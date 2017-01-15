@@ -37,7 +37,7 @@ public class DistributedEventBus extends AbstractEventBus implements DolphinEven
 
     @Override
     public <T extends Serializable> Subscription subscribe(final Topic<T> topic, final MessageListener<? super T> handler) {
-        final Subscription basicSubscription = super.subscribe(topic, handler);
+        final Subscription basicSubscription = subscribe(topic, handler);
         final Subscription hazelcastSubscription = createHazelcastSubscription(topic);
         return new Subscription() {
             @Override

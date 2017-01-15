@@ -50,8 +50,6 @@ public class DolphinPlatformConfiguration {
     private static final String MAX_POLL_TIME = "maxPollTime";
 
 
-
-
     private boolean useSessionInvalidationServlet = false;
 
     public final static int SESSION_TIMEOUT_DEFAULT_VALUE = 15 * 60;
@@ -182,7 +180,7 @@ public class DolphinPlatformConfiguration {
         return mBeanRegistration;
     }
 
-   public String getRootPackageForClasspathScan() {
+    public String getRootPackageForClasspathScan() {
         return rootPackageForClasspathScan;
     }
 
