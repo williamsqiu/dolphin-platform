@@ -47,5 +47,5 @@ public interface DolphinEventBus {
      * @param topic   the topic
      * @param handler the handler
      */
-    <T extends Serializable> Subscription subscribe(Topic<T> topic, MessageListener<? super T> handler);
+    <T extends Serializable> Subscription subscribe(Topic<T> topic, MessageListener<? super T> listener);
 }

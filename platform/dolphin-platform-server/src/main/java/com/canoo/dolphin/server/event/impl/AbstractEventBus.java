@@ -119,7 +119,7 @@ public abstract class AbstractEventBus implements DolphinEventBus {
         }
     }
 
-    protected <T extends Serializable> Subscription subscribeListenerToTopic(final Topic<T> topic, final MessageListener<? super T> listener) {
+    public <T extends Serializable> Subscription subscribe(final Topic<T> topic, final MessageListener<? super T> listener) {
         Assert.requireNonNull(topic, "topic");
         Assert.requireNonNull(listener, "listener");
 

@@ -15,12 +15,9 @@
  */
 package com.canoo.dolphin.server.event.impl;
 
-import com.canoo.dolphin.event.Subscription;
 import com.canoo.dolphin.server.context.DolphinSessionLifecycleHandler;
 import com.canoo.dolphin.server.context.DolphinSessionProvider;
 import com.canoo.dolphin.server.event.DolphinEventBus;
-import com.canoo.dolphin.server.event.MessageListener;
-import com.canoo.dolphin.server.event.Topic;
 
 import java.io.Serializable;
 
@@ -33,10 +30,5 @@ public class DefaultDolphinEventBus extends AbstractEventBus implements DolphinE
     @Override
     protected <T extends Serializable> void publishForOtherSessions(final DolphinEvent<T> event) {
         triggerEventHandling(event);
-    }
-
-    @Override
-    public <T extends Serializable> Subscription subscribe(final Topic<T> topic, final MessageListener<? super T> handler) {
-        return subscribeListenerToTopic(topic, handler);
     }
 }

@@ -21,6 +21,7 @@ import org.testng.annotations.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 import java.util.Set;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -766,8 +767,9 @@ public class TestGarbageCollection {
                 fail("GC should be deactivated!");
             }
         };
-        DolphinPlatformConfiguration configuration = new DolphinPlatformConfiguration();
-        configuration.setUseGc(false);
+        Properties properties = new Properties();
+        properties.setProperty("garbageCollectionActive", "false");
+        DolphinPlatformConfiguration configuration = new DolphinPlatformConfiguration(properties);
         GarbageCollector garbageCollector = new GarbageCollector(configuration, gcConsumer);
 
         BeanWithLists parentBeanA = new BeanWithLists(garbageCollector);
@@ -845,8 +847,8 @@ public class TestGarbageCollection {
 
     private GarbageCollector createGarbageCollection(final GarbageCollectionCallback gcConsumer) {
         Assert.requireNonNull(gcConsumer, "gcConsumer");
+
         final DolphinPlatformConfiguration configuration = new DolphinPlatformConfiguration();
-        configuration.setUseGc(true);
         return new GarbageCollector(configuration, gcConsumer);
     }
 }

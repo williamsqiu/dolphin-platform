@@ -30,14 +30,14 @@ public class DistributedEventBus extends AbstractEventBus implements DolphinEven
         this.hazelcastClient = hazelcastClient;
     }
 
-    protected  <T extends Serializable> void publishForOtherSessions(final DolphinEvent<T> event) {
-        ITopic<DolphinEvent<T>> topic = toHazelcastTopic(event.getTopic());
+    protected <T extends Serializable> void publishForOtherSessions(final DolphinEvent<T> event) {
+        final ITopic<DolphinEvent<T>> topic = toHazelcastTopic(event.getTopic());
         topic.publish(event);
     }
 
     @Override
     public <T extends Serializable> Subscription subscribe(final Topic<T> topic, final MessageListener<? super T> handler) {
-        final Subscription basicSubscription = subscribeListenerToTopic(topic, handler);
+        final Subscription basicSubscription = super.subscribe(topic, handler);
         final Subscription hazelcastSubscription = createHazelcastSubscription(topic);
         return new Subscription() {
             @Override
@@ -54,7 +54,7 @@ public class DistributedEventBus extends AbstractEventBus implements DolphinEven
             final ITopic<DolphinEvent<T>> hazelcastTopic = toHazelcastTopic(topic);
             Assert.requireNonNull(hazelcastTopic, "hazelcastTopic");
 
-            Integer currentCount = iTopicCount.get(topic.getName());
+            final Integer currentCount = iTopicCount.get(topic.getName());
             if (currentCount == 0) {
                 registerHazelcastEventPipe(topic);
             } else {
@@ -64,7 +64,7 @@ public class DistributedEventBus extends AbstractEventBus implements DolphinEven
             return new Subscription() {
                 @Override
                 public void unsubscribe() {
-                    Integer currentCount = iTopicCount.get(topic.getName());
+                    final Integer currentCount = iTopicCount.get(topic.getName());
                     if (currentCount > 1) {
                         iTopicCount.put(topic.getName(), currentCount - 1);
                     } else {
@@ -86,7 +86,7 @@ public class DistributedEventBus extends AbstractEventBus implements DolphinEven
             final String registrationId = hazelcastTopic.addMessageListener(new com.hazelcast.core.MessageListener<DolphinEvent<T>>() {
                 @Override
                 public void onMessage(com.hazelcast.core.Message<DolphinEvent<T>> message) {
-                    DolphinEvent<T> event = message.getMessageObject();
+                    final DolphinEvent<T> event = message.getMessageObject();
                     triggerEventHandling(event);
                 }
             });
@@ -105,7 +105,7 @@ public class DistributedEventBus extends AbstractEventBus implements DolphinEven
             final ITopic<DolphinEvent<T>> hazelcastTopic = toHazelcastTopic(topic);
             Assert.requireNonNull(hazelcastTopic, "hazelcastTopic");
 
-            Integer count = iTopicCount.get(hazelcastTopic.getName());
+            final Integer count = iTopicCount.get(hazelcastTopic.getName());
             if (count == null || count != 1) {
                 throw new IllegalStateException("Count for topic " + topic.getName() + " is wrong: " + count);
             }
@@ -122,7 +122,7 @@ public class DistributedEventBus extends AbstractEventBus implements DolphinEven
         }
     }
 
-    private <T extends Serializable> ITopic<DolphinEvent<T>> toHazelcastTopic(Topic<T> topic) {
+    private <T extends Serializable> ITopic<DolphinEvent<T>> toHazelcastTopic(final Topic<T> topic) {
         return hazelcastClient.getTopic(topic.getName());
     }
 
