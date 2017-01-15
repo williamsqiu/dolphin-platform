@@ -15,11 +15,13 @@
  */
 package com.canoo.dolphin.server.event;
 
+import java.io.Serializable;
+
 /**
  * A handler that can be registered to the dolphin message bus (see {@link com.canoo.dolphin.server.event.DolphinEventBus})
  * to receive publish messages (see {@link com.canoo.dolphin.server.event.Message}).
  */
-public interface MessageListener<T> {
+public interface MessageListener<T extends Serializable> {
 
     /**
      * Method will be called whenever a message is received

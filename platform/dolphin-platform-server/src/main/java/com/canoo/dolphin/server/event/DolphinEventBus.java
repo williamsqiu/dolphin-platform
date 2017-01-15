@@ -17,6 +17,8 @@ package com.canoo.dolphin.server.event;
 
 import com.canoo.dolphin.event.Subscription;
 
+import java.io.Serializable;
+
 /**
  * The dolphin event bus that can be used to send messages to dolphin sessions.
  * The {@link com.canoo.dolphin.server.event.DolphinEventBus} can be injected in any
@@ -34,7 +36,9 @@ public interface DolphinEventBus {
      *
      * @param data the data of the message
      */
-    <T> void publish(Topic<T> topic, T data);
+    <T extends Serializable> void publish(Topic<T> topic, T data);
+
+    <T extends Serializable> void publish(final Topic<T> topic, final T data, EventSessionFilter filter);
 
     /**
      * Register as a handler / listener for a given address. All messages that will be published for the given address
@@ -43,5 +47,5 @@ public interface DolphinEventBus {
      * @param topic   the topic
      * @param handler the handler
      */
-    <T> Subscription subscribe(Topic<T> topic, MessageListener<? super T> handler);
+    <T extends Serializable> Subscription subscribe(Topic<T> topic, MessageListener<? super T> handler);
 }

@@ -16,4 +16,5 @@
 
 dependencies {
     compile project(':dolphin-platform-server')
+    compile 'com.hazelcast:hazelcast-client:3.6.2'
 }
