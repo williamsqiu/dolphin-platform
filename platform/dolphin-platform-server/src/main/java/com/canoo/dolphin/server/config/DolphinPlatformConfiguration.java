@@ -136,4 +136,8 @@ public class DolphinPlatformConfiguration {
     public void setUseGc(boolean useGc) {
         this.useGc = useGc;
     }
+
+    public void setmBeanRegistration(boolean mBeanRegistration) {
+        this.mBeanRegistration = mBeanRegistration;
+    }
 }
