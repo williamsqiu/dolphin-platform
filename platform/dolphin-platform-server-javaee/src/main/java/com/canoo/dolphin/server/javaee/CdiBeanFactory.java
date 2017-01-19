@@ -23,10 +23,10 @@ import com.canoo.dolphin.server.binding.impl.PropertyBinderImpl;
 import com.canoo.dolphin.server.bootstrap.DolphinPlatformBootstrap;
 import com.canoo.dolphin.server.context.DolphinContextUtils;
 import com.canoo.dolphin.server.event.DolphinEventBus;
-import com.canoo.dolphin.server.event.impl.DefaultDolphinEventBus;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
+import javax.servlet.ServletContext;
 import java.util.concurrent.Future;
 
 /**
@@ -40,19 +40,19 @@ public class CdiBeanFactory {
     @Produces
     @ClientScoped
     public BeanManager createManager() {
-        return DolphinPlatformBootstrap.getContextProvider().getCurrentContext().getBeanManager();
+        return DolphinContextUtils.getContextForCurrentThread().getBeanManager();
     }
 
     @Produces
     @ClientScoped
     public DolphinSession createDolphinSession() {
-        return DolphinPlatformBootstrap.getContextProvider().getCurrentDolphinSession();
+        return DolphinPlatformBootstrap.getSessionProvider().getCurrentDolphinSession();
     }
 
     @Produces
     @ApplicationScoped
-    public DolphinEventBus createEventBus() {
-        return new DefaultDolphinEventBus(DolphinPlatformBootstrap.getContextProvider(), DolphinPlatformBootstrap.getSessionLifecycleHandler());
+    public DolphinEventBus createEventBus(ServletContext servletContext) {
+        return DolphinPlatformBootstrap.createEventBus(DolphinPlatformBootstrap.getConfiguration(servletContext));
     }
 
     @Produces

@@ -44,10 +44,8 @@ import com.canoo.dolphin.server.BackgroundRunner;
 import com.canoo.dolphin.server.DolphinSession;
 import com.canoo.dolphin.server.binding.PropertyBinder;
 import com.canoo.dolphin.server.binding.impl.PropertyBinderImpl;
-import com.canoo.dolphin.server.bootstrap.DolphinPlatformBootstrap;
 import com.canoo.dolphin.server.config.ConfigurationFileLoader;
 import com.canoo.dolphin.server.context.DolphinContext;
-import com.canoo.dolphin.server.context.DolphinContextProvider;
 import com.canoo.dolphin.server.context.DolphinContextUtils;
 import com.canoo.dolphin.server.context.DolphinSessionProvider;
 import com.canoo.dolphin.server.controller.ControllerRepository;
@@ -194,17 +192,12 @@ public class DolphinPlatformSpringTestBootstrap {
     @Bean(name = "dolphinEventBus")
     @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
     protected DolphinEventBus createEventBus(final DolphinTestContext context) {
-        return new DefaultDolphinEventBus(new DolphinContextProvider() {
-            @Override
-            public DolphinContext getCurrentContext() {
-                return context;
-            }
-
+        return new DefaultDolphinEventBus(new DolphinSessionProvider() {
             @Override
             public DolphinSession getCurrentDolphinSession() {
                 return context.getDolphinSession();
             }
-        }, DolphinPlatformBootstrap.getSessionLifecycleHandler());
+        });
     }
 
     @Bean(name = "backgroundRunner")
@@ -238,7 +231,7 @@ public class DolphinPlatformSpringTestBootstrap {
         return configurer;
     }
 
-    private class DolphinContextProviderMock implements DolphinContextProvider {
+    private class DolphinContextProviderMock implements DolphinSessionProvider {
 
         DolphinContext currentContext;
 
@@ -247,13 +240,8 @@ public class DolphinPlatformSpringTestBootstrap {
         }
 
         @Override
-        public DolphinContext getCurrentContext() {
-            return currentContext;
-        }
-
-        @Override
         public DolphinSession getCurrentDolphinSession() {
-            return getCurrentContext().getDolphinSession();
+            return currentContext.getDolphinSession();
         }
     }
 

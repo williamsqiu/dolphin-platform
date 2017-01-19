@@ -15,6 +15,9 @@
  */
 package com.canoo.dolphin.server.config;
 
+import com.canoo.dolphin.server.event.impl.DefaultEventBusProvider;
+
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -25,7 +28,7 @@ import java.util.logging.Level;
  * This class defines the configuration of the Dolphin Platform. Normally the configuration is created based
  * on defaults and a property file (see {@link ConfigurationFileLoader}).
  */
-public class DolphinPlatformConfiguration {
+public class DolphinPlatformConfiguration implements Serializable {
 
     private static final String OPEN_DOLPHIN_LOG_LEVEL = "openDolphinLogLevel";
 
@@ -49,6 +52,7 @@ public class DolphinPlatformConfiguration {
 
     private static final String MAX_POLL_TIME = "maxPollTime";
 
+    private static final String EVENTBUS_TYPE = "eventbusType";
 
     private boolean useSessionInvalidationServlet = false;
 
@@ -61,6 +65,8 @@ public class DolphinPlatformConfiguration {
     private String dolphinPlatformServletMapping = "/dolphin";
 
     private String rootPackageForClasspathScan = null;
+
+    private String eventbusType = DefaultEventBusProvider.DEFAULT_EVENTBUS_NAME;
 
     private List<String> idFilterUrlMappings = Arrays.asList("/*");
 
@@ -146,6 +152,9 @@ public class DolphinPlatformConfiguration {
             maxPollTime = Long.parseLong(internalProperties.getProperty(MAX_POLL_TIME));
         }
 
+        if (internalProperties.containsKey(EVENTBUS_TYPE)) {
+            eventbusType = internalProperties.getProperty(EVENTBUS_TYPE);
+        }
     }
 
     public int getSessionTimeout() {
@@ -194,5 +203,57 @@ public class DolphinPlatformConfiguration {
 
     public String getProperty(final String key) {
         return internalProperties.getProperty(key);
+    }
+
+    public String getEventbusType() {
+        return eventbusType;
+    }
+
+    public void setUseSessionInvalidationServlet(boolean useSessionInvalidationServlet) {
+        this.useSessionInvalidationServlet = useSessionInvalidationServlet;
+    }
+
+    public void setUseCrossSiteOriginFilter(boolean useCrossSiteOriginFilter) {
+        this.useCrossSiteOriginFilter = useCrossSiteOriginFilter;
+    }
+
+    public void setmBeanRegistration(boolean mBeanRegistration) {
+        this.mBeanRegistration = mBeanRegistration;
+    }
+
+    public void setDolphinPlatformServletMapping(String dolphinPlatformServletMapping) {
+        this.dolphinPlatformServletMapping = dolphinPlatformServletMapping;
+    }
+
+    public void setRootPackageForClasspathScan(String rootPackageForClasspathScan) {
+        this.rootPackageForClasspathScan = rootPackageForClasspathScan;
+    }
+
+    public void setEventbusType(String eventbusType) {
+        this.eventbusType = eventbusType;
+    }
+
+    public void setIdFilterUrlMappings(List<String> idFilterUrlMappings) {
+        this.idFilterUrlMappings = idFilterUrlMappings;
+    }
+
+    public void setOpenDolphinLogLevel(Level openDolphinLogLevel) {
+        this.openDolphinLogLevel = openDolphinLogLevel;
+    }
+
+    public void setSessionTimeout(int sessionTimeout) {
+        this.sessionTimeout = sessionTimeout;
+    }
+
+    public void setMaxPollTime(long maxPollTime) {
+        this.maxPollTime = maxPollTime;
+    }
+
+    public void setMaxClientsPerSession(int maxClientsPerSession) {
+        this.maxClientsPerSession = maxClientsPerSession;
+    }
+
+    public void setUseGc(boolean useGc) {
+        this.useGc = useGc;
     }
 }

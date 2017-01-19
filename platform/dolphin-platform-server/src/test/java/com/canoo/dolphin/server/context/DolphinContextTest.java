@@ -144,12 +144,7 @@ public class DolphinContextTest {
     private final ClasspathScanner classpathScanner = new ClasspathScanner("com.canoo.dolphin");
 
     private DolphinContext createContext() {
-        return new DolphinContext(new DolphinPlatformConfiguration(), new DolphinContextProvider() {
-            @Override
-            public DolphinContext getCurrentContext() {
-                return null;
-            }
-
+        return new DolphinContext(new DolphinPlatformConfiguration(), new DolphinSessionProvider() {
             @Override
             public DolphinSession getCurrentDolphinSession() {
                 return null;

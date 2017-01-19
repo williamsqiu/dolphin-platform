@@ -46,6 +46,7 @@ public class CdiContainerManager implements ContainerManager {
 
     @Override
     public void init(ServletContext servletContext) {
+
     }
 
     @Override

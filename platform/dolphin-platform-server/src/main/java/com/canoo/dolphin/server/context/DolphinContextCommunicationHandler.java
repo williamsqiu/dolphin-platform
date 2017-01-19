@@ -34,11 +34,8 @@ public class DolphinContextCommunicationHandler {
 
     private final DolphinPlatformConfiguration configuration;
 
-    private final DolphinContextProvider contextProvider;
-
-    public DolphinContextCommunicationHandler(final DolphinPlatformConfiguration configuration, final DolphinContextProvider contextProvider) {
+    public DolphinContextCommunicationHandler(final DolphinPlatformConfiguration configuration) {
         this.configuration = Assert.requireNonNull(configuration, "configuration");
-        this.contextProvider = Assert.requireNonNull(contextProvider, "contextProvider");
     }
 
     public void handle(final HttpServletRequest request, final HttpServletResponse response) {
@@ -47,7 +44,7 @@ public class DolphinContextCommunicationHandler {
         final HttpSession httpSession = Assert.requireNonNull(request.getSession(), "request.getSession()");
 
         try {
-            DolphinContext currentContext = contextProvider.getCurrentContext();
+            DolphinContext currentContext = DolphinContextUtils.getContextForCurrentThread();
             if (currentContext == null) {
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                 LOG.warn("Can not find or create matching dolphin context in session " + httpSession.getId());

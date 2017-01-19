@@ -15,16 +15,19 @@
  */
 package com.canoo.dolphin.server.event.impl;
 
-import com.canoo.dolphin.server.context.DolphinSessionLifecycleHandler;
+import com.canoo.dolphin.server.bootstrap.DolphinPlatformBootstrap;
 import com.canoo.dolphin.server.context.DolphinSessionProvider;
-import com.canoo.dolphin.server.event.DolphinEventBus;
 
 import java.io.Serializable;
 
-public class DefaultDolphinEventBus extends AbstractEventBus implements DolphinEventBus {
+public class DefaultDolphinEventBus extends AbstractEventBus {
 
-    public DefaultDolphinEventBus(final DolphinSessionProvider sessionProvider, final DolphinSessionLifecycleHandler lifecycleHandler) {
-        super(sessionProvider, lifecycleHandler);
+    public DefaultDolphinEventBus() {
+        this(DolphinPlatformBootstrap.getSessionProvider());
+    }
+
+    public DefaultDolphinEventBus(final DolphinSessionProvider sessionProvider) {
+        super(sessionProvider, DolphinPlatformBootstrap.getSessionLifecycleHandler());
     }
 
     @Override
