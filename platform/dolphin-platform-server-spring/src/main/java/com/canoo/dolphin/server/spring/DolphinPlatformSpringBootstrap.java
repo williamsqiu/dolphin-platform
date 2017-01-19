@@ -17,9 +17,14 @@ package com.canoo.dolphin.server.spring;
 
 import com.canoo.dolphin.server.bootstrap.DolphinPlatformBootstrap;
 import com.canoo.dolphin.server.config.ConfigurationFileLoader;
+import com.canoo.dolphin.server.config.DolphinPlatformConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeansException;
 import org.springframework.boot.context.embedded.ServletContextInitializer;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Configuration;
 
 import javax.servlet.ServletContext;
@@ -31,12 +36,23 @@ import javax.servlet.ServletException;
  * @author Hendrik Ebbers
  */
 @Configuration
-public class DolphinPlatformSpringBootstrap implements ServletContextInitializer {
+@EnableConfigurationProperties(DolphinPlatformProperties.class)
+public class DolphinPlatformSpringBootstrap implements ServletContextInitializer, ApplicationContextAware {
 
     private static final Logger LOG = LoggerFactory.getLogger(DolphinPlatformSpringBootstrap.class);
 
+    private ApplicationContext applicationContext;
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
+    }
+
     @Override
     public void onStartup(final ServletContext servletContext) throws ServletException {
-        DolphinPlatformBootstrap.start(servletContext, ConfigurationFileLoader.loadConfiguration());
+        DolphinPlatformConfiguration configuration = ConfigurationFileLoader.loadConfiguration();
+
+        final DolphinPlatformBootstrap bootstrap = new DolphinPlatformBootstrap(servletContext, configuration);
+        bootstrap.start();
     }
 }
