@@ -68,7 +68,7 @@ public class DolphinPlatformConfiguration implements Serializable {
 
     private String eventbusType = DefaultEventBusProvider.DEFAULT_EVENTBUS_NAME;
 
-    private List<String> idFilterUrlMappings = Arrays.asList("/*");
+    private List<String> idFilterUrlMappings = Arrays.asList("/dolphin");
 
     private Level openDolphinLogLevel = Level.SEVERE;
 
@@ -255,5 +255,9 @@ public class DolphinPlatformConfiguration implements Serializable {
 
     public void setUseGc(boolean useGc) {
         this.useGc = useGc;
+    }
+
+    public void setmBeanRegistration(boolean mBeanRegistration) {
+        this.mBeanRegistration = mBeanRegistration;
     }
 }
