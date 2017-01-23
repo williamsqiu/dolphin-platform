@@ -179,7 +179,7 @@ public class ReflectionHelper {
                 return (Class) pType.getActualTypeArguments()[0];
             }
         } catch (ClassCastException ex) {
-            LOG.warn("can not extract parameterized type!", ex);
+            LOG.warn("can not extract parameterized type for field: " +field.getName() + ", bean: "+ field.getDeclaringClass().getName(), ex);
         }
         return null;
     }
