@@ -60,7 +60,7 @@ public class DolphinBeanConverterFactory implements ConverterFactory {
             try {
                 return beanRepository.getBean(value);
             } catch (Exception e) {
-                throw new ValueConverterException("Can not convert to dolphin bean", e);
+                throw new ValueConverterException("Can not convert bean with id: "+ value +" to dolphin bean", e);
             }
         }
 

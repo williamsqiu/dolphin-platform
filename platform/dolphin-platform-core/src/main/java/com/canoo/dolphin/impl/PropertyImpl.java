@@ -54,7 +54,7 @@ public class PropertyImpl<T> extends AbstractProperty<T> {
                     final T newValue = (T) PropertyImpl.this.propertyInfo.convertFromDolphin(evt.getNewValue());
                     firePropertyChanged(oldValue, newValue);
                 } catch (Exception e) {
-                    throw new MappingException("Error in property change handling!", e);
+                    throw new MappingException("Error in property change handling for property: "+attribute.getPropertyName() +" in attribute with name: "+ propertyInfo.getAttributeName()+" and Id: "+attribute.getId(), e);
                 }
             }
         });
