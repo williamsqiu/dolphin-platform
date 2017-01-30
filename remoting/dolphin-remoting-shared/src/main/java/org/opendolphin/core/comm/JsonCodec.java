@@ -93,6 +93,7 @@ public class JsonCodec implements Codec {
             } else {
                 LOG.trace("Encoding command of type {}", command.getClass());
                 JsonElement element = GSON.toJsonTree(command);
+                element.getAsJsonObject().addProperty("id", command.getId());
                 element.getAsJsonObject().addProperty("className", command.getClass().getName());
                 ret.add(element);
             }
