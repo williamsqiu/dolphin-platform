@@ -15,11 +15,12 @@
  */
 package com.canoo.dolphin.server.event;
 
+import java.io.Serializable;
+
 /**
  * An message of the dolphin platform event bus (see {@link com.canoo.dolphin.server.event.DolphinEventBus}).
  */
-public interface Message<T> {
-
+public interface Message<T extends Serializable> extends Serializable{
 
     /**
      * Returns the topic of the event

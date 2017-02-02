@@ -33,8 +33,8 @@ import com.canoo.dolphin.server.impl.ServerPresentationModelBuilderFactory;
 import com.canoo.dolphin.server.impl.gc.GarbageCollectionCallback;
 import com.canoo.dolphin.server.impl.gc.GarbageCollector;
 import com.canoo.dolphin.server.impl.gc.Instance;
-import org.opendolphin.core.comm.Command;
 import core.comm.DefaultInMemoryConfig;
+import org.opendolphin.core.comm.Command;
 import org.opendolphin.core.server.ServerDolphin;
 import org.opendolphin.core.server.ServerModelStore;
 
@@ -63,7 +63,6 @@ public abstract class AbstractDolphinBasedTest {
         final ClassRepository classRepository = new ClassRepositoryImpl(dolphin, converters, builderFactory);
         final ListMapper listMapper = new ListMapperImpl(dolphin, classRepository, beanRepository, builderFactory, dispatcher);
         final DolphinPlatformConfiguration configurationForGc = new DolphinPlatformConfiguration();
-        configurationForGc.setUseGc(true);
         final GarbageCollector garbageCollector = new GarbageCollector(configurationForGc, new GarbageCollectionCallback() {
             @Override
             public void onReject(Set<Instance> instances) {

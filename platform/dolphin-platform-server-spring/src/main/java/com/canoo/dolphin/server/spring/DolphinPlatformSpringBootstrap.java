@@ -36,6 +36,7 @@ import java.util.logging.Level;
  */
 @Configuration
 @EnableConfigurationProperties(DolphinPlatformProperties.class)
+
 public class DolphinPlatformSpringBootstrap implements ServletContextInitializer {
 
     private static final Logger LOG = LoggerFactory.getLogger(DolphinPlatformSpringBootstrap.class);
@@ -49,7 +50,8 @@ public class DolphinPlatformSpringBootstrap implements ServletContextInitializer
 
         updateConfigurationBySpring(configuration);
 
-        DolphinPlatformBootstrap.start(servletContext, configuration);
+        final DolphinPlatformBootstrap bootstrap = new DolphinPlatformBootstrap(servletContext, configuration);
+        bootstrap.start();
     }
 
     private void updateConfigurationBySpring(DolphinPlatformConfiguration configuration) {

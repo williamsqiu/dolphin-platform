@@ -28,7 +28,7 @@ public class ConfigurationFileLoaderTest {
     public void testConfigLoad() {
         try {
             //given:
-            DolphinPlatformConfiguration configuration = ConfigurationFileLoader.load();
+            DolphinPlatformConfiguration configuration = ConfigurationFileLoader.loadConfiguration();
 
             //then:
             assertEquals(configuration.isUseCrossSiteOriginFilter(), false);

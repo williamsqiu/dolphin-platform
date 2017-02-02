@@ -25,18 +25,19 @@ import com.canoo.dolphin.server.context.DolphinContext;
 import com.canoo.dolphin.server.context.DolphinContextCommunicationHandler;
 import com.canoo.dolphin.server.context.DolphinContextFactory;
 import com.canoo.dolphin.server.context.DolphinContextFilter;
-import com.canoo.dolphin.server.context.DolphinContextProvider;
 import com.canoo.dolphin.server.context.DolphinContextUtils;
 import com.canoo.dolphin.server.context.DolphinHttpSessionListener;
 import com.canoo.dolphin.server.context.DolphinSessionLifecycleHandler;
+import com.canoo.dolphin.server.context.DolphinSessionProvider;
+import com.canoo.dolphin.server.event.DolphinEventBus;
+import com.canoo.dolphin.server.event.impl.EventBusProvider;
 import com.canoo.dolphin.server.impl.ClasspathScanner;
-import com.canoo.dolphin.server.impl.DolphinSessionLifecycleHandlerImpl;
 import com.canoo.dolphin.server.mbean.MBeanRegistry;
 import com.canoo.dolphin.server.servlet.CrossSiteOriginFilter;
 import com.canoo.dolphin.server.servlet.DolphinPlatformServlet;
+import com.canoo.dolphin.server.servlet.InvalidationServlet;
 import com.canoo.dolphin.util.Assert;
 import com.canoo.dolphin.util.Callback;
-import com.canoo.dolphin.server.servlet.InvalidationServlet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -58,42 +59,45 @@ import static com.canoo.dolphin.server.servlet.ServletConstants.DOLPHIN_SERVLET_
  */
 public class DolphinPlatformBootstrap {
 
+    private static final String CONFIGURATION_ATTRIBUTE_NAME = "dolphinPlatformConfiguration";
+
     private static final Logger LOG = LoggerFactory.getLogger(DolphinPlatformBootstrap.class);
 
-    private static final DolphinContextProvider contextProvider = new DolphinContextProvider() {
+    private static final DolphinSessionProvider sessionProvider = new DolphinSessionProvider() {
 
         @Override
         public DolphinSession getCurrentDolphinSession() {
-            DolphinContext context = getCurrentContext();
+            DolphinContext context = DolphinContextUtils.getContextForCurrentThread();
             if (context == null) {
                 return null;
             }
             return context.getDolphinSession();
         }
 
-        @Override
-        public DolphinContext getCurrentContext() {
-            return DolphinContextUtils.getContextForCurrentThread();
-        }
     };
 
-    private static final DolphinSessionLifecycleHandler sessionLifecycleHandler = new DolphinSessionLifecycleHandlerImpl();
+    private static final DolphinSessionLifecycleHandler sessionLifecycleHandler = new DolphinSessionLifecycleHandler();
 
-    private DolphinPlatformBootstrap() {
-    }
+    private final ServletContext servletContext;
 
-    /**
-     * This methods starts the Dolphin Platform server runtime
-     *
-     * @param servletContext the servlet context
-     */
-    public static final void start(final ServletContext servletContext, final DolphinPlatformConfiguration configuration) {
-        Assert.requireNonNull(servletContext, "servletContext");
-        Assert.requireNonNull(configuration, "configuration");
+    private final DolphinPlatformConfiguration configuration;
+
+    public DolphinPlatformBootstrap(ServletContext servletContext, final DolphinPlatformConfiguration configuration) {
+        this.servletContext = Assert.requireNonNull(servletContext, "servletContext");
+        this.configuration = Assert.requireNonNull(configuration, "configuration");
+
+        servletContext.setAttribute(CONFIGURATION_ATTRIBUTE_NAME, configuration);
 
         LOG.debug("Dolphin Platform starts with value for useCrossSiteOriginFilter=" + configuration.isUseCrossSiteOriginFilter());
         LOG.debug("Dolphin Platform starts with value for dolphinPlatformServletMapping=" + configuration.getDolphinPlatformServletMapping());
         LOG.debug("Dolphin Platform starts with value for openDolphinLogLevel=" + configuration.getOpenDolphinLogLevel());
+    }
+
+    /**
+     * This methods starts the Dolphin Platform server runtime
+     */
+    public void start() {
+        LOG.info("Staring Dolphin Platform");
 
         final ClasspathScanner classpathScanner = new ClasspathScanner(configuration.getRootPackageForClasspathScan());
 
@@ -104,9 +108,9 @@ public class DolphinPlatformBootstrap {
 
         registerDolphinSessionListener(containerManager, classpathScanner);
 
-        final DolphinContextCommunicationHandler communicationHandler = new DolphinContextCommunicationHandler(configuration, getContextProvider());
+        final DolphinContextCommunicationHandler communicationHandler = new DolphinContextCommunicationHandler(configuration);
 
-        DolphinContextFactory dolphinContextFactory = new DefaultDolphinContextFactory(configuration, getContextProvider(), containerManager, classpathScanner, getSessionLifecycleHandler());
+        DolphinContextFactory dolphinContextFactory = new DefaultDolphinContextFactory(configuration, getSessionProvider(), containerManager, classpathScanner, sessionLifecycleHandler);
         servletContext.addServlet(DOLPHIN_SERVLET_NAME, new DolphinPlatformServlet(communicationHandler)).addMapping(configuration.getDolphinPlatformServletMapping());
         if (configuration.isUseSessionInvalidationServlet()) {
             servletContext.addServlet(DOLPHIN_INVALIDATION_SERVLET_NAME, new InvalidationServlet()).addMapping(DEFAULT_DOLPHIN_INVALIDATION_SERVLET_MAPPING);
@@ -115,7 +119,7 @@ public class DolphinPlatformBootstrap {
             servletContext.addFilter(DOLPHIN_CROSS_SITE_FILTER_NAME, new CrossSiteOriginFilter()).addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/*");
         }
 
-        servletContext.addFilter(DOLPHIN_CLIENT_ID_FILTER_NAME, new DolphinContextFilter(configuration, containerManager, dolphinContextFactory, getSessionLifecycleHandler())).addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, configuration.getIdFilterUrlMappings().toArray(new String[configuration.getIdFilterUrlMappings().size()]));
+        servletContext.addFilter(DOLPHIN_CLIENT_ID_FILTER_NAME, new DolphinContextFilter(configuration, containerManager, dolphinContextFactory, sessionLifecycleHandler)).addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, configuration.getIdFilterUrlMappings().toArray(new String[configuration.getIdFilterUrlMappings().size()]));
 
         LOG.debug("Dolphin Platform initialized under context \"" + servletContext.getContextPath() + "\"");
         LOG.debug("Dolphin Platform endpoint defined as " + configuration.getDolphinPlatformServletMapping());
@@ -128,15 +132,7 @@ public class DolphinPlatformBootstrap {
         openDolphinLogger.setLevel(configuration.getOpenDolphinLogLevel());
     }
 
-    public static DolphinContextProvider getContextProvider() {
-        return contextProvider;
-    }
-
-    public static DolphinSessionLifecycleHandler getSessionLifecycleHandler() {
-        return sessionLifecycleHandler;
-    }
-
-    private static  ContainerManager findManager() {
+    private ContainerManager findManager() {
         final ServiceLoader<ContainerManager> serviceLoader = ServiceLoader.load(ContainerManager.class);
         final Iterator<ContainerManager> serviceIterator = serviceLoader.iterator();
         if (serviceIterator.hasNext()) {
@@ -150,21 +146,21 @@ public class DolphinPlatformBootstrap {
         }
     }
 
-    private static void registerDolphinSessionListener(final ContainerManager containerManager, final ClasspathScanner classpathScanner) {
+    private void registerDolphinSessionListener(final ContainerManager containerManager, final ClasspathScanner classpathScanner) {
         Assert.requireNonNull(containerManager, "containerManager");
         Assert.requireNonNull(classpathScanner, "classpathScanner");
         final Set<Class<?>> listeners = classpathScanner.getTypesAnnotatedWith(DolphinListener.class);
         for (final Class<?> listenerClass : listeners) {
             try {
                 if (DolphinSessionListener.class.isAssignableFrom(listenerClass)) {
-                    getSessionLifecycleHandler().addSessionDestroyedListener(new Callback<DolphinSession>() {
+                    sessionLifecycleHandler.addSessionDestroyedListener(new Callback<DolphinSession>() {
                         @Override
                         public void call(DolphinSession dolphinSession) {
                             final DolphinSessionListener listener = (DolphinSessionListener) containerManager.createListener(listenerClass);
                             listener.sessionDestroyed(dolphinSession);
                         }
                     });
-                    getSessionLifecycleHandler().addSessionCreatedListener(new Callback<DolphinSession>() {
+                    sessionLifecycleHandler.addSessionCreatedListener(new Callback<DolphinSession>() {
                         @Override
                         public void call(DolphinSession dolphinSession) {
                             final DolphinSessionListener listener = (DolphinSessionListener) containerManager.createListener(listenerClass);
@@ -176,5 +172,35 @@ public class DolphinPlatformBootstrap {
                 throw new DolphinPlatformBoostrapException("Error in creating DolphinSessionListener " + listenerClass, e);
             }
         }
+    }
+
+
+    //TODO: The static methods should be refactored...
+
+    public static DolphinSessionProvider getSessionProvider() {
+        return sessionProvider;
+    }
+
+    public static DolphinSessionLifecycleHandler getSessionLifecycleHandler() {
+        return sessionLifecycleHandler;
+    }
+
+    public static DolphinEventBus createEventBus(DolphinPlatformConfiguration configuration) {
+        Iterator<EventBusProvider> iterator = ServiceLoader.load(EventBusProvider.class).iterator();
+        while (iterator.hasNext()) {
+            EventBusProvider provider = iterator.next();
+            if (configuration.getEventbusType().equals(provider.getType())) {
+                return provider.create(configuration);
+            }
+        }
+        throw new IllegalArgumentException("No event bus provider of type " + configuration.getEventbusType() + " found!");
+    }
+
+    public static DolphinPlatformConfiguration getConfiguration(ServletContext servletContext) {
+        Object attribute = servletContext.getAttribute(CONFIGURATION_ATTRIBUTE_NAME);
+        if (attribute != null && attribute instanceof DolphinPlatformConfiguration) {
+            return (DolphinPlatformConfiguration) attribute;
+        }
+        throw new IllegalStateException("Configuration not stored in servlet context!");
     }
 }

@@ -35,6 +35,7 @@ public class SpringContainerManager extends AbstractSpringContainerManager {
     public void init(ServletContext servletContext) {
         this.servletContext = Assert.requireNonNull(servletContext, "servletContext");
         init();
+
     }
 
     /**

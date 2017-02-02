@@ -19,13 +19,52 @@ import com.canoo.dolphin.event.Subscription;
 import com.canoo.dolphin.server.DolphinSession;
 import com.canoo.dolphin.util.Callback;
 
-public interface DolphinSessionLifecycleHandler {
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
-    Subscription addSessionCreatedListener(Callback<DolphinSession> listener);
+public final class  DolphinSessionLifecycleHandler {
 
-    Subscription addSessionDestroyedListener(Callback<DolphinSession> listener);
+    private final List<Callback<DolphinSession>> onCreateCallbacks = new CopyOnWriteArrayList<>();
 
-    void onSessionCreated(final DolphinSession session);
+    private final List<Callback<DolphinSession>> onDestroyCallbacks = new CopyOnWriteArrayList<>();
 
-    void onSessionDestroyed(final DolphinSession session);
+    public Subscription addSessionCreatedListener(final Callback<DolphinSession> listener) {
+        onCreateCallbacks.add(listener);
+        return new Subscription() {
+            @Override
+            public void unsubscribe() {
+                onCreateCallbacks.remove(listener);
+            }
+        };
+    }
+
+    public Subscription addSessionDestroyedListener(final Callback<DolphinSession> listener) {
+        onDestroyCallbacks.add(listener);
+        return new Subscription() {
+            @Override
+            public void unsubscribe() {
+                onDestroyCallbacks.remove(listener);
+            }
+        };
+    }
+
+    public void onSessionCreated(final DolphinSession session) {
+        for (Callback<DolphinSession> listener : onCreateCallbacks) {
+            try {
+                listener.call(session);
+            } catch (Exception e) {
+                throw new DolphinContextException("Error while handling onSessionCreated listener", e);
+            }
+        }
+    }
+
+    public void onSessionDestroyed(final DolphinSession session) {
+        for (Callback<DolphinSession> listener : onDestroyCallbacks) {
+            try {
+                listener.call(session);
+            } catch (Exception e) {
+                throw new DolphinContextException("Error while handling onSessionDestroyed listener", e);
+            }
+        }
+    }
 }

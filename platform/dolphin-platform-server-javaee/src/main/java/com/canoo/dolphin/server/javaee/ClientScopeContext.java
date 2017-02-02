@@ -66,7 +66,7 @@ public class ClientScopeContext extends AbstractContext {
     }
 
     private DolphinSession getDolphinSession() {
-        return DolphinPlatformBootstrap.getContextProvider().getCurrentDolphinSession();
+        return DolphinPlatformBootstrap.getSessionProvider().getCurrentDolphinSession();
     }
 
     public void destroy() {
