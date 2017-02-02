@@ -68,4 +68,15 @@ have a look at `DefaultHttpURLConnectionFactory` and `DefaultHttpURLConnectionRe
 
 == Provide Security in a JavaScript based client
 
-Todo
+JavaScript client can send security tokens, cookies etc. as simple json object in config.headersInfo.
+
+----
+config:{
+    headersInfo:{
+      ‘X-Custom-Header’ : ‘security-token’,
+      ‘Cookie’ : ‘session=xxxxxxxxxxxxxx;’
+    }
+}
+ dolphin.connect(url, config);
+----
+
