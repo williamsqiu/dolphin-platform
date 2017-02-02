@@ -8,6 +8,21 @@ be true most of the public API of the Dolphin Platform is stable since 0.8.5 and
 package structure or adding additional methods to public interfaces. In addition it will be best practice to not use any
 method of the API is annotated by `@Deprecated` since we plan to remove all this methods and classes for the final 1.0.0 release.
 
+== Version 0.8.11
+* Support for distributed event bus (https://github.com/canoo/dolphin-platform/issues/240[issue])
+* Support for custom headers in HTTP layer in the JS library (https://github.com/canoo/dolphin-platform/issues/243[issue])
+* All JS repositories are build on Travis, run tests on SauceLabs and provide reports to Sonar (https://github.com/canoo/dolphin-platform/issues/314[issue],
+https://github.com/canoo/dolphin-platform/issues/167[issue], https://github.com/canoo/dolphin-platform/issues/39[issue],
+https://github.com/canoo/dolphin-platform/issues/322[issue], https://github.com/canoo/dolphin-platform/issues/321[issue],
+https://github.com/canoo/dolphin-platform/issues/315[issue])
+* Disconnect functionallity in JS provides promise (https://github.com/canoo/dolphin-platform/issues/280[issue])
+* Some better log messages (https://github.com/canoo/dolphin-platform/issues/331[issue], https://github.com/canoo/dolphin-platform/issues/330[issue])
+* Client ID filtering is limited to Dolphin Platform endpoint by default(https://github.com/canoo/dolphin-platform/issues/323[issue])
+* Angular client build include all dependencies (https://github.com/canoo/dolphin-platform/issues/317[issue])
+* Support for new datatype BigDecimal, BigInteger and UUID (https://github.com/canoo/dolphin-platform/pull/334[issue])
+* Dolphin Platform can be configured by Spring Boot configuration (https://github.com/canoo/dolphin-platform/pull/332[issue])
+* Internal map implementation in JS is replaced by core.js implementation(https://github.com/canoo/dolphin-platform/issues/169[issue])
+
 == Version 0.8.10
 _Release date: Jan 12, 2017_
 
