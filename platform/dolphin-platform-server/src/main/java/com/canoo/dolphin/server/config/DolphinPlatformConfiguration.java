@@ -257,7 +257,4 @@ public class DolphinPlatformConfiguration implements Serializable {
         this.useGc = useGc;
     }
 
-    public void setmBeanRegistration(boolean mBeanRegistration) {
-        this.mBeanRegistration = mBeanRegistration;
-    }
 }
