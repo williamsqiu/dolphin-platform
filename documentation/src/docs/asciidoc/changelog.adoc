@@ -15,7 +15,7 @@ method of the API is annotated by `@Deprecated` since we plan to remove all this
 https://github.com/canoo/dolphin-platform/issues/167[issue], https://github.com/canoo/dolphin-platform/issues/39[issue],
 https://github.com/canoo/dolphin-platform/issues/322[issue], https://github.com/canoo/dolphin-platform/issues/321[issue],
 https://github.com/canoo/dolphin-platform/issues/315[issue])
-* Disconnect functionallity in JS provides promise (https://github.com/canoo/dolphin-platform/issues/280[issue])
+* Disconnect functionality in JS provides promise (https://github.com/canoo/dolphin-platform/issues/280[issue])
 * Some better log messages (https://github.com/canoo/dolphin-platform/issues/331[issue], https://github.com/canoo/dolphin-platform/issues/330[issue])
 * Client ID filtering is limited to Dolphin Platform endpoint by default(https://github.com/canoo/dolphin-platform/issues/323[issue])
 * Angular client build include all dependencies (https://github.com/canoo/dolphin-platform/issues/317[issue])
