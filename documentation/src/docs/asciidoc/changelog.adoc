@@ -9,6 +9,8 @@ package structure or adding additional methods to public interfaces. In addition
 method of the API is annotated by `@Deprecated` since we plan to remove all this methods and classes for the final 1.0.0 release.
 
 == Version 0.8.11
+_Release date: Feb 03, 2017_
+
 * Support for distributed event bus (https://github.com/canoo/dolphin-platform/issues/240[issue])
 * Support for custom headers in HTTP layer in the JS library (https://github.com/canoo/dolphin-platform/issues/243[issue])
 * All JS repositories are build on Travis, run tests on SauceLabs and provide reports to Sonar (https://github.com/canoo/dolphin-platform/issues/314[issue],
