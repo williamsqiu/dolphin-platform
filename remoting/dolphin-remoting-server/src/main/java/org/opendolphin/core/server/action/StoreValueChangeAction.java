@@ -21,6 +21,7 @@ import org.opendolphin.core.server.comm.ActionRegistry;
 import org.opendolphin.core.server.comm.CommandHandler;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.logging.Logger;
 
 public class StoreValueChangeAction extends DolphinServerAction {
@@ -33,7 +34,7 @@ public class StoreValueChangeAction extends DolphinServerAction {
             public void handleCommand(final ValueChangedCommand command, List response) {
                 final ServerAttribute attribute = getServerDolphin().findAttributeById(command.getAttributeId());
                 if (attribute != null) {
-                    if ((attribute.getValue() != null || command.getOldValue() != null) && !attribute.getValue().equals(command.getOldValue())) {
+                    if (! Objects.equals(attribute.getValue(), command.getOldValue())) {
                         LOG.warning("S: updating attribute with id '" + command.getAttributeId() + "' to new value '" + command.getNewValue() + "' even though its old command value '" + command.getOldValue() + "' does not conform to the old value of '" + attribute.getValue() + "'. Client overrules server.");
                     }
 
