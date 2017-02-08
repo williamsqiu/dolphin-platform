@@ -18,6 +18,6 @@
     "jquery-ui": "1.11.x",
     "paper-elements": "PolymerElements/paper-elements#1.0.x",
     "polymer": "Polymer/polymer#1.4.x",
-    "dolphin-platform-polymer": "0.8.11"
+    "dolphin-platform-polymer": "0.8.12"
   }
 }
