@@ -28,7 +28,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Executor;
 
 /**
  * The main Dolphin facade on the client side.
@@ -50,6 +49,7 @@ public class ClientDolphin extends AbstractDolphin<ClientAttribute, ClientPresen
     /**
      * Convenience method for a creating a ClientPresentationModel with initial null values for the attributes
      */
+    @Deprecated
     public ClientPresentationModel presentationModel(String id, List<String> attributeNames) {
         List<ClientAttribute> attributes = new ArrayList<ClientAttribute>();
         for (String name : attributeNames) {
@@ -61,6 +61,7 @@ public class ClientDolphin extends AbstractDolphin<ClientAttribute, ClientPresen
         return result;
     }
 
+    @Deprecated
     public ClientPresentationModel presentationModel(String id, Map<String, Object> attributeNamesAndValues) {
         return presentationModel(id, null, attributeNamesAndValues);
     }
@@ -68,10 +69,12 @@ public class ClientDolphin extends AbstractDolphin<ClientAttribute, ClientPresen
     /**
      * groovy-friendly convenience method for a typical case of creating a ClientPresentationModel with initial values
      */
+    @Deprecated
     public ClientPresentationModel presentationModel(String id, String presentationModelType, Map<String, Object> attributeNamesAndValues) {
         return presentationModel(attributeNamesAndValues, id, presentationModelType);
     }
 
+    @Deprecated
     public ClientPresentationModel presentationModel(Map<String, Object> attributeNamesAndValues, String id) {
         return presentationModel(attributeNamesAndValues, id, null);
     }
@@ -79,6 +82,7 @@ public class ClientDolphin extends AbstractDolphin<ClientAttribute, ClientPresen
     /**
      * groovy-friendly convenience method for a typical case of creating a ClientPresentationModel with initial values
      */
+    @Deprecated
     public ClientPresentationModel presentationModel(Map<String, Object> attributeNamesAndValues, String id, String presentationModelType) {
         List<ClientAttribute> attributes = new ArrayList<ClientAttribute>();
         for (Map.Entry<String, Object> entry : attributeNamesAndValues.entrySet()) {
@@ -105,10 +109,6 @@ public class ClientDolphin extends AbstractDolphin<ClientAttribute, ClientPresen
         return result;
     }
 
-    public void send(String commandName, OnFinishedHandler onFinished, Executor executor) {
-        clientConnector.send(new NamedCommand(commandName), onFinished);
-    }
-
     /**
      * java-friendly convenience method for sending a named command
      */
@@ -124,6 +124,7 @@ public class ClientDolphin extends AbstractDolphin<ClientAttribute, ClientPresen
      * both java- and groovy-friendly convenience method to send an empty command, which will have no
      * presentation models nor data in the callback
      */
+    @Deprecated
     public void sync(final Runnable runnable) {
         clientConnector.send(new EmptyNotification(), new OnFinishedHandler() {
             public void onFinished(List<ClientPresentationModel> presentationModels) {
@@ -157,6 +158,12 @@ public class ClientDolphin extends AbstractDolphin<ClientAttribute, ClientPresen
 
     }
 
+    /**
+     * @deprecated Push should be active by default
+     * @param pushActionName
+     * @param releaseActionName
+     */
+    @Deprecated
     public void startPushListening(String pushActionName, String releaseActionName) {
         if (pushActionName == null) {
             return;
@@ -174,10 +181,19 @@ public class ClientDolphin extends AbstractDolphin<ClientAttribute, ClientPresen
         clientConnector.listen();
     }
 
+    /**
+     * @deprecated Push should be active by default
+     */
+    @Deprecated
     public void stopPushListening() {
         clientConnector.setPushEnabled(false);
     }
 
+    /**
+     * @deprecated Push should be active by default
+     * @return
+     */
+    @Deprecated
     public boolean isPushListening() {
         return clientConnector.isPushEnabled();
     }
@@ -190,10 +206,20 @@ public class ClientDolphin extends AbstractDolphin<ClientAttribute, ClientPresen
         return clientConnector;
     }
 
+    /**
+     * @deprecated Model store should be final and defined by constructor
+     * @param clientModelStore
+     */
+    @Deprecated
     public void setClientModelStore(ClientModelStore clientModelStore) {
         this.clientModelStore = clientModelStore;
     }
 
+    /**
+     * @deprecated client connector should be final and defined by constructor
+     * @param clientConnector
+     */
+    @Deprecated
     public void setClientConnector(ClientConnector clientConnector) {
         this.clientConnector = clientConnector;
     }
