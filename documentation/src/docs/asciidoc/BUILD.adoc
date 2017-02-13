@@ -67,3 +67,13 @@ Additional tasks may be available on subprojects, such as those that have the `a
 run:: Execute the project's main class.
 war:: Package the project as a WAR file.
 
+== Build for JavaScript projects
+
+TODO
+
+To Run Web Component Test Locally on Safari
+
+* install the latest SafariDriver extension from here
+http://selenium-release.storage.googleapis.com/2.48/SafariDriver.safariextz[SafariDriver.safariextz]
+* Open Safari -> preferences -> Advanced, Check the box ‘Show Develop menu bar’
+* Click menu option ‘Develop’ and click ‘Allow Remote Automation’
