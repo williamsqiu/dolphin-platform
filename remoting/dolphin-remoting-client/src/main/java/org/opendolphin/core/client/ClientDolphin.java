@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Executor;
 
 /**
  * The main Dolphin facade on the client side.
@@ -104,6 +105,10 @@ public class ClientDolphin extends AbstractDolphin<ClientAttribute, ClientPresen
         return result;
     }
 
+    public void send(String commandName, OnFinishedHandler onFinished, Executor executor) {
+        clientConnector.send(new NamedCommand(commandName), onFinished);
+    }
+
     /**
      * java-friendly convenience method for sending a named command
      */
@@ -112,7 +117,7 @@ public class ClientDolphin extends AbstractDolphin<ClientAttribute, ClientPresen
     }
 
     public void send(String commandName) {
-        clientConnector.send(new NamedCommand(commandName), null);
+        send(commandName, null);
     }
 
     /**

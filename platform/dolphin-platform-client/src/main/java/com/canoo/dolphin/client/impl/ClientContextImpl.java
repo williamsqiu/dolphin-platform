@@ -141,7 +141,7 @@ public class ClientContextImpl implements ClientContext {
         return remotingErrorHandler.register(new Callback<DolphinRemotingException>() {
             @Override
             public void call(final DolphinRemotingException e) {
-                clientConfiguration.getUiThreadHandler().executeInsideUiThread(new Runnable() {
+                clientConfiguration.getExecutor().execute(new Runnable() {
                     @Override
                     public void run() {
                         callback.call(e);

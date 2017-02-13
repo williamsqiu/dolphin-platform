@@ -19,6 +19,7 @@ import core.comm.DefaultInMemoryConfig;
 import org.opendolphin.core.client.comm.RunLaterUiThreadHandler;
 
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Executor;
 
 public class TestInMemoryConfig extends DefaultInMemoryConfig {
 
@@ -29,9 +30,13 @@ public class TestInMemoryConfig extends DefaultInMemoryConfig {
     private CountDownLatch done = new CountDownLatch(1);
 
     public TestInMemoryConfig() {
+        this(new RunLaterUiThreadHandler());
+    }
+
+    public TestInMemoryConfig(Executor executor) {
+        super(executor);
         getServerDolphin().registerDefaultActions();
         getClientConnector().setSleepMillis(0);
-        getClientConnector().setUiThreadHandler(new RunLaterUiThreadHandler());
     }
 
     public void assertionsDone() {

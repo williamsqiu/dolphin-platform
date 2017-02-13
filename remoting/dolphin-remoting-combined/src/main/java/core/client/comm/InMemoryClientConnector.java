@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.Executor;
 
 public class InMemoryClientConnector extends AbstractClientConnector {
 
@@ -36,12 +37,30 @@ public class InMemoryClientConnector extends AbstractClientConnector {
     private long sleepMillis = 0;
 
     public InMemoryClientConnector(ClientDolphin clientDolphin, ServerConnector serverConnector) {
-        super(clientDolphin);
+        this(clientDolphin, serverConnector, new Executor() {
+            @Override
+            public void execute(Runnable command) {
+                command.run();
+            }
+        });
+    }
+
+    public InMemoryClientConnector(ClientDolphin clientDolphin, ServerConnector serverConnector, Executor executor) {
+        super(clientDolphin, executor);
         this.serverConnector = serverConnector;
     }
 
     public InMemoryClientConnector(ClientDolphin clientDolphin, ServerConnector serverConnector, ICommandBatcher commandBatcher) {
-        super(clientDolphin, commandBatcher);
+        this(clientDolphin, serverConnector, commandBatcher, new Executor() {
+            @Override
+            public void execute(Runnable command) {
+                command.run();
+            }
+        });
+    }
+
+    public InMemoryClientConnector(ClientDolphin clientDolphin, ServerConnector serverConnector, ICommandBatcher commandBatcher, Executor executor) {
+        super(clientDolphin, executor, commandBatcher);
         this.serverConnector = serverConnector;
     }
 

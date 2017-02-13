@@ -35,5 +35,5 @@ public interface ClientConnector {
 
     void listen();
 
-    void setUiThreadHandler(UiThreadHandler uiThreadHandler);
+    //void setExecutor(Executor executor);
 }

@@ -26,6 +26,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Level;
@@ -35,7 +36,7 @@ public abstract class AbstractClientConnector implements ClientConnector {
 
     private static final Logger LOG = Logger.getLogger(AbstractClientConnector.class.getName());
 
-    private UiThreadHandler uiThreadHandler;
+    private final Executor executor;
 
     private final ExecutorService backgroundExecutor = Executors.newCachedThreadPool();
 
@@ -67,20 +68,21 @@ public abstract class AbstractClientConnector implements ClientConnector {
      */
     protected boolean waiting = false;
 
-    public AbstractClientConnector(ClientDolphin clientDolphin) {
-        this(clientDolphin, null);
+    public AbstractClientConnector(ClientDolphin clientDolphin, Executor executor) {
+        this(clientDolphin, executor, null);
     }
 
-    public AbstractClientConnector(ClientDolphin clientDolphin, ICommandBatcher commandBatcher) {
+    public AbstractClientConnector(final ClientDolphin clientDolphin, final Executor executor, final ICommandBatcher commandBatcher) {
         this.clientDolphin = clientDolphin;
+        this.executor = executor;
         this.commandBatcher = commandBatcher != null ? commandBatcher : new CommandBatcher();
         this.responseHandler = new ClientResponseHandler(clientDolphin);
         onException = new ExceptionHandler() {
             @Override
             public void handle(final Throwable e) {
                 LOG.log(Level.SEVERE, "onException reached, rethrowing in UI Thread, consider setting AbstractClientConnector.onException", e);
-                if (uiThreadHandler != null) {
-                    uiThreadHandler.executeInsideUiThread(new Runnable() {
+                if (executor != null) {
+                    executor.execute(new Runnable() {
                         @Override
                         public void run() {
                             throw new RuntimeException(e);
@@ -222,8 +224,8 @@ OnFinishedHandler callback = commandsAndHandlers.get(0).getHandler();// there ca
         doExceptionSafe(new Runnable() {
             @Override
             public void run() {
-                if (uiThreadHandler != null) {
-                    uiThreadHandler.executeInsideUiThread(whatToDo);
+                if (executor != null) {
+                    executor.execute(whatToDo);
                 } else {
                     LOG.warning("please provide howToProcessInsideUI handler");
                     whatToDo.run();
@@ -289,9 +291,6 @@ OnFinishedHandler callback = commandsAndHandlers.get(0).getHandler();// there ca
         this.responseHandler.setStrictMode(strictMode);
     }
 
-    public void setUiThreadHandler(UiThreadHandler uiThreadHandler) {
-        this.uiThreadHandler = uiThreadHandler;
-    }
     public void setOnException(ExceptionHandler onException) {
         this.onException = onException;
     }

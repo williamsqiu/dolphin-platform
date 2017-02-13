@@ -27,13 +27,14 @@ import org.opendolphin.core.comm.NamedCommand;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.Executor;
 
 public class DolphinTestClientConnector extends AbstractClientConnector{
 
     private final DolphinContext dolphinContext;
 
-    public DolphinTestClientConnector(ClientDolphin clientDolphin, DolphinContext dolphinContext) {
-        super(clientDolphin);
+    public DolphinTestClientConnector(ClientDolphin clientDolphin, Executor executor, DolphinContext dolphinContext) {
+        super(clientDolphin, executor);
         this.dolphinContext = dolphinContext;
     }
 

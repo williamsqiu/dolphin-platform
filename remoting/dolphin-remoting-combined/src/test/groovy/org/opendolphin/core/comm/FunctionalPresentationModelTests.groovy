@@ -16,9 +16,9 @@
 package org.opendolphin.core.comm
 
 import core.client.comm.InMemoryClientConnector
-import org.opendolphin.core.PresentationModel
-import org.opendolphin.core.client.comm.SynchronousInMemoryClientConnector
+import org.junit.Ignore
 import org.opendolphin.LogConfig
+import org.opendolphin.core.PresentationModel
 import org.opendolphin.core.client.ClientAttribute
 import org.opendolphin.core.client.ClientDolphin
 import org.opendolphin.core.client.ClientPresentationModel
@@ -29,6 +29,7 @@ import org.opendolphin.core.server.comm.ActionRegistry
 import org.opendolphin.core.server.comm.CommandHandler
 
 import java.util.concurrent.CountDownLatch
+import java.util.concurrent.Executor
 import java.util.concurrent.TimeUnit
 import java.util.logging.Level
 
@@ -73,15 +74,13 @@ class FunctionalPresentationModelTests extends GroovyTestCase {
 
     void testPerformanceWithBlindCommandBatcher() {
         def batcher = new BlindCommandBatcher(mergeValueChanges: true, deferMillis: 100)
-        def connector = new InMemoryClientConnector(context.clientDolphin, serverDolphin.serverConnector, batcher)
-        connector.uiThreadHandler = new RunLaterUiThreadHandler()
+        def connector = new InMemoryClientConnector(context.clientDolphin, serverDolphin.serverConnector, batcher, new RunLaterUiThreadHandler())
         context.clientDolphin.clientConnector = connector
         doTestPerformance()
     }
 
     void testPerformanceWithSynchronousConnector() {
         def connector = new SynchronousInMemoryClientConnector(context.clientDolphin, serverDolphin.serverConnector)
-        connector.uiThreadHandler = { fail "should not reach here! " } as UiThreadHandler
         context.clientDolphin.clientConnector = connector
         doTestPerformance()
     }
@@ -260,9 +259,18 @@ class FunctionalPresentationModelTests extends GroovyTestCase {
         }
     }
 
+    @Ignore
     void testAsynchronousExceptionInOnFinishedHandler() {
+        context = new TestInMemoryConfig(new Executor() {
+            @Override
+            void execute(Runnable command) {
+                command.run();
+            }
+        });
+        serverDolphin = context.serverDolphin
+        clientDolphin = context.clientDolphin
 
-        clientDolphin.clientConnector.uiThreadHandler = { it() } as UiThreadHandler
+        //clientDolphin.clientConnector.executor = { it() } as Executor
         // not "run later" we need it immediately here
         clientDolphin.clientConnector.onException = { context.assertionsDone() }
 

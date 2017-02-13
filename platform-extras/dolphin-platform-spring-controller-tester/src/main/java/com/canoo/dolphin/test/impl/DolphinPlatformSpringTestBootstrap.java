@@ -56,7 +56,6 @@ import com.canoo.dolphin.server.spring.ClientScope;
 import com.canoo.dolphin.test.ControllerTestException;
 import com.canoo.dolphin.util.Assert;
 import org.opendolphin.core.client.ClientDolphin;
-import org.opendolphin.core.client.comm.UiThreadHandler;
 import org.opendolphin.core.server.ServerModelStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -72,6 +71,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executor;
 import java.util.concurrent.Future;
 
 @Configuration
@@ -86,11 +86,10 @@ public class DolphinPlatformSpringTestBootstrap {
         final ClientDolphin clientDolphin = dolphinContext.getClientDolphin();
 
         final URL dummyURL = new URL("http://dummyURL");
-        final ClientConfiguration clientConfiguration = new ClientConfiguration(dummyURL, new UiThreadHandler() {
-
+        final ClientConfiguration clientConfiguration = new ClientConfiguration(dummyURL, new Executor() {
             @Override
-            public void executeInsideUiThread(Runnable runnable) {
-                config.getClientExecutor().execute(runnable);
+            public void execute(Runnable command) {
+                config.getClientExecutor().execute(command);
             }
         });
         clientConfiguration.setConnectionTimeout(Long.MAX_VALUE);
@@ -134,16 +133,9 @@ public class DolphinPlatformSpringTestBootstrap {
         DolphinTestContext dolphinContext = new DolphinTestContext(ConfigurationFileLoader.loadConfiguration(), dolphinContextProviderMock, containerManager, controllerRepository, config);
         dolphinContextProviderMock.setCurrentContext(dolphinContext);
 
-        DolphinTestClientConnector inMemoryClientConnector = new DolphinTestClientConnector(config.getClientDolphin(), dolphinContext);
+        DolphinTestClientConnector inMemoryClientConnector = new DolphinTestClientConnector(config.getClientDolphin(), config.getClientExecutor(), dolphinContext);
 
         inMemoryClientConnector.setStrictMode(false);
-        inMemoryClientConnector.setUiThreadHandler(new UiThreadHandler() {
-
-            @Override
-            public void executeInsideUiThread(Runnable runnable) {
-                config.getClientExecutor().execute(runnable);
-            }
-        });
         config.getClientDolphin().setClientConnector(inMemoryClientConnector);
 
         return dolphinContext;
