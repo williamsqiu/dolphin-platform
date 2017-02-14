@@ -17,7 +17,6 @@ package org.opendolphin.core.server.comm
 
 import org.opendolphin.core.comm.AttributeCreatedNotification
 import org.opendolphin.core.comm.Command
-import org.opendolphin.core.comm.DataCommand
 import org.opendolphin.core.comm.NamedCommand
 
 class ActionRegistryTests extends GroovyTestCase {
@@ -46,10 +45,9 @@ class ActionRegistryTests extends GroovyTestCase {
 
             }
         }
-        registry.register(DataCommand, otherAction)
         registry.register(AttributeCreatedNotification, otherAction)
         assert 2 == registry.actions.size()
-        assert 2 == registry.getAt('Data').size()
+        assert 1 == registry.getAt('Data').size()
         assert 1 == registry.getAt('AttributeCreated').size()
     }
 
@@ -57,9 +55,8 @@ class ActionRegistryTests extends GroovyTestCase {
         TestSimpleCommandHandler commandHandler = new TestSimpleCommandHandler()
         registry.register('Data', commandHandler)
         assert registry.getAt('Data').contains(commandHandler)
-        registry.register(DataCommand, new TestSimpleCommandHandler())
         assert 1 == registry.actions.size()
-        assert 2 == registry.getAt('Data').size()
+        assert 1 == registry.getAt('Data').size()
     }
 
     void testUnregisterCommandHandler() {
@@ -67,10 +64,6 @@ class ActionRegistryTests extends GroovyTestCase {
         registry.register('Data',commandHandler)
         assert 1 == registry.getAt('Data').size()
         registry.unregister('Data',commandHandler)
-        assert 0 == registry.getAt('Data').size()
-        registry.register(DataCommand, commandHandler)
-        assert 1 == registry.getAt('Data').size()
-        registry.unregister(DataCommand,commandHandler)
         assert 0 == registry.getAt('Data').size()
     }
 
@@ -84,10 +77,6 @@ class ActionRegistryTests extends GroovyTestCase {
         registry.register('Data',action)
         assert 1 == registry.getAt('Data').size()
         registry.unregister('Data',action)
-        assert 0 == registry.getAt('Data').size()
-        registry.register(DataCommand, action)
-        assert 1 == registry.getAt('Data').size()
-        registry.unregister(DataCommand,action)
         assert 0 == registry.getAt('Data').size()
     }
 

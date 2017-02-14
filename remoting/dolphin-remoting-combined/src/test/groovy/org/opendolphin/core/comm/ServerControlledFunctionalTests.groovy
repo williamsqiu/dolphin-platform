@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 package org.opendolphin.core.comm
+
 import org.opendolphin.core.client.ClientAttribute
 import org.opendolphin.core.client.ClientDolphin
-import org.opendolphin.core.client.ClientPresentationModel
 import org.opendolphin.core.client.comm.OnFinishedHandler
 import org.opendolphin.core.server.*
 import org.opendolphin.core.server.action.DolphinServerAction
@@ -108,14 +108,14 @@ class ServerControlledFunctionalTests extends GroovyTestCase {
 
         clientDolphin.send("createPM", new OnFinishedHandler() {
             @Override
-            void onFinished(List<ClientPresentationModel> presentationModels) {
+            void onFinished() {
                 assert clientDolphin.findAllPresentationModelsByType("myType").size() == 1
                 assert clientDolphin.findAllPresentationModelsByType("myType").first().getAttribute("a").value == 0
             }
         });
         clientDolphin.send("deleteAndRecreate", new OnFinishedHandler() {
             @Override
-            void onFinished(List<ClientPresentationModel> presentationModels) {
+            void onFinished() {
                 assert clientDolphin.findAllPresentationModelsByType("myType").size() == 2
                 assert clientDolphin.findAllPresentationModelsByType("myType")[0].getAttribute("a").value == 0
                 assert clientDolphin.findAllPresentationModelsByType("myType")[1].getAttribute("a").value == 1
@@ -139,7 +139,7 @@ class ServerControlledFunctionalTests extends GroovyTestCase {
         clientDolphin.send("createPM")
         clientDolphin.send("changeValueMultipleTimesAndBackToBase", new OnFinishedHandler() {
             @Override
-            void onFinished(List<ClientPresentationModel> presentationModels) {
+            void onFinished() {
                 def myPm = clientDolphin.getPresentationModel("myPm")
                 assert myPm.getAttribute("a").value == 0
                 context.assertionsDone()
@@ -159,13 +159,13 @@ class ServerControlledFunctionalTests extends GroovyTestCase {
 
         clientDolphin.send("createPM", new OnFinishedHandler() {
             @Override
-            void onFinished(List<ClientPresentationModel> presentationModels) {
+            void onFinished() {
                 assert clientDolphin.getPresentationModel("myPm")
             }
         });
         clientDolphin.send("remove", new OnFinishedHandler() {
             @Override
-            void onFinished(List<ClientPresentationModel> presentationModels) {
+            void onFinished() {
                 assert null == clientDolphin.getPresentationModel("myPm")
                 context.assertionsDone()
             }
@@ -184,7 +184,7 @@ class ServerControlledFunctionalTests extends GroovyTestCase {
 
         clientDolphin.send("createPM", new OnFinishedHandler() {
             @Override
-            void onFinished(List<ClientPresentationModel> presentationModels) {
+            void onFinished() {
                 def pm = clientDolphin.findAllPresentationModelsByType("myType").first()
                 pm.getAttribute('a').addPropertyChangeListener("qualifier", new PropertyChangeListener() {
                     @Override
@@ -196,7 +196,7 @@ class ServerControlledFunctionalTests extends GroovyTestCase {
         });
         clientDolphin.send("setAndUnsetQualifier", new OnFinishedHandler() {
             @Override
-            void onFinished(List<ClientPresentationModel> presentationModels) {
+            void onFinished() {
                 assert "myQualifier" == clientDolphin.findAllPresentationModelsByType("myType").first().getAttribute("a").qualifier
                 context.assertionsDone()
             }
@@ -215,13 +215,13 @@ class ServerControlledFunctionalTests extends GroovyTestCase {
 
         clientDolphin.send("createPM", new OnFinishedHandler() {
             @Override
-            void onFinished(List<ClientPresentationModel> presentationModels) {
+            void onFinished() {
                 assert clientDolphin.findAllPresentationModelsByType("myType").first()
             }
         });
         clientDolphin.send("setQualifier", new OnFinishedHandler() {
             @Override
-            void onFinished(List<ClientPresentationModel> presentationModels) {
+            void onFinished() {
                 assert clientDolphin.findAllPresentationModelsByType("myType").first().getAttribute("a").qualifier == "myQualifier"
                 context.assertionsDone()
             }

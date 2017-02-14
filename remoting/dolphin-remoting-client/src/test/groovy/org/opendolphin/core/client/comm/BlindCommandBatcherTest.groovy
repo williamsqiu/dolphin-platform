@@ -16,7 +16,6 @@
 package org.opendolphin.core.client.comm
 
 import org.opendolphin.LogConfig
-import org.opendolphin.core.client.ClientPresentationModel
 import org.opendolphin.core.comm.Command
 import org.opendolphin.core.comm.CreatePresentationModelCommand
 import org.opendolphin.core.comm.GetPresentationModelCommand
@@ -65,7 +64,7 @@ class BlindCommandBatcherTest extends GroovyTestCase {
         list << new CommandAndHandler(handler: new OnFinishedHandler() {
 
             @Override
-            void onFinished(List<ClientPresentationModel> presentationModels) {
+            void onFinished() {
 
             }
         })

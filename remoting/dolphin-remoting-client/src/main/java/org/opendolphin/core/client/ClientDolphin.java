@@ -126,7 +126,7 @@ public class ClientDolphin extends AbstractDolphin<ClientAttribute, ClientPresen
     @Deprecated
     public void sync(final Runnable runnable) {
         clientConnector.send(new EmptyNotification(), new OnFinishedHandler() {
-            public void onFinished(List<ClientPresentationModel> presentationModels) {
+            public void onFinished() {
                 runnable.run();
             }
 

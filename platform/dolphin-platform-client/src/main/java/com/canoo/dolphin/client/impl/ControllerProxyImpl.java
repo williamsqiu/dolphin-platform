@@ -23,10 +23,8 @@ import com.canoo.dolphin.impl.InternalAttributesBean;
 import com.canoo.dolphin.impl.PlatformConstants;
 import com.canoo.dolphin.util.Assert;
 import org.opendolphin.core.client.ClientDolphin;
-import org.opendolphin.core.client.ClientPresentationModel;
 import org.opendolphin.core.client.comm.OnFinishedHandler;
 
-import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BiFunction;
 
@@ -69,7 +67,7 @@ public class ControllerProxyImpl<T> implements ControllerProxy<T> {
         final CompletableFuture<Void> result = new CompletableFuture<>();
         dolphin.send(PlatformConstants.CALL_CONTROLLER_ACTION_COMMAND_NAME, new OnFinishedHandler(){
             @Override
-            public void onFinished(List<ClientPresentationModel> presentationModels) {
+            public void onFinished() {
                 if (bean.isError()) {
                     result.completeExceptionally(new ControllerActionException());
                 } else {
@@ -95,7 +93,7 @@ public class ControllerProxyImpl<T> implements ControllerProxy<T> {
 
         dolphin.send(PlatformConstants.DESTROY_CONTROLLER_COMMAND_NAME, new OnFinishedHandler() {
             @Override
-            public void onFinished(List<ClientPresentationModel> presentationModels) {
+            public void onFinished() {
                 model = null;
                 ret.complete(null);
             }

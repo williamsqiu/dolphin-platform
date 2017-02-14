@@ -17,19 +17,16 @@ package org.opendolphin.core.client.comm;
 
 import org.opendolphin.core.RemotingConstants;
 import org.opendolphin.core.client.ClientDolphin;
-import org.opendolphin.core.client.ClientPresentationModel;
 import org.opendolphin.core.comm.Command;
 import org.opendolphin.core.comm.NamedCommand;
 import org.opendolphin.core.comm.SignalCommand;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.Executor;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -37,9 +34,9 @@ public abstract class AbstractClientConnector implements ClientConnector {
 
     private static final Logger LOG = Logger.getLogger(AbstractClientConnector.class.getName());
 
-    private final Executor executor;
+    private final Executor uiExecutor;
 
-    private final ExecutorService backgroundExecutor = Executors.newCachedThreadPool();
+    private final Executor backgroundExecutor = Executors.newCachedThreadPool();
 
     private ExceptionHandler onException;
 
@@ -62,28 +59,28 @@ public abstract class AbstractClientConnector implements ClientConnector {
     /**
      * whether listening for push events should be done at all.
      */
-    protected boolean pushEnabled = false;
+    protected AtomicBoolean pushEnabled = new AtomicBoolean(false);
 
     /**
      * whether we currently wait for push events (internal state) and may need to release
      */
-    protected boolean waiting = false;
+    protected AtomicBoolean releaseNeeded = new AtomicBoolean(false);
 
-    public AbstractClientConnector(ClientDolphin clientDolphin, Executor executor) {
-        this(clientDolphin, executor, null);
+    public AbstractClientConnector(ClientDolphin clientDolphin, Executor uiExecutor) {
+        this(clientDolphin, uiExecutor, null);
     }
 
-    public AbstractClientConnector(final ClientDolphin clientDolphin, final Executor executor, final ICommandBatcher commandBatcher) {
+    public AbstractClientConnector(final ClientDolphin clientDolphin, final Executor uiExecutor, final ICommandBatcher commandBatcher) {
         this.clientDolphin = clientDolphin;
-        this.executor = executor;
+        this.uiExecutor = uiExecutor;
         this.commandBatcher = commandBatcher != null ? commandBatcher : new CommandBatcher();
         this.responseHandler = new ClientResponseHandler(clientDolphin);
         onException = new ExceptionHandler() {
             @Override
             public void handle(final Throwable e) {
                 LOG.log(Level.SEVERE, "onException reached, rethrowing in UI Thread, consider setting AbstractClientConnector.onException", e);
-                if (executor != null) {
-                    executor.execute(new Runnable() {
+                if (uiExecutor != null) {
+                    uiExecutor.execute(new Runnable() {
                         @Override
                         public void run() {
                             throw new RuntimeException(e);
@@ -157,7 +154,7 @@ public abstract class AbstractClientConnector implements ClientConnector {
 
     protected void processResults(final List<? extends Command> response, List<CommandAndHandler> commandsAndHandlers) {
         // see http://jira.codehaus.org/browse/GROOVY-6946
-        if(LOG.isLoggable(Level.INFO)) {
+        if (LOG.isLoggable(Level.INFO)) {
             final List<String> commands = new ArrayList<>();
             if (response != null) {
                 for (Command c : response) {
@@ -167,42 +164,18 @@ public abstract class AbstractClientConnector implements ClientConnector {
             }
         }
 
-        List<ClientPresentationModel> touchedPresentationModels = new LinkedList<>();
-        List<Map> touchedDataMaps = new LinkedList<>();
         for (Command serverCommand : response) {
-            Object touched = dispatchHandle(serverCommand);
-            if (touched != null && touched instanceof ClientPresentationModel) {
-                touchedPresentationModels.add((ClientPresentationModel) touched);
-            } else if (touched != null && touched instanceof Map) {
-                touchedDataMaps.add((Map) touched);
-            }
-
+            dispatchHandle(serverCommand);
         }
-OnFinishedHandler callback = commandsAndHandlers.get(0).getHandler();// there can only be one relevant handler anyway
-        // added != null check instead of using simple Groovy truth because of NPE through GROOVY-7709
+        OnFinishedHandler callback = commandsAndHandlers.get(0).getHandler();
         if (callback != null) {
-            List<ClientPresentationModel> uniqueModels = new ArrayList<>();
-            for(ClientPresentationModel model : touchedPresentationModels) {
-                boolean found = false;
-                for(ClientPresentationModel check : uniqueModels) {
-                    if(model.getId().equals(check.getId())) {
-                        found = true;
-                    }
-                }
-                if(!found) {
-                    uniqueModels.add(model);
-                }
-            }
-            callback.onFinished(uniqueModels);
-            if (callback instanceof OnFinishedData) {
-                ((OnFinishedData) callback).onFinishedData(touchedDataMaps);
-            }
+            callback.onFinished();
         }
     }
 
 
-    public Object dispatchHandle(Command command) {
-        return responseHandler.dispatchHandle(command);
+    protected void dispatchHandle(Command command) {
+        responseHandler.dispatchHandle(command);
     }
 
     private void doExceptionSafe(Runnable processing, Runnable atLeast) {
@@ -225,8 +198,8 @@ OnFinishedHandler callback = commandsAndHandlers.get(0).getHandler();// there ca
         doExceptionSafe(new Runnable() {
             @Override
             public void run() {
-                if (executor != null) {
-                    executor.execute(whatToDo);
+                if (uiExecutor != null) {
+                    uiExecutor.execute(whatToDo);
                 } else {
                     LOG.warning("please provide howToProcessInsideUI handler");
                     whatToDo.run();
@@ -238,22 +211,16 @@ OnFinishedHandler callback = commandsAndHandlers.get(0).getHandler();// there ca
     /**
      * listens for the pushListener to return. The pushListener must be set and pushEnabled must be true.
      */
-    public void listen() {
-        if (!pushEnabled) {
-            return; // allow the loop to end
+    protected void listen() {
+        if (!pushEnabled.get() || releaseNeeded.get()) {
+            return;
         }
-
-        if (waiting) {
-            return; // avoid second call while already waiting (?) -> two different push actions not supported
-        }
-        waiting = true;
+        releaseNeeded.set(true);
         send(pushListener, new OnFinishedHandler() {
             @Override
-            public void onFinished(List<ClientPresentationModel> presentationModels) {
-                // we do nothing here nor do we register a special handler.
-                // The server may have sent commands, though, even CallNamedActionCommand.
-                waiting = false;
-                listen();// not a real recursion; is added to event queue
+            public void onFinished() {
+                releaseNeeded.set(false);
+                listen();
             }
         });
     }
@@ -263,11 +230,11 @@ OnFinishedHandler callback = commandsAndHandlers.get(0).getHandler();// there ca
      * Does nothing in case that the push listener is not active.
      */
     protected void release() {
-        if (!waiting) {
+        if (!releaseNeeded.get()) {
             return; // there is no point in releasing if we do not wait. Avoid excessive releasing.
         }
 
-        waiting = false;// release is under way
+        releaseNeeded.set(false);// release is under way
         backgroundExecutor.execute(new Runnable() {
             @Override
             public void run() {
@@ -279,13 +246,13 @@ OnFinishedHandler callback = commandsAndHandlers.get(0).getHandler();// there ca
 
     @Override
     public void startPushListening() {
-        this.pushEnabled = true;
+        pushEnabled.set(true);
         listen();
     }
 
     @Override
     public void stopPushListening() {
-        this.pushEnabled = false;
+        pushEnabled.set(false);
     }
 
     public void setStrictMode(boolean strictMode) {
@@ -294,10 +261,6 @@ OnFinishedHandler callback = commandsAndHandlers.get(0).getHandler();// there ca
 
     public void setOnException(ExceptionHandler onException) {
         this.onException = onException;
-    }
-
-    public ClientDolphin getClientDolphin() {
-        return clientDolphin;
     }
 
     protected Command getReleaseCommand() {

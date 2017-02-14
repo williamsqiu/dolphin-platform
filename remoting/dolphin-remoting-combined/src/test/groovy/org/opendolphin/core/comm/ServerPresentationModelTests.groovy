@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 package org.opendolphin.core.comm
+
 import org.opendolphin.LogConfig
 import org.opendolphin.core.ModelStoreConfig
 import org.opendolphin.core.ModelStoreEvent
 import org.opendolphin.core.ModelStoreListener
 import org.opendolphin.core.client.ClientDolphin
-import org.opendolphin.core.client.ClientPresentationModel
 import org.opendolphin.core.client.comm.OnFinishedHandler
 import org.opendolphin.core.server.*
 import org.opendolphin.core.server.action.DolphinServerAction
@@ -91,7 +91,7 @@ class ServerPresentationModelTests extends GroovyTestCase {
         clientDolphin.send "assertValue", new OnFinishedHandler() {
 
             @Override
-            void onFinished(List<ClientPresentationModel> presentationModels) {
+            void onFinished() {
                 assert 1 == model.getAttribute("att1").value
                 context.assertionsDone()
             }
@@ -195,7 +195,7 @@ class ServerPresentationModelTests extends GroovyTestCase {
         clientDolphin.send "create", new OnFinishedHandler() {
 
             @Override
-            void onFinished(List<ClientPresentationModel> presentationModels) {
+            void onFinished() {
                 assert clientDolphin.getPresentationModel("PM1").getAttribute("att1").value == 1
                 clientDolphin.getPresentationModel("PM1").getAttribute("att1").value = 2
 
@@ -247,7 +247,7 @@ class ServerPresentationModelTests extends GroovyTestCase {
         clientDolphin.send "create", new OnFinishedHandler() {
 
             @Override
-            void onFinished(List<ClientPresentationModel> presentationModels) {
+            void onFinished() {
                 assert receivedCommands.get(0).pmId == "client-side-with-id"
                 assert receivedCommands.get(1).pmId == "server-side-with-id"
                 assert receivedCommands.get(2).pmId == "0-AUTO-SRV"
@@ -275,7 +275,7 @@ class ServerPresentationModelTests extends GroovyTestCase {
         clientDolphin.send "remove", new OnFinishedHandler() {
 
             @Override
-            void onFinished(List<ClientPresentationModel> presentationModels) {
+            void onFinished() {
                 assert null == clientDolphin.getPresentationModel("client-side-with-id") // removed from client before callback
                 context.assertionsDone()
             }
@@ -292,7 +292,7 @@ class ServerPresentationModelTests extends GroovyTestCase {
         clientDolphin.send "changeBaseValue", new OnFinishedHandler() {
 
             @Override
-            void onFinished(List<ClientPresentationModel> presentationModels) {
+            void onFinished() {
                 assert source.getAttribute("attr1").value     == "sourceValue"
                 context.assertionsDone()
             }
@@ -314,7 +314,7 @@ class ServerPresentationModelTests extends GroovyTestCase {
         clientDolphin.send "changeBaseValue", new OnFinishedHandler() {
 
             @Override
-            void onFinished(List<ClientPresentationModel> presentationModels) {
+            void onFinished() {
                 assert source.getAttribute("attr1").value     == "sourceValue"
                 assert source.getAttribute("attr1").qualifier == "changed"
                 context.assertionsDone()
@@ -336,7 +336,7 @@ class ServerPresentationModelTests extends GroovyTestCase {
         clientDolphin.send "addAttribute", new OnFinishedHandler() {
 
             @Override
-            void onFinished(List<ClientPresentationModel> presentationModels) {
+            void onFinished() {
                 assert source.getAttribute("attr2").value == "initial"
                 context.assertionsDone()
             }

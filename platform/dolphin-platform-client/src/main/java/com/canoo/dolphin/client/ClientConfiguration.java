@@ -46,7 +46,7 @@ public class ClientConfiguration {
 
     private final URL serverEndpoint;
 
-    private final Executor executor;
+    private final Executor uiExecutor;
 
     private final ExecutorService backgroundExecutor;
 
@@ -68,11 +68,11 @@ public class ClientConfiguration {
      * Default constructor of a client configuration
      *
      * @param serverEndpoint the Dolphin Platform server url
-     * @param uiThreadHandler the ui thread handler
+     * @param uiExecutor the ui thread handler
      */
-    public ClientConfiguration(URL serverEndpoint, Executor executor) {
+    public ClientConfiguration(URL serverEndpoint, Executor uiExecutor) {
         this.serverEndpoint = Assert.requireNonNull(serverEndpoint, "serverEndpoint");
-        this.executor = Assert.requireNonNull(executor, "executor");
+        this.uiExecutor = Assert.requireNonNull(uiExecutor, "uiExecutor");
         this.dolphinLogLevel = Level.SEVERE;
         this.connectionTimeout = DEFAULT_CONNECTION_TIMEOUT;
         dolphinPlatformThreadFactory = new DolphinPlatformThreadFactoryImpl();
@@ -87,8 +87,8 @@ public class ClientConfiguration {
      *
      * @return ui thread handler
      */
-    public Executor getExecutor() {
-        return executor;
+    public Executor getUiExecutor() {
+        return uiExecutor;
     }
 
     /**

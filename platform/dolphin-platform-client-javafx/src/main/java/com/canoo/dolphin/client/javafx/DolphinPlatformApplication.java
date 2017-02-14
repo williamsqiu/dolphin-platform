@@ -59,7 +59,7 @@ public abstract class DolphinPlatformApplication extends Application {
         try {
             ClientConfiguration clientConfiguration = getClientConfiguration();
             clientConfiguration.getDolphinPlatformThreadFactory().setUncaughtExceptionHandler((Thread thread, Throwable exception) -> {
-                clientConfiguration.getExecutor().execute(() -> {
+                clientConfiguration.getUiExecutor().execute(() -> {
                     Assert.requireNonNull(thread, "thread");
                     Assert.requireNonNull(exception, "exception");
                     onRuntimeError(primaryStage, new DolphinRuntimeException(thread, "Unhandled error in Dolphin Platform background thread", exception));
@@ -172,7 +172,7 @@ public abstract class DolphinPlatformApplication extends Application {
                     clientContext = null;
                 }
                 init();
-                clientConfiguration.getExecutor().execute(() -> {
+                clientConfiguration.getUiExecutor().execute(() -> {
                     try {
                         startImpl(primaryStage);
                     } catch (Exception e) {
@@ -180,7 +180,7 @@ public abstract class DolphinPlatformApplication extends Application {
                     }
                 });
             } catch (Exception e) {
-                clientConfiguration.getExecutor().execute(() -> onInitializationError(primaryStage, new ClientInitializationException("Error in reconnect!", e)));
+                clientConfiguration.getUiExecutor().execute(() -> onInitializationError(primaryStage, new ClientInitializationException("Error in reconnect!", e)));
             }
         });
     }

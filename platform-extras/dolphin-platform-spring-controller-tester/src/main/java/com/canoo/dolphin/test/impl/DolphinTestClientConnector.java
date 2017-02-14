@@ -59,12 +59,12 @@ public class DolphinTestClientConnector extends AbstractClientConnector{
     }
 
     @Override
-    public void listen() {
+    protected void listen() {
         //TODO: no implementation since EventBus is used in a different way for this tests. Should be refactored in parent class.
     }
 
     @Override
-    public List<Command> transmit(List<Command> commands) {
+    protected List<Command> transmit(List<Command> commands) {
         ArrayList<Command> realCommands = new ArrayList<>(commands);
         realCommands.add(new NamedCommand(RemotingConstants.POLL_EVENT_BUS_COMMAND_NAME));
         return dolphinContext.handle(commands);
