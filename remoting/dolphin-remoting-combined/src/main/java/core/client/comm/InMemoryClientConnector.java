@@ -20,6 +20,7 @@ import org.opendolphin.core.client.comm.AbstractClientConnector;
 import org.opendolphin.core.client.comm.ICommandBatcher;
 import org.opendolphin.core.comm.Command;
 import org.opendolphin.core.server.ServerConnector;
+import org.opendolphin.util.DirectExecutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,12 +38,7 @@ public class InMemoryClientConnector extends AbstractClientConnector {
     private long sleepMillis = 0;
 
     public InMemoryClientConnector(ClientDolphin clientDolphin, ServerConnector serverConnector) {
-        this(clientDolphin, serverConnector, new Executor() {
-            @Override
-            public void execute(Runnable command) {
-                command.run();
-            }
-        });
+        this(clientDolphin, serverConnector, DirectExecutor.getInstance());
     }
 
     public InMemoryClientConnector(ClientDolphin clientDolphin, ServerConnector serverConnector, Executor executor) {
@@ -51,12 +47,7 @@ public class InMemoryClientConnector extends AbstractClientConnector {
     }
 
     public InMemoryClientConnector(ClientDolphin clientDolphin, ServerConnector serverConnector, ICommandBatcher commandBatcher) {
-        this(clientDolphin, serverConnector, commandBatcher, new Executor() {
-            @Override
-            public void execute(Runnable command) {
-                command.run();
-            }
-        });
+        this(clientDolphin, serverConnector, commandBatcher, DirectExecutor.getInstance());
     }
 
     public InMemoryClientConnector(ClientDolphin clientDolphin, ServerConnector serverConnector, ICommandBatcher commandBatcher, Executor executor) {

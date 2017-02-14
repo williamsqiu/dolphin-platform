@@ -15,12 +15,13 @@
  */
 package core.comm;
 
+import core.client.comm.InMemoryClientConnector;
 import org.opendolphin.LogConfig;
 import org.opendolphin.core.client.ClientDolphin;
 import org.opendolphin.core.client.ClientModelStore;
-import core.client.comm.InMemoryClientConnector;
 import org.opendolphin.core.server.ServerDolphin;
 import org.opendolphin.core.server.ServerDolphinFactory;
+import org.opendolphin.util.DirectExecutor;
 
 import java.util.concurrent.Executor;
 import java.util.logging.Level;
@@ -40,12 +41,7 @@ public class DefaultInMemoryConfig {
     private final InMemoryClientConnector clientConnector;
 
     public DefaultInMemoryConfig() {
-        this(new Executor() {
-            @Override
-            public void execute(Runnable command) {
-                command.run();
-            }
-        });
+        this(DirectExecutor.getInstance());
     }
 
     public DefaultInMemoryConfig(final Executor executor) {

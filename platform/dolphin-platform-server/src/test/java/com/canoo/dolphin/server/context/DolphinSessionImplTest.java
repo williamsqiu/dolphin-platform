@@ -16,22 +16,16 @@
 package com.canoo.dolphin.server.context;
 
 import com.canoo.dolphin.server.DolphinSession;
+import org.opendolphin.util.DirectExecutor;
 import org.testng.Assert;
 import org.testng.annotations.Test;
-
-import java.util.concurrent.Executor;
 
 public class DolphinSessionImplTest {
 
     @Test
     public void testid() {
         //given:
-        DolphinSession dolphinSession = new DolphinSessionImpl("test-id", new Executor() {
-            @Override
-            public void execute(Runnable command) {
-                command.run();
-            }
-        });
+        DolphinSession dolphinSession = new DolphinSessionImpl("test-id", DirectExecutor.getInstance());
 
         //then:
         Assert.assertEquals("test-id", dolphinSession.getId());
@@ -40,12 +34,7 @@ public class DolphinSessionImplTest {
     @Test
     public void testAddAttribute() {
         //given:
-        DolphinSession dolphinSession = new DolphinSessionImpl("test-id", new Executor() {
-            @Override
-            public void execute(Runnable command) {
-                command.run();
-            }
-        });
+        DolphinSession dolphinSession = new DolphinSessionImpl("test-id", DirectExecutor.getInstance());
 
         //when:
         dolphinSession.setAttribute("test-attribute", "Hello Dolphin Session");
@@ -59,12 +48,7 @@ public class DolphinSessionImplTest {
     @Test
     public void testNullAttribute() {
         //given:
-        DolphinSession dolphinSession = new DolphinSessionImpl("test-id", new Executor() {
-            @Override
-            public void execute(Runnable command) {
-                command.run();
-            }
-        });
+        DolphinSession dolphinSession = new DolphinSessionImpl("test-id", DirectExecutor.getInstance());
 
         //then:
         Assert.assertEquals(0, dolphinSession.getAttributeNames().size());
@@ -74,12 +58,7 @@ public class DolphinSessionImplTest {
     @Test(expectedExceptions = UnsupportedOperationException.class)
     public void testImmutableAttributeSet() {
         //given:
-        DolphinSession dolphinSession = new DolphinSessionImpl("test-id", new Executor() {
-            @Override
-            public void execute(Runnable command) {
-                command.run();
-            }
-        });
+        DolphinSession dolphinSession = new DolphinSessionImpl("test-id", DirectExecutor.getInstance());
 
         //then:
         dolphinSession.getAttributeNames().add("att");
@@ -88,12 +67,7 @@ public class DolphinSessionImplTest {
     @Test(expectedExceptions = UnsupportedOperationException.class)
     public void testImmutableAttributeSet2() {
         //given:
-        DolphinSession dolphinSession = new DolphinSessionImpl("test-id", new Executor() {
-            @Override
-            public void execute(Runnable command) {
-                command.run();
-            }
-        });
+        DolphinSession dolphinSession = new DolphinSessionImpl("test-id", DirectExecutor.getInstance());
 
         //when:
         dolphinSession.setAttribute("test-attribute", "Hello Dolphin Session");
@@ -105,12 +79,7 @@ public class DolphinSessionImplTest {
     @Test
     public void testRemoveAttribute() {
         //given:
-        DolphinSession dolphinSession = new DolphinSessionImpl("test-id", new Executor() {
-            @Override
-            public void execute(Runnable command) {
-                command.run();
-            }
-        });
+        DolphinSession dolphinSession = new DolphinSessionImpl("test-id", DirectExecutor.getInstance());
 
         //when:
         dolphinSession.setAttribute("test-attribute", "Hello Dolphin Session");
@@ -124,12 +93,7 @@ public class DolphinSessionImplTest {
     @Test
     public void testMultipleAttributes() {
         //given:
-        DolphinSession dolphinSession = new DolphinSessionImpl("test-id", new Executor() {
-            @Override
-            public void execute(Runnable command) {
-                command.run();
-            }
-        });
+        DolphinSession dolphinSession = new DolphinSessionImpl("test-id", DirectExecutor.getInstance());
 
         //when:
         dolphinSession.setAttribute("test-attribute1", "Hello Dolphin Session");
@@ -149,12 +113,7 @@ public class DolphinSessionImplTest {
     @Test
     public void testInvalidate() {
         //given:
-        DolphinSession dolphinSession = new DolphinSessionImpl("test-id", new Executor() {
-            @Override
-            public void execute(Runnable command) {
-                command.run();
-            }
-        });
+        DolphinSession dolphinSession = new DolphinSessionImpl("test-id", DirectExecutor.getInstance());
 
         //when:
         dolphinSession.setAttribute("test-attribute1", "Hello Dolphin Session");
