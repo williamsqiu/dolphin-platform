@@ -29,7 +29,6 @@ import com.canoo.dolphin.client.impl.ForwardableCallback;
 import com.canoo.dolphin.impl.BeanRepositoryImpl;
 import com.canoo.dolphin.impl.ClassRepositoryImpl;
 import com.canoo.dolphin.impl.Converters;
-import com.canoo.dolphin.impl.PlatformConstants;
 import com.canoo.dolphin.impl.PresentationModelBuilderFactory;
 import com.canoo.dolphin.impl.codec.OptimizedJsonCodec;
 import com.canoo.dolphin.impl.collections.ListMapperImpl;
@@ -105,7 +104,7 @@ public class ClientContextFactory {
                     final ClientBeanManagerImpl clientBeanManager = new ClientBeanManagerImpl(beanRepository, beanBuilder, clientDolphin);
                     final ControllerProxyFactory controllerProxyFactory = new ControllerProxyFactoryImpl(platformBeanRepository, dolphinCommandHandler, clientDolphin);
                     final ClientContext clientContext = new ClientContextImpl(clientConfiguration, clientDolphin, controllerProxyFactory, dolphinCommandHandler, platformBeanRepository, clientBeanManager, remotingErrorHandler);
-                    clientDolphin.startPushListening(PlatformConstants.POLL_EVENT_BUS_COMMAND_NAME, PlatformConstants.RELEASE_EVENT_BUS_COMMAND_NAME);
+                    clientDolphin.startPushListening();
                     clientConfiguration.getExecutor().execute(new Runnable() {
                         @Override
                         public void run() {

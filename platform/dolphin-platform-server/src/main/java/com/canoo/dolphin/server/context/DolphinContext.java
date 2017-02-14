@@ -46,6 +46,7 @@ import com.canoo.dolphin.server.impl.gc.Instance;
 import com.canoo.dolphin.server.mbean.DolphinContextMBeanRegistry;
 import com.canoo.dolphin.util.Assert;
 import com.canoo.dolphin.util.Callback;
+import org.opendolphin.core.RemotingConstants;
 import org.opendolphin.core.comm.Command;
 import org.opendolphin.core.server.DefaultServerDolphin;
 import org.opendolphin.core.server.action.DolphinServerAction;
@@ -203,7 +204,7 @@ public class DolphinContext {
                     }
                 });
 
-                registry.register(PlatformConstants.POLL_EVENT_BUS_COMMAND_NAME, new CommandHandler() {
+                registry.register(RemotingConstants.POLL_EVENT_BUS_COMMAND_NAME, new CommandHandler() {
                     @Override
                     public void handleCommand(Command command, List response) {
                         if(configuration.isUseGc()) {
@@ -211,15 +212,15 @@ public class DolphinContext {
                             onGarbageCollection();
                         }
 
-                        LOG.trace("Handling {} for DolphinContext {}", PlatformConstants.POLL_EVENT_BUS_COMMAND_NAME, getId());
+                        LOG.trace("Handling {} for DolphinContext {}", RemotingConstants.POLL_EVENT_BUS_COMMAND_NAME, getId());
                         onPollEventBus();
                     }
                 });
 
-                registry.register(PlatformConstants.RELEASE_EVENT_BUS_COMMAND_NAME, new CommandHandler() {
+                registry.register(RemotingConstants.RELEASE_EVENT_BUS_COMMAND_NAME, new CommandHandler() {
                     @Override
                     public void handleCommand(Command command, List response) {
-                        LOG.trace("Handling {} for DolphinContext {}", PlatformConstants.RELEASE_EVENT_BUS_COMMAND_NAME, getId());
+                        LOG.trace("Handling {} for DolphinContext {}", RemotingConstants.RELEASE_EVENT_BUS_COMMAND_NAME, getId());
                         onReleaseEventBus();
                     }
                 });

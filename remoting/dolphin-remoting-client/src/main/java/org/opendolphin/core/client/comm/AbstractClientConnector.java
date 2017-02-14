@@ -15,6 +15,7 @@
  */
 package org.opendolphin.core.client.comm;
 
+import org.opendolphin.core.RemotingConstants;
 import org.opendolphin.core.client.ClientDolphin;
 import org.opendolphin.core.client.ClientPresentationModel;
 import org.opendolphin.core.comm.Command;
@@ -51,12 +52,12 @@ public abstract class AbstractClientConnector implements ClientConnector {
     /**
      * The named command that waits for pushes on the server side
      */
-    private NamedCommand pushListener = null;
+    private Command pushListener = new NamedCommand(RemotingConstants.POLL_EVENT_BUS_COMMAND_NAME);
 
     /**
      * The signal command that publishes a "release" event on the respective bus
      */
-    private SignalCommand releaseCommand = null;
+    private Command releaseCommand = new SignalCommand(RemotingConstants.RELEASE_EVENT_BUS_COMMAND_NAME);
 
     /**
      * whether listening for push events should be done at all.
@@ -116,7 +117,7 @@ public abstract class AbstractClientConnector implements ClientConnector {
                                         LOG.info("C:           -> " + command);
                                     }
                                 }
-                                final List<Command> answer = transmit(commands);
+                                final List<? extends Command> answer = transmit(commands);
                                 doSafelyInsideUiThread(new Runnable() {
                                     @Override
                                     public void run() {
@@ -154,7 +155,7 @@ public abstract class AbstractClientConnector implements ClientConnector {
         send(command, null);
     }
 
-    protected void processResults(final List<Command> response, List<CommandAndHandler> commandsAndHandlers) {
+    protected void processResults(final List<? extends Command> response, List<CommandAndHandler> commandsAndHandlers) {
         // see http://jira.codehaus.org/browse/GROOVY-6946
         if(LOG.isLoggable(Level.INFO)) {
             final List<String> commands = new ArrayList<>();
@@ -237,7 +238,6 @@ OnFinishedHandler callback = commandsAndHandlers.get(0).getHandler();// there ca
     /**
      * listens for the pushListener to return. The pushListener must be set and pushEnabled must be true.
      */
-    @Override
     public void listen() {
         if (!pushEnabled) {
             return; // allow the loop to end
@@ -271,20 +271,21 @@ OnFinishedHandler callback = commandsAndHandlers.get(0).getHandler();// there ca
         backgroundExecutor.execute(new Runnable() {
             @Override
             public void run() {
-                transmit(Collections.singletonList((Command)getReleaseCommand()));
+                transmit(Collections.singletonList(releaseCommand));
             }
 
         });
     }
 
     @Override
-    public void setPushEnabled(boolean pushEnabled) {
-        this.pushEnabled = pushEnabled;
+    public void startPushListening() {
+        this.pushEnabled = true;
+        listen();
     }
 
     @Override
-    public boolean isPushEnabled() {
-        return this.pushEnabled;
+    public void stopPushListening() {
+        this.pushEnabled = false;
     }
 
     public void setStrictMode(boolean strictMode) {
@@ -295,21 +296,11 @@ OnFinishedHandler callback = commandsAndHandlers.get(0).getHandler();// there ca
         this.onException = onException;
     }
 
-    @Override
-    public void setPushListener(NamedCommand pushListener) {
-        this.pushListener = pushListener;
-    }
-
-    public SignalCommand getReleaseCommand() {
-        return releaseCommand;
-    }
-
-    @Override
-    public void setReleaseCommand(SignalCommand releaseCommand) {
-        this.releaseCommand = releaseCommand;
-    }
-
     public ClientDolphin getClientDolphin() {
         return clientDolphin;
+    }
+
+    protected Command getReleaseCommand() {
+        return releaseCommand;
     }
 }

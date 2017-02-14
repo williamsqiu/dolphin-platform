@@ -172,6 +172,8 @@ public class DolphinPlatformHttpClientConnector extends AbstractClientConnector 
         }
         return byteArrayOutputStream.toByteArray();
     }
+
+
 }
 
 

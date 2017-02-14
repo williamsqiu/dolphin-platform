@@ -31,7 +31,6 @@ import com.canoo.dolphin.client.impl.ForwardableCallback;
 import com.canoo.dolphin.impl.BeanRepositoryImpl;
 import com.canoo.dolphin.impl.ClassRepositoryImpl;
 import com.canoo.dolphin.impl.Converters;
-import com.canoo.dolphin.impl.PlatformConstants;
 import com.canoo.dolphin.impl.PresentationModelBuilderFactory;
 import com.canoo.dolphin.impl.ReflectionHelper;
 import com.canoo.dolphin.impl.collections.ListMapperImpl;
@@ -111,7 +110,7 @@ public class DolphinPlatformSpringTestBootstrap {
             @Override
             public Void call() {
                 DolphinContextUtils.setContextForCurrentThread(dolphinContext);
-                clientDolphin.startPushListening(PlatformConstants.POLL_EVENT_BUS_COMMAND_NAME, PlatformConstants.RELEASE_EVENT_BUS_COMMAND_NAME);
+                clientDolphin.startPushListening();
                 return null;
             }
 

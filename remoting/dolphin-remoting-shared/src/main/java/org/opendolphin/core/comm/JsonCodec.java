@@ -84,7 +84,7 @@ public class JsonCodec implements Codec {
 
 
     @Override
-    public String encode(List<Command> commands) {
+    public String encode(List<? extends Command> commands) {
         JsonArray ret = new JsonArray();
 
         for (final Command command : commands) {

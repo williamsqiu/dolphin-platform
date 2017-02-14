@@ -16,6 +16,7 @@
 package org.opendolphin.core.comm
 
 import org.opendolphin.LogConfig
+import org.opendolphin.core.RemotingConstants
 import org.opendolphin.core.client.ClientDolphin
 import org.opendolphin.core.server.DefaultServerDolphin
 import spock.lang.Ignore
@@ -45,39 +46,22 @@ class ClientConnectorPushTests extends Specification {
         clientDolphin.stopPushListening()
     }
 
-
-    void "listening without push action does not work"() {
-        when:
-        clientDolphin.startPushListening(null, "ReleaseAction")
-        then:
-        clientDolphin.isPushListening() == false
-    }
-    void "listening without release action does not work"() {
-        when:
-        clientDolphin.startPushListening("PushAction", null)
-        then:
-        clientDolphin.isPushListening() == false
-    }
     void "listening can be started and stopped"() {
         when:
-        clientDolphin.startPushListening("PushAction", "ReleaseAction")
+        clientDolphin.startPushListening()
         then:
-        clientDolphin.isPushListening()
-        when:
         clientDolphin.stopPushListening()
-        then:
-        clientDolphin.isPushListening() == false
     }
 
     @Ignore
     void "core push: server-side commands are immediately processed when listening"() {
         given:
         CountDownLatch pushWasCalled = new CountDownLatch(1)
-        serverDolphin.action("PushAction") { cmd, resp ->
+        serverDolphin.action(RemotingConstants.POLL_EVENT_BUS_COMMAND_NAME) { cmd, resp ->
             pushWasCalled.countDown()
         }
         when:
-        clientDolphin.startPushListening("PushAction", "ReleaseAction")
+        clientDolphin.startPushListening()
         then:
         pushWasCalled.await(1, TimeUnit.SECONDS)
     }

@@ -15,8 +15,8 @@
  */
 package com.canoo.dolphin.test.impl;
 
-import com.canoo.dolphin.impl.PlatformConstants;
 import com.canoo.dolphin.server.context.DolphinContext;
+import org.opendolphin.core.RemotingConstants;
 import org.opendolphin.core.client.ClientDolphin;
 import org.opendolphin.core.client.comm.AbstractClientConnector;
 import org.opendolphin.core.client.comm.CommandAndHandler;
@@ -66,7 +66,7 @@ public class DolphinTestClientConnector extends AbstractClientConnector{
     @Override
     public List<Command> transmit(List<Command> commands) {
         ArrayList<Command> realCommands = new ArrayList<>(commands);
-        realCommands.add(new NamedCommand(PlatformConstants.POLL_EVENT_BUS_COMMAND_NAME));
+        realCommands.add(new NamedCommand(RemotingConstants.POLL_EVENT_BUS_COMMAND_NAME));
         return dolphinContext.handle(commands);
     }
 
