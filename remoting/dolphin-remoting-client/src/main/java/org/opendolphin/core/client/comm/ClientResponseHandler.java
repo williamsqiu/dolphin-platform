@@ -25,11 +25,9 @@ import org.opendolphin.core.comm.CallNamedActionCommand;
 import org.opendolphin.core.comm.Command;
 import org.opendolphin.core.comm.CreatePresentationModelCommand;
 import org.opendolphin.core.comm.DeletePresentationModelCommand;
-import org.opendolphin.core.comm.InitializeAttributeCommand;
 import org.opendolphin.core.comm.ValueChangedCommand;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -58,8 +56,6 @@ public class ClientResponseHandler {
             handleCreatePresentationModelCommand((CreatePresentationModelCommand) command);
         } else if (command instanceof ValueChangedCommand) {
             handleValueChangedCommand((ValueChangedCommand) command);
-        } else if (command instanceof InitializeAttributeCommand) {
-            handleInitializeAttributeCommand((InitializeAttributeCommand) command);
         } else if (command instanceof AttributeMetadataChangedCommand) {
             handleAttributeMetadataChangedCommand((AttributeMetadataChangedCommand) command);
         } else if (command instanceof CallNamedActionCommand) {
@@ -97,7 +93,7 @@ public class ClientResponseHandler {
                 attribute.setId(id.toString());
             }
 
-           attributes.add(attribute);
+            attributes.add(attribute);
         }
 
         ClientPresentationModel model = new ClientPresentationModel(serverCommand.getPmId(), attributes);
@@ -131,50 +127,6 @@ public class ClientResponseHandler {
         LOG.info("C: updating '" + attribute.getPropertyName() + "' id '" + serverCommand.getAttributeId() + "' from '" + attribute.getValue() + "' to '" + serverCommand.getNewValue() + "'");
         attribute.setValue(serverCommand.getNewValue());
         return;
-    }
-
-    private void handleInitializeAttributeCommand(InitializeAttributeCommand serverCommand) {
-        ClientAttribute attribute = new ClientAttribute(serverCommand.getPropertyName(), serverCommand.getNewValue(), serverCommand.getQualifier());
-
-        // todo: add check for no-value; null is a valid value
-        if (serverCommand.getQualifier() != null) {
-            List<ClientAttribute> copies = getClientModelStore().findAllAttributesByQualifier(serverCommand.getQualifier());
-            if (copies != null && !copies.isEmpty()) {
-                if (serverCommand.getNewValue() == null) {
-                    attribute.setValue(copies.get(0).getValue());
-                } else {
-                    for (ClientAttribute attr : copies) {
-                        attr.setValue(attribute.getValue());
-                    }
-
-                }
-
-            }
-
-        }
-
-        ClientPresentationModel presentationModel = null;
-        if (serverCommand.getPmId() != null) {
-            presentationModel = getClientModelStore().findPresentationModelById(serverCommand.getPmId());
-        }
-
-        // here we could have a pmType conflict and we may want to throw an Exception...
-        // if there is no pmId, it is most likely an error and CreatePresentationModelCommand should have been used
-        if (presentationModel == null) {
-            presentationModel = new ClientPresentationModel(serverCommand.getPmId(), Collections.<ClientAttribute>emptyList());
-            presentationModel.setPresentationModelType(serverCommand.getPmType());
-            getClientModelStore().add(presentationModel);
-        }
-
-        // if we already have the attribute, just update the value
-        Attribute existingAtt = presentationModel.getAttribute(serverCommand.getPropertyName());
-        if (existingAtt != null) {
-            existingAtt.setValue(attribute.getValue());
-        } else {
-            clientDolphin.addAttributeToModel(presentationModel, attribute);
-        }
-
-        clientDolphin.updateQualifiers(presentationModel);
     }
 
     private void handleAttributeMetadataChangedCommand(AttributeMetadataChangedCommand serverCommand) {

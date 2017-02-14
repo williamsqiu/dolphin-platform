@@ -21,5 +21,6 @@ package org.opendolphin.core.comm;
  * such that the onFinished handler can be executed
  * in the expected sequence.
  */
+@Deprecated
 public class EmptyNotification extends Command {
 }

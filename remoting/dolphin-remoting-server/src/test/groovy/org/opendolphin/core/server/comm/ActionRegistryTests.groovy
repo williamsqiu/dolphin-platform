@@ -15,7 +15,6 @@
  */
 package org.opendolphin.core.server.comm
 
-import org.opendolphin.core.comm.AttributeCreatedNotification
 import org.opendolphin.core.comm.Command
 import org.opendolphin.core.comm.NamedCommand
 
@@ -45,10 +44,8 @@ class ActionRegistryTests extends GroovyTestCase {
 
             }
         }
-        registry.register(AttributeCreatedNotification, otherAction)
-        assert 2 == registry.actions.size()
+        assert 1 == registry.actions.size()
         assert 1 == registry.getAt('Data').size()
-        assert 1 == registry.getAt('AttributeCreated').size()
     }
 
     void testRegisterCommandHandler(){

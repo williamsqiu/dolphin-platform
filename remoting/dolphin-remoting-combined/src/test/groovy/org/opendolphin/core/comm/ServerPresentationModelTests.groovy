@@ -322,27 +322,6 @@ class ServerPresentationModelTests extends GroovyTestCase {
         }
     }
 
-    void testServerSideAddingOfAttributesToAnExistingModel() {
-        def source = clientDolphin.presentationModel("source", null, attr1:"sourceValue")
-
-        registerAction serverDolphin, "addAttribute", { cmd, response ->
-            def pm = serverDolphin.getPresentationModel("source")
-            def attr2 = new ServerAttribute("attr2","initial")
-            pm.addAttribute(attr2)
-            // immediately applied on server
-            assert pm.getAttribute("attr2").value == "initial"
-        }
-
-        clientDolphin.send "addAttribute", new OnFinishedHandler() {
-
-            @Override
-            void onFinished() {
-                assert source.getAttribute("attr2").value == "initial"
-                context.assertionsDone()
-            }
-        }
-    }
-
     // todo dk: think about these use cases:
     // dolphin.copy(pm) on client and server (done) - todo: make js version use the same approach
     // server-side tagging

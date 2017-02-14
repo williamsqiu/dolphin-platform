@@ -173,7 +173,6 @@ public abstract class AbstractClientConnector implements ClientConnector {
         }
     }
 
-
     protected void dispatchHandle(Command command) {
         responseHandler.dispatchHandle(command);
     }

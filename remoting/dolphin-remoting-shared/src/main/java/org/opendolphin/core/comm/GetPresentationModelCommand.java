@@ -15,6 +15,7 @@
  */
 package org.opendolphin.core.comm;
 
+@Deprecated
 public class GetPresentationModelCommand extends Command {
     public GetPresentationModelCommand() {
     }

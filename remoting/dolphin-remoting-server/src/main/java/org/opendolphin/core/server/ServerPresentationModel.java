@@ -44,12 +44,6 @@ public class ServerPresentationModel extends BasePresentationModel<ServerAttribu
         return String.valueOf(newId) + AUTO_ID_SUFFIX;
     }
 
-    public void addAttribute(ServerAttribute attribute) {
-        _internal_addAttribute(attribute);
-        modelStore.registerAttribute(attribute);
-        DefaultServerDolphin.initAt(modelStore.getCurrentResponse(), getId(), attribute.getPropertyName(), attribute.getQualifier(), attribute.getValue());
-    }
-
     public ServerModelStore getModelStore() {
         return modelStore;
     }

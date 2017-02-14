@@ -19,7 +19,6 @@ import org.opendolphin.core.AbstractDolphin;
 import org.opendolphin.core.ModelStore;
 import org.opendolphin.core.client.comm.ClientConnector;
 import org.opendolphin.core.client.comm.OnFinishedHandler;
-import org.opendolphin.core.comm.AttributeCreatedNotification;
 import org.opendolphin.core.comm.EmptyNotification;
 import org.opendolphin.core.comm.NamedCommand;
 
@@ -140,21 +139,6 @@ public class ClientDolphin extends AbstractDolphin<ClientAttribute, ClientPresen
      */
     public void delete(ClientPresentationModel modelToDelete) {
         clientModelStore.delete(modelToDelete);
-    }
-
-    /**
-     * Adds the supplied attribute to the model store for the specified presentation model.
-     *
-     * @param presentationModel
-     * @param attribute
-     */
-    public void addAttributeToModel(ClientPresentationModel presentationModel, ClientAttribute attribute) {
-        presentationModel._internal_addAttribute(attribute);
-        clientModelStore.registerAttribute(attribute);
-        if (!presentationModel.isClientSideOnly()) {
-            clientConnector.send(new AttributeCreatedNotification(presentationModel.getId(), attribute.getId(), attribute.getPropertyName(), attribute.getValue(), attribute.getQualifier()));
-        }
-
     }
 
     /**

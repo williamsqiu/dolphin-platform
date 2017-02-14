@@ -20,7 +20,6 @@ import org.opendolphin.core.AbstractDolphin;
 import org.opendolphin.core.comm.Command;
 import org.opendolphin.core.comm.CreatePresentationModelCommand;
 import org.opendolphin.core.comm.DeletePresentationModelCommand;
-import org.opendolphin.core.comm.InitializeAttributeCommand;
 import org.opendolphin.core.comm.ValueChangedCommand;
 import org.opendolphin.core.server.action.CreatePresentationModelAction;
 import org.opendolphin.core.server.action.DeletePresentationModelAction;
@@ -197,16 +196,6 @@ public class DefaultServerDolphin extends AbstractDolphin<ServerAttribute, Serve
      */
     public static void forceChangeValue(Object value, List<Command> response, ServerAttribute attribute) {
         response.add(new ValueChangedCommand(attribute.getId(), attribute.getValue(), value));
-    }
-
-    /**
-     * Convenience method for the InitializeAttributeCommand
-     */
-    public static void initAt(List<Command> response, String pmId, String propertyName, String qualifier, Object newValue) {
-        if (null == response) {
-            return;
-        }
-        response.add(new InitializeAttributeCommand(pmId, propertyName, qualifier, newValue));
     }
 
     public ServerModelStore getServerModelStore() {
