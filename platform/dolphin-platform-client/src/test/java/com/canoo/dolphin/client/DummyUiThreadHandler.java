@@ -15,11 +15,12 @@
  */
 package com.canoo.dolphin.client;
 
-import org.opendolphin.core.client.comm.UiThreadHandler;
+import java.util.concurrent.Executor;
 
-public class DummyUiThreadHandler implements UiThreadHandler {
+public class DummyUiThreadHandler implements Executor {
+
     @Override
-    public void executeInsideUiThread(Runnable runnable) {
-        runnable.run();
+    public void execute(Runnable command) {
+        command.run();
     }
 }

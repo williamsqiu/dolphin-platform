@@ -106,7 +106,7 @@ public class ClientContextFactory {
                     final ControllerProxyFactory controllerProxyFactory = new ControllerProxyFactoryImpl(platformBeanRepository, dolphinCommandHandler, clientDolphin);
                     final ClientContext clientContext = new ClientContextImpl(clientConfiguration, clientDolphin, controllerProxyFactory, dolphinCommandHandler, platformBeanRepository, clientBeanManager, remotingErrorHandler);
                     clientDolphin.startPushListening(PlatformConstants.POLL_EVENT_BUS_COMMAND_NAME, PlatformConstants.RELEASE_EVENT_BUS_COMMAND_NAME);
-                    clientConfiguration.getUiThreadHandler().executeInsideUiThread(new Runnable() {
+                    clientConfiguration.getExecutor().execute(new Runnable() {
                         @Override
                         public void run() {
                             result.complete(clientContext);

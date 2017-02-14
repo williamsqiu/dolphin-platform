@@ -24,6 +24,7 @@ import org.opendolphin.core.comm.*
 
 import java.beans.PropertyChangeEvent
 import java.util.concurrent.CountDownLatch
+import java.util.concurrent.Executor
 import java.util.concurrent.TimeUnit
 
 class ClientConnectorTests extends GroovyTestCase {
@@ -51,8 +52,13 @@ class ClientConnectorTests extends GroovyTestCase {
 	protected void setUp() {
 
 		dolphin = new ClientDolphin()
-		clientConnector = new TestClientConnector(dolphin)
-		clientConnector.uiThreadHandler = new RunLaterUiThreadHandler()
+		clientConnector = new TestClientConnector(dolphin, new Executor(){
+
+			@Override
+			void execute(Runnable command) {
+				command.run();
+			}
+		});
 		dolphin.clientConnector = clientConnector
 		dolphin.clientModelStore = new ClientModelStore(dolphin)
 		attributeChangeListener = dolphin.clientModelStore.@attributeChangeListener
@@ -308,8 +314,8 @@ class ClientConnectorTests extends GroovyTestCase {
 
 		List<Command> transmittedCommands = []
 
-		TestClientConnector(ClientDolphin clientDolphin) {
-			super(clientDolphin)
+		TestClientConnector(ClientDolphin clientDolphin, Executor executor) {
+			super(clientDolphin, executor);
 		}
 
 		int getTransmitCount() {

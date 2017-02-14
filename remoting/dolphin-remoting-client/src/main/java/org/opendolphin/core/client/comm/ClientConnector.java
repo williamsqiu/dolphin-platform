@@ -25,15 +25,33 @@ public interface ClientConnector {
 
     void send(Command command);
 
+    /**
+     * @deprecated Push should be active by default
+     * @param pushListener
+     */
+    @Deprecated
     void setPushListener(NamedCommand pushListener);
 
+    /**
+     * @deprecated Push should be active by default
+     * @param releaseCommand
+     */
+    @Deprecated
     void setReleaseCommand(SignalCommand releaseCommand);
 
+    /**
+     * @deprecated Push should be active by default
+     * @param pushEnabled
+     */
+    @Deprecated
     void setPushEnabled(boolean pushEnabled);
 
+    @Deprecated
     boolean isPushEnabled();
 
+    /**
+     * @deprecated Push should be active by default
+     */
+    @Deprecated
     void listen();
-
-    void setUiThreadHandler(UiThreadHandler uiThreadHandler);
 }

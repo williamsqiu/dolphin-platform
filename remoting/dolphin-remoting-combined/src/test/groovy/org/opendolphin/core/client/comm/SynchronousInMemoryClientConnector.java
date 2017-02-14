@@ -23,6 +23,7 @@ import org.opendolphin.core.server.ServerConnector;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.Executor;
 
 /**
  * An in-memory client connector without any asynchronous calls such that
@@ -33,7 +34,12 @@ import java.util.List;
 public class SynchronousInMemoryClientConnector extends InMemoryClientConnector {
 
     public SynchronousInMemoryClientConnector(ClientDolphin clientDolphin, ServerConnector serverConnector) {
-        super(clientDolphin, serverConnector);
+        super(clientDolphin, serverConnector, new Executor() {
+            @Override
+            public void execute(Runnable command) {
+                throw new RuntimeException("should not reach here!");
+            }
+        });
     }
 
     protected void startCommandProcessing() {

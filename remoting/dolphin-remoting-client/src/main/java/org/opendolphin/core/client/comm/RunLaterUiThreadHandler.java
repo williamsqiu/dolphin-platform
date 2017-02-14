@@ -15,16 +15,17 @@
  */
 package org.opendolphin.core.client.comm;
 
+import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class RunLaterUiThreadHandler implements UiThreadHandler {
+public class RunLaterUiThreadHandler implements Executor {
 
     private final ExecutorService executorService = Executors.newSingleThreadExecutor();
 
     @Override
-    public void executeInsideUiThread(final Runnable runnable) {
-        executorService.execute(runnable);
+    public void execute(final Runnable command) {
+        executorService.execute(command);
     }
 
 }

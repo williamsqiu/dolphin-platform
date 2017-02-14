@@ -18,7 +18,6 @@ package com.canoo.dolphin.client.impl;
 import com.canoo.dolphin.client.util.AbstractDolphinBasedTest;
 import org.opendolphin.core.client.ClientAttribute;
 import org.opendolphin.core.client.ClientDolphin;
-import org.opendolphin.core.client.comm.UiThreadHandler;
 import org.opendolphin.core.comm.Command;
 import org.opendolphin.core.server.ServerDolphin;
 import org.opendolphin.core.server.action.DolphinServerAction;
@@ -39,12 +38,6 @@ public class TestDolphinCommandHandler extends AbstractDolphinBasedTest {
         final DolphinTestConfiguration configuration = createDolphinTestConfiguration();
         final ServerDolphin serverDolphin = configuration.getServerDolphin();
         final ClientDolphin clientDolphin = configuration.getClientDolphin();
-        clientDolphin.getClientConnector().setUiThreadHandler(new UiThreadHandler() {
-            @Override
-            public void executeInsideUiThread(Runnable runnable) {
-                runnable.run();
-            }
-        });
         final DolphinCommandHandler dolphinCommandHandler = new DolphinCommandHandler(clientDolphin);
         final String modelId = UUID.randomUUID().toString();
         clientDolphin.presentationModel(modelId, new ClientAttribute("myAttribute", "UNKNOWN"));

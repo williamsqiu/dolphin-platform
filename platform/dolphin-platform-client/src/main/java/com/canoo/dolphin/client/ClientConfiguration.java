@@ -19,13 +19,13 @@ import com.canoo.dolphin.client.impl.DefaultHttpURLConnectionFactory;
 import com.canoo.dolphin.client.impl.DefaultHttpURLConnectionResponseHandler;
 import com.canoo.dolphin.client.impl.DolphinPlatformThreadFactoryImpl;
 import com.canoo.dolphin.util.Assert;
-import org.opendolphin.core.client.comm.UiThreadHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.CookieManager;
 import java.net.CookieStore;
 import java.net.URL;
+import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Level;
@@ -46,7 +46,7 @@ public class ClientConfiguration {
 
     private final URL serverEndpoint;
 
-    private final UiThreadHandler uiThreadHandler;
+    private final Executor executor;
 
     private final ExecutorService backgroundExecutor;
 
@@ -70,9 +70,9 @@ public class ClientConfiguration {
      * @param serverEndpoint the Dolphin Platform server url
      * @param uiThreadHandler the ui thread handler
      */
-    public ClientConfiguration(URL serverEndpoint, UiThreadHandler uiThreadHandler) {
+    public ClientConfiguration(URL serverEndpoint, Executor executor) {
         this.serverEndpoint = Assert.requireNonNull(serverEndpoint, "serverEndpoint");
-        this.uiThreadHandler = Assert.requireNonNull(uiThreadHandler, "uiThreadHandler");
+        this.executor = Assert.requireNonNull(executor, "executor");
         this.dolphinLogLevel = Level.SEVERE;
         this.connectionTimeout = DEFAULT_CONNECTION_TIMEOUT;
         dolphinPlatformThreadFactory = new DolphinPlatformThreadFactoryImpl();
@@ -87,8 +87,8 @@ public class ClientConfiguration {
      *
      * @return ui thread handler
      */
-    public UiThreadHandler getUiThreadHandler() {
-        return uiThreadHandler;
+    public Executor getExecutor() {
+        return executor;
     }
 
     /**
