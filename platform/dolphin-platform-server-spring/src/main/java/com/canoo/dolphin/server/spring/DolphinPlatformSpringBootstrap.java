@@ -73,6 +73,18 @@ public class DolphinPlatformSpringBootstrap implements ServletContextInitializer
         if(platformProperties.getUseCrossSiteOriginFilter() != null) {
             configuration.setUseCrossSiteOriginFilter(platformProperties.getUseCrossSiteOriginFilter());
         }
+        if(platformProperties.getAccessControlAllowHeaders() != null) {
+            configuration.setAccessControlAllowHeaders(platformProperties.getAccessControlAllowHeaders());
+        }
+        if(platformProperties.getAccessControlAllowMethods() != null) {
+            configuration.setAccessControlAllowMethods(platformProperties.getAccessControlAllowMethods());
+        }
+        if(platformProperties.getAccessControlAllowCredentials() != null) {
+            configuration.setAccessControlAllowCredentials(platformProperties.getAccessControlAllowCredentials());
+        }
+        if(platformProperties.getAccessControlMaxAge() != null) {
+            configuration.setAccessControlMaxAge(platformProperties.getAccessControlMaxAge());
+        }
         if(platformProperties.getUseGc() != null) {
             configuration.setUseGc(platformProperties.getUseGc());
         }

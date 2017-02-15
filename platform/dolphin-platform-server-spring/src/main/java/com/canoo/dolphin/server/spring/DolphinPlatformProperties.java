@@ -31,6 +31,14 @@ public class DolphinPlatformProperties {
 
     private Boolean showRemotingLogging;
 
+    private List<String> accessControlAllowHeaders;
+
+    private List<String> accessControlAllowMethods;
+
+    private Boolean accessControlAllowCredentials;
+
+    private Long accessControlMaxAge;
+
     public Boolean getUseSessionInvalidationServlet() {
         return useSessionInvalidationServlet;
     }
@@ -125,5 +133,37 @@ public class DolphinPlatformProperties {
 
     public void setShowRemotingLogging(Boolean showRemotingLogging) {
         this.showRemotingLogging = showRemotingLogging;
+    }
+
+    public List<String> getAccessControlAllowHeaders() {
+        return accessControlAllowHeaders;
+    }
+
+    public void setAccessControlAllowHeaders(List<String> accessControlAllowHeaders) {
+        this.accessControlAllowHeaders = accessControlAllowHeaders;
+    }
+
+    public List<String> getAccessControlAllowMethods() {
+        return accessControlAllowMethods;
+    }
+
+    public void setAccessControlAllowMethods(List<String> accessControlAllowMethods) {
+        this.accessControlAllowMethods = accessControlAllowMethods;
+    }
+
+    public Boolean getAccessControlAllowCredentials() {
+        return accessControlAllowCredentials;
+    }
+
+    public void setAccessControlAllowCredentials(Boolean accessControlAllowCredentials) {
+        this.accessControlAllowCredentials = accessControlAllowCredentials;
+    }
+
+    public Long getAccessControlMaxAge() {
+        return accessControlMaxAge;
+    }
+
+    public void setAccessControlMaxAge(Long accessControlMaxAge) {
+        this.accessControlMaxAge = accessControlMaxAge;
     }
 }
