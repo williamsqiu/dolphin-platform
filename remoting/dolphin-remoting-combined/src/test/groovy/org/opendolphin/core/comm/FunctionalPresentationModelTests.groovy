@@ -29,9 +29,9 @@ import org.opendolphin.core.server.*
 import org.opendolphin.core.server.action.DolphinServerAction
 import org.opendolphin.core.server.comm.ActionRegistry
 import org.opendolphin.core.server.comm.CommandHandler
+import org.opendolphin.util.DirectExecutor
 
 import java.util.concurrent.CountDownLatch
-import java.util.concurrent.Executor
 import java.util.concurrent.TimeUnit
 import java.util.logging.Level
 /**
@@ -255,16 +255,10 @@ class FunctionalPresentationModelTests extends GroovyTestCase {
 
     @Ignore
     void testAsynchronousExceptionInOnFinishedHandler() {
-        context = new TestInMemoryConfig(new Executor() {
-            @Override
-            void execute(Runnable command) {
-                command.run();
-            }
-        });
+        context = new TestInMemoryConfig(DirectExecutor.getInstance());
         serverDolphin = context.serverDolphin
         clientDolphin = context.clientDolphin
 
-        //clientDolphin.clientConnector.uiExecutor = { it() } as Executor
         // not "run later" we need it immediately here
         clientDolphin.clientConnector.onException = { context.assertionsDone() }
 

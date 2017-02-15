@@ -20,7 +20,9 @@ import org.opendolphin.core.RemotingConstants;
 import org.opendolphin.core.client.ClientDolphin;
 import org.opendolphin.core.client.comm.AbstractClientConnector;
 import org.opendolphin.core.client.comm.CommandAndHandler;
+import org.opendolphin.core.client.comm.CommandBatcher;
 import org.opendolphin.core.client.comm.OnFinishedHandler;
+import org.opendolphin.core.client.comm.SimpleExceptionHandler;
 import org.opendolphin.core.comm.Command;
 import org.opendolphin.core.comm.NamedCommand;
 
@@ -28,18 +30,19 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 public class DolphinTestClientConnector extends AbstractClientConnector{
 
     private final DolphinContext dolphinContext;
 
-    public DolphinTestClientConnector(ClientDolphin clientDolphin, Executor executor, DolphinContext dolphinContext) {
-        super(clientDolphin, executor);
+    public DolphinTestClientConnector(ClientDolphin clientDolphin, Executor uiExecutor, DolphinContext dolphinContext) {
+        super(clientDolphin, uiExecutor, new CommandBatcher(), new SimpleExceptionHandler(uiExecutor), Executors.newCachedThreadPool());
         this.dolphinContext = dolphinContext;
     }
 
     @Override
-    protected void startCommandProcessing() {
+    protected void commandProcessing() {
         /* do nothing! */
         //TODO: no implementation since EventBus is used in a different way for this tests. Should be refactored in parent class.
     }

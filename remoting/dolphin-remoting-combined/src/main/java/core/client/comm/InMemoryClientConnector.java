@@ -18,9 +18,9 @@ package core.client.comm;
 import org.opendolphin.core.client.ClientDolphin;
 import org.opendolphin.core.client.comm.AbstractClientConnector;
 import org.opendolphin.core.client.comm.ICommandBatcher;
+import org.opendolphin.core.client.comm.SimpleExceptionHandler;
 import org.opendolphin.core.comm.Command;
 import org.opendolphin.core.server.ServerConnector;
-import org.opendolphin.util.DirectExecutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,6 +28,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 public class InMemoryClientConnector extends AbstractClientConnector {
 
@@ -37,21 +38,8 @@ public class InMemoryClientConnector extends AbstractClientConnector {
 
     private long sleepMillis = 0;
 
-    public InMemoryClientConnector(ClientDolphin clientDolphin, ServerConnector serverConnector) {
-        this(clientDolphin, serverConnector, DirectExecutor.getInstance());
-    }
-
-    public InMemoryClientConnector(ClientDolphin clientDolphin, ServerConnector serverConnector, Executor executor) {
-        super(clientDolphin, executor);
-        this.serverConnector = serverConnector;
-    }
-
-    public InMemoryClientConnector(ClientDolphin clientDolphin, ServerConnector serverConnector, ICommandBatcher commandBatcher) {
-        this(clientDolphin, serverConnector, commandBatcher, DirectExecutor.getInstance());
-    }
-
-    public InMemoryClientConnector(ClientDolphin clientDolphin, ServerConnector serverConnector, ICommandBatcher commandBatcher, Executor executor) {
-        super(clientDolphin, executor, commandBatcher);
+    public InMemoryClientConnector(ClientDolphin clientDolphin, ServerConnector serverConnector, ICommandBatcher commandBatcher, Executor uiExecutor) {
+        super(clientDolphin, uiExecutor, commandBatcher, new SimpleExceptionHandler(uiExecutor), Executors.newCachedThreadPool());
         this.serverConnector = serverConnector;
     }
 

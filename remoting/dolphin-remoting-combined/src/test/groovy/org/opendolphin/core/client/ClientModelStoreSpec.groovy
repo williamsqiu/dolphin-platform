@@ -17,7 +17,9 @@ package org.opendolphin.core.client
 import core.client.comm.InMemoryClientConnector
 import org.opendolphin.core.ModelStoreEvent
 import org.opendolphin.core.ModelStoreListener
+import org.opendolphin.core.client.comm.CommandBatcher
 import org.opendolphin.core.server.ServerConnector
+import org.opendolphin.util.DirectExecutor
 import spock.lang.Specification
 /**
  * @author Dieter Holz
@@ -29,7 +31,7 @@ class ClientModelStoreSpec extends Specification {
         def clientDolphin = new ClientDolphin()
 		modelStore = new ClientModelStore(clientDolphin)
         clientDolphin.clientModelStore = modelStore
-        clientDolphin.clientConnector = new InMemoryClientConnector(clientDolphin, [:] as ServerConnector)
+        clientDolphin.clientConnector = new InMemoryClientConnector(clientDolphin, [:] as ServerConnector, new CommandBatcher(), DirectExecutor.getInstance())
 
 		pmType = 'myType'
 		pm = new ClientPresentationModel('myId', [])

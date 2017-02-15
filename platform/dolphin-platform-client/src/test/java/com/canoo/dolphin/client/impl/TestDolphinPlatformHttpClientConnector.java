@@ -20,6 +20,7 @@ import com.canoo.dolphin.client.DummyUiThreadHandler;
 import com.canoo.dolphin.client.HttpURLConnectionFactory;
 import com.canoo.dolphin.util.DolphinRemotingException;
 import org.opendolphin.core.client.ClientDolphin;
+import org.opendolphin.core.client.comm.SimpleExceptionHandler;
 import org.opendolphin.core.comm.Command;
 import org.opendolphin.core.comm.CreatePresentationModelCommand;
 import org.opendolphin.core.comm.JsonCodec;
@@ -75,7 +76,7 @@ public class TestDolphinPlatformHttpClientConnector {
             }
         });
 
-        DolphinPlatformHttpClientConnector connector = new DolphinPlatformHttpClientConnector(clientConfiguration, new ClientDolphin(), new JsonCodec(), new ForwardableCallback<DolphinRemotingException>());
+        DolphinPlatformHttpClientConnector connector = new DolphinPlatformHttpClientConnector(clientConfiguration, new ClientDolphin(), new JsonCodec(), new ForwardableCallback<DolphinRemotingException>(), new SimpleExceptionHandler(clientConfiguration.getUiExecutor()));
 
         CreatePresentationModelCommand command = new CreatePresentationModelCommand();
         command.setPmId("p1");
@@ -120,7 +121,7 @@ public class TestDolphinPlatformHttpClientConnector {
         });
 
 
-        DolphinPlatformHttpClientConnector connector = new DolphinPlatformHttpClientConnector(clientConfiguration, new ClientDolphin(), new JsonCodec(), new ForwardableCallback<DolphinRemotingException>());
+        DolphinPlatformHttpClientConnector connector = new DolphinPlatformHttpClientConnector(clientConfiguration, new ClientDolphin(), new JsonCodec(), new ForwardableCallback<DolphinRemotingException>(), new SimpleExceptionHandler(clientConfiguration.getUiExecutor()));
 
         connector.transmit(Collections.singletonList(new Command()));
     }

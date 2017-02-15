@@ -19,9 +19,9 @@ import core.client.comm.InMemoryClientConnector;
 import org.opendolphin.LogConfig;
 import org.opendolphin.core.client.ClientDolphin;
 import org.opendolphin.core.client.ClientModelStore;
+import org.opendolphin.core.client.comm.CommandBatcher;
 import org.opendolphin.core.server.ServerDolphin;
 import org.opendolphin.core.server.ServerDolphinFactory;
-import org.opendolphin.util.DirectExecutor;
 
 import java.util.concurrent.Executor;
 import java.util.logging.Level;
@@ -40,22 +40,17 @@ public class DefaultInMemoryConfig {
 
     private final InMemoryClientConnector clientConnector;
 
-    public DefaultInMemoryConfig() {
-        this(DirectExecutor.getInstance());
-    }
-
-    public DefaultInMemoryConfig(final Executor executor) {
+    public DefaultInMemoryConfig(final Executor uiExecutor) {
         LogConfig.logOnLevel(Level.INFO);
 
         clientDolphin = new ClientDolphin();
         serverDolphin = ServerDolphinFactory.create();
 
         clientDolphin.setClientModelStore(new ClientModelStore(clientDolphin));
-        clientConnector = new InMemoryClientConnector(clientDolphin, serverDolphin.getServerConnector(), executor);
+        clientConnector = new InMemoryClientConnector(clientDolphin, serverDolphin.getServerConnector(), new CommandBatcher(), uiExecutor);
         clientDolphin.setClientConnector(clientConnector);
 
         clientConnector.setSleepMillis(100);
-
     }
 
     public ClientDolphin getClientDolphin() {

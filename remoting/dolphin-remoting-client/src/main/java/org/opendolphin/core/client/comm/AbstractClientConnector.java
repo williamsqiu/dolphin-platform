@@ -24,8 +24,8 @@ import org.opendolphin.core.comm.SignalCommand;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -36,100 +36,76 @@ public abstract class AbstractClientConnector implements ClientConnector {
 
     private final Executor uiExecutor;
 
-    private final Executor backgroundExecutor = Executors.newCachedThreadPool();
+    private final Executor backgroundExecutor;
 
     private ExceptionHandler onException;
 
     private final ClientResponseHandler responseHandler;
-
-    private final ClientDolphin clientDolphin;
 
     private final ICommandBatcher commandBatcher;
 
     /**
      * The named command that waits for pushes on the server side
      */
-    private Command pushListener = new NamedCommand(RemotingConstants.POLL_EVENT_BUS_COMMAND_NAME);
+    private final Command pushListener = new NamedCommand(RemotingConstants.POLL_EVENT_BUS_COMMAND_NAME);
 
     /**
      * The signal command that publishes a "release" event on the respective bus
      */
-    private Command releaseCommand = new SignalCommand(RemotingConstants.RELEASE_EVENT_BUS_COMMAND_NAME);
+    private final Command releaseCommand = new SignalCommand(RemotingConstants.RELEASE_EVENT_BUS_COMMAND_NAME);
 
     /**
      * whether listening for push events should be done at all.
      */
-    protected AtomicBoolean pushEnabled = new AtomicBoolean(false);
+    protected final AtomicBoolean pushEnabled = new AtomicBoolean(false);
 
     /**
      * whether we currently wait for push events (internal state) and may need to release
      */
-    protected AtomicBoolean releaseNeeded = new AtomicBoolean(false);
+    protected final AtomicBoolean releaseNeeded = new AtomicBoolean(false);
 
-    public AbstractClientConnector(ClientDolphin clientDolphin, Executor uiExecutor) {
-        this(clientDolphin, uiExecutor, null);
-    }
+    protected AbstractClientConnector(final ClientDolphin clientDolphin, final Executor uiExecutor, final ICommandBatcher commandBatcher, ExceptionHandler onException, Executor backgroundExecutor) {
+        this.uiExecutor = Objects.requireNonNull(uiExecutor);
+        this.commandBatcher = Objects.requireNonNull(commandBatcher);
+        this.onException = Objects.requireNonNull(onException);
+        this.backgroundExecutor = Objects.requireNonNull(backgroundExecutor);
+        this.responseHandler = new ClientResponseHandler(Objects.requireNonNull(clientDolphin));
 
-    public AbstractClientConnector(final ClientDolphin clientDolphin, final Executor uiExecutor, final ICommandBatcher commandBatcher) {
-        this.clientDolphin = clientDolphin;
-        this.uiExecutor = uiExecutor;
-        this.commandBatcher = commandBatcher != null ? commandBatcher : new CommandBatcher();
-        this.responseHandler = new ClientResponseHandler(clientDolphin);
-        onException = new ExceptionHandler() {
-            @Override
-            public void handle(final Throwable e) {
-                LOG.log(Level.SEVERE, "onException reached, rethrowing in UI Thread, consider setting AbstractClientConnector.onException", e);
-                if (uiExecutor != null) {
-                    uiExecutor.execute(new Runnable() {
-                        @Override
-                        public void run() {
-                            throw new RuntimeException(e);
-                        }
-                    });
-                } else {
-                    LOG.log(Level.SEVERE, "UI Thread not defined...", e);
-                }
-            }
-        };
-        startCommandProcessing();
-    }
-
-    protected void startCommandProcessing() {
         backgroundExecutor.execute(new Runnable() {
             @Override
             public void run() {
-                while (true) {
-                    doExceptionSafe(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                final List<CommandAndHandler> toProcess = commandBatcher.getWaitingBatches().getVal();
-                                List<Command> commands = new ArrayList<>();
-                                for (CommandAndHandler c : toProcess) {
-                                    commands.add(c.getCommand());
-                                }
-                                if (LOG.isLoggable(Level.INFO)) {
-                                    LOG.info("C: sending batch of size " + ((ArrayList<Command>) commands).size());
-                                    for (Command command : commands) {
-                                        LOG.info("C:           -> " + command);
-                                    }
-                                }
-                                final List<? extends Command> answer = transmit(commands);
-                                doSafelyInsideUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        processResults(answer, toProcess);
-                                    }
-
-                                });
-                            } catch (Exception e) {
-                                throw new RuntimeException(e);
-                            }
-                        }
-                    });
-                }
+                commandProcessing();
             }
         });
+
+    }
+
+    protected void commandProcessing() {
+        while (true) {
+            try {
+                final List<CommandAndHandler> toProcess = commandBatcher.getWaitingBatches().getVal();
+                List<Command> commands = new ArrayList<>();
+                for (CommandAndHandler c : toProcess) {
+                    commands.add(c.getCommand());
+                }
+                if (LOG.isLoggable(Level.INFO)) {
+                    LOG.info("C: sending batch of size " + commands.size());
+                    for (Command command : commands) {
+                        LOG.info("C:           -> " + command);
+                    }
+                }
+                final List<? extends Command> answers = transmit(commands);
+
+                uiExecutor.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        processResults(answers, toProcess);
+                    }
+                });
+            } catch (Exception e) {
+                onException.handle(e);
+            }
+        }
     }
 
     protected abstract List<Command> transmit(List<Command> commands);
@@ -177,36 +153,6 @@ public abstract class AbstractClientConnector implements ClientConnector {
         responseHandler.dispatchHandle(command);
     }
 
-    private void doExceptionSafe(Runnable processing, Runnable atLeast) {
-        try {
-            processing.run();
-        } catch (Exception e) {
-            onException.handle(e);
-        } finally {
-            if (atLeast != null) {
-                atLeast.run();
-            }
-        }
-    }
-
-    private void doExceptionSafe(Runnable processing) {
-        doExceptionSafe(processing, null);
-    }
-
-    private void doSafelyInsideUiThread(final Runnable whatToDo) {
-        doExceptionSafe(new Runnable() {
-            @Override
-            public void run() {
-                if (uiExecutor != null) {
-                    uiExecutor.execute(whatToDo);
-                } else {
-                    LOG.warning("please provide howToProcessInsideUI handler");
-                    whatToDo.run();
-                }
-            }
-        });
-    }
-
     /**
      * listens for the pushListener to return. The pushListener must be set and pushEnabled must be true.
      */
@@ -228,7 +174,7 @@ public abstract class AbstractClientConnector implements ClientConnector {
      * Release the current push listener, which blocks the sending queue.
      * Does nothing in case that the push listener is not active.
      */
-    protected void release() {
+    private void release() {
         if (!releaseNeeded.get()) {
             return; // there is no point in releasing if we do not wait. Avoid excessive releasing.
         }

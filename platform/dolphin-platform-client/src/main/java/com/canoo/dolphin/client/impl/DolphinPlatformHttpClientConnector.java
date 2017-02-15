@@ -25,6 +25,7 @@ import com.canoo.dolphin.util.DolphinRemotingException;
 import org.opendolphin.core.client.ClientDolphin;
 import org.opendolphin.core.client.comm.AbstractClientConnector;
 import org.opendolphin.core.client.comm.BlindCommandBatcher;
+import org.opendolphin.core.client.comm.ExceptionHandler;
 import org.opendolphin.core.comm.Codec;
 import org.opendolphin.core.comm.Command;
 
@@ -74,8 +75,8 @@ public class DolphinPlatformHttpClientConnector extends AbstractClientConnector 
 
     private String clientId;
 
-    public DolphinPlatformHttpClientConnector(ClientConfiguration configuration, ClientDolphin clientDolphin, Codec codec, ForwardableCallback<DolphinRemotingException> remotingErrorHandler) {
-        super(clientDolphin, Assert.requireNonNull(configuration, "configuration").getUiExecutor(), new BlindCommandBatcher());
+    public DolphinPlatformHttpClientConnector(ClientConfiguration configuration, ClientDolphin clientDolphin, Codec codec, ForwardableCallback<DolphinRemotingException> remotingErrorHandler, ExceptionHandler onException) {
+        super(clientDolphin, Assert.requireNonNull(configuration, "configuration").getUiExecutor(), new BlindCommandBatcher(), onException, configuration.getBackgroundExecutor());
         this.servletUrl = configuration.getServerEndpoint();
 
         this.connectionFactory = configuration.getConnectionFactory();
@@ -84,7 +85,6 @@ public class DolphinPlatformHttpClientConnector extends AbstractClientConnector 
 
         this.codec = Assert.requireNonNull(codec, "codec");
         this.remotingErrorHandler = Assert.requireNonNull(remotingErrorHandler, "remotingErrorHandler");
-
     }
 
     public List<Command> transmit(List<Command> commands) {

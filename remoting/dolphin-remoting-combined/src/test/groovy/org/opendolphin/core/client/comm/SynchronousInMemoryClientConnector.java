@@ -34,7 +34,7 @@ import java.util.concurrent.Executor;
 public class SynchronousInMemoryClientConnector extends InMemoryClientConnector {
 
     public SynchronousInMemoryClientConnector(ClientDolphin clientDolphin, ServerConnector serverConnector) {
-        super(clientDolphin, serverConnector, new Executor() {
+        super(clientDolphin, serverConnector, new CommandBatcher(), new Executor() {
             @Override
             public void execute(Runnable command) {
                 throw new RuntimeException("should not reach here!");
@@ -42,7 +42,7 @@ public class SynchronousInMemoryClientConnector extends InMemoryClientConnector 
         });
     }
 
-    protected void startCommandProcessing() {
+    protected void commandProcessing() {
         /* do nothing! */
     }
 
