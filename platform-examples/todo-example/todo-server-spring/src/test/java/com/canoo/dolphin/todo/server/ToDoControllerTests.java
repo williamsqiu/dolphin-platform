@@ -77,4 +77,55 @@ public class ToDoControllerTests extends SpringTestNGControllerTest {
         Assert.assertEquals(controllerUnderTest2.getModel().getItems().get(0).getText() ,"Banana");
     }
 
+    @Test
+    public void testElementSync() {
+
+        //given:
+        ControllerUnderTest<ToDoList> controllerUnderTest = createController(CONTROLLER_NAME);
+        ControllerUnderTest<ToDoList> controllerUnderTest2 = createController(CONTROLLER_NAME);
+
+
+        //when:
+        controllerUnderTest.getModel().getNewItemText().set("Banana");
+        controllerUnderTest.invoke(ADD_ACTION);
+
+        //then:
+        Assert.assertEquals(controllerUnderTest2.getModel().getItems().size() ,1);
+        Assert.assertEquals(controllerUnderTest2.getModel().getItems().get(0).getText() ,"Banana");
+    }
+
+    @Test
+    public void testElementStateSync() {
+
+        //given:
+        ControllerUnderTest<ToDoList> controllerUnderTest = createController(CONTROLLER_NAME);
+        ControllerUnderTest<ToDoList> controllerUnderTest2 = createController(CONTROLLER_NAME);
+
+
+        //when:
+        controllerUnderTest.getModel().getNewItemText().set("Banana");
+        controllerUnderTest.invoke(ADD_ACTION);
+        controllerUnderTest.invoke(CHANGE_ACTION, new Param(ITEM_PARAM, "Banana"));
+
+        //then:
+        Assert.assertEquals(controllerUnderTest2.getModel().getItems().size() ,1);
+        Assert.assertEquals(controllerUnderTest2.getModel().getItems().get(0).isCompleted() ,true);
+    }
+
+    @Test
+    public void testElementDeleteSync() {
+
+        //given:
+        ControllerUnderTest<ToDoList> controllerUnderTest = createController(CONTROLLER_NAME);
+        ControllerUnderTest<ToDoList> controllerUnderTest2 = createController(CONTROLLER_NAME);
+
+
+        //when:
+        controllerUnderTest.getModel().getNewItemText().set("Banana");
+        controllerUnderTest.invoke(ADD_ACTION);
+        controllerUnderTest.invoke(REMOVE_ACTION, new Param(ITEM_PARAM, "Banana"));
+
+        //then:
+        Assert.assertEquals(controllerUnderTest2.getModel().getItems().size() ,0);
+    }
 }
