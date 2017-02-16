@@ -21,4 +21,5 @@ mainClassName = 'com.canoo.dolphin.todo.server.ToDoServer'
 dependencies {
   compile project(':todo-server')
   compile project(':dolphin-platform-server-spring')
+  compile project(':dolphin-platform-spring-controller-tester')
 }

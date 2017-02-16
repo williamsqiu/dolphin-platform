@@ -15,23 +15,13 @@
  */
 package com.canoo.dolphin.todo.server;
 
-import com.canoo.dolphin.server.event.DolphinEventBus;
 import com.canoo.dolphin.server.spring.DolphinPlatformApplication;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.boot.SpringApplication;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Scope;
 
 @DolphinPlatformApplication
 public class ToDoServer {
 
     public static void main(String... args) {
         SpringApplication.run(ToDoServer.class, args);
-    }
-
-    @Bean
-    @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
-    public TodoItemStore createStore(DolphinEventBus eventBus) {
-        return new TodoItemStore(eventBus);
     }
 }
