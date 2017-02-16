@@ -26,7 +26,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 
 import static com.canoo.dolphin.todo.TodoAppConstants.ADD_ACTION;
-import static com.canoo.dolphin.todo.TodoAppConstants.CONTROLLER_NAME;
+import static com.canoo.dolphin.todo.TodoAppConstants.TODO_CONTROLLER_NAME;
 
 public class ToDoView extends AbstractFXMLViewBinder<ToDoList> {
 
@@ -40,7 +40,7 @@ public class ToDoView extends AbstractFXMLViewBinder<ToDoList> {
     private ListView<ToDoItem> itemList;
 
     public ToDoView(ClientContext clientContext) {
-        super(clientContext, CONTROLLER_NAME, ToDoView.class.getResource("view.fxml"));
+        super(clientContext, TODO_CONTROLLER_NAME, ToDoView.class.getResource("view.fxml"));
     }
 
     @Override

@@ -23,7 +23,7 @@ public interface TodoAppConstants {
 
     String CHANGE_ACTION = "change";
 
-    String CONTROLLER_NAME = "ToDoController";
+    String TODO_CONTROLLER_NAME = "ToDoController";
 
     String ITEM_PARAM = "item";
 }
