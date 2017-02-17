@@ -66,7 +66,7 @@ public class ConfigurationFileLoader {
 
             try (InputStream inputStream = classLoader.getResourceAsStream(WAR_LOCATION)) {
                 if (inputStream == null) {
-                    LOG.error("Can not read configuration. Maybe no dolphin.properties file is defined. Will use a default configuration!");
+                    LOG.info("Can not read configuration. Maybe no dolphin.properties file is defined. Will use a default configuration!");
                     return new DolphinPlatformConfiguration();
                 } else {
                     return readConfig(inputStream);
