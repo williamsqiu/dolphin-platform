@@ -140,6 +140,7 @@ public class DolphinPlatformBootstrap {
             if (serviceIterator.hasNext()) {
                 throw new IllegalStateException("More than 1 " + ContainerManager.class + " found!");
             }
+            LOG.debug("Container Manager of type {} is used", containerManager.getClass().getSimpleName());
             return containerManager;
         } else {
             throw new IllegalStateException("No " + ContainerManager.class + " found!");
