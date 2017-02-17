@@ -97,7 +97,7 @@ public class DolphinPlatformBootstrap {
      * This methods starts the Dolphin Platform server runtime
      */
     public void start() {
-        LOG.info("Staring Dolphin Platform");
+        LOG.info("Starting Dolphin Platform");
 
         final ClasspathScanner classpathScanner = new ClasspathScanner(configuration.getRootPackageForClasspathScan());
 
