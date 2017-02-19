@@ -68,7 +68,13 @@ have a look at `DefaultHttpURLConnectionFactory` and `DefaultHttpURLConnectionRe
 
 == Provide Security in a JavaScript based client
 
-JavaScript client can send security tokens, cookies etc. as simple json object in config.headersInfo.
+The JavaScript client API of the Dolphin Platform provides a simply way to add custom headers to all HTTP(s) requests
+that will be called the client. As in the Java API this behavior will be defined in the configuration. A cient
+configuration can contain a list of custom headers as string based JSON members in the JSON configuration. This list must
+be defined in the `headersInfo` JSON array as part of the JSON object for configuration.
+
+The following JavaScript snippet shows how 2 custom headers (‘X-Custom-Header’ and ‘Cookie’) are defined. By creating
+the Dolphin Platform connection that way all requests of the client will contain that headers.
 
 ----
 config:{

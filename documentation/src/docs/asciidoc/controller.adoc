@@ -352,4 +352,16 @@ public class MyViewController {
 
 == React on events on the server
 
-TODO 2 ways: eventbus or session.runLater...
+The Dolphin Platform provides 2 server side APIs that can be used to react on events on the server. When talking
+about events this can mean several different scenarios: A server side controller instance maybe needs to publish some
+data to other controller instances or a REST endpoint on the server needs to call the functionallity of controller
+instance for one or many clients. Another common scenario is the usageage of background threads and tasks on the server
+that are triggered by a Dolphin Platform controller instance and will notify the controller about a calculated behavior
+in any future.
+
+One approach to handle this use cases is by using the Dolphin Platform event bus that implements the publish / subscribe
+pattern and is automatically provided as a managed bean in Spring and JavaEE. More about the functionallity and the API
+of the event bus can be found in the chapter about the Dolphin Platform event bus.
+
+
+TODO way 2: session.runLater...
