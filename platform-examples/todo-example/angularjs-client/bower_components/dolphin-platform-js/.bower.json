@@ -41,6 +41,6 @@
     "commit": "399ea05bcc208184bf3722e76d8e6b17e833eaa1"
   },
   "_source": "https://github.com/canoo/dolphin-platform-js.git",
-  "_target": "^0.8.12",
+  "_target": "^0.8.13",
   "_originalSource": "dolphin-platform-js"
 }
