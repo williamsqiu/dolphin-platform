@@ -16,6 +16,8 @@
 package com.canoo.dolphin.server.config;
 
 import com.canoo.dolphin.server.event.impl.DefaultEventBusProvider;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 import java.util.Arrays;
@@ -29,6 +31,8 @@ import java.util.logging.Level;
  * on defaults and a property file (see {@link ConfigurationFileLoader}).
  */
 public class DolphinPlatformConfiguration implements Serializable {
+
+    private static final Logger LOG = LoggerFactory.getLogger(DolphinPlatformConfiguration.class);
 
     private static final String OPEN_DOLPHIN_LOG_LEVEL = "openDolphinLogLevel";
 
@@ -257,4 +261,10 @@ public class DolphinPlatformConfiguration implements Serializable {
         this.useGc = useGc;
     }
 
+    public void log(){
+        Set<Map.Entry<Object, Object>> properties = internalProperties.entrySet();
+        for(Map.Entry property:properties){
+            LOG.debug("Dolphin Platform starts with value for "+ property.getKey() +" = "+ property.getValue());
+        }
+    }
 }
