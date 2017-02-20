@@ -227,10 +227,7 @@ MyBean bean = beanManager.create(MyBean.class);
 
 === Removing a bean
 
-The BeanManager interface provides several methods to remove beans. Until a bean is removed by the bean manager it will
-be synchronized between client and server. Even if a bean isn't referenced in the custom application code anymore it won't
-be removed by the Java Garbage Collection since it's still referenced by the bean manager. The following methods can be
-used to remove beans from the client-server-synchronization:
+The BeanManager interface provides several deprecated methods to remove beans:
 
 * `void remove(Object bean)`
 * `void removeAll(Class<?> beanClass)`
@@ -247,16 +244,14 @@ server or if it's already removed from the bean manager:
 
 CAUTION: Currently all mentioned methods are deprecated. Since the Dolphin Platform provides its own Garbage
 Collector beans can be automatically removed by the bean manager once they are not referenced in the model layer anymore.
-Until now the Dolphin Platform garbage collection is an experimental feature that must be activated on the server. Once
-the garbage collection will become a default in the Dolphin Platform the deprecated methods will be removed in a future
-release.
+The deprecated methods will be removed in a future release.
 
 == The Dolphin Platform garbage collection
 
 The Dolphin Platform contains a garbage collection on the server that will automatically remove all bean instances from
-the remoting layer that aren't referenced anymore by other beans. Currently the garbage collection is an experimental
-feature and it's not active by default. If you want to use the garbage collection you need to add
-`garbageCollectionActive=true` to the `dolphin.properties` file (see chapter <<server-configuration, Server configuration>>).
+the remoting layer that aren't referenced anymore by other beans. Internally the garbage collection is working by
+reference counting.
+
 
 == How to work with the Model API
 

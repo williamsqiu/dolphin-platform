@@ -164,8 +164,62 @@ public class MyViewController {
     }
 }
 ----
+
+== Session filtering for events
+
+When publishing an event to the event bus a filter can be defined. By doing so the filter will decide to what client
+sessions the event should be published. By doing so it's quite easy to send an event only to the current client session
+or to all client sessions in the current HTTP session (this will infect all tabs in a browser, for example).
+
+To do so an implementation of the `EventSessionFilter` interface must be defined. This filter will check all client
+session that are subscriped to the given topic and can avoid that the event will be published tonthe given client session.
+
+A basic implementation of the `EventSessionFilter` interface that will allow only one client session to receive events
+might look like this:
+[source,java]
+----
+public class OneClientSessionFilter implements EventSessionFilter {
+
+    private final String clientSessionId;
+
+    public OneClientSessionFilter(final String clientSessionId) {
+        this.clientSessionId = clientSessionId;
+    }
+
+    public boolean shouldHandleEvent(String sessionId) {
+        return clientSessionId.equals(sessionId);
+    }
+}
+----
+
+Such an event filter can no be used when an event will be published. To do so the Dolphin Platform event bus provides
+a method to publish an event to a specific topic by using such a filter:
+
+[source,java]
+----
+eventBus.publish(myTopic, myData, myFilter);
+----
+
+
 == Use-cases for the event bus
 
 There are several use cases and scenarios that can simply be developed by using the Open Dolphin event bus.
 TODO
 
+== Using a distributed event bus
+
+Since the Dolphin Platform can be installed in a cluster by using sticky sessions the default implementation of the
+event bus will not work in such a scenario. In that case a distributed event bus is needed. The Dolphin Platform provides
+the optional module `dolphin-platform-distributed-eventbus` that adds such an alternative event bus that is based on
+Hazelcast (TODO: Link). Once this module is added to a server application the Dolphin Platform can be configured to use
+the distributed event bus instead of the default implementation. A developer do not need to change any source code in
+that case since the interface of the Dolphin Platform event bus will be still the same. Only the injected implementation
+is a different one. To activate the distributed event bus the following configuration property must be set in the
+`dolphin.properties` file (or by using Spring configuration):
+----
+eventbusType=distributed
+----
+Once this configuration is set Hazelcast will be used internally to provide a distributed event bus. Since each event bus
+instance (1 by server runtime) is defined as a Hazelcast client a remote Hazelcast server must be running. The Dolphin
+Platform event bus will automatically connect the internal Hazelcast client to the Hazelcast server and use it to distribute
+events to several server runtimes.

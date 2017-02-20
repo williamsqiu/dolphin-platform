@@ -113,7 +113,7 @@ The following snippet shows the dependency for a JavaFX based client as a Maven 
 </dependency>
 ----
 
-If you want to create a Android application you need to add the follwoing dependency to your
+If you want to create a Android application you need to add the following dependency to your
 application:
 
 [source,xml]

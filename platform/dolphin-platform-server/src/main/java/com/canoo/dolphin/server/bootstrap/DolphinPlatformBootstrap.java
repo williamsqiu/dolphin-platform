@@ -88,16 +88,14 @@ public class DolphinPlatformBootstrap {
 
         servletContext.setAttribute(CONFIGURATION_ATTRIBUTE_NAME, configuration);
 
-        LOG.debug("Dolphin Platform starts with value for useCrossSiteOriginFilter=" + configuration.isUseCrossSiteOriginFilter());
-        LOG.debug("Dolphin Platform starts with value for dolphinPlatformServletMapping=" + configuration.getDolphinPlatformServletMapping());
-        LOG.debug("Dolphin Platform starts with value for openDolphinLogLevel=" + configuration.getOpenDolphinLogLevel());
+        configuration.log();
     }
 
     /**
      * This methods starts the Dolphin Platform server runtime
      */
     public void start() {
-        LOG.info("Staring Dolphin Platform");
+        LOG.info("Starting Dolphin Platform");
 
         final ClasspathScanner classpathScanner = new ClasspathScanner(configuration.getRootPackageForClasspathScan());
 
@@ -140,6 +138,7 @@ public class DolphinPlatformBootstrap {
             if (serviceIterator.hasNext()) {
                 throw new IllegalStateException("More than 1 " + ContainerManager.class + " found!");
             }
+            LOG.debug("Container Manager of type {} is used", containerManager.getClass().getSimpleName());
             return containerManager;
         } else {
             throw new IllegalStateException("No " + ContainerManager.class + " found!");
