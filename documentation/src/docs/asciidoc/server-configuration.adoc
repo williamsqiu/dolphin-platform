@@ -30,6 +30,30 @@ will be used.
 |true, false
 |true
 
+|accessControlAllowHeaders
+|List of String headers which needs to be allowed with Access-Control-Allow-Headers for the cross site origin policy.
+ See here - https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS
+|Content-Type, x-requested-with, origin, authorization, accept, client-security-token
+|Content-Type, x-requested-with, origin, authorization, accept, client-security-token
+
+|accessControlAllowMethods
+|List of Methods which needs to be allowed with Access-Control-Allow-Methods for the cross site origin policy.
+ See here - https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS
+|*
+|*
+
+|accessControlAllowCredentials
+|Boolean property that allow Access-Control-Allow-Credentials for the cross site origin policy.
+ are allowed. See here - https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS
+|true, false
+|true
+
+|accessControlMaxAge
+|Long property that defines Access-Control-Max-Age for the cross site origin policy.
+ are allowed. See here - https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS
+|timestamp Long value
+|86400
+
 |useSessionInvalidationServlet
 |Boolean property that defines if the servlet for session validation should be used. By default the servlet will not be used. We plan to remove the servlet completelly in a future release and this property is just for a fallback if not using the servelt will end in issues.
 |true, false

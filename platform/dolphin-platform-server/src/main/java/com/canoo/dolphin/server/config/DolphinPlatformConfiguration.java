@@ -37,6 +37,14 @@ public class DolphinPlatformConfiguration implements Serializable {
 
     private static final String USE_CROSS_SITE_ORIGIN_FILTER = "useCrossSiteOriginFilter";
 
+    private static final String ACCESS_CONTROL_ALLOW_HEADERS = "accessControlAllowHeaders";
+
+    private static final String ACCESS_CONTROL_ALLOW_METHODS = "accessControlAllowMethods";
+
+    private static final String ACCESS_CONTROL_ALLOW_CREDENTIALS = "accessControlAllowCredentials";
+
+    private static final String ACCESS_CONTROL_MAXAGE = "accessControlMaxAge";
+
     private static final String USE_SESSION_INVALIDATION_SERVLET = "useSessionInvalidationServlet";
 
     private static final String GARBAGE_COLLECTION_ACTIVE = "garbageCollectionActive";
@@ -80,6 +88,14 @@ public class DolphinPlatformConfiguration implements Serializable {
     private int maxClientsPerSession = 10;
 
     private boolean useGc = true;
+
+    private List<String> accessControlAllowHeaders = Arrays.asList("Content-Type", "x-requested-with", "origin", "authorization", "accept", "client-security-token");
+
+    private List<String> accessControlAllowMethods = Arrays.asList("*");
+
+    private boolean accessControlAllowCredentials = true;
+
+    private long accessControlMaxAge = 86400;
 
     private final Properties internalProperties;
 
@@ -128,6 +144,29 @@ public class DolphinPlatformConfiguration implements Serializable {
         if (internalProperties.containsKey(USE_CROSS_SITE_ORIGIN_FILTER)) {
             useCrossSiteOriginFilter = Boolean.parseBoolean(internalProperties.getProperty(DOLPHIN_PLATFORM_SERVLET_MAPPING));
         }
+
+        if (internalProperties.containsKey(ACCESS_CONTROL_ALLOW_HEADERS)) {
+            String headers = internalProperties.getProperty(ACCESS_CONTROL_ALLOW_HEADERS);
+            if(null != headers){
+                accessControlAllowHeaders = Arrays.asList(headers.split(","));
+            }
+        }
+
+        if (internalProperties.containsKey(ACCESS_CONTROL_ALLOW_METHODS)) {
+            String headers = internalProperties.getProperty(ACCESS_CONTROL_ALLOW_METHODS);
+            if(null != headers) {
+                accessControlAllowMethods = Arrays.asList(headers.split(","));
+            }
+        }
+
+        if (internalProperties.containsKey(ACCESS_CONTROL_ALLOW_CREDENTIALS)) {
+            accessControlAllowCredentials = Boolean.parseBoolean(internalProperties.getProperty(ACCESS_CONTROL_ALLOW_CREDENTIALS));
+        }
+
+        if (internalProperties.containsKey(ACCESS_CONTROL_MAXAGE)) {
+            accessControlMaxAge = Long.parseLong(internalProperties.getProperty(ACCESS_CONTROL_MAXAGE));
+        }
+
         if (internalProperties.containsKey(USE_SESSION_INVALIDATION_SERVLET)) {
             useSessionInvalidationServlet = Boolean.parseBoolean(internalProperties.getProperty(USE_SESSION_INVALIDATION_SERVLET));
         }
@@ -258,6 +297,42 @@ public class DolphinPlatformConfiguration implements Serializable {
         this.useGc = useGc;
     }
 
+    public List<String> getAccessControlAllowHeaders() {
+        return Collections.unmodifiableList(accessControlAllowHeaders);
+    }
+
+    public void setAccessControlAllowHeaders(List<String> accessControlAllowHeaders) {
+        this.accessControlAllowHeaders = accessControlAllowHeaders;
+    }
+
+    public List<String> getAccessControlAllowMethods() {
+        return accessControlAllowMethods;
+    }
+
+    public void setAccessControlAllowMethods(List<String> accessControlAllowMethods) {
+        this.accessControlAllowMethods = accessControlAllowMethods;
+    }
+
+    public static String getUseCrossSiteOriginFilter() {
+        return USE_CROSS_SITE_ORIGIN_FILTER;
+    }
+
+    public void setAccessControlAllowCredentials(boolean accessControlAllowCredentials) {
+        this.accessControlAllowCredentials = accessControlAllowCredentials;
+    }
+
+    public boolean isAccessControlAllowCredentials() {
+        return accessControlAllowCredentials;
+    }
+
+    public long getAccessControlMaxAge() {
+        return accessControlMaxAge;
+    }
+
+    public void setAccessControlMaxAge(long accessControlMaxAge) {
+        this.accessControlMaxAge = accessControlMaxAge;
+    }
+
     public void log(){
         Set<Map.Entry<Object, Object>> properties = internalProperties.entrySet();
         for(Map.Entry property:properties){
@@ -265,3 +340,4 @@ public class DolphinPlatformConfiguration implements Serializable {
         }
     }
 }
+
