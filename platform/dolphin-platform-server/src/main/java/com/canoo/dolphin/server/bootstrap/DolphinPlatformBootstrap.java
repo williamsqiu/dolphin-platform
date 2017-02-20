@@ -88,9 +88,7 @@ public class DolphinPlatformBootstrap {
 
         servletContext.setAttribute(CONFIGURATION_ATTRIBUTE_NAME, configuration);
 
-        LOG.debug("Dolphin Platform starts with value for useCrossSiteOriginFilter=" + configuration.isUseCrossSiteOriginFilter());
-        LOG.debug("Dolphin Platform starts with value for dolphinPlatformServletMapping=" + configuration.getDolphinPlatformServletMapping());
-        LOG.debug("Dolphin Platform starts with value for openDolphinLogLevel=" + configuration.getOpenDolphinLogLevel());
+        configuration.log();
     }
 
     /**
