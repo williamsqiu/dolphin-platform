@@ -97,7 +97,9 @@ public class DolphinPlatformHttpClientConnector extends AbstractClientConnector 
             conn.setRequestProperty(CONTENT_TYPE_HEADER, JSON_MIME_TYPE);
             conn.setRequestProperty(ACCEPT_HEADER, JSON_MIME_TYPE);
             conn.setRequestMethod(POST_METHOD);
-            conn.setRequestProperty(PlatformConstants.CLIENT_ID_HTTP_HEADER_NAME, clientId);
+            if(clientId != null) {
+                conn.setRequestProperty(PlatformConstants.CLIENT_ID_HTTP_HEADER_NAME, clientId);
+            }
             setRequestCookies(conn);
             String content = codec.encode(commands);
             OutputStream w = conn.getOutputStream();
