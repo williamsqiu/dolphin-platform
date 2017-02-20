@@ -72,11 +72,11 @@ public class CrossSiteOriginFilter implements Filter {
         chain.doFilter(request, response);
     }
 
-    public String getAsCommaSeparatedList(final List<String> list){
-        Assert.requireNonNull(list, "configuration");
+    public String getAsCommaSeparatedList(final List<String> headers){
+        Assert.requireNonNull(headers, "headers");
         StringBuilder values = new StringBuilder("");
-        if(list.size() > 0){
-            for(String value:list){
+        if(headers.size() > 0){
+            for(String value:headers){
                 values.append(value).append(",");
             }
             values.deleteCharAt(values.length() - 1);
