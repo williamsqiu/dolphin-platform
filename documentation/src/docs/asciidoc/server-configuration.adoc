@@ -32,23 +32,25 @@ will be used.
 
 |accessControlAllowHeaders
 |List of String headers which needs to be allowed with Access-Control-Allow-Headers for the cross site origin policy.
+ See here - https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS
 |Content-Type, x-requested-with, origin, authorization, accept, client-security-token
 |Content-Type, x-requested-with, origin, authorization, accept, client-security-token
 
 |accessControlAllowMethods
 |List of Methods which needs to be allowed with Access-Control-Allow-Methods for the cross site origin policy.
+ See here - https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS
 |*
 |*
 
 |accessControlAllowCredentials
 |Boolean property that allow Access-Control-Allow-Credentials for the cross site origin policy.
- are allowed
+ are allowed. See here - https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS
 |true, false
 |true
 
 |accessControlMaxAge
 |Long property that defines Access-Control-Max-Age for the cross site origin policy.
- are allowed
+ are allowed. See here - https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS
 |timestamp Long value
 |86400
 

@@ -146,12 +146,16 @@ public class DolphinPlatformConfiguration implements Serializable {
 
         if (internalProperties.containsKey(ACCESS_CONTROL_ALLOW_HEADERS)) {
             String headers = internalProperties.getProperty(ACCESS_CONTROL_ALLOW_HEADERS);
-            accessControlAllowHeaders = Arrays.asList(headers.split(","));
+            if(null != headers){
+                accessControlAllowHeaders = Arrays.asList(headers.split(","));
+            }
         }
 
         if (internalProperties.containsKey(ACCESS_CONTROL_ALLOW_METHODS)) {
             String headers = internalProperties.getProperty(ACCESS_CONTROL_ALLOW_METHODS);
-            accessControlAllowMethods = Arrays.asList(headers.split(","));
+            if(null != headers) {
+                accessControlAllowMethods = Arrays.asList(headers.split(","));
+            }
         }
 
         if (internalProperties.containsKey(ACCESS_CONTROL_ALLOW_CREDENTIALS)) {

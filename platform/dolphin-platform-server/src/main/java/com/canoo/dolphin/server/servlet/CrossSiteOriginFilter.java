@@ -28,13 +28,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import com.canoo.dolphin.util.Assert;
 
 public class CrossSiteOriginFilter implements Filter {
 
     private final DolphinPlatformConfiguration configuration;
 
     public CrossSiteOriginFilter(final DolphinPlatformConfiguration configuration){
-        this.configuration = configuration;
+        this.configuration = Assert.requireNonNull(configuration, "configuration");
     }
 
     @Override
@@ -47,17 +48,22 @@ public class CrossSiteOriginFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse resp = (HttpServletResponse) response;
 
+        //Access-Control-Allow-Headers
         String accessControlAllowHeaders = PlatformConstants.CLIENT_ID_HTTP_HEADER_NAME;
-        String headerValues = getvalues(configuration.getAccessControlAllowHeaders());
+        String headerValues = getAsCommaSeparatedList(configuration.getAccessControlAllowHeaders());
         if(!headerValues.isEmpty()){
             accessControlAllowHeaders = accessControlAllowHeaders + ", " + headerValues;
         }
 
+        //Access-Control-Allow-Methods
+        String allowedMethods = getAsCommaSeparatedList(configuration.getAccessControlAllowMethods());
 
 
         String clientOrigin = req.getHeader("origin");
         resp.setHeader("Access-Control-Allow-Origin", clientOrigin);
-        resp.setHeader("Access-Control-Allow-Methods", getvalues(configuration.getAccessControlAllowMethods()));
+        if(!allowedMethods.isEmpty()){
+            resp.setHeader("Access-Control-Allow-Methods", allowedMethods);
+        }
         resp.setHeader("Access-Control-Allow-Headers", accessControlAllowHeaders);
         resp.setHeader("Access-Control-Expose-Headers", PlatformConstants.CLIENT_ID_HTTP_HEADER_NAME);
         resp.setHeader("Access-Control-Allow-Credentials", "" + configuration.isAccessControlAllowCredentials());
@@ -66,9 +72,10 @@ public class CrossSiteOriginFilter implements Filter {
         chain.doFilter(request, response);
     }
 
-    private String getvalues(List<String> list){
+    public String getAsCommaSeparatedList(final List<String> list){
+        Assert.requireNonNull(list, "configuration");
         StringBuilder values = new StringBuilder("");
-        if(null != list && list.size() > 0){
+        if(list.size() > 0){
             for(String value:list){
                 values.append(value).append(",");
             }
