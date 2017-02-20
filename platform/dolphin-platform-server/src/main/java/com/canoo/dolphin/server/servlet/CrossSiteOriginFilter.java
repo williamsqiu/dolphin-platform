@@ -72,14 +72,16 @@ public class CrossSiteOriginFilter implements Filter {
         chain.doFilter(request, response);
     }
 
-    public String getAsCommaSeparatedList(final List<String> headers){
+    public String getAsCommaSeparatedList(final List<String> headers) {
         Assert.requireNonNull(headers, "headers");
         StringBuilder values = new StringBuilder("");
-        if(headers.size() > 0){
-            for(String value:headers){
-                values.append(value).append(",");
+        if (null != headers && headers.size() > 0) {
+            for (int i = 0; i < headers.size(); i++) {
+                values.append(headers.get(i));
+                if (i < headers.size() - 1) {
+                    values.append(",");
+                }
             }
-            values.deleteCharAt(values.length() - 1);
         }
         return values.toString();
     }
