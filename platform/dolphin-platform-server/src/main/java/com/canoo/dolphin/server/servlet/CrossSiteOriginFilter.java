@@ -75,7 +75,7 @@ public class CrossSiteOriginFilter implements Filter {
     public String getAsCommaSeparatedList(final List<String> headers) {
         Assert.requireNonNull(headers, "headers");
         StringBuilder values = new StringBuilder("");
-        if (null != headers && headers.size() > 0) {
+        if (headers.size() > 0) {
             for (int i = 0; i < headers.size(); i++) {
                 values.append(headers.get(i));
                 if (i < headers.size() - 1) {
