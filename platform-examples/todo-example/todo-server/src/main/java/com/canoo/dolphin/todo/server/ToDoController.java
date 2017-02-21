@@ -30,27 +30,31 @@ import java.util.Optional;
 
 import static com.canoo.dolphin.todo.TodoAppConstants.ADD_ACTION;
 import static com.canoo.dolphin.todo.TodoAppConstants.CHANGE_ACTION;
-import static com.canoo.dolphin.todo.TodoAppConstants.CONTROLLER_NAME;
 import static com.canoo.dolphin.todo.TodoAppConstants.ITEM_PARAM;
 import static com.canoo.dolphin.todo.TodoAppConstants.REMOVE_ACTION;
+import static com.canoo.dolphin.todo.TodoAppConstants.TODO_CONTROLLER_NAME;
 import static com.canoo.dolphin.todo.server.ToDoEventTopics.ITEM_ADDED;
 import static com.canoo.dolphin.todo.server.ToDoEventTopics.ITEM_MARK_CHANGED;
 import static com.canoo.dolphin.todo.server.ToDoEventTopics.ITEM_REMOVED;
 
-@DolphinController(CONTROLLER_NAME)
+@DolphinController(TODO_CONTROLLER_NAME)
 public class ToDoController {
 
-    @Inject
-    private BeanManager beanManager;
+    private final BeanManager beanManager;
 
-    @Inject
-    private DolphinEventBus eventBus;
+    private final DolphinEventBus eventBus;
 
-    @Inject
-    private TodoItemStore todoItemStore;
+    private final TodoItemStore todoItemStore;
 
     @DolphinModel
     private ToDoList toDoList;
+
+    @Inject
+    public ToDoController(BeanManager beanManager, DolphinEventBus eventBus, TodoItemStore todoItemStore) {
+        this.beanManager = beanManager;
+        this.eventBus = eventBus;
+        this.todoItemStore = todoItemStore;
+    }
 
     @PostConstruct
     public void onInit() {

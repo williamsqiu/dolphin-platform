@@ -33,6 +33,8 @@ public class ToDoItem {
     public Property<String> getTextProperty() {
         return text;
     }
+
+
     public ToDoItem withText(final String text) {
         setText(text);
         return this;

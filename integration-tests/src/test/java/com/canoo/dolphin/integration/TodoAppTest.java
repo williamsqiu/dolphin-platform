@@ -24,7 +24,7 @@ import org.testng.annotations.Test;
 import java.util.concurrent.TimeUnit;
 
 import static com.canoo.dolphin.todo.TodoAppConstants.ADD_ACTION;
-import static com.canoo.dolphin.todo.TodoAppConstants.CONTROLLER_NAME;
+import static com.canoo.dolphin.todo.TodoAppConstants.TODO_CONTROLLER_NAME;
 
 public class TodoAppTest extends AbstractIntegrationTest {
 
@@ -42,7 +42,7 @@ public class TodoAppTest extends AbstractIntegrationTest {
     public void testCreateController(String containerType, String endpoint) {
         try {
             ClientContext context = createClientContext(endpoint);
-            ControllerProxy<ToDoList> controller = createController(context, CONTROLLER_NAME);
+            ControllerProxy<ToDoList> controller = createController(context, TODO_CONTROLLER_NAME);
             Assert.assertNotNull(controller);
             Assert.assertNotNull(controller.getModel());
             Assert.assertEquals(controller.getModel().getClass(), ToDoList.class);
@@ -58,7 +58,7 @@ public class TodoAppTest extends AbstractIntegrationTest {
     public void testAddItem(String containerType, String endpoint) {
         try {
             ClientContext context = createClientContext(endpoint);
-            ControllerProxy<ToDoList> controller = createController(context, CONTROLLER_NAME);
+            ControllerProxy<ToDoList> controller = createController(context, TODO_CONTROLLER_NAME);
             controller.getModel().getNewItemText().set("Milk");
             invoke(controller, ADD_ACTION, endpoint);
 
@@ -78,10 +78,10 @@ public class TodoAppTest extends AbstractIntegrationTest {
     public void testClientSync(String containerType, String endpoint) {
         try {
             ClientContext context1 = createClientContext(endpoint);
-            ControllerProxy<ToDoList> controller1 = createController(context1, CONTROLLER_NAME);
+            ControllerProxy<ToDoList> controller1 = createController(context1, TODO_CONTROLLER_NAME);
 
             ClientContext context2 = createClientContext(endpoint);
-            ControllerProxy<ToDoList> controller2 = createController(context2, CONTROLLER_NAME);
+            ControllerProxy<ToDoList> controller2 = createController(context2, TODO_CONTROLLER_NAME);
 
             controller1.getModel().getNewItemText().set("Banana");
             invoke(controller1, ADD_ACTION, endpoint);
