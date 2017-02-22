@@ -11,7 +11,7 @@ method of the API is annotated by `@Deprecated` since we plan to remove all this
 == Version 0.8.13
 _Release date: Feb 22, 2017_
 
-* Bugfix to resolves an issue with invalid headers which appears when the Dolphin server runs behind an Apache.
+* Bugfix to resolves an issue with invalid headers which appears when the Dolphin server runs behind an Apache(https://github.com/canoo/dolphin-platform/pull/366[issue])
 * Bugfix to resolve a racing condition that appears when many controllers are initialized together
 
 == Version 0.8.12
