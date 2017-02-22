@@ -8,6 +8,12 @@ be true most of the public API of the Dolphin Platform is stable since 0.8.5 and
 package structure or adding additional methods to public interfaces. In addition it will be best practice to not use any
 method of the API is annotated by `@Deprecated` since we plan to remove all this methods and classes for the final 1.0.0 release.
 
+== Version 0.8.13
+_Release date: Feb 22, 2017_
+
+* Bugfix to resolves an issue with invalid headers which appears when the Dolphin server runs behind an Apache.
+* Bugfix to resolve a racing condition that appears when many controllers are initialized together
+
 == Version 0.8.12
 _Release date: Feb 08, 2017_
 
