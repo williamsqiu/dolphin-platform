@@ -1,6 +1,6 @@
 {
   "name": "dolphin-platform-js",
-  "version": "0.8.12",
+  "version": "0.8.13",
   "main": "./dist/dolphin-platform.js",
   "homepage": "http://www.dolphin-platform.io",
   "authors": [
@@ -34,11 +34,11 @@
   "devDependencies": {
     "core.js": "2.4.x"
   },
-  "_release": "0.8.12",
+  "_release": "0.8.13",
   "_resolution": {
     "type": "version",
-    "tag": "0.8.12",
-    "commit": "0d1c7d38f4610b6098144b4ab31e4d903bd77e53"
+    "tag": "0.8.13",
+    "commit": "399ea05bcc208184bf3722e76d8e6b17e833eaa1"
   },
   "_source": "https://github.com/canoo/dolphin-platform-js.git",
   "_target": "^0.8.12",
