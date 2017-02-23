@@ -15,13 +15,11 @@
  */
 package org.opendolphin.core.client.comm;
 
-import org.opendolphin.core.client.ClientPresentationModel;
-
-import java.util.List;
-
 /**
  * interface for setting handler executed after command completion
  */
 public interface OnFinishedHandler {
-    void onFinished(List<ClientPresentationModel> presentationModels);
+
+    void onFinished();
+
 }

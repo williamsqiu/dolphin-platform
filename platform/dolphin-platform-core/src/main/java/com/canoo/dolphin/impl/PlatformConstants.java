@@ -19,10 +19,6 @@ public interface PlatformConstants {
 
     String DOLPHIN_PLATFORM_PREFIX = "dolphin_platform_intern_";
 
-    String RELEASE_EVENT_BUS_COMMAND_NAME = DOLPHIN_PLATFORM_PREFIX + "release";
-
-    String POLL_EVENT_BUS_COMMAND_NAME = DOLPHIN_PLATFORM_PREFIX + "longPoll";
-
     String REGISTER_CONTROLLER_COMMAND_NAME = DOLPHIN_PLATFORM_PREFIX + "registerController";
 
     String DESTROY_CONTROLLER_COMMAND_NAME = DOLPHIN_PLATFORM_PREFIX + "destroyController";

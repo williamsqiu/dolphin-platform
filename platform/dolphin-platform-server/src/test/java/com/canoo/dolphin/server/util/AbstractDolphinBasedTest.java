@@ -37,6 +37,7 @@ import core.comm.DefaultInMemoryConfig;
 import org.opendolphin.core.comm.Command;
 import org.opendolphin.core.server.ServerDolphin;
 import org.opendolphin.core.server.ServerModelStore;
+import org.opendolphin.util.DirectExecutor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +46,7 @@ import java.util.Set;
 public abstract class AbstractDolphinBasedTest {
 
     protected ServerDolphin createServerDolphin() {
-        DefaultInMemoryConfig config = new DefaultInMemoryConfig();
+        DefaultInMemoryConfig config = new DefaultInMemoryConfig(DirectExecutor.getInstance());
         config.getServerDolphin().registerDefaultActions();
 
         ServerModelStore store = config.getServerDolphin().getModelStore();

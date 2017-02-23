@@ -36,6 +36,7 @@ import org.opendolphin.core.client.comm.ClientConnector;
 import org.opendolphin.core.comm.Command;
 import org.opendolphin.core.server.ServerDolphin;
 import org.opendolphin.core.server.ServerModelStore;
+import org.opendolphin.util.DirectExecutor;
 
 import java.util.ArrayList;
 
@@ -69,7 +70,7 @@ public abstract class AbstractDolphinBasedTest {
     }
 
     protected DolphinTestConfiguration createDolphinTestConfiguration() {
-        DefaultInMemoryConfig config = new DefaultInMemoryConfig();
+        DefaultInMemoryConfig config = new DefaultInMemoryConfig(DirectExecutor.getInstance());
         config.getServerDolphin().registerDefaultActions();
         ServerModelStore store = config.getServerDolphin().getModelStore();
         store.setCurrentResponse(new ArrayList<Command>());

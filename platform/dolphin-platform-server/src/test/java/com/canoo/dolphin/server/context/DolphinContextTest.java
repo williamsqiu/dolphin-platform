@@ -23,6 +23,7 @@ import com.canoo.dolphin.server.container.ModelInjector;
 import com.canoo.dolphin.server.controller.ControllerRepository;
 import com.canoo.dolphin.server.impl.ClasspathScanner;
 import com.canoo.dolphin.util.Callback;
+import org.opendolphin.core.RemotingConstants;
 import org.opendolphin.core.server.comm.CommandHandler;
 import org.testng.annotations.Test;
 
@@ -137,8 +138,8 @@ public class DolphinContextTest {
         assertNotNull(dolphinActions.containsKey(PlatformConstants.REGISTER_CONTROLLER_COMMAND_NAME));
         assertNotNull(dolphinActions.containsKey(PlatformConstants.DESTROY_CONTROLLER_COMMAND_NAME));
         assertNotNull(dolphinActions.containsKey(PlatformConstants.CALL_CONTROLLER_ACTION_COMMAND_NAME));
-        assertNotNull(dolphinActions.containsKey(PlatformConstants.POLL_EVENT_BUS_COMMAND_NAME));
-        assertNotNull(dolphinActions.containsKey(PlatformConstants.RELEASE_EVENT_BUS_COMMAND_NAME));
+        assertNotNull(dolphinActions.containsKey(RemotingConstants.POLL_EVENT_BUS_COMMAND_NAME));
+        assertNotNull(dolphinActions.containsKey(RemotingConstants.RELEASE_EVENT_BUS_COMMAND_NAME));
     }
 
     private final ClasspathScanner classpathScanner = new ClasspathScanner("com.canoo.dolphin");

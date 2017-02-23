@@ -60,7 +60,7 @@ public class OptimizedJsonCodec implements Codec {
 
     @Override
     @SuppressWarnings("unchecked")
-    public String encode(List<Command> commands) {
+    public String encode(List<? extends Command> commands) {
         Assert.requireNonNull(commands, "commands");
         LOG.trace("Encoding command list with {} commands", commands.size());
         final StringBuilder builder = new StringBuilder("[");

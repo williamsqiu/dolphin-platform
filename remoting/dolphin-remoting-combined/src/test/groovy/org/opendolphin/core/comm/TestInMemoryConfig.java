@@ -33,8 +33,8 @@ public class TestInMemoryConfig extends DefaultInMemoryConfig {
         this(new RunLaterUiThreadHandler());
     }
 
-    public TestInMemoryConfig(Executor executor) {
-        super(executor);
+    public TestInMemoryConfig(Executor uiExecutor) {
+        super(uiExecutor);
         getServerDolphin().registerDefaultActions();
         getClientConnector().setSleepMillis(0);
     }

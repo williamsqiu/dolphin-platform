@@ -28,6 +28,7 @@ import java.util.logging.Logger;
  * such that the onFinished handler for the command is executed
  * in the expected sequence.
  */
+@Deprecated
 public class EmptyAction implements ServerAction {
 
     private static final Logger LOG = Logger.getLogger(EmptyAction.class.getName());

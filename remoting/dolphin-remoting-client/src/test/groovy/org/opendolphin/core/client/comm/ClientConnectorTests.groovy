@@ -21,10 +21,12 @@ import org.opendolphin.core.client.ClientDolphin
 import org.opendolphin.core.client.ClientModelStore
 import org.opendolphin.core.client.ClientPresentationModel
 import org.opendolphin.core.comm.*
+import org.opendolphin.util.DirectExecutor
 
 import java.beans.PropertyChangeEvent
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.Executor
+import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 
 class ClientConnectorTests extends GroovyTestCase {
@@ -52,13 +54,7 @@ class ClientConnectorTests extends GroovyTestCase {
 	protected void setUp() {
 
 		dolphin = new ClientDolphin()
-		clientConnector = new TestClientConnector(dolphin, new Executor(){
-
-			@Override
-			void execute(Runnable command) {
-				command.run();
-			}
-		});
+		clientConnector = new TestClientConnector(dolphin, DirectExecutor.getInstance());
 		dolphin.clientConnector = clientConnector
 		dolphin.clientModelStore = new ClientModelStore(dolphin)
 		attributeChangeListener = dolphin.clientModelStore.@attributeChangeListener
@@ -102,8 +98,7 @@ class ClientConnectorTests extends GroovyTestCase {
 		assert null == dolphin.getPresentationModel(myPmId)
 		CreatePresentationModelCommand command = new CreatePresentationModelCommand()
 		command.pmId = myPmId
-		def result = clientConnector.dispatchHandle(command)
-		assert myPmId == result.id
+		clientConnector.dispatchHandle(command)
 		assert dolphin.getPresentationModel(myPmId)
 		syncAndWaitUntilDone()
 		assertCommandsTransmitted(2)
@@ -147,23 +142,9 @@ class ClientConnectorTests extends GroovyTestCase {
 		assert clientConnector.transmittedCommands.any { it instanceof ValueChangedCommand }
 	}
 
-	void testAddAttributeToPresentationModel_ClientSideOnly() {
-		def clientPM = clientConnector.dispatchHandle(new CreatePresentationModelCommand(pmId: 'p1', pmType: 'type', clientSideOnly: true, attributes: [[propertyName: '1', value: 'initialValue1', qualifier: 'qualifier']]))
-		clientConnector.clientDolphin.addAttributeToModel(clientPM, new ClientAttribute('2', 'initialValue2'))
-		syncAndWaitUntilDone()
-		assertOnlySyncCommandWasTransmitted()
-	}
-
-	void testAddTwoAttributesWithSameQualifierToSamePMIsNotAllowed() {
-		shouldFail(IllegalStateException) {
-			ClientPresentationModel presentationModel  = clientConnector.clientDolphin.presentationModel("1", new ClientAttribute("a", "0", "QUAL"))
-			clientConnector.clientDolphin.addAttributeToModel(presentationModel, new ClientAttribute("c", "0", "QUAL"))
-		}
-	}
-
 	void testAddTwoAttributesInConstructorWithSameQualifierToSamePMIsNotAllowed() {
 		shouldFail(IllegalStateException) {
-			clientConnector.clientDolphin.presentationModel("1", new ClientAttribute("a", "0", "QUAL"), new ClientAttribute("b", "0", "QUAL"))
+			dolphin.presentationModel("1", new ClientAttribute("a", "0", "QUAL"), new ClientAttribute("b", "0", "QUAL"))
 		}
 	}
 
@@ -175,49 +156,6 @@ class ClientConnectorTests extends GroovyTestCase {
 		assertCommandsTransmitted(2)
 		assert ChangeAttributeMetadataCommand == clientConnector.transmittedCommands[0].class
 		assert 'oldValue' == attribute.additionalParam
-	}
-
-	void testHandle_InitializeAttribute() {
-		def syncedAttribute = new ClientAttribute('attr', 'initialValue', 'qualifier')
-		dolphin.clientModelStore.registerAttribute(syncedAttribute)
-		clientConnector.dispatchHandle(new InitializeAttributeCommand('p1', 'newProp', 'qualifier', 'newValue'))
-		assert dolphin.getPresentationModel('p1')
-		assert dolphin.getPresentationModel('p1').getAttribute('newProp')
-		assert 'newValue' == dolphin.getPresentationModel('p1').getAttribute('newProp').value
-		assert 'newValue' == syncedAttribute.value
-
-	}
-
-	void testHandle_InitializeAttribut_ExistingAttributeValueIsSet() {
-		clientConnector.dispatchHandle(new InitializeAttributeCommand('p1', 'prop', null, 'initialValue'))
-		clientConnector.dispatchHandle(new InitializeAttributeCommand('p1', 'prop', null, 'updatedValue'))
-		assert dolphin.getPresentationModel('p1')
-		assert dolphin.getPresentationModel('p1').getAttribute('prop')
-		assert 'updatedValue' == dolphin.getPresentationModel('p1').getAttribute('prop').value
-	}
-
-	void testHandle_InitializeAttribute_NewValueNotSet() {
-		def syncedAttribute = new ClientAttribute('attr', 'initialValue', 'qualifier')
-		dolphin.clientModelStore.registerAttribute(syncedAttribute)
-		clientConnector.dispatchHandle(new InitializeAttributeCommand('p1', 'newProp', 'qualifier', null))
-		assert dolphin.getPresentationModel('p1')
-		assert dolphin.getPresentationModel('p1').getAttribute('newProp')
-		assert 'initialValue' == dolphin.getPresentationModel('p1').getAttribute('newProp').value
-		assert 'initialValue' == syncedAttribute.value
-
-	}
-	void testHandle_InitializeAttribute_NewValueNotSet_and_firstOtherAttributeValueIsNull() {
-		def syncedAttribute1 = new ClientAttribute('attr', null, 'qualifier')
-		def syncedAttribute2 = new ClientAttribute('attr2', 'initialValue', 'qualifier')
-		dolphin.clientModelStore.registerAttribute(syncedAttribute1)
-		dolphin.clientModelStore.registerAttribute(syncedAttribute2)
-		// null from 'syncedAttribute1' will be synchronized to other attributes since it is the first in the list of attributes with qualifier 'qualifier'
-		clientConnector.dispatchHandle(new InitializeAttributeCommand('p1', 'newProp', 'qualifier', null))
-		assert dolphin.getPresentationModel('p1')
-		assert dolphin.getPresentationModel('p1').getAttribute('newProp')
-		assert null == dolphin.getPresentationModel('p1').getAttribute('newProp').value
-		assert null == syncedAttribute1.value
-		assert null == syncedAttribute2.value
 	}
 
 	void testHandle_ValueChanged_AttrNotExists() {
@@ -248,7 +186,7 @@ class ClientConnectorTests extends GroovyTestCase {
 	}
 
 	void testHandle_CreatePresentationModelTwiceFails() {
-		assert clientConnector.dispatchHandle(new CreatePresentationModelCommand(pmId: 'p1', pmType: 'type', attributes: [[propertyName: 'attr', value: 'initialValue', qualifier: 'qualifier']]))
+		clientConnector.dispatchHandle(new CreatePresentationModelCommand(pmId: 'p1', pmType: 'type', attributes: [[propertyName: 'attr', value: 'initialValue', qualifier: 'qualifier']]))
 		def msg = shouldFail {
 			clientConnector.dispatchHandle(new CreatePresentationModelCommand(pmId: 'p1', pmType: 'type', attributes: [[propertyName: 'attr', value: 'initialValue', qualifier: 'qualifier']]))
 		}
@@ -256,7 +194,7 @@ class ClientConnectorTests extends GroovyTestCase {
 	}
 
 	void testHandle_CreatePresentationModel() {
-		assert clientConnector.dispatchHandle(new CreatePresentationModelCommand(pmId: 'p1', pmType: 'type', attributes: [[propertyName: 'attr', value: 'initialValue', qualifier: 'qualifier']]))
+		clientConnector.dispatchHandle(new CreatePresentationModelCommand(pmId: 'p1', pmType: 'type', attributes: [[propertyName: 'attr', value: 'initialValue', qualifier: 'qualifier']]))
 		assert dolphin.getPresentationModel('p1')
 		assert dolphin.getPresentationModel('p1').getAttribute('attr')
 		assert 'initialValue' == dolphin.getPresentationModel('p1').getAttribute('attr').value
@@ -267,7 +205,7 @@ class ClientConnectorTests extends GroovyTestCase {
 	}
 
 	void testHandle_CreatePresentationModel_ClientSideOnly() {
-		assert clientConnector.dispatchHandle(new CreatePresentationModelCommand(pmId: 'p1', pmType: 'type', clientSideOnly: true, attributes: [[propertyName: 'attr', value: 'initialValue', qualifier: 'qualifier']]))
+		clientConnector.dispatchHandle(new CreatePresentationModelCommand(pmId: 'p1', pmType: 'type', clientSideOnly: true, attributes: [[propertyName: 'attr', value: 'initialValue', qualifier: 'qualifier']]))
 		assert dolphin.getPresentationModel('p1')
 		assert dolphin.getPresentationModel('p1').getAttribute('attr')
 		assert 'initialValue' == dolphin.getPresentationModel('p1').getAttribute('attr').value
@@ -303,19 +241,13 @@ class ClientConnectorTests extends GroovyTestCase {
 		assert 1 == clientConnector.transmittedCommands.findAll { it instanceof DeletedPresentationModelNotification }.size()
 	}
 
-	void testHandle_DataCommand() {
-		def data = [k: 'v']
-		assert data == clientConnector.dispatchHandle(new DataCommand(data))
-	}
-
-
 	@Log
 	class TestClientConnector extends AbstractClientConnector {
 
 		List<Command> transmittedCommands = []
 
-		TestClientConnector(ClientDolphin clientDolphin, Executor executor) {
-			super(clientDolphin, executor);
+		TestClientConnector(ClientDolphin clientDolphin, Executor uiExecutor) {
+			super(clientDolphin, uiExecutor, new CommandBatcher(), new SimpleExceptionHandler(uiExecutor), Executors.newCachedThreadPool());
 		}
 
 		int getTransmitCount() {

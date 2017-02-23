@@ -19,10 +19,8 @@ import org.opendolphin.core.AbstractDolphin;
 import org.opendolphin.core.ModelStore;
 import org.opendolphin.core.client.comm.ClientConnector;
 import org.opendolphin.core.client.comm.OnFinishedHandler;
-import org.opendolphin.core.comm.AttributeCreatedNotification;
 import org.opendolphin.core.comm.EmptyNotification;
 import org.opendolphin.core.comm.NamedCommand;
-import org.opendolphin.core.comm.SignalCommand;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -127,7 +125,7 @@ public class ClientDolphin extends AbstractDolphin<ClientAttribute, ClientPresen
     @Deprecated
     public void sync(final Runnable runnable) {
         clientConnector.send(new EmptyNotification(), new OnFinishedHandler() {
-            public void onFinished(List<ClientPresentationModel> presentationModels) {
+            public void onFinished() {
                 runnable.run();
             }
 
@@ -144,41 +142,11 @@ public class ClientDolphin extends AbstractDolphin<ClientAttribute, ClientPresen
     }
 
     /**
-     * Adds the supplied attribute to the model store for the specified presentation model.
-     *
-     * @param presentationModel
-     * @param attribute
-     */
-    public void addAttributeToModel(ClientPresentationModel presentationModel, ClientAttribute attribute) {
-        presentationModel._internal_addAttribute(attribute);
-        clientModelStore.registerAttribute(attribute);
-        if (!presentationModel.isClientSideOnly()) {
-            clientConnector.send(new AttributeCreatedNotification(presentationModel.getId(), attribute.getId(), attribute.getPropertyName(), attribute.getValue(), attribute.getQualifier()));
-        }
-
-    }
-
-    /**
      * @deprecated Push should be active by default
-     * @param pushActionName
-     * @param releaseActionName
      */
     @Deprecated
-    public void startPushListening(String pushActionName, String releaseActionName) {
-        if (pushActionName == null) {
-            return;
-
-        }
-
-        if (releaseActionName == null) {
-            return;
-
-        }
-
-        clientConnector.setPushListener(new NamedCommand(pushActionName));
-        clientConnector.setReleaseCommand(new SignalCommand(releaseActionName));
-        clientConnector.setPushEnabled(true);
-        clientConnector.listen();
+    public void startPushListening() {
+        clientConnector.startPushListening();
     }
 
     /**
@@ -186,16 +154,7 @@ public class ClientDolphin extends AbstractDolphin<ClientAttribute, ClientPresen
      */
     @Deprecated
     public void stopPushListening() {
-        clientConnector.setPushEnabled(false);
-    }
-
-    /**
-     * @deprecated Push should be active by default
-     * @return
-     */
-    @Deprecated
-    public boolean isPushListening() {
-        return clientConnector.isPushEnabled();
+        clientConnector.stopPushListening();
     }
 
     public ClientModelStore getClientModelStore() {

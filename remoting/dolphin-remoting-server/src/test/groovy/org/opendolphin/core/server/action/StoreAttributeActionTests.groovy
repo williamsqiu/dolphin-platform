@@ -15,7 +15,6 @@
  */
 package org.opendolphin.core.server.action
 
-import org.opendolphin.core.comm.AttributeCreatedNotification
 import org.opendolphin.core.comm.ChangeAttributeMetadataCommand
 import org.opendolphin.core.server.DefaultServerDolphin
 import org.opendolphin.core.server.ServerAttribute
@@ -32,31 +31,6 @@ class StoreAttributeActionTests extends GroovyTestCase {
         dolphin = ServerDolphinFactory.create()
         dolphin.serverModelStore.currentResponse = []
         registry = new ActionRegistry()
-    }
-
-    void testStoreAttribute() {
-        StoreAttributeAction action = new StoreAttributeAction(serverDolphin: dolphin)
-        action.registerIn(registry)
-        registry.getAt('AttributeCreated').first().handleCommand(new AttributeCreatedNotification(pmId: 'model', propertyName: 'newAttribute', newValue: 'value'), [])
-        assert dolphin.getPresentationModel('model').getAttribute('newAttribute')
-        assert 'value' == dolphin.getPresentationModel('model').getAttribute('newAttribute').value
-    }
-
-    void testStoreAttribute_ModelExists() {
-        StoreAttributeAction action = new StoreAttributeAction(serverDolphin: dolphin)
-        action.registerIn(registry)
-        dolphin.addPresentationModel(new ServerPresentationModel('model', [], dolphin.serverModelStore))
-        registry.getAt('AttributeCreated').first().handleCommand(new AttributeCreatedNotification(pmId: 'model', propertyName: 'newAttribute', newValue: 'value'), [])
-        assert dolphin.getPresentationModel('model').getAttribute('newAttribute')
-        assert 'value' == dolphin.getPresentationModel('model').getAttribute('newAttribute').value
-    }
-
-    void testStoreAttribute_AlreadyExistingAttribute() {
-        new StoreAttributeAction(serverDolphin: dolphin).registerIn registry
-        ServerAttribute attribute = new ServerAttribute('newAttribute', '')
-        dolphin.addPresentationModel(new ServerPresentationModel('model', [attribute], dolphin.serverModelStore))
-        registry.getAt('AttributeCreated').first().handleCommand(new AttributeCreatedNotification(pmId: 'model', attributeId: attribute.id, propertyName: 'newAttribute', newValue: 'value'), [])
-        assert '' == dolphin.getPresentationModel('model').getAttribute('newAttribute').value
     }
 
     void testChangeAttributeMetadata() {

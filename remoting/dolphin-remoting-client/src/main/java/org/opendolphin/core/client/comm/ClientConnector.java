@@ -16,8 +16,6 @@
 package org.opendolphin.core.client.comm;
 
 import org.opendolphin.core.comm.Command;
-import org.opendolphin.core.comm.NamedCommand;
-import org.opendolphin.core.comm.SignalCommand;
 
 public interface ClientConnector {
 
@@ -25,33 +23,7 @@ public interface ClientConnector {
 
     void send(Command command);
 
-    /**
-     * @deprecated Push should be active by default
-     * @param pushListener
-     */
-    @Deprecated
-    void setPushListener(NamedCommand pushListener);
+    void startPushListening();
 
-    /**
-     * @deprecated Push should be active by default
-     * @param releaseCommand
-     */
-    @Deprecated
-    void setReleaseCommand(SignalCommand releaseCommand);
-
-    /**
-     * @deprecated Push should be active by default
-     * @param pushEnabled
-     */
-    @Deprecated
-    void setPushEnabled(boolean pushEnabled);
-
-    @Deprecated
-    boolean isPushEnabled();
-
-    /**
-     * @deprecated Push should be active by default
-     */
-    @Deprecated
-    void listen();
+    void stopPushListening();
 }

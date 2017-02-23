@@ -24,67 +24,58 @@ import org.opendolphin.core.comm.AttributeMetadataChangedCommand;
 import org.opendolphin.core.comm.CallNamedActionCommand;
 import org.opendolphin.core.comm.Command;
 import org.opendolphin.core.comm.CreatePresentationModelCommand;
-import org.opendolphin.core.comm.DataCommand;
 import org.opendolphin.core.comm.DeletePresentationModelCommand;
-import org.opendolphin.core.comm.InitializeAttributeCommand;
 import org.opendolphin.core.comm.ValueChangedCommand;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.logging.Logger;
 
 public class ClientResponseHandler {
+
+    private static final Logger LOG = Logger.getLogger(ClientResponseHandler.class.getName());
+
+    private final ClientDolphin clientDolphin;
+
+    private boolean strictMode = true;
+
     public ClientResponseHandler(ClientDolphin clientDolphin) {
-        this.clientDolphin = clientDolphin;
+        this.clientDolphin = Objects.requireNonNull(clientDolphin);
     }
 
     protected ClientModelStore getClientModelStore() {
         return clientDolphin.getClientModelStore();
     }
 
-    public Object dispatchHandle(Command command) {
-        if (command instanceof DataCommand) {
-            return handleDataCommand((DataCommand) command);
-        } else if (command instanceof DeletePresentationModelCommand) {
-            return handleDeletePresentationModelCommand((DeletePresentationModelCommand) command);
+    public void dispatchHandle(Command command) {
+        if (command instanceof DeletePresentationModelCommand) {
+            handleDeletePresentationModelCommand((DeletePresentationModelCommand) command);
         } else if (command instanceof CreatePresentationModelCommand) {
-            return handleCreatePresentationModelCommand((CreatePresentationModelCommand) command);
+            handleCreatePresentationModelCommand((CreatePresentationModelCommand) command);
         } else if (command instanceof ValueChangedCommand) {
-            return handleValueChangedCommand((ValueChangedCommand) command);
-        } else if (command instanceof InitializeAttributeCommand) {
-            return handleInitializeAttributeCommand((InitializeAttributeCommand) command);
+            handleValueChangedCommand((ValueChangedCommand) command);
         } else if (command instanceof AttributeMetadataChangedCommand) {
-            return handleAttributeMetadataChangedCommand((AttributeMetadataChangedCommand) command);
+            handleAttributeMetadataChangedCommand((AttributeMetadataChangedCommand) command);
         } else if (command instanceof CallNamedActionCommand) {
-            return handleCallNamedActionCommand((CallNamedActionCommand) command);
+            handleCallNamedActionCommand((CallNamedActionCommand) command);
         } else {
-            handleUnknownCommand(command);
-            return null;
+            LOG.severe("C: cannot handle unknown command '" + command + "'");
         }
 
     }
 
-    private void handleUnknownCommand(Command serverCommand) {
-        LOG.severe("C: cannot handle unknown command '" + serverCommand + "'");
-    }
-
-    private Map handleDataCommand(DataCommand serverCommand) {
-        return serverCommand.getData();
-    }
-
-    private ClientPresentationModel handleDeletePresentationModelCommand(DeletePresentationModelCommand serverCommand) {
+    private void handleDeletePresentationModelCommand(DeletePresentationModelCommand serverCommand) {
         ClientPresentationModel model = clientDolphin.getPresentationModel(serverCommand.getPmId());
         if (model == null) {
-            return null;
+            return;
         }
 
         getClientModelStore().delete(model);
-        return model;
     }
 
-    private ClientPresentationModel handleCreatePresentationModelCommand(CreatePresentationModelCommand serverCommand) {
+    private void handleCreatePresentationModelCommand(CreatePresentationModelCommand serverCommand) {
         if (getClientModelStore().containsPresentationModel(serverCommand.getPmId())) {
             throw new IllegalStateException("There already is a presentation model with id '" + serverCommand.getPmId() + "' known to the client.");
         }
@@ -97,14 +88,12 @@ public class ClientResponseHandler {
             Object qualifier = attr.get("qualifier");
             Object id = attr.get("id");
 
-
             ClientAttribute attribute = new ClientAttribute(propertyName != null ? propertyName.toString() : null, value, qualifier != null ? qualifier.toString() : null);
             if (id != null && id.toString().endsWith("S")) {
                 attribute.setId(id.toString());
             }
 
-
-            ((ArrayList<ClientAttribute>) attributes).add(attribute);
+            attributes.add(attribute);
         }
 
         ClientPresentationModel model = new ClientPresentationModel(serverCommand.getPmId(), attributes);
@@ -115,81 +104,35 @@ public class ClientResponseHandler {
 
         getClientModelStore().add(model);
         clientDolphin.updateQualifiers(model);
-        return model;
     }
 
-    private ClientPresentationModel handleValueChangedCommand(ValueChangedCommand serverCommand) {
+    private void handleValueChangedCommand(ValueChangedCommand serverCommand) {
         Attribute attribute = getClientModelStore().findAttributeById(serverCommand.getAttributeId());
         if (attribute == null) {
             LOG.warning("C: attribute with id '" + serverCommand.getAttributeId() + "' not found, cannot update old value '" + serverCommand.getOldValue() + "' to new value '" + serverCommand.getNewValue() + "'");
-            return null;
+            return;
         }
 
-        if (((ClientAttribute) attribute).getValue() == null && serverCommand.getNewValue() == null || (((ClientAttribute) attribute).getValue() != null && serverCommand.getNewValue() != null && ((ClientAttribute) attribute).getValue().equals(serverCommand.getNewValue()))) {
-            return null;
+        if (attribute.getValue() == null && serverCommand.getNewValue() == null || (attribute.getValue() != null && serverCommand.getNewValue() != null && attribute.getValue().equals(serverCommand.getNewValue()))) {
+            return;
         }
 
 
-        if (strictMode && ((((ClientAttribute) attribute).getValue() == null && serverCommand.getOldValue() != null) || (((ClientAttribute) attribute).getValue() != null && serverCommand.getOldValue() == null) || (((ClientAttribute) attribute).getValue() != null && !((ClientAttribute) attribute).getValue().equals(serverCommand.getOldValue())))) {
+        if (strictMode && ((attribute.getValue() == null && serverCommand.getOldValue() != null) || (attribute.getValue() != null && serverCommand.getOldValue() == null) || (attribute.getValue() != null && !attribute.getValue().equals(serverCommand.getOldValue())))) {
             // todo dk: think about sending a RejectCommand here to tell the server about a possible lost update
-            LOG.warning("C: attribute with id '" + serverCommand.getAttributeId() + "' and value '" + ((ClientAttribute) attribute).getValue() + "' cannot be set to new value '" + serverCommand.getNewValue() + "' because the change was based on an outdated old value of '" + serverCommand.getOldValue() + "'.");
-            return null;
+            LOG.warning("C: attribute with id '" + serverCommand.getAttributeId() + "' and value '" + attribute.getValue() + "' cannot be set to new value '" + serverCommand.getNewValue() + "' because the change was based on an outdated old value of '" + serverCommand.getOldValue() + "'.");
+            return;
         }
 
-        LOG.info("C: updating '" + ((ClientAttribute) attribute).getPropertyName() + "' id '" + serverCommand.getAttributeId() + "' from '" + ((ClientAttribute) attribute).getValue() + "' to '" + serverCommand.getNewValue() + "'");
-        ((ClientAttribute) attribute).setValue(serverCommand.getNewValue());
-        return null;// this command is not expected to be sent explicitly, so no pm needs to be returned
+        LOG.info("C: updating '" + attribute.getPropertyName() + "' id '" + serverCommand.getAttributeId() + "' from '" + attribute.getValue() + "' to '" + serverCommand.getNewValue() + "'");
+        attribute.setValue(serverCommand.getNewValue());
+        return;
     }
 
-    private ClientPresentationModel handleInitializeAttributeCommand(InitializeAttributeCommand serverCommand) {
-        ClientAttribute attribute = new ClientAttribute(serverCommand.getPropertyName(), serverCommand.getNewValue(), serverCommand.getQualifier());
-
-        // todo: add check for no-value; null is a valid value
-        if (serverCommand.getQualifier() != null) {
-            List<ClientAttribute> copies = getClientModelStore().findAllAttributesByQualifier(serverCommand.getQualifier());
-            if (copies != null && !copies.isEmpty()) {
-                if (serverCommand.getNewValue() == null) {
-                    attribute.setValue(copies.get(0).getValue());
-                } else {
-                    for (ClientAttribute attr : copies) {
-                        attr.setValue(attribute.getValue());
-                    }
-
-                }
-
-            }
-
-        }
-
-        ClientPresentationModel presentationModel = null;
-        if (serverCommand.getPmId() != null) {
-            presentationModel = getClientModelStore().findPresentationModelById(serverCommand.getPmId());
-        }
-
-        // here we could have a pmType conflict and we may want to throw an Exception...
-        // if there is no pmId, it is most likely an error and CreatePresentationModelCommand should have been used
-        if (presentationModel == null) {
-            presentationModel = new ClientPresentationModel(serverCommand.getPmId(), Collections.<ClientAttribute>emptyList());
-            presentationModel.setPresentationModelType(serverCommand.getPmType());
-            getClientModelStore().add(presentationModel);
-        }
-
-        // if we already have the attribute, just update the value
-        Attribute existingAtt = presentationModel.getAttribute(serverCommand.getPropertyName());
-        if (existingAtt != null) {
-            ((ClientAttribute) existingAtt).setValue(attribute.getValue());
-        } else {
-            clientDolphin.addAttributeToModel(presentationModel, attribute);
-        }
-
-        clientDolphin.updateQualifiers(presentationModel);
-        return presentationModel;// todo dk: check and test
-    }
-
-    private ClientPresentationModel handleAttributeMetadataChangedCommand(AttributeMetadataChangedCommand serverCommand) {
+    private void handleAttributeMetadataChangedCommand(AttributeMetadataChangedCommand serverCommand) {
         ClientAttribute attribute = getClientModelStore().findAttributeById(serverCommand.getAttributeId());
         if (attribute == null) {
-            return null;
+            return;
         }
 
         if (serverCommand.getMetadataName() != null && serverCommand.getMetadataName().equals(Attribute.VALUE_NAME)) {
@@ -197,30 +140,20 @@ public class ClientResponseHandler {
         }
 
         if (serverCommand.getMetadataName() != null && serverCommand.getMetadataName().equals(Attribute.QUALIFIER_NAME)) {
-            if(serverCommand.getValue() == null) {
+            if (serverCommand.getValue() == null) {
                 attribute.setQualifier(null);
             } else {
                 attribute.setQualifier(serverCommand.getValue().toString());
             }
         }
-
-        return null;
     }
 
-    private ClientPresentationModel handleCallNamedActionCommand(CallNamedActionCommand serverCommand) {
+    private void handleCallNamedActionCommand(CallNamedActionCommand serverCommand) {
         clientDolphin.send(serverCommand.getActionName());
-        return null;
-    }
-
-    public boolean getStrictMode() {
-        return strictMode;
     }
 
     public void setStrictMode(boolean strictMode) {
         this.strictMode = strictMode;
     }
 
-    private static final Logger LOG = Logger.getLogger(ClientResponseHandler.class.getName());
-    private final ClientDolphin clientDolphin;
-    private boolean strictMode = true;
 }

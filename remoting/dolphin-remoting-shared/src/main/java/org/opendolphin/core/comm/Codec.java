@@ -19,7 +19,7 @@ import java.util.List;
 
 public interface Codec {
 
-   String encode(List<Command> commands);
+   String encode(List<? extends Command> commands);
 
    List<Command> decode(String transmitted);
     
