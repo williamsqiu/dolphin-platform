@@ -4,9 +4,6 @@ import java.util.concurrent.Executor;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- * Created by hendrikebbers on 15.02.17.
- */
 public class SimpleExceptionHandler implements ExceptionHandler {
 
     private static final Logger LOG = Logger.getLogger(SimpleExceptionHandler.class.getName());
