@@ -8,9 +8,29 @@ be true most of the public API of the Dolphin Platform is stable since 0.8.5 and
 package structure or adding additional methods to public interfaces. In addition it will be best practice to not use any
 method of the API is annotated by `@Deprecated` since we plan to remove all this methods and classes for the final 1.0.0 release.
 
+== Version 0.8.14
+
+_Release date: Feb 24, 2017_
+
+* Polymer client provide an event which is fired when controller is ready (https://github.com/canoo/dolphin-platform/issues/362[issue])
+* Bugfix for missing config should be logged as Info(https://github.com/canoo/dolphin-platform/issues/361[issue])
+* Added controller test to the sample project(https://github.com/canoo/dolphin-platform/issues/359[issue])
+* Added Cross Origin Header configuration to server(https://github.com/canoo/dolphin-platform/issues/342[issue])
+* Added documentation how to run tests locally on Safari(https://github.com/canoo/dolphin-platform/issues/341[issue])
+* Added logging about the configurations on server(https://github.com/canoo/dolphin-platform/issues/339[issue])
+* Added AngularJS client to Jumpstart(https://github.com/canoo/dolphin-platform/issues/319[issue])
+* Bugfix to generate lcov report for polymer client(https://github.com/canoo/dolphin-platform/issues/311[issue])
+
+
 == Version 0.8.13
 
+_Release date: Feb 22, 2017_
+
+* Bugfix to resolves an issue with invalid headers which appears when the Dolphin server runs behind an Apache(https://github.com/canoo/dolphin-platform/pull/366[issue])
+* Bugfix to resolve a racing condition that appears when many controllers are initialized together
+
 == Version 0.8.12
+
 _Release date: Feb 08, 2017_
 
 * Bugfix for NPE while running generated project from spring-boot-archetype (https://github.com/canoo/dolphin-platform/issues/351[issue])
