@@ -166,7 +166,7 @@ public class ClientConfiguration {
         this.connectionFactory = Assert.requireNonNull(connectionFactory, "connectionFactory");
     }
 
- public void setCookieStore(CookieStore cookieStore) {
+    public void setCookieStore(CookieStore cookieStore) {
         this.cookieStore = Assert.requireNonNull(cookieStore, "cookieStore");
     }
 
