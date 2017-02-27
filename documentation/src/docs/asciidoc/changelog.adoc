@@ -12,13 +12,13 @@ method of the API is annotated by `@Deprecated` since we plan to remove all this
 _Release date: Feb 24, 2017_
 
 * Polymer client provide an event which is fired when controller is ready (https://github.com/canoo/dolphin-platform/issues/362[issue])
-* Bugfix for missing config should be logged as Info(https://github.com/canoo/dolphin-platform/issues/361[issue])
-* Added controller test to the sample project(https://github.com/canoo/dolphin-platform/issues/359[issue])
-* Added Cross Origin Header configuration to server(https://github.com/canoo/dolphin-platform/issues/342[issue])
-* Added documentation how to run tests locally on Safari(https://github.com/canoo/dolphin-platform/issues/341[issue])
-* Added logging about the configurations on server(https://github.com/canoo/dolphin-platform/issues/339[issue])
-* Added AngularJS client to Jumpstart(https://github.com/canoo/dolphin-platform/issues/319[issue])
-* Bugfix to generate lcov report for polymer client(https://github.com/canoo/dolphin-platform/issues/311[issue])
+* Bugfix for missing config should be logged as info (https://github.com/canoo/dolphin-platform/issues/361[issue])
+* Added controller test to the sample project (https://github.com/canoo/dolphin-platform/issues/359[issue])
+* Added cross origin header configuration to server (https://github.com/canoo/dolphin-platform/issues/342[issue])
+* Added documentation how to run tests locally on Safari (https://github.com/canoo/dolphin-platform/issues/341[issue])
+* Added logging about the configurations on server (https://github.com/canoo/dolphin-platform/issues/339[issue])
+* Added AngularJS client to jumpstart (https://github.com/canoo/dolphin-platform/issues/319[issue])
+* Bugfix to generate lcov report for Polymer client (https://github.com/canoo/dolphin-platform/issues/311[issue])
 
 == Version 0.8.13
 _Release date: Feb 22, 2017_
@@ -137,7 +137,7 @@ _Release date: May 9, 2016_
 * Bugfix for the client-server connection (https://github.com/canoo/dolphin-platform/issues/148[issue])
 * Listener support for the lifecylce of the dolphin session on the server (https://github.com/canoo/dolphin-platform/issues/93[issue])
 * Memory leak on server removed (https://github.com/canoo/dolphin-platform/issues/130[issue])
-* Public Interfaces for all functionallity of the API that is needed by application developers (https://github.com/canoo/dolphin-platform/issues/42[issue])
+* Public Interfaces for all functionality of the API that is needed by application developers (https://github.com/canoo/dolphin-platform/issues/42[issue])
 * Configuration support for the server (https://github.com/canoo/dolphin-platform/issues/95[issue])
 * Asiidoc based documentation started (https://github.com/canoo/dolphin-platform/issues/133[issue])
 
