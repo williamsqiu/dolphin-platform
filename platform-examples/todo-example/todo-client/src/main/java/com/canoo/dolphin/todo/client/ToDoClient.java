@@ -19,7 +19,6 @@ import com.canoo.dolphin.client.ClientContext;
 import com.canoo.dolphin.client.ClientInitializationException;
 import com.canoo.dolphin.client.DolphinRuntimeException;
 import com.canoo.dolphin.client.javafx.DolphinPlatformApplication;
-import com.canoo.dolphin.client.javafx.JavaFXConfiguration;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Scene;
@@ -38,17 +37,7 @@ public class ToDoClient extends DolphinPlatformApplication {
 
     @Override
     protected URL getServerEndpoint() throws MalformedURLException {
-        return new URL("http://localhost:8080/todo-app/dolphin");
-    }
-
-    @Override
-    protected JavaFXConfiguration getClientConfiguration() {
-        try {
-            JavaFXConfiguration configuration = new JavaFXConfiguration(new URL("http://localhost:8080/todo-app/dolphin"));
-            return configuration;
-        } catch (MalformedURLException e) {
-            throw new ClientInitializationException("Error in creating config", e);
-        }
+        return new URL("http://localhost:4444/todo-app/dolphin");
     }
 
     @Override

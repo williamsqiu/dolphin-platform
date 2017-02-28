@@ -71,13 +71,13 @@ public class DolphinPlatformConfiguration implements Serializable {
 
     private boolean mBeanRegistration = true;
 
-    private String dolphinPlatformServletMapping = "/dolphin";
+    private String dolphinPlatformServletMapping = "/dolphin/*";
 
     private String rootPackageForClasspathScan = null;
 
     private String eventbusType = DefaultEventBusProvider.DEFAULT_EVENTBUS_NAME;
 
-    private List<String> idFilterUrlMappings = Arrays.asList("/dolphin");
+    private List<String> idFilterUrlMappings = Arrays.asList("/dolphin/*");
 
     private Level openDolphinLogLevel = Level.SEVERE;
 

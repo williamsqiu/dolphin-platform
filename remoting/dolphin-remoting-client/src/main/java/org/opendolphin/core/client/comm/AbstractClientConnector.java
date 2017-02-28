@@ -191,8 +191,8 @@ public abstract class AbstractClientConnector implements ClientConnector {
 
     @Override
     public void startPushListening() {
-        pushEnabled.set(true);
-        listen();
+       // pushEnabled.set(true);
+       // listen();
     }
 
     @Override

@@ -17,5 +17,7 @@
 dependencies {
     compile project(':dolphin-platform-core')
     compile project(':dolphin-remoting-client')
+    compile "org.springframework:spring-websocket:4.2.7.RELEASE"
+    compile "com.fasterxml.jackson.core:jackson-databind:2.6.7"
     testCompile project(':dolphin-remoting-combined')
 }

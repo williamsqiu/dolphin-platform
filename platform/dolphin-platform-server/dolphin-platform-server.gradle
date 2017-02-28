@@ -18,6 +18,7 @@ dependencies {
     compile project(':dolphin-platform-core')
     compile project(':dolphin-remoting-server')
     compile 'org.reflections:reflections:0.9.10'
+    compile 'org.projectodd.sockjs:sockjs-servlet:0.1.2'
     compileOnly "javax.servlet:javax.servlet-api:$servletApiVersion"
 
     testCompile project(':dolphin-remoting-combined')

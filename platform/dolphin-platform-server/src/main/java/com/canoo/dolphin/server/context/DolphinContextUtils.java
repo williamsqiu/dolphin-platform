@@ -16,6 +16,7 @@
 package com.canoo.dolphin.server.context;
 
 import com.canoo.dolphin.util.Assert;
+import org.projectodd.sockjs.SockJsConnection;
 
 import javax.servlet.http.HttpSession;
 import java.lang.ref.WeakReference;
@@ -99,5 +100,15 @@ public class DolphinContextUtils {
         if(dolphinContext != null && !weakContextMap.containsKey(dolphinContext.getId())) {
             weakContextMap.put(dolphinContext.getId(), new WeakReference<>(dolphinContext));
         }
+    }
+
+    private static Map<String, DolphinContext> contextForSockJS = new HashMap<>();
+
+    public static void setContextForSockJSConnection(SockJsConnection connection, DolphinContext contextForCurrentThread) {
+        contextForSockJS.put(connection.id, contextForCurrentThread);
+    }
+
+    public static DolphinContext getContextForSockJSConnection(SockJsConnection connection) {
+        return contextForSockJS.get(connection.id);
     }
 }
