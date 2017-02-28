@@ -223,3 +223,35 @@ Once this configuration is set Hazelcast will be used internally to provide a di
 instance (1 by server runtime) is defined as a Hazelcast client a remote Hazelcast server must be running. The Dolphin
 Platform event bus will automatically connect the internal Hazelcast client to the Hazelcast server and use it to distribute
 events to several server runtimes.
+
+=== Hazelcast configuration
+
+If the distributed event bus is used a Hazelcast server is needed. All application instances that use the distributed
+event bus will automatically create a connection to that server. Such a connection must be configured. To do so a developer
+can define the following parameters in the `dolphin.properties` file:
+
+.Table title
+|===
+|Name |Description |Supported values |Default value
+
+|hazelcast.server.name
+|Defines the host name of the Hazelcast server.
+|any string that defines the host name of the hazelcast server
+|localhost
+
+|hazelcast.server.port
+|Defines the port of the Hazelcast server.
+|a valid port number
+|5701
+
+|hazelcast.group.name
+|Defines the name of the Hazelcast group that should be used
+|a String
+|micro-landscape
+|===
+
+NOTE: Currently this values can only be specified in the `dolphin.properties` file. The Dolphin Platform provides an
+integration in Spring configuration to configure the common properties of the Dolphin Platform. This is currently not
+possible for the Hazelcast integration (see https://github.com/canoo/dolphin-platform/issues/377[this issue]). In
+addtion a already defined Hazelcast client that is provided by Spring or JavaEE as a managed bean can not be used
+(see https://github.com/canoo/dolphin-platform/issues/378[this issue]).
