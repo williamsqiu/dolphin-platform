@@ -49,7 +49,8 @@ public abstract class AbstractSpringContainerManager implements ContainerManager
     public <T> T createListener(Class<T> listenerClass) {
         Assert.requireNonNull(listenerClass, "listenerClass");
         ApplicationContext context = getContext();
-        return context.getBean(listenerClass);
+        AutowireCapableBeanFactory beanFactory = context.getAutowireCapableBeanFactory();
+        return beanFactory.createBean(listenerClass);
     }
 
     @Override

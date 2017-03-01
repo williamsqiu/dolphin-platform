@@ -152,17 +152,17 @@ public class DolphinPlatformBootstrap {
         for (final Class<?> listenerClass : listeners) {
             try {
                 if (DolphinSessionListener.class.isAssignableFrom(listenerClass)) {
+                    final DolphinSessionListener listener = (DolphinSessionListener) containerManager.createListener(listenerClass);
+
                     sessionLifecycleHandler.addSessionDestroyedListener(new Callback<DolphinSession>() {
                         @Override
                         public void call(DolphinSession dolphinSession) {
-                            final DolphinSessionListener listener = (DolphinSessionListener) containerManager.createListener(listenerClass);
                             listener.sessionDestroyed(dolphinSession);
                         }
                     });
                     sessionLifecycleHandler.addSessionCreatedListener(new Callback<DolphinSession>() {
                         @Override
                         public void call(DolphinSession dolphinSession) {
-                            final DolphinSessionListener listener = (DolphinSessionListener) containerManager.createListener(listenerClass);
                             listener.sessionCreated(dolphinSession);
                         }
                     });
