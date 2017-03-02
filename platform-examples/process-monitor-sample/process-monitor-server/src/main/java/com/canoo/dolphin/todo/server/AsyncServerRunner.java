@@ -15,8 +15,8 @@
  */
 package com.canoo.dolphin.todo.server;
 
-public interface BackgroundTaskRunner {
+public interface AsyncServerRunner {
 
-    void setTask(Runnable task);
+    void execute(Runnable task);
 
 }
