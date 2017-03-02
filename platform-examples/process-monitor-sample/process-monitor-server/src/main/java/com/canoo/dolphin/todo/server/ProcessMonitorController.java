@@ -18,7 +18,7 @@ package com.canoo.dolphin.todo.server;
 import com.canoo.dolphin.BeanManager;
 import com.canoo.dolphin.samples.processmonitor.model.ProcessBean;
 import com.canoo.dolphin.samples.processmonitor.model.ProcessListBean;
-import com.canoo.dolphin.server.BackgroundRunner;
+import com.canoo.dolphin.server.ClientSessionExecutor;
 import com.canoo.dolphin.server.DolphinController;
 import com.canoo.dolphin.server.DolphinModel;
 import com.canoo.dolphin.server.DolphinSession;
@@ -49,7 +49,7 @@ public class ProcessMonitorController {
     @Inject
     private DolphinSession session;
 
-    private BackgroundRunner backgroundRunner;
+    private ClientSessionExecutor sessionExecutor;
 
     @Inject
     private AsyncServerRunner asyncServerRunner;
@@ -95,7 +95,7 @@ public class ProcessMonitorController {
         asyncServerRunner.execute(new Runnable() {
             @Override
             public void run() {
-                backgroundRunner.runLaterInClientSession(() -> update());
+                sessionExecutor.runLaterInClientSession(() -> update());
             }
         });
     }

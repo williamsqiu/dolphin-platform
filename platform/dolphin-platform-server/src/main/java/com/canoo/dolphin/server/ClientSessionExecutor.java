@@ -18,9 +18,9 @@ package com.canoo.dolphin.server;
 import java.util.concurrent.Future;
 
 /**
- * The BackgroundRunner can be used to execute tasks later on a specific client session (see {@link DolphinSession}).
+ * The ClientSessionExecutor can be used to execute tasks later on a specific client session (see {@link DolphinSession}).
  */
-public interface BackgroundRunner {
+public interface ClientSessionExecutor {
 
     /**
      * Executes the given task later in the given client session

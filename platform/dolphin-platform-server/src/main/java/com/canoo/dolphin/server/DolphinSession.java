@@ -62,5 +62,5 @@ public interface DolphinSession {
      */
     String getId();
 
-    BackgroundRunner createBackgroundRunner();
+    ClientSessionExecutor createBackgroundRunner();
 }
