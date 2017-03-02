@@ -62,5 +62,9 @@ public interface DolphinSession {
      */
     String getId();
 
+    /**
+     * Provides a {@link ClientSessionExecutor} that can be used to access the client session from a background thread.
+     * @return
+     */
     ClientSessionExecutor createBackgroundRunner();
 }
