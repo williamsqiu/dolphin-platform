@@ -18,6 +18,7 @@ package com.canoo.dolphin.todo.server;
 import com.canoo.dolphin.BeanManager;
 import com.canoo.dolphin.samples.processmonitor.model.ProcessBean;
 import com.canoo.dolphin.samples.processmonitor.model.ProcessListBean;
+import com.canoo.dolphin.server.BackgroundRunner;
 import com.canoo.dolphin.server.DolphinController;
 import com.canoo.dolphin.server.DolphinModel;
 import com.canoo.dolphin.server.DolphinSession;
@@ -48,8 +49,10 @@ public class ProcessMonitorController {
     @Inject
     private DolphinSession session;
 
+    private BackgroundRunner backgroundRunner;
+
     @Inject
-    private BackgroundTaskRunner backgroundTaskRunner;
+    private AsyncServerRunner asyncServerRunner;
 
     @DolphinModel
     private ProcessListBean processList;
@@ -89,10 +92,10 @@ public class ProcessMonitorController {
             bean.setMemoryPercentage(format.format(100d * process.getResidentSetSize() / memory.getTotal()));
             bean.setName(process.getName());
         }
-        backgroundTaskRunner.setTask(new Runnable() {
+        asyncServerRunner.execute(new Runnable() {
             @Override
             public void run() {
-                session.runLater(() -> update());
+                backgroundRunner.runLaterInClientSession(() -> update());
             }
         });
     }

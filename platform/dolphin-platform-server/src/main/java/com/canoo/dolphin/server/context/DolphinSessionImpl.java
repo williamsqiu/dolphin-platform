@@ -15,6 +15,7 @@
  */
 package com.canoo.dolphin.server.context;
 
+import com.canoo.dolphin.server.BackgroundRunner;
 import com.canoo.dolphin.server.DolphinSession;
 import com.canoo.dolphin.util.Assert;
 
@@ -72,7 +73,7 @@ public class DolphinSessionImpl implements DolphinSession {
     }
 
     @Override
-    public void runLater(Runnable runnable) {
-        runLaterExecutor.execute(runnable);
+    public BackgroundRunner createBackgroundRunner() {
+        return new BackgroundRunnerImpl(runLaterExecutor);
     }
 }

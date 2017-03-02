@@ -16,7 +16,7 @@
 package com.canoo.dolphin.samples.processmonitor;
 
 import com.canoo.dolphin.server.spring.DolphinPlatformApplication;
-import com.canoo.dolphin.todo.server.BackgroundTaskRunner;
+import com.canoo.dolphin.todo.server.AsyncServerRunner;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.annotation.Bean;
@@ -36,7 +36,7 @@ public class ProcessMonitorStarter {
 
     @Bean
     @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
-    public BackgroundTaskRunner createRunner() {
+    public AsyncServerRunner createRunner() {
         final List<Runnable> myTasks = new CopyOnWriteArrayList<>();
         Executors.newSingleThreadExecutor().execute(new Runnable() {
             @Override
@@ -55,9 +55,9 @@ public class ProcessMonitorStarter {
             }
         });
 
-        return new BackgroundTaskRunner() {
+        return new AsyncServerRunner() {
             @Override
-            public void setTask(Runnable task) {
+            public void execute(Runnable task) {
                 myTasks.add(task);
             }
         };

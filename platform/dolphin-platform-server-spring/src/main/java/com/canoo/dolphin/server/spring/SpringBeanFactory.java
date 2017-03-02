@@ -73,18 +73,6 @@ public class SpringBeanFactory {
         return new PropertyBinderImpl();
     }
 
-    @Bean(name = "backgroundRunner")
-    @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
-    protected BackgroundRunner createBackgroundRunner() {
-        return new BackgroundRunner() {
-
-            @Override
-            public Future<Void> runLaterInClientSession(final String clientSessionId, final Runnable task) {
-                return DolphinContextUtils.runLaterInClientSession(clientSessionId, task);
-            }
-        };
-    }
-
     @Bean(name = "customScopeConfigurer")
     public static CustomScopeConfigurer createClientScope() {
         CustomScopeConfigurer configurer = new CustomScopeConfigurer();

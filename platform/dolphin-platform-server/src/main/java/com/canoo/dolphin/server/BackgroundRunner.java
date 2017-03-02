@@ -28,6 +28,6 @@ public interface BackgroundRunner {
      * @param task the task
      * @return a future that is finished once the task is finished.
      */
-    Future<Void> runLaterInClientSession(String clientSessionId, Runnable task);
+    Future<Void> runLaterInClientSession(Runnable task);
 
 }

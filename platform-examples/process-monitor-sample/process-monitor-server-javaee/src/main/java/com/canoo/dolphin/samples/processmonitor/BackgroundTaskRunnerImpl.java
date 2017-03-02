@@ -15,7 +15,7 @@
  */
 package com.canoo.dolphin.samples.processmonitor;
 
-import com.canoo.dolphin.todo.server.BackgroundTaskRunner;
+import com.canoo.dolphin.todo.server.AsyncServerRunner;
 
 import javax.ejb.Schedule;
 import javax.ejb.Singleton;
@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 @Singleton
-public class BackgroundTaskRunnerImpl implements BackgroundTaskRunner {
+public class BackgroundTaskRunnerImpl implements AsyncServerRunner {
 
     private List<Runnable> myTasks = new CopyOnWriteArrayList<>();
 
@@ -36,7 +36,7 @@ public class BackgroundTaskRunnerImpl implements BackgroundTaskRunner {
     }
 
     @Override
-    public void setTask(Runnable task) {
+    public void execute(Runnable task) {
         myTasks.add(task);
     }
 }
