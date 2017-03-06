@@ -84,22 +84,22 @@ public class SockJsClient {
     public static void main(String[] args) throws Exception {
         new SockJsClient().connect(new SockJsHandler() {
             @Override
-            public void afterConnectionEstablished(SockJsSession session) throws Exception {
+            public void afterConnectionEstablished(SockJsSession session) {
 
             }
 
             @Override
-            public void handleMessage(SockJsSession session, Object message) throws Exception {
+            public void handleMessage(SockJsSession session, Object message) {
 
             }
 
             @Override
-            public void handleTransportError(SockJsSession session, Throwable exception) throws Exception {
+            public void handleTransportError(SockJsSession session, Throwable exception) {
 
             }
 
             @Override
-            public void afterConnectionClosed(SockJsSession session) throws Exception {
+            public void afterConnectionClosed(SockJsSession session) {
 
             }
         }, new URL("http://localhost:4444/todo-app/dolphin")).get();
