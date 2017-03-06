@@ -9,6 +9,7 @@ package structure or adding additional methods to public interfaces. In addition
 method of the API is annotated by `@Deprecated` since we plan to remove all this methods and classes for the final 1.0.0 release.
 
 == Version 0.9.0
+_Release date: Mar 6, 2017_
 
 * Release workflow supports major & minor releases (https://github.com/canoo/dolphin-platform/issues/372[issue])
 * Documentation of the distributed event bus (https://github.com/canoo/dolphin-platform/issues/364[issue])
