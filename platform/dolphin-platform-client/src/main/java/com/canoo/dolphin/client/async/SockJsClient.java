@@ -69,6 +69,7 @@ public class SockJsClient {
                     final String serverId = getServerId(uuid);
                     final String sessionId = getSessionId(uuid);
 
+                    //TODO: Later the protocol should be defined based on the server support and the protocols on classpath
                     SockJsProtocol protocol = new NioSockJsProtocol();
                     SockJsSession session = protocol.connect(endPointUrl, serverId, sessionId, handler, backgroundExecutor);
                     future.set(session);
