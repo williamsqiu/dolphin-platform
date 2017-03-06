@@ -12,6 +12,9 @@ method of the API is annotated by `@Deprecated` since we plan to remove all this
 
 * Release workflow supports major & minor releases (https://github.com/canoo/dolphin-platform/issues/372[issue])
 * Documentation of the distributed event bus (https://github.com/canoo/dolphin-platform/issues/364[issue])
+* Add dolphin.properties to jump start project (https://github.com/canoo/dolphin-platform/issues/355[issue])
+* Bugfix for DolphinListener setup in Spring (https://github.com/canoo/dolphin-platform/issues/354[issue])
+* Bugfix for Refactoring of BackgroundRunner (https://github.com/canoo/dolphin-platform/issues/357[issue])
 
 == Version 0.8.14
 _Release date: Feb 24, 2017_

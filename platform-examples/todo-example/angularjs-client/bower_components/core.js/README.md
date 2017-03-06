@@ -695,7 +695,7 @@ new Date(NaN).toString(); // => 'Invalid Date'
 #### ECMAScript 6: Promise
 Module [`es6.promise`](https://github.com/zloirock/core-js/blob/v2.4.1/modules/es6.promise.js).
 ```js
-new Promise(uiExecutor(resolve(var), reject(var))) -> promise
+new Promise(executor(resolve(var), reject(var))) -> promise
   #then(resolved(var), rejected(var))            -> promise
   #catch(rejected(var))                          -> promise
   .resolve(promise | var)                        -> promise

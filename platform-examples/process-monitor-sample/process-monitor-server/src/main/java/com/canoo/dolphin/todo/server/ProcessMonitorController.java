@@ -22,6 +22,7 @@ import com.canoo.dolphin.server.ClientSessionExecutor;
 import com.canoo.dolphin.server.DolphinController;
 import com.canoo.dolphin.server.DolphinModel;
 import com.canoo.dolphin.server.DolphinSession;
+import com.canoo.dolphin.server.context.ClientSessionExecutorImpl;
 import oshi.SystemInfo;
 import oshi.hardware.GlobalMemory;
 import oshi.software.os.OSProcess;
@@ -34,6 +35,7 @@ import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 import static com.canoo.dolphin.samples.processmonitor.ProcessMonitorConstants.CONTROLLER_NAME;
@@ -68,6 +70,7 @@ public class ProcessMonitorController {
         SystemInfo si = new SystemInfo();
         os = si.getOperatingSystem();
         memory = si.getHardware().getMemory();
+        sessionExecutor = new ClientSessionExecutorImpl(Executors.newFixedThreadPool(5));
         update();
     }
 
