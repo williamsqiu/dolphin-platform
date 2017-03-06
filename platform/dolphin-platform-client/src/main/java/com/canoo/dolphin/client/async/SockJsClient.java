@@ -12,8 +12,6 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -23,9 +21,11 @@ public class SockJsClient {
 
     private static final Logger LOG = LoggerFactory.getLogger(SockJsClient.class);
 
-    private final List<SockJsProtocol> protocols = new ArrayList<>();
-
     private final Executor backgroundExecutor;
+
+    public SockJsClient() {
+        this(Executors.newCachedThreadPool());
+    }
 
     public SockJsClient(final Executor backgroundExecutor) {
         this.backgroundExecutor = Assert.requireNonNull(backgroundExecutor, "backgroundExecutor");
@@ -70,7 +70,7 @@ public class SockJsClient {
                     final String sessionId = getSessionId(uuid);
 
                     SockJsProtocol protocol = new NioSockJsProtocol();
-                    SockJsSession session = protocol.connect(endPointUrl, serverId, sessionId, handler);
+                    SockJsSession session = protocol.connect(endPointUrl, serverId, sessionId, handler, backgroundExecutor);
                     future.set(session);
                 } catch (Exception e) {
                     future.setException(e);
@@ -82,7 +82,7 @@ public class SockJsClient {
     }
 
     public static void main(String[] args) throws Exception {
-        new SockJsClient(Executors.newSingleThreadExecutor()).connect(new SockJsHandler() {
+        new SockJsClient().connect(new SockJsHandler() {
             @Override
             public void afterConnectionEstablished(SockJsSession session) throws Exception {
 

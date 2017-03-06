@@ -37,18 +37,10 @@ public class NioSockJsProtocol implements SockJsProtocol {
         final SocketChannel channel = SocketChannel.open();
         channel.connect(new InetSocketAddress(baseEndpoint.getHost(), baseEndpoint.getPort()));
 
-        final URL streamingRequestUrl = getTransportUrl(STREAMING_PROTOCOL);
+        // TODO: Looks like the XHR communication starts with a request to the xhr_streaming endpoint
+        // This request should happen here
 
-
-        executor.execute(() -> {
-            try {
-                readFromChannel(channel, handler);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
-
-        return new SockJsSession() {
+        SockJsSession session = new SockJsSession() {
             @Override
             public String getId() {
                 return sessionId;
@@ -66,7 +58,7 @@ public class NioSockJsProtocol implements SockJsProtocol {
 
             @Override
             public void sendMessage(String message) throws IOException {
-                sendMessageToChannel(message, channel, executor);
+                sendMessageToChannel(this, message, channel, executor);
             }
 
             @Override
@@ -76,31 +68,52 @@ public class NioSockJsProtocol implements SockJsProtocol {
 
             @Override
             public void close() throws IOException {
-                channel.close();
+                try {
+                    closeChannel(channel, this);
+                } catch (IOException e) {
+                    handler.handleTransportError(this, e);
+                    throw e;
+                }
             }
         };
+
+        executor.execute(() -> {
+            try {
+                readFromChannel(channel);
+            } catch (IOException e) {
+                handler.handleTransportError(session, e);
+            }
+        });
+
+        handler.afterConnectionEstablished(session);
+        return session;
     }
 
-    private void addBytes(final SockJsHandler handler, final byte[] bytes) {
+    private void closeChannel(SocketChannel channel, SockJsSession session) throws IOException {
+        channel.close();
+        handler.afterConnectionClosed(session);
+    }
+
+    private void addReceivedBytes(final byte[] bytes) {
         //TODO: Create HTTP(S) request based on the received bytes (can be called several times)
     }
 
-    private void readFromChannel(final ReadableByteChannel channel, final SockJsHandler handler) throws IOException {
+    private void readFromChannel(final ReadableByteChannel channel) throws IOException {
         int read = 0;
         ByteBuffer inputBuffer = ByteBuffer.allocate(48);
         while (read >= 0 && channel.isOpen()) {
             read = channel.read(inputBuffer);
-            addBytes(handler, inputBuffer.array());
+            addReceivedBytes(inputBuffer.array());
             inputBuffer.clear();
         }
     }
 
-    private void sendMessageToChannel(final String message, final WritableByteChannel channel, final Executor executor) {
-
-        //TODO: Create HTTP(S) request with message as content
-
+    private void sendMessageToChannel(final SockJsSession session, final String message, final WritableByteChannel channel, final Executor executor) {
         executor.execute(() -> {
             try {
+
+                //TODO: Create HTTP(S) request with message as content
+
                 ByteBuffer inputBuffer = ByteBuffer.wrap(message.getBytes());
                 inputBuffer.flip();
                 while (inputBuffer.hasRemaining()) {
@@ -108,7 +121,7 @@ public class NioSockJsProtocol implements SockJsProtocol {
                 }
                 inputBuffer.clear();
             } catch (Exception e) {
-                e.printStackTrace();
+              handler.handleTransportError(session, e);
             }
         });
     }
