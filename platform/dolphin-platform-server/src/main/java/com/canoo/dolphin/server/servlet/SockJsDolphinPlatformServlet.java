@@ -33,7 +33,9 @@ public class SockJsDolphinPlatformServlet extends SockJsServlet {
                         DolphinContextUtils.setContextForCurrentThread(dolphinContext);
                         try {
                             final List<Command> commands = new ArrayList<>(dolphinContext.getDolphin().getServerConnector().getCodec().decode(message));
+
                             final List<Command> results = new ArrayList<>(dolphinContext.handle(commands));
+
                             connection.write(dolphinContext.getDolphin().getServerConnector().getCodec().encode(results));
                         } catch (Exception e) {
                             e.printStackTrace();

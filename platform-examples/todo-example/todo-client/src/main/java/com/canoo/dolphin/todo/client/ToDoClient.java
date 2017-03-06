@@ -37,7 +37,7 @@ public class ToDoClient extends DolphinPlatformApplication {
 
     @Override
     protected URL getServerEndpoint() throws MalformedURLException {
-        return new URL("http://localhost:4444/todo-app/dolphin");
+        return new URL("http://localhost:4445/todo-app/dolphin");
     }
 
     @Override
