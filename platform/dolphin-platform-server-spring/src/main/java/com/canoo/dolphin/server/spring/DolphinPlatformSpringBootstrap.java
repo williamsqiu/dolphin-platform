@@ -49,9 +49,10 @@ public class DolphinPlatformSpringBootstrap implements ServletContextInitializer
         DolphinPlatformConfiguration configuration = ConfigurationFileLoader.loadConfiguration();
 
         updateConfigurationBySpring(configuration);
-
-        final DolphinPlatformBootstrap bootstrap = new DolphinPlatformBootstrap(servletContext, configuration);
-        bootstrap.start();
+        if(configuration.isActive()) {
+            final DolphinPlatformBootstrap bootstrap = new DolphinPlatformBootstrap(servletContext, configuration);
+            bootstrap.start();
+        }
     }
 
     private void updateConfigurationBySpring(DolphinPlatformConfiguration configuration) {
@@ -99,6 +100,9 @@ public class DolphinPlatformSpringBootstrap implements ServletContextInitializer
         }
         if(platformProperties.getShowRemotingLogging() != null) {
             configuration.setOpenDolphinLogLevel(platformProperties.getShowRemotingLogging()? Level.INFO : Level.OFF);
+        }
+        if(platformProperties.getActive() != null) {
+            configuration.setActive(platformProperties.getActive());
         }
     }
 

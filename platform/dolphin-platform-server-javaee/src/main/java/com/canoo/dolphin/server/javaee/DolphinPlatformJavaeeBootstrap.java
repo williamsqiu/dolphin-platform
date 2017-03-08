@@ -17,6 +17,7 @@ package com.canoo.dolphin.server.javaee;
 
 import com.canoo.dolphin.server.bootstrap.DolphinPlatformBootstrap;
 import com.canoo.dolphin.server.config.ConfigurationFileLoader;
+import com.canoo.dolphin.server.config.DolphinPlatformConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,7 +37,10 @@ public class DolphinPlatformJavaeeBootstrap implements ServletContainerInitializ
 
     @Override
     public void onStartup(final Set<Class<?>> c, final ServletContext servletContext) throws ServletException {
-        final DolphinPlatformBootstrap bootstrap = new DolphinPlatformBootstrap(servletContext, ConfigurationFileLoader.loadConfiguration());
-        bootstrap.start();
+        DolphinPlatformConfiguration configuration = ConfigurationFileLoader.loadConfiguration();
+        if(configuration.isActive()) {
+            final DolphinPlatformBootstrap bootstrap = new DolphinPlatformBootstrap(servletContext, configuration);
+            bootstrap.start();
+        }
     }
 }

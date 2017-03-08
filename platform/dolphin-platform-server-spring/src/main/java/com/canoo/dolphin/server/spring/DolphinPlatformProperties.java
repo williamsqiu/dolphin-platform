@@ -13,6 +13,8 @@ public class DolphinPlatformProperties {
 
     private Boolean mBeanRegistration;
 
+    private Boolean active;
+
     private String dolphinPlatformServletMapping;
 
     private String rootPackageForClasspathScan;
@@ -165,5 +167,13 @@ public class DolphinPlatformProperties {
 
     public void setAccessControlMaxAge(Long accessControlMaxAge) {
         this.accessControlMaxAge = accessControlMaxAge;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 }
