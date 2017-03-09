@@ -107,4 +107,9 @@ unstable feature at the moment and should only be activated for tests.
 call.
 |any long
 |5000
+
+|active
+|Defines if the Dolphin Platform should be bootstraped at the start of the server
+|true, false
+|true
 |===
