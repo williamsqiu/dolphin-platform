@@ -341,10 +341,6 @@ public class DolphinPlatformConfiguration implements Serializable {
         this.accessControlMaxAge = accessControlMaxAge;
     }
 
-    public boolean ismBeanRegistration() {
-        return mBeanRegistration;
-    }
-
     public boolean isActive() {
         return active;
     }
