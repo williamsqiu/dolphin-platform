@@ -96,6 +96,8 @@ subprojects { subprj ->
         jcenter()
     }
 
+    test.useTestNG()
+
     if (!subprj.publishJars.toBoolean()) {
         sonarqube {
             sonarqube {
@@ -159,8 +161,6 @@ subprojects { subprj ->
             testCompile 'org.hamcrest:java-hamcrest:2.0.0.0'
             testCompile "org.jmockit:jmockit:$jmockitVersion"
         }
-
-        test.useTestNG()
 
         if (subprj.name.startsWith('dolphin-remoting')) {
             dependencies {

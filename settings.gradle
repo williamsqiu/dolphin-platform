@@ -27,6 +27,7 @@ include 'platform-examples/process-monitor-sample/process-monitor-client-javafx'
 include 'documentation'
 include 'integration-common'
 include 'integration-server'
+include 'integration-tests-jee'
 include 'integration-tests'
 
 rootProject.children.each { project ->

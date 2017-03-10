@@ -1,3 +1,3 @@
 FROM airhacks/tomee
 MAINTAINER Hendrik Ebbers, canoo.com
-COPY todo-app.war ${DEPLOYMENT_DIR}
+COPY integration-tests.war ${DEPLOYMENT_DIR}
