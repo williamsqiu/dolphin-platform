@@ -63,7 +63,7 @@ mvn archetype:generate -Dfilter=com.canoo.dolphin-platform:
 ```
 Currently the projects contains only a JavaFX based client but it’s planned to add a Polymer based client to the archetypes with the next release.
 
-A complete "Getting started" documentation can be found [here](https://canoo.github.io/dolphin-platform/).
+A complete "Getting started" documentation can be found [here](https://canoo.github.io/dolphin-platform/#_dolphin_platform_jumpstart).
 
 ## Useful links
 * [Documentation](https://canoo.github.io/dolphin-platform/)
