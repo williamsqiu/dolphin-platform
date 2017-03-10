@@ -44,7 +44,7 @@ public class EnterpriseControllerTest extends AbstractIntegrationTest {
             ClientContext context = createClientContext(endpoint);
             ControllerProxy<EnterpriseTestBean> controller = createController(context, ENTERPRISE_CONTROLLER_NAME);
             Property<Boolean> preDestroyProperty = controller.getModel().preDestroyCalledProperty();
-            Assert.assertFalse(preDestroyProperty.get());
+            Assert.assertNull(preDestroyProperty.get());
             destroy(controller, endpoint);
             Assert.assertTrue(preDestroyProperty.get());
         } catch (Exception e) {

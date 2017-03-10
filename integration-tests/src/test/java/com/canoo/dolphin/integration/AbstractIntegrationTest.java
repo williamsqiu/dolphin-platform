@@ -64,7 +64,7 @@ public class AbstractIntegrationTest {
 
     protected <T> ControllerProxy<T> createController(ClientContext clientContext, String controllerName) {
         try {
-            return (ControllerProxy<T>) clientContext.createController(controllerName).get(5_000, TimeUnit.MILLISECONDS);
+            return (ControllerProxy<T>) clientContext.createController(controllerName).get(2, TimeUnit.MINUTES);
         } catch (Exception e) {
             throw new DolphinRemotingException("Can not create controller " + controllerName, e);
         }
