@@ -15,12 +15,7 @@
  */
 package com.canoo.dolphin.integration;
 
-import com.canoo.dolphin.client.ClientConfiguration;
-import com.canoo.dolphin.client.ClientContext;
-import com.canoo.dolphin.client.ClientContextFactory;
-import com.canoo.dolphin.client.ControllerProxy;
-import com.canoo.dolphin.client.Param;
-import com.canoo.dolphin.client.impl.HttpStatus;
+import com.canoo.dolphin.client.*;
 import com.canoo.dolphin.util.DolphinRemotingException;
 import org.testng.annotations.DataProvider;
 
@@ -45,12 +40,12 @@ public class AbstractIntegrationTest {
                 throw new TimeoutException("Server " + host + " is still down after " + waitMillis + " ms");
             }
             try {
-                URL healthUrl = new URL(host + "/health");
+                URL healthUrl = new URL(host + "/dolphin");
                 URLConnection connection = healthUrl.openConnection();
                 if(connection instanceof HttpURLConnection) {
                     HttpURLConnection httpURLConnection = (HttpURLConnection) connection;
                     httpURLConnection.connect();
-                    if(httpURLConnection.getResponseCode() == HttpStatus.HTTP_OK) {
+                    if(httpURLConnection.getResponseCode() == 405) {
                         connected = true;
                     }
                 } else {

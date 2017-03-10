@@ -16,7 +16,7 @@ dependencies {
   testCompile 'org.hamcrest:java-hamcrest:2.0.0.0'
   testCompile "org.jmockit:jmockit:$jmockitVersion"
   testCompile "org.slf4j:slf4j-simple:$slf4jVersion"
-  testCompile project(':todo-common')
+  testCompile project(':integration-common')
 }
 
 task copyWar(dependsOn: [':integration-tests-jee:war']) {
