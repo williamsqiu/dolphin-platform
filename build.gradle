@@ -128,7 +128,13 @@ subprojects { subprj ->
             options.windowTitle = "$project.name $project.version API"
             options.docTitle = "$project.name $project.version API"
             options.links = ['http://docs.oracle.com/javase/8/docs/api/',
-                             'http://docs.oracle.com/javase/8/javafx/api/']
+                             'http://docs.oracle.com/javase/8/javafx/api/',
+                             'https://canoo.github.io/dolphin-platform/javadoc/core/',
+                             'https://canoo.github.io/dolphin-platform/javadoc/client/',
+                             'https://canoo.github.io/dolphin-platform/javadoc/client-jfx/',
+                             'https://canoo.github.io/dolphin-platform/javadoc/server/',
+                             'https://canoo.github.io/dolphin-platform/javadoc/server-spring/',
+                             'https://canoo.github.io/dolphin-platform/javadoc/server-jee/']
         }
 
         task sourcesJar(type: Jar) {
