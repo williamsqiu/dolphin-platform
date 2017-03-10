@@ -82,17 +82,17 @@ public class AbstractIntegrationTest {
         }
     }
 
-    protected void invoke(ControllerProxy<?> controllerProxy, String actionName, String endpoint, Param... params) {
+    protected void invoke(ControllerProxy<?> controllerProxy, String actionName, String containerType, Param... params) {
         try {
-            controllerProxy.invoke(actionName, params).get(5_000, TimeUnit.MILLISECONDS);
+            controllerProxy.invoke(actionName, params).get(2, TimeUnit.MINUTES);
         } catch (Exception e) {
-            throw new DolphinRemotingException("Can not handle action " + actionName + " for endpoint " + endpoint, e);
+            throw new DolphinRemotingException("Can not handle action " + actionName + " for containerType " + containerType, e);
         }
     }
 
     protected void destroy(ControllerProxy<?> controllerProxy, String endpoint) {
         try {
-            controllerProxy.destroy().get(5_000, TimeUnit.MILLISECONDS);
+            controllerProxy.destroy().get(2, TimeUnit.MINUTES);
         } catch (Exception e) {
             throw new DolphinRemotingException("Can not destroy controller for endpoint " + endpoint, e);
         }

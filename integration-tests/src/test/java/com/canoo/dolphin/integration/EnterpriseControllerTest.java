@@ -10,7 +10,7 @@ import org.testng.annotations.Test;
 import static com.canoo.dolphin.integration.enterprise.EnterpriseTestConstants.ENTERPRISE_CONTROLLER_NAME;
 
 
-public class EnerpriseControllerTest extends AbstractIntegrationTest {
+public class EnterpriseControllerTest extends AbstractIntegrationTest {
 
     @Test(dataProvider = ENDPOINTS_DATAPROVIDER, description = "Test if controller and model can be created")
     public void testCreateController(String containerType, String endpoint) {

@@ -22,8 +22,6 @@ import com.canoo.dolphin.integration.action.ActionTestBean;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import java.util.concurrent.TimeUnit;
-
 import static com.canoo.dolphin.integration.action.ActionTestConstants.*;
 
 public class ActionControllerTest extends AbstractIntegrationTest {
@@ -47,7 +45,7 @@ public class ActionControllerTest extends AbstractIntegrationTest {
         try {
             ClientContext context = createClientContext(endpoint);
             ControllerProxy<ActionTestBean> controller = createController(context, ACTION_CONTROLLER_NAME);
-            controller.invoke(PUBLIC_ACTION).get(5, TimeUnit.MINUTES);
+            invoke(controller, PUBLIC_ACTION, containerType);
             Assert.assertTrue(controller.getModel().getBooleanValue());
             destroy(controller, endpoint);
         } catch (Exception e) {
@@ -60,7 +58,7 @@ public class ActionControllerTest extends AbstractIntegrationTest {
         try {
             ClientContext context = createClientContext(endpoint);
             ControllerProxy<ActionTestBean> controller = createController(context, ACTION_CONTROLLER_NAME);
-            controller.invoke(PRIVATE_ACTION).get(5, TimeUnit.MINUTES);
+            invoke(controller, PRIVATE_ACTION, containerType);
             Assert.assertTrue(controller.getModel().getBooleanValue());
             destroy(controller, endpoint);
         } catch (Exception e) {
@@ -73,7 +71,7 @@ public class ActionControllerTest extends AbstractIntegrationTest {
         try {
             ClientContext context = createClientContext(endpoint);
             ControllerProxy<ActionTestBean> controller = createController(context, ACTION_CONTROLLER_NAME);
-            controller.invoke(WITH_STRING_PARAM_ACTION, new Param(PARAM_NAME, "Yeah!")).get(5, TimeUnit.MINUTES);
+            invoke(controller, WITH_STRING_PARAM_ACTION, containerType, new Param(PARAM_NAME, "Yeah!"));
             Assert.assertTrue(controller.getModel().getBooleanValue());
             Assert.assertEquals(controller.getModel().getStringValue(), "Yeah!");
             destroy(controller, endpoint);
@@ -92,7 +90,7 @@ public class ActionControllerTest extends AbstractIntegrationTest {
             String value2 = "I want to test you!";
             int value3 = 356;
 
-            controller.invoke(WITH_SEVERAL_PARAMS_ACTION, new Param(PARAM_NAME_1, value1), new Param(PARAM_NAME_2, value2), new Param(PARAM_NAME_3, value3)).get(5, TimeUnit.MINUTES);
+            invoke(controller, WITH_SEVERAL_PARAMS_ACTION, containerType, new Param(PARAM_NAME_1, value1), new Param(PARAM_NAME_2, value2), new Param(PARAM_NAME_3, value3));
             Assert.assertTrue(controller.getModel().getBooleanValue());
             Assert.assertEquals(controller.getModel().getStringValue(), value1 + value2 + value3);
             destroy(controller, endpoint);
