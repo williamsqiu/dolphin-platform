@@ -91,7 +91,15 @@ public class PropertyControllerTest extends AbstractIntegrationTest {
             Assert.assertEquals(controller.getModel().getBigIntegerValue(), BIG_INTEGER_VALUE);
             Assert.assertEquals(controller.getModel().getBooleanValue(), BOOLEAN_VALUE);
             Assert.assertEquals(controller.getModel().getByteValue(), BYTE_VALUE);
-            Assert.assertEquals(controller.getModel().getCalendarValue().getTime(), CALENDAR_VALUE.getTime());
+
+
+            System.out.println(controller.getModel().getCalendarValue().getTimeInMillis());
+            System.out.println(CALENDAR_VALUE.getTimeInMillis());
+
+            Assert.assertEquals(controller.getModel().getCalendarValue().getTimeInMillis(), CALENDAR_VALUE.getTimeInMillis());
+
+
+
             Assert.assertEquals(controller.getModel().getDateValue(), DATE_VALUE);
             Assert.assertEquals(controller.getModel().getDoubleValue(), DOUBLE_VALUE);
             Assert.assertEquals(controller.getModel().getEnumValue(), ENUM_VALUE);

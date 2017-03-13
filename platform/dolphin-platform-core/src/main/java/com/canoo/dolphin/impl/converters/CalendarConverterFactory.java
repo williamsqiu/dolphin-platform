@@ -78,7 +78,7 @@ public class CalendarConverterFactory extends AbstractConverterFactory {
                 return null;
             }
             try {
-                return dateFormat.format(((Calendar)value).getTime());
+                return dateFormat.format((value).getTime());
             } catch (IllegalArgumentException e) {
                 throw new ValueConverterException("Unable to format the date: " + value, e);
             }

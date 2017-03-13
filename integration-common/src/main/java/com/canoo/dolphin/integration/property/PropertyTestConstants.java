@@ -5,8 +5,10 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.UUID;
+
+import static com.canoo.dolphin.integration.util.ValueHelper.createInZone;
+import static com.canoo.dolphin.integration.util.ValueHelper.getUtcZone;
 
 public interface PropertyTestConstants {
 
@@ -17,7 +19,6 @@ public interface PropertyTestConstants {
     String SET_TO_DEFAULTS_ACTION = "setToDefaults";
 
     String RESET_TO_NULL_ACTION = "resetToNull";
-
 
     String STRING_VALUE = "Hello World!";
 
@@ -39,13 +40,14 @@ public interface PropertyTestConstants {
 
     Byte BYTE_VALUE = new Byte((byte) 12);
 
-    Calendar CALENDAR_VALUE = new GregorianCalendar(2017, 2, 3,4, 5, 6);
+    Calendar CALENDAR_VALUE = createInZone(2017, 2, 3,4, 8, getUtcZone());
 
-    Date DATE_VALUE = new GregorianCalendar(2017, 2, 3,4, 5, 6).getTime();
+    Date DATE_VALUE = createInZone(2017, 2, 3,4, 5, getUtcZone()).getTime();
 
     Short SHORT_VALUE = new Short((short) 3);
 
     UUID UUID_VALUE = new UUID(1235, 43567);
 
     ElementType ENUM_VALUE = ElementType.ANNOTATION_TYPE;
+
 }
