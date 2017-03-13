@@ -22,9 +22,6 @@ import org.testng.annotations.Test;
 
 import java.util.Date;
 
-/**
- * Created by hendrikebbers on 13.03.17.
- */
 public class DateConverterFactoryTest {
 
     @Test
