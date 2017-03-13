@@ -65,7 +65,8 @@ public class CalenderConverterFactoryTest {
         CalendarConverterFactory factory = new CalendarConverterFactory();
         Converter converter = factory.getConverterForType(Calendar.class);
 
-        Calendar calendar = new GregorianCalendar(2017, 2, 3,4, 5, 6);
+        Calendar calendar = new GregorianCalendar(TimeZone.getTimeZone("UTC"));
+        calendar.set(2017, 2, 3,4, 5, 6);
         Object converted = converter.convertToDolphin(calendar);
         Assert.assertNotNull(converted);
         Assert.assertEquals(((Calendar)converter.convertFromDolphin(converted)).getTime(), calendar.getTime());
@@ -76,24 +77,27 @@ public class CalenderConverterFactoryTest {
         CalendarConverterFactory factory = new CalendarConverterFactory();
         Converter converter = factory.getConverterForType(Calendar.class);
 
-        Calendar calendar = new GregorianCalendar(2017, 2, 3,4, 5, 6);
-        Object converted = converter.convertToDolphin(calendar);
-        Assert.assertNotNull(converted);
-        Assert.assertTrue(converted instanceof String);
-        Assert.assertEquals(converted, "2017-03-03T03:05:06.000Z");
-    }
-
-    @Test
-    public void testToDolphinConversionFixDateInUTC() throws ValueConverterException {
-        CalendarConverterFactory factory = new CalendarConverterFactory();
-        Converter converter = factory.getConverterForType(Calendar.class);
-
-        Calendar calendar = new GregorianCalendar(2017, 2, 3,4, 5, 6);
-        calendar.setTimeZone(TimeZone.getTimeZone("UTC"));
+        Calendar calendar = new GregorianCalendar(TimeZone.getTimeZone("UTC"));
+        calendar.set(2017, 2, 3,4, 5, 6);
+        calendar.set(Calendar.MILLISECOND, 0);
         Object converted = converter.convertToDolphin(calendar);
         Assert.assertNotNull(converted);
         Assert.assertTrue(converted instanceof String);
         Assert.assertEquals(converted, "2017-03-03T04:05:06.000Z");
+    }
+
+    @Test
+    public void testToDolphinConversionFixDateInGmt() throws ValueConverterException {
+        CalendarConverterFactory factory = new CalendarConverterFactory();
+        Converter converter = factory.getConverterForType(Calendar.class);
+
+        Calendar calendar = new GregorianCalendar(TimeZone.getTimeZone("GMT+1"));
+        calendar.set(2017, 2, 3,4, 5, 6);
+        calendar.set(Calendar.MILLISECOND, 0);
+        Object converted = converter.convertToDolphin(calendar);
+        Assert.assertNotNull(converted);
+        Assert.assertTrue(converted instanceof String);
+        Assert.assertEquals(converted, "2017-03-03T03:05:06.000Z");
     }
 
     @Test
