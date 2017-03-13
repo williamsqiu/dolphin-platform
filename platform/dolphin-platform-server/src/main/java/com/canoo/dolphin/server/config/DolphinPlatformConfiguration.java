@@ -63,6 +63,8 @@ public class DolphinPlatformConfiguration implements Serializable {
 
     private static final String EVENTBUS_TYPE = "eventbusType";
 
+    private static final String PLATFORM_ACTIVE = "active";
+
     private boolean useSessionInvalidationServlet = false;
 
     public final static int SESSION_TIMEOUT_DEFAULT_VALUE = 15 * 60;
@@ -88,6 +90,8 @@ public class DolphinPlatformConfiguration implements Serializable {
     private int maxClientsPerSession = 10;
 
     private boolean useGc = true;
+
+    private boolean active = true;
 
     private List<String> accessControlAllowHeaders = Arrays.asList("Content-Type", "x-requested-with", "origin", "authorization", "accept", "client-security-token");
 
@@ -169,6 +173,10 @@ public class DolphinPlatformConfiguration implements Serializable {
 
         if (internalProperties.containsKey(USE_SESSION_INVALIDATION_SERVLET)) {
             useSessionInvalidationServlet = Boolean.parseBoolean(internalProperties.getProperty(USE_SESSION_INVALIDATION_SERVLET));
+        }
+
+        if (internalProperties.containsKey(PLATFORM_ACTIVE)) {
+            active = Boolean.parseBoolean(internalProperties.getProperty(PLATFORM_ACTIVE));
         }
 
         if (internalProperties.containsKey(GARBAGE_COLLECTION_ACTIVE)) {
@@ -331,6 +339,14 @@ public class DolphinPlatformConfiguration implements Serializable {
 
     public void setAccessControlMaxAge(long accessControlMaxAge) {
         this.accessControlMaxAge = accessControlMaxAge;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     public void log(){
