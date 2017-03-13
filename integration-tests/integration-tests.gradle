@@ -41,3 +41,4 @@ dockerCompose {
 
 dockerCompose.isRequiredBy(test)
 test.dependsOn copyWar
+composeUp.dependsOn copyWar
