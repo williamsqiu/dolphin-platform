@@ -10,7 +10,4 @@ dist/
 node_modules/
 local.properties
 **/.nb-gradle
-
-integration-tests/docker-base/payara-integration/integration-tests.war
-integration-tests/docker-base/tomee-integration/integration-tests.war
-integration-tests/docker-base/wildfly-integration/integration-tests.war
+**/integration-tests.war
