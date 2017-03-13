@@ -40,12 +40,12 @@ public class AbstractIntegrationTest {
                 throw new TimeoutException("Server " + host + " is still down after " + waitMillis + " ms");
             }
             try {
-                URL healthUrl = new URL(host + "/dolphin");
+                URL healthUrl = new URL(host + "/rest/health");
                 URLConnection connection = healthUrl.openConnection();
                 if(connection instanceof HttpURLConnection) {
                     HttpURLConnection httpURLConnection = (HttpURLConnection) connection;
                     httpURLConnection.connect();
-                    if(httpURLConnection.getResponseCode() == 405) {
+                    if(httpURLConnection.getResponseCode() == 200) {
                         connected = true;
                     }
                 } else {
