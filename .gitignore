@@ -10,4 +10,4 @@ dist/
 node_modules/
 local.properties
 **/.nb-gradle
-
+**/integration-tests.war

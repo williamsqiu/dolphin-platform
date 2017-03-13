@@ -15,12 +15,7 @@
  */
 package com.canoo.dolphin.integration;
 
-import com.canoo.dolphin.client.ClientConfiguration;
-import com.canoo.dolphin.client.ClientContext;
-import com.canoo.dolphin.client.ClientContextFactory;
-import com.canoo.dolphin.client.ControllerProxy;
-import com.canoo.dolphin.client.Param;
-import com.canoo.dolphin.client.impl.HttpStatus;
+import com.canoo.dolphin.client.*;
 import com.canoo.dolphin.util.DolphinRemotingException;
 import org.testng.annotations.DataProvider;
 
@@ -45,12 +40,12 @@ public class AbstractIntegrationTest {
                 throw new TimeoutException("Server " + host + " is still down after " + waitMillis + " ms");
             }
             try {
-                URL healthUrl = new URL(host + "/health");
+                URL healthUrl = new URL(host + "/rest/health");
                 URLConnection connection = healthUrl.openConnection();
                 if(connection instanceof HttpURLConnection) {
                     HttpURLConnection httpURLConnection = (HttpURLConnection) connection;
                     httpURLConnection.connect();
-                    if(httpURLConnection.getResponseCode() == HttpStatus.HTTP_OK) {
+                    if(httpURLConnection.getResponseCode() == 200) {
                         connected = true;
                     }
                 } else {
@@ -69,7 +64,7 @@ public class AbstractIntegrationTest {
 
     protected <T> ControllerProxy<T> createController(ClientContext clientContext, String controllerName) {
         try {
-            return (ControllerProxy<T>) clientContext.createController(controllerName).get(5_000, TimeUnit.MILLISECONDS);
+            return (ControllerProxy<T>) clientContext.createController(controllerName).get(2, TimeUnit.MINUTES);
         } catch (Exception e) {
             throw new DolphinRemotingException("Can not create controller " + controllerName, e);
         }
@@ -87,17 +82,17 @@ public class AbstractIntegrationTest {
         }
     }
 
-    protected void invoke(ControllerProxy<?> controllerProxy, String actionName, String endpoint, Param... params) {
+    protected void invoke(ControllerProxy<?> controllerProxy, String actionName, String containerType, Param... params) {
         try {
-            controllerProxy.invoke(actionName, params).get(5_000, TimeUnit.MILLISECONDS);
+            controllerProxy.invoke(actionName, params).get(2, TimeUnit.MINUTES);
         } catch (Exception e) {
-            throw new DolphinRemotingException("Can not handle action " + actionName + " for endpoint " + endpoint, e);
+            throw new DolphinRemotingException("Can not handle action " + actionName + " for containerType " + containerType, e);
         }
     }
 
     protected void destroy(ControllerProxy<?> controllerProxy, String endpoint) {
         try {
-            controllerProxy.destroy().get(5_000, TimeUnit.MILLISECONDS);
+            controllerProxy.destroy().get(2, TimeUnit.MINUTES);
         } catch (Exception e) {
             throw new DolphinRemotingException("Can not destroy controller for endpoint " + endpoint, e);
         }
@@ -113,10 +108,10 @@ public class AbstractIntegrationTest {
 
     @DataProvider(name = ENDPOINTS_DATAPROVIDER, parallel = true)
     public Object[][] getEndpoints() {
-        return new String[][]{{"Payara", "http://localhost:8081/todo-app"},
-                {"TomEE", "http://localhost:8082/todo-app"},
-                {"Wildfly", "http://localhost:8083/todo-app"}//,
-                //{"Spring-Boot", "http://localhost:8084/todo-app"}
+        return new String[][]{{"Payara", "http://localhost:8081/integration-tests"},
+                {"TomEE", "http://localhost:8082/integration-tests"},
+                {"Wildfly", "http://localhost:8083/integration-tests"}//,
+                //{"Spring-Boot", "http://localhost:8084/integration-tests"}
         };
     }
 }

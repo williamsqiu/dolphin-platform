@@ -21,9 +21,6 @@ import org.testng.annotations.Test;
 
 import java.util.concurrent.Executors;
 
-/**
- * Created by hendrikebbers on 02.03.17.
- */
 public class ClientSessionExecutorImplTest {
 
     @Test

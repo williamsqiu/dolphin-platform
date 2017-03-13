@@ -1,0 +1,53 @@
+package com.canoo.dolphin.integration.property;
+
+import java.lang.annotation.ElementType;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.UUID;
+
+import static com.canoo.dolphin.integration.util.ValueHelper.createInZone;
+import static com.canoo.dolphin.integration.util.ValueHelper.getUtcZone;
+
+public interface PropertyTestConstants {
+
+    String PROPERTY_CONTROLLER_NAME = "PropertyController";
+
+    String CHECK_MODEL_CREATION_ACTION = "checkModelCreation";
+
+    String SET_TO_DEFAULTS_ACTION = "setToDefaults";
+
+    String RESET_TO_NULL_ACTION = "resetToNull";
+
+    String STRING_VALUE = "Hello World!";
+
+    Boolean BOOLEAN_VALUE = true;
+
+    Integer INTEGER_VALUE = 4711;
+
+    Long LONG_VALUE = new Long(Integer.MAX_VALUE * 2);
+
+    Float FLOAT_VALUE = new Float(1.01);
+
+    Double DOUBLE_VALUE = new Double(1.00001);
+
+    Number NUMBER_VALUE = Double.MAX_VALUE;
+
+    BigDecimal BIG_DECIMAL_VALUE = new BigDecimal(12.23);
+
+    BigInteger BIG_INTEGER_VALUE= BigInteger.valueOf(12475);
+
+    Byte BYTE_VALUE = new Byte((byte) 12);
+
+    Calendar CALENDAR_VALUE = createInZone(2017, 2, 3,4, 8, getUtcZone());
+
+    Date DATE_VALUE = createInZone(2017, 2, 3,4, 5, getUtcZone()).getTime();
+
+    Short SHORT_VALUE = new Short((short) 3);
+
+    UUID UUID_VALUE = new UUID(1235, 43567);
+
+    ElementType ENUM_VALUE = ElementType.ANNOTATION_TYPE;
+
+}
