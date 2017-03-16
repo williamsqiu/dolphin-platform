@@ -19,6 +19,8 @@ dependencies {
     compile project(':dolphin-remoting-server')
     compile 'org.reflections:reflections:0.9.10'
     compileOnly "javax.servlet:javax.servlet-api:$servletApiVersion"
+    compile 'org.atmosphere:atmosphere-runtime:3.0.0-SNAPSHOT'
+
 
     testCompile project(':dolphin-remoting-combined')
     testCompile "javax.servlet:javax.servlet-api:$servletApiVersion"

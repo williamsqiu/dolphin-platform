@@ -17,18 +17,13 @@ package com.canoo.dolphin.server.servlet;
 
 import com.canoo.dolphin.impl.PlatformConstants;
 import com.canoo.dolphin.server.config.DolphinPlatformConfiguration;
+import com.canoo.dolphin.util.Assert;
 
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
+import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
-import com.canoo.dolphin.util.Assert;
 
 public class CrossSiteOriginFilter implements Filter {
 
@@ -47,6 +42,7 @@ public class CrossSiteOriginFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse resp = (HttpServletResponse) response;
+        request.startAsync(request, response);
 
         //Access-Control-Allow-Headers
         String accessControlAllowHeaders = PlatformConstants.CLIENT_ID_HTTP_HEADER_NAME;
