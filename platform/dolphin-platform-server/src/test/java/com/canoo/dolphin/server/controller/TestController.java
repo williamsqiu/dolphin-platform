@@ -15,8 +15,30 @@
  */
 package com.canoo.dolphin.server.controller;
 
+import com.canoo.dolphin.server.DolphinAction;
 import com.canoo.dolphin.server.DolphinController;
+import com.canoo.dolphin.server.DolphinModel;
+import com.canoo.dolphin.server.Param;
+
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 
 @DolphinController
 public class TestController {
+
+
+    @DolphinModel
+    private TestBean testBean;
+
+    @PostConstruct
+    public void postConstruct() {
+    }
+
+    @PreDestroy
+    public void preDestroy() {
+    }
+
+    @DolphinAction
+    public void dolphinAction(@Param String test) {
+    }
 }

@@ -21,6 +21,7 @@ import com.canoo.dolphin.server.config.DolphinPlatformConfiguration;
 import com.canoo.dolphin.server.container.ContainerManager;
 import com.canoo.dolphin.server.container.ModelInjector;
 import com.canoo.dolphin.server.controller.ControllerRepository;
+import com.canoo.dolphin.server.controller.ControllerValidationException;
 import com.canoo.dolphin.server.impl.ClasspathScanner;
 import com.canoo.dolphin.util.Callback;
 import org.opendolphin.core.RemotingConstants;
@@ -145,12 +146,17 @@ public class DolphinContextTest {
     private final ClasspathScanner classpathScanner = new ClasspathScanner("com.canoo.dolphin");
 
     private DolphinContext createContext() {
-        return new DolphinContext(new DolphinPlatformConfiguration(), new DolphinSessionProvider() {
-            @Override
-            public DolphinSession getCurrentDolphinSession() {
-                return null;
-            }
-        }, new ContainerManagerMock(), new ControllerRepository(classpathScanner), new DefaultOpenDolphinFactory(), new DestroyCallbackMock(), new DestroyCallbackMock());
+        try{
+            return new DolphinContext(new DolphinPlatformConfiguration(), new DolphinSessionProvider() {
+                @Override
+                public DolphinSession getCurrentDolphinSession() {
+                    return null;
+                }
+            }, new ContainerManagerMock(), new ControllerRepository(classpathScanner), new DefaultOpenDolphinFactory(), new DestroyCallbackMock(), new DestroyCallbackMock());
+        }catch(ControllerValidationException cve){
+            return null;
+        }
+
     }
 
     private class DestroyCallbackMock implements Callback<DolphinContext> {

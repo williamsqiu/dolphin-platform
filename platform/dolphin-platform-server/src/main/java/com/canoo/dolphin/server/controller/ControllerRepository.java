@@ -30,16 +30,19 @@ import java.util.Set;
 public class ControllerRepository {
 
     private Map<String, Class> controllersClasses;
+    private ControllerValidator controllerValidator;
 
     /**
      * Constructor
      */
-    public ControllerRepository(final ClasspathScanner scanner) {
+    public ControllerRepository(final ClasspathScanner scanner) throws ControllerValidationException{
         Assert.requireNonNull(scanner, "scanner");
 
         controllersClasses = new HashMap<>();
+        controllerValidator = new ControllerValidator();
         Set<Class<?>> foundControllerClasses = scanner.getTypesAnnotatedWith(DolphinController.class);
         for (Class<?> controllerClass : foundControllerClasses) {
+            controllerValidator.validate(controllerClass);
             String name = controllerClass.getName();
             if (controllerClass.getAnnotation(DolphinController.class).value() != null && !controllerClass.getAnnotation(DolphinController.class).value().trim().isEmpty()) {
                 name = controllerClass.getAnnotation(DolphinController.class).value();
