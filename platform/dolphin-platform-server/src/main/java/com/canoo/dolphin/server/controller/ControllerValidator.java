@@ -68,6 +68,10 @@ public class ControllerValidator {
         if (!dolphinModelPresent(clazz)) {
             throw new ControllerValidationException("Controller must have a DolphinModel.");
         }
+
+        if(moreThanOneDolphinModel(clazz)){
+            throw new ControllerValidationException("Controller should not contain more than one DolphinModel.");
+        }
     }
 
     private boolean isInterface(Class<?> clazz) {
@@ -147,9 +151,22 @@ public class ControllerValidator {
     private boolean dolphinModelPresent(Class<?> clazz) {
         List<Field> fields = ReflectionHelper.getInheritedDeclaredFields(clazz);
         for (Field field : fields) {
-            return field.isAnnotationPresent(DolphinModel.class);
+            if (field.isAnnotationPresent(DolphinModel.class)) {
+                return true;
+            }
         }
         return false;
+    }
+
+    private boolean moreThanOneDolphinModel(Class<?> clazz) {
+        List<Field> fields = ReflectionHelper.getInheritedDeclaredFields(clazz);
+        int count = 0;
+        for (Field field : fields) {
+            if (field.isAnnotationPresent(DolphinModel.class)) {
+                count++;
+            }
+        }
+        return count > 1;
     }
 
 
