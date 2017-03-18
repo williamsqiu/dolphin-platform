@@ -68,7 +68,6 @@ public class ControllerValidator {
         if (!dolphinModelPresent(clazz)) {
             throw new ControllerValidationException("Controller must have a DolphinModel.");
         }
-
         if(moreThanOneDolphinModel(clazz)){
             throw new ControllerValidationException("Controller should not contain more than one DolphinModel.");
         }

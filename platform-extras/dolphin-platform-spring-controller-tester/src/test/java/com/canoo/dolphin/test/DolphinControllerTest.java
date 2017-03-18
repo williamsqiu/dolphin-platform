@@ -21,7 +21,7 @@ import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.fail;
 
-public class ControllerTestTest extends SpringTestNGControllerTest {
+public class DolphinControllerTest extends SpringTestNGControllerTest {
 
     @Test
     public void testCreation() {
