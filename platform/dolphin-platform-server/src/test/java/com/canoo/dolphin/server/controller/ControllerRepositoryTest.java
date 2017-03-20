@@ -24,7 +24,7 @@ import static org.testng.Assert.assertNotNull;
 public class ControllerRepositoryTest {
 
     @Test
-    public void testExistingControllers() {
+    public void testExistingControllers() throws Exception{
         ControllerRepository controllerRepository = new ControllerRepository(new ClasspathScanner());
         Class<?> controllerClass = controllerRepository.getControllerClassForName(TestController.class.getName());
         assertNotNull(controllerClass);
@@ -32,7 +32,7 @@ public class ControllerRepositoryTest {
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testWrongControllersName() {
+    public void testWrongControllersName() throws Exception{
         ControllerRepository controllerRepository = new ControllerRepository(new ClasspathScanner());
         Class<?> controllerClass = controllerRepository.getControllerClassForName("WrongControllerName");
     }

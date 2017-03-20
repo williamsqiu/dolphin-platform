@@ -29,6 +29,7 @@ import com.canoo.dolphin.server.context.DolphinContextUtils;
 import com.canoo.dolphin.server.context.DolphinHttpSessionListener;
 import com.canoo.dolphin.server.context.DolphinSessionLifecycleHandler;
 import com.canoo.dolphin.server.context.DolphinSessionProvider;
+import com.canoo.dolphin.server.controller.ControllerValidationException;
 import com.canoo.dolphin.server.event.DolphinEventBus;
 import com.canoo.dolphin.server.event.impl.EventBusProvider;
 import com.canoo.dolphin.server.impl.ClasspathScanner;
@@ -97,37 +98,42 @@ public class DolphinPlatformBootstrap {
     public void start() {
         LOG.info("Starting Dolphin Platform");
 
-        final ClasspathScanner classpathScanner = new ClasspathScanner(configuration.getRootPackageForClasspathScan());
+        try{
+            final ClasspathScanner classpathScanner = new ClasspathScanner(configuration.getRootPackageForClasspathScan());
 
-        MBeanRegistry.getInstance().setMbeanSupport(configuration.isMBeanRegistration());
+            MBeanRegistry.getInstance().setMbeanSupport(configuration.isMBeanRegistration());
 
-        final ContainerManager containerManager = findManager();
-        containerManager.init(servletContext);
+            final ContainerManager containerManager = findManager();
+            containerManager.init(servletContext);
 
-        registerDolphinSessionListener(containerManager, classpathScanner);
+            registerDolphinSessionListener(containerManager, classpathScanner);
 
-        final DolphinContextCommunicationHandler communicationHandler = new DolphinContextCommunicationHandler(configuration);
+            final DolphinContextCommunicationHandler communicationHandler = new DolphinContextCommunicationHandler(configuration);
 
-        DolphinContextFactory dolphinContextFactory = new DefaultDolphinContextFactory(configuration, getSessionProvider(), containerManager, classpathScanner, sessionLifecycleHandler);
-        servletContext.addServlet(DOLPHIN_SERVLET_NAME, new DolphinPlatformServlet(communicationHandler)).addMapping(configuration.getDolphinPlatformServletMapping());
-        if (configuration.isUseSessionInvalidationServlet()) {
-            servletContext.addServlet(DOLPHIN_INVALIDATION_SERVLET_NAME, new InvalidationServlet()).addMapping(DEFAULT_DOLPHIN_INVALIDATION_SERVLET_MAPPING);
+            DolphinContextFactory dolphinContextFactory = new DefaultDolphinContextFactory(configuration, getSessionProvider(), containerManager, classpathScanner, sessionLifecycleHandler);
+            servletContext.addServlet(DOLPHIN_SERVLET_NAME, new DolphinPlatformServlet(communicationHandler)).addMapping(configuration.getDolphinPlatformServletMapping());
+            if (configuration.isUseSessionInvalidationServlet()) {
+                servletContext.addServlet(DOLPHIN_INVALIDATION_SERVLET_NAME, new InvalidationServlet()).addMapping(DEFAULT_DOLPHIN_INVALIDATION_SERVLET_MAPPING);
+            }
+            if (configuration.isUseCrossSiteOriginFilter()) {
+                servletContext.addFilter(DOLPHIN_CROSS_SITE_FILTER_NAME, new CrossSiteOriginFilter(configuration)).addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/*");
+            }
+
+            servletContext.addFilter(DOLPHIN_CLIENT_ID_FILTER_NAME, new DolphinContextFilter(configuration, containerManager, dolphinContextFactory, sessionLifecycleHandler)).addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, configuration.getIdFilterUrlMappings().toArray(new String[configuration.getIdFilterUrlMappings().size()]));
+
+            LOG.debug("Dolphin Platform initialized under context \"" + servletContext.getContextPath() + "\"");
+            LOG.debug("Dolphin Platform endpoint defined as " + configuration.getDolphinPlatformServletMapping());
+
+            DolphinHttpSessionListener contextCleaner = new DolphinHttpSessionListener();
+            contextCleaner.init(configuration);
+            servletContext.addListener(contextCleaner);
+
+            java.util.logging.Logger openDolphinLogger = java.util.logging.Logger.getLogger("org.opendolphin");
+            openDolphinLogger.setLevel(configuration.getOpenDolphinLogLevel());
+        }catch (ControllerValidationException cve){
+            throw new DolphinPlatformBoostrapException("Can not start Dolphin Platform based on bad controller definition", cve);
         }
-        if (configuration.isUseCrossSiteOriginFilter()) {
-            servletContext.addFilter(DOLPHIN_CROSS_SITE_FILTER_NAME, new CrossSiteOriginFilter(configuration)).addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/*");
-        }
 
-        servletContext.addFilter(DOLPHIN_CLIENT_ID_FILTER_NAME, new DolphinContextFilter(configuration, containerManager, dolphinContextFactory, sessionLifecycleHandler)).addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, configuration.getIdFilterUrlMappings().toArray(new String[configuration.getIdFilterUrlMappings().size()]));
-
-        LOG.debug("Dolphin Platform initialized under context \"" + servletContext.getContextPath() + "\"");
-        LOG.debug("Dolphin Platform endpoint defined as " + configuration.getDolphinPlatformServletMapping());
-
-        DolphinHttpSessionListener contextCleaner = new DolphinHttpSessionListener();
-        contextCleaner.init(configuration);
-        servletContext.addListener(contextCleaner);
-
-        java.util.logging.Logger openDolphinLogger = java.util.logging.Logger.getLogger("org.opendolphin");
-        openDolphinLogger.setLevel(configuration.getOpenDolphinLogLevel());
     }
 
     private ContainerManager findManager() {

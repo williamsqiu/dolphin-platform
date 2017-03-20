@@ -18,6 +18,7 @@ package com.canoo.dolphin.server.context;
 import com.canoo.dolphin.server.config.DolphinPlatformConfiguration;
 import com.canoo.dolphin.server.container.ContainerManager;
 import com.canoo.dolphin.server.controller.ControllerRepository;
+import com.canoo.dolphin.server.controller.ControllerValidationException;
 import com.canoo.dolphin.server.impl.ClasspathScanner;
 import com.canoo.dolphin.util.Assert;
 import com.canoo.dolphin.util.Callback;
@@ -41,7 +42,8 @@ public class DefaultDolphinContextFactory implements DolphinContextFactory {
 
     private final DolphinSessionLifecycleHandler lifecycleHandler;
 
-    public DefaultDolphinContextFactory(final DolphinPlatformConfiguration configuration, DolphinSessionProvider sessionProvider, final ContainerManager containerManager, final ClasspathScanner scanner, final DolphinSessionLifecycleHandler lifecycleHandler) {
+    public DefaultDolphinContextFactory(final DolphinPlatformConfiguration configuration, DolphinSessionProvider sessionProvider, final ContainerManager containerManager, final ClasspathScanner scanner, final DolphinSessionLifecycleHandler lifecycleHandler)
+    throws ControllerValidationException {
         this.configuration = Assert.requireNonNull(configuration, "configuration");
         this.sessionProvider = Assert.requireNonNull(sessionProvider, "sessionProvider");
         this.containerManager = Assert.requireNonNull(containerManager, "containerManager");

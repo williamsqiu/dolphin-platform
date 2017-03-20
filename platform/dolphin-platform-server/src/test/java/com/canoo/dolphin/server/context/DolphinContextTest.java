@@ -21,6 +21,7 @@ import com.canoo.dolphin.server.config.DolphinPlatformConfiguration;
 import com.canoo.dolphin.server.container.ContainerManager;
 import com.canoo.dolphin.server.container.ModelInjector;
 import com.canoo.dolphin.server.controller.ControllerRepository;
+import com.canoo.dolphin.server.controller.ControllerValidationException;
 import com.canoo.dolphin.server.impl.ClasspathScanner;
 import com.canoo.dolphin.util.Callback;
 import org.opendolphin.core.RemotingConstants;
@@ -40,7 +41,7 @@ import static org.testng.Assert.assertTrue;
 public class DolphinContextTest {
 
     @Test
-    public void testUniqueId() {
+    public void testUniqueId() throws ControllerValidationException {
         //given:
         List<DolphinContext> contextList = new ArrayList<>();
         for(int i = 0; i < 1000; i++) {
@@ -61,7 +62,7 @@ public class DolphinContextTest {
     }
 
     @Test
-    public void testUniqueBeanManager() {
+    public void testUniqueBeanManager() throws ControllerValidationException {
         //given:
         List<DolphinContext> contextList = new ArrayList<>();
         for(int i = 0; i < 100; i++) {
@@ -79,7 +80,7 @@ public class DolphinContextTest {
     }
 
     @Test
-    public void testUniqueDolphin() {
+    public void testUniqueDolphin() throws ControllerValidationException {
         //given:
         List<DolphinContext> contextList = new ArrayList<>();
         for(int i = 0; i < 100; i++) {
@@ -97,7 +98,7 @@ public class DolphinContextTest {
     }
 
     @Test
-    public void testUniqueDolphinSession() {
+    public void testUniqueDolphinSession() throws ControllerValidationException {
         //given:
         List<DolphinContext> contextList = new ArrayList<>();
         for(int i = 0; i < 100; i++) {
@@ -115,7 +116,7 @@ public class DolphinContextTest {
     }
 
     @Test
-    public void testGetterReturnValue() {
+    public void testGetterReturnValue() throws ControllerValidationException {
         //given:
         DolphinContext dolphinContext = createContext();
 
@@ -127,7 +128,7 @@ public class DolphinContextTest {
     }
 
     @Test
-    public void testNewDolphinCommands() {
+    public void testNewDolphinCommands() throws ControllerValidationException {
         //given:
         DolphinContext dolphinContext = createContext();
 
@@ -144,7 +145,7 @@ public class DolphinContextTest {
 
     private final ClasspathScanner classpathScanner = new ClasspathScanner("com.canoo.dolphin");
 
-    private DolphinContext createContext() {
+    private DolphinContext createContext() throws ControllerValidationException {
         return new DolphinContext(new DolphinPlatformConfiguration(), new DolphinSessionProvider() {
             @Override
             public DolphinSession getCurrentDolphinSession() {

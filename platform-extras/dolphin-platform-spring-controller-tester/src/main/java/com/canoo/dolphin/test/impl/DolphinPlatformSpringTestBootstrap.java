@@ -47,6 +47,7 @@ import com.canoo.dolphin.server.context.DolphinContext;
 import com.canoo.dolphin.server.context.DolphinContextUtils;
 import com.canoo.dolphin.server.context.DolphinSessionProvider;
 import com.canoo.dolphin.server.controller.ControllerRepository;
+import com.canoo.dolphin.server.controller.ControllerValidationException;
 import com.canoo.dolphin.server.event.DolphinEventBus;
 import com.canoo.dolphin.server.event.impl.DefaultDolphinEventBus;
 import com.canoo.dolphin.server.impl.ClasspathScanner;
@@ -119,7 +120,7 @@ public class DolphinPlatformSpringTestBootstrap {
     @Bean
     @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
     public DolphinTestContext createServerContext(final TestInMemoryConfiguration config,
-                                                  final WebApplicationContext context) throws ExecutionException, InterruptedException {
+                                                  final WebApplicationContext context) throws ExecutionException, ControllerValidationException, InterruptedException {
         Assert.requireNonNull(config, "config");
         Assert.requireNonNull(context, "context");
         ControllerRepository controllerRepository = new ControllerRepository(new ClasspathScanner());
