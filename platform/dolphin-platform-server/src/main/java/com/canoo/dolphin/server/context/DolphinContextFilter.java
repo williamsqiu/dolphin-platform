@@ -60,7 +60,6 @@ public class DolphinContextFilter implements Filter {
         final HttpServletRequest servletRequest = (HttpServletRequest) request;
         final HttpServletResponse servletResponse = (HttpServletResponse) response;
         final HttpSession httpSession = Assert.requireNonNull(servletRequest.getSession(), "request.getSession()");
-        request.startAsync(request, response);
 
         try {
             DolphinContext dolphinContext;

@@ -4,26 +4,24 @@ import com.canoo.dolphin.client.async.AsyncClient;
 import com.canoo.dolphin.client.async.AsyncConnection;
 import com.canoo.dolphin.client.async.AsyncHandler;
 import org.atmosphere.wasync.*;
-import org.atmosphere.wasync.impl.AtmosphereClient;
+import org.atmosphere.wasync.serial.SerializedClient;
 
 import java.io.IOException;
 import java.net.URI;
 
-/**
- * Created by hendrikebbers on 16.03.17.
- */
 public class AthmosClient implements AsyncClient {
 
     @Override
     public AsyncConnection connect(final URI endpoint, final AsyncHandler handler) throws IOException {
-        AtmosphereClient client = ClientFactory.getDefault().newClient(AtmosphereClient.class);
+        SerializedClient client = ClientFactory.getDefault().newClient(SerializedClient.class);
 
-        RequestBuilder request = client.newRequestBuilder()
+        RequestBuilder requestBuilder = client.newRequestBuilder()
                 .uri(endpoint.toString())
                 .transport(Request.TRANSPORT.WEBSOCKET)
                 .transport(Request.TRANSPORT.SSE)
                 .transport(Request.TRANSPORT.STREAMING)
                 .transport(Request.TRANSPORT.LONG_POLLING);
+        Request request = requestBuilder.build();
 
         final Socket socket = client.create();
 
@@ -49,7 +47,7 @@ public class AthmosClient implements AsyncClient {
             public void on(String t) {
                 handler.onMessage(asyncConnection, t);
             }
-        }).open(request.build());
+        }).open(request);
 
         return asyncConnection;
     }

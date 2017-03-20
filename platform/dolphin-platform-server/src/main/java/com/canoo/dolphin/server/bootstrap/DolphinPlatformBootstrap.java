@@ -25,24 +25,20 @@ import com.canoo.dolphin.server.event.DolphinEventBus;
 import com.canoo.dolphin.server.event.impl.EventBusProvider;
 import com.canoo.dolphin.server.impl.ClasspathScanner;
 import com.canoo.dolphin.server.mbean.MBeanRegistry;
-import com.canoo.dolphin.server.servlet.DolphinPlatformServlet;
-import com.canoo.dolphin.server.servlet.InvalidationServlet;
+import com.canoo.dolphin.server.servlet.CrossSiteOriginFilter;
 import com.canoo.dolphin.util.Assert;
 import com.canoo.dolphin.util.Callback;
+import org.atmosphere.runtime.ApplicationConfig;
 import org.atmosphere.runtime.AtmosphereServlet;
 import org.atmosphere.runtime.ContainerInitializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRegistration;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.ServiceLoader;
-import java.util.Set;
+import javax.servlet.*;
+import java.util.*;
 
-import static com.canoo.dolphin.server.servlet.ServletConstants.*;
+import static com.canoo.dolphin.server.servlet.ServletConstants.DOLPHIN_CLIENT_ID_FILTER_NAME;
+import static com.canoo.dolphin.server.servlet.ServletConstants.DOLPHIN_CROSS_SITE_FILTER_NAME;
 
 /**
  * This class defines the bootstrap for Dolphin Platform.
@@ -99,19 +95,19 @@ public class DolphinPlatformBootstrap {
         final DolphinContextCommunicationHandler communicationHandler = new DolphinContextCommunicationHandler(configuration);
 
         DolphinContextFactory dolphinContextFactory = new DefaultDolphinContextFactory(configuration, getSessionProvider(), containerManager, classpathScanner, sessionLifecycleHandler);
-        servletContext.addServlet(DOLPHIN_SERVLET_NAME, new DolphinPlatformServlet(communicationHandler)).addMapping(configuration.getDolphinPlatformServletMapping());
+        //servletContext.addServlet(DOLPHIN_SERVLET_NAME, new DolphinPlatformServlet(communicationHandler)).addMapping(configuration.getDolphinPlatformServletMapping());
         if (configuration.isUseSessionInvalidationServlet()) {
-            servletContext.addServlet(DOLPHIN_INVALIDATION_SERVLET_NAME, new InvalidationServlet()).addMapping(DEFAULT_DOLPHIN_INVALIDATION_SERVLET_MAPPING);
+           // servletContext.addServlet(DOLPHIN_INVALIDATION_SERVLET_NAME, new InvalidationServlet()).addMapping(DEFAULT_DOLPHIN_INVALIDATION_SERVLET_MAPPING);
         }
         if (configuration.isUseCrossSiteOriginFilter()) {
-    //        FilterRegistration.Dynamic filterRegistration = servletContext.addFilter(DOLPHIN_CROSS_SITE_FILTER_NAME, new CrossSiteOriginFilter(configuration));
-     //      filterRegistration.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/*");
-      //      filterRegistration.setAsyncSupported(true);
+            FilterRegistration.Dynamic filterRegistration = servletContext.addFilter(DOLPHIN_CROSS_SITE_FILTER_NAME, new CrossSiteOriginFilter(configuration));
+           filterRegistration.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/*");
+            filterRegistration.setAsyncSupported(true);
         }
 
-//        FilterRegistration.Dynamic filterRegistration = servletContext.addFilter(DOLPHIN_CLIENT_ID_FILTER_NAME, new DolphinContextFilter(configuration, containerManager, dolphinContextFactory, sessionLifecycleHandler));
- //       filterRegistration.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, configuration.getIdFilterUrlMappings().toArray(new String[configuration.getIdFilterUrlMappings().size()]));
-  //      filterRegistration.setAsyncSupported(true);
+        FilterRegistration.Dynamic filterRegistration = servletContext.addFilter(DOLPHIN_CLIENT_ID_FILTER_NAME, new DolphinContextFilter(configuration, containerManager, dolphinContextFactory, sessionLifecycleHandler));
+        filterRegistration.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, configuration.getIdFilterUrlMappings().toArray(new String[configuration.getIdFilterUrlMappings().size()]));
+        filterRegistration.setAsyncSupported(true);
 
         LOG.debug("Dolphin Platform initialized under context \"" + servletContext.getContextPath() + "\"");
         LOG.debug("Dolphin Platform endpoint defined as " + configuration.getDolphinPlatformServletMapping());
@@ -124,12 +120,10 @@ public class DolphinPlatformBootstrap {
         openDolphinLogger.setLevel(configuration.getOpenDolphinLogLevel());
 
 
-
-
-
+        servletContext.setInitParameter(ApplicationConfig.PROPERTY_SESSION_SUPPORT, "true");
         ServletRegistration.Dynamic asyncServelt = servletContext.addServlet("Async-Endpoint", new AtmosphereServlet());
         asyncServelt.setAsyncSupported(true);
-        asyncServelt.addMapping("/bla");
+        asyncServelt.addMapping("/dolphin");
         ContainerInitializer initializer = new ContainerInitializer();
         initializer.onStartup(Collections.emptySet(), servletContext);
     }
