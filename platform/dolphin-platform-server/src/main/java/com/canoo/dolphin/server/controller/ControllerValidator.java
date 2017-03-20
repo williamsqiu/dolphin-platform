@@ -19,6 +19,7 @@ import com.canoo.dolphin.impl.ReflectionHelper;
 import com.canoo.dolphin.server.DolphinAction;
 import com.canoo.dolphin.server.DolphinModel;
 import com.canoo.dolphin.server.Param;
+import com.canoo.dolphin.util.Assert;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -35,41 +36,40 @@ public class ControllerValidator {
 
     public void validate(Class<?> clazz) throws ControllerValidationException {
 
+        Assert.requireNonNull(clazz, "Controller class");
+
         if (isInterface(clazz)) {
-            throw new ControllerValidationException("Dolphin Controller must be a class.");
+            throw new ControllerValidationException("Dolphin Controller "+ clazz.getName() +" must be a class.");
         }
         if (isAbstract(clazz)) {
-            throw new ControllerValidationException("Dolphin Controller can't be abstract.");
+            throw new ControllerValidationException("Dolphin Controller "+ clazz.getName() +" can't be abstract.");
         }
         if (isFinal(clazz)) {
-            throw new ControllerValidationException("Dolphin Controller can't be final.");
+            throw new ControllerValidationException("Dolphin Controller "+ clazz.getName() +" can't be final.");
         }
-//        if (!containsDefaultConstructor(clazz)) {
-//            throw new ControllerValidationException("Dolphin Controller must contain a default constructor.");
-//        }
         if (postConstructContainsParameter(clazz)) {
-            throw new ControllerValidationException("PostConstruct method should not contain parameter.");
+            throw new ControllerValidationException("PostConstruct method should not contain parameter in Controller "+ clazz.getName());
         }
-        if (moreThanOnePostConstruct(clazz)) {
-            throw new ControllerValidationException("Only one PostConstruct method is allowed.");
+        if (isMoreThanOnePostConstruct(clazz)) {
+            throw new ControllerValidationException("Only one PostConstruct method is allowed in Controller "+ clazz.getName());
         }
         if (preDestroyContainsParameter(clazz)) {
-            throw new ControllerValidationException("PreDestroy method should not contain parameter.");
+            throw new ControllerValidationException("PreDestroy method should not contain parameter in Controller "+ clazz.getName());
         }
-        if (moreThanOnePreDestroy(clazz)) {
-            throw new ControllerValidationException("Only one PreDestroy method is allowed.");
+        if (isMoreThanOnePreDestroy(clazz)) {
+            throw new ControllerValidationException("Only one PreDestroy method is allowed in Controller "+ clazz.getName());
         }
         if (!isDolphinActionVoid(clazz)) {
-            throw new ControllerValidationException("DolphinAction must be void.");
+            throw new ControllerValidationException("DolphinAction must be void in Controller "+ clazz.getName());
         }
         if (!isAnnotatedWithParam(clazz)) {
-            throw new ControllerValidationException("DolphinAction parameters must be annotated with @param.");
+            throw new ControllerValidationException("DolphinAction parameters must be annotated with @param in Controller "+ clazz.getName());
         }
-        if (!dolphinModelPresent(clazz)) {
-            throw new ControllerValidationException("Controller must have a DolphinModel.");
+        if (!isDolphinModelPresent(clazz)) {
+            throw new ControllerValidationException("Controller " + clazz.getName() + " must have a DolphinModel.");
         }
-        if(moreThanOneDolphinModel(clazz)){
-            throw new ControllerValidationException("Controller should not contain more than one DolphinModel.");
+        if(isMoreThanOneDolphinModel(clazz)){
+            throw new ControllerValidationException("Controller " + clazz.getName() + " should not contain more than one DolphinModel.");
         }
     }
 
@@ -84,15 +84,6 @@ public class ControllerValidator {
     private boolean isFinal(Class<?> clazz) {
         return Modifier.isFinal(clazz.getModifiers());
     }
-
-//    private boolean containsDefaultConstructor(Class<?> clazz) {
-//        for (Constructor<?> constructor : clazz.getConstructors()) {
-//            if (constructor.getParameterTypes().length == 0 || constructor.isAnnotationPresent(Inject.class)) {
-//                return true;
-//            }
-//        }
-//        return false;
-//    }
 
     private boolean postConstructContainsParameter(Class<?> clazz) {
         List<Method> methods = ReflectionHelper.getInheritedDeclaredMethods(clazz);
@@ -147,7 +138,7 @@ public class ControllerValidator {
         return true;
     }
 
-    private boolean dolphinModelPresent(Class<?> clazz) {
+    private boolean isDolphinModelPresent(Class<?> clazz) {
         List<Field> fields = ReflectionHelper.getInheritedDeclaredFields(clazz);
         for (Field field : fields) {
             if (field.isAnnotationPresent(DolphinModel.class)) {
@@ -157,7 +148,7 @@ public class ControllerValidator {
         return false;
     }
 
-    private boolean moreThanOneDolphinModel(Class<?> clazz) {
+    private boolean isMoreThanOneDolphinModel(Class<?> clazz) {
         List<Field> fields = ReflectionHelper.getInheritedDeclaredFields(clazz);
         int count = 0;
         for (Field field : fields) {
@@ -169,7 +160,7 @@ public class ControllerValidator {
     }
 
 
-    private boolean moreThanOnePreDestroy(Class<?> clazz) {
+    private boolean isMoreThanOnePreDestroy(Class<?> clazz) {
         int count = 0;
         List<Method> methods = ReflectionHelper.getInheritedDeclaredMethods(clazz);
         for (Method method : methods) {
@@ -180,7 +171,7 @@ public class ControllerValidator {
         return count > 1;
     }
 
-    private boolean moreThanOnePostConstruct(Class<?> clazz) {
+    private boolean isMoreThanOnePostConstruct(Class<?> clazz) {
         int count = 0;
         List<Method> methods = ReflectionHelper.getInheritedDeclaredMethods(clazz);
         for (Method method : methods) {

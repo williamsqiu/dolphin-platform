@@ -131,7 +131,7 @@ public class DolphinPlatformBootstrap {
             java.util.logging.Logger openDolphinLogger = java.util.logging.Logger.getLogger("org.opendolphin");
             openDolphinLogger.setLevel(configuration.getOpenDolphinLogLevel());
         }catch (ControllerValidationException cve){
-            throw new DolphinPlatformBoostrapException(cve.getMessage(), cve);
+            throw new DolphinPlatformBoostrapException("Can not start Dolphin Platform based on bad controller definition", cve);
         }
 
     }

@@ -41,7 +41,7 @@ import static org.testng.Assert.assertTrue;
 public class DolphinContextTest {
 
     @Test
-    public void testUniqueId() {
+    public void testUniqueId() throws ControllerValidationException {
         //given:
         List<DolphinContext> contextList = new ArrayList<>();
         for(int i = 0; i < 1000; i++) {
@@ -62,7 +62,7 @@ public class DolphinContextTest {
     }
 
     @Test
-    public void testUniqueBeanManager() {
+    public void testUniqueBeanManager() throws ControllerValidationException {
         //given:
         List<DolphinContext> contextList = new ArrayList<>();
         for(int i = 0; i < 100; i++) {
@@ -80,7 +80,7 @@ public class DolphinContextTest {
     }
 
     @Test
-    public void testUniqueDolphin() {
+    public void testUniqueDolphin() throws ControllerValidationException {
         //given:
         List<DolphinContext> contextList = new ArrayList<>();
         for(int i = 0; i < 100; i++) {
@@ -98,7 +98,7 @@ public class DolphinContextTest {
     }
 
     @Test
-    public void testUniqueDolphinSession() {
+    public void testUniqueDolphinSession() throws ControllerValidationException {
         //given:
         List<DolphinContext> contextList = new ArrayList<>();
         for(int i = 0; i < 100; i++) {
@@ -116,7 +116,7 @@ public class DolphinContextTest {
     }
 
     @Test
-    public void testGetterReturnValue() {
+    public void testGetterReturnValue() throws ControllerValidationException {
         //given:
         DolphinContext dolphinContext = createContext();
 
@@ -128,7 +128,7 @@ public class DolphinContextTest {
     }
 
     @Test
-    public void testNewDolphinCommands() {
+    public void testNewDolphinCommands() throws ControllerValidationException {
         //given:
         DolphinContext dolphinContext = createContext();
 
@@ -145,18 +145,13 @@ public class DolphinContextTest {
 
     private final ClasspathScanner classpathScanner = new ClasspathScanner("com.canoo.dolphin");
 
-    private DolphinContext createContext() {
-        try{
-            return new DolphinContext(new DolphinPlatformConfiguration(), new DolphinSessionProvider() {
-                @Override
-                public DolphinSession getCurrentDolphinSession() {
-                    return null;
-                }
-            }, new ContainerManagerMock(), new ControllerRepository(classpathScanner), new DefaultOpenDolphinFactory(), new DestroyCallbackMock(), new DestroyCallbackMock());
-        }catch(ControllerValidationException cve){
-            return null;
-        }
-
+    private DolphinContext createContext() throws ControllerValidationException {
+        return new DolphinContext(new DolphinPlatformConfiguration(), new DolphinSessionProvider() {
+            @Override
+            public DolphinSession getCurrentDolphinSession() {
+                return null;
+            }
+        }, new ContainerManagerMock(), new ControllerRepository(classpathScanner), new DefaultOpenDolphinFactory(), new DestroyCallbackMock(), new DestroyCallbackMock());
     }
 
     private class DestroyCallbackMock implements Callback<DolphinContext> {
