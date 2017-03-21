@@ -14,14 +14,14 @@ _Release date: Mar 21, 2017_
 * Server configuration can be injected as a bean (https://github.com/canoo/dolphin-platform/issues/409[issue])
 * Add config to deactivate DolphinPlatformBootstrap while testing(https://github.com/canoo/dolphin-platform/issues/397[issue])
 * No need to add @DolphinBean etc. to the complete class hierarchy of a bean (https://github.com/canoo/dolphin-platform/issues/395[issue])
-* Android API is compiled against latest DolphinPlatform (https://github.com/canoo/dolphin-platform/issues/376)
+* Android API is compiled against latest DolphinPlatform (https://github.com/canoo/dolphin-platform/issues/376[issue])
 * Bugfix for NPE in DolphinCommandRegistration (https://github.com/canoo/dolphin-platform/issues/52[issue])
 * Bugfix for CME in BeanRepository (https://github.com/canoo/dolphin-platform/issues/54[issue])
-* Config can be provided as managed bean in Spring (https://github.com/canoo/dolphin-platform/pull/410)
-* WAR for Integration Tests is now created by the build (https://github.com/canoo/dolphin-platform/issues/297)
-* Bugfix in Calender converter (https://github.com/canoo/dolphin-platform/issues/400)
-* Added New module that provides a server app to test the DP with Docker (https://github.com/canoo/dolphin-platform/pull/399)
-* Bugfix for ProcessMonitoring sample is not working (https://github.com/canoo/dolphin-platform/issues/396)
+* Config can be provided as managed bean in Spring (https://github.com/canoo/dolphin-platform/pull/410[issue])
+* WAR for Integration Tests is now created by the build (https://github.com/canoo/dolphin-platform/issues/297[issue])
+* Bugfix in Calender converter (https://github.com/canoo/dolphin-platform/issues/400[issue])
+* Added New module that provides a server app to test the DP with Docker (https://github.com/canoo/dolphin-platform/pull/399[issue])
+* Bugfix for ProcessMonitoring sample is not working (https://github.com/canoo/dolphin-platform/issues/396[issue])
 
 == Version 0.9.0
 _Release date: Mar 6, 2017_
