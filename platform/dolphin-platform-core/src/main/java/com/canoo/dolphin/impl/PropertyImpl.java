@@ -37,9 +37,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class PropertyImpl<T> extends AbstractProperty<T> {
 
-    private static final Logger LOG = LoggerFactory.getLogger(PropertyImpl.class);
-
-
     private final Attribute attribute;
 
     private final PropertyInfo propertyInfo;
