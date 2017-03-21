@@ -14,7 +14,11 @@
  * limitations under the License.
  */
 package org.opendolphin.core
+
 import spock.lang.Specification
+
+import java.beans.PropertyChangeEvent
+import java.beans.PropertyChangeListener
 
 class BaseAttributeSpec extends Specification {
 
@@ -52,6 +56,27 @@ class BaseAttributeSpec extends Specification {
         attribute.value == null
         attribute.toString().contains "name"
     }
+
+    def "Should not fire for same value"() {
+        given:
+        boolean changed = false;
+        def attribute = new MyAttribute("name")
+        attribute.setValue(new Integer(35))
+        attribute.addPropertyChangeListener(Attribute.VALUE_NAME, new PropertyChangeListener() {
+
+            @Override
+            void propertyChange(PropertyChangeEvent evt) {
+                changed = true;
+            }
+        });
+
+        when:
+        attribute.setValue(new Long(35))
+
+        then:
+        changed == false;
+    }
+
 }
 
 class MyAttribute extends BaseAttribute {

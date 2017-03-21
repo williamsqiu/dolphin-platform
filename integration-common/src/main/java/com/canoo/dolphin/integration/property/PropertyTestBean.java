@@ -41,6 +41,34 @@ public class PropertyTestBean {
 
     private Property<ElementType> enumValue;
 
+    private Property<Boolean> bigDecimalValueChanged;
+
+    private Property<Boolean> bigIntegerValueChanged;
+
+    private Property<Boolean> booleanValueChanged;
+
+    private Property<Boolean> byteValueChanged;
+
+    private Property<Boolean> calenderValueChanged;
+
+    private Property<Boolean> dateValueChanged;
+
+    private Property<Boolean> doubleValueChanged;
+
+    private Property<Boolean> enumValueChanged;
+
+    private Property<Boolean> floatValueChanged;
+
+    private Property<Boolean> integerValueChanged;
+
+    private Property<Boolean> longValueChanged;
+
+    private Property<Boolean> shortValueChanged;
+
+    private Property<Boolean> stringValueChanged;
+
+    private Property<Boolean> uuidValueChanged;
+
     public Property<String> stringValueProperty() {
         return stringValue;
     }
@@ -209,4 +237,171 @@ public class PropertyTestBean {
         this.enumValue.set(enumValue);
     }
 
+    public Property<Boolean> bigDecimalValueChangedProperty() {
+        return bigDecimalValueChanged;
+    }
+
+    public Property<Boolean> bigIntegerValueChangedProperty() {
+        return bigIntegerValueChanged;
+    }
+
+    public Property<Boolean> booleanValueChangedProperty() {
+        return booleanValueChanged;
+    }
+
+    public Property<Boolean> byteValueChangedProperty() {
+        return byteValueChanged;
+    }
+
+    public Property<Boolean> calenderValueChangedProperty() {
+        return calenderValueChanged;
+    }
+
+    public Property<Boolean> dateValueChangedProperty() {
+        return dateValueChanged;
+    }
+
+    public Property<Boolean> doubleValueChangedProperty() {
+        return doubleValueChanged;
+    }
+
+    public Property<Boolean> enumValueChangedProperty() {
+        return enumValueChanged;
+    }
+
+    public Property<Boolean> floatValueChangedProperty() {
+        return floatValueChanged;
+    }
+
+    public Property<Boolean> integerValueChangedProperty() {
+        return integerValueChanged;
+    }
+
+    public Property<Boolean> longValueChangedProperty() {
+        return longValueChanged;
+    }
+
+    public Property<Boolean> shortValueChangedProperty() {
+        return shortValueChanged;
+    }
+
+    public Property<Boolean> stringValueChangedProperty() {
+        return stringValueChanged;
+    }
+
+    public Property<Boolean> uuidValueChangedProperty() {
+        return uuidValueChanged;
+    }
+
+    public Boolean getBigDecimalValueChanged() {
+        return bigDecimalValueChanged.get();
+    }
+
+    public void setBigDecimalValueChanged(Boolean bigDecimalValueChanged) {
+        this.bigDecimalValueChanged.set(bigDecimalValueChanged);
+    }
+
+    public Boolean getBigIntegerValueChanged() {
+        return bigIntegerValueChanged.get();
+    }
+
+    public void setBigIntegerValueChanged(Boolean bigIntegerValueChanged) {
+        this.bigIntegerValueChanged.set(bigIntegerValueChanged);
+    }
+
+    public Boolean getBooleanValueChanged() {
+        return booleanValueChanged.get();
+    }
+
+    public void setBooleanValueChanged(Boolean booleanValueChanged) {
+        this.booleanValueChanged.set(booleanValueChanged);
+    }
+
+    public Boolean getByteValueChanged() {
+        return byteValueChanged.get();
+    }
+
+    public void setByteValueChanged(Boolean byteValueChanged) {
+        this.byteValueChanged.set(byteValueChanged);
+    }
+
+    public Boolean getCalenderValueChanged() {
+        return calenderValueChanged.get();
+    }
+
+    public void setCalenderValueChanged(Boolean calenderValueChanged) {
+        this.calenderValueChanged.set(calenderValueChanged);
+    }
+
+    public Boolean getDateValueChanged() {
+        return dateValueChanged.get();
+    }
+
+    public void setDateValueChanged(Boolean dateValueChanged) {
+        this.dateValueChanged.set(dateValueChanged);
+    }
+
+    public Boolean getDoubleValueChanged() {
+        return doubleValueChanged.get();
+    }
+
+    public void setDoubleValueChanged(Boolean doubleValueChanged) {
+        this.doubleValueChanged.set(doubleValueChanged);
+    }
+
+    public Boolean getEnumValueChanged() {
+        return enumValueChanged.get();
+    }
+
+    public void setEnumValueChanged(Boolean enumValueChanged) {
+        this.enumValueChanged.set(enumValueChanged);
+    }
+
+    public Boolean getFloatValueChanged() {
+        return floatValueChanged.get();
+    }
+
+    public void setFloatValueChanged(Boolean floatValueChanged) {
+        this.floatValueChanged.set(floatValueChanged);
+    }
+
+    public Boolean getIntegerValueChanged() {
+        return integerValueChanged.get();
+    }
+
+    public void setIntegerValueChanged(Boolean integerValueChanged) {
+        this.integerValueChanged.set(integerValueChanged);
+    }
+
+    public Boolean getLongValueChanged() {
+        return longValueChanged.get();
+    }
+
+    public void setLongValueChanged(Boolean longValueChanged) {
+        this.longValueChanged.set(longValueChanged);
+    }
+
+    public Boolean getShortValueChanged() {
+        return shortValueChanged.get();
+    }
+
+    public void setShortValueChanged(Boolean shortValueChanged) {
+        this.shortValueChanged.set(shortValueChanged);
+    }
+
+    public Boolean getStringValueChanged() {
+        return stringValueChanged.get();
+    }
+
+    public void setStringValueChanged(Boolean stringValueChanged) {
+        this.stringValueChanged.set(stringValueChanged);
+    }
+
+    public Boolean getUuidValueChanged() {
+        return uuidValueChanged.get();
+    }
+
+    public void setUuidValueChanged(Boolean uuidValueChanged) {
+        this.uuidValueChanged.set(uuidValueChanged);
+    }
 }

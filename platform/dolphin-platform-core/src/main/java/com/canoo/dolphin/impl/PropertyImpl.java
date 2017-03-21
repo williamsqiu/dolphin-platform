@@ -22,6 +22,8 @@ import com.canoo.dolphin.mapping.MappingException;
 import com.canoo.dolphin.mapping.Property;
 import com.canoo.dolphin.util.Assert;
 import org.opendolphin.core.Attribute;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -35,10 +37,14 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class PropertyImpl<T> extends AbstractProperty<T> {
 
-    private final Attribute attribute;
-    private final PropertyInfo propertyInfo;
-    private final List<ValueChangeListener<? super T>> listeners = new CopyOnWriteArrayList<>();
+    private static final Logger LOG = LoggerFactory.getLogger(PropertyImpl.class);
 
+
+    private final Attribute attribute;
+
+    private final PropertyInfo propertyInfo;
+
+    private final List<ValueChangeListener<? super T>> listeners = new CopyOnWriteArrayList<>();
 
     public PropertyImpl(final Attribute attribute, final PropertyInfo propertyInfo) {
         this.attribute = Assert.requireNonNull(attribute, "attribute");
@@ -52,9 +58,13 @@ public class PropertyImpl<T> extends AbstractProperty<T> {
                 try {
                     final T oldValue = (T) PropertyImpl.this.propertyInfo.convertFromDolphin(evt.getOldValue());
                     final T newValue = (T) PropertyImpl.this.propertyInfo.convertFromDolphin(evt.getNewValue());
-                    firePropertyChanged(oldValue, newValue);
+                    if (oldValue == null && newValue != null ||
+                            oldValue != null && newValue == null ||
+                            (oldValue != null && newValue != null && !oldValue.equals(newValue))) {
+                       firePropertyChanged(oldValue, newValue);
+                    }
                 } catch (Exception e) {
-                    throw new MappingException("Error in property change handling for property: "+attribute.getPropertyName() +" in attribute with name: "+ propertyInfo.getAttributeName()+" and Id: "+attribute.getId(), e);
+                    throw new MappingException("Error in property change handling for property: " + attribute.getPropertyName() + " in attribute with name: " + propertyInfo.getAttributeName() + " and Id: " + attribute.getId(), e);
                 }
             }
         });
@@ -73,7 +83,7 @@ public class PropertyImpl<T> extends AbstractProperty<T> {
     @SuppressWarnings("unchecked")
     public T get() {
         try {
-        return (T) propertyInfo.convertFromDolphin(attribute.getValue());
+            return (T) propertyInfo.convertFromDolphin(attribute.getValue());
         } catch (ValueConverterException e) {
             throw new MappingException("Error in accessing property value!", e);
         }

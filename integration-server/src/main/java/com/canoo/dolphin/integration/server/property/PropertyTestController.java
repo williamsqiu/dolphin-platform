@@ -1,5 +1,6 @@
 package com.canoo.dolphin.integration.server.property;
 
+import com.canoo.dolphin.event.Subscription;
 import com.canoo.dolphin.integration.property.PropertyTestBean;
 import com.canoo.dolphin.server.DolphinAction;
 import com.canoo.dolphin.server.DolphinController;
@@ -8,30 +9,41 @@ import com.canoo.dolphin.server.DolphinModel;
 import java.util.Objects;
 
 import static com.canoo.dolphin.integration.IntegrationConstants.NOT_NULL;
-import static com.canoo.dolphin.integration.property.PropertyTestConstants.BIG_DECIMAL_VALUE;
-import static com.canoo.dolphin.integration.property.PropertyTestConstants.BIG_INTEGER_VALUE;
-import static com.canoo.dolphin.integration.property.PropertyTestConstants.BOOLEAN_VALUE;
-import static com.canoo.dolphin.integration.property.PropertyTestConstants.BYTE_VALUE;
-import static com.canoo.dolphin.integration.property.PropertyTestConstants.CALENDAR_VALUE;
-import static com.canoo.dolphin.integration.property.PropertyTestConstants.CHECK_MODEL_CREATION_ACTION;
-import static com.canoo.dolphin.integration.property.PropertyTestConstants.DATE_VALUE;
-import static com.canoo.dolphin.integration.property.PropertyTestConstants.DOUBLE_VALUE;
-import static com.canoo.dolphin.integration.property.PropertyTestConstants.ENUM_VALUE;
-import static com.canoo.dolphin.integration.property.PropertyTestConstants.FLOAT_VALUE;
-import static com.canoo.dolphin.integration.property.PropertyTestConstants.INTEGER_VALUE;
-import static com.canoo.dolphin.integration.property.PropertyTestConstants.LONG_VALUE;
-import static com.canoo.dolphin.integration.property.PropertyTestConstants.PROPERTY_CONTROLLER_NAME;
-import static com.canoo.dolphin.integration.property.PropertyTestConstants.RESET_TO_NULL_ACTION;
-import static com.canoo.dolphin.integration.property.PropertyTestConstants.SET_TO_DEFAULTS_ACTION;
-import static com.canoo.dolphin.integration.property.PropertyTestConstants.SHORT_VALUE;
-import static com.canoo.dolphin.integration.property.PropertyTestConstants.STRING_VALUE;
-import static com.canoo.dolphin.integration.property.PropertyTestConstants.UUID_VALUE;
+import static com.canoo.dolphin.integration.property.PropertyTestConstants.*;
 
 @DolphinController(PROPERTY_CONTROLLER_NAME)
 public class PropertyTestController {
 
     @DolphinModel
     private PropertyTestBean model;
+
+    private Subscription bigDecimalChangedSubscription;
+
+    private Subscription bigIntegerChangedSubscription;
+
+    private Subscription booleanChangedSubscription;
+
+    private Subscription byteChangedSubscription;
+
+    private Subscription calenderChangedSubscription;
+
+    private Subscription dateChangedSubscription;
+
+    private Subscription doubleChangedSubscription;
+
+    private Subscription enumChangedSubscription;
+
+    private Subscription floatChangedSubscription;
+
+    private Subscription integerChangedSubscription;
+
+    private Subscription longChangedSubscription;
+
+    private Subscription shortChangedSubscription;
+
+    private Subscription stringChangedSubscription;
+
+    private Subscription uuidChangedSubscription;
 
     @DolphinAction(CHECK_MODEL_CREATION_ACTION)
     public void checkModelCreation() {
@@ -70,6 +82,89 @@ public class PropertyTestController {
         model.setUuidValue(UUID_VALUE);
     }
 
+    @DolphinAction(ADD_CHANGE_LISTENER)
+    public void addChangeListener() {
+        resetChangedFlags();
+        bigDecimalChangedSubscription = model.bigDecimalValueProperty().onChanged(e -> model.setBigDecimalValueChanged(true));
+        bigIntegerChangedSubscription = model.bigIntegerValueProperty().onChanged(e -> model.setBigIntegerValueChanged(true));
+        booleanChangedSubscription = model.booleanValueProperty().onChanged(e -> model.setBooleanValueChanged(true));
+        byteChangedSubscription = model.byteValueProperty().onChanged(e -> model.setByteValueChanged(true));
+        calenderChangedSubscription = model.calendarValueProperty().onChanged(e -> model.setCalenderValueChanged(true));
+        dateChangedSubscription = model.dateValueProperty().onChanged(e -> model.setDateValueChanged(true));
+        doubleChangedSubscription = model.doubleValueProperty().onChanged(e -> model.setDoubleValueChanged(true));
+        enumChangedSubscription = model.enumValueProperty().onChanged(e -> model.setEnumValueChanged(true));
+        floatChangedSubscription = model.floatValueProperty().onChanged(e -> model.setFloatValueChanged(true));
+        integerChangedSubscription = model.integerValueProperty().onChanged(e -> model.setIntegerValueChanged(true));
+        longChangedSubscription = model.longValueProperty().onChanged(e -> model.setLongValueChanged(true));
+        shortChangedSubscription = model.shortValueProperty().onChanged(e -> model.setShortValueChanged(true));
+        stringChangedSubscription = model.stringValueProperty().onChanged(e -> model.setStringValueChanged(true));
+        uuidChangedSubscription = model.uuidValueProperty().onChanged(e -> model.setUuidValueChanged(true));
+    }
+
+    @DolphinAction(REMOVE_CHANGE_LISTENER)
+    public void removeChangeListener() {
+        bigDecimalChangedSubscription.unsubscribe();
+        bigDecimalChangedSubscription = null;
+
+        bigIntegerChangedSubscription.unsubscribe();
+        bigIntegerChangedSubscription = null;
+
+        booleanChangedSubscription.unsubscribe();
+        booleanChangedSubscription = null;
+
+        byteChangedSubscription.unsubscribe();
+        byteChangedSubscription = null;
+
+        calenderChangedSubscription.unsubscribe();
+        calenderChangedSubscription = null;
+
+        dateChangedSubscription.unsubscribe();
+        dateChangedSubscription = null;
+
+        doubleChangedSubscription.unsubscribe();
+        doubleChangedSubscription = null;
+
+        enumChangedSubscription.unsubscribe();
+        enumChangedSubscription = null;
+
+        floatChangedSubscription.unsubscribe();
+        floatChangedSubscription = null;
+
+        integerChangedSubscription.unsubscribe();
+        integerChangedSubscription = null;
+
+        longChangedSubscription.unsubscribe();
+        longChangedSubscription = null;
+
+        shortChangedSubscription.unsubscribe();
+        shortChangedSubscription = null;
+
+        stringChangedSubscription.unsubscribe();
+        stringChangedSubscription = null;
+
+        uuidChangedSubscription.unsubscribe();
+        uuidChangedSubscription = null;
+        resetChangedFlags();
+    }
+
+    @DolphinAction(RESET_CHANGE_FLAGS)
+    public void resetChangedFlags() {
+        model.setBigDecimalValueChanged(false);
+        model.setBigIntegerValueChanged(false);
+        model.setBooleanValueChanged(false);
+        model.setByteValueChanged(false);
+        model.setCalenderValueChanged(false);
+        model.setDateValueChanged(false);
+        model.setDoubleValueChanged(false);
+        model.setEnumValueChanged(false);
+        model.setFloatValueChanged(false);
+        model.setIntegerValueChanged(false);
+        model.setLongValueChanged(false);
+        model.setShortValueChanged(false);
+        model.setStringValueChanged(false);
+        model.setUuidValueChanged(false);
+    }
+
     @DolphinAction(RESET_TO_NULL_ACTION)
     public void resetToNull() {
         model.setBigDecimalValue(null);
@@ -88,4 +183,8 @@ public class PropertyTestController {
         model.setUuidValue(null);
     }
 
+    @DolphinAction(PING)
+    public void ping() {
+
+    }
 }

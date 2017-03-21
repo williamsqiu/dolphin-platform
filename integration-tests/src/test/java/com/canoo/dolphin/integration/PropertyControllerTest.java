@@ -91,15 +91,7 @@ public class PropertyControllerTest extends AbstractIntegrationTest {
             Assert.assertEquals(controller.getModel().getBigIntegerValue(), BIG_INTEGER_VALUE);
             Assert.assertEquals(controller.getModel().getBooleanValue(), BOOLEAN_VALUE);
             Assert.assertEquals(controller.getModel().getByteValue(), BYTE_VALUE);
-
-
-            System.out.println(controller.getModel().getCalendarValue().getTimeInMillis());
-            System.out.println(CALENDAR_VALUE.getTimeInMillis());
-
             Assert.assertEquals(controller.getModel().getCalendarValue().getTimeInMillis(), CALENDAR_VALUE.getTimeInMillis());
-
-
-
             Assert.assertEquals(controller.getModel().getDateValue(), DATE_VALUE);
             Assert.assertEquals(controller.getModel().getDoubleValue(), DOUBLE_VALUE);
             Assert.assertEquals(controller.getModel().getEnumValue(), ENUM_VALUE);
@@ -115,4 +107,174 @@ public class PropertyControllerTest extends AbstractIntegrationTest {
             Assert.fail("Can not create controller for " + containerType, e);
         }
     }
+
+    @Test(dataProvider = ENDPOINTS_DATAPROVIDER, description = "Test if all no property changed are fired at same side")
+    public void testNoPropertyChangeOnSameSide(String containerType, String endpoint) {
+        try {
+            ClientContext context = createClientContext(endpoint);
+            ControllerProxy<PropertyTestBean> controller = createController(context, PROPERTY_CONTROLLER_NAME);
+            invoke(controller, SET_TO_DEFAULTS_ACTION, containerType);
+            invoke(controller, ADD_CHANGE_LISTENER, containerType);
+            invoke(controller, SET_TO_DEFAULTS_ACTION, containerType);
+
+            Assert.assertFalse(controller.getModel().getBigDecimalValueChanged());
+            Assert.assertFalse(controller.getModel().getBigIntegerValueChanged());
+            Assert.assertFalse(controller.getModel().getBooleanValueChanged());
+            Assert.assertFalse(controller.getModel().getByteValueChanged());
+            Assert.assertFalse(controller.getModel().getCalenderValueChanged());
+            Assert.assertFalse(controller.getModel().getDateValueChanged());
+            Assert.assertFalse(controller.getModel().getDoubleValueChanged());
+            Assert.assertFalse(controller.getModel().getEnumValueChanged());
+            Assert.assertFalse(controller.getModel().getFloatValueChanged());
+            Assert.assertFalse(controller.getModel().getIntegerValueChanged());
+            Assert.assertFalse(controller.getModel().getLongValueChanged());
+            Assert.assertFalse(controller.getModel().getShortValueChanged());
+            Assert.assertFalse(controller.getModel().getStringValueChanged());
+            Assert.assertFalse(controller.getModel().getUuidValueChanged());
+
+            destroy(controller, endpoint);
+        } catch (Exception e) {
+            Assert.fail("Can not create controller for " + containerType, e);
+        }
+    }
+
+    @Test(dataProvider = ENDPOINTS_DATAPROVIDER, description = "Test if all property changed are fired")
+    public void testPropertyChange(String containerType, String endpoint) {
+        try {
+            ClientContext context = createClientContext(endpoint);
+            ControllerProxy<PropertyTestBean> controller = createController(context, PROPERTY_CONTROLLER_NAME);
+            invoke(controller, SET_TO_DEFAULTS_ACTION, containerType);
+            invoke(controller, ADD_CHANGE_LISTENER, containerType);
+
+            controller.getModel().setBigDecimalValue(null);
+            controller.getModel().setBigIntegerValue(null);
+            controller.getModel().setBooleanValue(null);
+            controller.getModel().setByteValue(null);
+            controller.getModel().setCalendarValue(null);
+            controller.getModel().setDateValue(null);
+            controller.getModel().setDoubleValue(null);
+            controller.getModel().setEnumValue(null);
+            controller.getModel().setFloatValue(null);
+            controller.getModel().setIntegerValue(null);
+            controller.getModel().setLongValue(null);
+            controller.getModel().setShortValue(null);
+            controller.getModel().setStringValue(null);
+            controller.getModel().setUuidValue(null);
+
+            invoke(controller, PING, containerType);
+
+            Assert.assertTrue(controller.getModel().getBigDecimalValueChanged());
+            Assert.assertTrue(controller.getModel().getBigIntegerValueChanged());
+            Assert.assertTrue(controller.getModel().getBooleanValueChanged());
+            Assert.assertTrue(controller.getModel().getByteValueChanged());
+            Assert.assertTrue(controller.getModel().getCalenderValueChanged());
+            Assert.assertTrue(controller.getModel().getDateValueChanged());
+            Assert.assertTrue(controller.getModel().getDoubleValueChanged());
+            Assert.assertTrue(controller.getModel().getEnumValueChanged());
+            Assert.assertTrue(controller.getModel().getFloatValueChanged());
+            Assert.assertTrue(controller.getModel().getIntegerValueChanged());
+            Assert.assertTrue(controller.getModel().getLongValueChanged());
+            Assert.assertTrue(controller.getModel().getShortValueChanged());
+            Assert.assertTrue(controller.getModel().getStringValueChanged());
+            Assert.assertTrue(controller.getModel().getUuidValueChanged());
+
+            destroy(controller, endpoint);
+        } catch (Exception e) {
+            Assert.fail("Can not create controller for " + containerType, e);
+        }
+    }
+
+    @Test(dataProvider = ENDPOINTS_DATAPROVIDER, description = "Test if all unsubscribe for changes is working")
+    public void testPropertyChangeUnsubscribe(String containerType, String endpoint) {
+        try {
+            ClientContext context = createClientContext(endpoint);
+            ControllerProxy<PropertyTestBean> controller = createController(context, PROPERTY_CONTROLLER_NAME);
+            invoke(controller, ADD_CHANGE_LISTENER, containerType);
+            invoke(controller, SET_TO_DEFAULTS_ACTION, containerType);
+            invoke(controller, REMOVE_CHANGE_LISTENER, containerType);
+
+            controller.getModel().setBigDecimalValue(null);
+            controller.getModel().setBigIntegerValue(null);
+            controller.getModel().setBooleanValue(null);
+            controller.getModel().setByteValue(null);
+            controller.getModel().setCalendarValue(null);
+            controller.getModel().setDateValue(null);
+            controller.getModel().setDoubleValue(null);
+            controller.getModel().setEnumValue(null);
+            controller.getModel().setFloatValue(null);
+            controller.getModel().setIntegerValue(null);
+            controller.getModel().setLongValue(null);
+            controller.getModel().setShortValue(null);
+            controller.getModel().setStringValue(null);
+            controller.getModel().setUuidValue(null);
+
+            invoke(controller, PING, containerType);
+
+            Assert.assertFalse(controller.getModel().getBigDecimalValueChanged());
+            Assert.assertFalse(controller.getModel().getBigIntegerValueChanged());
+            Assert.assertFalse(controller.getModel().getBooleanValueChanged());
+            Assert.assertFalse(controller.getModel().getByteValueChanged());
+            Assert.assertFalse(controller.getModel().getCalenderValueChanged());
+            Assert.assertFalse(controller.getModel().getDateValueChanged());
+            Assert.assertFalse(controller.getModel().getDoubleValueChanged());
+            Assert.assertFalse(controller.getModel().getEnumValueChanged());
+            Assert.assertFalse(controller.getModel().getFloatValueChanged());
+            Assert.assertFalse(controller.getModel().getIntegerValueChanged());
+            Assert.assertFalse(controller.getModel().getLongValueChanged());
+            Assert.assertFalse(controller.getModel().getShortValueChanged());
+            Assert.assertFalse(controller.getModel().getStringValueChanged());
+            Assert.assertFalse(controller.getModel().getUuidValueChanged());
+
+            destroy(controller, endpoint);
+        } catch (Exception e) {
+            Assert.fail("Can not create controller for " + containerType, e);
+        }
+    }
+
+    @Test(dataProvider = ENDPOINTS_DATAPROVIDER, description = "Test if all unsubscribe for changes is working")
+    public void testNoChangeForSameValue(String containerType, String endpoint) {
+        try {
+            ClientContext context = createClientContext(endpoint);
+            ControllerProxy<PropertyTestBean> controller = createController(context, PROPERTY_CONTROLLER_NAME);
+            invoke(controller, SET_TO_DEFAULTS_ACTION, containerType);
+            invoke(controller, ADD_CHANGE_LISTENER, containerType);
+
+            controller.getModel().setBigDecimalValue(BIG_DECIMAL_VALUE);
+            controller.getModel().setBigIntegerValue(BIG_INTEGER_VALUE);
+            controller.getModel().setBooleanValue(BOOLEAN_VALUE);
+            controller.getModel().setByteValue(BYTE_VALUE);
+            controller.getModel().setCalendarValue(CALENDAR_VALUE);
+            controller.getModel().setDateValue(DATE_VALUE);
+            controller.getModel().setDoubleValue(DOUBLE_VALUE);
+            controller.getModel().setEnumValue(ENUM_VALUE);
+            controller.getModel().setFloatValue(FLOAT_VALUE);
+            controller.getModel().setIntegerValue(INTEGER_VALUE);
+            controller.getModel().setLongValue(LONG_VALUE);
+            controller.getModel().setShortValue(SHORT_VALUE);
+            controller.getModel().setStringValue(STRING_VALUE);
+            controller.getModel().setUuidValue(UUID_VALUE);
+
+            invoke(controller, PING, containerType);
+
+            Assert.assertFalse(controller.getModel().getBigDecimalValueChanged());
+            Assert.assertFalse(controller.getModel().getBigIntegerValueChanged());
+            Assert.assertFalse(controller.getModel().getBooleanValueChanged());
+            Assert.assertFalse(controller.getModel().getByteValueChanged());
+            Assert.assertFalse(controller.getModel().getCalenderValueChanged());
+            Assert.assertFalse(controller.getModel().getDateValueChanged());
+            Assert.assertFalse(controller.getModel().getDoubleValueChanged());
+            Assert.assertFalse(controller.getModel().getEnumValueChanged());
+            Assert.assertFalse(controller.getModel().getFloatValueChanged());
+            Assert.assertFalse(controller.getModel().getIntegerValueChanged());
+            Assert.assertFalse(controller.getModel().getLongValueChanged());
+            Assert.assertFalse(controller.getModel().getShortValueChanged());
+            Assert.assertFalse(controller.getModel().getStringValueChanged());
+            Assert.assertFalse(controller.getModel().getUuidValueChanged());
+
+            destroy(controller, endpoint);
+        } catch (Exception e) {
+            Assert.fail("Can not create controller for " + containerType, e);
+        }
+    }
+
 }
