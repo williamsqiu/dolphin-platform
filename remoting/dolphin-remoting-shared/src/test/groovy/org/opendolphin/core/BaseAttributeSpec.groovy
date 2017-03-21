@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 package org.opendolphin.core
+
 import spock.lang.Specification
 
 class BaseAttributeSpec extends Specification {
@@ -52,6 +53,7 @@ class BaseAttributeSpec extends Specification {
         attribute.value == null
         attribute.toString().contains "name"
     }
+
 }
 
 class MyAttribute extends BaseAttribute {

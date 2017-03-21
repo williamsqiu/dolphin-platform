@@ -14,11 +14,23 @@ public interface PropertyTestConstants {
 
     String PROPERTY_CONTROLLER_NAME = "PropertyController";
 
+    String PROPERTY_CHANGE_CONTROLLER_NAME = "PropertyChangeController";
+
+
     String CHECK_MODEL_CREATION_ACTION = "checkModelCreation";
 
     String SET_TO_DEFAULTS_ACTION = "setToDefaults";
 
+    String REMOVE_CHANGE_LISTENER = "removeChangeListener";
+
+    String RESET_CHANGE_FLAGS = "resetChangeFlags";
+
+    String ADD_CHANGE_LISTENER = "addChangeListener";
+
     String RESET_TO_NULL_ACTION = "resetToNull";
+
+    String PING = "ping";
+
 
     String STRING_VALUE = "Hello World!";
 

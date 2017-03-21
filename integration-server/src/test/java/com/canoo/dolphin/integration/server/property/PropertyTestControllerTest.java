@@ -11,24 +11,7 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import static com.canoo.dolphin.integration.property.PropertyTestConstants.BIG_DECIMAL_VALUE;
-import static com.canoo.dolphin.integration.property.PropertyTestConstants.BIG_INTEGER_VALUE;
-import static com.canoo.dolphin.integration.property.PropertyTestConstants.BOOLEAN_VALUE;
-import static com.canoo.dolphin.integration.property.PropertyTestConstants.BYTE_VALUE;
-import static com.canoo.dolphin.integration.property.PropertyTestConstants.CALENDAR_VALUE;
-import static com.canoo.dolphin.integration.property.PropertyTestConstants.CHECK_MODEL_CREATION_ACTION;
-import static com.canoo.dolphin.integration.property.PropertyTestConstants.DATE_VALUE;
-import static com.canoo.dolphin.integration.property.PropertyTestConstants.DOUBLE_VALUE;
-import static com.canoo.dolphin.integration.property.PropertyTestConstants.ENUM_VALUE;
-import static com.canoo.dolphin.integration.property.PropertyTestConstants.FLOAT_VALUE;
-import static com.canoo.dolphin.integration.property.PropertyTestConstants.INTEGER_VALUE;
-import static com.canoo.dolphin.integration.property.PropertyTestConstants.LONG_VALUE;
-import static com.canoo.dolphin.integration.property.PropertyTestConstants.PROPERTY_CONTROLLER_NAME;
-import static com.canoo.dolphin.integration.property.PropertyTestConstants.RESET_TO_NULL_ACTION;
-import static com.canoo.dolphin.integration.property.PropertyTestConstants.SET_TO_DEFAULTS_ACTION;
-import static com.canoo.dolphin.integration.property.PropertyTestConstants.SHORT_VALUE;
-import static com.canoo.dolphin.integration.property.PropertyTestConstants.STRING_VALUE;
-import static com.canoo.dolphin.integration.property.PropertyTestConstants.UUID_VALUE;
+import static com.canoo.dolphin.integration.property.PropertyTestConstants.*;
 
 @SpringApplicationConfiguration(classes = TestConfiguration.class)
 public class PropertyTestControllerTest extends SpringTestNGControllerTest {
@@ -161,5 +144,142 @@ public class PropertyTestControllerTest extends SpringTestNGControllerTest {
         Assert.assertEquals(controller.getModel().getShortValue(), SHORT_VALUE);
         Assert.assertEquals(controller.getModel().getStringValue(), STRING_VALUE);
         Assert.assertEquals(controller.getModel().getUuidValue(), UUID_VALUE);
+    }
+
+    @Test
+    public void testNoPropertyChangeOnSameSide() {
+        controller.invoke(SET_TO_DEFAULTS_ACTION);
+        controller.invoke(ADD_CHANGE_LISTENER);
+        controller.invoke(SET_TO_DEFAULTS_ACTION);
+
+        Assert.assertFalse(controller.getModel().getBigDecimalValueChanged());
+        Assert.assertFalse(controller.getModel().getBigIntegerValueChanged());
+        Assert.assertFalse(controller.getModel().getBooleanValueChanged());
+        Assert.assertFalse(controller.getModel().getByteValueChanged());
+        Assert.assertFalse(controller.getModel().getCalenderValueChanged());
+        Assert.assertFalse(controller.getModel().getDateValueChanged());
+        Assert.assertFalse(controller.getModel().getDoubleValueChanged());
+        Assert.assertFalse(controller.getModel().getEnumValueChanged());
+        Assert.assertFalse(controller.getModel().getFloatValueChanged());
+        Assert.assertFalse(controller.getModel().getIntegerValueChanged());
+        Assert.assertFalse(controller.getModel().getLongValueChanged());
+        Assert.assertFalse(controller.getModel().getShortValueChanged());
+        Assert.assertFalse(controller.getModel().getStringValueChanged());
+        Assert.assertFalse(controller.getModel().getUuidValueChanged());
+    }
+
+    @Test
+    public void testPropertyChange() {
+        controller.invoke(SET_TO_DEFAULTS_ACTION);
+        controller.invoke(ADD_CHANGE_LISTENER);
+
+        controller.getModel().setBigDecimalValue(null);
+        controller.getModel().setBigIntegerValue(null);
+        controller.getModel().setBooleanValue(null);
+        controller.getModel().setByteValue(null);
+        controller.getModel().setCalendarValue(null);
+        controller.getModel().setDateValue(null);
+        controller.getModel().setDoubleValue(null);
+        controller.getModel().setEnumValue(null);
+        controller.getModel().setFloatValue(null);
+        controller.getModel().setIntegerValue(null);
+        controller.getModel().setLongValue(null);
+        controller.getModel().setShortValue(null);
+        controller.getModel().setStringValue(null);
+        controller.getModel().setUuidValue(null);
+
+        controller.invoke(PING);
+
+        Assert.assertTrue(controller.getModel().getBigDecimalValueChanged());
+        Assert.assertTrue(controller.getModel().getBigIntegerValueChanged());
+        Assert.assertTrue(controller.getModel().getBooleanValueChanged());
+        Assert.assertTrue(controller.getModel().getByteValueChanged());
+        Assert.assertTrue(controller.getModel().getCalenderValueChanged());
+        Assert.assertTrue(controller.getModel().getDateValueChanged());
+        Assert.assertTrue(controller.getModel().getDoubleValueChanged());
+        Assert.assertTrue(controller.getModel().getEnumValueChanged());
+        Assert.assertTrue(controller.getModel().getFloatValueChanged());
+        Assert.assertTrue(controller.getModel().getIntegerValueChanged());
+        Assert.assertTrue(controller.getModel().getLongValueChanged());
+        Assert.assertTrue(controller.getModel().getShortValueChanged());
+        Assert.assertTrue(controller.getModel().getStringValueChanged());
+        Assert.assertTrue(controller.getModel().getUuidValueChanged());
+    }
+
+    @Test
+    public void testPropertyChangeUnsubscribe() {
+        controller.invoke(ADD_CHANGE_LISTENER);
+        controller.invoke(SET_TO_DEFAULTS_ACTION);
+        controller.invoke(REMOVE_CHANGE_LISTENER);
+
+        controller.getModel().setBigDecimalValue(null);
+        controller.getModel().setBigIntegerValue(null);
+        controller.getModel().setBooleanValue(null);
+        controller.getModel().setByteValue(null);
+        controller.getModel().setCalendarValue(null);
+        controller.getModel().setDateValue(null);
+        controller.getModel().setDoubleValue(null);
+        controller.getModel().setEnumValue(null);
+        controller.getModel().setFloatValue(null);
+        controller.getModel().setIntegerValue(null);
+        controller.getModel().setLongValue(null);
+        controller.getModel().setShortValue(null);
+        controller.getModel().setStringValue(null);
+        controller.getModel().setUuidValue(null);
+
+        controller.invoke(PING);
+
+        Assert.assertFalse(controller.getModel().getBigDecimalValueChanged());
+        Assert.assertFalse(controller.getModel().getBigIntegerValueChanged());
+        Assert.assertFalse(controller.getModel().getBooleanValueChanged());
+        Assert.assertFalse(controller.getModel().getByteValueChanged());
+        Assert.assertFalse(controller.getModel().getCalenderValueChanged());
+        Assert.assertFalse(controller.getModel().getDateValueChanged());
+        Assert.assertFalse(controller.getModel().getDoubleValueChanged());
+        Assert.assertFalse(controller.getModel().getEnumValueChanged());
+        Assert.assertFalse(controller.getModel().getFloatValueChanged());
+        Assert.assertFalse(controller.getModel().getIntegerValueChanged());
+        Assert.assertFalse(controller.getModel().getLongValueChanged());
+        Assert.assertFalse(controller.getModel().getShortValueChanged());
+        Assert.assertFalse(controller.getModel().getStringValueChanged());
+        Assert.assertFalse(controller.getModel().getUuidValueChanged());
+    }
+
+    @Test
+    public void testNoChangeForSameValue() {
+        controller.invoke(SET_TO_DEFAULTS_ACTION);
+        controller.invoke(ADD_CHANGE_LISTENER);
+
+        controller.getModel().setBigDecimalValue(BIG_DECIMAL_VALUE);
+        controller.getModel().setBigIntegerValue(BIG_INTEGER_VALUE);
+        controller.getModel().setBooleanValue(BOOLEAN_VALUE);
+        controller.getModel().setByteValue(BYTE_VALUE);
+        controller.getModel().setCalendarValue(CALENDAR_VALUE);
+        controller.getModel().setDateValue(DATE_VALUE);
+        controller.getModel().setDoubleValue(DOUBLE_VALUE);
+        controller.getModel().setEnumValue(ENUM_VALUE);
+        controller.getModel().setFloatValue(FLOAT_VALUE);
+        controller.getModel().setIntegerValue(INTEGER_VALUE);
+        controller.getModel().setLongValue(LONG_VALUE);
+        controller.getModel().setShortValue(SHORT_VALUE);
+        controller.getModel().setStringValue(STRING_VALUE);
+        controller.getModel().setUuidValue(UUID_VALUE);
+
+        controller.invoke(PING);
+
+        Assert.assertFalse(controller.getModel().getBigDecimalValueChanged());
+        Assert.assertFalse(controller.getModel().getBigIntegerValueChanged());
+        Assert.assertFalse(controller.getModel().getBooleanValueChanged());
+        Assert.assertFalse(controller.getModel().getByteValueChanged());
+        Assert.assertFalse(controller.getModel().getCalenderValueChanged());
+        Assert.assertFalse(controller.getModel().getDateValueChanged());
+        Assert.assertFalse(controller.getModel().getDoubleValueChanged());
+        Assert.assertFalse(controller.getModel().getEnumValueChanged());
+        Assert.assertFalse(controller.getModel().getFloatValueChanged());
+        Assert.assertFalse(controller.getModel().getIntegerValueChanged());
+        Assert.assertFalse(controller.getModel().getLongValueChanged());
+        Assert.assertFalse(controller.getModel().getShortValueChanged());
+        Assert.assertFalse(controller.getModel().getStringValueChanged());
+        Assert.assertFalse(controller.getModel().getUuidValueChanged());
     }
 }
