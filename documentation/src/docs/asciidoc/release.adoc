@@ -41,7 +41,7 @@ documentation shows a step by step instruction to release all repositories. In g
 the sources of the JavaScript API repositores followed by the Java repository. Once this is done the jumpstart related
 repositories can be released in any order.
 
-==== Realising the JavaScript repositories
+==== Releasing the JavaScript repositories
 A developer should always start to release the *JavaScript basic API*. To do so several steps are needed:
 
 * The https://github.com/canoo/dolphin-platform-js[JavaScript basic API repository] must be check out on the local
@@ -105,10 +105,10 @@ release like `0.10.0`
 * Once the tag is uploaded to the global repository at GitHub the AngularJS basic API has been released
 
 
-==== Realising the Java repository
-* update the dependecies of all JavaScript modules in the `platform-examples` folder to the new version
+==== Releasing the Java repository
+* update the dependencies of all JavaScript modules in the `platform-examples` folder to the new version
 * Try all examples
-* check the changelog in the documentation if all changes are mentioned
+* check the changelog for current release in the documentation if all changes are mentioned
 * Commit the changes to master
 * Create a new branch `release/VERSION` where `VERSION` defines the version that should be released (like `release/0.10.0`)
 * Check out the created release branch
@@ -122,7 +122,7 @@ release like `0.10.0`
 * If this release changed the first number in the version number (like 1.X.X -> 2.X.X) we need to update the SNAPSHOT version in the master
 * Login to Bintray and publish all artifacts to JCenter and Maven Central
 
-==== Realising the Android repository
+==== Releasing the Android repository
 * Create a new branch `release/VERSION` where `VERSION` defines the version that should be released (like `release/0.10.0`)
 * update the version number of Dolphin Platform in the `gradle.properties` file
 * Call `./gradlew clean build` from the project folder to check that the build is working
@@ -133,7 +133,7 @@ release like `0.10.0`
 * Upload the tag is to the global repository at GitHub
 * Login to Bintray and publish all artifacts to JCenter and Maven Central
 
-==== Realising the jumpstart repository
+==== Releasing the jumpstart repository
 
 * Change the version number of Dolphin Platform in `src/main/resources/archetype-resources/pom.xml`
 * Change the version number of Dolphin Platform in `src/main/resources/archetype-resources/polymer-client/bower.json`
@@ -169,7 +169,7 @@ documentation shows a step by step instruction to release all repositories. In g
 the sources of the JavaScript API repositores followed by the Java repository. Once this is done the jumpstart related
 repositories can be released in any order.
 
-==== Realising the JavaScript repositories
+==== Releasing the JavaScript repositories
 A developer should always start to release the *JavaScript basic API*. To do so several steps are needed:
 
 * The https://github.com/canoo/dolphin-platform-js[JavaScript basic API repository] must be check out on the local
@@ -230,12 +230,12 @@ release like `0.10.1`
 * Once the tag is uploaded to the global repository at GitHub the AngularJS basic API has been released
 
 
-==== Realising the Java repository
+==== Releasing the Java repository
 * Check out the last release branch (like `release/0.10.0`)
 * Change the version of the project in the `pom.xml` to a `SNAPSHOT` version (like `0.10.1-SNAPSHOT`)
 * update the dependecies of all JavaScript modules in the `platform-examples` folder to the new version
 * Try all examples
-* check the changelog in the documentation if all changes are mentioned
+* check the changelog for current release in the documentation if all changes are mentioned
 * Commit the changes to master
 * update the version number in the `gradle.properties` file
 * Call `./gradlew clean build` from the project folder to check that the build is working
@@ -247,7 +247,7 @@ release like `0.10.1`
 * Upload the tag is to the global repository at GitHub
 * Login to Bintray and publish all artifacts to JCenter and Maven Central
 
-==== Realising the Android repository
+==== Releasing the Android repository
 * Check out the last release branch (like `release/0.10.0`)
 * Change the version of the project in the `pom.xml` to a `SNAPSHOT` version (like `0.10.1-SNAPSHOT`)
 * update the version number of Dolphin Platform in the `gradle.properties` file
@@ -260,7 +260,7 @@ release like `0.10.1`
 * Upload the tag is to the global repository at GitHub
 * Login to Bintray and publish all artifacts to JCenter and Maven Central
 
-==== Realising the jumpstart repository
+==== Releasing the jumpstart repository
 
 * Check out the last release branch (like `release/0.10.0`)
 * Change the version of the project in the `pom.xml` to a `SNAPSHOT` version (like `0.10.1-SNAPSHOT`)
