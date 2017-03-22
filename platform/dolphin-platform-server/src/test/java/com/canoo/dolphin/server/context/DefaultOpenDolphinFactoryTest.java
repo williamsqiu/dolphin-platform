@@ -16,6 +16,7 @@
 package com.canoo.dolphin.server.context;
 
 import com.canoo.dolphin.impl.codec.OptimizedJsonCodec;
+import org.opendolphin.core.comm.*;
 import org.opendolphin.core.server.DefaultServerDolphin;
 import org.testng.annotations.Test;
 
@@ -37,11 +38,11 @@ public class DefaultOpenDolphinFactoryTest {
         assertEquals(OptimizedJsonCodec.class, serverDolphin.getServerConnector().getCodec().getClass());
 
         assertEquals(serverDolphin.getServerConnector().getRegistry().getActions().size(), 5);
-        assertTrue(serverDolphin.getServerConnector().getRegistry().getActions().containsKey("Empty"));
-        assertTrue(serverDolphin.getServerConnector().getRegistry().getActions().containsKey("ValueChanged"));
-        assertTrue(serverDolphin.getServerConnector().getRegistry().getActions().containsKey("CreatePresentationModel"));
-        assertTrue(serverDolphin.getServerConnector().getRegistry().getActions().containsKey("ChangeAttributeMetadata"));
-        assertTrue(serverDolphin.getServerConnector().getRegistry().getActions().containsKey("DeletedPresentationModel"));
+        assertTrue(serverDolphin.getServerConnector().getRegistry().getActions().containsKey(EmptyNotification.class));
+        assertTrue(serverDolphin.getServerConnector().getRegistry().getActions().containsKey(ValueChangedCommand.class));
+        assertTrue(serverDolphin.getServerConnector().getRegistry().getActions().containsKey(CreatePresentationModelCommand.class));
+        assertTrue(serverDolphin.getServerConnector().getRegistry().getActions().containsKey(ChangeAttributeMetadataCommand.class));
+        assertTrue(serverDolphin.getServerConnector().getRegistry().getActions().containsKey(DeletedPresentationModelNotification.class));
 
         assertEquals(serverDolphin.listPresentationModelIds().size(), 0);
     }

@@ -17,13 +17,9 @@ package com.canoo.dolphin.server.context;
 
 import com.canoo.dolphin.BeanManager;
 import com.canoo.dolphin.event.Subscription;
-import com.canoo.dolphin.impl.BeanManagerImpl;
-import com.canoo.dolphin.impl.ClassRepositoryImpl;
-import com.canoo.dolphin.impl.Converters;
-import com.canoo.dolphin.impl.InternalAttributesBean;
-import com.canoo.dolphin.impl.PlatformConstants;
-import com.canoo.dolphin.impl.PresentationModelBuilderFactory;
+import com.canoo.dolphin.impl.*;
 import com.canoo.dolphin.impl.collections.ListMapperImpl;
+import com.canoo.dolphin.impl.commands.*;
 import com.canoo.dolphin.internal.ClassRepository;
 import com.canoo.dolphin.internal.EventDispatcher;
 import com.canoo.dolphin.internal.collections.ListMapper;
@@ -32,21 +28,13 @@ import com.canoo.dolphin.server.config.DolphinPlatformConfiguration;
 import com.canoo.dolphin.server.container.ContainerManager;
 import com.canoo.dolphin.server.controller.ControllerHandler;
 import com.canoo.dolphin.server.controller.ControllerRepository;
-import com.canoo.dolphin.server.impl.ServerBeanBuilder;
-import com.canoo.dolphin.server.impl.ServerBeanBuilderImpl;
-import com.canoo.dolphin.server.impl.ServerBeanRepository;
-import com.canoo.dolphin.server.impl.ServerBeanRepositoryImpl;
-import com.canoo.dolphin.server.impl.ServerControllerActionCallBean;
-import com.canoo.dolphin.server.impl.ServerEventDispatcher;
-import com.canoo.dolphin.server.impl.ServerPlatformBeanRepository;
-import com.canoo.dolphin.server.impl.ServerPresentationModelBuilderFactory;
+import com.canoo.dolphin.server.impl.*;
 import com.canoo.dolphin.server.impl.gc.GarbageCollectionCallback;
 import com.canoo.dolphin.server.impl.gc.GarbageCollector;
 import com.canoo.dolphin.server.impl.gc.Instance;
 import com.canoo.dolphin.server.mbean.DolphinContextMBeanRegistry;
 import com.canoo.dolphin.util.Assert;
 import com.canoo.dolphin.util.Callback;
-import org.opendolphin.core.RemotingConstants;
 import org.opendolphin.core.comm.Command;
 import org.opendolphin.core.server.DefaultServerDolphin;
 import org.opendolphin.core.server.action.DolphinServerAction;
@@ -159,71 +147,79 @@ public class DolphinContext {
         mBeanSubscription = mBeanRegistry.registerDolphinContext(dolphinSession, garbageCollector);
     }
 
+    private <T extends Command> void registerCommand(final ActionRegistry registry, final Class<T> commandClass, final Callback<T> handler) {
+        Assert.requireNonNull(registry, "registry");
+        Assert.requireNonNull(commandClass, "commandClass");
+        Assert.requireNonNull(handler, "handler");
+        registry.register(commandClass, new CommandHandler() {
+            @Override
+            public void handleCommand(final Command command, final List response) {
+                LOG.trace("Handling {} for DolphinContext {}", commandClass.getSimpleName(), getId());
+                handler.call((T) command);
+            }
+        });
+    }
+
     private void registerDolphinPlatformDefaultCommands() {
         dolphin.register(new DolphinServerAction() {
             @Override
             public void registerIn(ActionRegistry registry) {
 
-                registry.register(PlatformConstants.INIT_CONTEXT_COMMAND_NAME, new CommandHandler() {
+                registerCommand(registry, CreateContextCommand.class, new Callback<CreateContextCommand>() {
                     @Override
-                    public void handleCommand(Command command, List response) {
-                        LOG.trace("Handling {} for DolphinContext {}", PlatformConstants.INIT_CONTEXT_COMMAND_NAME, getId());
+                    public void call(CreateContextCommand createContextCommand) {
                         onInitContext();
                     }
                 });
 
-                registry.register(PlatformConstants.DESTROY_CONTEXT_COMMAND_NAME, new CommandHandler() {
+                registerCommand(registry, DestroyContextCommand.class, new Callback<DestroyContextCommand>() {
                     @Override
-                    public void handleCommand(Command command, List response) {
-                        LOG.trace("Handling {} for DolphinContext {}", PlatformConstants.DESTROY_CONTEXT_COMMAND_NAME, getId());
+                    public void call(DestroyContextCommand createContextCommand) {
                         onDestroyContext();
                     }
                 });
 
-                registry.register(PlatformConstants.REGISTER_CONTROLLER_COMMAND_NAME, new CommandHandler() {
+
+                registerCommand(registry, CreateControllerCommand.class, new Callback<CreateControllerCommand>() {
                     @Override
-                    public void handleCommand(Command command, List response) {
-                        LOG.trace("Handling {} for DolphinContext {}", PlatformConstants.REGISTER_CONTROLLER_COMMAND_NAME, getId());
+                    public void call(CreateControllerCommand createContextCommand) {
                         onRegisterController();
                     }
                 });
 
-                registry.register(PlatformConstants.DESTROY_CONTROLLER_COMMAND_NAME, new CommandHandler() {
+
+                registerCommand(registry, DestroyControllerCommand.class, new Callback<DestroyControllerCommand>() {
                     @Override
-                    public void handleCommand(Command command, List response) {
-                        LOG.trace("Handling {} for DolphinContext {}", PlatformConstants.DESTROY_CONTROLLER_COMMAND_NAME, getId());
+                    public void call(DestroyControllerCommand createContextCommand) {
                         onDestroyController();
                     }
                 });
 
-                registry.register(PlatformConstants.CALL_CONTROLLER_ACTION_COMMAND_NAME, new CommandHandler() {
+                registerCommand(registry, CallActionCommand.class, new Callback<CallActionCommand>() {
                     @Override
-                    public void handleCommand(Command command, List response) {
-                        LOG.trace("Handling {} for DolphinContext {}", PlatformConstants.CALL_CONTROLLER_ACTION_COMMAND_NAME, getId());
+                    public void call(CallActionCommand createContextCommand) {
                         onCallControllerAction();
                     }
                 });
 
-                registry.register(RemotingConstants.POLL_EVENT_BUS_COMMAND_NAME, new CommandHandler() {
+                registerCommand(registry, StartLongPollCommand.class, new Callback<StartLongPollCommand>() {
                     @Override
-                    public void handleCommand(Command command, List response) {
+                    public void call(StartLongPollCommand createContextCommand) {
                         if(configuration.isUseGc()) {
                             LOG.trace("Handling GarbageCollection for DolphinContext {}", getId());
                             onGarbageCollection();
                         }
-
-                        LOG.trace("Handling {} for DolphinContext {}", RemotingConstants.POLL_EVENT_BUS_COMMAND_NAME, getId());
                         onPollEventBus();
                     }
                 });
 
-                registry.register(RemotingConstants.RELEASE_EVENT_BUS_COMMAND_NAME, new CommandHandler() {
+                registerCommand(registry, InterruptLongPollCommand.class, new Callback<InterruptLongPollCommand>() {
                     @Override
-                    public void handleCommand(Command command, List response) {
-                        LOG.trace("Handling {} for DolphinContext {}", RemotingConstants.RELEASE_EVENT_BUS_COMMAND_NAME, getId());
+                    public void call(InterruptLongPollCommand createContextCommand) {
                         onReleaseEventBus();
                     }
                 });
+
             }
         });
     }

@@ -15,14 +15,10 @@
  */
 package com.canoo.dolphin.client.impl;
 
-import com.canoo.dolphin.client.ClientBeanManager;
-import com.canoo.dolphin.client.ClientConfiguration;
-import com.canoo.dolphin.client.ClientContext;
-import com.canoo.dolphin.client.ClientInitializationException;
-import com.canoo.dolphin.client.ControllerInitalizationException;
-import com.canoo.dolphin.client.ControllerProxy;
+import com.canoo.dolphin.client.*;
 import com.canoo.dolphin.event.Subscription;
-import com.canoo.dolphin.impl.PlatformConstants;
+import com.canoo.dolphin.impl.commands.CreateContextCommand;
+import com.canoo.dolphin.impl.commands.DestroyContextCommand;
 import com.canoo.dolphin.util.Assert;
 import com.canoo.dolphin.util.Callback;
 import com.canoo.dolphin.util.DolphinRemotingException;
@@ -61,7 +57,7 @@ public class ClientContextImpl implements ClientContext {
         this.remotingErrorHandler = Assert.requireNonNull(remotingErrorHandler, "remotingErrorHandler");
         this.clientConfiguration = Assert.requireNonNull(clientConfiguration, "clientConfiguration");
         try {
-            dolphinCommandHandler.invokeDolphinCommand(PlatformConstants.INIT_CONTEXT_COMMAND_NAME).handle(new BiFunction<Void, Throwable, Object>() {
+            dolphinCommandHandler.invokeDolphinCommand(new CreateContextCommand()).handle(new BiFunction<Void, Throwable, Object>() {
                 @Override
                 public Object apply(Void aVoid, Throwable throwable) {
                     if (throwable != null) {
@@ -117,7 +113,7 @@ public class ClientContextImpl implements ClientContext {
             @Override
             public void run() {
                 state = State.DESTROYED;
-                dolphinCommandHandler.invokeDolphinCommand(PlatformConstants.DESTROY_CONTEXT_COMMAND_NAME).handle(new BiFunction<Void, Throwable, Object>() {
+                dolphinCommandHandler.invokeDolphinCommand(new DestroyContextCommand()).handle(new BiFunction<Void, Throwable, Object>() {
                     @Override
                     public Object apply(Void aVoid, Throwable throwable) {
                         if (throwable != null) {

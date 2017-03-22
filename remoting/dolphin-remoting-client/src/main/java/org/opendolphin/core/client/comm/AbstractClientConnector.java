@@ -15,10 +15,8 @@
  */
 package org.opendolphin.core.client.comm;
 
-import org.opendolphin.core.RemotingConstants;
 import org.opendolphin.core.client.ClientDolphin;
 import org.opendolphin.core.comm.Command;
-import org.opendolphin.core.comm.NamedCommand;
 import org.opendolphin.core.comm.SignalCommand;
 
 import java.util.ArrayList;
@@ -47,13 +45,11 @@ public abstract class AbstractClientConnector implements ClientConnector {
     /**
      * The named command that waits for pushes on the server side
      */
-    private final Command pushListener = new NamedCommand(RemotingConstants.POLL_EVENT_BUS_COMMAND_NAME);
-
+    private Command pushListener;
     /**
      * The signal command that publishes a "release" event on the respective bus
      */
-    private final Command releaseCommand = new SignalCommand(RemotingConstants.RELEASE_EVENT_BUS_COMMAND_NAME);
-
+    private Command releaseCommand;
     /**
      * whether listening for push events should be done at all.
      */
@@ -111,16 +107,19 @@ public abstract class AbstractClientConnector implements ClientConnector {
     protected abstract List<Command> transmit(List<Command> commands);
 
     @Override
-    public void send(Command command, OnFinishedHandler callback) {
+    public void send(final Command command, final OnFinishedHandler callback, final HandlerType handlerType) {
         // we have some change so regardless of the batching we may have to release a push
         if (!command.equals(pushListener)) {
             release();
         }
         // we are inside the UI thread and events calls come in strict order as received by the UI toolkit
-        CommandAndHandler handler = new CommandAndHandler();
-        handler.setCommand(command);
-        handler.setHandler(callback);
+        CommandAndHandler handler = new CommandAndHandler(command, callback, handlerType);
         commandBatcher.batch(handler);
+    }
+
+    @Override
+    public void send(final Command command, final OnFinishedHandler callback) {
+        send(command, callback, HandlerType.UI);
     }
 
     @Override
@@ -129,7 +128,6 @@ public abstract class AbstractClientConnector implements ClientConnector {
     }
 
     protected void processResults(final List<? extends Command> response, List<CommandAndHandler> commandsAndHandlers) {
-        // see http://jira.codehaus.org/browse/GROOVY-6946
         if (LOG.isLoggable(Level.INFO)) {
             final List<String> commands = new ArrayList<>();
             if (response != null) {
@@ -190,7 +188,10 @@ public abstract class AbstractClientConnector implements ClientConnector {
     }
 
     @Override
-    public void startPushListening() {
+    public void startPushListening(final Command startLongPollCommand, final SignalCommand interruptLongPollCommand) {
+        pushListener = Objects.requireNonNull(startLongPollCommand);
+        releaseCommand = Objects.requireNonNull(interruptLongPollCommand);
+
         pushEnabled.set(true);
         listen();
     }

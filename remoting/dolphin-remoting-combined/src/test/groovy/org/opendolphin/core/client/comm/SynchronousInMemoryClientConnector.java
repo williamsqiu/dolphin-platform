@@ -48,9 +48,7 @@ public class SynchronousInMemoryClientConnector extends InMemoryClientConnector 
 
     public void send(Command command, OnFinishedHandler callback) {
         List<Command> answer = transmit(new ArrayList(Arrays.asList(command)));
-        CommandAndHandler handler = new CommandAndHandler();
-        handler.setCommand(command);
-        handler.setHandler(callback);
+        CommandAndHandler handler = new CommandAndHandler(command, callback);
         processResults(answer, new ArrayList(Arrays.asList(handler)));
     }
 

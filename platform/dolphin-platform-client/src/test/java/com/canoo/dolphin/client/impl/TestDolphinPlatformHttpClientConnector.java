@@ -18,6 +18,7 @@ package com.canoo.dolphin.client.impl;
 import com.canoo.dolphin.client.ClientConfiguration;
 import com.canoo.dolphin.client.DummyUiThreadHandler;
 import com.canoo.dolphin.client.HttpURLConnectionFactory;
+import com.canoo.dolphin.impl.commands.CreateContextCommand;
 import com.canoo.dolphin.util.DolphinRemotingException;
 import org.opendolphin.core.client.ClientDolphin;
 import org.opendolphin.core.client.comm.SimpleExceptionHandler;
@@ -35,6 +36,7 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -123,7 +125,9 @@ public class TestDolphinPlatformHttpClientConnector {
 
         DolphinPlatformHttpClientConnector connector = new DolphinPlatformHttpClientConnector(clientConfiguration, new ClientDolphin(), new JsonCodec(), new ForwardableCallback<DolphinRemotingException>(), new SimpleExceptionHandler(clientConfiguration.getUiExecutor()));
 
-        connector.transmit(Collections.singletonList(new Command()));
+        List<Command> commands = new ArrayList<>();
+        commands.add(new CreateContextCommand());
+        connector.transmit(commands);
     }
 
     private URL getDummyURL() {

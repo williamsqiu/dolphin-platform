@@ -19,13 +19,13 @@ public interface PlatformConstants {
 
     String DOLPHIN_PLATFORM_PREFIX = "dolphin_platform_intern_";
 
-    String REGISTER_CONTROLLER_COMMAND_NAME = DOLPHIN_PLATFORM_PREFIX + "registerController";
+    String CREATE_CONTROLLER_COMMAND_NAME = DOLPHIN_PLATFORM_PREFIX + "registerController";
 
     String DESTROY_CONTROLLER_COMMAND_NAME = DOLPHIN_PLATFORM_PREFIX + "destroyController";
 
-    String CALL_CONTROLLER_ACTION_COMMAND_NAME = DOLPHIN_PLATFORM_PREFIX + "callControllerAction";
+    String CALL_ACTION_COMMAND_NAME = DOLPHIN_PLATFORM_PREFIX + "callControllerAction";
 
-    String INIT_CONTEXT_COMMAND_NAME = DOLPHIN_PLATFORM_PREFIX + "initClientContext";
+    String CREATE_CONTEXT_COMMAND_NAME = DOLPHIN_PLATFORM_PREFIX + "initClientContext";
 
     String CLIENT_ID_HTTP_HEADER_NAME = DOLPHIN_PLATFORM_PREFIX + "dolphinClientId";
 
@@ -42,4 +42,8 @@ public interface PlatformConstants {
 
     String CONTROLLER_ACTION_CALL_BEAN_NAME = "@@@ CONTROLLER_ACTION_CALL_BEAN @@@";
     String INTERNAL_ATTRIBUTES_BEAN_NAME = "@@@ HIGHLANDER_BEAN @@@";
+
+    String START_LONG_POLL_COMMAND_NAME = DOLPHIN_PLATFORM_PREFIX + "longPoll";
+
+    String INTERRUPT_LONG_POLL_COMMAND_NAME = DOLPHIN_PLATFORM_PREFIX + "release";
 }

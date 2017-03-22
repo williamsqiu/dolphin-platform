@@ -29,13 +29,13 @@ class StandardCommandBatcherTest extends GroovyTestCase {
 	}
 
 	void testOne() {
-		def cah = new CommandAndHandler()
+		def cah = new CommandAndHandler(null)
 		batcher.batch(cah)
         assert batcher.waitingBatches.val == [cah]
 	}
 
 	void testMultipleDoesNotBatch() {
-		def list = [new CommandAndHandler()] * 3
+		def list = [new CommandAndHandler(null)] * 3
 
 		list.each { cwh -> batcher.batch(cwh) }
 

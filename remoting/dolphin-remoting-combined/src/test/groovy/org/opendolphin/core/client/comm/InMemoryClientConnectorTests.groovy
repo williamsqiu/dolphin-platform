@@ -17,7 +17,7 @@ package org.opendolphin.core.client.comm
 
 import core.client.comm.InMemoryClientConnector
 import org.opendolphin.core.client.ClientDolphin
-import org.opendolphin.core.comm.Command
+import org.opendolphin.core.comm.EmptyNotification
 import org.opendolphin.core.server.ServerConnector
 import org.opendolphin.util.DirectExecutor
 
@@ -25,7 +25,7 @@ class InMemoryClientConnectorTests extends GroovyTestCase {
 
     void testCallConnector_NoServerConnectorWired() {
         InMemoryClientConnector connector = new InMemoryClientConnector(new ClientDolphin(), null, new CommandBatcher(), DirectExecutor.getInstance())
-        assert [] == connector.transmit([new Command()])
+        assert [] == connector.transmit([new EmptyNotification()])
     }
 
     void testCallConnector_ServerWired() {
@@ -35,7 +35,7 @@ class InMemoryClientConnectorTests extends GroovyTestCase {
             return []
         }] as ServerConnector
         InMemoryClientConnector connector = new InMemoryClientConnector(new ClientDolphin(), serverConnector, new CommandBatcher(), DirectExecutor.getInstance())
-        def command = new Command()
+        def command = new EmptyNotification()
         connector.transmit([command])
         assert serverCalled
     }
@@ -48,7 +48,7 @@ class InMemoryClientConnectorTests extends GroovyTestCase {
         }] as ServerConnector
         InMemoryClientConnector connector = new InMemoryClientConnector(new ClientDolphin(), serverConnector, new CommandBatcher(), DirectExecutor.getInstance())
         connector.sleepMillis = 10
-        def command = new Command()
+        def command = new EmptyNotification()
         connector.transmit([command])
         assert serverCalled
     }

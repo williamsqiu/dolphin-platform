@@ -34,6 +34,8 @@ import com.canoo.dolphin.impl.Converters;
 import com.canoo.dolphin.impl.PresentationModelBuilderFactory;
 import com.canoo.dolphin.impl.ReflectionHelper;
 import com.canoo.dolphin.impl.collections.ListMapperImpl;
+import com.canoo.dolphin.impl.commands.InterruptLongPollCommand;
+import com.canoo.dolphin.impl.commands.StartLongPollCommand;
 import com.canoo.dolphin.internal.BeanBuilder;
 import com.canoo.dolphin.internal.BeanRepository;
 import com.canoo.dolphin.internal.ClassRepository;
@@ -109,7 +111,7 @@ public class DolphinPlatformSpringTestBootstrap {
             @Override
             public Void call() {
                 DolphinContextUtils.setContextForCurrentThread(dolphinContext);
-                clientDolphin.startPushListening();
+                clientDolphin.startPushListening(new StartLongPollCommand(), new InterruptLongPollCommand());
                 return null;
             }
 

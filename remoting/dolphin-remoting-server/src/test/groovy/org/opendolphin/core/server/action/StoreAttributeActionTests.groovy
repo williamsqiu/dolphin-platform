@@ -37,7 +37,7 @@ class StoreAttributeActionTests extends GroovyTestCase {
         new StoreAttributeAction(serverDolphin: dolphin).registerIn registry
         ServerAttribute attribute = new ServerAttribute('newAttribute', '')
         dolphin.addPresentationModel(new ServerPresentationModel('model', [attribute], dolphin.serverModelStore))
-        registry.getAt('ChangeAttributeMetadata').first().handleCommand(new ChangeAttributeMetadataCommand(attributeId: attribute.id, metadataName: 'value', value: 'newValue'), [])
+        registry.getActionsFor(ChangeAttributeMetadataCommand.class).first().handleCommand(new ChangeAttributeMetadataCommand(attributeId: attribute.id, metadataName: 'value', value: 'newValue'), [])
         assert 'newValue' == attribute.value
     }
 }

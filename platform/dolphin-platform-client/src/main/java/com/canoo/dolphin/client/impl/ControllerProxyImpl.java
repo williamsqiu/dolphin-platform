@@ -20,7 +20,8 @@ import com.canoo.dolphin.client.ControllerInitalizationException;
 import com.canoo.dolphin.client.ControllerProxy;
 import com.canoo.dolphin.client.Param;
 import com.canoo.dolphin.impl.InternalAttributesBean;
-import com.canoo.dolphin.impl.PlatformConstants;
+import com.canoo.dolphin.impl.commands.CallActionCommand;
+import com.canoo.dolphin.impl.commands.DestroyControllerCommand;
 import com.canoo.dolphin.util.Assert;
 import org.opendolphin.core.client.ClientDolphin;
 import org.opendolphin.core.client.comm.OnFinishedHandler;
@@ -65,7 +66,7 @@ public class ControllerProxyImpl<T> implements ControllerProxy<T> {
 
 
         final CompletableFuture<Void> result = new CompletableFuture<>();
-        dolphin.send(PlatformConstants.CALL_CONTROLLER_ACTION_COMMAND_NAME, new OnFinishedHandler(){
+        dolphin.send(new CallActionCommand(), new OnFinishedHandler(){
             @Override
             public void onFinished() {
                 if (bean.isError()) {
@@ -91,7 +92,7 @@ public class ControllerProxyImpl<T> implements ControllerProxy<T> {
 
         final CompletableFuture<Void> ret = new CompletableFuture<>();
 
-        dolphin.send(PlatformConstants.DESTROY_CONTROLLER_COMMAND_NAME, new OnFinishedHandler() {
+        dolphin.send(new DestroyControllerCommand(), new OnFinishedHandler() {
             @Override
             public void onFinished() {
                 model = null;

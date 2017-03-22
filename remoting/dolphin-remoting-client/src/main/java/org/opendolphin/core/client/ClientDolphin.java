@@ -19,8 +19,10 @@ import org.opendolphin.core.AbstractDolphin;
 import org.opendolphin.core.ModelStore;
 import org.opendolphin.core.client.comm.ClientConnector;
 import org.opendolphin.core.client.comm.OnFinishedHandler;
+import org.opendolphin.core.comm.Command;
 import org.opendolphin.core.comm.EmptyNotification;
 import org.opendolphin.core.comm.NamedCommand;
+import org.opendolphin.core.comm.SignalCommand;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -107,15 +109,8 @@ public class ClientDolphin extends AbstractDolphin<ClientAttribute, ClientPresen
         return result;
     }
 
-    /**
-     * java-friendly convenience method for sending a named command
-     */
-    public void send(String commandName, OnFinishedHandler onFinished) {
-        clientConnector.send(new NamedCommand(commandName), onFinished);
-    }
-
-    public void send(String commandName) {
-        send(commandName, null);
+    public void send(Command command, OnFinishedHandler onFinished) {
+        clientConnector.send(command, onFinished);
     }
 
     /**
@@ -145,8 +140,8 @@ public class ClientDolphin extends AbstractDolphin<ClientAttribute, ClientPresen
      * @deprecated Push should be active by default
      */
     @Deprecated
-    public void startPushListening() {
-        clientConnector.startPushListening();
+    public void startPushListening(final Command startLongPollCommand, final SignalCommand interruptLongPollCommand) {
+        clientConnector.startPushListening(startLongPollCommand, interruptLongPollCommand);
     }
 
     /**

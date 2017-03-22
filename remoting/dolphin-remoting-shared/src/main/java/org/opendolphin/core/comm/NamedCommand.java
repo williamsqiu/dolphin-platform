@@ -23,16 +23,6 @@ public class NamedCommand extends Command {
     }
 
     public NamedCommand(String id) {
-        this.id = id;
+        super(id);
     }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    private String id;
 }

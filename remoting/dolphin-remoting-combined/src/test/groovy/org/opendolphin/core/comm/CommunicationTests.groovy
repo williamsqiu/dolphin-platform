@@ -139,16 +139,18 @@ class CommunicationTests extends GroovyTestCase {
         clientModelStore.add new ClientPresentationModel('testPm', [ca]) // trigger the whole cycle
     }
 
+    class ButtonActionCommand extends Command {}
+
 	void testRequestingSomeGeneralCommandExecution() {
 		boolean reached = false
-		serverConnector.registry.register("ButtonAction", new CommandHandler<NamedCommand>(){
+		serverConnector.registry.register(ButtonActionCommand.class, new CommandHandler<ButtonActionCommand>(){
 
             @Override
-            void handleCommand(NamedCommand command, List response) {
+            void handleCommand(ButtonActionCommand command, List response) {
                 reached = true
             }
         });
-		clientConnector.send(new NamedCommand(id: "ButtonAction"))
+		clientConnector.send(new ButtonActionCommand())
 
         clientDolphin.sync {
             assert reached

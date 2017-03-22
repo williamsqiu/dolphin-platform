@@ -44,7 +44,7 @@ class BlindCommandBatcherTest extends GroovyTestCase {
 
     void doMultipleBlindsAreBatched() {
         assert batcher.isEmpty()
-        def list = [new CommandAndHandler(), new CommandAndHandler(), new CommandAndHandler()]
+        def list = [new CommandAndHandler(null), new CommandAndHandler(null), new CommandAndHandler(null)]
 
         list.each { commandAndHandler -> batcher.batch(commandAndHandler) }
         assert batcher.waitingBatches.val == list
@@ -60,8 +60,8 @@ class BlindCommandBatcherTest extends GroovyTestCase {
 
     void doNonBlindForcesBatch() {
         assert batcher.isEmpty()
-        def list = [new CommandAndHandler(), new CommandAndHandler(), new CommandAndHandler()]
-        list << new CommandAndHandler(handler: new OnFinishedHandler() {
+        def list = [new CommandAndHandler(null), new CommandAndHandler(null), new CommandAndHandler(null)]
+        list << new CommandAndHandler(null, new OnFinishedHandler() {
 
             @Override
             void onFinished() {
@@ -85,7 +85,7 @@ class BlindCommandBatcherTest extends GroovyTestCase {
 
     void doMaxBatchSize() {
         batcher.maxBatchSize = 4
-        def list = [new CommandAndHandler()] * 17
+        def list = [new CommandAndHandler(null)] * 17
 
         list.each { commandAndHandler -> batcher.batch(commandAndHandler) }
 
@@ -101,9 +101,9 @@ class BlindCommandBatcherTest extends GroovyTestCase {
 
         batcher.mergeValueChanges = true
         def list = [
-          new CommandAndHandler(command: new ValueChangedCommand(attributeId: 0, oldValue: 0, newValue: 1)),
-          new CommandAndHandler(command: new ValueChangedCommand(attributeId: 0, oldValue: 1, newValue: 2)),
-          new CommandAndHandler(command: new ValueChangedCommand(attributeId: 0, oldValue: 2, newValue: 3)),
+          new CommandAndHandler(new ValueChangedCommand(attributeId: 0, oldValue: 0, newValue: 1)),
+          new CommandAndHandler(new ValueChangedCommand(attributeId: 0, oldValue: 1, newValue: 2)),
+          new CommandAndHandler(new ValueChangedCommand(attributeId: 0, oldValue: 2, newValue: 3)),
         ]
 
         list.each { commandAndHandler -> batcher.batch(commandAndHandler) }
@@ -120,8 +120,8 @@ class BlindCommandBatcherTest extends GroovyTestCase {
 
         batcher.mergeValueChanges = true
         def list = [
-          new CommandAndHandler(command: new ValueChangedCommand(attributeId: 0, oldValue: 0, newValue: 1)),
-          new CommandAndHandler(command: new CreatePresentationModelCommand()),
+          new CommandAndHandler(new ValueChangedCommand(attributeId: 0, oldValue: 0, newValue: 1)),
+          new CommandAndHandler(new CreatePresentationModelCommand()),
         ]
 
         list.each { commandAndHandler -> batcher.batch(commandAndHandler) }
@@ -140,9 +140,9 @@ class BlindCommandBatcherTest extends GroovyTestCase {
         OnFinishedHandler sameHandler = [onFinished: { /* do nothing*/ }] as OnFinishedHandler
 
         def list = [
-          new CommandAndHandler(command: cmd1, handler: sameHandler),
-          new CommandAndHandler(command: cmd2, handler: sameHandler), // same handler can be dropped
-          new CommandAndHandler(command: cmd2, handler: null),        // null handler can be dropped
+          new CommandAndHandler(cmd1, sameHandler),
+          new CommandAndHandler(cmd2, sameHandler), // same handler can be dropped
+          new CommandAndHandler(cmd2),        // null handler can be dropped
         ]
 
         list.each { commandAndHandler -> batcher.batch(commandAndHandler) }
@@ -158,8 +158,8 @@ class BlindCommandBatcherTest extends GroovyTestCase {
         300.times {
             Command cmd1 = new GetPresentationModelCommand(pmId: it)
             Command cmd2 = new GetPresentationModelCommand(pmId: it)
-            list << new CommandAndHandler(command: cmd1, handler: null) // will be batched
-            list << new CommandAndHandler(command: cmd2, handler: null) // will be dropped
+            list << new CommandAndHandler(cmd1, null) // will be batched
+            list << new CommandAndHandler(cmd2, null) // will be dropped
         }
 
         list.each { commandAndHandler -> batcher.batch(commandAndHandler) }
