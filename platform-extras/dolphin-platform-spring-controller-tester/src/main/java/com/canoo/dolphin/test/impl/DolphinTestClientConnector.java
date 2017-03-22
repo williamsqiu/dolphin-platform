@@ -15,17 +15,12 @@
  */
 package com.canoo.dolphin.test.impl;
 
-import com.canoo.dolphin.impl.PlatformConstants;
+import com.canoo.dolphin.impl.commands.StartLongPollCommand;
 import com.canoo.dolphin.server.context.DolphinContext;
 import com.canoo.dolphin.util.Assert;
 import org.opendolphin.core.client.ClientDolphin;
-import org.opendolphin.core.client.comm.AbstractClientConnector;
-import org.opendolphin.core.client.comm.CommandAndHandler;
-import org.opendolphin.core.client.comm.CommandBatcher;
-import org.opendolphin.core.client.comm.OnFinishedHandler;
-import org.opendolphin.core.client.comm.SimpleExceptionHandler;
+import org.opendolphin.core.client.comm.*;
 import org.opendolphin.core.comm.Command;
-import org.opendolphin.core.comm.NamedCommand;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -70,7 +65,7 @@ public class DolphinTestClientConnector extends AbstractClientConnector {
     @Override
     protected List<Command> transmit(List<Command> commands) {
         ArrayList<Command> realCommands = new ArrayList<>(commands);
-        realCommands.add(new NamedCommand(PlatformConstants.START_LONG_POLL_COMMAND_NAME));
+        realCommands.add(new StartLongPollCommand());
         return dolphinContext.handle(commands);
     }
 

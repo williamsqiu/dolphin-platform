@@ -40,6 +40,9 @@ class CommunicationTests extends GroovyTestCase {
     ClientDolphin       clientDolphin
     TestInMemoryConfig config
 
+    private final class ButtonActionCommand extends Command {}
+
+
     @Override
 	protected void setUp() {
 		LogConfig.logOnLevel(Level.INFO);
@@ -139,7 +142,6 @@ class CommunicationTests extends GroovyTestCase {
         clientModelStore.add new ClientPresentationModel('testPm', [ca]) // trigger the whole cycle
     }
 
-    class ButtonActionCommand extends Command {}
 
 	void testRequestingSomeGeneralCommandExecution() {
 		boolean reached = false

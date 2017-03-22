@@ -22,5 +22,5 @@ package org.opendolphin.core.comm;
  * in the expected sequence.
  */
 @Deprecated
-public class EmptyNotification extends Command {
+public final class EmptyNotification extends Command {
 }

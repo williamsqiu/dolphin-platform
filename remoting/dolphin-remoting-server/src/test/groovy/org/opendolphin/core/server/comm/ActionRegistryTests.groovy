@@ -16,7 +16,6 @@
 package org.opendolphin.core.server.comm
 
 import org.opendolphin.core.comm.Command
-import org.opendolphin.core.comm.NamedCommand
 
 class ActionRegistryTests extends GroovyTestCase {
     ActionRegistry registry
@@ -67,9 +66,9 @@ class ActionRegistryTests extends GroovyTestCase {
 
     void testRegisterCommand_MultipleCalls() {
         assert 0 == registry.actions.size()
-        def action = new CommandHandler<NamedCommand>() {
+        def action = new CommandHandler<Command>() {
             @Override
-            void handleCommand(NamedCommand command, List<Command> response) {
+            void handleCommand(Command command, List<Command> response) {
 
             }
         }

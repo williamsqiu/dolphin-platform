@@ -15,7 +15,7 @@
  */
 package org.opendolphin.core.comm;
 
-public class ValueChangedCommand extends Command {
+public final class ValueChangedCommand extends Command {
 
     private String attributeId;
 

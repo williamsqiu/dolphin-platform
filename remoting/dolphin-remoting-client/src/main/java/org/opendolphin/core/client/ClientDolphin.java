@@ -21,7 +21,6 @@ import org.opendolphin.core.client.comm.ClientConnector;
 import org.opendolphin.core.client.comm.OnFinishedHandler;
 import org.opendolphin.core.comm.Command;
 import org.opendolphin.core.comm.EmptyNotification;
-import org.opendolphin.core.comm.NamedCommand;
 import org.opendolphin.core.comm.SignalCommand;
 
 import java.util.ArrayList;

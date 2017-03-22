@@ -31,6 +31,9 @@ class DeletePresentationModelTests extends GroovyTestCase {
     DefaultServerDolphin serverDolphin
     ClientDolphin clientDolphin
 
+    private final class TriggerDeleteCommand extends Command {}
+
+
     @Override
     protected void setUp() {
         context = new TestInMemoryConfig()
@@ -43,7 +46,7 @@ class DeletePresentationModelTests extends GroovyTestCase {
         assert context.done.await(2, TimeUnit.SECONDS)
     }
 
-    void registerAction(ServerDolphin serverDolphin, Class<? extends Command> commandClass, CommandHandler<NamedCommand> handler) {
+    public <T extends Command> void registerAction(ServerDolphin serverDolphin, Class<T> commandClass, CommandHandler<T> handler) {
         serverDolphin.register(new DolphinServerAction() {
 
             @Override
@@ -84,8 +87,6 @@ class DeletePresentationModelTests extends GroovyTestCase {
             context.assertionsDone()
         }
     }
-
-    class TriggerDeleteCommand extends Command {}
 
     void testCreateAndDeletePresentationModelFromServer() {
         // create the pm

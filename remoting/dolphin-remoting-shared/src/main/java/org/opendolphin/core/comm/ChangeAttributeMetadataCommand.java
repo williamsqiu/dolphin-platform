@@ -15,7 +15,7 @@
  */
 package org.opendolphin.core.comm;
 
-public class ChangeAttributeMetadataCommand extends Command {
+public final class ChangeAttributeMetadataCommand extends Command {
 
     private String attributeId;
     private String metadataName;

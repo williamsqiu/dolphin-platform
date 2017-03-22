@@ -27,6 +27,8 @@ import java.util.logging.Level
 
 class ClientConnectorPushTests extends Specification {
 
+    private final class PollCommand extends Command {}
+
     volatile TestInMemoryConfig app
     DefaultServerDolphin serverDolphin
     ClientDolphin clientDolphin
@@ -47,7 +49,7 @@ class ClientConnectorPushTests extends Specification {
 
     void "listening can be started and stopped"() {
         when:
-        clientDolphin.startPushListening(new NamedCommand("POLL"), new SignalCommand("INTERRUPT"))
+        clientDolphin.startPushListening(new PollCommand(), new SignalCommand("INTERRUPT"))
         then:
         clientDolphin.stopPushListening()
     }
@@ -60,7 +62,7 @@ class ClientConnectorPushTests extends Specification {
             pushWasCalled.countDown()
         }
         when:
-        clientDolphin.startPushListening(new NamedCommand("POLL"), new SignalCommand("INTERRUPT"))
+        clientDolphin.startPushListening(new PollCommand("POLL"), new SignalCommand("INTERRUPT"))
         then:
         pushWasCalled.await(1, TimeUnit.SECONDS)
     }
