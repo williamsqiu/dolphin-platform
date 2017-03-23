@@ -17,20 +17,36 @@ package org.opendolphin.core.client.comm;
 
 import org.opendolphin.core.comm.Command;
 import org.opendolphin.core.comm.EmptyNotification;
-import org.opendolphin.core.comm.NamedCommand;
 
 public class CommandAndHandler {
 
-    private Command command;
+    private final Command command;
 
-    private OnFinishedHandler handler;
+    private final OnFinishedHandler handler;
 
-    public CommandAndHandler() {
+    private final HandlerType handlerType;
+
+    @Deprecated
+    public CommandAndHandler(final Command command) {
+        this(command, null, HandlerType.UI);
     }
 
-    public CommandAndHandler(Command command, OnFinishedHandler handler) {
+    @Deprecated
+    public CommandAndHandler(final Command command, final OnFinishedHandler handler) {
+        this(command, handler, HandlerType.UI);
+    }
+
+    public CommandAndHandler(final Command command, final OnFinishedHandler handler, final HandlerType handlerType) {
+
+        //TODO: null in several groovy tests. Tests need to be reacftored....
+        //this.command = Objects.requireNonNull(command, "Command should bot be null");
+
+        //if(handler != null && handlerExecutor == null) {
+        //    throw new IllegalArgumentException("A handlerExecutor must be specified for the handler!");
+        //}
         this.command = command;
         this.handler = handler;
+        this.handlerType = handlerType;
     }
 
     /**
@@ -38,7 +54,6 @@ public class CommandAndHandler {
      */
     public boolean isBatchable() {
         if (handler != null) return false;
-        if (command instanceof NamedCommand) return false;
         if (command instanceof EmptyNotification) return false;
         return true;
     }
@@ -47,16 +62,11 @@ public class CommandAndHandler {
         return command;
     }
 
-    public void setCommand(Command command) {
-        this.command = command;
-    }
-
     public OnFinishedHandler getHandler() {
         return handler;
     }
 
-    public void setHandler(OnFinishedHandler handler) {
-        this.handler = handler;
+    public HandlerType getHandlerType() {
+        return handlerType;
     }
-
 }

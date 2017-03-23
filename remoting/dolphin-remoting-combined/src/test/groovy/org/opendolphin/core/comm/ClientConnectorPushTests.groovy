@@ -16,7 +16,6 @@
 package org.opendolphin.core.comm
 
 import org.opendolphin.LogConfig
-import org.opendolphin.core.RemotingConstants
 import org.opendolphin.core.client.ClientDolphin
 import org.opendolphin.core.server.DefaultServerDolphin
 import spock.lang.Ignore
@@ -27,6 +26,8 @@ import java.util.concurrent.TimeUnit
 import java.util.logging.Level
 
 class ClientConnectorPushTests extends Specification {
+
+    private final class PollCommand extends Command {}
 
     volatile TestInMemoryConfig app
     DefaultServerDolphin serverDolphin
@@ -48,7 +49,7 @@ class ClientConnectorPushTests extends Specification {
 
     void "listening can be started and stopped"() {
         when:
-        clientDolphin.startPushListening()
+        clientDolphin.startPushListening(new PollCommand(), new SignalCommand("INTERRUPT"))
         then:
         clientDolphin.stopPushListening()
     }
@@ -57,11 +58,11 @@ class ClientConnectorPushTests extends Specification {
     void "core push: server-side commands are immediately processed when listening"() {
         given:
         CountDownLatch pushWasCalled = new CountDownLatch(1)
-        serverDolphin.action(RemotingConstants.POLL_EVENT_BUS_COMMAND_NAME) { cmd, resp ->
+        serverDolphin.action(PlatformConstants.POLL_EVENT_BUS_COMMAND_NAME) { cmd, resp ->
             pushWasCalled.countDown()
         }
         when:
-        clientDolphin.startPushListening()
+        clientDolphin.startPushListening(new PollCommand("POLL"), new SignalCommand("INTERRUPT"))
         then:
         pushWasCalled.await(1, TimeUnit.SECONDS)
     }

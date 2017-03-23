@@ -15,7 +15,7 @@
  */
 package org.opendolphin.core.comm;
 
-public class DeletedPresentationModelNotification extends Command {
+public final class DeletedPresentationModelNotification extends Command {
     public DeletedPresentationModelNotification(String pmId) {
         this.pmId = pmId;
     }

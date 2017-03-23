@@ -32,6 +32,8 @@ import static org.testng.Assert.assertEquals;
 
 public class TestDolphinCommandHandler extends AbstractDolphinBasedTest {
 
+    private final class TestChangeCommand extends Command {}
+
     @Test
     public void testInvocation() throws Exception {
         //Given:
@@ -44,7 +46,7 @@ public class TestDolphinCommandHandler extends AbstractDolphinBasedTest {
         serverDolphin.register(new DolphinServerAction() {
             @Override
             public void registerIn(ActionRegistry registry) {
-                registry.register("CHANGE_VALUE", new CommandHandler() {
+                registry.register(TestChangeCommand.class, new CommandHandler() {
                     @Override
                     public void handleCommand(Command command, List response) {
                         serverDolphin.getPresentationModel(modelId).getAttribute("myAttribute").setValue("Hello World");
@@ -54,7 +56,7 @@ public class TestDolphinCommandHandler extends AbstractDolphinBasedTest {
         });
 
         //When:
-        dolphinCommandHandler.invokeDolphinCommand("CHANGE_VALUE").get();
+        dolphinCommandHandler.invokeDolphinCommand(new TestChangeCommand()).get();
 
         //Then:
         assertEquals(clientDolphin.getPresentationModel(modelId).getAttribute("myAttribute").getValue(), "Hello World");

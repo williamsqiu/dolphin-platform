@@ -88,7 +88,7 @@ class ClientConnectorTests extends GroovyTestCase {
 	}
 
 	void testSevereLogWhenCommandNotFound() {
-		clientConnector.dispatchHandle( new Command() )
+		clientConnector.dispatchHandle( new EmptyNotification() )
 		syncAndWaitUntilDone()
 		assertOnlySyncCommandWasTransmitted()
 	}

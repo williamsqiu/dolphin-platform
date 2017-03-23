@@ -15,7 +15,8 @@
  */
 package org.opendolphin.core.comm;
 
-public class DeletePresentationModelCommand extends Command {
+public final class DeletePresentationModelCommand extends Command {
+
     public DeletePresentationModelCommand() {
     }
 

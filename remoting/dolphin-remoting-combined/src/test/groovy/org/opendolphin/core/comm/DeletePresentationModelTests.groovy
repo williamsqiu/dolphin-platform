@@ -31,6 +31,9 @@ class DeletePresentationModelTests extends GroovyTestCase {
     DefaultServerDolphin serverDolphin
     ClientDolphin clientDolphin
 
+    private final class TriggerDeleteCommand extends Command {}
+
+
     @Override
     protected void setUp() {
         context = new TestInMemoryConfig()
@@ -43,12 +46,12 @@ class DeletePresentationModelTests extends GroovyTestCase {
         assert context.done.await(2, TimeUnit.SECONDS)
     }
 
-    void registerAction(ServerDolphin serverDolphin, String name, CommandHandler<NamedCommand> handler) {
+    public <T extends Command> void registerAction(ServerDolphin serverDolphin, Class<T> commandClass, CommandHandler<T> handler) {
         serverDolphin.register(new DolphinServerAction() {
 
             @Override
             void registerIn(ActionRegistry registry) {
-                registry.register(name, handler);
+                registry.register(commandClass, handler);
             }
         });
     }
@@ -85,7 +88,6 @@ class DeletePresentationModelTests extends GroovyTestCase {
         }
     }
 
-
     void testCreateAndDeletePresentationModelFromServer() {
         // create the pm
         String modelId = 'modelId'
@@ -98,15 +100,15 @@ class DeletePresentationModelTests extends GroovyTestCase {
             assert serverDolphin.getPresentationModel(modelId)
         }
 
-        registerAction(serverDolphin, 'triggerDelete', new CommandHandler<NamedCommand>() {
+        registerAction(serverDolphin, TriggerDeleteCommand.class, new CommandHandler<TriggerDeleteCommand>() {
 
             @Override
-            void handleCommand(NamedCommand command, List<Command> response) {
+            void handleCommand(TriggerDeleteCommand command, List<Command> response) {
                 serverDolphin.deleteCommand(response, modelId)
             }
         });
         // when we now delete the pm
-        clientDolphin.send 'triggerDelete', new OnFinishedHandler() {
+        clientDolphin.send(new TriggerDeleteCommand(), new OnFinishedHandler() {
             @Override
             void onFinished() {
                 clientDolphin.sync {
@@ -120,7 +122,7 @@ class DeletePresentationModelTests extends GroovyTestCase {
                     context.assertionsDone()
                 }
             }
-        }
+        });
     }
 
 }

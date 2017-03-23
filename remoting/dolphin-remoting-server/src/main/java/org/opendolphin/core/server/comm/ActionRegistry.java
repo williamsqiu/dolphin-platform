@@ -23,50 +23,26 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-// todo: think about inlining this into receiver and use get/setProperty to ease registration
 public class ActionRegistry {
-    // todo: think about proper sizing and synchronization needs
-    /** Implementation Note: the type for the values of the following Map could be
-    *  List<CommandHandler<? extends Command>>
-    * to be really precise. But since this class does not use the CommandHandlers besides registering them, especially
-    * it does not call 'handleCommand(...)' on them, it does not matter which Commands it stores. Therefore the
-    * type is defined as: List<CommandHandler>
-    */
-    private final Map<String, List<CommandHandler>> ACTIONS = new HashMap();
 
-    public Map<String, List<CommandHandler>> getActions() {
+    private final Map<Class<? extends Command>, List<CommandHandler>> ACTIONS = new HashMap();
+
+    public Map<Class<? extends Command>, List<CommandHandler>> getActions() {
         return Collections.unmodifiableMap(ACTIONS);
     }
 
-    public void register(String commandId, CommandHandler serverCommand) {
-        List<CommandHandler> actions = getActionsFor(commandId);
+    public void register(Class commandClass, CommandHandler serverCommand) {
+        List<CommandHandler> actions = getActionsFor(commandClass);
         if (!actions.contains(serverCommand)) {
             actions.add(serverCommand);
         }
     }
 
-    public void register(Class commandClass, CommandHandler serverCommand) {
-        register(Command.idFor(commandClass), serverCommand);
-    }
-
-    public List<CommandHandler> getAt(String commandId) {
-        return getActionsFor(commandId);
-    }
-
-    public void unregister(String commandId, CommandHandler serverCommand) {
-        List<CommandHandler> commandList = getActionsFor(commandId);
-        commandList.remove(serverCommand);
-    }
-
-    public void unregister(Class commandClass, CommandHandler serverCommand) {
-        unregister(Command.idFor(commandClass), serverCommand);
-    }
-
-    private List<CommandHandler> getActionsFor(String commandName) {
-        List<CommandHandler> actions = ACTIONS.get(commandName);
+    public List<CommandHandler> getActionsFor(Class<? extends Command> commandClass) {
+        List<CommandHandler> actions = ACTIONS.get(commandClass);
         if (actions == null) {
             actions = new ArrayList<CommandHandler>();
-            ACTIONS.put(commandName, actions);
+            ACTIONS.put(commandClass, actions);
         }
 
         return actions;

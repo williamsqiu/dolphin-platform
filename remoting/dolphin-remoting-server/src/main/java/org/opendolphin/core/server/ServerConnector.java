@@ -46,7 +46,7 @@ public class ServerConnector {
         }
 
 
-        List<CommandHandler> actions = registry.getAt(command.getId());
+        List<CommandHandler> actions = registry.getActionsFor(command.getClass());
         if (actions.isEmpty()) {
             LOG.warning("S: there is no server action registered for received command: " + String.valueOf(command) + ", known commands are " + String.valueOf(registry.getActions().keySet()));
             return response;

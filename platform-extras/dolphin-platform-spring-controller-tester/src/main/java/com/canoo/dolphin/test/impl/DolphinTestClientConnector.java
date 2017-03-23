@@ -15,16 +15,12 @@
  */
 package com.canoo.dolphin.test.impl;
 
+import com.canoo.dolphin.impl.commands.StartLongPollCommand;
 import com.canoo.dolphin.server.context.DolphinContext;
-import org.opendolphin.core.RemotingConstants;
+import com.canoo.dolphin.util.Assert;
 import org.opendolphin.core.client.ClientDolphin;
-import org.opendolphin.core.client.comm.AbstractClientConnector;
-import org.opendolphin.core.client.comm.CommandAndHandler;
-import org.opendolphin.core.client.comm.CommandBatcher;
-import org.opendolphin.core.client.comm.OnFinishedHandler;
-import org.opendolphin.core.client.comm.SimpleExceptionHandler;
+import org.opendolphin.core.client.comm.*;
 import org.opendolphin.core.comm.Command;
-import org.opendolphin.core.comm.NamedCommand;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,27 +28,27 @@ import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-public class DolphinTestClientConnector extends AbstractClientConnector{
+public class DolphinTestClientConnector extends AbstractClientConnector {
 
     private final DolphinContext dolphinContext;
 
+    private final Executor uiExecutor;
+
     public DolphinTestClientConnector(ClientDolphin clientDolphin, Executor uiExecutor, DolphinContext dolphinContext) {
         super(clientDolphin, uiExecutor, new CommandBatcher(), new SimpleExceptionHandler(uiExecutor), Executors.newCachedThreadPool());
-        this.dolphinContext = dolphinContext;
+        this.dolphinContext = Assert.requireNonNull(dolphinContext, "dolphinContext");
+        this.uiExecutor = Assert.requireNonNull(uiExecutor, "uiExecutor");
     }
 
     @Override
     protected void commandProcessing() {
         /* do nothing! */
-        //TODO: no implementation since EventBus is used in a different way for this tests. Should be refactored in parent class.
     }
 
     @Override
     public void send(Command command, OnFinishedHandler callback) {
         List<Command> answer = transmit(new ArrayList<>(Arrays.asList(command)));
-        CommandAndHandler handler = new CommandAndHandler();
-        handler.setCommand(command);
-        handler.setHandler(callback);
+        CommandAndHandler handler = new CommandAndHandler(command, callback);
         processResults(answer, new ArrayList<>(Arrays.asList(handler)));
     }
 
@@ -69,7 +65,7 @@ public class DolphinTestClientConnector extends AbstractClientConnector{
     @Override
     protected List<Command> transmit(List<Command> commands) {
         ArrayList<Command> realCommands = new ArrayList<>(commands);
-        realCommands.add(new NamedCommand(RemotingConstants.POLL_EVENT_BUS_COMMAND_NAME));
+        realCommands.add(new StartLongPollCommand());
         return dolphinContext.handle(commands);
     }
 

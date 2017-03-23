@@ -16,10 +16,12 @@
 package org.opendolphin.core.server.comm
 
 import org.opendolphin.core.comm.Command
-import org.opendolphin.core.comm.NamedCommand
 
 class ActionRegistryTests extends GroovyTestCase {
     ActionRegistry registry
+
+    private class TestDataCommand extends Command {}
+
 
     @Override
     protected void setUp() throws Exception {
@@ -34,9 +36,9 @@ class ActionRegistryTests extends GroovyTestCase {
 
             }
         };
-        registry.register('Data', firstAction)
-        assert 1 == registry.getAt('Data').size()
-        assert registry.getAt('Data').contains(firstAction)
+        registry.register(TestDataCommand.class, firstAction)
+        assert 1 == registry.getActionsFor(TestDataCommand.class).size()
+        assert registry.getActionsFor(TestDataCommand.class).contains(firstAction)
 
         CommandHandler otherAction = new CommandHandler<Command>() {
             @Override
@@ -45,51 +47,36 @@ class ActionRegistryTests extends GroovyTestCase {
             }
         }
         assert 1 == registry.actions.size()
-        assert 1 == registry.getAt('Data').size()
+        assert 1 == registry.getActionsFor(TestDataCommand.class).size()
     }
 
     void testRegisterCommandHandler(){
-        TestSimpleCommandHandler commandHandler = new TestSimpleCommandHandler()
-        registry.register('Data', commandHandler)
-        assert registry.getAt('Data').contains(commandHandler)
-        assert 1 == registry.actions.size()
-        assert 1 == registry.getAt('Data').size()
-    }
+        CommandHandler<TestDataCommand> commandHandler = new CommandHandler<TestDataCommand>() {
 
-    void testUnregisterCommandHandler() {
-        TestSimpleCommandHandler commandHandler = new TestSimpleCommandHandler()
-        registry.register('Data',commandHandler)
-        assert 1 == registry.getAt('Data').size()
-        registry.unregister('Data',commandHandler)
-        assert 0 == registry.getAt('Data').size()
-    }
-
-    void testUnregisterCommand() {
-        CommandHandler action = new CommandHandler<Command>() {
             @Override
-            void handleCommand(Command command, List<Command> response) {
+            void handleCommand(TestDataCommand command, List response) {
 
             }
-        };
-        registry.register('Data',action)
-        assert 1 == registry.getAt('Data').size()
-        registry.unregister('Data',action)
-        assert 0 == registry.getAt('Data').size()
+        }
+        registry.register(TestDataCommand.class, commandHandler)
+        assert registry.getActionsFor(TestDataCommand.class).contains(commandHandler)
+        assert 1 == registry.actions.size()
+        assert 1 == registry.getActionsFor(TestDataCommand.class).size()
     }
 
     void testRegisterCommand_MultipleCalls() {
         assert 0 == registry.actions.size()
-        def action = new CommandHandler<NamedCommand>() {
+        def action = new CommandHandler<Command>() {
             @Override
-            void handleCommand(NamedCommand command, List<Command> response) {
+            void handleCommand(Command command, List<Command> response) {
 
             }
         }
-        registry.register('Data', action)
-        assert 1 == registry.getAt('Data').size()
+        registry.register(TestDataCommand.class, action)
+        assert 1 == registry.getActionsFor(TestDataCommand.class).size()
 
-        registry.register('Data', action)
-        assert 1 == registry.getAt('Data').size()
+        registry.register(TestDataCommand.class, action)
+        assert 1 == registry.getActionsFor(TestDataCommand.class).size()
     }
 
 }

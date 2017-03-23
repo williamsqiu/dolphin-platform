@@ -18,6 +18,7 @@ package com.canoo.dolphin.client.impl;
 import com.canoo.dolphin.util.Assert;
 import org.opendolphin.core.client.ClientDolphin;
 import org.opendolphin.core.client.comm.OnFinishedHandler;
+import org.opendolphin.core.comm.Command;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -29,7 +30,7 @@ public class DolphinCommandHandler {
         this.clientDolphin = clientDolphin;
     }
 
-    public CompletableFuture<Void> invokeDolphinCommand(String command) {
+    public CompletableFuture<Void> invokeDolphinCommand(Command command) {
         Assert.requireNonNull(command, "command");
         final CompletableFuture<Void> result = new CompletableFuture<>();
         clientDolphin.send(command, new OnFinishedHandler() {

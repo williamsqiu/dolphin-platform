@@ -27,18 +27,26 @@ import java.io.Serializable;
  * They are only "DTOs" that are sent over the wire.
  * The receiving side is responsible for finding the appropriate action.
  */
-public class Command implements Serializable {
-    public Command() {
+public abstract class Command implements Serializable {
 
+    private final String id;
+
+    public Command() {
+        this.id = null;
+    }
+
+    public Command(String id) {
+        this.id = id;
     }
 
     public String getId() {
-        return idFor(this.getClass());
+        if(id == null) {
+            return idFor(getClass());
+        }
+        return id;
     }
 
-    public static String idFor(Class commandClass) {
-
-
+    private static String idFor(Class commandClass) {
         String id = commandClass.getSimpleName();
         id = id.replace("Command", "");
         id = id.replace("Notification", "");

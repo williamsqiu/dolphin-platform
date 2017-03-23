@@ -16,14 +16,17 @@
 package org.opendolphin.core.client.comm;
 
 import org.opendolphin.core.comm.Command;
+import org.opendolphin.core.comm.SignalCommand;
 
 public interface ClientConnector {
+
+    void send(Command command, OnFinishedHandler callback, HandlerType handlerType);
 
     void send(Command command, OnFinishedHandler callback);
 
     void send(Command command);
 
-    void startPushListening();
+    void startPushListening(final Command startLongPollCommand, final SignalCommand interruptLongPollCommand);
 
     void stopPushListening();
 }

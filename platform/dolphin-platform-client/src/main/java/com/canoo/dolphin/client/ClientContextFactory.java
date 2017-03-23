@@ -32,6 +32,8 @@ import com.canoo.dolphin.impl.Converters;
 import com.canoo.dolphin.impl.PresentationModelBuilderFactory;
 import com.canoo.dolphin.impl.codec.OptimizedJsonCodec;
 import com.canoo.dolphin.impl.collections.ListMapperImpl;
+import com.canoo.dolphin.impl.commands.InterruptLongPollCommand;
+import com.canoo.dolphin.impl.commands.StartLongPollCommand;
 import com.canoo.dolphin.internal.BeanBuilder;
 import com.canoo.dolphin.internal.BeanRepository;
 import com.canoo.dolphin.internal.ClassRepository;
@@ -106,7 +108,7 @@ public class ClientContextFactory {
                     final ClientBeanManagerImpl clientBeanManager = new ClientBeanManagerImpl(beanRepository, beanBuilder, clientDolphin);
                     final ControllerProxyFactory controllerProxyFactory = new ControllerProxyFactoryImpl(platformBeanRepository, dolphinCommandHandler, clientDolphin);
                     final ClientContext clientContext = new ClientContextImpl(clientConfiguration, clientDolphin, controllerProxyFactory, dolphinCommandHandler, platformBeanRepository, clientBeanManager, remotingErrorHandler);
-                    clientDolphin.startPushListening();
+                    clientDolphin.startPushListening(new StartLongPollCommand(), new InterruptLongPollCommand());
                     clientConfiguration.getUiExecutor().execute(new Runnable() {
                         @Override
                         public void run() {

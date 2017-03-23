@@ -18,7 +18,7 @@ package com.canoo.dolphin.impl.codec;
 import org.hamcrest.Matchers;
 import org.opendolphin.core.comm.Command;
 import org.opendolphin.core.comm.CreatePresentationModelCommand;
-import org.opendolphin.core.comm.NamedCommand;
+import org.opendolphin.core.comm.EmptyNotification;
 import org.opendolphin.core.comm.ValueChangedCommand;
 import org.testng.annotations.Test;
 
@@ -120,9 +120,9 @@ public class TestOptimizedJsonCodec {
 
     @Test
     public void shouldEncodeSingleNamedCommand() {
-        final Command command = createNamedCommand();
+        final Command command = createCommand();
         final String actual = new OptimizedJsonCodec().encode(Collections.singletonList(command));
-        assertThat(actual, is("[" + createNamedCommandString() + "]"));
+        assertThat(actual, is("[" + createCommandJsonString() + "]"));
     }
 
     @Test
@@ -135,28 +135,28 @@ public class TestOptimizedJsonCodec {
 
     @Test
     public void shouldEncodeTwoStandardCodecCommands() {
-        final Command command = createNamedCommand();
+        final Command command = createCommand();
         final String actual = new OptimizedJsonCodec().encode(Arrays.asList(command, command));
-        final String expected = createNamedCommandString();
+        final String expected = createCommandJsonString();
         assertThat(actual, is("[" + expected + "," + expected + "]"));
     }
 
     @Test
     public void shouldEncodeCustomCodecCommandAndStandardCodecCommand() {
         final Command customCodecCommand = createCPMCommand();
-        final Command standardCodecCommand = createNamedCommand();
+        final Command standardCodecCommand = createCommand();
         final String actual = new OptimizedJsonCodec().encode(Arrays.asList(customCodecCommand, standardCodecCommand));
         final String customCodecCommandString = createCPMCommandString();
-        final String standardCodecCommandString = createNamedCommandString();
+        final String standardCodecCommandString = createCommandJsonString();
         assertThat(actual, is("[" + customCodecCommandString + "," + standardCodecCommandString + "]"));
     }
 
     @Test
     public void shouldEncodeStandardCodecCommandAndCustomCodecCommand() {
-        final Command standardCodecCommand = createNamedCommand();
+        final Command standardCodecCommand = createCommand();
         final Command customCodecCommand = createCPMCommand();
         final String actual = new OptimizedJsonCodec().encode(Arrays.asList(standardCodecCommand, customCodecCommand));
-        final String standardCodecCommandString = createNamedCommandString();
+        final String standardCodecCommandString = createCommandJsonString();
         final String customCodecCommandString = createCPMCommandString();
         assertThat(actual, is("[" + standardCodecCommandString + "," + customCodecCommandString + "]"));
     }
@@ -267,10 +267,10 @@ public class TestOptimizedJsonCodec {
 
     @Test
     public void shouldDecodeSingleNamedCommand() {
-        final List<Command> commands = new OptimizedJsonCodec().decode("[" + createNamedCommandString() + "]");
+        final List<Command> commands = new OptimizedJsonCodec().decode("[" + createCommandJsonString() + "]");
 
         assertThat(commands, hasSize(1));
-        assertThat(commands.get(0), Matchers.<Command>samePropertyValuesAs(createNamedCommand()));
+        assertThat(commands.get(0), Matchers.<Command>samePropertyValuesAs(createCommand()));
     }
 
 
@@ -354,11 +354,11 @@ public class TestOptimizedJsonCodec {
             "}";
     }
 
-    private static NamedCommand createNamedCommand() {
-        return new NamedCommand("dolphin_platform_intern_registerController");
+    private static Command createCommand() {
+        return new EmptyNotification();
     }
 
-    private static String createNamedCommandString() {
-        return "{\"id\":\"dolphin_platform_intern_registerController\",\"className\":\"org.opendolphin.core.comm.NamedCommand\"}";
+    private static String createCommandJsonString() {
+        return "{\"id\":\"Empty\",\"className\":\"org.opendolphin.core.comm.EmptyNotification\"}";
     }
 }

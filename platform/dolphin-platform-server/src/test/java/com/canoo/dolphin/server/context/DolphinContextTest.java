@@ -15,7 +15,7 @@
  */
 package com.canoo.dolphin.server.context;
 
-import com.canoo.dolphin.impl.PlatformConstants;
+import com.canoo.dolphin.impl.commands.*;
 import com.canoo.dolphin.server.DolphinSession;
 import com.canoo.dolphin.server.config.DolphinPlatformConfiguration;
 import com.canoo.dolphin.server.container.ContainerManager;
@@ -24,7 +24,7 @@ import com.canoo.dolphin.server.controller.ControllerRepository;
 import com.canoo.dolphin.server.controller.ControllerValidationException;
 import com.canoo.dolphin.server.impl.ClasspathScanner;
 import com.canoo.dolphin.util.Callback;
-import org.opendolphin.core.RemotingConstants;
+import org.opendolphin.core.comm.Command;
 import org.opendolphin.core.server.comm.CommandHandler;
 import org.testng.annotations.Test;
 
@@ -33,10 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertFalse;
-import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.assertTrue;
+import static org.testng.Assert.*;
 
 public class DolphinContextTest {
 
@@ -133,14 +130,14 @@ public class DolphinContextTest {
         DolphinContext dolphinContext = createContext();
 
         //then:
-        Map<String, List<CommandHandler>> dolphinActions = dolphinContext.getDolphin().getServerConnector().getRegistry().getActions();
-        assertNotNull(dolphinActions.containsKey(PlatformConstants.INIT_CONTEXT_COMMAND_NAME));
-        assertNotNull(dolphinActions.containsKey(PlatformConstants.DESTROY_CONTEXT_COMMAND_NAME));
-        assertNotNull(dolphinActions.containsKey(PlatformConstants.REGISTER_CONTROLLER_COMMAND_NAME));
-        assertNotNull(dolphinActions.containsKey(PlatformConstants.DESTROY_CONTROLLER_COMMAND_NAME));
-        assertNotNull(dolphinActions.containsKey(PlatformConstants.CALL_CONTROLLER_ACTION_COMMAND_NAME));
-        assertNotNull(dolphinActions.containsKey(RemotingConstants.POLL_EVENT_BUS_COMMAND_NAME));
-        assertNotNull(dolphinActions.containsKey(RemotingConstants.RELEASE_EVENT_BUS_COMMAND_NAME));
+        Map<Class<? extends Command>, List<CommandHandler>> dolphinActions = dolphinContext.getDolphin().getServerConnector().getRegistry().getActions();
+        assertNotNull(dolphinActions.containsKey(CreateContextCommand.class));
+        assertNotNull(dolphinActions.containsKey(DestroyContextCommand.class));
+        assertNotNull(dolphinActions.containsKey(CreateControllerCommand.class));
+        assertNotNull(dolphinActions.containsKey(DestroyControllerCommand.class));
+        assertNotNull(dolphinActions.containsKey(CallActionCommand.class));
+        assertNotNull(dolphinActions.containsKey(StartLongPollCommand.class));
+        assertNotNull(dolphinActions.containsKey(InterruptLongPollCommand.class));
     }
 
     private final ClasspathScanner classpathScanner = new ClasspathScanner("com.canoo.dolphin");

@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -38,8 +39,11 @@ public class InMemoryClientConnector extends AbstractClientConnector {
 
     private long sleepMillis = 0;
 
+    private final Executor uiExecutor;
+
     public InMemoryClientConnector(ClientDolphin clientDolphin, ServerConnector serverConnector, ICommandBatcher commandBatcher, Executor uiExecutor) {
         super(clientDolphin, uiExecutor, commandBatcher, new SimpleExceptionHandler(uiExecutor), Executors.newCachedThreadPool());
+        this.uiExecutor = Objects.requireNonNull(uiExecutor);
         this.serverConnector = serverConnector;
     }
 
@@ -77,4 +81,7 @@ public class InMemoryClientConnector extends AbstractClientConnector {
         this.sleepMillis = sleepMillis;
     }
 
+    protected Executor getUiExecutor() {
+        return uiExecutor;
+    }
 }

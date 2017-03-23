@@ -20,12 +20,7 @@ import org.opendolphin.core.client.ClientAttribute;
 import org.opendolphin.core.client.ClientDolphin;
 import org.opendolphin.core.client.ClientModelStore;
 import org.opendolphin.core.client.ClientPresentationModel;
-import org.opendolphin.core.comm.AttributeMetadataChangedCommand;
-import org.opendolphin.core.comm.CallNamedActionCommand;
-import org.opendolphin.core.comm.Command;
-import org.opendolphin.core.comm.CreatePresentationModelCommand;
-import org.opendolphin.core.comm.DeletePresentationModelCommand;
-import org.opendolphin.core.comm.ValueChangedCommand;
+import org.opendolphin.core.comm.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,8 +53,6 @@ public class ClientResponseHandler {
             handleValueChangedCommand((ValueChangedCommand) command);
         } else if (command instanceof AttributeMetadataChangedCommand) {
             handleAttributeMetadataChangedCommand((AttributeMetadataChangedCommand) command);
-        } else if (command instanceof CallNamedActionCommand) {
-            handleCallNamedActionCommand((CallNamedActionCommand) command);
         } else {
             LOG.severe("C: cannot handle unknown command '" + command + "'");
         }
@@ -146,10 +139,6 @@ public class ClientResponseHandler {
                 attribute.setQualifier(serverCommand.getValue().toString());
             }
         }
-    }
-
-    private void handleCallNamedActionCommand(CallNamedActionCommand serverCommand) {
-        clientDolphin.send(serverCommand.getActionName());
     }
 
     public void setStrictMode(boolean strictMode) {

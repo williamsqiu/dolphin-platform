@@ -17,7 +17,7 @@ package com.canoo.dolphin.client.impl;
 
 import com.canoo.dolphin.client.ControllerProxy;
 import com.canoo.dolphin.impl.InternalAttributesBean;
-import com.canoo.dolphin.impl.PlatformConstants;
+import com.canoo.dolphin.impl.commands.CreateControllerCommand;
 import com.canoo.dolphin.util.Assert;
 import org.opendolphin.core.client.ClientDolphin;
 
@@ -47,7 +47,7 @@ public class ControllerProxyFactoryImpl implements ControllerProxyFactory {
         final InternalAttributesBean bean = platformBeanRepository.getInternalAttributesBean();
         bean.setControllerName(name);
 
-        return dolphinCommandHandler.invokeDolphinCommand(PlatformConstants.REGISTER_CONTROLLER_COMMAND_NAME).thenApply(new Function<Void, ControllerProxy<T>>() {
+        return dolphinCommandHandler.invokeDolphinCommand(new CreateControllerCommand()).thenApply(new Function<Void, ControllerProxy<T>>() {
             @Override
             public ControllerProxy<T> apply(Void aVoid) {
                 return new ControllerProxyImpl<T>(bean.getControllerId(), (T) bean.getModel(), clientDolphin, platformBeanRepository, ControllerProxyFactoryImpl.this);
