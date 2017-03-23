@@ -34,13 +34,13 @@ by using the default functionality to create getter & setter.
 The following screen shows a class that defines 2 Dolphin Platform properties.
 
 .IntelliJ sample
-image::intellij-generate[]
+image::intellij-generate.png[]
 
 
 By opening the "Generate" popup you can now trigger the "Getter and Setter" action as always.
 The following dialog shows the 2 properties that part of the class. By selecting both IntelliJ
 will create all getter / setter methods for you:
 
-.IntelliJ sample
-image::intellij-generated[]
+.Generated code
+image::intellij-generated.png[]
 
