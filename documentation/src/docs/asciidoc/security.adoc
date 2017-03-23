@@ -73,14 +73,19 @@ that will be called the client. As in the Java API this behavior will be defined
 configuration can contain a list of custom headers as string based JSON members in the JSON configuration. This list must
 be defined in the `headersInfo` JSON array as part of the JSON object for configuration.
 
-The following JavaScript snippet shows how 2 custom headers (‘X-Custom-Header’ and ‘Cookie’) are defined. By creating
-the Dolphin Platform connection that way all requests of the client will contain that headers.
+The following JavaScript snippet shows how 2 custom headers (‘X-Custom-Header’ and ‘Cookie’) and connection
+parameter ('maxRetry' and 'timeout') are defined. By creating the Dolphin Platform connection that way all requests of the
+client will contain that headers and connection parameters.
 
 ----
 config:{
     headersInfo:{
       ‘X-Custom-Header’ : ‘security-token’,
       ‘Cookie’ : ‘session=xxxxxxxxxxxxxx;’
+    },
+    connection:{
+      'maxRetry': 3,
+      'timeout' : 5000
     }
 }
  dolphin.connect(url, config);
