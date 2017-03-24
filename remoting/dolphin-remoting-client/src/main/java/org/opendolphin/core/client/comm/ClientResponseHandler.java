@@ -60,7 +60,7 @@ public class ClientResponseHandler {
     }
 
     private void handleDeletePresentationModelCommand(DeletePresentationModelCommand serverCommand) {
-        ClientPresentationModel model = clientDolphin.getPresentationModel(serverCommand.getPmId());
+        ClientPresentationModel model = clientDolphin.getModelStore().findPresentationModelById(serverCommand.getPmId());
         if (model == null) {
             return;
         }
@@ -96,7 +96,7 @@ public class ClientResponseHandler {
         }
 
         getClientModelStore().add(model);
-        clientDolphin.updateQualifiers(model);
+        clientDolphin.getModelStore().updateQualifiers(model);
     }
 
     private void handleValueChangedCommand(ValueChangedCommand serverCommand) {

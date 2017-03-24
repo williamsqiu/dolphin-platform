@@ -18,6 +18,7 @@ package com.canoo.dolphin.impl;
 import com.canoo.dolphin.internal.DolphinEventHandler;
 import com.canoo.dolphin.internal.EventDispatcher;
 import com.canoo.dolphin.util.Assert;
+import org.opendolphin.RemotingConstants;
 import org.opendolphin.core.Dolphin;
 import org.opendolphin.core.ModelStoreEvent;
 import org.opendolphin.core.PresentationModel;
@@ -35,7 +36,7 @@ public abstract class EventDispatcherImpl implements EventDispatcher {
     private final List<DolphinEventHandler> internalAttributesBeanAddedHandlers = new ArrayList<>(1);
 
     public EventDispatcherImpl(Dolphin dolphin) {
-        dolphin.addModelStoreListener(this);
+        dolphin.getModelStore().addModelStoreListener(this);
     }
 
     @Override
@@ -136,7 +137,7 @@ public abstract class EventDispatcherImpl implements EventDispatcher {
 
     private boolean isLocalChange(PresentationModel model) {
         Assert.requireNonNull(model, "model");
-        final Object value = model.getAttribute(PlatformConstants.SOURCE_SYSTEM).getValue();
+        final Object value = model.getAttribute(RemotingConstants.SOURCE_SYSTEM).getValue();
         return getLocalSystemIdentifier().equals(value);
     }
 

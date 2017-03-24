@@ -30,6 +30,17 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class ServerConnector {
+
+    private static final Logger LOG = Logger.getLogger(ServerConnector.class.getName());
+
+    private final ActionRegistry registry = new ActionRegistry();
+
+    private final List<DolphinServerAction> dolphinServerActions = new ArrayList<DolphinServerAction>();
+
+    private Codec codec;
+
+    private ServerModelStore serverModelStore;
+
     /**
      * doesn't fail on missing commands
      **/
@@ -77,12 +88,6 @@ public class ServerConnector {
         action.registerIn(registry);
     }
 
-    private static final Logger LOG = Logger.getLogger(ServerConnector.class.getName());
-    private Codec codec;
-    private ServerModelStore serverModelStore;
-    private ActionRegistry registry = new ActionRegistry();
-    private List<DolphinServerAction> dolphinServerActions = new ArrayList<DolphinServerAction>();
-
     public Codec getCodec() {
         return codec;
     }
@@ -99,11 +104,4 @@ public class ServerConnector {
         return registry;
     }
 
-    /**
-     * Hack that is used in old groovy unit test
-     * @param logLevel
-     */
-    public void setLogLevel(Level logLevel) {
-        LOG.setLevel(logLevel);
-    }
 }

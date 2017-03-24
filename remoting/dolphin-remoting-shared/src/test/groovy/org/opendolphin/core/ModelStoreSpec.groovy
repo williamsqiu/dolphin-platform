@@ -35,33 +35,42 @@ class ModelStoreSpec extends Specification {
 
     def "a pm can be retrieved by type: empty"() {
         given:
-        def modelStore = new ModelStore()
-        def dolphin = new AbstractDolphin() {
-            ModelStore getModelStore() { modelStore}
-        }
+        ModelStore modelStore = new ModelStore()
+        Dolphin dolphin = new Dolphin() {
+            @Override
+            ModelStore getModelStore() {
+                return modelStore
+            }
+        };
         expect:
-        [] == dolphin.findAllPresentationModelsByType("no such type")
+        [] == dolphin.getModelStore().findAllPresentationModelsByType("no such type")
     }
 
     def "a pm can be retrieved by type: one"() {
         given:
-        def modelStore = new ModelStore()
-        def dolphin = new AbstractDolphin() {
-            ModelStore getModelStore() { modelStore }
-        }
+        ModelStore modelStore = new ModelStore()
+        Dolphin dolphin = new Dolphin() {
+            @Override
+            ModelStore getModelStore() {
+                return modelStore
+            }
+        };
         def bpm = new BasePresentationModel(null,[])
         bpm.presentationModelType = "type"
         modelStore.add bpm
         expect:
-        [bpm] == dolphin.findAllPresentationModelsByType("type")
+        [bpm] == dolphin.getModelStore().findAllPresentationModelsByType("type")
     }
 
     def "a pm can be retrieved by type: many"() {
         given:
-        def modelStore = new ModelStore()
-        def dolphin = new AbstractDolphin() {
-            ModelStore getModelStore() { modelStore }
-        }
+        ModelStore modelStore = new ModelStore()
+        Dolphin dolphin = new Dolphin() {
+            @Override
+            ModelStore getModelStore() {
+                return modelStore
+            }
+        };
         def bpm1 = new BasePresentationModel("1",[])
         def bpm2 = new BasePresentationModel("2",[])
         def bpm3 = new BasePresentationModel("3",[])
@@ -72,7 +81,7 @@ class ModelStoreSpec extends Specification {
         modelStore.add bpm2
         modelStore.add bpm3
 
-        def result = dolphin.findAllPresentationModelsByType("type")
+        def result = dolphin.getModelStore().findAllPresentationModelsByType("type")
         expect:
         2 == result.size()
         bpm1 in result

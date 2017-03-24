@@ -15,8 +15,8 @@
  */
 package com.canoo.dolphin.server.impl;
 
-import com.canoo.dolphin.impl.PlatformConstants;
 import com.canoo.dolphin.server.util.AbstractDolphinBasedTest;
+import org.opendolphin.RemotingConstants;
 import org.opendolphin.core.server.ServerDolphin;
 import org.opendolphin.core.server.ServerPresentationModel;
 import org.testng.annotations.Test;
@@ -39,8 +39,8 @@ public class ServerPresentationModelBuilderTest extends AbstractDolphinBasedTest
         ServerPresentationModel model = builder.create();
         assertNotNull(model);
         assertEquals(model.getAttributes().size(), 1);
-        assertEquals(model.getAttributes().get(0).getPropertyName(), PlatformConstants.SOURCE_SYSTEM);
-        assertEquals(model.getAttributes().get(0).getValue(), PlatformConstants.SOURCE_SYSTEM_SERVER);
+        assertEquals(model.getAttributes().get(0).getPropertyName(), RemotingConstants.SOURCE_SYSTEM);
+        assertEquals(model.getAttributes().get(0).getValue(), RemotingConstants.SOURCE_SYSTEM_SERVER);
     }
 
     @Test
@@ -50,7 +50,7 @@ public class ServerPresentationModelBuilderTest extends AbstractDolphinBasedTest
         ServerPresentationModel model = builder.withAttribute("testName").create();
         assertNotNull(model);
         assertEquals(model.getAttributes().size(), 2);
-        assertNotNull(model.getAttribute(PlatformConstants.SOURCE_SYSTEM));
+        assertNotNull(model.getAttribute(RemotingConstants.SOURCE_SYSTEM));
         assertNotNull(model.getAttribute("testName"));
     }
 
@@ -61,7 +61,7 @@ public class ServerPresentationModelBuilderTest extends AbstractDolphinBasedTest
         ServerPresentationModel model = builder.withAttribute("testName", "testValue").create();
         assertNotNull(model);
         assertEquals(model.getAttributes().size(), 2);
-        assertNotNull(model.getAttribute(PlatformConstants.SOURCE_SYSTEM));
+        assertNotNull(model.getAttribute(RemotingConstants.SOURCE_SYSTEM));
         assertNotNull(model.getAttribute("testName"));
         assertEquals(model.getAttribute("testName").getValue(), "testValue");
     }

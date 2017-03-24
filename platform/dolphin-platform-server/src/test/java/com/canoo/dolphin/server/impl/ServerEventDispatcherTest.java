@@ -15,9 +15,9 @@
  */
 package com.canoo.dolphin.server.impl;
 
-import com.canoo.dolphin.impl.PlatformConstants;
 import com.canoo.dolphin.server.context.DefaultOpenDolphinFactory;
 import com.canoo.dolphin.server.context.OpenDolphinFactory;
+import org.opendolphin.RemotingConstants;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertEquals;
@@ -31,6 +31,6 @@ public class ServerEventDispatcherTest {
         ServerEventDispatcher dispatcher = new ServerEventDispatcher(factory.create());
 
         //then:
-        assertEquals(dispatcher.getLocalSystemIdentifier(), PlatformConstants.SOURCE_SYSTEM_SERVER);
+        assertEquals(dispatcher.getLocalSystemIdentifier(), RemotingConstants.SOURCE_SYSTEM_SERVER);
     }
 }

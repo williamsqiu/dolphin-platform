@@ -80,8 +80,4 @@ public class InMemoryClientConnector extends AbstractClientConnector {
     public void setSleepMillis(long sleepMillis) {
         this.sleepMillis = sleepMillis;
     }
-
-    protected Executor getUiExecutor() {
-        return uiExecutor;
-    }
 }

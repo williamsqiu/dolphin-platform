@@ -16,7 +16,6 @@
 package core.comm;
 
 import core.client.comm.InMemoryClientConnector;
-import org.opendolphin.LogConfig;
 import org.opendolphin.core.client.ClientDolphin;
 import org.opendolphin.core.client.ClientModelStore;
 import org.opendolphin.core.client.comm.CommandBatcher;
@@ -24,7 +23,6 @@ import org.opendolphin.core.server.ServerDolphin;
 import org.opendolphin.core.server.ServerDolphinFactory;
 
 import java.util.concurrent.Executor;
-import java.util.logging.Level;
 
 /**
  * Base class for running a client and server dolphin inside the same VM.
@@ -34,15 +32,13 @@ import java.util.logging.Level;
  */
 public class DefaultInMemoryConfig {
 
-    private ClientDolphin clientDolphin;
+    private final ClientDolphin clientDolphin;
 
-    private ServerDolphin serverDolphin;
+    private final ServerDolphin serverDolphin;
 
     private final InMemoryClientConnector clientConnector;
 
     public DefaultInMemoryConfig(final Executor uiExecutor) {
-        LogConfig.logOnLevel(Level.INFO);
-
         clientDolphin = new ClientDolphin();
         serverDolphin = ServerDolphinFactory.create();
 
@@ -63,13 +59,5 @@ public class DefaultInMemoryConfig {
 
     public InMemoryClientConnector getClientConnector() {
         return clientConnector;
-    }
-
-    public void setClientDolphin(ClientDolphin clientDolphin) {
-        this.clientDolphin = clientDolphin;
-    }
-
-    public void setServerDolphin(ServerDolphin serverDolphin) {
-        this.serverDolphin = serverDolphin;
     }
 }

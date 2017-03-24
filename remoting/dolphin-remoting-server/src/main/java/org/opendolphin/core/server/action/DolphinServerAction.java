@@ -19,6 +19,7 @@ import org.opendolphin.core.comm.Command;
 import org.opendolphin.core.server.DTO;
 import org.opendolphin.core.server.DefaultServerDolphin;
 import org.opendolphin.core.server.ServerAttribute;
+import org.opendolphin.core.server.ServerModelStore;
 
 import java.util.List;
 
@@ -33,11 +34,11 @@ public abstract class DolphinServerAction implements ServerAction {
     private List<Command> dolphinResponse;
 
     public void presentationModel(String id, String presentationModelType, DTO dto) {
-        DefaultServerDolphin.presentationModelCommand(dolphinResponse, id, presentationModelType, dto);
+        ServerModelStore.presentationModelCommand(dolphinResponse, id, presentationModelType, dto);
     }
 
     public void changeValue(ServerAttribute attribute, String value) {
-        DefaultServerDolphin.changeValueCommand(dolphinResponse, attribute, value);
+        ServerModelStore.changeValueCommand(dolphinResponse, attribute, value);
     }
 
     public DefaultServerDolphin getServerDolphin() {

@@ -22,6 +22,7 @@ import com.canoo.dolphin.client.util.SimpleTestModel;
 import com.canoo.dolphin.impl.PlatformConstants;
 import com.canoo.dolphin.impl.converters.DolphinBeanConverterFactory;
 import mockit.Mocked;
+import org.opendolphin.RemotingConstants;
 import org.opendolphin.core.PresentationModel;
 import org.opendolphin.core.client.ClientAttribute;
 import org.opendolphin.core.client.ClientDolphin;
@@ -45,7 +46,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         public PresentationModelBuilder(ClientDolphin dolphin, String type) {
             this.dolphin = dolphin;
             this.type = type;
-            this.attributes.add(new ClientAttribute(PlatformConstants.SOURCE_SYSTEM, PlatformConstants.SOURCE_SYSTEM_SERVER));
+            this.attributes.add(new ClientAttribute(RemotingConstants.SOURCE_SYSTEM, RemotingConstants.SOURCE_SYSTEM_SERVER));
         }
 
         public PresentationModelBuilder withAttribute(String name, Object value) {
@@ -69,15 +70,15 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         final BeanManager manager = createBeanManager(dolphin);
 
         final ListReferenceModel model = manager.create(ListReferenceModel.class);
-        final PresentationModel sourceModel = dolphin.findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
+        final PresentationModel sourceModel = dolphin.getModelStore().findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
         final SimpleTestModel object = manager.create(SimpleTestModel.class);
-        final PresentationModel objectModel = dolphin.findAllPresentationModelsByType(SimpleTestModel.class.getName()).get(0);
+        final PresentationModel objectModel = dolphin.getModelStore().findAllPresentationModelsByType(SimpleTestModel.class.getName()).get(0);
 
         // when :
         model.getObjectList().add(object);
 
         // then :
-        final List<ClientPresentationModel> changes = dolphin.findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE);
+        final List<ClientPresentationModel> changes = dolphin.getModelStore().findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE);
         assertThat(changes, hasSize(1));
 
         final PresentationModel change = changes.get(0);
@@ -96,13 +97,13 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         final BeanManager manager = createBeanManager(dolphin);
 
         final ListReferenceModel model = manager.create(ListReferenceModel.class);
-        final PresentationModel sourceModel = dolphin.findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
+        final PresentationModel sourceModel = dolphin.getModelStore().findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
 
         // when :
         model.getObjectList().add(null);
 
         // then :
-        final List<ClientPresentationModel> changes = dolphin.findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE);
+        final List<ClientPresentationModel> changes = dolphin.getModelStore().findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE);
         assertThat(changes, hasSize(1));
 
         final PresentationModel change = changes.get(0);
@@ -121,14 +122,14 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         final BeanManager manager = createBeanManager(dolphin);
 
         final ListReferenceModel model = manager.create(ListReferenceModel.class);
-        final PresentationModel sourceModel = dolphin.findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
+        final PresentationModel sourceModel = dolphin.getModelStore().findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
         final String value = "Hello";
 
         // when :
         model.getPrimitiveList().add(value);
 
         // then :
-        final List<ClientPresentationModel> changes = dolphin.findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE);
+        final List<ClientPresentationModel> changes = dolphin.getModelStore().findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE);
         assertThat(changes, hasSize(1));
 
         final PresentationModel change = changes.get(0);
@@ -147,13 +148,13 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         final BeanManager manager = createBeanManager(dolphin);
 
         final ListReferenceModel model = manager.create(ListReferenceModel.class);
-        final PresentationModel sourceModel = dolphin.findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
+        final PresentationModel sourceModel = dolphin.getModelStore().findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
 
         // when :
         model.getPrimitiveList().add(null);
 
         // then :
-        final List<ClientPresentationModel> changes = dolphin.findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE);
+        final List<ClientPresentationModel> changes = dolphin.getModelStore().findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE);
         assertThat(changes, hasSize(1));
 
         final PresentationModel change = changes.get(0);
@@ -172,7 +173,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         final BeanManager manager = createBeanManager(dolphin);
 
         final ListReferenceModel model = manager.create(ListReferenceModel.class);
-        final PresentationModel sourceModel = dolphin.findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
+        final PresentationModel sourceModel = dolphin.getModelStore().findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
         final SimpleTestModel object = manager.create(SimpleTestModel.class);
 
         model.getObjectList().add(object);
@@ -182,7 +183,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         model.getObjectList().remove(0);
 
         // then :
-        final List<ClientPresentationModel> changes = dolphin.findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE);
+        final List<ClientPresentationModel> changes = dolphin.getModelStore().findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE);
         assertThat(changes, hasSize(1));
 
         final PresentationModel change = changes.get(0);
@@ -200,7 +201,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         final BeanManager manager = createBeanManager(dolphin);
 
         final ListReferenceModel model = manager.create(ListReferenceModel.class);
-        final PresentationModel sourceModel = dolphin.findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
+        final PresentationModel sourceModel = dolphin.getModelStore().findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
 
         model.getObjectList().add(null);
         deleteAllPresentationModelsOfType(dolphin, PlatformConstants.LIST_SPLICE);
@@ -209,7 +210,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         model.getObjectList().remove(0);
 
         // then :
-        final List<ClientPresentationModel> changes = dolphin.findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE);
+        final List<ClientPresentationModel> changes = dolphin.getModelStore().findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE);
         assertThat(changes, hasSize(1));
 
         final PresentationModel change = changes.get(0);
@@ -227,7 +228,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         final BeanManager manager = createBeanManager(dolphin);
 
         final ListReferenceModel model = manager.create(ListReferenceModel.class);
-        final PresentationModel sourceModel = dolphin.findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
+        final PresentationModel sourceModel = dolphin.getModelStore().findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
 
         model.getPrimitiveList().add("Hello");
         deleteAllPresentationModelsOfType(dolphin, PlatformConstants.LIST_SPLICE);
@@ -236,7 +237,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         model.getPrimitiveList().remove(0);
 
         // then :
-        final List<ClientPresentationModel> changes = dolphin.findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE);
+        final List<ClientPresentationModel> changes = dolphin.getModelStore().findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE);
         assertThat(changes, hasSize(1));
 
         final PresentationModel change = changes.get(0);
@@ -254,7 +255,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         final BeanManager manager = createBeanManager(dolphin);
 
         final ListReferenceModel model = manager.create(ListReferenceModel.class);
-        final PresentationModel sourceModel = dolphin.findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
+        final PresentationModel sourceModel = dolphin.getModelStore().findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
 
         model.getPrimitiveList().add(null);
         deleteAllPresentationModelsOfType(dolphin, PlatformConstants.LIST_SPLICE);
@@ -263,7 +264,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         model.getPrimitiveList().remove(0);
 
         // then :
-        final List<ClientPresentationModel> changes = dolphin.findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE);
+        final List<ClientPresentationModel> changes = dolphin.getModelStore().findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE);
         assertThat(changes, hasSize(1));
 
         final PresentationModel change = changes.get(0);
@@ -281,9 +282,9 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         final BeanManager manager = createBeanManager(dolphin);
 
         final ListReferenceModel model = manager.create(ListReferenceModel.class);
-        final PresentationModel sourceModel = dolphin.findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
+        final PresentationModel sourceModel = dolphin.getModelStore().findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
         final SimpleTestModel newObject = manager.create(SimpleTestModel.class);
-        final PresentationModel newObjectModel = dolphin.findAllPresentationModelsByType(SimpleTestModel.class.getName()).get(0);
+        final PresentationModel newObjectModel = dolphin.getModelStore().findAllPresentationModelsByType(SimpleTestModel.class.getName()).get(0);
         final SimpleTestModel oldObject = manager.create(SimpleTestModel.class);
 
         model.getObjectList().add(oldObject);
@@ -293,7 +294,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         model.getObjectList().set(0, newObject);
 
         // then :
-        final List<ClientPresentationModel> changes = dolphin.findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE);
+        final List<ClientPresentationModel> changes = dolphin.getModelStore().findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE);
         assertThat(changes, hasSize(1));
 
         final PresentationModel change = changes.get(0);
@@ -312,7 +313,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         final BeanManager manager = createBeanManager(dolphin);
 
         final ListReferenceModel model = manager.create(ListReferenceModel.class);
-        final PresentationModel sourceModel = dolphin.findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
+        final PresentationModel sourceModel = dolphin.getModelStore().findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
         final SimpleTestModel oldObject = manager.create(SimpleTestModel.class);
 
         model.getObjectList().add(oldObject);
@@ -322,7 +323,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         model.getObjectList().set(0, null);
 
         // then :
-        final List<ClientPresentationModel> changes = dolphin.findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE);
+        final List<ClientPresentationModel> changes = dolphin.getModelStore().findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE);
         assertThat(changes, hasSize(1));
 
         final PresentationModel change = changes.get(0);
@@ -341,9 +342,9 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         final BeanManager manager = createBeanManager(dolphin);
 
         final ListReferenceModel model = manager.create(ListReferenceModel.class);
-        final PresentationModel sourceModel = dolphin.findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
+        final PresentationModel sourceModel = dolphin.getModelStore().findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
         final SimpleTestModel newObject = manager.create(SimpleTestModel.class);
-        final PresentationModel newObjectModel = dolphin.findAllPresentationModelsByType(SimpleTestModel.class.getName()).get(0);
+        final PresentationModel newObjectModel = dolphin.getModelStore().findAllPresentationModelsByType(SimpleTestModel.class.getName()).get(0);
 
         model.getObjectList().add(null);
         deleteAllPresentationModelsOfType(dolphin, PlatformConstants.LIST_SPLICE);
@@ -352,7 +353,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         model.getObjectList().set(0, newObject);
 
         // then :
-        final List<ClientPresentationModel> changes = dolphin.findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE);
+        final List<ClientPresentationModel> changes = dolphin.getModelStore().findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE);
         assertThat(changes, hasSize(1));
 
         final PresentationModel change = changes.get(0);
@@ -371,7 +372,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         final BeanManager manager = createBeanManager(dolphin);
 
         final ListReferenceModel model = manager.create(ListReferenceModel.class);
-        final PresentationModel sourceModel = dolphin.findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
+        final PresentationModel sourceModel = dolphin.getModelStore().findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
         final String newValue = "Goodbye World";
 
         model.getPrimitiveList().add("Hello World");
@@ -381,7 +382,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         model.getPrimitiveList().set(0, newValue);
 
         // then :
-        final List<ClientPresentationModel> changes = dolphin.findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE);
+        final List<ClientPresentationModel> changes = dolphin.getModelStore().findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE);
         assertThat(changes, hasSize(1));
 
         final PresentationModel change = changes.get(0);
@@ -400,7 +401,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         final BeanManager manager = createBeanManager(dolphin);
 
         final ListReferenceModel model = manager.create(ListReferenceModel.class);
-        final PresentationModel sourceModel = dolphin.findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
+        final PresentationModel sourceModel = dolphin.getModelStore().findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
 
         model.getPrimitiveList().add("Hello World");
         deleteAllPresentationModelsOfType(dolphin, PlatformConstants.LIST_SPLICE);
@@ -409,7 +410,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         model.getPrimitiveList().set(0, null);
 
         // then :
-        final List<ClientPresentationModel> changes = dolphin.findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE);
+        final List<ClientPresentationModel> changes = dolphin.getModelStore().findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE);
         assertThat(changes, hasSize(1));
 
         final PresentationModel change = changes.get(0);
@@ -428,7 +429,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         final BeanManager manager = createBeanManager(dolphin);
 
         final ListReferenceModel model = manager.create(ListReferenceModel.class);
-        final PresentationModel sourceModel = dolphin.findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
+        final PresentationModel sourceModel = dolphin.getModelStore().findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
         final String newValue = "Goodbye World";
 
         model.getPrimitiveList().add(null);
@@ -438,7 +439,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         model.getPrimitiveList().set(0, newValue);
 
         // then :
-        final List<ClientPresentationModel> changes = dolphin.findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE);
+        final List<ClientPresentationModel> changes = dolphin.getModelStore().findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE);
         assertThat(changes, hasSize(1));
 
         final PresentationModel change = changes.get(0);
@@ -461,14 +462,14 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         final BeanManager manager = createBeanManager(dolphin);
 
         final ListReferenceModel model = manager.create(ListReferenceModel.class);
-        final PresentationModel sourceModel = dolphin.findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
+        final PresentationModel sourceModel = dolphin.getModelStore().findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
         final String[] newElement = new String[]{"42", "4711", "Hello World"};
 
         // when :
         model.getPrimitiveList().addAll(0, Arrays.asList(newElement));
 
         // then :
-        final List<ClientPresentationModel> changes = dolphin.findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE);
+        final List<ClientPresentationModel> changes = dolphin.getModelStore().findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE);
         assertThat(changes, hasSize(1));
 
         final PresentationModel change = changes.get(0);
@@ -489,7 +490,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         final BeanManager manager = createBeanManager(dolphin);
 
         final ListReferenceModel model = manager.create(ListReferenceModel.class);
-        final PresentationModel sourceModel = dolphin.findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
+        final PresentationModel sourceModel = dolphin.getModelStore().findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
         final String newElement = "42";
 
         model.getPrimitiveList().addAll(Arrays.asList("1", "2", "3"));
@@ -499,7 +500,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         model.getPrimitiveList().add(0, newElement);
 
         // then :
-        final List<ClientPresentationModel> changes = dolphin.findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE);
+        final List<ClientPresentationModel> changes = dolphin.getModelStore().findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE);
         assertThat(changes, hasSize(1));
 
         final PresentationModel change = changes.get(0);
@@ -518,7 +519,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         final BeanManager manager = createBeanManager(dolphin);
 
         final ListReferenceModel model = manager.create(ListReferenceModel.class);
-        final PresentationModel sourceModel = dolphin.findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
+        final PresentationModel sourceModel = dolphin.getModelStore().findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
         final String[] newElement = new String[]{"42", "4711", "Hello World"};
 
         model.getPrimitiveList().addAll(Arrays.asList("1", "2", "3"));
@@ -528,7 +529,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         model.getPrimitiveList().addAll(0, Arrays.asList(newElement));
 
         // then :
-        final List<ClientPresentationModel> changes = dolphin.findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE);
+        final List<ClientPresentationModel> changes = dolphin.getModelStore().findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE);
         assertThat(changes, hasSize(1));
 
         final PresentationModel change = changes.get(0);
@@ -549,7 +550,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         final BeanManager manager = createBeanManager(dolphin);
 
         final ListReferenceModel model = manager.create(ListReferenceModel.class);
-        final PresentationModel sourceModel = dolphin.findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
+        final PresentationModel sourceModel = dolphin.getModelStore().findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
         final String newElement = "42";
 
         model.getPrimitiveList().addAll(Arrays.asList("1", "2", "3"));
@@ -559,7 +560,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         model.getPrimitiveList().add(1, newElement);
 
         // then :
-        final List<ClientPresentationModel> changes = dolphin.findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE);
+        final List<ClientPresentationModel> changes = dolphin.getModelStore().findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE);
         assertThat(changes, hasSize(1));
 
         final PresentationModel change = changes.get(0);
@@ -578,7 +579,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         final BeanManager manager = createBeanManager(dolphin);
 
         final ListReferenceModel model = manager.create(ListReferenceModel.class);
-        final PresentationModel sourceModel = dolphin.findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
+        final PresentationModel sourceModel = dolphin.getModelStore().findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
         final String[] newElement = new String[]{"42", "4711", "Hello World"};
 
         model.getPrimitiveList().addAll(Arrays.asList("1", "2", "3"));
@@ -588,7 +589,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         model.getPrimitiveList().addAll(1, Arrays.asList(newElement));
 
         // then :
-        final List<ClientPresentationModel> changes = dolphin.findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE);
+        final List<ClientPresentationModel> changes = dolphin.getModelStore().findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE);
         assertThat(changes, hasSize(1));
 
         final PresentationModel change = changes.get(0);
@@ -609,7 +610,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         final BeanManager manager = createBeanManager(dolphin);
 
         final ListReferenceModel model = manager.create(ListReferenceModel.class);
-        final PresentationModel sourceModel = dolphin.findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
+        final PresentationModel sourceModel = dolphin.getModelStore().findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
         final String newElement = "42";
 
         model.getPrimitiveList().addAll(Arrays.asList("1", "2", "3"));
@@ -619,7 +620,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         model.getPrimitiveList().add(newElement);
 
         // then :
-        final List<ClientPresentationModel> changes = dolphin.findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE);
+        final List<ClientPresentationModel> changes = dolphin.getModelStore().findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE);
         assertThat(changes, hasSize(1));
 
         final PresentationModel change = changes.get(0);
@@ -638,7 +639,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         final BeanManager manager = createBeanManager(dolphin);
 
         final ListReferenceModel model = manager.create(ListReferenceModel.class);
-        final PresentationModel sourceModel = dolphin.findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
+        final PresentationModel sourceModel = dolphin.getModelStore().findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
         final String[] newElement = new String[]{"42", "4711", "Hello World"};
 
         model.getPrimitiveList().addAll(Arrays.asList("1", "2", "3"));
@@ -648,7 +649,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         model.getPrimitiveList().addAll(Arrays.asList(newElement));
 
         // then :
-        final List<ClientPresentationModel> changes = dolphin.findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE);
+        final List<ClientPresentationModel> changes = dolphin.getModelStore().findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE);
         assertThat(changes, hasSize(1));
 
         final PresentationModel change = changes.get(0);
@@ -673,7 +674,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         final BeanManager manager = createBeanManager(dolphin);
 
         final ListReferenceModel model = manager.create(ListReferenceModel.class);
-        final PresentationModel sourceModel = dolphin.findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
+        final PresentationModel sourceModel = dolphin.getModelStore().findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
 
         model.getPrimitiveList().addAll(Arrays.asList("1", "2", "3"));
         deleteAllPresentationModelsOfType(dolphin, PlatformConstants.LIST_SPLICE);
@@ -682,7 +683,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         model.getPrimitiveList().remove(0);
 
         // then :
-        final List<ClientPresentationModel> changes = dolphin.findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE);
+        final List<ClientPresentationModel> changes = dolphin.getModelStore().findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE);
         assertThat(changes, hasSize(1));
 
         final PresentationModel change = changes.get(0);
@@ -701,7 +702,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         final BeanManager manager = createBeanManager(dolphin);
 
         final ListReferenceModel model = manager.create(ListReferenceModel.class);
-        final PresentationModel sourceModel = dolphin.findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
+        final PresentationModel sourceModel = dolphin.getModelStore().findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
 
         model.getPrimitiveList().addAll(Arrays.asList("1", "2", "3", "4", "5", "6"));
         deleteAllPresentationModelsOfType(dolphin, PlatformConstants.LIST_SPLICE);
@@ -710,7 +711,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         model.getPrimitiveList().subList(0, 3).clear();
 
         // then :
-        final List<ClientPresentationModel> changes = dolphin.findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE);
+        final List<ClientPresentationModel> changes = dolphin.getModelStore().findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE);
         assertThat(changes, hasSize(1));
 
         final PresentationModel change = changes.get(0);
@@ -728,7 +729,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         final BeanManager manager = createBeanManager(dolphin);
 
         final ListReferenceModel model = manager.create(ListReferenceModel.class);
-        final PresentationModel sourceModel = dolphin.findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
+        final PresentationModel sourceModel = dolphin.getModelStore().findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
 
         model.getPrimitiveList().addAll(Arrays.asList("1", "2", "3"));
         deleteAllPresentationModelsOfType(dolphin, PlatformConstants.LIST_SPLICE);
@@ -737,7 +738,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         model.getPrimitiveList().remove(1);
 
         // then :
-        final List<ClientPresentationModel> changes = dolphin.findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE);
+        final List<ClientPresentationModel> changes = dolphin.getModelStore().findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE);
         assertThat(changes, hasSize(1));
 
         final PresentationModel change = changes.get(0);
@@ -756,7 +757,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         final BeanManager manager = createBeanManager(dolphin);
 
         final ListReferenceModel model = manager.create(ListReferenceModel.class);
-        final PresentationModel sourceModel = dolphin.findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
+        final PresentationModel sourceModel = dolphin.getModelStore().findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
 
         model.getPrimitiveList().addAll(Arrays.asList("1", "2", "3", "4", "5", "6"));
         deleteAllPresentationModelsOfType(dolphin, PlatformConstants.LIST_SPLICE);
@@ -765,7 +766,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         model.getPrimitiveList().subList(1, 4).clear();
 
         // then :
-        final List<ClientPresentationModel> changes = dolphin.findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE);
+        final List<ClientPresentationModel> changes = dolphin.getModelStore().findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE);
         assertThat(changes, hasSize(1));
 
         final PresentationModel change = changes.get(0);
@@ -783,7 +784,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         final BeanManager manager = createBeanManager(dolphin);
 
         final ListReferenceModel model = manager.create(ListReferenceModel.class);
-        final PresentationModel sourceModel = dolphin.findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
+        final PresentationModel sourceModel = dolphin.getModelStore().findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
 
         model.getPrimitiveList().addAll(Arrays.asList("1", "2", "3"));
         deleteAllPresentationModelsOfType(dolphin, PlatformConstants.LIST_SPLICE);
@@ -792,7 +793,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         model.getPrimitiveList().remove(2);
 
         // then :
-        final List<ClientPresentationModel> changes = dolphin.findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE);
+        final List<ClientPresentationModel> changes = dolphin.getModelStore().findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE);
         assertThat(changes, hasSize(1));
 
         final PresentationModel change = changes.get(0);
@@ -811,7 +812,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         final BeanManager manager = createBeanManager(dolphin);
 
         final ListReferenceModel model = manager.create(ListReferenceModel.class);
-        final PresentationModel sourceModel = dolphin.findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
+        final PresentationModel sourceModel = dolphin.getModelStore().findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
 
         model.getPrimitiveList().addAll(Arrays.asList("1", "2", "3", "4", "5", "6"));
         deleteAllPresentationModelsOfType(dolphin, PlatformConstants.LIST_SPLICE);
@@ -820,7 +821,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         model.getPrimitiveList().subList(3, 6).clear();
 
         // then :
-        final List<ClientPresentationModel> changes = dolphin.findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE);
+        final List<ClientPresentationModel> changes = dolphin.getModelStore().findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE);
         assertThat(changes, hasSize(1));
 
         final PresentationModel change = changes.get(0);
@@ -842,7 +843,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         final BeanManager manager = createBeanManager(dolphin);
 
         final ListReferenceModel model = manager.create(ListReferenceModel.class);
-        final PresentationModel sourceModel = dolphin.findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
+        final PresentationModel sourceModel = dolphin.getModelStore().findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
         final String newValue = "42";
 
         model.getPrimitiveList().addAll(Arrays.asList("1", "2", "3"));
@@ -852,7 +853,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         model.getPrimitiveList().set(0, newValue);
 
         // then :
-        final List<ClientPresentationModel> changes = dolphin.findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE);
+        final List<ClientPresentationModel> changes = dolphin.getModelStore().findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE);
         assertThat(changes, hasSize(1));
 
         final PresentationModel change = changes.get(0);
@@ -871,7 +872,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         final BeanManager manager = createBeanManager(dolphin);
 
         final ListReferenceModel model = manager.create(ListReferenceModel.class);
-        final PresentationModel sourceModel = dolphin.findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
+        final PresentationModel sourceModel = dolphin.getModelStore().findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
         final String newValue = "42";
 
         model.getPrimitiveList().addAll(Arrays.asList("1", "2", "3"));
@@ -881,7 +882,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         model.getPrimitiveList().set(1, newValue);
 
         // then :
-        final List<ClientPresentationModel> changes = dolphin.findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE);
+        final List<ClientPresentationModel> changes = dolphin.getModelStore().findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE);
         assertThat(changes, hasSize(1));
 
         final PresentationModel change = changes.get(0);
@@ -900,7 +901,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         final BeanManager manager = createBeanManager(dolphin);
 
         final ListReferenceModel model = manager.create(ListReferenceModel.class);
-        final PresentationModel sourceModel = dolphin.findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
+        final PresentationModel sourceModel = dolphin.getModelStore().findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
         final String newValue = "42";
 
         model.getPrimitiveList().addAll(Arrays.asList("1", "2", "3"));
@@ -910,7 +911,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         model.getPrimitiveList().set(2, newValue);
 
         // then :
-        final List<ClientPresentationModel> changes = dolphin.findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE);
+        final List<ClientPresentationModel> changes = dolphin.getModelStore().findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE);
         assertThat(changes, hasSize(1));
 
         final PresentationModel change = changes.get(0);
@@ -933,11 +934,11 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         final BeanManager manager = createBeanManager(dolphin);
 
         final ListReferenceModel model = manager.create(ListReferenceModel.class);
-        final PresentationModel sourceModel = dolphin.findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
-        final PresentationModel classDescription = dolphin.findAllPresentationModelsByType(PlatformConstants.DOLPHIN_BEAN).get(0);
+        final PresentationModel sourceModel = dolphin.getModelStore().findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
+        final PresentationModel classDescription = dolphin.getModelStore().findAllPresentationModelsByType(PlatformConstants.DOLPHIN_BEAN).get(0);
         classDescription.getAttribute("objectList").setValue(DolphinBeanConverterFactory.FIELD_TYPE_DOLPHIN_BEAN);
         final SimpleTestModel object = manager.create(SimpleTestModel.class);
-        final PresentationModel objectModel = dolphin.findAllPresentationModelsByType(SimpleTestModel.class.getName()).get(0);
+        final PresentationModel objectModel = dolphin.getModelStore().findAllPresentationModelsByType(SimpleTestModel.class.getName()).get(0);
 
         // when :
         new PresentationModelBuilder(dolphin, PlatformConstants.LIST_SPLICE)
@@ -951,7 +952,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
 
         // then :
         assertThat(model.getObjectList(), is(Collections.singletonList(object)));
-        assertThat(dolphin.findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE), empty());
+        assertThat(dolphin.getModelStore().findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE), empty());
     }
 
     @Test
@@ -961,8 +962,8 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         final BeanManager manager = createBeanManager(dolphin);
 
         final ListReferenceModel model = manager.create(ListReferenceModel.class);
-        final PresentationModel sourceModel = dolphin.findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
-        final PresentationModel classDescription = dolphin.findAllPresentationModelsByType(PlatformConstants.DOLPHIN_BEAN).get(0);
+        final PresentationModel sourceModel = dolphin.getModelStore().findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
+        final PresentationModel classDescription = dolphin.getModelStore().findAllPresentationModelsByType(PlatformConstants.DOLPHIN_BEAN).get(0);
         classDescription.getAttribute("objectList").setValue(DolphinBeanConverterFactory.FIELD_TYPE_DOLPHIN_BEAN);
 
         // when :
@@ -977,7 +978,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
 
         // then :
         assertThat(model.getObjectList(), is(Collections.singletonList((SimpleTestModel)null)));
-        assertThat(dolphin.findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE), empty());
+        assertThat(dolphin.getModelStore().findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE), empty());
     }
 
     @Test
@@ -987,7 +988,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         final BeanManager manager = createBeanManager(dolphin);
 
         final ListReferenceModel model = manager.create(ListReferenceModel.class);
-        final PresentationModel sourceModel = dolphin.findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
+        final PresentationModel sourceModel = dolphin.getModelStore().findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
         final String value = "Hello";
 
         // when :
@@ -1002,7 +1003,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
 
         // then :
         assertThat(model.getPrimitiveList(), is(Collections.singletonList(value)));
-        assertThat(dolphin.findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE), empty());
+        assertThat(dolphin.getModelStore().findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE), empty());
     }
 
     @Test
@@ -1012,7 +1013,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         final BeanManager manager = createBeanManager(dolphin);
 
         final ListReferenceModel model = manager.create(ListReferenceModel.class);
-        final PresentationModel sourceModel = dolphin.findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
+        final PresentationModel sourceModel = dolphin.getModelStore().findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
 
         // when :
         new PresentationModelBuilder(dolphin, PlatformConstants.LIST_SPLICE)
@@ -1026,7 +1027,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
 
         // then :
         assertThat(model.getPrimitiveList(), is(Collections.singletonList((String)null)));
-        assertThat(dolphin.findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE), empty());
+        assertThat(dolphin.getModelStore().findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE), empty());
     }
 
     @Test
@@ -1036,9 +1037,9 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         final BeanManager manager = createBeanManager(dolphin);
 
         final ListReferenceModel model = manager.create(ListReferenceModel.class);
-        final PresentationModel sourceModel = dolphin.findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
+        final PresentationModel sourceModel = dolphin.getModelStore().findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
         manager.create(SimpleTestModel.class);
-        final PresentationModel objectModel = dolphin.findAllPresentationModelsByType(SimpleTestModel.class.getName()).get(0);
+        final PresentationModel objectModel = dolphin.getModelStore().findAllPresentationModelsByType(SimpleTestModel.class.getName()).get(0);
 
         new PresentationModelBuilder(dolphin, PlatformConstants.LIST_SPLICE)
                 .withAttribute("source", sourceModel.getId())
@@ -1061,7 +1062,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
 
         // then :
         assertThat(model.getObjectList(), empty());
-        assertThat(dolphin.findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE), empty());
+        assertThat(dolphin.getModelStore().findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE), empty());
     }
 
     @Test
@@ -1071,7 +1072,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         final BeanManager manager = createBeanManager(dolphin);
 
         final ListReferenceModel model = manager.create(ListReferenceModel.class);
-        final PresentationModel sourceModel = dolphin.findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
+        final PresentationModel sourceModel = dolphin.getModelStore().findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
 
         new PresentationModelBuilder(dolphin, PlatformConstants.LIST_SPLICE)
                 .withAttribute("source", sourceModel.getId())
@@ -1094,7 +1095,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
 
         // then :
         assertThat(model.getObjectList(), empty());
-        assertThat(dolphin.findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE), empty());
+        assertThat(dolphin.getModelStore().findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE), empty());
     }
 
     @Test
@@ -1104,7 +1105,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         final BeanManager manager = createBeanManager(dolphin);
 
         final ListReferenceModel model = manager.create(ListReferenceModel.class);
-        final PresentationModel sourceModel = dolphin.findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
+        final PresentationModel sourceModel = dolphin.getModelStore().findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
         final String value = "Hello";
 
         new PresentationModelBuilder(dolphin, PlatformConstants.LIST_SPLICE)
@@ -1128,7 +1129,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
 
         // then :
         assertThat(model.getPrimitiveList(), empty());
-        assertThat(dolphin.findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE), empty());
+        assertThat(dolphin.getModelStore().findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE), empty());
     }
 
     @Test
@@ -1138,7 +1139,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         final BeanManager manager = createBeanManager(dolphin);
 
         final ListReferenceModel model = manager.create(ListReferenceModel.class);
-        final PresentationModel sourceModel = dolphin.findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
+        final PresentationModel sourceModel = dolphin.getModelStore().findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
 
         new PresentationModelBuilder(dolphin, PlatformConstants.LIST_SPLICE)
                 .withAttribute("source", sourceModel.getId())
@@ -1161,7 +1162,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
 
         // then :
         assertThat(model.getPrimitiveList(), empty());
-        assertThat(dolphin.findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE), empty());
+        assertThat(dolphin.getModelStore().findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE), empty());
     }
 
     @Test
@@ -1171,13 +1172,13 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         final BeanManager manager = createBeanManager(dolphin);
 
         final ListReferenceModel model = manager.create(ListReferenceModel.class);
-        final PresentationModel sourceModel = dolphin.findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
-        final PresentationModel classDescription = dolphin.findAllPresentationModelsByType(PlatformConstants.DOLPHIN_BEAN).get(0);
+        final PresentationModel sourceModel = dolphin.getModelStore().findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
+        final PresentationModel classDescription = dolphin.getModelStore().findAllPresentationModelsByType(PlatformConstants.DOLPHIN_BEAN).get(0);
         classDescription.getAttribute("objectList").setValue(DolphinBeanConverterFactory.FIELD_TYPE_DOLPHIN_BEAN);
         final SimpleTestModel oldObject = manager.create(SimpleTestModel.class);
-        final PresentationModel oldObjectModel = dolphin.findAllPresentationModelsByType(SimpleTestModel.class.getName()).get(0);
+        final PresentationModel oldObjectModel = dolphin.getModelStore().findAllPresentationModelsByType(SimpleTestModel.class.getName()).get(0);
         final SimpleTestModel newObject = manager.create(SimpleTestModel.class);
-        final List<ClientPresentationModel> models = dolphin.findAllPresentationModelsByType(SimpleTestModel.class.getName());
+        final List<ClientPresentationModel> models = dolphin.getModelStore().findAllPresentationModelsByType(SimpleTestModel.class.getName());
         final PresentationModel newObjectModel = oldObjectModel == models.get(1) ? models.get(0) : models.get(1);
 
         new PresentationModelBuilder(dolphin, PlatformConstants.LIST_SPLICE)
@@ -1203,7 +1204,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
 
         // then :
         assertThat(model.getObjectList(), is(Collections.singletonList(newObject)));
-        assertThat(dolphin.findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE), empty());
+        assertThat(dolphin.getModelStore().findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE), empty());
     }
 
     @Test
@@ -1213,11 +1214,11 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         final BeanManager manager = createBeanManager(dolphin);
 
         final ListReferenceModel model = manager.create(ListReferenceModel.class);
-        final PresentationModel sourceModel = dolphin.findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
-        final PresentationModel classDescription = dolphin.findAllPresentationModelsByType(PlatformConstants.DOLPHIN_BEAN).get(0);
+        final PresentationModel sourceModel = dolphin.getModelStore().findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
+        final PresentationModel classDescription = dolphin.getModelStore().findAllPresentationModelsByType(PlatformConstants.DOLPHIN_BEAN).get(0);
         classDescription.getAttribute("objectList").setValue(DolphinBeanConverterFactory.FIELD_TYPE_DOLPHIN_BEAN);
         final SimpleTestModel oldObject = manager.create(SimpleTestModel.class);
-        final PresentationModel oldObjectModel = dolphin.findAllPresentationModelsByType(SimpleTestModel.class.getName()).get(0);
+        final PresentationModel oldObjectModel = dolphin.getModelStore().findAllPresentationModelsByType(SimpleTestModel.class.getName()).get(0);
 
         new PresentationModelBuilder(dolphin, PlatformConstants.LIST_SPLICE)
                 .withAttribute("source", sourceModel.getId())
@@ -1241,7 +1242,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
 
         // then :
         assertThat(model.getObjectList(), is(Collections.singletonList((SimpleTestModel)null)));
-        assertThat(dolphin.findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE), empty());
+        assertThat(dolphin.getModelStore().findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE), empty());
     }
 
     @Test
@@ -1251,11 +1252,11 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         final BeanManager manager = createBeanManager(dolphin);
 
         final ListReferenceModel model = manager.create(ListReferenceModel.class);
-        final PresentationModel sourceModel = dolphin.findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
-        final PresentationModel classDescription = dolphin.findAllPresentationModelsByType(PlatformConstants.DOLPHIN_BEAN).get(0);
+        final PresentationModel sourceModel = dolphin.getModelStore().findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
+        final PresentationModel classDescription = dolphin.getModelStore().findAllPresentationModelsByType(PlatformConstants.DOLPHIN_BEAN).get(0);
         classDescription.getAttribute("objectList").setValue(DolphinBeanConverterFactory.FIELD_TYPE_DOLPHIN_BEAN);
         final SimpleTestModel newObject = manager.create(SimpleTestModel.class);
-        final PresentationModel newObjectModel = dolphin.findAllPresentationModelsByType(SimpleTestModel.class.getName()).get(0);
+        final PresentationModel newObjectModel = dolphin.getModelStore().findAllPresentationModelsByType(SimpleTestModel.class.getName()).get(0);
 
         new PresentationModelBuilder(dolphin, PlatformConstants.LIST_SPLICE)
                 .withAttribute("source", sourceModel.getId())
@@ -1279,7 +1280,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
 
         // then :
         assertThat(model.getObjectList(), is(Collections.singletonList(newObject)));
-        assertThat(dolphin.findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE), empty());
+        assertThat(dolphin.getModelStore().findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE), empty());
     }
 
     @Test
@@ -1289,7 +1290,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         final BeanManager manager = createBeanManager(dolphin);
 
         final ListReferenceModel model = manager.create(ListReferenceModel.class);
-        final PresentationModel sourceModel = dolphin.findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
+        final PresentationModel sourceModel = dolphin.getModelStore().findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
         final String oldValue = "Hello";
         final String newValue = "Goodbye";
 
@@ -1315,7 +1316,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
 
         // then :
         assertThat(model.getPrimitiveList(), is(Collections.singletonList(newValue)));
-        assertThat(dolphin.findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE), empty());
+        assertThat(dolphin.getModelStore().findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE), empty());
     }
 
     @Test
@@ -1325,7 +1326,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         final BeanManager manager = createBeanManager(dolphin);
 
         final ListReferenceModel model = manager.create(ListReferenceModel.class);
-        final PresentationModel sourceModel = dolphin.findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
+        final PresentationModel sourceModel = dolphin.getModelStore().findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
         final String oldValue = "Hello";
 
         new PresentationModelBuilder(dolphin, PlatformConstants.LIST_SPLICE)
@@ -1350,7 +1351,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
 
         // then :
         assertThat(model.getPrimitiveList(), is(Collections.singletonList((String)null)));
-        assertThat(dolphin.findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE), empty());
+        assertThat(dolphin.getModelStore().findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE), empty());
     }
 
     @Test
@@ -1360,7 +1361,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         final BeanManager manager = createBeanManager(dolphin);
 
         final ListReferenceModel model = manager.create(ListReferenceModel.class);
-        final PresentationModel sourceModel = dolphin.findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
+        final PresentationModel sourceModel = dolphin.getModelStore().findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
         final String newValue = "Goodbye";
 
         new PresentationModelBuilder(dolphin, PlatformConstants.LIST_SPLICE)
@@ -1385,7 +1386,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
 
         // then :
         assertThat(model.getPrimitiveList(), is(Collections.singletonList(newValue)));
-        assertThat(dolphin.findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE), empty());
+        assertThat(dolphin.getModelStore().findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE), empty());
     }
 
 
@@ -1399,7 +1400,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         final BeanManager manager = createBeanManager(dolphin);
 
         final ListReferenceModel model = manager.create(ListReferenceModel.class);
-        final PresentationModel sourceModel = dolphin.findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
+        final PresentationModel sourceModel = dolphin.getModelStore().findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
 
         // when :
         new PresentationModelBuilder(dolphin, PlatformConstants.LIST_SPLICE)
@@ -1415,7 +1416,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
 
         // then :
         assertThat(model.getPrimitiveList(), is(Arrays.asList("42", "4711", "Hello World")));
-        assertThat(dolphin.findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE), empty());
+        assertThat(dolphin.getModelStore().findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE), empty());
     }
 
     @Test
@@ -1425,7 +1426,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         final BeanManager manager = createBeanManager(dolphin);
 
         final ListReferenceModel model = manager.create(ListReferenceModel.class);
-        final PresentationModel sourceModel = dolphin.findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
+        final PresentationModel sourceModel = dolphin.getModelStore().findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
         final String newElement = "42";
 
         model.getPrimitiveList().addAll(Arrays.asList("1", "2", "3"));
@@ -1443,7 +1444,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
 
         // then :
         assertThat(model.getPrimitiveList(), is(Arrays.asList(newElement, "1", "2", "3")));
-        assertThat(dolphin.findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE), empty());
+        assertThat(dolphin.getModelStore().findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE), empty());
     }
 
     @Test
@@ -1453,7 +1454,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         final BeanManager manager = createBeanManager(dolphin);
 
         final ListReferenceModel model = manager.create(ListReferenceModel.class);
-        final PresentationModel sourceModel = dolphin.findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
+        final PresentationModel sourceModel = dolphin.getModelStore().findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
 
         model.getPrimitiveList().addAll(Arrays.asList("1", "2", "3"));
         deleteAllPresentationModelsOfType(dolphin, PlatformConstants.LIST_SPLICE);
@@ -1472,7 +1473,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
 
         // then :
         assertThat(model.getPrimitiveList(), is(Arrays.asList("42", "4711", "Hello World", "1", "2", "3")));
-        assertThat(dolphin.findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE), empty());
+        assertThat(dolphin.getModelStore().findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE), empty());
     }
 
     @Test
@@ -1482,7 +1483,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         final BeanManager manager = createBeanManager(dolphin);
 
         final ListReferenceModel model = manager.create(ListReferenceModel.class);
-        final PresentationModel sourceModel = dolphin.findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
+        final PresentationModel sourceModel = dolphin.getModelStore().findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
         final String newElement = "42";
 
         model.getPrimitiveList().addAll(Arrays.asList("1", "2", "3"));
@@ -1500,7 +1501,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
 
         // then :
         assertThat(model.getPrimitiveList(), is(Arrays.asList("1", newElement, "2", "3")));
-        assertThat(dolphin.findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE), empty());
+        assertThat(dolphin.getModelStore().findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE), empty());
     }
 
     @Test
@@ -1510,7 +1511,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         final BeanManager manager = createBeanManager(dolphin);
 
         final ListReferenceModel model = manager.create(ListReferenceModel.class);
-        final PresentationModel sourceModel = dolphin.findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
+        final PresentationModel sourceModel = dolphin.getModelStore().findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
 
         model.getPrimitiveList().addAll(Arrays.asList("1", "2", "3"));
         deleteAllPresentationModelsOfType(dolphin, PlatformConstants.LIST_SPLICE);
@@ -1529,7 +1530,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
 
         // then :
         assertThat(model.getPrimitiveList(), is(Arrays.asList("1", "42", "4711", "Hello World", "2", "3")));
-        assertThat(dolphin.findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE), empty());
+        assertThat(dolphin.getModelStore().findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE), empty());
     }
 
     @Test
@@ -1539,7 +1540,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         final BeanManager manager = createBeanManager(dolphin);
 
         final ListReferenceModel model = manager.create(ListReferenceModel.class);
-        final PresentationModel sourceModel = dolphin.findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
+        final PresentationModel sourceModel = dolphin.getModelStore().findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
         final String newElement = "42";
 
         model.getPrimitiveList().addAll(Arrays.asList("1", "2", "3"));
@@ -1555,7 +1556,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
                 .create();
 
         assertThat(model.getPrimitiveList(), is(Arrays.asList("1", "2", "3", newElement)));
-        assertThat(dolphin.findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE), empty());
+        assertThat(dolphin.getModelStore().findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE), empty());
     }
 
     @Test
@@ -1565,7 +1566,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         final BeanManager manager = createBeanManager(dolphin);
 
         final ListReferenceModel model = manager.create(ListReferenceModel.class);
-        final PresentationModel sourceModel = dolphin.findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
+        final PresentationModel sourceModel = dolphin.getModelStore().findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
 
         model.getPrimitiveList().addAll(Arrays.asList("1", "2", "3"));
         deleteAllPresentationModelsOfType(dolphin, PlatformConstants.LIST_SPLICE);
@@ -1584,7 +1585,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
 
         // then :
         assertThat(model.getPrimitiveList(), is(Arrays.asList("1", "2", "3", "42", "4711", "Hello World")));
-        assertThat(dolphin.findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE), empty());
+        assertThat(dolphin.getModelStore().findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE), empty());
     }
 
 
@@ -1598,7 +1599,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         final BeanManager manager = createBeanManager(dolphin);
 
         final ListReferenceModel model = manager.create(ListReferenceModel.class);
-        final PresentationModel sourceModel = dolphin.findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
+        final PresentationModel sourceModel = dolphin.getModelStore().findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
 
         model.getPrimitiveList().addAll(Arrays.asList("1", "2", "3"));
         deleteAllPresentationModelsOfType(dolphin, PlatformConstants.LIST_SPLICE);
@@ -1614,7 +1615,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
 
         // then :
         assertThat(model.getPrimitiveList(), is(Arrays.asList("2", "3")));
-        assertThat(dolphin.findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE), empty());
+        assertThat(dolphin.getModelStore().findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE), empty());
     }
 
     @Test
@@ -1624,7 +1625,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         final BeanManager manager = createBeanManager(dolphin);
 
         final ListReferenceModel model = manager.create(ListReferenceModel.class);
-        final PresentationModel sourceModel = dolphin.findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
+        final PresentationModel sourceModel = dolphin.getModelStore().findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
 
         model.getPrimitiveList().addAll(Arrays.asList("1", "2", "3", "4", "5", "6"));
         deleteAllPresentationModelsOfType(dolphin, PlatformConstants.LIST_SPLICE);
@@ -1640,7 +1641,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
 
         // then :
         assertThat(model.getPrimitiveList(), is(Arrays.asList("4", "5", "6")));
-        assertThat(dolphin.findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE), empty());
+        assertThat(dolphin.getModelStore().findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE), empty());
     }
 
     @Test
@@ -1650,7 +1651,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         final BeanManager manager = createBeanManager(dolphin);
 
         final ListReferenceModel model = manager.create(ListReferenceModel.class);
-        final PresentationModel sourceModel = dolphin.findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
+        final PresentationModel sourceModel = dolphin.getModelStore().findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
 
         model.getPrimitiveList().addAll(Arrays.asList("1", "2", "3"));
         deleteAllPresentationModelsOfType(dolphin, PlatformConstants.LIST_SPLICE);
@@ -1666,7 +1667,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
 
         // then :
         assertThat(model.getPrimitiveList(), is(Arrays.asList("1", "3")));
-        assertThat(dolphin.findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE), empty());
+        assertThat(dolphin.getModelStore().findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE), empty());
     }
 
     @Test
@@ -1676,7 +1677,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         final BeanManager manager = createBeanManager(dolphin);
 
         final ListReferenceModel model = manager.create(ListReferenceModel.class);
-        final PresentationModel sourceModel = dolphin.findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
+        final PresentationModel sourceModel = dolphin.getModelStore().findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
 
         model.getPrimitiveList().addAll(Arrays.asList("1", "2", "3", "4", "5", "6"));
         deleteAllPresentationModelsOfType(dolphin, PlatformConstants.LIST_SPLICE);
@@ -1692,7 +1693,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
 
         // then :
         assertThat(model.getPrimitiveList(), is(Arrays.asList("1", "2", "5", "6")));
-        assertThat(dolphin.findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE), empty());
+        assertThat(dolphin.getModelStore().findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE), empty());
     }
 
     @Test
@@ -1702,7 +1703,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         final BeanManager manager = createBeanManager(dolphin);
 
         final ListReferenceModel model = manager.create(ListReferenceModel.class);
-        final PresentationModel sourceModel = dolphin.findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
+        final PresentationModel sourceModel = dolphin.getModelStore().findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
 
         model.getPrimitiveList().addAll(Arrays.asList("1", "2", "3"));
         deleteAllPresentationModelsOfType(dolphin, PlatformConstants.LIST_SPLICE);
@@ -1718,7 +1719,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
 
         // then :
         assertThat(model.getPrimitiveList(), is(Arrays.asList("1", "2")));
-        assertThat(dolphin.findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE), empty());
+        assertThat(dolphin.getModelStore().findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE), empty());
     }
 
     @Test
@@ -1728,7 +1729,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         final BeanManager manager = createBeanManager(dolphin);
 
         final ListReferenceModel model = manager.create(ListReferenceModel.class);
-        final PresentationModel sourceModel = dolphin.findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
+        final PresentationModel sourceModel = dolphin.getModelStore().findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
 
         model.getPrimitiveList().addAll(Arrays.asList("1", "2", "3", "4", "5", "6"));
         deleteAllPresentationModelsOfType(dolphin, PlatformConstants.LIST_SPLICE);
@@ -1744,11 +1745,11 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
 
         // then :
         assertThat(model.getPrimitiveList(), is(Arrays.asList("1", "2", "3", "4")));
-        assertThat(dolphin.findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE), empty());
+        assertThat(dolphin.getModelStore().findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE), empty());
     }
 
     private void deleteAllPresentationModelsOfType(ClientDolphin dolphin, String listSplice) {
-        List<ClientPresentationModel> toDelete = new ArrayList<>(dolphin.findAllPresentationModelsByType(listSplice));
+        List<ClientPresentationModel> toDelete = new ArrayList<>(dolphin.getModelStore().findAllPresentationModelsByType(listSplice));
         for(ClientPresentationModel model : toDelete) {
             dolphin.delete(model);
         }
@@ -1765,7 +1766,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         final BeanManager manager = createBeanManager(dolphin);
 
         final ListReferenceModel model = manager.create(ListReferenceModel.class);
-        final PresentationModel sourceModel = dolphin.findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
+        final PresentationModel sourceModel = dolphin.getModelStore().findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
         final String newValue = "42";
 
         model.getPrimitiveList().addAll(Arrays.asList("1", "2", "3"));
@@ -1782,7 +1783,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
                 .create();
 
         assertThat(model.getPrimitiveList(), is(Arrays.asList("42", "2", "3")));
-        assertThat(dolphin.findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE), empty());
+        assertThat(dolphin.getModelStore().findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE), empty());
     }
 
     @Test
@@ -1792,7 +1793,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         final BeanManager manager = createBeanManager(dolphin);
 
         final ListReferenceModel model = manager.create(ListReferenceModel.class);
-        final PresentationModel sourceModel = dolphin.findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
+        final PresentationModel sourceModel = dolphin.getModelStore().findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
 
         model.getPrimitiveList().addAll(Arrays.asList("1", "2", "3", "4"));
         deleteAllPresentationModelsOfType(dolphin, PlatformConstants.LIST_SPLICE);
@@ -1810,7 +1811,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
                 .create();
 
         assertThat(model.getPrimitiveList(), is(Arrays.asList("42", "4711", "Hello World", "3", "4")));
-        assertThat(dolphin.findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE), empty());
+        assertThat(dolphin.getModelStore().findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE), empty());
     }
 
     @Test
@@ -1820,7 +1821,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         final BeanManager manager = createBeanManager(dolphin);
 
         final ListReferenceModel model = manager.create(ListReferenceModel.class);
-        final PresentationModel sourceModel = dolphin.findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
+        final PresentationModel sourceModel = dolphin.getModelStore().findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
         final String newValue = "42";
 
         model.getPrimitiveList().addAll(Arrays.asList("1", "2", "3"));
@@ -1838,7 +1839,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
 
         // then :
         assertThat(model.getPrimitiveList(), is(Arrays.asList("1", "42", "3")));
-        assertThat(dolphin.findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE), empty());
+        assertThat(dolphin.getModelStore().findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE), empty());
     }
 
     @Test
@@ -1848,7 +1849,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         final BeanManager manager = createBeanManager(dolphin);
 
         final ListReferenceModel model = manager.create(ListReferenceModel.class);
-        final PresentationModel sourceModel = dolphin.findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
+        final PresentationModel sourceModel = dolphin.getModelStore().findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
 
         model.getPrimitiveList().addAll(Arrays.asList("1", "2", "3", "4"));
         deleteAllPresentationModelsOfType(dolphin, PlatformConstants.LIST_SPLICE);
@@ -1866,7 +1867,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
                 .create();
 
         assertThat(model.getPrimitiveList(), is(Arrays.asList("1", "42", "4711", "Hello World", "4")));
-        assertThat(dolphin.findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE), empty());
+        assertThat(dolphin.getModelStore().findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE), empty());
     }
 
     @Test
@@ -1876,7 +1877,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         final BeanManager manager = createBeanManager(dolphin);
 
         final ListReferenceModel model = manager.create(ListReferenceModel.class);
-        final PresentationModel sourceModel = dolphin.findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
+        final PresentationModel sourceModel = dolphin.getModelStore().findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
         final String newValue = "42";
 
         model.getPrimitiveList().addAll(Arrays.asList("1", "2", "3"));
@@ -1894,7 +1895,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
 
         // then :
         assertThat(model.getPrimitiveList(), is(Arrays.asList("1", "2", "42")));
-        assertThat(dolphin.findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE), empty());
+        assertThat(dolphin.getModelStore().findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE), empty());
     }
 
 
@@ -1905,7 +1906,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         final BeanManager manager = createBeanManager(dolphin);
 
         final ListReferenceModel model = manager.create(ListReferenceModel.class);
-        final PresentationModel sourceModel = dolphin.findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
+        final PresentationModel sourceModel = dolphin.getModelStore().findAllPresentationModelsByType(ListReferenceModel.class.getName()).get(0);
 
         model.getPrimitiveList().addAll(Arrays.asList("1", "2", "3", "4"));
         deleteAllPresentationModelsOfType(dolphin, PlatformConstants.LIST_SPLICE);
@@ -1923,6 +1924,6 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
                 .create();
 
         assertThat(model.getPrimitiveList(), is(Arrays.asList("1", "2", "42", "4711", "Hello World")));
-        assertThat(dolphin.findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE), empty());
+        assertThat(dolphin.getModelStore().findAllPresentationModelsByType(PlatformConstants.LIST_SPLICE), empty());
     }
 }

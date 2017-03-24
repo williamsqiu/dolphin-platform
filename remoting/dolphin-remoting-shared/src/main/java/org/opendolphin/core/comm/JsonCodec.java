@@ -15,34 +15,22 @@
  */
 package org.opendolphin.core.comm;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonParser;
-import com.google.gson.JsonPrimitive;
-import com.google.gson.JsonSerializationContext;
-import com.google.gson.JsonSerializer;
+import com.google.gson.*;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class JsonCodec implements Codec {
 
-    private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(JsonCodec.class);
-
-    private final Gson GSON;
+    private static final Logger LOG = LoggerFactory.getLogger(JsonCodec.class);
 
     public static final String ISO8601_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
+
+    private final Gson GSON;
 
     public JsonCodec() {
         GsonBuilder gsonBuilder = new GsonBuilder();

@@ -15,6 +15,7 @@
  */
 package org.opendolphin.core.server;
 
+import org.opendolphin.RemotingConstants;
 import org.opendolphin.core.BasePresentationModel;
 
 import java.util.List;
@@ -24,8 +25,6 @@ public class ServerPresentationModel extends BasePresentationModel<ServerAttribu
 
     private static final Logger LOG = Logger.getLogger(ServerPresentationModel.class.getName());
 
-    public static final String AUTO_ID_SUFFIX = "-AUTO-SRV";
-
     private ServerModelStore modelStore;
 
     /**
@@ -33,7 +32,7 @@ public class ServerPresentationModel extends BasePresentationModel<ServerAttribu
      */
     public ServerPresentationModel(String id, List<ServerAttribute> attributes, ServerModelStore serverModelStore) {
         super((id != null && id.length() > 0) ? id : makeId(serverModelStore), attributes);
-        if (id != null && id.endsWith(AUTO_ID_SUFFIX)) {
+        if (id != null && id.endsWith(RemotingConstants.SERVER_PM_AUTO_ID_SUFFIX)) {
             LOG.info("Creating a PM with self-provided id \'" + id + "\' even though it ends with a reserved suffix.");
         }
         modelStore = serverModelStore;
@@ -41,7 +40,7 @@ public class ServerPresentationModel extends BasePresentationModel<ServerAttribu
 
     private static String makeId(ServerModelStore serverModelStore) {
         long newId = serverModelStore.pmInstanceCount++;
-        return String.valueOf(newId) + AUTO_ID_SUFFIX;
+        return String.valueOf(newId) + RemotingConstants.SERVER_PM_AUTO_ID_SUFFIX;
     }
 
     public ServerModelStore getModelStore() {

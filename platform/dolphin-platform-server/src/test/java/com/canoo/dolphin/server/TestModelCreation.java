@@ -39,6 +39,7 @@ import com.canoo.dolphin.server.util.SimpleAnnotatedTestModel;
 import com.canoo.dolphin.server.util.SimpleTestModel;
 import com.canoo.dolphin.server.util.SingleReferenceModel;
 import org.hamcrest.Matchers;
+import org.opendolphin.RemotingConstants;
 import org.opendolphin.core.Attribute;
 import org.opendolphin.core.PresentationModel;
 import org.opendolphin.core.server.ServerAttribute;
@@ -74,7 +75,7 @@ public class TestModelCreation extends AbstractDolphinBasedTest {
         assertThat(model.getMyProperty().get(), nullValue());
         assertThat(manager.isManaged(model), is(true));
 
-        List<ServerPresentationModel> dolphinModels = dolphin.findAllPresentationModelsByType(SimpleAnnotatedTestModel.class.getName());
+        List<ServerPresentationModel> dolphinModels = dolphin.getModelStore().findAllPresentationModelsByType(SimpleAnnotatedTestModel.class.getName());
         assertThat(dolphinModels, hasSize(1));
 
         ServerPresentationModel dolphinModel = dolphinModels.get(0);
@@ -88,13 +89,13 @@ public class TestModelCreation extends AbstractDolphinBasedTest {
                         hasProperty("qualifier", nullValue())
                 ),
                 allOf(
-                        hasProperty("propertyName", is(PlatformConstants.SOURCE_SYSTEM)),
-                        hasProperty("value", is(PlatformConstants.SOURCE_SYSTEM_SERVER)),
+                        hasProperty("propertyName", is(RemotingConstants.SOURCE_SYSTEM)),
+                        hasProperty("value", is(RemotingConstants.SOURCE_SYSTEM_SERVER)),
                         hasProperty("qualifier", nullValue())
                 )
         ));
 
-        List<ServerPresentationModel> classModels = dolphin.findAllPresentationModelsByType(PlatformConstants.DOLPHIN_BEAN);
+        List<ServerPresentationModel> classModels = dolphin.getModelStore().findAllPresentationModelsByType(PlatformConstants.DOLPHIN_BEAN);
         assertThat(classModels, contains(
                 hasProperty("attributes", containsInAnyOrder(
                         allOf(
@@ -108,8 +109,8 @@ public class TestModelCreation extends AbstractDolphinBasedTest {
                                 hasProperty("qualifier", nullValue())
                         ),
                         allOf(
-                                hasProperty("propertyName", is(PlatformConstants.SOURCE_SYSTEM)),
-                                hasProperty("value", is(PlatformConstants.SOURCE_SYSTEM_SERVER)),
+                                hasProperty("propertyName", is(RemotingConstants.SOURCE_SYSTEM)),
+                                hasProperty("value", is(RemotingConstants.SOURCE_SYSTEM_SERVER)),
                                 hasProperty("qualifier", nullValue())
                         )
                 ))
@@ -128,7 +129,7 @@ public class TestModelCreation extends AbstractDolphinBasedTest {
         assertThat(model.getTextProperty().get(), nullValue());
         assertThat(manager.isManaged(model), is(true));
 
-        List<ServerPresentationModel> dolphinModels = dolphin.findAllPresentationModelsByType(SimpleTestModel.class.getName());
+        List<ServerPresentationModel> dolphinModels = dolphin.getModelStore().findAllPresentationModelsByType(SimpleTestModel.class.getName());
         assertThat(dolphinModels, hasSize(1));
 
         ServerPresentationModel dolphinModel = dolphinModels.get(0);
@@ -142,13 +143,13 @@ public class TestModelCreation extends AbstractDolphinBasedTest {
                         hasProperty("qualifier", nullValue())
                 ),
                 allOf(
-                        hasProperty("propertyName", is(PlatformConstants.SOURCE_SYSTEM)),
-                        hasProperty("value", is(PlatformConstants.SOURCE_SYSTEM_SERVER)),
+                        hasProperty("propertyName", is(RemotingConstants.SOURCE_SYSTEM)),
+                        hasProperty("value", is(RemotingConstants.SOURCE_SYSTEM_SERVER)),
                         hasProperty("qualifier", nullValue())
                 )
         ));
 
-        List<ServerPresentationModel> classModels = dolphin.findAllPresentationModelsByType(PlatformConstants.DOLPHIN_BEAN);
+        List<ServerPresentationModel> classModels = dolphin.getModelStore().findAllPresentationModelsByType(PlatformConstants.DOLPHIN_BEAN);
         assertThat(classModels, contains(
                 hasProperty("attributes", containsInAnyOrder(
                         allOf(
@@ -162,8 +163,8 @@ public class TestModelCreation extends AbstractDolphinBasedTest {
                                 hasProperty("qualifier", nullValue())
                         ),
                         allOf(
-                                hasProperty("propertyName", is(PlatformConstants.SOURCE_SYSTEM)),
-                                hasProperty("value", is(PlatformConstants.SOURCE_SYSTEM_SERVER)),
+                                hasProperty("propertyName", is(RemotingConstants.SOURCE_SYSTEM)),
+                                hasProperty("value", is(RemotingConstants.SOURCE_SYSTEM_SERVER)),
                                 hasProperty("qualifier", nullValue())
                         )
                 ))
@@ -198,7 +199,7 @@ public class TestModelCreation extends AbstractDolphinBasedTest {
         assertThat(model.getTextProperty().get(), nullValue());
         assertThat(manager.isManaged(model), is(true));
 
-        List<ServerPresentationModel> dolphinModels = dolphin.findAllPresentationModelsByType(PrimitiveDataTypesModel.class.getName());
+        List<ServerPresentationModel> dolphinModels = dolphin.getModelStore().findAllPresentationModelsByType(PrimitiveDataTypesModel.class.getName());
         assertThat(dolphinModels, hasSize(1));
 
         ServerPresentationModel dolphinModel = dolphinModels.get(0);
@@ -207,15 +208,15 @@ public class TestModelCreation extends AbstractDolphinBasedTest {
         assertThat(attributes, hasSize(9));
 
         for(Attribute attribute : attributes) {
-            if (PlatformConstants.SOURCE_SYSTEM.equals(attribute.getPropertyName())) {
-                assertThat(attribute.getValue(), Matchers.<Object>is(PlatformConstants.SOURCE_SYSTEM_SERVER));
+            if (RemotingConstants.SOURCE_SYSTEM.equals(attribute.getPropertyName())) {
+                assertThat(attribute.getValue(), Matchers.<Object>is(RemotingConstants.SOURCE_SYSTEM_SERVER));
             } else {
                 assertThat(attribute.getValue(), nullValue());
             }
             assertThat(attribute.getQualifier(), nullValue());
         }
 
-        final List<ServerPresentationModel> classModels = dolphin.findAllPresentationModelsByType(PlatformConstants.DOLPHIN_BEAN);
+        final List<ServerPresentationModel> classModels = dolphin.getModelStore().findAllPresentationModelsByType(PlatformConstants.DOLPHIN_BEAN);
         assertThat(classModels, hasSize(1));
 
         final PresentationModel classModel = classModels.get(0);
@@ -226,8 +227,8 @@ public class TestModelCreation extends AbstractDolphinBasedTest {
         for(Attribute attribute : classAttributes) {
             if (PlatformConstants.JAVA_CLASS.equals(attribute.getPropertyName())) {
                 assertThat(attribute.getValue(), Matchers.<Object>is(PrimitiveDataTypesModel.class.getName()));
-            } else if (PlatformConstants.SOURCE_SYSTEM.equals(attribute.getPropertyName())) {
-                assertThat(attribute.getValue(), Matchers.<Object>is(PlatformConstants.SOURCE_SYSTEM_SERVER));
+            } else if (RemotingConstants.SOURCE_SYSTEM.equals(attribute.getPropertyName())) {
+                assertThat(attribute.getValue(), Matchers.<Object>is(RemotingConstants.SOURCE_SYSTEM_SERVER));
             } else {
                 switch (attribute.getPropertyName()) {
                     case "byteProperty":
@@ -280,7 +281,7 @@ public class TestModelCreation extends AbstractDolphinBasedTest {
         assertThat(model.getEnumProperty().get(), nullValue());
         assertThat(manager.isManaged(model), is(true));
 
-        List<ServerPresentationModel> dolphinModels = dolphin.findAllPresentationModelsByType(ComplexDataTypesModel.class.getName());
+        List<ServerPresentationModel> dolphinModels = dolphin.getModelStore().findAllPresentationModelsByType(ComplexDataTypesModel.class.getName());
         assertThat(dolphinModels, hasSize(1));
 
         PresentationModel dolphinModel = dolphinModels.get(0);
@@ -304,13 +305,13 @@ public class TestModelCreation extends AbstractDolphinBasedTest {
                         hasProperty("qualifier", nullValue())
                 ),
                 allOf(
-                        hasProperty("propertyName", is(PlatformConstants.SOURCE_SYSTEM)),
-                        hasProperty("value", is(PlatformConstants.SOURCE_SYSTEM_SERVER)),
+                        hasProperty("propertyName", is(RemotingConstants.SOURCE_SYSTEM)),
+                        hasProperty("value", is(RemotingConstants.SOURCE_SYSTEM_SERVER)),
                         hasProperty("qualifier", nullValue())
                 )
         ));
 
-        List<ServerPresentationModel> classModels = dolphin.findAllPresentationModelsByType(PlatformConstants.DOLPHIN_BEAN);
+        List<ServerPresentationModel> classModels = dolphin.getModelStore().findAllPresentationModelsByType(PlatformConstants.DOLPHIN_BEAN);
         assertThat(classModels, contains(
                 hasProperty("attributes", containsInAnyOrder(
                         allOf(
@@ -334,8 +335,8 @@ public class TestModelCreation extends AbstractDolphinBasedTest {
                                 hasProperty("qualifier", nullValue())
                         ),
                         allOf(
-                                hasProperty("propertyName", is(PlatformConstants.SOURCE_SYSTEM)),
-                                hasProperty("value", is(PlatformConstants.SOURCE_SYSTEM_SERVER)),
+                                hasProperty("propertyName", is(RemotingConstants.SOURCE_SYSTEM)),
+                                hasProperty("value", is(RemotingConstants.SOURCE_SYSTEM_SERVER)),
                                 hasProperty("qualifier", nullValue())
                         )
                 ))
@@ -355,7 +356,7 @@ public class TestModelCreation extends AbstractDolphinBasedTest {
         assertThat(model.getReferenceProperty().get(), nullValue());
         assertThat(manager.isManaged(model), is(true));
 
-        List<ServerPresentationModel> dolphinModels = dolphin.findAllPresentationModelsByType(SingleReferenceModel.class.getName());
+        List<ServerPresentationModel> dolphinModels = dolphin.getModelStore().findAllPresentationModelsByType(SingleReferenceModel.class.getName());
         assertThat(dolphinModels, hasSize(1));
 
         ServerPresentationModel dolphinModel = dolphinModels.get(0);
@@ -369,13 +370,13 @@ public class TestModelCreation extends AbstractDolphinBasedTest {
                         hasProperty("qualifier", nullValue())
                 ),
                 allOf(
-                        hasProperty("propertyName", is(PlatformConstants.SOURCE_SYSTEM)),
-                        hasProperty("value", is(PlatformConstants.SOURCE_SYSTEM_SERVER)),
+                        hasProperty("propertyName", is(RemotingConstants.SOURCE_SYSTEM)),
+                        hasProperty("value", is(RemotingConstants.SOURCE_SYSTEM_SERVER)),
                         hasProperty("qualifier", nullValue())
                 )
         ));
 
-        List<ServerPresentationModel> classModels = dolphin.findAllPresentationModelsByType(PlatformConstants.DOLPHIN_BEAN);
+        List<ServerPresentationModel> classModels = dolphin.getModelStore().findAllPresentationModelsByType(PlatformConstants.DOLPHIN_BEAN);
         assertThat(classModels, contains(
                 hasProperty("attributes", containsInAnyOrder(
                         allOf(
@@ -389,8 +390,8 @@ public class TestModelCreation extends AbstractDolphinBasedTest {
                                 hasProperty("qualifier", nullValue())
                         ),
                         allOf(
-                                hasProperty("propertyName", is(PlatformConstants.SOURCE_SYSTEM)),
-                                hasProperty("value", is(PlatformConstants.SOURCE_SYSTEM_SERVER)),
+                                hasProperty("propertyName", is(RemotingConstants.SOURCE_SYSTEM)),
+                                hasProperty("value", is(RemotingConstants.SOURCE_SYSTEM_SERVER)),
                                 hasProperty("qualifier", nullValue())
                         )
                 ))
@@ -408,7 +409,7 @@ public class TestModelCreation extends AbstractDolphinBasedTest {
         assertThat(model.getObjectList(), empty());
         assertThat(model.getPrimitiveList(), empty());
 
-        List<ServerPresentationModel> dolphinModels = dolphin.findAllPresentationModelsByType(ListReferenceModel.class.getName());
+        List<ServerPresentationModel> dolphinModels = dolphin.getModelStore().findAllPresentationModelsByType(ListReferenceModel.class.getName());
         assertThat(dolphinModels, hasSize(1));
 
         ServerPresentationModel dolphinModel = dolphinModels.get(0);
@@ -417,13 +418,13 @@ public class TestModelCreation extends AbstractDolphinBasedTest {
 
         assertThat(attributes, contains(
                 allOf(
-                        hasProperty("propertyName", is(PlatformConstants.SOURCE_SYSTEM)),
-                        hasProperty("value", is(PlatformConstants.SOURCE_SYSTEM_SERVER)),
+                        hasProperty("propertyName", is(RemotingConstants.SOURCE_SYSTEM)),
+                        hasProperty("value", is(RemotingConstants.SOURCE_SYSTEM_SERVER)),
                         hasProperty("qualifier", nullValue())
                 )
         ));
 
-        List<ServerPresentationModel> classModels = dolphin.findAllPresentationModelsByType(PlatformConstants.DOLPHIN_BEAN);
+        List<ServerPresentationModel> classModels = dolphin.getModelStore().findAllPresentationModelsByType(PlatformConstants.DOLPHIN_BEAN);
         assertThat(classModels, contains(
                 hasProperty("attributes", containsInAnyOrder(
                         allOf(
@@ -442,8 +443,8 @@ public class TestModelCreation extends AbstractDolphinBasedTest {
                                 hasProperty("qualifier", nullValue())
                         ),
                         allOf(
-                                hasProperty("propertyName", is(PlatformConstants.SOURCE_SYSTEM)),
-                                hasProperty("value", is(PlatformConstants.SOURCE_SYSTEM_SERVER)),
+                                hasProperty("propertyName", is(RemotingConstants.SOURCE_SYSTEM)),
+                                hasProperty("value", is(RemotingConstants.SOURCE_SYSTEM_SERVER)),
                                 hasProperty("qualifier", nullValue())
                         )
                 ))
@@ -464,7 +465,7 @@ public class TestModelCreation extends AbstractDolphinBasedTest {
         assertThat(model.getChildProperty().get(), nullValue());
         assertThat(manager.isManaged(model), is(true));
 
-        List<ServerPresentationModel> dolphinModels = dolphin.findAllPresentationModelsByType(ChildModel.class.getName());
+        List<ServerPresentationModel> dolphinModels = dolphin.getModelStore().findAllPresentationModelsByType(ChildModel.class.getName());
         assertThat(dolphinModels, hasSize(1));
 
         ServerPresentationModel dolphinModel = dolphinModels.get(0);
@@ -483,13 +484,13 @@ public class TestModelCreation extends AbstractDolphinBasedTest {
                         hasProperty("qualifier", nullValue())
                 ),
                 allOf(
-                        hasProperty("propertyName", is(PlatformConstants.SOURCE_SYSTEM)),
-                        hasProperty("value", is(PlatformConstants.SOURCE_SYSTEM_SERVER)),
+                        hasProperty("propertyName", is(RemotingConstants.SOURCE_SYSTEM)),
+                        hasProperty("value", is(RemotingConstants.SOURCE_SYSTEM_SERVER)),
                         hasProperty("qualifier", nullValue())
                 )
         ));
 
-        List<ServerPresentationModel> classModels = dolphin.findAllPresentationModelsByType(PlatformConstants.DOLPHIN_BEAN);
+        List<ServerPresentationModel> classModels = dolphin.getModelStore().findAllPresentationModelsByType(PlatformConstants.DOLPHIN_BEAN);
         assertThat(classModels, hasSize(1));
         assertThat(classModels, contains(
                 hasProperty("attributes", containsInAnyOrder(
@@ -509,8 +510,8 @@ public class TestModelCreation extends AbstractDolphinBasedTest {
                                 hasProperty("qualifier", nullValue())
                         ),
                         allOf(
-                                hasProperty("propertyName", is(PlatformConstants.SOURCE_SYSTEM)),
-                                hasProperty("value", is(PlatformConstants.SOURCE_SYSTEM_SERVER)),
+                                hasProperty("propertyName", is(RemotingConstants.SOURCE_SYSTEM)),
+                                hasProperty("value", is(RemotingConstants.SOURCE_SYSTEM_SERVER)),
                                 hasProperty("qualifier", nullValue())
                         )
                 ))

@@ -15,6 +15,7 @@
  */
 package org.opendolphin.core.server;
 
+import org.opendolphin.RemotingConstants;
 import org.opendolphin.core.Attribute;
 import org.opendolphin.core.BaseAttribute;
 import org.opendolphin.core.comm.AttributeMetadataChangedCommand;
@@ -41,7 +42,7 @@ public class ServerAttribute extends BaseAttribute {
     @Override
     public void setValue(final Object newValue) {
         if (notifyClient) {
-            DefaultServerDolphin.changeValueCommand(getPresentationModel().getModelStore().getCurrentResponse(), this, newValue);
+            ServerModelStore.changeValueCommand(getPresentationModel().getModelStore().getCurrentResponse(), this, newValue);
         }
 
         super.setValue(newValue);
@@ -79,7 +80,7 @@ public class ServerAttribute extends BaseAttribute {
     }
 
     public String getOrigin() {
-        return "S";
+        return RemotingConstants.SERVER_ORIGIN;
     }
 
     /**
@@ -88,8 +89,11 @@ public class ServerAttribute extends BaseAttribute {
     public void silently(Runnable applyChange) {
         boolean temp = notifyClient;
         notifyClient = false;
-        applyChange.run();
-        notifyClient = temp;
+        try {
+            applyChange.run();
+        } finally {
+            notifyClient = temp;
+        }
     }
 
     /**
@@ -98,8 +102,11 @@ public class ServerAttribute extends BaseAttribute {
     protected void verbosely(Runnable applyChange) {
         boolean temp = notifyClient;
         notifyClient = true;
-        applyChange.run();
-        notifyClient = temp;
+        try {
+            applyChange.run();
+        } finally {
+            notifyClient = temp;
+        }
     }
 
     /**

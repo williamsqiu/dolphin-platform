@@ -21,7 +21,7 @@ package org.opendolphin.core;
 
 public abstract class BaseAttribute extends AbstractObservable implements Attribute {
 
-    static private long  instanceCount = 0;
+    private static long instanceCount = 0;
 
     private final String propertyName;
 
@@ -69,10 +69,9 @@ public abstract class BaseAttribute extends AbstractObservable implements Attrib
         return value;
     }
 
-    // todo dk: think about specific method versions for each allowed type
     public void setValue(Object newValue) {
-        if (isDifferent(value, newValue)){ // firePropertyChange doesn't do this check sufficiently
-            firePropertyChange(VALUE_NAME, value, value = newValue); // set inline to avoid recursion
+        if (isDifferent(value, newValue)) {
+            firePropertyChange(VALUE_NAME, value, value = newValue);
         }
     }
 

@@ -130,7 +130,7 @@ public class BeanRepositoryImpl implements BeanRepository{
         final PresentationModel model = objectPmToDolphinPm.remove(bean);
         if (model != null) {
             dolphinIdToObjectPm.remove(model.getId());
-            dolphin.removePresentationModel(model);
+            dolphin.getModelStore().remove(model);
         }
     }
 
@@ -139,7 +139,7 @@ public class BeanRepositoryImpl implements BeanRepository{
     public <T> List<T> findAll(Class<T> beanClass) {
         DolphinUtils.assertIsDolphinBean(beanClass);
         final List<T> result = new ArrayList<>();
-        final List<PresentationModel> presentationModels = dolphin.findAllPresentationModelsByType(DolphinUtils.getDolphinPresentationModelTypeForClass(beanClass));
+        final List<PresentationModel> presentationModels = dolphin.getModelStore().findAllPresentationModelsByType(DolphinUtils.getDolphinPresentationModelTypeForClass(beanClass));
         for (PresentationModel model : presentationModels) {
             result.add((T) dolphinIdToObjectPm.get(model.getId()));
         }

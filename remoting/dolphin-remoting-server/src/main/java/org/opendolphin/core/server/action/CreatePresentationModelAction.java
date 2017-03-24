@@ -15,7 +15,7 @@
  */
 package org.opendolphin.core.server.action;
 
-import org.opendolphin.core.PresentationModel;
+import org.opendolphin.RemotingConstants;
 import org.opendolphin.core.comm.CreatePresentationModelCommand;
 import org.opendolphin.core.server.DefaultServerDolphin;
 import org.opendolphin.core.server.ServerAttribute;
@@ -43,12 +43,12 @@ public class CreatePresentationModelAction extends DolphinServerAction {
     }
 
     private static void createPresentationModel(CreatePresentationModelCommand command, DefaultServerDolphin serverDolphin) {
-        if (serverDolphin.getPresentationModel(command.getPmId()) != null) {
+        if (serverDolphin.getModelStore().findPresentationModelById(command.getPmId()) != null) {
             LOG.info("Ignoring create PM '" + command.getPmId() + "' since it is already in the model store.");
             return;
         }
 
-        if (command.getPmId().endsWith(ServerPresentationModel.AUTO_ID_SUFFIX)) {
+        if (command.getPmId().endsWith(RemotingConstants.SERVER_PM_AUTO_ID_SUFFIX)) {
             LOG.info("Creating the PM '" + command.getPmId() + "' with reserved server-auto-suffix.");
         }
 
@@ -59,13 +59,9 @@ public class CreatePresentationModelAction extends DolphinServerAction {
             attributes.add(attribute);
         }
 
-        PresentationModel model = new ServerPresentationModel(command.getPmId(), attributes, serverDolphin.getServerModelStore());
-        ((ServerPresentationModel) model).setPresentationModelType(command.getPmType());
-        if (serverDolphin.getServerModelStore().containsPresentationModel(model.getId())) {
-            LOG.info("There already is a PM with id " + model.getId() + ". Create PM ignored.");
-        } else {
-            serverDolphin.getServerModelStore().add(model);
-        }
+        ServerPresentationModel model = new ServerPresentationModel(command.getPmId(), attributes, serverDolphin.getServerModelStore());
+        model.setPresentationModelType(command.getPmType());
+        serverDolphin.getServerModelStore().checkClientAdded(model);
     }
 
 }
