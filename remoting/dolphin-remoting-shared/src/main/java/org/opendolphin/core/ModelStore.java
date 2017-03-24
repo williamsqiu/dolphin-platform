@@ -344,4 +344,13 @@ public class ModelStore<A extends Attribute, P extends PresentationModel<A>> {
             listener.modelStoreChanged(event);
         }
     }
+
+    public void updateQualifiers(P presentationModel) {
+        for (A source : presentationModel.getAttributes()) {
+            if (null == source.getQualifier()) continue;
+            for (A target : findAllAttributesByQualifier(source.getQualifier())) {
+                target.setValue(source.getValue());
+            }
+        }
+    }
 }

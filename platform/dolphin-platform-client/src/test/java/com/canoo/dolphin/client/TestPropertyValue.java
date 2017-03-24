@@ -51,7 +51,7 @@ public class TestPropertyValue extends AbstractDolphinBasedTest {
 
         SimpleAnnotatedTestModel model = manager.create(SimpleAnnotatedTestModel.class);
 
-        PresentationModel dolphinModel = dolphin.findAllPresentationModelsByType(SimpleAnnotatedTestModel.class.getName()).get(0);
+        PresentationModel dolphinModel = dolphin.getModelStore().findAllPresentationModelsByType(SimpleAnnotatedTestModel.class.getName()).get(0);
 
         Attribute textAttribute = dolphinModel.getAttribute("myProperty");
         assertThat(textAttribute.getValue(), nullValue());
@@ -72,7 +72,7 @@ public class TestPropertyValue extends AbstractDolphinBasedTest {
 
         SimpleTestModel model = manager.create(SimpleTestModel.class);
 
-        PresentationModel dolphinModel = dolphin.findAllPresentationModelsByType(SimpleTestModel.class.getName()).get(0);
+        PresentationModel dolphinModel = dolphin.getModelStore().findAllPresentationModelsByType(SimpleTestModel.class.getName()).get(0);
 
         Attribute textAttribute = dolphinModel.getAttribute("text");
         assertThat(textAttribute.getValue(), nullValue());
@@ -93,7 +93,7 @@ public class TestPropertyValue extends AbstractDolphinBasedTest {
 
         PrimitiveDataTypesModel model = manager.create(PrimitiveDataTypesModel.class);
 
-        PresentationModel dolphinModel = dolphin.findAllPresentationModelsByType(PrimitiveDataTypesModel.class.getName()).get(0);
+        PresentationModel dolphinModel = dolphin.getModelStore().findAllPresentationModelsByType(PrimitiveDataTypesModel.class.getName()).get(0);
 
         Attribute textAttribute = dolphinModel.getAttribute("textProperty");
         assertThat(textAttribute.getValue(), nullValue());
@@ -147,7 +147,7 @@ public class TestPropertyValue extends AbstractDolphinBasedTest {
 
         ComplexDataTypesModel model = manager.create(ComplexDataTypesModel.class);
 
-        PresentationModel dolphinModel = dolphin.findAllPresentationModelsByType(ComplexDataTypesModel.class.getName()).get(0);
+        PresentationModel dolphinModel = dolphin.getModelStore().findAllPresentationModelsByType(ComplexDataTypesModel.class.getName()).get(0);
 
 
         Attribute dateAttribute = dolphinModel.getAttribute("dateProperty");
@@ -196,13 +196,13 @@ public class TestPropertyValue extends AbstractDolphinBasedTest {
         ref1.getTextProperty().set("ref1_text");
         final SimpleTestModel ref2 = manager.create(SimpleTestModel.class);
         ref2.getTextProperty().set("ref2_text");
-        final List<ClientPresentationModel> refPMs = dolphin.findAllPresentationModelsByType(SimpleTestModel.class.getName());
+        final List<ClientPresentationModel> refPMs = dolphin.getModelStore().findAllPresentationModelsByType(SimpleTestModel.class.getName());
         final PresentationModel ref1PM = "ref1_text".equals(refPMs.get(0).getAttribute("text").getValue())? refPMs.get(0) : refPMs.get(1);
         final PresentationModel ref2PM = "ref2_text".equals(refPMs.get(0).getAttribute("text").getValue())? refPMs.get(0) : refPMs.get(1);
 
         final SingleReferenceModel model = manager.create(SingleReferenceModel.class);
 
-        final PresentationModel dolphinModel = dolphin.findAllPresentationModelsByType(SingleReferenceModel.class.getName()).get(0);
+        final PresentationModel dolphinModel = dolphin.getModelStore().findAllPresentationModelsByType(SingleReferenceModel.class.getName()).get(0);
 
         final Attribute referenceAttribute = dolphinModel.getAttribute("referenceProperty");
         assertThat(referenceAttribute.getValue(), nullValue());
@@ -223,7 +223,7 @@ public class TestPropertyValue extends AbstractDolphinBasedTest {
 
         ChildModel model = manager.create(ChildModel.class);
 
-        PresentationModel dolphinModel = dolphin.findAllPresentationModelsByType(ChildModel.class.getName()).get(0);
+        PresentationModel dolphinModel = dolphin.getModelStore().findAllPresentationModelsByType(ChildModel.class.getName()).get(0);
 
         Attribute childAttribute = dolphinModel.getAttribute("childProperty");
         assertThat(childAttribute.getValue(), nullValue());

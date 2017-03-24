@@ -24,11 +24,11 @@ package org.opendolphin.core.server;
  */
 public final class Slot {
 
-    private String propertyName;
+    private final String propertyName;
 
-    private Object value;
+    private final Object value;
 
-    private String qualifier;
+    private final String qualifier;
 
     public Slot(String propertyName, Object value) {
         this(propertyName, value, null);

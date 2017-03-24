@@ -25,10 +25,10 @@ import java.util.Map;
 
 public class ActionRegistry {
 
-    private final Map<Class<? extends Command>, List<CommandHandler>> ACTIONS = new HashMap();
+    private final Map<Class<? extends Command>, List<CommandHandler>> actions = new HashMap();
 
     public Map<Class<? extends Command>, List<CommandHandler>> getActions() {
-        return Collections.unmodifiableMap(ACTIONS);
+        return Collections.unmodifiableMap(actions);
     }
 
     public void register(Class commandClass, CommandHandler serverCommand) {
@@ -39,10 +39,10 @@ public class ActionRegistry {
     }
 
     public List<CommandHandler> getActionsFor(Class<? extends Command> commandClass) {
-        List<CommandHandler> actions = ACTIONS.get(commandClass);
+        List<CommandHandler> actions = this.actions.get(commandClass);
         if (actions == null) {
             actions = new ArrayList<CommandHandler>();
-            ACTIONS.put(commandClass, actions);
+            this.actions.put(commandClass, actions);
         }
 
         return actions;

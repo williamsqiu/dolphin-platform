@@ -56,7 +56,7 @@ public class ClassRepositoryImpl implements ClassRepository {
         this.converters = Assert.requireNonNull(converters, "converters");
         this.builderFactory = Assert.requireNonNull(builderFactory, "builderFactory");
 
-        dolphin.addModelStoreListener(PlatformConstants.DOLPHIN_BEAN, new ModelStoreListener() {
+        dolphin.getModelStore().addModelStoreListener(PlatformConstants.DOLPHIN_BEAN, new ModelStoreListener() {
             @Override
             public void modelStoreChanged(final ModelStoreEvent event) {
                 Assert.requireNonNull(event, "event");

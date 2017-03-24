@@ -32,7 +32,7 @@ public class StoreAttributeAction extends DolphinServerAction {
         registry.register(ChangeAttributeMetadataCommand.class, new CommandHandler<ChangeAttributeMetadataCommand>() {
             @Override
             public void handleCommand(final ChangeAttributeMetadataCommand command, List response) {
-                final Attribute attribute = getServerDolphin().findAttributeById(command.getAttributeId());
+                final Attribute attribute = getServerDolphin().getModelStore().findAttributeById(command.getAttributeId());
                 if (attribute == null) {
                     LOG.warning("Cannot find attribute with id '" + command.getAttributeId() + "'. Metadata remains unchanged.");
                     return;

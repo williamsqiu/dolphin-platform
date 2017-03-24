@@ -15,23 +15,10 @@
  */
 package org.opendolphin.core.server;
 
-import org.opendolphin.StringUtil;
-import org.opendolphin.core.AbstractDolphin;
-import org.opendolphin.core.comm.Command;
-import org.opendolphin.core.comm.CreatePresentationModelCommand;
-import org.opendolphin.core.comm.DeletePresentationModelCommand;
-import org.opendolphin.core.comm.ValueChangedCommand;
-import org.opendolphin.core.server.action.CreatePresentationModelAction;
-import org.opendolphin.core.server.action.DeletePresentationModelAction;
-import org.opendolphin.core.server.action.DolphinServerAction;
-import org.opendolphin.core.server.action.EmptyAction;
-import org.opendolphin.core.server.action.StoreAttributeAction;
-import org.opendolphin.core.server.action.StoreValueChangeAction;
+import org.opendolphin.core.server.action.*;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Logger;
 
@@ -41,7 +28,7 @@ import java.util.logging.Logger;
  * Collaborates with server model store and current response.
  * Threading model: confined to a single controller thread.
  */
-public class DefaultServerDolphin extends AbstractDolphin<ServerAttribute, ServerPresentationModel> implements ServerDolphin {
+public class DefaultServerDolphin implements ServerDolphin {
 
     private static final Logger LOG = Logger.getLogger(DefaultServerDolphin.class.getName());
 
@@ -86,27 +73,11 @@ public class DefaultServerDolphin extends AbstractDolphin<ServerAttribute, Serve
         register(new StoreAttributeAction());
         register(new CreatePresentationModelAction());
         register(new DeletePresentationModelAction());
-        serverConnector.register(new EmptyAction());
     }
 
     public void register(DolphinServerAction action) {
         action.setServerDolphin(this);
         serverConnector.register(action);
-    }
-
-    /**
-     * Adding the model to the model store and if successful, sending the CreatePresentationModelCommand.
-     *
-     * @param model the model to be added.
-     * @return whether the adding was successful, which implies that also the command has been sent
-     */
-    @Override
-    public boolean addPresentationModel(ServerPresentationModel model) {
-        boolean result = super.addPresentationModel(model);
-        if (result) {
-            serverModelStore.getCurrentResponse().add(CreatePresentationModelCommand.makeFrom(model));
-        }
-        return result;
     }
 
     /**
@@ -130,72 +101,8 @@ public class DefaultServerDolphin extends AbstractDolphin<ServerAttribute, Serve
         }
         ServerPresentationModel model = new ServerPresentationModel(id, attributes, serverModelStore);
         model.setPresentationModelType(presentationModelType);
-        addPresentationModel(model);
+        getServerModelStore().add(model);
         return model;
-    }
-
-    /**
-     * Convenience method to let the client (!) dolphin create a presentation model as specified by the DTO.
-     * The server model store remains untouched until the client has issued the notification.
-     */
-    public static void presentationModelCommand(List<Command> response, String id, String presentationModelType, DTO dto) {
-        if (response == null) {
-            return;
-        }
-        List<Map<String, Object>> list = new ArrayList<>();
-        for (Slot slot : dto.getSlots()) {
-            Map<String, Object> map = new HashMap<>();
-            map.put("propertyName", slot.getPropertyName());
-            map.put("value", slot.getValue());
-            map.put("qualifier", slot.getQualifier());
-            list.add(map);
-        }
-        response.add(new CreatePresentationModelCommand(id, presentationModelType, list));
-    }
-
-    /**
-     * Convenience method to let Dolphin removePresentationModel a presentation model directly on the server and notify the client.
-     */
-    public boolean removePresentationModel(ServerPresentationModel pm) {
-        boolean deleted = serverModelStore.remove(pm);
-        if (deleted) {
-            DefaultServerDolphin.deleteCommand(serverModelStore.getCurrentResponse(), pm.getId());
-        }
-        return deleted;
-    }
-
-    /**
-     * Convenience method to let Dolphin delete a presentation model on the client side
-     */
-    public static void deleteCommand(List<Command> response, String pmId) {
-        if (response == null || StringUtil.isBlank(pmId)) {
-            return;
-        }
-        response.add(new DeletePresentationModelCommand(pmId));
-    }
-
-    /**
-     * Convenience method to change an attribute value on the server side.
-     *
-     * @param response  must not be null or the method silently ignores the call
-     * @param attribute must not be null
-     */
-    public static void changeValueCommand(List<Command> response, ServerAttribute attribute, Object value) {
-        if (response == null) {
-            return;
-        }
-        if (attribute == null) {
-            LOG.severe("Cannot change value on a null attribute to '" + value);
-            return;
-        }
-        forceChangeValue(value, response, attribute);
-    }
-
-    /**
-     * @deprecated use forceChangeValueCommand(Object, List, ServerAttribute). You can use the "inline method refactoring". Will be removed in version 1.0!
-     */
-    public static void forceChangeValue(Object value, List<Command> response, ServerAttribute attribute) {
-        response.add(new ValueChangedCommand(attribute.getId(), attribute.getValue(), value));
     }
 
     public ServerModelStore getServerModelStore() {

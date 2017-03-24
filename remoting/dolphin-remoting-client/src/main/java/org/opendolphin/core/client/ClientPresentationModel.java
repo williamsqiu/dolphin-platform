@@ -19,13 +19,13 @@ import org.opendolphin.core.BasePresentationModel;
 
 import java.util.List;
 
+import static org.opendolphin.RemotingConstants.CLIENT_PM_AUTO_ID_SUFFIX;
+
 public final class ClientPresentationModel extends BasePresentationModel<ClientAttribute> {
 
-    public final static String AUTO_ID_SUFFIX = "-AUTO-CLT";
+    private static long instanceCount = 0;
 
     private boolean clientSideOnly = false;
-
-    private static long instanceCount = 0;
 
     public ClientPresentationModel(List<ClientAttribute> attributes) {
         this(null, attributes);
@@ -36,13 +36,13 @@ public final class ClientPresentationModel extends BasePresentationModel<ClientA
      */
     public ClientPresentationModel(String id, List<ClientAttribute> attributes) {
         super(createUniqueId(id), attributes);
-        if (id != null && id.endsWith(AUTO_ID_SUFFIX)) {
-            throw new IllegalArgumentException("presentation model with self-provided id \'" + id + "\' may not end with suffix \'" + AUTO_ID_SUFFIX + "\' since that is reserved.");
+        if (id != null && id.endsWith(CLIENT_PM_AUTO_ID_SUFFIX)) {
+            throw new IllegalArgumentException("presentation model with self-provided id \'" + id + "\' may not end with suffix \'" + CLIENT_PM_AUTO_ID_SUFFIX + "\' since that is reserved.");
         }
     }
 
     private static String createUniqueId(String id) {
-        return (id != null && id.length() > 0) ? id : "" + instanceCount++ + AUTO_ID_SUFFIX;
+        return (id != null && id.length() > 0) ? id : "" + instanceCount++ + CLIENT_PM_AUTO_ID_SUFFIX;
     }
 
     public boolean isClientSideOnly() {

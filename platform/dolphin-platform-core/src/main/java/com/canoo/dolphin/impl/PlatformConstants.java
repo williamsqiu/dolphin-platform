@@ -33,9 +33,6 @@ public interface PlatformConstants {
 
     String DOLPHIN_BEAN = "@@@ DOLPHIN_BEAN @@@";
 
-    String SOURCE_SYSTEM = "@@@ SOURCE_SYSTEM @@@";
-    String SOURCE_SYSTEM_CLIENT = "client";
-    String SOURCE_SYSTEM_SERVER = "server";
     String JAVA_CLASS = "@@@ JAVA_CLASS @@@";
 
     String LIST_SPLICE = "@DP:LS@";

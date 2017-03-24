@@ -95,11 +95,11 @@ class ClientConnectorTests extends GroovyTestCase {
 
 	void testHandleSimpleCreatePresentationModelCommand() {
 		final myPmId = "myPmId"
-		assert null == dolphin.getPresentationModel(myPmId)
+		assert null == dolphin.getModelStore().findPresentationModelById(myPmId)
 		CreatePresentationModelCommand command = new CreatePresentationModelCommand()
 		command.pmId = myPmId
 		clientConnector.dispatchHandle(command)
-		assert dolphin.getPresentationModel(myPmId)
+		assert dolphin.getModelStore().findPresentationModelById(myPmId)
 		syncAndWaitUntilDone()
 		assertCommandsTransmitted(2)
 	}
@@ -195,10 +195,10 @@ class ClientConnectorTests extends GroovyTestCase {
 
 	void testHandle_CreatePresentationModel() {
 		clientConnector.dispatchHandle(new CreatePresentationModelCommand(pmId: 'p1', pmType: 'type', attributes: [[propertyName: 'attr', value: 'initialValue', qualifier: 'qualifier']]))
-		assert dolphin.getPresentationModel('p1')
-		assert dolphin.getPresentationModel('p1').getAttribute('attr')
-		assert 'initialValue' == dolphin.getPresentationModel('p1').getAttribute('attr').value
-		assert 'qualifier' == dolphin.getPresentationModel('p1').getAttribute('attr').qualifier
+		assert dolphin.getModelStore().findPresentationModelById('p1')
+		assert dolphin.getModelStore().findPresentationModelById('p1').getAttribute('attr')
+		assert 'initialValue' == dolphin.getModelStore().findPresentationModelById('p1').getAttribute('attr').value
+		assert 'qualifier' == dolphin.getModelStore().findPresentationModelById('p1').getAttribute('attr').qualifier
 		syncAndWaitUntilDone()
 		assertCommandsTransmitted(2)
 		assert CreatePresentationModelCommand == clientConnector.transmittedCommands[0].class
@@ -206,10 +206,10 @@ class ClientConnectorTests extends GroovyTestCase {
 
 	void testHandle_CreatePresentationModel_ClientSideOnly() {
 		clientConnector.dispatchHandle(new CreatePresentationModelCommand(pmId: 'p1', pmType: 'type', clientSideOnly: true, attributes: [[propertyName: 'attr', value: 'initialValue', qualifier: 'qualifier']]))
-		assert dolphin.getPresentationModel('p1')
-		assert dolphin.getPresentationModel('p1').getAttribute('attr')
-		assert 'initialValue' == dolphin.getPresentationModel('p1').getAttribute('attr').value
-		assert 'qualifier' == dolphin.getPresentationModel('p1').getAttribute('attr').qualifier
+		assert dolphin.getModelStore().findPresentationModelById('p1')
+		assert dolphin.getModelStore().findPresentationModelById('p1').getAttribute('attr')
+		assert 'initialValue' == dolphin.getModelStore().findPresentationModelById('p1').getAttribute('attr').value
+		assert 'qualifier' == dolphin.getModelStore().findPresentationModelById('p1').getAttribute('attr').qualifier
 		syncAndWaitUntilDone()
 		assertOnlySyncCommandWasTransmitted()
 	}
@@ -230,8 +230,8 @@ class ClientConnectorTests extends GroovyTestCase {
 		clientConnector.dispatchHandle(new DeletePresentationModelCommand(pmId: model.id))
 		clientConnector.dispatchHandle(new DeletePresentationModelCommand(pmId: p1.id))
 		clientConnector.dispatchHandle(new DeletePresentationModelCommand(pmId: p2.id))
-		assert !dolphin.getPresentationModel(p1.id)
-		assert !dolphin.getPresentationModel(p2.id)
+		assert !dolphin.getModelStore().findPresentationModelById(p1.id)
+		assert !dolphin.getModelStore().findPresentationModelById(p2.id)
 		syncAndWaitUntilDone()
 		// 3 commands will have been transferred:
 		// 1: delete of p1 (causes no DeletedPresentationModelNotification since client side only)
@@ -270,7 +270,7 @@ class ClientConnectorTests extends GroovyTestCase {
 		}
 
 		List construct(ChangeAttributeMetadataCommand command) {
-			[new AttributeMetadataChangedCommand(attributeId: command.attributeId, metadataName: command.metadataName, value: command.value)]
+			[new AttributeMetadataChangedCommand(command.attributeId, command.metadataName, command.value)]
 		}
 
 		List construct(Command command) {

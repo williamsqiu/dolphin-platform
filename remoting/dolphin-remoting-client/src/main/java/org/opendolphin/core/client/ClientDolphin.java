@@ -15,7 +15,7 @@
  */
 package org.opendolphin.core.client;
 
-import org.opendolphin.core.AbstractDolphin;
+import org.opendolphin.core.Dolphin;
 import org.opendolphin.core.ModelStore;
 import org.opendolphin.core.client.comm.ClientConnector;
 import org.opendolphin.core.client.comm.OnFinishedHandler;
@@ -34,14 +34,14 @@ import java.util.Map;
  * Collaborates with client model store and client connector.
  * Threading model: confined to the UI handling thread.
  */
-public class ClientDolphin extends AbstractDolphin<ClientAttribute, ClientPresentationModel> {
+public class ClientDolphin implements Dolphin<ClientAttribute, ClientPresentationModel> {
 
     private ClientModelStore clientModelStore;
 
     private ClientConnector clientConnector;
 
     @Override
-    public ModelStore getModelStore() {
+    public ModelStore<ClientAttribute, ClientPresentationModel> getModelStore() {
         return clientModelStore;
     }
 
@@ -58,19 +58,6 @@ public class ClientDolphin extends AbstractDolphin<ClientAttribute, ClientPresen
         ClientPresentationModel result = new ClientPresentationModel(id, attributes);
         clientModelStore.add(result);
         return result;
-    }
-
-    @Deprecated
-    public ClientPresentationModel presentationModel(String id, Map<String, Object> attributeNamesAndValues) {
-        return presentationModel(id, null, attributeNamesAndValues);
-    }
-
-    /**
-     * groovy-friendly convenience method for a typical case of creating a ClientPresentationModel with initial values
-     */
-    @Deprecated
-    public ClientPresentationModel presentationModel(String id, String presentationModelType, Map<String, Object> attributeNamesAndValues) {
-        return presentationModel(attributeNamesAndValues, id, presentationModelType);
     }
 
     @Deprecated

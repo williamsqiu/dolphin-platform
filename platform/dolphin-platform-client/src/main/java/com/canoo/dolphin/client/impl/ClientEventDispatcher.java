@@ -16,7 +16,7 @@
 package com.canoo.dolphin.client.impl;
 
 import com.canoo.dolphin.impl.EventDispatcherImpl;
-import com.canoo.dolphin.impl.PlatformConstants;
+import org.opendolphin.RemotingConstants;
 import org.opendolphin.core.Dolphin;
 
 public class ClientEventDispatcher extends EventDispatcherImpl {
@@ -27,6 +27,6 @@ public class ClientEventDispatcher extends EventDispatcherImpl {
 
     @Override
     protected String getLocalSystemIdentifier() {
-        return PlatformConstants.SOURCE_SYSTEM_CLIENT;
+        return RemotingConstants.SOURCE_SYSTEM_CLIENT;
     }
 }

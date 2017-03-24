@@ -48,7 +48,7 @@ public class TestDeleteAll extends AbstractDolphinBasedTest {
         assertThat(manager.isManaged(model3), is(false));
         assertThat(manager.isManaged(wrongModel), is(true));
 
-        List<ServerPresentationModel> testModels = dolphin.findAllPresentationModelsByType("com.canoo.dolphin.server.util.SimpleTestModel");
+        List<ServerPresentationModel> testModels = dolphin.getModelStore().findAllPresentationModelsByType("com.canoo.dolphin.server.util.SimpleTestModel");
         assertThat(testModels, hasSize(0));
 
     }

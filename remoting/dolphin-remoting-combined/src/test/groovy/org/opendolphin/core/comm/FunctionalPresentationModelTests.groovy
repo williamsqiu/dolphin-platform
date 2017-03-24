@@ -106,7 +106,7 @@ class FunctionalPresentationModelTests extends GroovyTestCase {
         long id = 0
         registerAction serverDolphin, PerformanceCommand.class, { cmd, response ->
             100.times { attr ->
-                serverDolphin.presentationModelCommand(response, "id_${id++}".toString(), null, new DTO(new Slot("attr_$attr", attr)))
+                ServerModelStore.presentationModelCommand(response, "id_${id++}".toString(), null, new DTO(new Slot("attr_$attr", attr)))
             }
         }
         def start = System.nanoTime()
@@ -129,11 +129,11 @@ class FunctionalPresentationModelTests extends GroovyTestCase {
 
     void testCreationRoundtripDefaultBehavior() {
         registerAction serverDolphin, CreateCommand.class, { cmd, response ->
-            serverDolphin.presentationModelCommand(response, "id".toString(), null, new DTO(new Slot("attr", 'attr')))
+            ServerModelStore.presentationModelCommand(response, "id".toString(), null, new DTO(new Slot("attr", 'attr')))
         }
         registerAction serverDolphin, CheckNotificationReachedCommand.class, { cmd, response ->
-            assert 1 == serverDolphin.listPresentationModels().size()
-            assert serverDolphin.getPresentationModel("id")
+            assert 1 == serverDolphin.getModelStore().listPresentationModels().size()
+            assert serverDolphin.getModelStore().findPresentationModelById("id")
         }
 
         clientDolphin.send new CreateCommand(), new OnFinishedHandler() {
@@ -155,7 +155,7 @@ class FunctionalPresentationModelTests extends GroovyTestCase {
         registerAction serverDolphin, CreateCommand.class, { cmd, response ->
             def NO_TYPE = null
             def NO_QUALIFIER = null
-            serverDolphin.presentationModelCommand(response, "id".toString(), NO_TYPE, new DTO(new Slot("attr", true, NO_QUALIFIER)))
+            ServerModelStore.presentationModelCommand(response, "id".toString(), NO_TYPE, new DTO(new Slot("attr", true, NO_QUALIFIER)))
         }
         registerAction serverDolphin, CheckTagIsKnownOnServerSideCommand.class, { cmd, response ->
         }
@@ -180,7 +180,7 @@ class FunctionalPresentationModelTests extends GroovyTestCase {
             ('a'..'z').each {
                 DTO dto = new DTO(new Slot('char', it))
                 // sending CreatePresentationModelCommand _without_ adding the pm to the server model store
-                serverDolphin.presentationModelCommand(response, it, null, dto)
+                ServerModelStore.presentationModelCommand(response, it, null, dto)
             }
         }
         clientDolphin.send new FetchDataCommand(), new OnFinishedHandler() {
@@ -188,8 +188,8 @@ class FunctionalPresentationModelTests extends GroovyTestCase {
             @Override
             void onFinished() {
                 // pmIds from a single action should come in sequence
-                assert 'a' == context.clientDolphin.getPresentationModel('a').getAttribute("char").value
-                assert 'z' == context.clientDolphin.getPresentationModel('z').getAttribute("char").value
+                assert 'a' == context.clientDolphin.getModelStore().findPresentationModelById('a').getAttribute("char").value
+                assert 'z' == context.clientDolphin.getModelStore().findPresentationModelById('z').getAttribute("char").value
                 context.assertionsDone() // make sure the assertions are really executed
             }
         }
@@ -207,9 +207,9 @@ class FunctionalPresentationModelTests extends GroovyTestCase {
 
     void testLoginUseCase() {
         registerAction serverDolphin, LoginCommand.class, { cmd, response ->
-            def user = context.serverDolphin.getPresentationModel('user')
+            def user = context.serverDolphin.getModelStore().findPresentationModelById('user')
             if (user.getAttribute("name").value == 'Dierk' && user.getAttribute("password").value == 'Koenig') {
-                DefaultServerDolphin.changeValueCommand(response, user.getAttribute("loggedIn"), 'true')
+                ServerModelStore.changeValueCommand(response, user.getAttribute("loggedIn"), 'true')
             }
         }
         def user = clientDolphin.presentationModel 'user', name: null, password: null, loggedIn: null
@@ -291,7 +291,6 @@ class FunctionalPresentationModelTests extends GroovyTestCase {
     }
 
     void testUnregisteredCommandWithLog() {
-        serverDolphin.serverConnector.setLogLevel(Level.ALL);
         clientDolphin.send new NoSuchActionRegisteredCommand(), new OnFinishedHandler() {
 
             @Override
@@ -303,7 +302,6 @@ class FunctionalPresentationModelTests extends GroovyTestCase {
     }
 
     void testUnregisteredCommandWithoutLog() {
-        serverDolphin.serverConnector.setLogLevel(Level.OFF);
         clientDolphin.send(new NoSuchActionRegisteredCommand(), null)
         context.assertionsDone()
     }
@@ -311,8 +309,8 @@ class FunctionalPresentationModelTests extends GroovyTestCase {
     // silly and only for the coverage, we test behavior when id is wrong ...
     void testIdNotFoundInVariousCommands() {
         clientDolphin.clientConnector.send new ValueChangedCommand(attributeId: 0)
-        DefaultServerDolphin.changeValueCommand(null, null, null)
-        DefaultServerDolphin.changeValueCommand(null, new ServerAttribute('a', 42), 42)
+        ServerModelStore.changeValueCommand(null, null, null)
+        ServerModelStore.changeValueCommand(null, new ServerAttribute('a', 42), 42)
         context.assertionsDone()
     }
 
@@ -339,17 +337,16 @@ class FunctionalPresentationModelTests extends GroovyTestCase {
         clientDolphin.presentationModel('pm', attr: 1)
 
         registerAction serverDolphin, DeleteCommand.class, { cmd, response ->
-//            serverDolphin.delete(response, serverDolphin['pm']) // deprecated
-            serverDolphin.removePresentationModel(serverDolphin.getPresentationModel('pm'))
-            assert serverDolphin.getPresentationModel('pm') == null
+            serverDolphin.getModelStore().remove(serverDolphin.getModelStore().findPresentationModelById('pm'))
+            assert serverDolphin.getModelStore().findPresentationModelById('pm') == null
         }
-        assert clientDolphin.getPresentationModel('pm')
+        assert clientDolphin.getModelStore().findPresentationModelById('pm')
 
         clientDolphin.send new DeleteCommand(), new OnFinishedHandler() {
 
             @Override
             void onFinished() {
-                assert clientDolphin.getPresentationModel('pm') == null
+                assert clientDolphin.getModelStore().findPresentationModelById('pm') == null
                 context.assertionsDone()
             }
         }
@@ -360,11 +357,11 @@ class FunctionalPresentationModelTests extends GroovyTestCase {
         clientDolphin.presentationModel('pm', attr: 1)
 
         registerAction serverDolphin, ArbitraryCommand.class, { cmd, response ->
-            serverDolphin.deleteCommand([], null)
-            serverDolphin.deleteCommand([], '')
-            serverDolphin.deleteCommand(null, '')
-            serverDolphin.presentationModelCommand(null, null, null, null)
-            serverDolphin.changeValueCommand([], null, null)
+            ServerModelStore.deleteCommand([], null)
+            ServerModelStore.deleteCommand([], '')
+            ServerModelStore.deleteCommand(null, '')
+            ServerModelStore.presentationModelCommand(null, null, null, null)
+            ServerModelStore.changeValueCommand([], null, null)
         }
         clientDolphin.send(new ArbitraryCommand(), new OnFinishedHandler() {
 
@@ -383,12 +380,12 @@ class FunctionalPresentationModelTests extends GroovyTestCase {
 
         registerAction serverDolphin, Set2Command.class, { cmd, response ->
             latch.await() // mimic a server delay such that the client has enough time to change the value concurrently
-            serverDolphin.getPresentationModel('pm').getAttribute('attr').value == 1
-            serverDolphin.getPresentationModel('pm').getAttribute('attr').value = 2
-            serverDolphin.getPresentationModel('pm').getAttribute('attr').value == 2 // immediate change of server state
+            serverDolphin.getModelStore().findPresentationModelById('pm').getAttribute('attr').value == 1
+            serverDolphin.getModelStore().findPresentationModelById('pm').getAttribute('attr').value = 2
+            serverDolphin.getModelStore().findPresentationModelById('pm').getAttribute('attr').value == 2 // immediate change of server state
         }
         registerAction serverDolphin, Assert3Command.class, { cmd, response ->
-            assert serverDolphin.getPresentationModel('pm').getAttribute('attr').value == 3
+            assert serverDolphin.getModelStore().findPresentationModelById('pm').getAttribute('attr').value == 3
         }
 
         clientDolphin.send(new Set2Command(), null) // a conflict could arise when the server value is changed ...

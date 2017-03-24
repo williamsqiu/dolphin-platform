@@ -15,41 +15,8 @@
  */
 package org.opendolphin.core;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
-
 public interface Dolphin<A extends Attribute, P extends PresentationModel<A>> {
 
     ModelStore<A, P> getModelStore();
 
-    boolean addPresentationModel(P model);
-
-    boolean removePresentationModel(P model);
-
-    A findAttributeById(String id);
-
-    List<A> findAllAttributesByQualifier(String qualifier);
-
-    Set<String> listPresentationModelIds();
-
-    Collection<P> listPresentationModels();
-
-    List<P> findAllPresentationModelsByType(String presentationModelType);
-
-    P getPresentationModel(String id);
-
-    void removeModelStoreListener(ModelStoreListener listener);
-
-    void removeModelStoreListener(String presentationModelType, ModelStoreListener listener);
-
-    boolean hasModelStoreListener(ModelStoreListener listener);
-
-    void addModelStoreListener(String presentationModelType, ModelStoreListener listener);
-
-    boolean hasModelStoreListener(String presentationModelType, ModelStoreListener listener);
-
-    void addModelStoreListener(ModelStoreListener listener);
-
-    void updateQualifiers(P presentationModel);
 }

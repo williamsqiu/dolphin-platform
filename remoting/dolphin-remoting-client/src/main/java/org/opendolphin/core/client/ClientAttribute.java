@@ -15,6 +15,7 @@
  */
 package org.opendolphin.core.client;
 
+import org.opendolphin.RemotingConstants;
 import org.opendolphin.core.BaseAttribute;
 
 /**
@@ -35,7 +36,7 @@ public class ClientAttribute extends BaseAttribute {
     }
 
     public String getOrigin() {
-        return "C";
+        return RemotingConstants.CLIENT_ORIGIN;
     }
 
 }

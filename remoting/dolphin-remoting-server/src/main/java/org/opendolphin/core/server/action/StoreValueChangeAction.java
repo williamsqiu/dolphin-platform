@@ -32,7 +32,7 @@ public class StoreValueChangeAction extends DolphinServerAction {
         registry.register(ValueChangedCommand.class, new CommandHandler<ValueChangedCommand>() {
             @Override
             public void handleCommand(final ValueChangedCommand command, List response) {
-                final ServerAttribute attribute = getServerDolphin().findAttributeById(command.getAttributeId());
+                final ServerAttribute attribute = getServerDolphin().getModelStore().findAttributeById(command.getAttributeId());
                 if (attribute != null) {
                     if (! Objects.equals(attribute.getValue(), command.getOldValue())) {
                         LOG.warning("S: updating attribute with id '" + command.getAttributeId() + "' to new value '" + command.getNewValue() + "' even though its old command value '" + command.getOldValue() + "' does not conform to the old value of '" + attribute.getValue() + "'. Client overrules server.");
