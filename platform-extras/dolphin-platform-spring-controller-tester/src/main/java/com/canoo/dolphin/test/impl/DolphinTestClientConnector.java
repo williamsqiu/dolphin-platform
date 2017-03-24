@@ -18,7 +18,7 @@ package com.canoo.dolphin.test.impl;
 import com.canoo.dolphin.impl.commands.StartLongPollCommand;
 import com.canoo.dolphin.server.context.DolphinContext;
 import com.canoo.dolphin.util.Assert;
-import org.opendolphin.core.client.ClientDolphin;
+import org.opendolphin.core.client.ClientModelStore;
 import org.opendolphin.core.client.comm.*;
 import org.opendolphin.core.comm.Command;
 
@@ -34,8 +34,8 @@ public class DolphinTestClientConnector extends AbstractClientConnector {
 
     private final Executor uiExecutor;
 
-    public DolphinTestClientConnector(ClientDolphin clientDolphin, Executor uiExecutor, DolphinContext dolphinContext) {
-        super(clientDolphin, uiExecutor, new CommandBatcher(), new SimpleExceptionHandler(uiExecutor), Executors.newCachedThreadPool());
+    public DolphinTestClientConnector(ClientModelStore clientModelStore, Executor uiExecutor, DolphinContext dolphinContext) {
+        super(clientModelStore, uiExecutor, new CommandBatcher(), new SimpleExceptionHandler(uiExecutor), Executors.newCachedThreadPool());
         this.dolphinContext = Assert.requireNonNull(dolphinContext, "dolphinContext");
         this.uiExecutor = Assert.requireNonNull(uiExecutor, "uiExecutor");
     }

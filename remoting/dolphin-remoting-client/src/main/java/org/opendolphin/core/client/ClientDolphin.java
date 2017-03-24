@@ -16,17 +16,9 @@
 package org.opendolphin.core.client;
 
 import org.opendolphin.core.Dolphin;
-import org.opendolphin.core.ModelStore;
 import org.opendolphin.core.client.comm.ClientConnector;
 import org.opendolphin.core.client.comm.OnFinishedHandler;
-import org.opendolphin.core.comm.Command;
 import org.opendolphin.core.comm.EmptyNotification;
-import org.opendolphin.core.comm.SignalCommand;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
 
 /**
  * The main Dolphin facade on the client side.
@@ -34,6 +26,7 @@ import java.util.Map;
  * Collaborates with client model store and client connector.
  * Threading model: confined to the UI handling thread.
  */
+@Deprecated
 public class ClientDolphin implements Dolphin<ClientAttribute, ClientPresentationModel> {
 
     private ClientModelStore clientModelStore;
@@ -41,62 +34,12 @@ public class ClientDolphin implements Dolphin<ClientAttribute, ClientPresentatio
     private ClientConnector clientConnector;
 
     @Override
-    public ModelStore<ClientAttribute, ClientPresentationModel> getModelStore() {
+    public ClientModelStore getModelStore() {
         return clientModelStore;
     }
 
-    /**
-     * Convenience method for a creating a ClientPresentationModel with initial null values for the attributes
-     */
-    @Deprecated
-    public ClientPresentationModel presentationModel(String id, List<String> attributeNames) {
-        List<ClientAttribute> attributes = new ArrayList<ClientAttribute>();
-        for (String name : attributeNames) {
-            attributes.add(new ClientAttribute(name, null));
-        }
-
-        ClientPresentationModel result = new ClientPresentationModel(id, attributes);
-        clientModelStore.add(result);
-        return result;
-    }
-
-    @Deprecated
-    public ClientPresentationModel presentationModel(Map<String, Object> attributeNamesAndValues, String id) {
-        return presentationModel(attributeNamesAndValues, id, null);
-    }
-
-    /**
-     * groovy-friendly convenience method for a typical case of creating a ClientPresentationModel with initial values
-     */
-    @Deprecated
-    public ClientPresentationModel presentationModel(Map<String, Object> attributeNamesAndValues, String id, String presentationModelType) {
-        List<ClientAttribute> attributes = new ArrayList<ClientAttribute>();
-        for (Map.Entry<String, Object> entry : attributeNamesAndValues.entrySet()) {
-            ((ArrayList<ClientAttribute>) attributes).add(new ClientAttribute(entry.getKey(), entry.getValue()));
-        }
-
-        ClientPresentationModel result = new ClientPresentationModel(id, attributes);
-        result.setPresentationModelType(presentationModelType);
-        clientModelStore.add(result);
-        return result;
-    }
-
-    public ClientPresentationModel presentationModel(String id, ClientAttribute... attributes) {
-        return presentationModel(id, null, attributes);
-    }
-
-    /**
-     * both groovy- and java-friendly full-control constructor
-     */
-    public ClientPresentationModel presentationModel(String id, String presentationModelType, ClientAttribute... attributes) {
-        ClientPresentationModel result = new ClientPresentationModel(id, Arrays.asList(attributes));
-        result.setPresentationModelType(presentationModelType);
-        clientModelStore.add(result);
-        return result;
-    }
-
-    public void send(Command command, OnFinishedHandler onFinished) {
-        clientConnector.send(command, onFinished);
+    public ClientConnector getClientConnector() {
+        return clientConnector;
     }
 
     /**
@@ -111,39 +54,6 @@ public class ClientDolphin implements Dolphin<ClientAttribute, ClientPresentatio
             }
 
         });
-    }
-
-    /**
-     * Removes the modelToDelete from the client model store,
-     * detaches all model store listeners,
-     * and notifies the server if successful
-     */
-    public void delete(ClientPresentationModel modelToDelete) {
-        clientModelStore.delete(modelToDelete);
-    }
-
-    /**
-     * @deprecated Push should be active by default
-     */
-    @Deprecated
-    public void startPushListening(final Command startLongPollCommand, final SignalCommand interruptLongPollCommand) {
-        clientConnector.startPushListening(startLongPollCommand, interruptLongPollCommand);
-    }
-
-    /**
-     * @deprecated Push should be active by default
-     */
-    @Deprecated
-    public void stopPushListening() {
-        clientConnector.stopPushListening();
-    }
-
-    public ClientModelStore getClientModelStore() {
-        return clientModelStore;
-    }
-
-    public ClientConnector getClientConnector() {
-        return clientConnector;
     }
 
     /**

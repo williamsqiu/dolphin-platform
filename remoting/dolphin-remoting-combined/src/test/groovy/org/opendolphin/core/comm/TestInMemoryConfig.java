@@ -35,7 +35,7 @@ public class TestInMemoryConfig extends DefaultInMemoryConfig {
 
     public TestInMemoryConfig(Executor uiExecutor) {
         super(uiExecutor);
-        getServerDolphin().registerDefaultActions();
+        getServerDolphin().getServerConnector().registerDefaultActions();
         getClientConnector().setSleepMillis(0);
     }
 

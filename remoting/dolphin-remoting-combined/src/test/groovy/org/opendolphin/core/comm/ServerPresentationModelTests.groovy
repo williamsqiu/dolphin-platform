@@ -20,6 +20,7 @@ import org.opendolphin.RemotingConstants
 import org.opendolphin.core.ModelStoreConfig
 import org.opendolphin.core.ModelStoreEvent
 import org.opendolphin.core.ModelStoreListener
+import org.opendolphin.core.client.ClientAttribute
 import org.opendolphin.core.client.ClientDolphin
 import org.opendolphin.core.client.comm.OnFinishedHandler
 import org.opendolphin.core.server.*
@@ -73,7 +74,7 @@ class ServerPresentationModelTests extends GroovyTestCase {
     }
 
     public <T extends Command> void registerAction(ServerDolphin serverDolphin, Class<T> commandType, CommandHandler<T> handler) {
-        serverDolphin.register(new DolphinServerAction() {
+        serverDolphin.getServerConnector().register(new DolphinServerAction() {
 
             @Override
             void registerIn(ActionRegistry registry) {
@@ -92,7 +93,7 @@ class ServerPresentationModelTests extends GroovyTestCase {
     }
 
     void testSecondServerActionCanRelyOnAttributeValueChange() {
-        def model = clientDolphin.presentationModel("PM1", ["att1"] )
+        def model = clientDolphin.getModelStore().createModel("PM1", null, new ClientAttribute("att1", null))
 
         registerAction serverDolphin, SetValueCommand.class, { cmd, response ->
             serverDolphin.getModelStore().findPresentationModelById("PM1").getAttribute("att1").value = 1
@@ -102,8 +103,8 @@ class ServerPresentationModelTests extends GroovyTestCase {
             assert 1 == serverDolphin.getModelStore().findPresentationModelById("PM1").getAttribute("att1").value
         }
 
-        clientDolphin.send(new SetValueCommand(), null)
-        clientDolphin.send new AssertValueCommand(), new OnFinishedHandler() {
+        clientDolphin.getClientConnector().send(new SetValueCommand(), null)
+        clientDolphin.getClientConnector().send new AssertValueCommand(), new OnFinishedHandler() {
 
             @Override
             void onFinished() {
@@ -114,7 +115,7 @@ class ServerPresentationModelTests extends GroovyTestCase {
     }
 
     void testServerSideValueChangesUseQualifiers() {
-        def model = clientDolphin.presentationModel("PM1", att1:'base', att2:'base')
+        def model = clientDolphin.getModelStore().createModel("PM1", null, new ClientAttribute("att1", "base"), new ClientAttribute("att2", "base"));
         model.getAttribute("att1").qualifier = 'qualifier'
         model.getAttribute("att2").qualifier = 'qualifier'
 
@@ -125,7 +126,7 @@ class ServerPresentationModelTests extends GroovyTestCase {
             assert serverDolphin.getModelStore().findPresentationModelById("PM1").getAttribute("att2").value == 'changed'
         }
 
-        clientDolphin.send(new ChangeValueCommand(), null)
+        clientDolphin.getClientConnector().send(new ChangeValueCommand(), null)
 
         clientDolphin.sync {
             context.assertionsDone()
@@ -133,7 +134,7 @@ class ServerPresentationModelTests extends GroovyTestCase {
     }
 
     void testServerSideEventListenerCanChangeSelfValue() {
-        def model = clientDolphin.presentationModel("PM1", att1:'base')
+        def model = clientDolphin.getModelStore().createModel("PM1", null, new ClientAttribute("att1", "base"))
 
         registerAction serverDolphin, AttachListenerCommand.class, { cmd, response ->
             ServerAttribute at1 = serverDolphin.getModelStore().findPresentationModelById("PM1").getAttribute("att1")
@@ -149,7 +150,7 @@ class ServerPresentationModelTests extends GroovyTestCase {
             assert serverDolphin.getModelStore().findPresentationModelById("PM1").getAttribute("att2").baseValue == 'changedBase'
         }
 
-        clientDolphin.send(new AttachListenerCommand(), null)
+        clientDolphin.getClientConnector().send(new AttachListenerCommand(), null)
 
         clientDolphin.sync {
             model.getAttribute("att1").setValue("changed")
@@ -167,8 +168,8 @@ class ServerPresentationModelTests extends GroovyTestCase {
 
         registerAction serverDolphin, CreateCommand.class, { cmd, response ->
             def dto = new DTO(new Slot("att1", 1))
-            def pm = serverDolphin.presentationModel("PM1", null, dto)
-            pmWithNullId = serverDolphin.presentationModel(null, "pmType", dto)
+            def pm = serverDolphin.getModelStore().presentationModel("PM1", null, dto)
+            pmWithNullId = serverDolphin.getModelStore().presentationModel(null, "pmType", dto)
             assert pm
             assert pmWithNullId
             assert serverDolphin.getModelStore().findPresentationModelById("PM1")
@@ -180,8 +181,8 @@ class ServerPresentationModelTests extends GroovyTestCase {
             assert serverDolphin.getModelStore().findAllPresentationModelsByType("pmType").first() == pmWithNullId
         }
 
-        clientDolphin.send(new CreateCommand(), null)
-        clientDolphin.send(new AssertVisibleCommand(), null)
+        clientDolphin.getClientConnector().send(new CreateCommand(), null)
+        clientDolphin.getClientConnector().send(new AssertVisibleCommand(), null)
 
         clientDolphin.sync {
             assert clientDolphin.getModelStore().findPresentationModelById("PM1")
@@ -197,7 +198,7 @@ class ServerPresentationModelTests extends GroovyTestCase {
 
         registerAction serverDolphin, CreateCommand.class, { cmd, response ->
             def dto = new DTO(new Slot("att1", 1))
-            serverDolphin.presentationModel("PM1", null, dto)
+            serverDolphin.getModelStore().presentationModel("PM1", null, dto)
             serverDolphin.getModelStore().findPresentationModelById("PM1").getAttribute("att1").addPropertyChangeListener("value",{ pclReached.set(true) })
         }
 
@@ -207,14 +208,14 @@ class ServerPresentationModelTests extends GroovyTestCase {
             context.assertionsDone()
         }
 
-        clientDolphin.send new CreateCommand(), new OnFinishedHandler() {
+        clientDolphin.getClientConnector().send new CreateCommand(), new OnFinishedHandler() {
 
             @Override
             void onFinished() {
                 assert clientDolphin.getModelStore().findPresentationModelById("PM1").getAttribute("att1").value == 1
                 clientDolphin.getModelStore().findPresentationModelById("PM1").getAttribute("att1").value = 2
 
-                clientDolphin.send(new AssertValueChangeCommand(), null)
+                clientDolphin.getClientConnector().send(new AssertValueChangeCommand(), null)
             }
         }
 
@@ -233,7 +234,7 @@ class ServerPresentationModelTests extends GroovyTestCase {
             })
         }
 
-        serverDolphin.register(new DolphinServerAction() {
+        serverDolphin.getServerConnector().register(new DolphinServerAction() {
             @Override
             void registerIn(ActionRegistry registry) {
                 registry.register(CreatePresentationModelCommand.class, new CommandHandler<CreatePresentationModelCommand>() {
@@ -248,18 +249,18 @@ class ServerPresentationModelTests extends GroovyTestCase {
 
         registerAction serverDolphin, CreateCommand.class, { cmd, response ->
             def dto = new DTO(new Slot("att1", 1))
-            serverDolphin.presentationModel("server-side-with-id", null, dto)
+            serverDolphin.getModelStore().presentationModel("server-side-with-id", null, dto)
             // will lead to log: [INFO] There already is a PM with id server-side-with-id. Create PM ignored.
-            serverDolphin.presentationModel(null, "server-side-without-id", dto)
+            serverDolphin.getModelStore().presentationModel(null, "server-side-without-id", dto)
             // will lead to log: [INFO] Cannot create PM '0-AUTO-SRV' with forbidden suffix. Create PM ignored.
             // at this point, the MSL has been triggered
         }
 
-        clientDolphin.send(new RegisterMSLCommand(), null)
+        clientDolphin.getClientConnector().send(new RegisterMSLCommand(), null)
 
-        clientDolphin.presentationModel("client-side-with-id", null, attr1:1)
+        clientDolphin.getModelStore().createModel("client-side-with-id", null, new ClientAttribute("attr1", 1))
 
-        clientDolphin.send new CreateCommand(), new OnFinishedHandler() {
+        clientDolphin.getClientConnector().send new CreateCommand(), new OnFinishedHandler() {
 
             @Override
             void onFinished() {
@@ -276,7 +277,7 @@ class ServerPresentationModelTests extends GroovyTestCase {
 
     void testServerSidePmRemoval() {
 
-        clientDolphin.presentationModel("client-side-with-id", null, attr1:1)
+        clientDolphin.getModelStore().createModel("client-side-with-id", null, new ClientAttribute("attr1", 1))
 
         registerAction serverDolphin, RemoveCommand.class, { cmd, response ->
             def pm = serverDolphin.getModelStore().findPresentationModelById("client-side-with-id")
@@ -287,7 +288,7 @@ class ServerPresentationModelTests extends GroovyTestCase {
 
         assert clientDolphin.getModelStore().findPresentationModelById("client-side-with-id")
 
-        clientDolphin.send new RemoveCommand(), new OnFinishedHandler() {
+        clientDolphin.getClientConnector().send new RemoveCommand(), new OnFinishedHandler() {
 
             @Override
             void onFinished() {
@@ -298,13 +299,13 @@ class ServerPresentationModelTests extends GroovyTestCase {
     }
 
     void testServerSideBaseValueChange() {
-        def source = clientDolphin.presentationModel("source", null, attr1:"sourceValue")
+        def source = clientDolphin.getModelStore().createModel("source", null, new ClientAttribute("attr1", "sourceValue"))
 
         registerAction serverDolphin, ChangeBaseValueCommand.class, { cmd, response ->
             def attribute = serverDolphin.getModelStore().findPresentationModelById("source").getAttribute("attr1")
         }
 
-        clientDolphin.send new ChangeBaseValueCommand(), new OnFinishedHandler() {
+        clientDolphin.getClientConnector().send new ChangeBaseValueCommand(), new OnFinishedHandler() {
 
             @Override
             void onFinished() {
@@ -315,7 +316,7 @@ class ServerPresentationModelTests extends GroovyTestCase {
     }
 
     void testServerSideQualifierChange() {
-        def source = clientDolphin.presentationModel("source", null, attr1:"sourceValue")
+        def source = clientDolphin.getModelStore().createModel("source", null, new ClientAttribute("attr1", "sourceValue"))
 
         source.getAttribute("attr1").qualifier = "qualifier"
 
@@ -326,7 +327,7 @@ class ServerPresentationModelTests extends GroovyTestCase {
             assert attribute.qualifier == "changed"
         }
 
-        clientDolphin.send new ChangeBaseValueCommand(), new OnFinishedHandler() {
+        clientDolphin.getClientConnector().send new ChangeBaseValueCommand(), new OnFinishedHandler() {
 
             @Override
             void onFinished() {

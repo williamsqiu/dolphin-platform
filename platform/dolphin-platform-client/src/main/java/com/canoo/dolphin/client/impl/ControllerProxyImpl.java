@@ -66,7 +66,7 @@ public class ControllerProxyImpl<T> implements ControllerProxy<T> {
 
 
         final CompletableFuture<Void> result = new CompletableFuture<>();
-        dolphin.send(new CallActionCommand(), new OnFinishedHandler(){
+        dolphin.getClientConnector().send(new CallActionCommand(), new OnFinishedHandler(){
             @Override
             public void onFinished() {
                 if (bean.isError()) {
@@ -92,7 +92,7 @@ public class ControllerProxyImpl<T> implements ControllerProxy<T> {
 
         final CompletableFuture<Void> ret = new CompletableFuture<>();
 
-        dolphin.send(new DestroyControllerCommand(), new OnFinishedHandler() {
+        dolphin.getClientConnector().send(new DestroyControllerCommand(), new OnFinishedHandler() {
             @Override
             public void onFinished() {
                 model = null;

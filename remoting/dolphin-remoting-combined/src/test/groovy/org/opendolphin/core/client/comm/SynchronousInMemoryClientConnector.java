@@ -16,7 +16,7 @@
 package org.opendolphin.core.client.comm;
 
 import core.client.comm.InMemoryClientConnector;
-import org.opendolphin.core.client.ClientDolphin;
+import org.opendolphin.core.client.ClientModelStore;
 import org.opendolphin.core.comm.Command;
 import org.opendolphin.core.server.ServerConnector;
 
@@ -33,8 +33,8 @@ import java.util.concurrent.Executor;
  */
 public class SynchronousInMemoryClientConnector extends InMemoryClientConnector {
 
-    public SynchronousInMemoryClientConnector(ClientDolphin clientDolphin, ServerConnector serverConnector) {
-        super(clientDolphin, serverConnector, new CommandBatcher(), new Executor() {
+    public SynchronousInMemoryClientConnector(ClientModelStore clientModelStore, ServerConnector serverConnector) {
+        super(clientModelStore, serverConnector, new CommandBatcher(), new Executor() {
             @Override
             public void execute(Runnable command) {
                 throw new RuntimeException("should not reach here!");

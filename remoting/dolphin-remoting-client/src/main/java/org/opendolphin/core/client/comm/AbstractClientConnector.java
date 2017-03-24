@@ -15,7 +15,7 @@
  */
 package org.opendolphin.core.client.comm;
 
-import org.opendolphin.core.client.ClientDolphin;
+import org.opendolphin.core.client.ClientModelStore;
 import org.opendolphin.core.comm.Command;
 import org.opendolphin.core.comm.SignalCommand;
 
@@ -60,20 +60,18 @@ public abstract class AbstractClientConnector implements ClientConnector {
      */
     protected final AtomicBoolean releaseNeeded = new AtomicBoolean(false);
 
-    protected AbstractClientConnector(final ClientDolphin clientDolphin, final Executor uiExecutor, final ICommandBatcher commandBatcher, ExceptionHandler onException, Executor backgroundExecutor) {
+    protected AbstractClientConnector(final ClientModelStore clientModelStore, final Executor uiExecutor, final ICommandBatcher commandBatcher, ExceptionHandler onException, Executor backgroundExecutor) {
         this.uiExecutor = Objects.requireNonNull(uiExecutor);
         this.commandBatcher = Objects.requireNonNull(commandBatcher);
         this.onException = Objects.requireNonNull(onException);
         this.backgroundExecutor = Objects.requireNonNull(backgroundExecutor);
-        this.responseHandler = new ClientResponseHandler(Objects.requireNonNull(clientDolphin));
-
+        this.responseHandler = new ClientResponseHandler(clientModelStore);
         backgroundExecutor.execute(new Runnable() {
             @Override
             public void run() {
                 commandProcessing();
             }
         });
-
     }
 
     protected void commandProcessing() {

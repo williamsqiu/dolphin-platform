@@ -44,14 +44,14 @@ class ClientConnectorPushTests extends Specification {
     protected void cleanup() {
         clientDolphin.sync { app.assertionsDone() }
         assert app.done.await(4, TimeUnit.SECONDS) // max waiting time for async operations to have finished
-        clientDolphin.stopPushListening()
+        clientDolphin.getClientConnector().stopPushListening()
     }
 
     void "listening can be started and stopped"() {
         when:
-        clientDolphin.startPushListening(new PollCommand(), new SignalCommand("INTERRUPT"))
+        clientDolphin.getClientConnector().startPushListening(new PollCommand(), new SignalCommand("INTERRUPT"))
         then:
-        clientDolphin.stopPushListening()
+        clientDolphin.getClientConnector().stopPushListening()
     }
 
     @Ignore
@@ -62,7 +62,7 @@ class ClientConnectorPushTests extends Specification {
             pushWasCalled.countDown()
         }
         when:
-        clientDolphin.startPushListening(new PollCommand("POLL"), new SignalCommand("INTERRUPT"))
+        clientDolphin.getClientConnector().startPushListening(new PollCommand("POLL"), new SignalCommand("INTERRUPT"))
         then:
         pushWasCalled.await(1, TimeUnit.SECONDS)
     }

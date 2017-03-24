@@ -24,7 +24,7 @@ public class ServerDolphinTest extends GroovyTestCase {
     @Override
     protected void setUp() throws Exception {
         dolphin = ServerDolphinFactory.create()
-        dolphin.serverModelStore.currentResponse = []
+        dolphin.getModelStore().currentResponse = []
     }
 
     void testListPresentationModels() {
@@ -33,13 +33,13 @@ public class ServerDolphinTest extends GroovyTestCase {
         assert dolphin.getModelStore().findAllAttributesByQualifier("no-such-qualifier").empty
         assert dolphin.getModelStore().findAllPresentationModelsByType("no-such-type").empty
 
-        def pm1 = new ServerPresentationModel("first", [], dolphin.serverModelStore)
+        def pm1 = new ServerPresentationModel("first", [], dolphin.getModelStore())
         dolphin.getModelStore().add pm1
 
         assert ['first'].toSet() == dolphin.getModelStore().listPresentationModelIds()
         assert [pm1] == dolphin.getModelStore().listPresentationModels().toList()
 
-        def pm2 = new ServerPresentationModel("second", [], dolphin.serverModelStore)
+        def pm2 = new ServerPresentationModel("second", [], dolphin.getModelStore())
         dolphin.getModelStore().add pm2
 
         assert 2 == dolphin.getModelStore().listPresentationModelIds().size()
@@ -67,11 +67,11 @@ public class ServerDolphinTest extends GroovyTestCase {
         }
         dolphin.getModelStore().addModelStoreListener 'person', typedListener
         dolphin.getModelStore().addModelStoreListener listener
-        dolphin.getModelStore().add(new ServerPresentationModel('p1', [], dolphin.serverModelStore))
-        ServerPresentationModel modelWithType = new ServerPresentationModel('person1', [], dolphin.serverModelStore)
+        dolphin.getModelStore().add(new ServerPresentationModel('p1', [], dolphin.getModelStore()))
+        ServerPresentationModel modelWithType = new ServerPresentationModel('person1', [], dolphin.getModelStore())
         modelWithType.setPresentationModelType('person')
         dolphin.getModelStore().add(modelWithType)
-        dolphin.getModelStore().add(new ServerPresentationModel('p2', [], dolphin.serverModelStore))
+        dolphin.getModelStore().add(new ServerPresentationModel('p2', [], dolphin.getModelStore()))
         dolphin.getModelStore().removeModelStoreListener 'person', typedListener
         dolphin.getModelStore().removeModelStoreListener listener
         assert 3 == listenerCallCount
@@ -85,11 +85,11 @@ public class ServerDolphinTest extends GroovyTestCase {
         int listenerCallCount = 0
         dolphin.getModelStore().addModelStoreListener 'person', { evt -> typedListenerCallCount++ }
         dolphin.getModelStore().addModelStoreListener { evt -> listenerCallCount++ }
-        dolphin.getModelStore().add(new ServerPresentationModel('p1', [], dolphin.serverModelStore))
-        ServerPresentationModel modelWithType = new ServerPresentationModel('person1', [], dolphin.serverModelStore)
+        dolphin.getModelStore().add(new ServerPresentationModel('p1', [], dolphin.getModelStore()))
+        ServerPresentationModel modelWithType = new ServerPresentationModel('person1', [], dolphin.getModelStore())
         modelWithType.setPresentationModelType('person')
         dolphin.getModelStore().add(modelWithType)
-        dolphin.getModelStore().add(new ServerPresentationModel('p2', [], dolphin.serverModelStore))
+        dolphin.getModelStore().add(new ServerPresentationModel('p2', [], dolphin.getModelStore()))
         assert 3 == listenerCallCount
         assert 1 == typedListenerCallCount
     }
@@ -107,11 +107,11 @@ public class ServerDolphinTest extends GroovyTestCase {
     }
 
     void testRegisterDefaultActions() {
-        dolphin.registerDefaultActions();
+        dolphin.getServerConnector().registerDefaultActions();
         def numDefaultActions = dolphin.serverConnector.dolphinServerActions.size()
 
         // multiple calls should not lead to multiple initializations
-        dolphin.registerDefaultActions();
+        dolphin.getServerConnector().registerDefaultActions();
         assert numDefaultActions == dolphin.serverConnector.dolphinServerActions.size()
     }
 

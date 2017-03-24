@@ -28,8 +28,8 @@ public class DeletePresentationModelAction extends DolphinServerAction {
         registry.register(DeletedPresentationModelNotification.class, new CommandHandler<DeletedPresentationModelNotification>() {
             @Override
             public void handleCommand(final DeletedPresentationModelNotification command, List response) {
-                ServerPresentationModel model = getServerDolphin().getModelStore().findPresentationModelById(command.getPmId());
-                getServerDolphin().getServerModelStore().checkClientRemoved(model);
+                ServerPresentationModel model = getServerModelStore().findPresentationModelById(command.getPmId());
+                getServerModelStore().checkClientRemoved(model);
             }
         });
     }

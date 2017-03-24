@@ -17,8 +17,8 @@ package org.opendolphin.core.server.action;
 
 import org.opendolphin.RemotingConstants;
 import org.opendolphin.core.comm.CreatePresentationModelCommand;
-import org.opendolphin.core.server.DefaultServerDolphin;
 import org.opendolphin.core.server.ServerAttribute;
+import org.opendolphin.core.server.ServerModelStore;
 import org.opendolphin.core.server.ServerPresentationModel;
 import org.opendolphin.core.server.comm.ActionRegistry;
 import org.opendolphin.core.server.comm.CommandHandler;
@@ -37,13 +37,13 @@ public class CreatePresentationModelAction extends DolphinServerAction {
         registry.register(CreatePresentationModelCommand.class, new CommandHandler<CreatePresentationModelCommand>() {
             @Override
             public void handleCommand(final CreatePresentationModelCommand command, List response) {
-                createPresentationModel(command, getServerDolphin());// closure wrapper for correct scoping and extracted method for static compilation
+                createPresentationModel(command, getServerModelStore());
             }
         });
     }
 
-    private static void createPresentationModel(CreatePresentationModelCommand command, DefaultServerDolphin serverDolphin) {
-        if (serverDolphin.getModelStore().findPresentationModelById(command.getPmId()) != null) {
+    private static void createPresentationModel(CreatePresentationModelCommand command, ServerModelStore serverModelStore) {
+        if (serverModelStore.findPresentationModelById(command.getPmId()) != null) {
             LOG.info("Ignoring create PM '" + command.getPmId() + "' since it is already in the model store.");
             return;
         }
@@ -59,9 +59,9 @@ public class CreatePresentationModelAction extends DolphinServerAction {
             attributes.add(attribute);
         }
 
-        ServerPresentationModel model = new ServerPresentationModel(command.getPmId(), attributes, serverDolphin.getServerModelStore());
+        ServerPresentationModel model = new ServerPresentationModel(command.getPmId(), attributes, serverModelStore);
         model.setPresentationModelType(command.getPmType());
-        serverDolphin.getServerModelStore().checkClientAdded(model);
+        serverModelStore.checkClientAdded(model);
     }
 
 }

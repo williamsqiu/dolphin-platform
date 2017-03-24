@@ -49,7 +49,7 @@ class CommunicationTests extends GroovyTestCase {
 		config = new TestInMemoryConfig()
         serverConnector  = config.serverDolphin.serverConnector
         clientConnector  = config.clientDolphin.clientConnector
-        clientModelStore = config.clientDolphin.clientModelStore
+        clientModelStore = config.clientDolphin.getModelStore()
         clientDolphin    = config.clientDolphin
 	}
 

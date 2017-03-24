@@ -161,7 +161,7 @@ public class DolphinContext {
     }
 
     private void registerDolphinPlatformDefaultCommands() {
-        dolphin.register(new DolphinServerAction() {
+        dolphin.getServerConnector().register(new DolphinServerAction() {
             @Override
             public void registerIn(ActionRegistry registry) {
 

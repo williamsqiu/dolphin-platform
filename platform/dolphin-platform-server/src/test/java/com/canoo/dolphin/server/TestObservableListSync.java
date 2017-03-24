@@ -58,7 +58,7 @@ public class TestObservableListSync extends AbstractDolphinBasedTest {
         }
 
         public PresentationModel create() {
-            return dolphin.presentationModel(UUID.randomUUID().toString(), type, new DTO(slots));
+            return dolphin.getModelStore().presentationModel(UUID.randomUUID().toString(), type, new DTO(slots));
         }
 
     }

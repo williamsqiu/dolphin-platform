@@ -16,17 +16,12 @@
 package org.opendolphin.core.server;
 
 import org.opendolphin.core.Dolphin;
-import org.opendolphin.core.server.action.DolphinServerAction;
 
+@Deprecated
 public interface ServerDolphin extends Dolphin<ServerAttribute, ServerPresentationModel> {
 
     ServerConnector getServerConnector();
 
-    void registerDefaultActions();
-
-    void register(DolphinServerAction action);
-
     ServerModelStore getModelStore();
 
-     ServerPresentationModel presentationModel(String id, String presentationModelType, DTO dto);
 }

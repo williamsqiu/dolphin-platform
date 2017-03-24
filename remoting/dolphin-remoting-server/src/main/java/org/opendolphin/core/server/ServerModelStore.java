@@ -183,4 +183,29 @@ public class ServerModelStore extends ModelStore<ServerAttribute, ServerPresenta
         }
         response.add(new CreatePresentationModelCommand(id, presentationModelType, list));
     }
+
+    /**
+     * Create a presentation model on the server side, add it to the model store, and send a command to
+     * the client, advising him to do the same.
+     *
+     * @throws IllegalArgumentException if a presentation model for this id already exists. No commands are sent in this case.
+     */
+    public ServerPresentationModel presentationModel(String id, String presentationModelType, DTO dto) {
+        List<ServerAttribute> attributes = new ArrayList<ServerAttribute>();
+        for (final Slot slot : dto.getSlots()) {
+            final ServerAttribute result = new ServerAttribute(slot.getPropertyName(), slot.getValue(), slot.getQualifier());
+            result.silently(new Runnable() {
+                @Override
+                public void run() {
+                    result.setValue(slot.getValue());
+                }
+
+            });
+            attributes.add(result);
+        }
+        ServerPresentationModel model = new ServerPresentationModel(id, attributes, this);
+        model.setPresentationModelType(presentationModelType);
+        add(model);
+        return model;
+    }
 }

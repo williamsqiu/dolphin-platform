@@ -17,7 +17,6 @@ package org.opendolphin.core.server.action;
 
 import org.opendolphin.core.comm.Command;
 import org.opendolphin.core.server.DTO;
-import org.opendolphin.core.server.DefaultServerDolphin;
 import org.opendolphin.core.server.ServerAttribute;
 import org.opendolphin.core.server.ServerModelStore;
 
@@ -29,7 +28,7 @@ import java.util.List;
  */
 public abstract class DolphinServerAction implements ServerAction {
 
-    private DefaultServerDolphin serverDolphin;
+    private ServerModelStore serverModelStore;
 
     private List<Command> dolphinResponse;
 
@@ -41,12 +40,13 @@ public abstract class DolphinServerAction implements ServerAction {
         ServerModelStore.changeValueCommand(dolphinResponse, attribute, value);
     }
 
-    public DefaultServerDolphin getServerDolphin() {
-        return serverDolphin;
+    public ServerModelStore getServerModelStore() {
+        return serverModelStore;
     }
 
-    public void setServerDolphin(DefaultServerDolphin serverDolphin) {
-        this.serverDolphin = serverDolphin;
+    @Deprecated
+    public void setServerModelStore(ServerModelStore serverModelStore) {
+        this.serverModelStore = serverModelStore;
     }
 
     public List<Command> getDolphinResponse() {

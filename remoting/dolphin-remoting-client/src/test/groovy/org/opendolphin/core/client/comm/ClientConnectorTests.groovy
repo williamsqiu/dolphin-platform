@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 package org.opendolphin.core.client.comm
+
 import groovy.util.logging.Log
 import org.opendolphin.core.Attribute
-import org.opendolphin.core.client.ClientAttribute
-import org.opendolphin.core.client.ClientDolphin
-import org.opendolphin.core.client.ClientModelStore
-import org.opendolphin.core.client.ClientPresentationModel
+import org.opendolphin.core.client.*
 import org.opendolphin.core.comm.*
 import org.opendolphin.util.DirectExecutor
+import org.opendolphin.util.Provider
 
 import java.beans.PropertyChangeEvent
 import java.util.concurrent.CountDownLatch
@@ -52,12 +51,19 @@ class ClientConnectorTests extends GroovyTestCase {
 
 	@Override
 	protected void setUp() {
-
 		dolphin = new ClientDolphin()
-		clientConnector = new TestClientConnector(dolphin, DirectExecutor.getInstance());
-		dolphin.clientConnector = clientConnector
-		dolphin.clientModelStore = new ClientModelStore(dolphin)
-		attributeChangeListener = dolphin.clientModelStore.@attributeChangeListener
+		ModelSynchronizer defaultModelSynchronizer = new DefaultModelSynchronizer(new Provider<ClientConnector>() {
+			@Override
+			ClientConnector get() {
+				return dolphin.clientConnector;
+			}
+		});
+		ClientModelStore clientModelStore = new ClientModelStore(defaultModelSynchronizer);
+		dolphin.clientModelStore = clientModelStore;
+		clientConnector = new TestClientConnector(clientModelStore, DirectExecutor.getInstance());
+		dolphin.clientConnector = clientConnector;
+
+		attributeChangeListener = dolphin.getModelStore().@attributeChangeListener
 
 		initLatch()
 	}
@@ -121,7 +127,7 @@ class ClientConnectorTests extends GroovyTestCase {
 
 	void testValueChange_noQualifier() {
 		ClientAttribute attribute = new ClientAttribute('attr', 'initialValue')
-		dolphin.clientModelStore.registerAttribute(attribute)
+		dolphin.getModelStore().registerAttribute(attribute)
 		attributeChangeListener.propertyChange(new PropertyChangeEvent(attribute, Attribute.VALUE_NAME, attribute.value, 'newValue'))
 		syncAndWaitUntilDone()
 		assertCommandsTransmitted(2)
@@ -133,7 +139,7 @@ class ClientConnectorTests extends GroovyTestCase {
 		syncDone = new CountDownLatch(1)
 
 		ClientAttribute attribute = new ClientAttribute('attr', 'initialValue', 'qualifier')
-		dolphin.clientModelStore.registerAttribute(attribute)
+		dolphin.getModelStore().registerAttribute(attribute)
 		attributeChangeListener.propertyChange(new PropertyChangeEvent(attribute, Attribute.VALUE_NAME, attribute.value, 'newValue'))
 		syncAndWaitUntilDone()
 
@@ -144,7 +150,7 @@ class ClientConnectorTests extends GroovyTestCase {
 
 	void testAddTwoAttributesInConstructorWithSameQualifierToSamePMIsNotAllowed() {
 		shouldFail(IllegalStateException) {
-			dolphin.presentationModel("1", new ClientAttribute("a", "0", "QUAL"), new ClientAttribute("b", "0", "QUAL"))
+			dolphin.getModelStore().createModel("1", null, new ClientAttribute("a", "0", "QUAL"), new ClientAttribute("b", "0", "QUAL"))
 		}
 	}
 
@@ -164,7 +170,7 @@ class ClientConnectorTests extends GroovyTestCase {
 
 	void testHandle_ValueChangedWithBadBaseValueIsIgnored() {
 		def attribute = new ClientAttribute('attr', 'initialValue')
-		dolphin.clientModelStore.registerAttribute(attribute)
+		dolphin.getModelStore().registerAttribute(attribute)
 		clientConnector.dispatchHandle(new ValueChangedCommand(attributeId: attribute.id, oldValue: 'no-such-base-value', newValue: 'newValue'))
 		assert 'initialValue' == attribute.value
 	}
@@ -172,7 +178,7 @@ class ClientConnectorTests extends GroovyTestCase {
 	void testHandle_ValueChangedWithBadBaseValueIgnoredInNonStrictMode() {
 		clientConnector.strictMode = false
 		def attribute = new ClientAttribute('attr', 'initialValue')
-		dolphin.clientModelStore.registerAttribute(attribute)
+		dolphin.getModelStore().registerAttribute(attribute)
 		clientConnector.dispatchHandle(new ValueChangedCommand(attributeId: attribute.id, oldValue: 'no-such-base-value', newValue: 'newValue'))
 		assert 'newValue' == attribute.value
 		clientConnector.strictMode = true // re-setting for later tests
@@ -180,7 +186,7 @@ class ClientConnectorTests extends GroovyTestCase {
 
 	void testHandle_ValueChanged() {
 		def attribute = new ClientAttribute('attr', 'initialValue')
-		dolphin.clientModelStore.registerAttribute(attribute)
+		dolphin.getModelStore().registerAttribute(attribute)
 		assert !clientConnector.dispatchHandle(new ValueChangedCommand(attributeId: attribute.id, oldValue: 'initialValue', newValue: 'newValue'))
 		assert 'newValue' == attribute.value
 	}
@@ -215,16 +221,16 @@ class ClientConnectorTests extends GroovyTestCase {
 	}
 
 	void testHandle_CreatePresentationModel_MergeAttributesToExistingModel() {
-		dolphin.presentationModel('p1')
+		dolphin.getModelStore().createModel('p1', null)
 		shouldFail(IllegalStateException) {
 			clientConnector.dispatchHandle(new CreatePresentationModelCommand(pmId: 'p1', pmType: 'type', attributes: []))
 		}
 	}
 
 	void testHandle_DeletePresentationModel() {
-		ClientPresentationModel p1 = dolphin.presentationModel('p1')
+		ClientPresentationModel p1 = dolphin.getModelStore().createModel('p1', null)
 		p1.clientSideOnly = true
-		ClientPresentationModel p2 = dolphin.presentationModel('p2')
+		ClientPresentationModel p2 = dolphin.getModelStore().createModel('p2', null)
 		clientConnector.dispatchHandle(new DeletePresentationModelCommand(pmId: null))
 		def model = new ClientPresentationModel('p3', [])
 		clientConnector.dispatchHandle(new DeletePresentationModelCommand(pmId: model.id))
@@ -246,8 +252,8 @@ class ClientConnectorTests extends GroovyTestCase {
 
 		List<Command> transmittedCommands = []
 
-		TestClientConnector(ClientDolphin clientDolphin, Executor uiExecutor) {
-			super(clientDolphin, uiExecutor, new CommandBatcher(), new SimpleExceptionHandler(uiExecutor), Executors.newCachedThreadPool());
+		TestClientConnector(ClientModelStore modelStore, Executor uiExecutor) {
+			super(modelStore, uiExecutor, new CommandBatcher(), new SimpleExceptionHandler(uiExecutor), Executors.newCachedThreadPool());
 		}
 
 		int getTransmitCount() {

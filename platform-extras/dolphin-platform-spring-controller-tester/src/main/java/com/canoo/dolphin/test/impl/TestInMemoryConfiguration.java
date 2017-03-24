@@ -17,8 +17,12 @@ package com.canoo.dolphin.test.impl;
 
 import org.opendolphin.core.client.ClientDolphin;
 import org.opendolphin.core.client.ClientModelStore;
+import org.opendolphin.core.client.DefaultModelSynchronizer;
+import org.opendolphin.core.client.ModelSynchronizer;
+import org.opendolphin.core.client.comm.ClientConnector;
 import org.opendolphin.core.server.DefaultServerDolphin;
 import org.opendolphin.core.server.ServerDolphinFactory;
+import org.opendolphin.util.Provider;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -32,7 +36,13 @@ public class TestInMemoryConfiguration {
     private final ExecutorService clientExecutor = Executors.newSingleThreadExecutor();
 
     public TestInMemoryConfiguration() {
-        clientDolphin.setClientModelStore(new ClientModelStore(clientDolphin));
+        ModelSynchronizer defaultModelSynchronizer = new DefaultModelSynchronizer(new Provider<ClientConnector>() {
+            @Override
+            public ClientConnector get() {
+                return clientDolphin.getClientConnector();
+            }
+        });
+        clientDolphin.setClientModelStore(new ClientModelStore(defaultModelSynchronizer));
     }
 
     public ExecutorService getClientExecutor() {

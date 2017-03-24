@@ -18,14 +18,14 @@ package org.opendolphin.core.server;
 import org.opendolphin.core.comm.Codec;
 import org.opendolphin.core.comm.Command;
 import org.opendolphin.core.comm.SignalCommand;
-import org.opendolphin.core.server.action.DolphinServerAction;
-import org.opendolphin.core.server.action.ServerAction;
+import org.opendolphin.core.server.action.*;
 import org.opendolphin.core.server.comm.ActionRegistry;
 import org.opendolphin.core.server.comm.CommandHandler;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -36,6 +36,8 @@ public class ServerConnector {
     private final ActionRegistry registry = new ActionRegistry();
 
     private final List<DolphinServerAction> dolphinServerActions = new ArrayList<DolphinServerAction>();
+
+    private final AtomicBoolean initialized = new AtomicBoolean(false);
 
     private Codec codec;
 
@@ -80,12 +82,21 @@ public class ServerConnector {
         return response;
     }
 
-    public void register(ServerAction action) {
-        if (action instanceof DolphinServerAction) {
-            // static type checker complains if no explicit cast
-            dolphinServerActions.add((DolphinServerAction) action);
-        }
+    public void register(DolphinServerAction action) {
+        action.setServerModelStore(serverModelStore);
+        dolphinServerActions.add(action);
         action.registerIn(registry);
+    }
+
+    public void registerDefaultActions() {
+        if (initialized.getAndSet(true)) {
+            LOG.warning("attempt to initialize default actions more than once!");
+            return;
+        }
+        register(new StoreValueChangeAction());
+        register(new StoreAttributeAction());
+        register(new CreatePresentationModelAction());
+        register(new DeletePresentationModelAction());
     }
 
     public Codec getCodec() {

@@ -291,6 +291,7 @@ public class ModelStore<A extends Attribute, P extends PresentationModel<A>> {
      * @param attribute attribute to be added to the model store
      * @see #add(PresentationModel)
      */
+    @Deprecated
     public void registerAttribute(A attribute) {
         if (null == attribute) return;
         boolean listeningAlready = false;
