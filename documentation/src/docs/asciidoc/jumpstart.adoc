@@ -46,11 +46,11 @@ documentation https://github.com/canoo/dolphin-platform-lazybones-templates[can 
 == Creating a project by hand
 
 Maybe some developers don't want to use the Maven archetype to create a new Dolphin Platform based application or want to
-integrate the Dolphin Platform in an existing application. Even if the Maven archetype is the fasted way to set up a
+integrate the Dolphin Platform in an existing application. Even if the Maven archetype is the fastest way to set up a
 startable project it's quite easy to create such an application from scratch.
 
-The API and implementation of the Dolphin Platform is splitted in several modules. Depending on the application
-infrastructure a developer needs to add different modules to the application dependencies. The following diagramm
+The API and implementation of the Dolphin Platform is split in several modules. Depending on the application
+infrastructure a developer needs to add different modules to the application dependencies. The following diagram
 gives an overview of all Dolphin Platform modules:
 
 .Dolphin Platform modules
@@ -64,8 +64,10 @@ API for the server part. Based on this you only need to add one dependency to yo
 application. All modules on the server are full compatible to Java 7 and above.
 
 You can simply integrate Dolphin Platform in a Spring based application. To do so you only need to add the Spring
-module. All Java modules of the Dolphin Platform are available at Maven Central and JCenter. The following snippet
-shows the spring module as a Maven dependency:
+module. All Java modules of the Dolphin Platform are available at Maven Central and JCenter. The following snippet shows
+module dependency as maven and gradle.
+
+Spring module as a Maven dependency:
 
 [source,xml]
 ----
@@ -75,6 +77,16 @@ shows the spring module as a Maven dependency:
     <version>0.8.9</version>
 </dependency>
 ----
+
+Spring module as a Gradle dependency:
+
+[source,xml]
+----
+dependencies{
+    compile 'com.canoo.dolphin-platform:dolphin-platform-server-spring:0.8.9'
+}
+----
+
 
 Next to this the Dolphin Platform provides support for JavaEE. The following snippet shows the JavaEE module of the
 Dolphin Platform as a Maven dependency:
@@ -86,6 +98,15 @@ Dolphin Platform as a Maven dependency:
     <artifactId>dolphin-platform-server-javaee</artifactId>
     <version>0.8.9</version>
 </dependency>
+----
+
+JavaEE module as a Gradle dependency:
+
+[source,xml]
+----
+dependencies{
+    compile 'com.canoo.dolphin-platform:dolphin-platform-server-javaee:0.8.9'
+}
 ----
 
 NOTE: Additional information can be found in the JavaEE and Spring chapter of this documentation.
