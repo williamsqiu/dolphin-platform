@@ -43,4 +43,8 @@ public interface PlatformConstants {
     String START_LONG_POLL_COMMAND_NAME = DOLPHIN_PLATFORM_PREFIX + "longPoll";
 
     String INTERRUPT_LONG_POLL_COMMAND_NAME = DOLPHIN_PLATFORM_PREFIX + "release";
+
+    String REMOTING_DATE_FORMAT_PATTERN = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
+
+    String TIMEZONE_UTC = "UTC";
 }

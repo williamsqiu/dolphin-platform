@@ -17,11 +17,19 @@ package com.canoo.dolphin.converters;
 
 import com.canoo.dolphin.converter.Converter;
 import com.canoo.dolphin.converter.ValueConverterException;
+import com.canoo.dolphin.impl.PlatformConstants;
 import com.canoo.dolphin.impl.converters.AbstractConverterFactory;
 import com.canoo.dolphin.impl.converters.AbstractStringConverter;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.TimeZone;
 
 public class LocalDateTimeConverterFactory extends AbstractConverterFactory {
 
@@ -44,13 +52,20 @@ public class LocalDateTimeConverterFactory extends AbstractConverterFactory {
 
     private static class LocalDateTimeConverter extends AbstractStringConverter<LocalDateTime> {
 
+        private final DateFormat dateFormat;
+        public LocalDateTimeConverter(){
+            dateFormat = new SimpleDateFormat(PlatformConstants.REMOTING_DATE_FORMAT_PATTERN);
+            dateFormat.setTimeZone(TimeZone.getTimeZone(PlatformConstants.TIMEZONE_UTC));
+        }
         @Override
         public LocalDateTime convertFromDolphin(String value) throws ValueConverterException {
             if (value == null) {
                 return null;
             }
             try {
-                return LocalDateTime.from(DateTimeFormatter.ISO_LOCAL_DATE_TIME.parse(value));
+                final Calendar result = Calendar.getInstance(TimeZone.getTimeZone(PlatformConstants.TIMEZONE_UTC));
+                result.setTime(dateFormat.parse(value));
+                return result.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
             } catch (Exception e) {
                 throw new ValueConverterException("Can not convert to LocalDateTime", e);
             }
@@ -62,7 +77,8 @@ public class LocalDateTimeConverterFactory extends AbstractConverterFactory {
                 return null;
             }
             try {
-                return value.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+                Date date = Date.from(value.toInstant(OffsetDateTime.now().getOffset()));
+                return dateFormat.format(date);
             } catch (Exception e) {
                 throw new ValueConverterException("Can not convert from LocalDateTime", e);
             }
