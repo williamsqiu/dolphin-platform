@@ -96,6 +96,10 @@ public class MyViewController {
 How a model can be specified and how it can be used on the client and the server can be found in the documentation of
 the model API.
 
+IMPORTANT: A Dolphin Platform controller must have exactly 1 model. Using the `@DolphinModel` annotation more than 1
+time in a controller will cause an exception at runtime. If you do not define a model (by using `@DolphinModel`) an
+exception will be thrown as well.
+
 == Controller actions
 
 Actions are endpoints of the controller that can be triggered by the view. For example this can happen when a user
