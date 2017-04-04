@@ -21,8 +21,8 @@ import com.canoo.dolphin.impl.commands.CreateContextCommand;
 import com.canoo.dolphin.impl.commands.DestroyContextCommand;
 import com.canoo.dolphin.util.Assert;
 import com.canoo.dolphin.util.Callback;
-import com.canoo.dolphin.util.DolphinRemotingException;
 import org.opendolphin.core.client.ClientDolphin;
+import org.opendolphin.util.DolphinRemotingException;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;

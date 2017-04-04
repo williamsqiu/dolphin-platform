@@ -18,6 +18,7 @@ package org.opendolphin.core.client.comm;
 import org.opendolphin.core.client.ClientModelStore;
 import org.opendolphin.core.comm.Command;
 import org.opendolphin.core.comm.SignalCommand;
+import org.opendolphin.util.DolphinRemotingException;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -36,20 +37,12 @@ public abstract class AbstractClientConnector implements ClientConnector {
 
     private final Executor backgroundExecutor;
 
-    private ExceptionHandler onException;
+    private final RemotingExceptionHandler remotingExceptionHandler;
 
     private final ClientResponseHandler responseHandler;
 
     private final ICommandBatcher commandBatcher;
 
-    /**
-     * The named command that waits for pushes on the server side
-     */
-    private Command pushListener;
-    /**
-     * The signal command that publishes a "release" event on the respective bus
-     */
-    private Command releaseCommand;
     /**
      * whether listening for push events should be done at all.
      */
@@ -60,10 +53,21 @@ public abstract class AbstractClientConnector implements ClientConnector {
      */
     protected final AtomicBoolean releaseNeeded = new AtomicBoolean(false);
 
-    protected AbstractClientConnector(final ClientModelStore clientModelStore, final Executor uiExecutor, final ICommandBatcher commandBatcher, ExceptionHandler onException, Executor backgroundExecutor) {
+    protected final AtomicBoolean brokenConnection = new AtomicBoolean(false);
+
+    /**
+     * The named command that waits for pushes on the server side
+     */
+    private Command pushListener;
+    /**
+     * The signal command that publishes a "release" event on the respective bus
+     */
+    private Command releaseCommand;
+
+    protected AbstractClientConnector(final ClientModelStore clientModelStore, final Executor uiExecutor, final ICommandBatcher commandBatcher, RemotingExceptionHandler remotingExceptionHandler, Executor backgroundExecutor) {
         this.uiExecutor = Objects.requireNonNull(uiExecutor);
         this.commandBatcher = Objects.requireNonNull(commandBatcher);
-        this.onException = Objects.requireNonNull(onException);
+        this.remotingExceptionHandler = Objects.requireNonNull(remotingExceptionHandler);
         this.backgroundExecutor = Objects.requireNonNull(backgroundExecutor);
         this.responseHandler = new ClientResponseHandler(clientModelStore);
         backgroundExecutor.execute(new Runnable() {
@@ -74,8 +78,20 @@ public abstract class AbstractClientConnector implements ClientConnector {
         });
     }
 
+    private void handleError(Exception exception) {
+        Objects.requireNonNull(exception);
+
+        brokenConnection.set(true);
+        stopPushListening();
+        if(exception instanceof DolphinRemotingException) {
+            remotingExceptionHandler.handle((DolphinRemotingException) exception);
+        } else {
+            remotingExceptionHandler.handle(new DolphinRemotingException("internal remoting error", exception));
+        }
+    }
+
     protected void commandProcessing() {
-        while (true) {
+        while (!brokenConnection.get()) {
             try {
                 final List<CommandAndHandler> toProcess = commandBatcher.getWaitingBatches().getVal();
                 List<Command> commands = new ArrayList<>();
@@ -97,15 +113,19 @@ public abstract class AbstractClientConnector implements ClientConnector {
                     }
                 });
             } catch (Exception e) {
-                onException.handle(e);
+                handleError(e);
             }
         }
     }
 
-    protected abstract List<Command> transmit(List<Command> commands);
+    protected abstract List<Command> transmit(List<Command> commands) throws DolphinRemotingException;
 
     @Override
     public void send(final Command command, final OnFinishedHandler callback, final HandlerType handlerType) {
+        if(brokenConnection.get()) {
+            //TODO: Change to DolphinRemotingException
+            throw new IllegalStateException("Conection is broken");
+        }
         // we have some change so regardless of the batching we may have to release a push
         if (!command.equals(pushListener)) {
             release();
@@ -153,17 +173,25 @@ public abstract class AbstractClientConnector implements ClientConnector {
      * listens for the pushListener to return. The pushListener must be set and pushEnabled must be true.
      */
     protected void listen() {
+        if(brokenConnection.get()) {
+            return;
+        }
+
         if (!pushEnabled.get() || releaseNeeded.get()) {
             return;
         }
         releaseNeeded.set(true);
-        send(pushListener, new OnFinishedHandler() {
-            @Override
-            public void onFinished() {
-                releaseNeeded.set(false);
-                listen();
-            }
-        });
+        try {
+            send(pushListener, new OnFinishedHandler() {
+                @Override
+                public void onFinished() {
+                    releaseNeeded.set(false);
+                    listen();
+                }
+            });
+        } catch (Exception e) {
+            // do nothing...
+        }
     }
 
     /**
@@ -179,9 +207,12 @@ public abstract class AbstractClientConnector implements ClientConnector {
         backgroundExecutor.execute(new Runnable() {
             @Override
             public void run() {
-                transmit(Collections.singletonList(releaseCommand));
+                try {
+                    transmit(Collections.singletonList(releaseCommand));
+                } catch (DolphinRemotingException e) {
+                    handleError(e);
+                }
             }
-
         });
     }
 
@@ -201,10 +232,6 @@ public abstract class AbstractClientConnector implements ClientConnector {
 
     public void setStrictMode(boolean strictMode) {
         this.responseHandler.setStrictMode(strictMode);
-    }
-
-    public void setOnException(ExceptionHandler onException) {
-        this.onException = onException;
     }
 
     protected Command getReleaseCommand() {

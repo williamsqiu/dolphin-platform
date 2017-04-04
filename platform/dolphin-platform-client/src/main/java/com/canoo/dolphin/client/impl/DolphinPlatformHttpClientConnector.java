@@ -21,13 +21,13 @@ import com.canoo.dolphin.client.HttpURLConnectionFactory;
 import com.canoo.dolphin.client.HttpURLConnectionResponseHandler;
 import com.canoo.dolphin.impl.PlatformConstants;
 import com.canoo.dolphin.util.Assert;
-import com.canoo.dolphin.util.DolphinRemotingException;
 import org.opendolphin.core.client.ClientDolphin;
 import org.opendolphin.core.client.comm.AbstractClientConnector;
 import org.opendolphin.core.client.comm.BlindCommandBatcher;
-import org.opendolphin.core.client.comm.ExceptionHandler;
+import org.opendolphin.core.client.comm.RemotingExceptionHandler;
 import org.opendolphin.core.comm.Codec;
 import org.opendolphin.core.comm.Command;
+import org.opendolphin.util.DolphinRemotingException;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -63,8 +63,6 @@ public class DolphinPlatformHttpClientConnector extends AbstractClientConnector 
 
     private final URL servletUrl;
 
-    private final ForwardableCallback<DolphinRemotingException> remotingErrorHandler;
-
     private final Codec codec;
 
     private final CookieStore cookieStore;
@@ -75,7 +73,7 @@ public class DolphinPlatformHttpClientConnector extends AbstractClientConnector 
 
     private String clientId;
 
-    public DolphinPlatformHttpClientConnector(ClientConfiguration configuration, ClientDolphin clientDolphin, Codec codec, ForwardableCallback<DolphinRemotingException> remotingErrorHandler, ExceptionHandler onException) {
+    public DolphinPlatformHttpClientConnector(ClientConfiguration configuration, ClientDolphin clientDolphin, Codec codec, RemotingExceptionHandler onException) {
         super(clientDolphin.getModelStore(), Assert.requireNonNull(configuration, "configuration").getUiExecutor(), new BlindCommandBatcher(), onException, configuration.getBackgroundExecutor());
         setStrictMode(false);
 
@@ -86,10 +84,9 @@ public class DolphinPlatformHttpClientConnector extends AbstractClientConnector 
         this.responseHandler = configuration.getResponseHandler();
 
         this.codec = Assert.requireNonNull(codec, "codec");
-        this.remotingErrorHandler = Assert.requireNonNull(remotingErrorHandler, "remotingErrorHandler");
     }
 
-    public List<Command> transmit(List<Command> commands) {
+    public List<Command> transmit(List<Command> commands) throws DolphinRemotingException {
         Assert.requireNonNull(commands, "commands");
         try {
             //REQUEST
@@ -126,7 +123,6 @@ public class DolphinPlatformHttpClientConnector extends AbstractClientConnector 
             }
         } catch (Exception e) {
             DolphinRemotingException dolphinRemotingException = new DolphinRemotingException("Error in remoting layer", e);
-            remotingErrorHandler.call(dolphinRemotingException);
             throw dolphinRemotingException;
         }
     }
@@ -162,7 +158,7 @@ public class DolphinPlatformHttpClientConnector extends AbstractClientConnector 
     private void updateClientId(HttpURLConnection conn) {
         String clientIdInHeader = conn.getHeaderField(PlatformConstants.CLIENT_ID_HTTP_HEADER_NAME);
         if (this.clientId != null && !this.clientId.equals(clientIdInHeader)) {
-            throw new DolphinRemotingException("Error: client id conflict!");
+            throw new IllegalStateException("Error: client id conflict!");
         }
         this.clientId = clientIdInHeader;
     }

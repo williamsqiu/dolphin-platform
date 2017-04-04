@@ -17,7 +17,7 @@ package com.canoo.dolphin.client;
 
 import com.canoo.dolphin.event.Subscription;
 import com.canoo.dolphin.util.Callback;
-import com.canoo.dolphin.util.DolphinRemotingException;
+import org.opendolphin.util.DolphinRemotingException;
 
 import java.util.concurrent.CompletableFuture;
 

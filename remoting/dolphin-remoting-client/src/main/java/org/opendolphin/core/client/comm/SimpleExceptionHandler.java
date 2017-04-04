@@ -15,11 +15,13 @@
  */
 package org.opendolphin.core.client.comm;
 
+import org.opendolphin.util.DolphinRemotingException;
+
 import java.util.concurrent.Executor;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class SimpleExceptionHandler implements ExceptionHandler {
+public class SimpleExceptionHandler implements RemotingExceptionHandler {
 
     private static final Logger LOG = Logger.getLogger(SimpleExceptionHandler.class.getName());
 
@@ -30,7 +32,7 @@ public class SimpleExceptionHandler implements ExceptionHandler {
     }
 
     @Override
-    public void handle(final Throwable e) {
+    public void handle(final DolphinRemotingException e) {
         LOG.log(Level.SEVERE, "onException reached, rethrowing in UI Thread, consider setting AbstractClientConnector.onException", e);
         uiExecutor.execute(new Runnable() {
             @Override

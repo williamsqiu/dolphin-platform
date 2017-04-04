@@ -15,17 +15,7 @@
  */
 package com.canoo.dolphin.client;
 
-import com.canoo.dolphin.client.impl.ClientBeanBuilderImpl;
-import com.canoo.dolphin.client.impl.ClientBeanManagerImpl;
-import com.canoo.dolphin.client.impl.ClientContextImpl;
-import com.canoo.dolphin.client.impl.ClientEventDispatcher;
-import com.canoo.dolphin.client.impl.ClientPlatformBeanRepository;
-import com.canoo.dolphin.client.impl.ClientPresentationModelBuilderFactory;
-import com.canoo.dolphin.client.impl.ControllerProxyFactory;
-import com.canoo.dolphin.client.impl.ControllerProxyFactoryImpl;
-import com.canoo.dolphin.client.impl.DolphinCommandHandler;
-import com.canoo.dolphin.client.impl.DolphinPlatformHttpClientConnector;
-import com.canoo.dolphin.client.impl.ForwardableCallback;
+import com.canoo.dolphin.client.impl.*;
 import com.canoo.dolphin.impl.BeanRepositoryImpl;
 import com.canoo.dolphin.impl.ClassRepositoryImpl;
 import com.canoo.dolphin.impl.Converters;
@@ -40,14 +30,14 @@ import com.canoo.dolphin.internal.ClassRepository;
 import com.canoo.dolphin.internal.EventDispatcher;
 import com.canoo.dolphin.internal.collections.ListMapper;
 import com.canoo.dolphin.util.Assert;
-import com.canoo.dolphin.util.DolphinRemotingException;
 import org.opendolphin.core.client.ClientDolphin;
 import org.opendolphin.core.client.ClientModelStore;
 import org.opendolphin.core.client.DefaultModelSynchronizer;
 import org.opendolphin.core.client.ModelSynchronizer;
 import org.opendolphin.core.client.comm.AbstractClientConnector;
 import org.opendolphin.core.client.comm.ClientConnector;
-import org.opendolphin.core.client.comm.ExceptionHandler;
+import org.opendolphin.core.client.comm.RemotingExceptionHandler;
+import org.opendolphin.util.DolphinRemotingException;
 import org.opendolphin.util.Provider;
 
 import java.util.concurrent.CompletableFuture;
@@ -94,17 +84,16 @@ public class ClientContextFactory {
                     });
                     clientDolphin.setClientModelStore(new ClientModelStore(defaultModelSynchronizer));
 
-                    ExceptionHandler exceptionHandler = new ExceptionHandler() {
+                    RemotingExceptionHandler exceptionHandler = new RemotingExceptionHandler() {
 
                         @Override
-                        public void handle(Throwable e) {
+                        public void handle(DolphinRemotingException e) {
                             result.completeExceptionally(new DolphinRemotingException("Internal Exception", e));
                         }
                     };
 
-                    final AbstractClientConnector clientConnector = new DolphinPlatformHttpClientConnector(clientConfiguration, clientDolphin, new OptimizedJsonCodec(), remotingErrorHandler, exceptionHandler);
+                    final AbstractClientConnector clientConnector = new DolphinPlatformHttpClientConnector(clientConfiguration, clientDolphin, new OptimizedJsonCodec(), exceptionHandler);
 
-                    clientConnector.setOnException(exceptionHandler);
                     clientDolphin.setClientConnector(clientConnector);
                     final DolphinCommandHandler dolphinCommandHandler = new DolphinCommandHandler(clientDolphin);
                     final EventDispatcher dispatcher = new ClientEventDispatcher(clientDolphin);
