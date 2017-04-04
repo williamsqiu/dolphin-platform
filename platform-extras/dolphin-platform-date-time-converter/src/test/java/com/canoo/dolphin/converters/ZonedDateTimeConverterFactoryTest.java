@@ -122,7 +122,7 @@ public class ZonedDateTimeConverterFactoryTest {
             assertNotNull(reconvertedObject);
             assertEquals(reconvertedObject.getClass(), ZonedDateTime.class);
             ZonedDateTime reverted = (ZonedDateTime) reconvertedObject;
-            assertEquals(reverted, time);
+            assertEquals(reverted.withZoneSameInstant(ZoneId.of("UTC")), time.withZoneSameInstant(ZoneId.of("UTC")));
         } catch (ValueConverterException e) {
             fail("Error in converter", e);
         }

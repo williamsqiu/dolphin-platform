@@ -17,11 +17,20 @@ package com.canoo.dolphin.converters;
 
 import com.canoo.dolphin.converter.Converter;
 import com.canoo.dolphin.converter.ValueConverterException;
+import com.canoo.dolphin.impl.PlatformConstants;
 import com.canoo.dolphin.impl.converters.AbstractConverterFactory;
 import com.canoo.dolphin.impl.converters.AbstractStringConverter;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.TimeZone;
 
 public class ZonedDateTimeConverterFactory extends AbstractConverterFactory {
 
@@ -44,13 +53,21 @@ public class ZonedDateTimeConverterFactory extends AbstractConverterFactory {
 
     private static class ZonedDateTimeConverter extends AbstractStringConverter<ZonedDateTime> {
 
+        private final DateFormat dateFormat;
+
+        public ZonedDateTimeConverter(){
+            dateFormat = new SimpleDateFormat(PlatformConstants.REMOTING_DATE_FORMAT_PATTERN);
+            dateFormat.setTimeZone(TimeZone.getTimeZone(PlatformConstants.TIMEZONE_UTC));
+        }
         @Override
         public ZonedDateTime convertFromDolphin(String value) throws ValueConverterException {
             if (value == null) {
                 return null;
             }
             try {
-                return ZonedDateTime.from(DateTimeFormatter.ISO_DATE_TIME.parse(value));
+                final Calendar result = Calendar.getInstance();
+                result.setTime(dateFormat.parse(value));
+                return result.toInstant().atZone(ZoneId.systemDefault());
             } catch (Exception e) {
                 throw new ValueConverterException("Can not convert to ZonedDateTime", e);
             }
@@ -62,7 +79,8 @@ public class ZonedDateTimeConverterFactory extends AbstractConverterFactory {
                 return null;
             }
             try {
-                return value.format(DateTimeFormatter.ISO_DATE_TIME);
+                Calendar calendar = GregorianCalendar.from(value);
+                return dateFormat.format(calendar.getTime());
             } catch (Exception e) {
                 throw new ValueConverterException("Can not convert from ZonedDateTime", e);
             }
