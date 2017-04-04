@@ -9,6 +9,16 @@ package structure or adding additional methods to public interfaces. In addition
 method of the API is annotated by `@Deprecated` since we plan to remove all this methods and classes for the final 1.0.0 release.
 
 == Version 0.10.0
+_Release date: Apr 04, 2017_
+
+* Java 8 date&time support for JavaScript (https://github.com/canoo/dolphin-platform/issues/411[issue])
+* Gradle samples in documentation (https://github.com/canoo/dolphin-platform/issues/417[issue])
+* Timezone support in JavaScript (https://github.com/canoo/dolphin-platform/issues/405[issue])
+* IntelliJ Plugin to create getter & setter (https://github.com/canoo/dolphin-platform/issues/375[issue])
+* Bugfix for onChange handling of number properties (https://github.com/canoo/dolphin-platform/pull/418[issue])
+
+
+== Version 0.10.0
 _Release date: Mar 21, 2017_
 
 * Server configuration can be injected as a bean (https://github.com/canoo/dolphin-platform/issues/409[issue])
