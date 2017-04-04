@@ -47,20 +47,6 @@ import java.util.Map;
  */
 public class DolphinPlatformHttpClientConnector extends AbstractClientConnector {
 
-    private static final String CHARSET = "UTF-8";
-
-    private static final String CONTENT_TYPE_HEADER = "Content-Type";
-
-    private static final String ACCEPT_HEADER = "Accept";
-
-    private static final String COOKIE_HEADER = "Cookie";
-
-    private static final String SET_COOKIE_HEADER = "Set-Cookie";
-
-    private static final String POST_METHOD = "POST";
-
-    private static final String JSON_MIME_TYPE = "application/json";
-
     private final URL servletUrl;
 
     private final Codec codec;
@@ -75,34 +61,34 @@ public class DolphinPlatformHttpClientConnector extends AbstractClientConnector 
 
     public DolphinPlatformHttpClientConnector(ClientConfiguration configuration, ClientDolphin clientDolphin, Codec codec, RemotingExceptionHandler onException) {
         super(clientDolphin.getModelStore(), Assert.requireNonNull(configuration, "configuration").getUiExecutor(), new BlindCommandBatcher(), onException, configuration.getBackgroundExecutor());
-        setStrictMode(false);
-
         this.servletUrl = configuration.getServerEndpoint();
-
         this.connectionFactory = configuration.getConnectionFactory();
         this.cookieStore = configuration.getCookieStore();
         this.responseHandler = configuration.getResponseHandler();
-
         this.codec = Assert.requireNonNull(codec, "codec");
+
+        //TODO: Strict mode is always false in DP. This flag should be removed in AbstractClientConnector
+        setStrictMode(false);
     }
 
     public List<Command> transmit(List<Command> commands) throws DolphinRemotingException {
         Assert.requireNonNull(commands, "commands");
+
         try {
             //REQUEST
-            HttpURLConnection conn = connectionFactory.create(servletUrl);
+            final HttpURLConnection conn = connectionFactory.create(servletUrl);
             conn.setDoOutput(true);
             conn.setDoInput(true);
-            conn.setRequestProperty(CONTENT_TYPE_HEADER, JSON_MIME_TYPE);
-            conn.setRequestProperty(ACCEPT_HEADER, JSON_MIME_TYPE);
-            conn.setRequestMethod(POST_METHOD);
+            conn.setRequestProperty(PlatformConstants.CONTENT_TYPE_HEADER, PlatformConstants.JSON_MIME_TYPE);
+            conn.setRequestProperty(PlatformConstants.ACCEPT_HEADER, PlatformConstants.JSON_MIME_TYPE);
+            conn.setRequestMethod(PlatformConstants.POST_METHOD);
             if(clientId != null) {
                 conn.setRequestProperty(PlatformConstants.CLIENT_ID_HTTP_HEADER_NAME, clientId);
             }
             setRequestCookies(conn);
             String content = codec.encode(commands);
             OutputStream w = conn.getOutputStream();
-            w.write(content.getBytes(CHARSET));
+            w.write(content.getBytes(PlatformConstants.CHARSET));
             w.close();
 
             //RESPONSE
@@ -113,23 +99,25 @@ public class DolphinPlatformHttpClientConnector extends AbstractClientConnector 
             if (responseCode >= HttpStatus.SC_MULTIPLE_CHOICES) {
                 throw new DolphinHttpResponseException(responseCode, conn.getResponseMessage());
             }
+
+            responseHandler.handle(conn);
+
             updateCookiesFromResponse(conn);
             updateClientId(conn);
             if (commands.size() == 1 && commands.get(0) == getReleaseCommand()) {
                 return new ArrayList<>();
             } else {
-                String receivedContent = new String(inputStreamToByte(conn.getInputStream()), CHARSET);
+                String receivedContent = new String(inputStreamToByte(conn.getInputStream()), PlatformConstants.CHARSET);
                 return codec.decode(receivedContent);
             }
         } catch (Exception e) {
-            DolphinRemotingException dolphinRemotingException = new DolphinRemotingException("Error in remoting layer", e);
-            throw dolphinRemotingException;
+            throw new DolphinRemotingException("Error in remoting layer", e);
         }
     }
 
-    private void updateCookiesFromResponse(HttpURLConnection conn) throws URISyntaxException {
+    private void updateCookiesFromResponse(final HttpURLConnection conn) throws URISyntaxException {
         Map<String, List<String>> headerFields = conn.getHeaderFields();
-        List<String> cookiesHeader = headerFields.get(SET_COOKIE_HEADER);
+        List<String> cookiesHeader = headerFields.get(PlatformConstants.SET_COOKIE_HEADER);
 
         if (cookiesHeader != null) {
             for (String cookie : cookiesHeader) {
@@ -141,7 +129,7 @@ public class DolphinPlatformHttpClientConnector extends AbstractClientConnector 
         }
     }
 
-    private void setRequestCookies(HttpURLConnection conn) throws URISyntaxException {
+    private void setRequestCookies(final HttpURLConnection conn) throws URISyntaxException {
         if (cookieStore.getCookies().size() > 0) {
 
             String cookieValue = "";
@@ -150,7 +138,7 @@ public class DolphinPlatformHttpClientConnector extends AbstractClientConnector 
             }
             if(!cookieValue.isEmpty()) {
                 cookieValue = cookieValue.substring(0, cookieValue.length());
-                conn.setRequestProperty(COOKIE_HEADER, cookieValue);
+                conn.setRequestProperty(PlatformConstants.COOKIE_HEADER, cookieValue);
             }
         }
     }

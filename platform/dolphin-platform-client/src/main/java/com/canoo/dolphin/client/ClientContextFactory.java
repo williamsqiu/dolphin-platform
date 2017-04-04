@@ -88,14 +88,17 @@ public class ClientContextFactory {
 
                         @Override
                         public void handle(DolphinRemotingException e) {
-                            result.completeExceptionally(new DolphinRemotingException("Internal Exception", e));
+                            remotingErrorHandler.call(e);
+                            if(!result.isDone()) {
+                                result.completeExceptionally(new DolphinRemotingException("Internal Exception", e));
+                            }
                         }
                     };
 
                     final AbstractClientConnector clientConnector = new DolphinPlatformHttpClientConnector(clientConfiguration, clientDolphin, new OptimizedJsonCodec(), exceptionHandler);
 
                     clientDolphin.setClientConnector(clientConnector);
-                    final DolphinCommandHandler dolphinCommandHandler = new DolphinCommandHandler(clientDolphin);
+                    final DolphinCommandHandler dolphinCommandHandler = new DolphinCommandHandler(clientConnector);
                     final EventDispatcher dispatcher = new ClientEventDispatcher(clientDolphin);
                     final BeanRepository beanRepository = new BeanRepositoryImpl(clientDolphin, dispatcher);
                     final Converters converters = new Converters(beanRepository);
@@ -107,7 +110,7 @@ public class ClientContextFactory {
                     final ClientBeanManagerImpl clientBeanManager = new ClientBeanManagerImpl(beanRepository, beanBuilder, clientDolphin);
                     final ControllerProxyFactory controllerProxyFactory = new ControllerProxyFactoryImpl(platformBeanRepository, dolphinCommandHandler, clientDolphin);
                     final ClientContext clientContext = new ClientContextImpl(clientConfiguration, clientDolphin, controllerProxyFactory, dolphinCommandHandler, platformBeanRepository, clientBeanManager, remotingErrorHandler);
-                    clientDolphin.getClientConnector().startPushListening(new StartLongPollCommand(), new InterruptLongPollCommand());
+                    clientConnector.startPushListening(new StartLongPollCommand(), new InterruptLongPollCommand());
                     clientConfiguration.getUiExecutor().execute(new Runnable() {
                         @Override
                         public void run() {
