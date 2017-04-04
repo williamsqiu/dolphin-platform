@@ -270,6 +270,7 @@ release like `0.10.1`
 * Change the version of the project in the `pom.xml` to a `SNAPSHOT` version (like `0.10.1-SNAPSHOT`)
 * Change the version number of Dolphin Platform in `src/main/resources/archetype-resources/pom.xml`
 * Change the version number of Dolphin Platform in `src/main/resources/archetype-resources/polymer-client/bower.json`
+* Change the version number of Dolphin Platform in `src/main/resources/archetype-resources/angular-client/bower.json`
 * Do `mvn clean install`
 * Create sample project by calling `mvn archetype:generate -Dfilter=com.canoo.dolphin-platform:` in separate folder
 * Check everything in the sample project
