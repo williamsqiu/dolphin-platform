@@ -54,7 +54,7 @@ public class ClientPresentationModelBuilder extends AbstractPresentationModelBui
 
     @Override
     public ClientPresentationModel create() {
-        return dolphin.presentationModel(id, type, attributes.toArray(new ClientAttribute[attributes.size()]));
+        return dolphin.getModelStore().createModel(id, type, attributes.toArray(new ClientAttribute[attributes.size()]));
     }
 
 }

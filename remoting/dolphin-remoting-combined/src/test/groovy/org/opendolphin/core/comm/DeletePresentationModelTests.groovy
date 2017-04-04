@@ -15,6 +15,7 @@
  */
 package org.opendolphin.core.comm
 
+import org.opendolphin.core.client.ClientAttribute
 import org.opendolphin.core.client.ClientDolphin
 import org.opendolphin.core.client.comm.OnFinishedHandler
 import org.opendolphin.core.server.DefaultServerDolphin
@@ -48,7 +49,7 @@ class DeletePresentationModelTests extends GroovyTestCase {
     }
 
     public <T extends Command> void registerAction(ServerDolphin serverDolphin, Class<T> commandClass, CommandHandler<T> handler) {
-        serverDolphin.register(new DolphinServerAction() {
+        serverDolphin.getServerConnector().register(new DolphinServerAction() {
 
             @Override
             void registerIn(ActionRegistry registry) {
@@ -60,7 +61,7 @@ class DeletePresentationModelTests extends GroovyTestCase {
     void testCreateAndDeletePresentationModel() {
         // create the pm
         String modelId = 'modelId'
-        def model = clientDolphin.presentationModel(modelId, someAttribute:"someValue")
+        def model = clientDolphin.getModelStore().createModel(modelId, null, new ClientAttribute("someAttribute", "someValue"));
         // sanity check: we have a least the client model store listening to changes of someAttribute
         assert model.getAttribute("someAttribute").propertyChangeListeners
         // the model is in the client model store
@@ -71,7 +72,7 @@ class DeletePresentationModelTests extends GroovyTestCase {
             assert serverDolphin.getModelStore().findPresentationModelById(modelId)
         }
         // when we now delete the pm
-        clientDolphin.delete(model)
+        clientDolphin.getModelStore().delete(model)
         // ... it is no longer in the client model store
         assert !clientDolphin.getModelStore().findPresentationModelById(modelId)
         // ... all listeners have been detached from model and all its attributes
@@ -92,7 +93,7 @@ class DeletePresentationModelTests extends GroovyTestCase {
     void testCreateAndDeletePresentationModelFromServer() {
         // create the pm
         String modelId = 'modelId'
-        def model = clientDolphin.presentationModel(modelId, someAttribute:"someValue")
+        def model = clientDolphin.getModelStore().createModel(modelId, null, new ClientAttribute("someAttribute", "someValue"))
         // the model is in the client model store
         def found = clientDolphin.getModelStore().findPresentationModelById(modelId)
         assert model == found
@@ -109,7 +110,7 @@ class DeletePresentationModelTests extends GroovyTestCase {
             }
         });
         // when we now delete the pm
-        clientDolphin.send(new TriggerDeleteCommand(), new OnFinishedHandler() {
+        clientDolphin.getClientConnector().send(new TriggerDeleteCommand(), new OnFinishedHandler() {
             @Override
             void onFinished() {
                 clientDolphin.sync {

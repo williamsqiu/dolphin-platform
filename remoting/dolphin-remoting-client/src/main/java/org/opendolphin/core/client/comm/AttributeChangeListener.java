@@ -20,8 +20,7 @@ import org.opendolphin.core.PresentationModel;
 import org.opendolphin.core.client.ClientAttribute;
 import org.opendolphin.core.client.ClientModelStore;
 import org.opendolphin.core.client.ClientPresentationModel;
-import org.opendolphin.core.comm.ChangeAttributeMetadataCommand;
-import org.opendolphin.core.comm.ValueChangedCommand;
+import org.opendolphin.core.client.ModelSynchronizer;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -29,9 +28,14 @@ import java.util.List;
 
 public class AttributeChangeListener implements PropertyChangeListener {
 
-    private ClientModelStore clientModelStore;
+    private final ClientModelStore clientModelStore;
 
-    private ClientConnector clientConnector;
+    private final ModelSynchronizer modelSynchronizer;
+
+    public AttributeChangeListener(ClientModelStore clientModelStore, ModelSynchronizer modelSynchronizer) {
+        this.clientModelStore = clientModelStore;
+        this.modelSynchronizer = modelSynchronizer;
+    }
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
@@ -41,7 +45,7 @@ public class AttributeChangeListener implements PropertyChangeListener {
             }
 
             if (isSendable(evt)) {
-                clientConnector.send(constructValueChangedCommand(evt));
+                modelSynchronizer.onPropertyChanged(evt);
             }
 
             List<ClientAttribute> attributes = clientModelStore.findAllAttributesByQualifier(((Attribute) evt.getSource()).getQualifier());
@@ -52,7 +56,7 @@ public class AttributeChangeListener implements PropertyChangeListener {
         } else {
             // we assume the change is on a metadata property such as qualifier
             if (isSendable(evt)) {
-                clientConnector.send(constructChangeAttributeMetadataCommand(evt));
+                modelSynchronizer.onMetadataChanged(evt);
             }
         }
     }
@@ -70,23 +74,4 @@ public class AttributeChangeListener implements PropertyChangeListener {
         return true;
     }
 
-    private ValueChangedCommand constructValueChangedCommand(PropertyChangeEvent evt) {
-        return new ValueChangedCommand(((Attribute) evt.getSource()).getId(), evt.getOldValue(), evt.getNewValue());
-    }
-
-    private ChangeAttributeMetadataCommand constructChangeAttributeMetadataCommand(PropertyChangeEvent evt) {
-        return new ChangeAttributeMetadataCommand(((Attribute) evt.getSource()).getId(), evt.getPropertyName(), evt.getNewValue());
-    }
-
-    public void setClientModelStore(ClientModelStore clientModelStore) {
-        this.clientModelStore = clientModelStore;
-    }
-
-    public ClientConnector getClientConnector() {
-        return clientConnector;
-    }
-
-    public void setClientConnector(ClientConnector clientConnector) {
-        this.clientConnector = clientConnector;
-    }
 }

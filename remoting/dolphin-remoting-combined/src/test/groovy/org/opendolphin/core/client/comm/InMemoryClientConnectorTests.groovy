@@ -17,14 +17,35 @@ package org.opendolphin.core.client.comm
 
 import core.client.comm.InMemoryClientConnector
 import org.opendolphin.core.client.ClientDolphin
+import org.opendolphin.core.client.ClientModelStore
+import org.opendolphin.core.client.DefaultModelSynchronizer
+import org.opendolphin.core.client.ModelSynchronizer
 import org.opendolphin.core.comm.EmptyNotification
 import org.opendolphin.core.server.ServerConnector
 import org.opendolphin.util.DirectExecutor
+import org.opendolphin.util.Provider
 
 class InMemoryClientConnectorTests extends GroovyTestCase {
 
     void testCallConnector_NoServerConnectorWired() {
-        InMemoryClientConnector connector = new InMemoryClientConnector(new ClientDolphin(), null, new CommandBatcher(), DirectExecutor.getInstance())
+
+        def serverConnector = [receive: { cmd ->
+            return []
+        }] as ServerConnector
+
+        ClientDolphin clientDolphin = new ClientDolphin();
+        ModelSynchronizer defaultModelSynchronizer = new DefaultModelSynchronizer(new Provider<ClientConnector>() {
+            @Override
+            ClientConnector get() {
+                return clientDolphin.getClientConnector();
+            }
+        });
+        ClientModelStore modelStore = new ClientModelStore(defaultModelSynchronizer);
+        AbstractClientConnector connector = new InMemoryClientConnector(modelStore, serverConnector, new CommandBatcher(), DirectExecutor.getInstance());
+
+        clientDolphin.setClientConnector(connector);
+        clientDolphin.setClientModelStore(modelStore);
+
         assert [] == connector.transmit([new EmptyNotification()])
     }
 
@@ -34,7 +55,20 @@ class InMemoryClientConnectorTests extends GroovyTestCase {
             serverCalled = true
             return []
         }] as ServerConnector
-        InMemoryClientConnector connector = new InMemoryClientConnector(new ClientDolphin(), serverConnector, new CommandBatcher(), DirectExecutor.getInstance())
+
+        ClientDolphin clientDolphin = new ClientDolphin();
+        ModelSynchronizer defaultModelSynchronizer = new DefaultModelSynchronizer(new Provider<ClientConnector>() {
+            @Override
+            ClientConnector get() {
+                return clientDolphin.getClientConnector();
+            }
+        });
+        ClientModelStore modelStore = new ClientModelStore(defaultModelSynchronizer);
+        AbstractClientConnector connector = new InMemoryClientConnector(modelStore, serverConnector, new CommandBatcher(), DirectExecutor.getInstance());
+
+        clientDolphin.setClientConnector(connector);
+        clientDolphin.setClientModelStore(modelStore);
+
         def command = new EmptyNotification()
         connector.transmit([command])
         assert serverCalled
@@ -46,7 +80,20 @@ class InMemoryClientConnectorTests extends GroovyTestCase {
             serverCalled = true
             return []
         }] as ServerConnector
-        InMemoryClientConnector connector = new InMemoryClientConnector(new ClientDolphin(), serverConnector, new CommandBatcher(), DirectExecutor.getInstance())
+
+        ClientDolphin clientDolphin = new ClientDolphin();
+        ModelSynchronizer defaultModelSynchronizer = new DefaultModelSynchronizer(new Provider<ClientConnector>() {
+            @Override
+            ClientConnector get() {
+                return clientDolphin.getClientConnector();
+            }
+        });
+        ClientModelStore modelStore = new ClientModelStore(defaultModelSynchronizer);
+        AbstractClientConnector connector = new InMemoryClientConnector(modelStore, serverConnector, new CommandBatcher(), DirectExecutor.getInstance());
+
+        clientDolphin.setClientConnector(connector);
+        clientDolphin.setClientModelStore(modelStore);
+
         connector.sleepMillis = 10
         def command = new EmptyNotification()
         connector.transmit([command])

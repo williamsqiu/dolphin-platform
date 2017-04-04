@@ -18,6 +18,10 @@ package org.opendolphin.core.client.comm;
 import org.opendolphin.core.comm.Command;
 import org.opendolphin.core.comm.SignalCommand;
 
+/**
+ * @Deprecated since the only direct implementation is {@link AbstractClientConnector}
+ */
+@Deprecated
 public interface ClientConnector {
 
     void send(Command command, OnFinishedHandler callback, HandlerType handlerType);

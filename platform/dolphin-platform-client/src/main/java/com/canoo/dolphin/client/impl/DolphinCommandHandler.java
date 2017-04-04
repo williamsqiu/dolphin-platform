@@ -33,7 +33,7 @@ public class DolphinCommandHandler {
     public CompletableFuture<Void> invokeDolphinCommand(Command command) {
         Assert.requireNonNull(command, "command");
         final CompletableFuture<Void> result = new CompletableFuture<>();
-        clientDolphin.send(command, new OnFinishedHandler() {
+        clientDolphin.getClientConnector().send(command, new OnFinishedHandler() {
             @Override
             public void onFinished() {
                 result.complete(null);

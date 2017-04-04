@@ -33,7 +33,7 @@ public class DefaultOpenDolphinFactoryTest {
         assertNotNull(serverDolphin);
         assertNotNull(serverDolphin.getModelStore());
         assertNotNull(serverDolphin.getServerConnector());
-        assertNotNull(serverDolphin.getServerModelStore());
+        assertNotNull(serverDolphin.getModelStore());
         assertNotNull(serverDolphin.getServerConnector().getCodec());
         assertEquals(OptimizedJsonCodec.class, serverDolphin.getServerConnector().getCodec().getClass());
 

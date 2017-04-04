@@ -106,7 +106,7 @@ public class ClientContextImpl implements ClientContext {
     public synchronized CompletableFuture<Void> disconnect() {
         checkForInitializedState();
         state = State.DESTROYING;
-        clientDolphin.stopPushListening();
+        clientDolphin.getClientConnector().stopPushListening();
         final CompletableFuture<Void> result = new CompletableFuture<>();
 
         Executors.newSingleThreadExecutor().execute(new Runnable() {

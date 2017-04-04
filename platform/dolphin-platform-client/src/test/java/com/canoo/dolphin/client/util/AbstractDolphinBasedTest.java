@@ -32,11 +32,14 @@ import com.canoo.dolphin.internal.collections.ListMapper;
 import core.comm.DefaultInMemoryConfig;
 import org.opendolphin.core.client.ClientDolphin;
 import org.opendolphin.core.client.ClientModelStore;
+import org.opendolphin.core.client.DefaultModelSynchronizer;
+import org.opendolphin.core.client.ModelSynchronizer;
 import org.opendolphin.core.client.comm.ClientConnector;
 import org.opendolphin.core.comm.Command;
 import org.opendolphin.core.server.ServerDolphin;
 import org.opendolphin.core.server.ServerModelStore;
 import org.opendolphin.util.DirectExecutor;
+import org.opendolphin.util.Provider;
 
 import java.util.ArrayList;
 
@@ -62,16 +65,23 @@ public abstract class AbstractDolphinBasedTest {
         }
     }
 
-    protected ClientDolphin createClientDolphin(ClientConnector connector) {
+    protected ClientDolphin createClientDolphin(final ClientConnector connector) {
         final ClientDolphin dolphin = new ClientDolphin();
-        dolphin.setClientModelStore(new ClientModelStore(dolphin));
+        ModelSynchronizer defaultModelSynchronizer = new DefaultModelSynchronizer(new Provider<ClientConnector>() {
+            @Override
+            public ClientConnector get() {
+                return connector;
+            }
+        });
+        ClientModelStore modelStore = new ClientModelStore(defaultModelSynchronizer);
+        dolphin.setClientModelStore(modelStore);
         dolphin.setClientConnector(connector);
         return dolphin;
     }
 
     protected DolphinTestConfiguration createDolphinTestConfiguration() {
         DefaultInMemoryConfig config = new DefaultInMemoryConfig(DirectExecutor.getInstance());
-        config.getServerDolphin().registerDefaultActions();
+        config.getServerDolphin().getServerConnector().registerDefaultActions();
         ServerModelStore store = config.getServerDolphin().getModelStore();
         store.setCurrentResponse(new ArrayList<Command>());
 

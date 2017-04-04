@@ -15,7 +15,7 @@
  */
 package core.client.comm;
 
-import org.opendolphin.core.client.ClientDolphin;
+import org.opendolphin.core.client.ClientModelStore;
 import org.opendolphin.core.client.comm.AbstractClientConnector;
 import org.opendolphin.core.client.comm.ICommandBatcher;
 import org.opendolphin.core.client.comm.SimpleExceptionHandler;
@@ -39,12 +39,9 @@ public class InMemoryClientConnector extends AbstractClientConnector {
 
     private long sleepMillis = 0;
 
-    private final Executor uiExecutor;
-
-    public InMemoryClientConnector(ClientDolphin clientDolphin, ServerConnector serverConnector, ICommandBatcher commandBatcher, Executor uiExecutor) {
-        super(clientDolphin, uiExecutor, commandBatcher, new SimpleExceptionHandler(uiExecutor), Executors.newCachedThreadPool());
-        this.uiExecutor = Objects.requireNonNull(uiExecutor);
-        this.serverConnector = serverConnector;
+    public InMemoryClientConnector(final ClientModelStore clientModelStore, final ServerConnector serverConnector, final ICommandBatcher commandBatcher, final Executor uiExecutor) {
+        super(clientModelStore, uiExecutor, commandBatcher, new SimpleExceptionHandler(uiExecutor), Executors.newCachedThreadPool());
+        this.serverConnector = Objects.requireNonNull(serverConnector);
     }
 
     @Override
@@ -54,26 +51,18 @@ public class InMemoryClientConnector extends AbstractClientConnector {
             LOGGER.warn("no server connector wired for in-memory connector");
             return Collections.EMPTY_LIST;
         }
-
-
         if (sleepMillis > 0) {
             try {
                 Thread.sleep(sleepMillis);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-
-
         }
-
-
         List<Command> result = new LinkedList<Command>();
         for (Command command : commands) {
             LOGGER.trace("processing {}", command);
-            ((LinkedList<Command>) result).addAll(serverConnector.receive(command));// there is no need for encoding since we are in-memory
+            result.addAll(serverConnector.receive(command));// there is no need for encoding since we are in-memory
         }
-
-
         return result;
     }
 

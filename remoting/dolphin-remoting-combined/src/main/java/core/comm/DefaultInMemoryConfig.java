@@ -18,9 +18,13 @@ package core.comm;
 import core.client.comm.InMemoryClientConnector;
 import org.opendolphin.core.client.ClientDolphin;
 import org.opendolphin.core.client.ClientModelStore;
+import org.opendolphin.core.client.DefaultModelSynchronizer;
+import org.opendolphin.core.client.ModelSynchronizer;
+import org.opendolphin.core.client.comm.ClientConnector;
 import org.opendolphin.core.client.comm.CommandBatcher;
 import org.opendolphin.core.server.ServerDolphin;
 import org.opendolphin.core.server.ServerDolphinFactory;
+import org.opendolphin.util.Provider;
 
 import java.util.concurrent.Executor;
 
@@ -30,7 +34,7 @@ import java.util.concurrent.Executor;
  * Subclasses JavaFxInMemoryConfig and SwingInMemoryConfig additionally set the threading model
  * as appropriate for the UI (JavaFX or Swing, respectively.)
  */
-public class DefaultInMemoryConfig {
+public class DefaultInMemoryConfig implements Provider<ClientConnector> {
 
     private final ClientDolphin clientDolphin;
 
@@ -41,11 +45,11 @@ public class DefaultInMemoryConfig {
     public DefaultInMemoryConfig(final Executor uiExecutor) {
         clientDolphin = new ClientDolphin();
         serverDolphin = ServerDolphinFactory.create();
-
-        clientDolphin.setClientModelStore(new ClientModelStore(clientDolphin));
-        clientConnector = new InMemoryClientConnector(clientDolphin, serverDolphin.getServerConnector(), new CommandBatcher(), uiExecutor);
+        ModelSynchronizer defaultModelSynchronizer = new DefaultModelSynchronizer(this);
+        ClientModelStore modelStore = new ClientModelStore(defaultModelSynchronizer);
+        clientConnector = new InMemoryClientConnector(modelStore, serverDolphin.getServerConnector(), new CommandBatcher(), uiExecutor);
+        clientDolphin.setClientModelStore(modelStore);
         clientDolphin.setClientConnector(clientConnector);
-
         clientConnector.setSleepMillis(100);
     }
 
@@ -58,6 +62,11 @@ public class DefaultInMemoryConfig {
     }
 
     public InMemoryClientConnector getClientConnector() {
+        return clientConnector;
+    }
+
+    @Override
+    public ClientConnector get() {
         return clientConnector;
     }
 }

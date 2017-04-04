@@ -17,9 +17,11 @@ package org.opendolphin.core.client
 import core.client.comm.InMemoryClientConnector
 import org.opendolphin.core.ModelStoreEvent
 import org.opendolphin.core.ModelStoreListener
+import org.opendolphin.core.client.comm.ClientConnector
 import org.opendolphin.core.client.comm.CommandBatcher
 import org.opendolphin.core.server.ServerConnector
 import org.opendolphin.util.DirectExecutor
+import org.opendolphin.util.Provider
 import spock.lang.Specification
 /**
  * @author Dieter Holz
@@ -29,9 +31,18 @@ class ClientModelStoreSpec extends Specification {
 
 	def setup(){
         def clientDolphin = new ClientDolphin()
-		modelStore = new ClientModelStore(clientDolphin)
-        clientDolphin.clientModelStore = modelStore
-        clientDolphin.clientConnector = new InMemoryClientConnector(clientDolphin, [:] as ServerConnector, new CommandBatcher(), DirectExecutor.getInstance())
+		ModelSynchronizer defaultModelSynchronizer = new DefaultModelSynchronizer(new Provider<ClientConnector>() {
+			@Override
+			ClientConnector get() {
+				return clientDolphin.getClientConnector();
+			}
+		});
+		modelStore = new ClientModelStore(defaultModelSynchronizer)
+		ClientConnector clientConnector = new InMemoryClientConnector(modelStore, [:] as ServerConnector, new CommandBatcher(), DirectExecutor.getInstance());
+
+        clientDolphin.clientConnector = clientConnector;
+		clientDolphin.clientModelStore = modelStore
+
 
 		pmType = 'myType'
 		pm = new ClientPresentationModel('myId', [])

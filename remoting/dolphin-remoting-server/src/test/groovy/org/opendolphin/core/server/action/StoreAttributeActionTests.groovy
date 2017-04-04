@@ -29,14 +29,14 @@ class StoreAttributeActionTests extends GroovyTestCase {
     @Override
     protected void setUp() throws Exception {
         dolphin = ServerDolphinFactory.create()
-        dolphin.serverModelStore.currentResponse = []
+        dolphin.getModelStore().currentResponse = []
         registry = new ActionRegistry()
     }
 
     void testChangeAttributeMetadata() {
-        new StoreAttributeAction(serverDolphin: dolphin).registerIn registry
+        new StoreAttributeAction(serverModelStore: dolphin.modelStore).registerIn registry
         ServerAttribute attribute = new ServerAttribute('newAttribute', '')
-        dolphin.getModelStore().add(new ServerPresentationModel('model', [attribute], dolphin.serverModelStore))
+        dolphin.getModelStore().add(new ServerPresentationModel('model', [attribute], dolphin.getModelStore()))
         registry.getActionsFor(ChangeAttributeMetadataCommand.class).first().handleCommand(new ChangeAttributeMetadataCommand(attributeId: attribute.id, metadataName: 'value', value: 'newValue'), [])
         assert 'newValue' == attribute.value
     }

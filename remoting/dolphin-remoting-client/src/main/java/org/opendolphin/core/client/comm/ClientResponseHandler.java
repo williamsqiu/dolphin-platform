@@ -17,7 +17,6 @@ package org.opendolphin.core.client.comm;
 
 import org.opendolphin.core.Attribute;
 import org.opendolphin.core.client.ClientAttribute;
-import org.opendolphin.core.client.ClientDolphin;
 import org.opendolphin.core.client.ClientModelStore;
 import org.opendolphin.core.client.ClientPresentationModel;
 import org.opendolphin.core.comm.*;
@@ -32,16 +31,12 @@ public class ClientResponseHandler {
 
     private static final Logger LOG = Logger.getLogger(ClientResponseHandler.class.getName());
 
-    private final ClientDolphin clientDolphin;
+    private final ClientModelStore clientModelStore;
 
     private boolean strictMode = true;
 
-    public ClientResponseHandler(ClientDolphin clientDolphin) {
-        this.clientDolphin = Objects.requireNonNull(clientDolphin);
-    }
-
-    protected ClientModelStore getClientModelStore() {
-        return clientDolphin.getClientModelStore();
+    public ClientResponseHandler(final ClientModelStore clientModelStore) {
+        this.clientModelStore = Objects.requireNonNull(clientModelStore);
     }
 
     public void dispatchHandle(Command command) {
@@ -60,16 +55,15 @@ public class ClientResponseHandler {
     }
 
     private void handleDeletePresentationModelCommand(DeletePresentationModelCommand serverCommand) {
-        ClientPresentationModel model = clientDolphin.getModelStore().findPresentationModelById(serverCommand.getPmId());
+        ClientPresentationModel model = clientModelStore.findPresentationModelById(serverCommand.getPmId());
         if (model == null) {
             return;
         }
-
-        getClientModelStore().delete(model);
+        clientModelStore.delete(model);
     }
 
     private void handleCreatePresentationModelCommand(CreatePresentationModelCommand serverCommand) {
-        if (getClientModelStore().containsPresentationModel(serverCommand.getPmId())) {
+        if (clientModelStore.containsPresentationModel(serverCommand.getPmId())) {
             throw new IllegalStateException("There already is a presentation model with id '" + serverCommand.getPmId() + "' known to the client.");
         }
 
@@ -95,12 +89,12 @@ public class ClientResponseHandler {
             model.setClientSideOnly(true);
         }
 
-        getClientModelStore().add(model);
-        clientDolphin.getModelStore().updateQualifiers(model);
+        clientModelStore.add(model);
+        clientModelStore.updateQualifiers(model);
     }
 
     private void handleValueChangedCommand(ValueChangedCommand serverCommand) {
-        Attribute attribute = getClientModelStore().findAttributeById(serverCommand.getAttributeId());
+        Attribute attribute = clientModelStore.findAttributeById(serverCommand.getAttributeId());
         if (attribute == null) {
             LOG.warning("C: attribute with id '" + serverCommand.getAttributeId() + "' not found, cannot update old value '" + serverCommand.getOldValue() + "' to new value '" + serverCommand.getNewValue() + "'");
             return;
@@ -123,7 +117,7 @@ public class ClientResponseHandler {
     }
 
     private void handleAttributeMetadataChangedCommand(AttributeMetadataChangedCommand serverCommand) {
-        ClientAttribute attribute = getClientModelStore().findAttributeById(serverCommand.getAttributeId());
+        ClientAttribute attribute = clientModelStore.findAttributeById(serverCommand.getAttributeId());
         if (attribute == null) {
             return;
         }

@@ -47,7 +47,7 @@ public abstract class AbstractDolphinBasedTest {
 
     protected ServerDolphin createServerDolphin() {
         DefaultInMemoryConfig config = new DefaultInMemoryConfig(DirectExecutor.getInstance());
-        config.getServerDolphin().registerDefaultActions();
+        config.getServerDolphin().getServerConnector().registerDefaultActions();
 
         ServerModelStore store = config.getServerDolphin().getModelStore();
         List<Command> commands = new ArrayList<>();

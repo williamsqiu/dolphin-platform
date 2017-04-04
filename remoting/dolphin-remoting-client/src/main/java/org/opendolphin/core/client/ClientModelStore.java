@@ -18,10 +18,8 @@ package org.opendolphin.core.client;
 import org.opendolphin.core.ModelStore;
 import org.opendolphin.core.ModelStoreConfig;
 import org.opendolphin.core.client.comm.AttributeChangeListener;
-import org.opendolphin.core.client.comm.ClientConnector;
-import org.opendolphin.core.comm.CreatePresentationModelCommand;
-import org.opendolphin.core.comm.DeletedPresentationModelNotification;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -32,7 +30,7 @@ import java.util.List;
  */
 public class ClientModelStore extends ModelStore<ClientAttribute, ClientPresentationModel> {
 
-    private final ClientDolphin clientDolphin;
+    private final ModelSynchronizer modelSynchronizer;
 
     protected final AttributeChangeListener attributeChangeListener;
 
@@ -40,27 +38,16 @@ public class ClientModelStore extends ModelStore<ClientAttribute, ClientPresenta
      * Constructs a client model store with default capacities.
      * @see ModelStoreConfig
      */
-    public ClientModelStore(ClientDolphin clientDolphin) {
-        this(clientDolphin, new ModelStoreConfig());
+    public ClientModelStore(final ModelSynchronizer modelSynchronizer) {
+        this(modelSynchronizer, new ModelStoreConfig());
     }
 
-    public ClientModelStore(ClientDolphin clientDolphin, ModelStoreConfig config) {
+    public ClientModelStore(final ModelSynchronizer modelSynchronizer, final ModelStoreConfig config) {
         super(config);
-        this.clientDolphin = clientDolphin;
-        attributeChangeListener = new AttributeChangeListener();
-        attributeChangeListener.setClientConnector(getClientConnector());
-        attributeChangeListener.setClientModelStore(this);
+        this.modelSynchronizer = modelSynchronizer;
+        attributeChangeListener = new AttributeChangeListener(this, modelSynchronizer);
     }
 
-    protected ClientConnector getClientConnector() {
-        ClientConnector clientConnector = clientDolphin.getClientConnector();
-        if (null == attributeChangeListener.getClientConnector()){
-            attributeChangeListener.setClientConnector(clientConnector);
-        }
-        return clientConnector;
-    }
-
-    // ModelStoreListener ADDED will be fired before server is notified.
     @Override
     public boolean add(ClientPresentationModel model) {
         boolean success = super.add(model);
@@ -70,25 +57,10 @@ public class ClientModelStore extends ModelStore<ClientAttribute, ClientPresenta
                 attribute.addPropertyChangeListener(attributeChangeListener);
             }
             if (!model.isClientSideOnly()) {
-                getClientConnector().send(CreatePresentationModelCommand.makeFrom(model));
+                modelSynchronizer.onAdded(model);
             }
         }
         return success;
-    }
-
-    @Override
-    public boolean remove(ClientPresentationModel model) {
-        boolean success = super.remove(model);
-        for (ClientAttribute attribute : model.getAttributes()) {
-            attribute.removePropertyChangeListener(attributeChangeListener);
-        }
-        return success;
-    }
-
-    @Override
-    public void registerAttribute(ClientAttribute attribute) {
-        super.registerAttribute(attribute);
-        attribute.addPropertyChangeListener(attributeChangeListener);
     }
 
     public void delete(ClientPresentationModel model) {
@@ -101,7 +73,31 @@ public class ClientModelStore extends ModelStore<ClientAttribute, ClientPresenta
             remove(model);
             if (!notify) return;
             if (model.isClientSideOnly()) return;
-            getClientConnector().send(new DeletedPresentationModelNotification(model.getId()));
+            modelSynchronizer.onDeleted(model);
         }
+    }
+
+    @Override
+    public boolean remove(ClientPresentationModel model) {
+        boolean success = super.remove(model);
+        for (ClientAttribute attribute : model.getAttributes()) {
+            attribute.removePropertyChangeListener(attributeChangeListener);
+        }
+        return success;
+    }
+
+    @Override
+    @Deprecated
+    public void registerAttribute(ClientAttribute attribute) {
+        super.registerAttribute(attribute);
+        attribute.addPropertyChangeListener(attributeChangeListener);
+    }
+
+
+    public ClientPresentationModel createModel(String id, String presentationModelType, ClientAttribute... attributes) {
+        ClientPresentationModel result = new ClientPresentationModel(id, Arrays.asList(attributes));
+        result.setPresentationModelType(presentationModelType);
+        add(result);
+        return result;
     }
 }

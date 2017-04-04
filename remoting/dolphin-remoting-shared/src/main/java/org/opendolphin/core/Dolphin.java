@@ -15,6 +15,7 @@
  */
 package org.opendolphin.core;
 
+@Deprecated
 public interface Dolphin<A extends Attribute, P extends PresentationModel<A>> {
 
     ModelStore<A, P> getModelStore();

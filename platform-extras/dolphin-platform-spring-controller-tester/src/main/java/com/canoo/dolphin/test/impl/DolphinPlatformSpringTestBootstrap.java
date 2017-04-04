@@ -111,7 +111,7 @@ public class DolphinPlatformSpringTestBootstrap {
             @Override
             public Void call() {
                 DolphinContextUtils.setContextForCurrentThread(dolphinContext);
-                clientDolphin.startPushListening(new StartLongPollCommand(), new InterruptLongPollCommand());
+                clientDolphin.getClientConnector().startPushListening(new StartLongPollCommand(), new InterruptLongPollCommand());
                 return null;
             }
 
@@ -133,7 +133,7 @@ public class DolphinPlatformSpringTestBootstrap {
         DolphinTestContext dolphinContext = new DolphinTestContext(ConfigurationFileLoader.loadConfiguration(), dolphinContextProviderMock, containerManager, controllerRepository, config);
         dolphinContextProviderMock.setCurrentContext(dolphinContext);
 
-        DolphinTestClientConnector inMemoryClientConnector = new DolphinTestClientConnector(config.getClientDolphin(), config.getClientExecutor(), dolphinContext);
+        DolphinTestClientConnector inMemoryClientConnector = new DolphinTestClientConnector(config.getClientDolphin().getModelStore(), config.getClientExecutor(), dolphinContext);
 
         inMemoryClientConnector.setStrictMode(false);
         config.getClientDolphin().setClientConnector(inMemoryClientConnector);
@@ -145,8 +145,8 @@ public class DolphinPlatformSpringTestBootstrap {
     @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
     public TestInMemoryConfiguration createInMemoryConfig() throws ExecutionException, InterruptedException {
         TestInMemoryConfiguration config = new TestInMemoryConfiguration();
-        config.getServerDolphin().registerDefaultActions();
-        ServerModelStore store = config.getServerDolphin().getServerModelStore();
+        config.getServerDolphin().getServerConnector().registerDefaultActions();
+        ServerModelStore store = config.getServerDolphin().getModelStore();
         try {
             ReflectionHelper.setPrivileged(ServerModelStore.class.getDeclaredField("currentResponse"), store, new ArrayList<>());
         } catch (NoSuchFieldException e) {

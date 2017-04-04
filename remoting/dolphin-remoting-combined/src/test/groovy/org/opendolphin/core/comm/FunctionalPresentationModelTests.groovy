@@ -75,8 +75,8 @@ class FunctionalPresentationModelTests extends GroovyTestCase {
     }
 
     void testQualifiersInClientPMs() {
-        PresentationModel modelA = clientDolphin.presentationModel("1", new ClientAttribute("a", 0, "QUAL"))
-        PresentationModel modelB = clientDolphin.presentationModel("2", new ClientAttribute("b", 0, "QUAL"))
+        PresentationModel modelA = clientDolphin.getModelStore().createModel("1", null, new ClientAttribute("a", 0, "QUAL"))
+        PresentationModel modelB = clientDolphin.getModelStore().createModel("2", null, new ClientAttribute("b", 0, "QUAL"))
 
         modelA.getAttribute("a").setValue(1)
 
@@ -90,13 +90,13 @@ class FunctionalPresentationModelTests extends GroovyTestCase {
 
     void testPerformanceWithBlindCommandBatcher() {
         def batcher = new BlindCommandBatcher(mergeValueChanges: true, deferMillis: 100)
-        def connector = new InMemoryClientConnector(context.clientDolphin, serverDolphin.serverConnector, batcher, new RunLaterUiThreadHandler())
+        def connector = new InMemoryClientConnector(context.clientDolphin.modelStore, serverDolphin.serverConnector, batcher, new RunLaterUiThreadHandler())
         context.clientDolphin.clientConnector = connector
         doTestPerformance()
     }
 
     void testPerformanceWithSynchronousConnector() {
-        def connector = new SynchronousInMemoryClientConnector(context.clientDolphin, serverDolphin.serverConnector)
+        def connector = new SynchronousInMemoryClientConnector(context.clientDolphin.getModelStore(), serverDolphin.serverConnector)
         context.clientDolphin.clientConnector = connector
         doTestPerformance()
     }
@@ -111,13 +111,13 @@ class FunctionalPresentationModelTests extends GroovyTestCase {
         }
         def start = System.nanoTime()
         100.times { soOften ->
-            clientDolphin.send new PerformanceCommand(), new OnFinishedHandler() {
+            clientDolphin.getClientConnector().send new PerformanceCommand(), new OnFinishedHandler() {
                 @Override
                 void onFinished() {
                 }
             }
         }
-        clientDolphin.send new PerformanceCommand(), new OnFinishedHandler() {
+        clientDolphin.getClientConnector().send new PerformanceCommand(), new OnFinishedHandler() {
 
             @Override
             void onFinished() {
@@ -136,11 +136,11 @@ class FunctionalPresentationModelTests extends GroovyTestCase {
             assert serverDolphin.getModelStore().findPresentationModelById("id")
         }
 
-        clientDolphin.send new CreateCommand(), new OnFinishedHandler() {
+        clientDolphin.getClientConnector().send new CreateCommand(), new OnFinishedHandler() {
 
             @Override
             void onFinished() {
-                clientDolphin.send new CheckNotificationReachedCommand(), new OnFinishedHandler() {
+                clientDolphin.getClientConnector().send new CheckNotificationReachedCommand(), new OnFinishedHandler() {
 
                     @Override
                     void onFinished() {
@@ -160,11 +160,11 @@ class FunctionalPresentationModelTests extends GroovyTestCase {
         registerAction serverDolphin, CheckTagIsKnownOnServerSideCommand.class, { cmd, response ->
         }
 
-        clientDolphin.send new CreateCommand(), new OnFinishedHandler() {
+        clientDolphin.getClientConnector().send new CreateCommand(), new OnFinishedHandler() {
 
             @Override
             void onFinished() {
-                clientDolphin.send new CheckTagIsKnownOnServerSideCommand(), new OnFinishedHandler() {
+                clientDolphin.getClientConnector().send new CheckTagIsKnownOnServerSideCommand(), new OnFinishedHandler() {
 
                     @Override
                     void onFinished() {
@@ -183,7 +183,7 @@ class FunctionalPresentationModelTests extends GroovyTestCase {
                 ServerModelStore.presentationModelCommand(response, it, null, dto)
             }
         }
-        clientDolphin.send new FetchDataCommand(), new OnFinishedHandler() {
+        clientDolphin.getClientConnector().send new FetchDataCommand(), new OnFinishedHandler() {
 
             @Override
             void onFinished() {
@@ -196,7 +196,7 @@ class FunctionalPresentationModelTests extends GroovyTestCase {
     }
 
     public <T extends Command> void registerAction(ServerDolphin serverDolphin, Class<T> commandClass, CommandHandler<T> handler) {
-        serverDolphin.register(new DolphinServerAction() {
+        serverDolphin.getServerConnector().register(new DolphinServerAction() {
 
             @Override
             void registerIn(ActionRegistry registry) {
@@ -212,8 +212,8 @@ class FunctionalPresentationModelTests extends GroovyTestCase {
                 ServerModelStore.changeValueCommand(response, user.getAttribute("loggedIn"), 'true')
             }
         }
-        def user = clientDolphin.presentationModel 'user', name: null, password: null, loggedIn: null
-        clientDolphin.send new LoginCommand(), new OnFinishedHandler() {
+        def user = clientDolphin.getModelStore().createModel('user', null, new ClientAttribute("name", null), new ClientAttribute("password", null), new ClientAttribute("loggedIn", null))
+        clientDolphin.getClientConnector().send new LoginCommand(), new OnFinishedHandler() {
 
             @Override
             void onFinished() {
@@ -223,7 +223,7 @@ class FunctionalPresentationModelTests extends GroovyTestCase {
         user.getAttribute("name").value = "Dierk"
         user.getAttribute("password").value = "Koenig"
 
-        clientDolphin.send new LoginCommand(), new OnFinishedHandler() {
+        clientDolphin.getClientConnector().send new LoginCommand(), new OnFinishedHandler() {
 
             @Override
             void onFinished() {
@@ -242,7 +242,7 @@ class FunctionalPresentationModelTests extends GroovyTestCase {
             throw new RuntimeException("EXPECTED: some arbitrary exception on the server")
         }
 
-        clientDolphin.send new SomeCommand(), new OnFinishedHandler() {
+        clientDolphin.getClientConnector().send new SomeCommand(), new OnFinishedHandler() {
 
             @Override
             void onFinished() {
@@ -254,7 +254,7 @@ class FunctionalPresentationModelTests extends GroovyTestCase {
         }
 
         // provoke a second exception
-        clientDolphin.send new SomeCommand(), new OnFinishedHandler() {
+        clientDolphin.getClientConnector().send new SomeCommand(), new OnFinishedHandler() {
 
             @Override
             void onFinished() {
@@ -281,7 +281,7 @@ class FunctionalPresentationModelTests extends GroovyTestCase {
         registerAction serverDolphin, SomeCommand.class, { cmd, response ->
             // nothing to do
         }
-        clientDolphin.send new SomeCommand(), new OnFinishedHandler() {
+        clientDolphin.getClientConnector().send new SomeCommand(), new OnFinishedHandler() {
 
             @Override
             void onFinished() {
@@ -291,7 +291,7 @@ class FunctionalPresentationModelTests extends GroovyTestCase {
     }
 
     void testUnregisteredCommandWithLog() {
-        clientDolphin.send new NoSuchActionRegisteredCommand(), new OnFinishedHandler() {
+        clientDolphin.getClientConnector().send new NoSuchActionRegisteredCommand(), new OnFinishedHandler() {
 
             @Override
             void onFinished() {
@@ -302,7 +302,7 @@ class FunctionalPresentationModelTests extends GroovyTestCase {
     }
 
     void testUnregisteredCommandWithoutLog() {
-        clientDolphin.send(new NoSuchActionRegisteredCommand(), null)
+        clientDolphin.getClientConnector().send(new NoSuchActionRegisteredCommand(), null)
         context.assertionsDone()
     }
 
@@ -323,7 +323,7 @@ class FunctionalPresentationModelTests extends GroovyTestCase {
                 reached = true
             }
         });
-        clientDolphin.send(new JavaCommand(), new OnFinishedHandler() {
+        clientDolphin.getClientConnector().send(new JavaCommand(), new OnFinishedHandler() {
             @Override
             void onFinished() {
                 assert reached
@@ -334,7 +334,7 @@ class FunctionalPresentationModelTests extends GroovyTestCase {
 
 
     void testRemovePresentationModel() {
-        clientDolphin.presentationModel('pm', attr: 1)
+        clientDolphin.getModelStore().createModel('pm', null, new ClientAttribute("attr", 1))
 
         registerAction serverDolphin, DeleteCommand.class, { cmd, response ->
             serverDolphin.getModelStore().remove(serverDolphin.getModelStore().findPresentationModelById('pm'))
@@ -342,7 +342,7 @@ class FunctionalPresentationModelTests extends GroovyTestCase {
         }
         assert clientDolphin.getModelStore().findPresentationModelById('pm')
 
-        clientDolphin.send new DeleteCommand(), new OnFinishedHandler() {
+        clientDolphin.getClientConnector().send new DeleteCommand(), new OnFinishedHandler() {
 
             @Override
             void onFinished() {
@@ -354,7 +354,7 @@ class FunctionalPresentationModelTests extends GroovyTestCase {
 
 
     void testWithNullResponses() {
-        clientDolphin.presentationModel('pm', attr: 1)
+        clientDolphin.getModelStore().createModel('pm', null, new ClientAttribute("attr", 1))
 
         registerAction serverDolphin, ArbitraryCommand.class, { cmd, response ->
             ServerModelStore.deleteCommand([], null)
@@ -363,7 +363,7 @@ class FunctionalPresentationModelTests extends GroovyTestCase {
             ServerModelStore.presentationModelCommand(null, null, null, null)
             ServerModelStore.changeValueCommand([], null, null)
         }
-        clientDolphin.send(new ArbitraryCommand(), new OnFinishedHandler() {
+        clientDolphin.getClientConnector().send(new ArbitraryCommand(), new OnFinishedHandler() {
 
             @Override
             void onFinished() {
@@ -375,7 +375,7 @@ class FunctionalPresentationModelTests extends GroovyTestCase {
     void testStateConflictBetweenClientAndServer() {
         LogConfig.logOnLevel(Level.INFO);
         def latch = new CountDownLatch(1)
-        def pm = clientDolphin.presentationModel('pm', attr: 1)
+        def pm = clientDolphin.getModelStore().createModel('pm', null, new ClientAttribute("attr", 1))
         def attr = pm.getAttribute('attr')
 
         registerAction serverDolphin, Set2Command.class, { cmd, response ->
@@ -388,15 +388,15 @@ class FunctionalPresentationModelTests extends GroovyTestCase {
             assert serverDolphin.getModelStore().findPresentationModelById('pm').getAttribute('attr').value == 3
         }
 
-        clientDolphin.send(new Set2Command(), null) // a conflict could arise when the server value is changed ...
+        clientDolphin.getClientConnector().send(new Set2Command(), null) // a conflict could arise when the server value is changed ...
         attr.value = 3            // ... while the client value is changed concurrently
         latch.countDown()
-        clientDolphin.send(new Assert3Command(), null)
+        clientDolphin.getClientConnector().send(new Assert3Command(), null)
         // since from the client perspective, the last change was to 3, server and client should both see the 3
 
         // in between these calls a conflicting value change could be transferred, setting both value to 2
 
-        clientDolphin.send(new Assert3Command(), new OnFinishedHandler() {
+        clientDolphin.getClientConnector().send(new Assert3Command(), new OnFinishedHandler() {
 
             @Override
             void onFinished() {

@@ -43,8 +43,12 @@ import com.canoo.dolphin.util.Assert;
 import com.canoo.dolphin.util.DolphinRemotingException;
 import org.opendolphin.core.client.ClientDolphin;
 import org.opendolphin.core.client.ClientModelStore;
+import org.opendolphin.core.client.DefaultModelSynchronizer;
+import org.opendolphin.core.client.ModelSynchronizer;
 import org.opendolphin.core.client.comm.AbstractClientConnector;
+import org.opendolphin.core.client.comm.ClientConnector;
 import org.opendolphin.core.client.comm.ExceptionHandler;
+import org.opendolphin.util.Provider;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
@@ -82,7 +86,13 @@ public class ClientContextFactory {
                 try {
                     final ForwardableCallback<DolphinRemotingException> remotingErrorHandler = new ForwardableCallback<>();
                     final ClientDolphin clientDolphin = new ClientDolphin();
-                    clientDolphin.setClientModelStore(new ClientModelStore(clientDolphin));
+                    final ModelSynchronizer defaultModelSynchronizer = new DefaultModelSynchronizer(new Provider<ClientConnector>() {
+                        @Override
+                        public ClientConnector get() {
+                            return clientDolphin.getClientConnector();
+                        }
+                    });
+                    clientDolphin.setClientModelStore(new ClientModelStore(defaultModelSynchronizer));
 
                     ExceptionHandler exceptionHandler = new ExceptionHandler() {
 
@@ -108,7 +118,7 @@ public class ClientContextFactory {
                     final ClientBeanManagerImpl clientBeanManager = new ClientBeanManagerImpl(beanRepository, beanBuilder, clientDolphin);
                     final ControllerProxyFactory controllerProxyFactory = new ControllerProxyFactoryImpl(platformBeanRepository, dolphinCommandHandler, clientDolphin);
                     final ClientContext clientContext = new ClientContextImpl(clientConfiguration, clientDolphin, controllerProxyFactory, dolphinCommandHandler, platformBeanRepository, clientBeanManager, remotingErrorHandler);
-                    clientDolphin.startPushListening(new StartLongPollCommand(), new InterruptLongPollCommand());
+                    clientDolphin.getClientConnector().startPushListening(new StartLongPollCommand(), new InterruptLongPollCommand());
                     clientConfiguration.getUiExecutor().execute(new Runnable() {
                         @Override
                         public void run() {

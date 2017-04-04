@@ -57,7 +57,7 @@ public class ServerPresentationModelBuilder extends AbstractPresentationModelBui
 
     @Override
     public ServerPresentationModel create() {
-        return dolphin.presentationModel(id, type, new DTO(slots));
+        return dolphin.getModelStore().presentationModel(id, type, new DTO(slots));
     }
 
 }

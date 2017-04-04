@@ -33,7 +33,7 @@ public class DefaultOpenDolphinFactory implements OpenDolphinFactory {
         serverConnector.setCodec(new OptimizedJsonCodec());
         serverConnector.setServerModelStore(modelStore);
         final DefaultServerDolphin dolphin = new DefaultServerDolphin(modelStore, serverConnector);
-        dolphin.registerDefaultActions();
+        dolphin.getServerConnector().registerDefaultActions();
         return dolphin;
     }
 }
