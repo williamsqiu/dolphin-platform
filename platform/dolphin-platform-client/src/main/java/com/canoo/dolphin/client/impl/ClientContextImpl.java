@@ -16,12 +16,10 @@
 package com.canoo.dolphin.client.impl;
 
 import com.canoo.dolphin.client.*;
-import com.canoo.dolphin.event.Subscription;
 import com.canoo.dolphin.impl.commands.CreateContextCommand;
 import com.canoo.dolphin.impl.commands.DestroyContextCommand;
 import com.canoo.dolphin.util.Assert;
-import com.canoo.dolphin.util.Callback;
-import org.opendolphin.core.client.ClientDolphin;
+import org.opendolphin.core.client.comm.AbstractClientConnector;
 import org.opendolphin.util.DolphinRemotingException;
 
 import java.util.concurrent.CompletableFuture;
@@ -32,30 +30,21 @@ import java.util.function.BiFunction;
 
 public class ClientContextImpl implements ClientContext {
 
-    private final ClientDolphin clientDolphin;
+    private final AbstractClientConnector clientConnector;
 
     private final ClientBeanManagerImpl clientBeanManager;
-
-    private final ClientPlatformBeanRepository platformBeanRepository;
-
-    private State state = State.CREATED;
 
     private final ControllerProxyFactory controllerProxyFactory;
 
     private final DolphinCommandHandler dolphinCommandHandler;
 
-    private final ClientConfiguration clientConfiguration;
+    private State state = State.CREATED;
 
-    private ForwardableCallback<DolphinRemotingException> remotingErrorHandler;
-
-    public ClientContextImpl(ClientConfiguration clientConfiguration, ClientDolphin clientDolphin, ControllerProxyFactory controllerProxyFactory, DolphinCommandHandler dolphinCommandHandler, ClientPlatformBeanRepository platformBeanRepository, ClientBeanManagerImpl clientBeanManager, ForwardableCallback<DolphinRemotingException> remotingErrorHandler) throws ExecutionException, InterruptedException {
-        this.clientDolphin = Assert.requireNonNull(clientDolphin, "clientDolphin");
+    public ClientContextImpl(ClientConfiguration clientConfiguration, AbstractClientConnector clientConnector, ControllerProxyFactory controllerProxyFactory, DolphinCommandHandler dolphinCommandHandler, ClientBeanManagerImpl clientBeanManager) throws ExecutionException, InterruptedException {
+        this.clientConnector = Assert.requireNonNull(clientConnector, "clientConnector");
         this.controllerProxyFactory = Assert.requireNonNull(controllerProxyFactory, "controllerProxyFactory");
         this.dolphinCommandHandler = Assert.requireNonNull(dolphinCommandHandler, "dolphinCommandHandler");
-        this.platformBeanRepository = Assert.requireNonNull(platformBeanRepository, "platformBeanRepository");
         this.clientBeanManager = Assert.requireNonNull(clientBeanManager, "clientBeanManager");
-        this.remotingErrorHandler = Assert.requireNonNull(remotingErrorHandler, "remotingErrorHandler");
-        this.clientConfiguration = Assert.requireNonNull(clientConfiguration, "clientConfiguration");
         try {
             dolphinCommandHandler.invokeDolphinCommand(new CreateContextCommand()).handle(new BiFunction<Void, Throwable, Object>() {
                 @Override
@@ -106,7 +95,7 @@ public class ClientContextImpl implements ClientContext {
     public synchronized CompletableFuture<Void> disconnect() {
         checkForInitializedState();
         state = State.DESTROYING;
-        clientDolphin.getClientConnector().stopPushListening();
+        clientConnector.stopPushListening();
         final CompletableFuture<Void> result = new CompletableFuture<>();
 
         Executors.newSingleThreadExecutor().execute(new Runnable() {
@@ -129,22 +118,6 @@ public class ClientContextImpl implements ClientContext {
         });
 
         return result;
-    }
-
-    @Override
-    public Subscription onRemotingError(final Callback<DolphinRemotingException> callback) {
-        Assert.requireNonNull(callback, "callback");
-        return remotingErrorHandler.register(new Callback<DolphinRemotingException>() {
-            @Override
-            public void call(final DolphinRemotingException e) {
-                clientConfiguration.getUiExecutor().execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        callback.call(e);
-                    }
-                });
-            }
-        });
     }
 
     private void checkForInitializedState() {

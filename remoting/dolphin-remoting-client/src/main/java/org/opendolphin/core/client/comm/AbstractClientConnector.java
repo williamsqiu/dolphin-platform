@@ -122,7 +122,12 @@ public abstract class AbstractClientConnector implements ClientConnector {
                     }
                 });
             } catch (Exception e) {
-                handleError(e);
+                if(!brokenConnectionFlag.get()) {
+                    handleError(e);
+                } else {
+                    LOG.log(Level.WARNING,"Remoting error based on broken connection in parallel request", e);
+                }
+
             }
         }
     }

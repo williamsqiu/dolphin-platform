@@ -19,6 +19,8 @@ import com.canoo.dolphin.client.impl.DefaultHttpURLConnectionFactory;
 import com.canoo.dolphin.client.impl.DefaultHttpURLConnectionResponseHandler;
 import com.canoo.dolphin.client.impl.DolphinPlatformThreadFactoryImpl;
 import com.canoo.dolphin.util.Assert;
+import org.opendolphin.core.client.comm.RemotingExceptionHandler;
+import org.opendolphin.core.client.comm.SimpleExceptionHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,6 +54,8 @@ public class ClientConfiguration {
 
     private final DolphinPlatformThreadFactory dolphinPlatformThreadFactory;
 
+    private RemotingExceptionHandler remotingExceptionHandler;
+
     private Level dolphinLogLevel;
 
     private long connectionTimeout;
@@ -80,6 +84,7 @@ public class ClientConfiguration {
         cookieStore = new CookieManager().getCookieStore();
         connectionFactory = new DefaultHttpURLConnectionFactory();
         responseHandler = new DefaultHttpURLConnectionResponseHandler();
+        remotingExceptionHandler = new SimpleExceptionHandler();
     }
 
     /**
@@ -174,4 +179,11 @@ public class ClientConfiguration {
         this.responseHandler = Assert.requireNonNull(responseHandler, "responseHandler");
     }
 
+    public RemotingExceptionHandler getRemotingExceptionHandler() {
+        return remotingExceptionHandler;
+    }
+
+    public void setRemotingExceptionHandler(RemotingExceptionHandler remotingExceptionHandler) {
+        this.remotingExceptionHandler = remotingExceptionHandler;
+    }
 }

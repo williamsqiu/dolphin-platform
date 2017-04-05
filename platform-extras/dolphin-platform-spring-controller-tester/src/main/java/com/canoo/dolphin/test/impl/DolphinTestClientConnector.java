@@ -35,7 +35,7 @@ public class DolphinTestClientConnector extends AbstractClientConnector {
     private final Executor uiExecutor;
 
     public DolphinTestClientConnector(ClientModelStore clientModelStore, Executor uiExecutor, DolphinContext dolphinContext) {
-        super(clientModelStore, uiExecutor, new CommandBatcher(), new SimpleExceptionHandler(uiExecutor), Executors.newCachedThreadPool());
+        super(clientModelStore, uiExecutor, new CommandBatcher(), new SimpleExceptionHandler(), Executors.newCachedThreadPool());
         this.dolphinContext = Assert.requireNonNull(dolphinContext, "dolphinContext");
         this.uiExecutor = Assert.requireNonNull(uiExecutor, "uiExecutor");
     }

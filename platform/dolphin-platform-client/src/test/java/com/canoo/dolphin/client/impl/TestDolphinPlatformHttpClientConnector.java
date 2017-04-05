@@ -89,7 +89,7 @@ public class TestDolphinPlatformHttpClientConnector {
                 return null;
             }
         })));
-        DolphinPlatformHttpClientConnector connector = new DolphinPlatformHttpClientConnector(clientConfiguration, clientDolphin, new JsonCodec(), new SimpleExceptionHandler(clientConfiguration.getUiExecutor()));
+        DolphinPlatformHttpClientConnector connector = new DolphinPlatformHttpClientConnector(clientConfiguration, clientDolphin, new JsonCodec(), new SimpleExceptionHandler());
 
         CreatePresentationModelCommand command = new CreatePresentationModelCommand();
         command.setPmId("p1");
@@ -140,7 +140,7 @@ public class TestDolphinPlatformHttpClientConnector {
                 return null;
             }
         })));
-        DolphinPlatformHttpClientConnector connector = new DolphinPlatformHttpClientConnector(clientConfiguration, clientDolphin, new JsonCodec(), new SimpleExceptionHandler(clientConfiguration.getUiExecutor()));
+        DolphinPlatformHttpClientConnector connector = new DolphinPlatformHttpClientConnector(clientConfiguration, clientDolphin, new JsonCodec(), new SimpleExceptionHandler());
 
         List<Command> commands = new ArrayList<>();
         commands.add(new CreateContextCommand());

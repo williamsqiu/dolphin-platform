@@ -74,7 +74,6 @@ public class ClientContextFactory {
             @Override
             public void run() {
                 try {
-                    final ForwardableCallback<DolphinRemotingException> remotingErrorHandler = new ForwardableCallback<>();
                     final ClientDolphin clientDolphin = new ClientDolphin();
                     final ModelSynchronizer defaultModelSynchronizer = new DefaultModelSynchronizer(new Provider<ClientConnector>() {
                         @Override
@@ -84,18 +83,20 @@ public class ClientContextFactory {
                     });
                     clientDolphin.setClientModelStore(new ClientModelStore(defaultModelSynchronizer));
 
-                    RemotingExceptionHandler exceptionHandler = new RemotingExceptionHandler() {
+                    RemotingExceptionHandler contextExceptionHandler = clientConfiguration.getRemotingExceptionHandler();
+
+                    RemotingExceptionHandler internalExceptionHandler = new RemotingExceptionHandler() {
 
                         @Override
                         public void handle(DolphinRemotingException e) {
-                            remotingErrorHandler.call(e);
+                            contextExceptionHandler.handle(e);
                             if(!result.isDone()) {
-                                result.completeExceptionally(new DolphinRemotingException("Internal Exception", e));
+                                result.completeExceptionally(new DolphinRemotingException("Can not create connection", e));
                             }
                         }
                     };
 
-                    final AbstractClientConnector clientConnector = new DolphinPlatformHttpClientConnector(clientConfiguration, clientDolphin, new OptimizedJsonCodec(), exceptionHandler);
+                    final AbstractClientConnector clientConnector = new DolphinPlatformHttpClientConnector(clientConfiguration, clientDolphin, new OptimizedJsonCodec(), internalExceptionHandler);
 
                     clientDolphin.setClientConnector(clientConnector);
                     final DolphinCommandHandler dolphinCommandHandler = new DolphinCommandHandler(clientConnector);
@@ -109,7 +110,7 @@ public class ClientContextFactory {
                     final ClientPlatformBeanRepository platformBeanRepository = new ClientPlatformBeanRepository(clientDolphin, beanRepository, dispatcher, converters);
                     final ClientBeanManagerImpl clientBeanManager = new ClientBeanManagerImpl(beanRepository, beanBuilder, clientDolphin);
                     final ControllerProxyFactory controllerProxyFactory = new ControllerProxyFactoryImpl(platformBeanRepository, dolphinCommandHandler, clientDolphin);
-                    final ClientContext clientContext = new ClientContextImpl(clientConfiguration, clientDolphin, controllerProxyFactory, dolphinCommandHandler, platformBeanRepository, clientBeanManager, remotingErrorHandler);
+                    final ClientContext clientContext = new ClientContextImpl(clientConfiguration, clientConnector, controllerProxyFactory, dolphinCommandHandler, clientBeanManager);
                     clientConnector.startPushListening(new StartLongPollCommand(), new InterruptLongPollCommand());
                     clientConfiguration.getUiExecutor().execute(new Runnable() {
                         @Override

@@ -82,6 +82,7 @@ public abstract class DolphinPlatformApplication extends Application {
         JavaFXConfiguration configuration = null;
         try {
             configuration = new JavaFXConfiguration(getServerEndpoint());
+            configuration.setRemotingExceptionHandler(e -> onRuntimeError(primaryStage, new DolphinRuntimeException("Dolphin Platform remoting error!", e)));
         } catch (MalformedURLException e) {
             throw new ClientInitializationException("Client configuration cannot be created", e);
         }
@@ -112,7 +113,6 @@ public abstract class DolphinPlatformApplication extends Application {
         this.primaryStage = primaryStage;
         if (initializationException == null) {
             if (clientContext != null) {
-                clientContext.onRemotingError(e -> onRuntimeError(primaryStage, new DolphinRuntimeException("Dolphin Platform remoting error!", e)));
                 try {
                     start(primaryStage, clientContext);
                 } catch (Exception e) {

@@ -18,21 +18,8 @@ package com.canoo.dolphin.test.impl;
 import com.canoo.dolphin.BeanManager;
 import com.canoo.dolphin.client.ClientConfiguration;
 import com.canoo.dolphin.client.ClientContext;
-import com.canoo.dolphin.client.impl.ClientBeanBuilderImpl;
-import com.canoo.dolphin.client.impl.ClientBeanManagerImpl;
-import com.canoo.dolphin.client.impl.ClientContextImpl;
-import com.canoo.dolphin.client.impl.ClientEventDispatcher;
-import com.canoo.dolphin.client.impl.ClientPlatformBeanRepository;
-import com.canoo.dolphin.client.impl.ClientPresentationModelBuilderFactory;
-import com.canoo.dolphin.client.impl.ControllerProxyFactory;
-import com.canoo.dolphin.client.impl.ControllerProxyFactoryImpl;
-import com.canoo.dolphin.client.impl.DolphinCommandHandler;
-import com.canoo.dolphin.client.impl.ForwardableCallback;
-import com.canoo.dolphin.impl.BeanRepositoryImpl;
-import com.canoo.dolphin.impl.ClassRepositoryImpl;
-import com.canoo.dolphin.impl.Converters;
-import com.canoo.dolphin.impl.PresentationModelBuilderFactory;
-import com.canoo.dolphin.impl.ReflectionHelper;
+import com.canoo.dolphin.client.impl.*;
+import com.canoo.dolphin.impl.*;
 import com.canoo.dolphin.impl.collections.ListMapperImpl;
 import com.canoo.dolphin.impl.commands.InterruptLongPollCommand;
 import com.canoo.dolphin.impl.commands.StartLongPollCommand;
@@ -104,7 +91,7 @@ public class DolphinPlatformSpringTestBootstrap {
         final ClientPlatformBeanRepository platformBeanRepository = new ClientPlatformBeanRepository(clientDolphin, beanRepository, dispatcher, converters);
         final ClientBeanManagerImpl clientBeanManager = new ClientBeanManagerImpl(beanRepository, beanBuilder, clientDolphin);
         final ControllerProxyFactory controllerProxyFactory = new ControllerProxyFactoryImpl(platformBeanRepository, dolphinCommandHandler, clientDolphin);
-        final ClientContext clientContext = new ClientContextImpl(clientConfiguration, clientDolphin, controllerProxyFactory, dolphinCommandHandler, platformBeanRepository, clientBeanManager, new ForwardableCallback());
+        final ClientContext clientContext = new ClientContextImpl(clientConfiguration, clientDolphin.getClientConnector(), controllerProxyFactory, dolphinCommandHandler, clientBeanManager);
 
         //Currently the event bus can not used in tests. See https://github.com/canoo/dolphin-platform/issues/196
         config.getClientExecutor().submit(new Callable<Void>() {
