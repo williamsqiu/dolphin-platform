@@ -16,7 +16,7 @@
 package com.canoo.dolphin.integration;
 
 import com.canoo.dolphin.client.*;
-import com.canoo.dolphin.util.DolphinRemotingException;
+import org.opendolphin.util.DolphinRemotingException;
 import org.testng.annotations.DataProvider;
 
 import java.io.IOException;
@@ -66,7 +66,7 @@ public class AbstractIntegrationTest {
         try {
             return (ControllerProxy<T>) clientContext.createController(controllerName).get(2, TimeUnit.MINUTES);
         } catch (Exception e) {
-            throw new DolphinRemotingException("Can not create controller " + controllerName, e);
+            throw new RuntimeException("Can not create controller " + controllerName, e);
         }
     }
 
@@ -78,7 +78,7 @@ public class AbstractIntegrationTest {
             configuration.setConnectionTimeout(10_000L);
             return ClientContextFactory.connect(configuration).get(configuration.getConnectionTimeout(), TimeUnit.MILLISECONDS);
         } catch (Exception e) {
-            throw new DolphinRemotingException("Can not create client context for endpoint " + endpoint, e);
+            throw new RuntimeException("Can not create client context for endpoint " + endpoint, e);
         }
     }
 
@@ -86,7 +86,7 @@ public class AbstractIntegrationTest {
         try {
             controllerProxy.invoke(actionName, params).get(2, TimeUnit.MINUTES);
         } catch (Exception e) {
-            throw new DolphinRemotingException("Can not handle action " + actionName + " for containerType " + containerType, e);
+            throw new RuntimeException("Can not handle action " + actionName + " for containerType " + containerType, e);
         }
     }
 
@@ -94,7 +94,7 @@ public class AbstractIntegrationTest {
         try {
             controllerProxy.destroy().get(2, TimeUnit.MINUTES);
         } catch (Exception e) {
-            throw new DolphinRemotingException("Can not destroy controller for endpoint " + endpoint, e);
+            throw new RuntimeException("Can not destroy controller for endpoint " + endpoint, e);
         }
     }
 
@@ -102,7 +102,7 @@ public class AbstractIntegrationTest {
         try {
             Thread.sleep(timeUnit.toMillis(time));
         } catch (Exception e) {
-            throw new DolphinRemotingException("Can not sleep :(", e);
+            throw new RuntimeException("Can not sleep :(", e);
         }
     }
 

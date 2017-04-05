@@ -20,32 +20,35 @@ import com.canoo.dolphin.client.DolphinSessionException;
 import com.canoo.dolphin.client.HttpURLConnectionFactory;
 import com.canoo.dolphin.client.HttpURLConnectionResponseHandler;
 import com.canoo.dolphin.impl.PlatformConstants;
+import com.canoo.dolphin.impl.commands.DestroyContextCommand;
 import com.canoo.dolphin.util.Assert;
-import org.opendolphin.core.client.ClientDolphin;
+import org.opendolphin.core.client.ClientModelStore;
 import org.opendolphin.core.client.comm.AbstractClientConnector;
 import org.opendolphin.core.client.comm.BlindCommandBatcher;
 import org.opendolphin.core.client.comm.RemotingExceptionHandler;
 import org.opendolphin.core.comm.Codec;
 import org.opendolphin.core.comm.Command;
 import org.opendolphin.util.DolphinRemotingException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.CookieStore;
-import java.net.HttpCookie;
-import java.net.HttpURLConnection;
-import java.net.URISyntaxException;
-import java.net.URL;
+import java.net.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * This class is used to sync the unique client scope id of the current dolphin
  */
 public class DolphinPlatformHttpClientConnector extends AbstractClientConnector {
+
+    private static final Logger LOG = LoggerFactory.getLogger(DolphinPlatformHttpClientConnector.class);
 
     private final URL servletUrl;
 
@@ -59,8 +62,8 @@ public class DolphinPlatformHttpClientConnector extends AbstractClientConnector 
 
     private String clientId;
 
-    public DolphinPlatformHttpClientConnector(ClientConfiguration configuration, ClientDolphin clientDolphin, Codec codec, RemotingExceptionHandler onException) {
-        super(clientDolphin.getModelStore(), Assert.requireNonNull(configuration, "configuration").getUiExecutor(), new BlindCommandBatcher(), onException, configuration.getBackgroundExecutor());
+    public DolphinPlatformHttpClientConnector(ClientConfiguration configuration, ClientModelStore clientModelStore, Codec codec, RemotingExceptionHandler onException) {
+        super(clientModelStore, Assert.requireNonNull(configuration, "configuration").getUiExecutor(), new BlindCommandBatcher(), onException, configuration.getBackgroundExecutor());
         this.servletUrl = configuration.getServerEndpoint();
         this.connectionFactory = configuration.getConnectionFactory();
         this.cookieStore = configuration.getCookieStore();
@@ -71,8 +74,23 @@ public class DolphinPlatformHttpClientConnector extends AbstractClientConnector 
         setStrictMode(false);
     }
 
+    private final AtomicBoolean disconnecting = new AtomicBoolean(false);
+
     public List<Command> transmit(List<Command> commands) throws DolphinRemotingException {
         Assert.requireNonNull(commands, "commands");
+
+        if(disconnecting.get()) {
+            LOG.warn("Canceled communication based on disconnect");
+            return Collections.emptyList();
+        }
+
+        //BLOCKADE FALLS DISCONNECT AUFGERUFEN WURDE
+        for (Command command : commands) {
+            if(command instanceof DestroyContextCommand) {
+                disconnecting.set(true);
+            }
+        }
+
 
         try {
             //REQUEST
@@ -161,7 +179,19 @@ public class DolphinPlatformHttpClientConnector extends AbstractClientConnector 
         return byteArrayOutputStream.toByteArray();
     }
 
+    @Override
+    public void connect() {
+        clientId = null;
+        disconnecting.set(false);
+        super.connect();
+    }
 
+    @Override
+    public void disconnect() {
+        super.disconnect();
+        clientId = null;
+        disconnecting.set(false);
+    }
 }
 
 

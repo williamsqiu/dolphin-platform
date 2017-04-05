@@ -150,6 +150,10 @@ class ServerPresentationModelTests extends GroovyTestCase {
             assert serverDolphin.getModelStore().findPresentationModelById("PM1").getAttribute("att2").baseValue == 'changedBase'
         }
 
+        clientDolphin.sync {
+            //...
+        }
+
         clientDolphin.getClientConnector().send(new AttachListenerCommand(), null)
 
         clientDolphin.sync {

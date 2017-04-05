@@ -15,32 +15,16 @@
  */
 package com.canoo.dolphin.client;
 
-import com.canoo.dolphin.client.impl.*;
-import com.canoo.dolphin.impl.BeanRepositoryImpl;
-import com.canoo.dolphin.impl.ClassRepositoryImpl;
-import com.canoo.dolphin.impl.Converters;
-import com.canoo.dolphin.impl.PresentationModelBuilderFactory;
+import com.canoo.dolphin.client.impl.ClientContextImpl;
+import com.canoo.dolphin.client.impl.DolphinPlatformHttpClientConnector;
 import com.canoo.dolphin.impl.codec.OptimizedJsonCodec;
-import com.canoo.dolphin.impl.collections.ListMapperImpl;
-import com.canoo.dolphin.impl.commands.InterruptLongPollCommand;
-import com.canoo.dolphin.impl.commands.StartLongPollCommand;
-import com.canoo.dolphin.internal.BeanBuilder;
-import com.canoo.dolphin.internal.BeanRepository;
-import com.canoo.dolphin.internal.ClassRepository;
-import com.canoo.dolphin.internal.EventDispatcher;
-import com.canoo.dolphin.internal.collections.ListMapper;
 import com.canoo.dolphin.util.Assert;
-import org.opendolphin.core.client.ClientDolphin;
 import org.opendolphin.core.client.ClientModelStore;
-import org.opendolphin.core.client.DefaultModelSynchronizer;
-import org.opendolphin.core.client.ModelSynchronizer;
 import org.opendolphin.core.client.comm.AbstractClientConnector;
-import org.opendolphin.core.client.comm.ClientConnector;
-import org.opendolphin.core.client.comm.RemotingExceptionHandler;
-import org.opendolphin.util.DolphinRemotingException;
-import org.opendolphin.util.Provider;
+import org.opendolphin.util.Function;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -74,52 +58,28 @@ public class ClientContextFactory {
             @Override
             public void run() {
                 try {
-                    final ClientDolphin clientDolphin = new ClientDolphin();
-                    final ModelSynchronizer defaultModelSynchronizer = new DefaultModelSynchronizer(new Provider<ClientConnector>() {
+
+                    final ClientContext clientContext = new ClientContextImpl(clientConfiguration, new Function<ClientModelStore, AbstractClientConnector>() {
                         @Override
-                        public ClientConnector get() {
-                            return clientDolphin.getClientConnector();
+                        public AbstractClientConnector call(final ClientModelStore clientModelStore) {
+                            return new DolphinPlatformHttpClientConnector(clientConfiguration, clientModelStore, new OptimizedJsonCodec(), clientConfiguration.getRemotingExceptionHandler());
                         }
                     });
-                    clientDolphin.setClientModelStore(new ClientModelStore(defaultModelSynchronizer));
+                    clientContext.connect().get(clientConfiguration.getConnectionTimeout(), TimeUnit.MILLISECONDS);
 
-                    RemotingExceptionHandler contextExceptionHandler = clientConfiguration.getRemotingExceptionHandler();
-
-                    RemotingExceptionHandler internalExceptionHandler = new RemotingExceptionHandler() {
-
-                        @Override
-                        public void handle(DolphinRemotingException e) {
-                            contextExceptionHandler.handle(e);
-                            if(!result.isDone()) {
-                                result.completeExceptionally(new DolphinRemotingException("Can not create connection", e));
-                            }
-                        }
-                    };
-
-                    final AbstractClientConnector clientConnector = new DolphinPlatformHttpClientConnector(clientConfiguration, clientDolphin, new OptimizedJsonCodec(), internalExceptionHandler);
-
-                    clientDolphin.setClientConnector(clientConnector);
-                    final DolphinCommandHandler dolphinCommandHandler = new DolphinCommandHandler(clientConnector);
-                    final EventDispatcher dispatcher = new ClientEventDispatcher(clientDolphin);
-                    final BeanRepository beanRepository = new BeanRepositoryImpl(clientDolphin, dispatcher);
-                    final Converters converters = new Converters(beanRepository);
-                    final PresentationModelBuilderFactory builderFactory = new ClientPresentationModelBuilderFactory(clientDolphin);
-                    final ClassRepository classRepository = new ClassRepositoryImpl(clientDolphin, converters, builderFactory);
-                    final ListMapper listMapper = new ListMapperImpl(clientDolphin, classRepository, beanRepository, builderFactory, dispatcher);
-                    final BeanBuilder beanBuilder = new ClientBeanBuilderImpl(classRepository, beanRepository, listMapper, builderFactory, dispatcher);
-                    final ClientPlatformBeanRepository platformBeanRepository = new ClientPlatformBeanRepository(clientDolphin, beanRepository, dispatcher, converters);
-                    final ClientBeanManagerImpl clientBeanManager = new ClientBeanManagerImpl(beanRepository, beanBuilder, clientDolphin);
-                    final ControllerProxyFactory controllerProxyFactory = new ControllerProxyFactoryImpl(platformBeanRepository, dolphinCommandHandler, clientDolphin);
-                    final ClientContext clientContext = new ClientContextImpl(clientConfiguration, clientConnector, controllerProxyFactory, dolphinCommandHandler, clientBeanManager);
-                    clientConnector.startPushListening(new StartLongPollCommand(), new InterruptLongPollCommand());
                     clientConfiguration.getUiExecutor().execute(new Runnable() {
                         @Override
                         public void run() {
                             result.complete(clientContext);
                         }
                     });
-                } catch (Exception e) {
-                    result.obtrudeException(new ClientInitializationException("Can not connect to server!", e));
+                } catch (final Exception exception) {
+                    clientConfiguration.getUiExecutor().execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            result.obtrudeException(new ClientInitializationException("Can not connect to server!", exception));
+                        }
+                    });
                 }
             }
         });

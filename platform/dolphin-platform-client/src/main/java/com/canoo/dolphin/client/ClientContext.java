@@ -51,4 +51,8 @@ public interface ClientContext {
      */
     CompletableFuture<Void> disconnect();
 
+    CompletableFuture<Void> connect();
+
+    CompletableFuture<Void> reconnect();
+
 }

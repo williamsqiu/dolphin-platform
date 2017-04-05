@@ -16,7 +16,6 @@
 package org.opendolphin.core.client.comm;
 
 import org.opendolphin.core.comm.Command;
-import org.opendolphin.core.comm.SignalCommand;
 
 /**
  * @Deprecated since the only direct implementation is {@link AbstractClientConnector}
@@ -30,7 +29,7 @@ public interface ClientConnector {
 
     void send(Command command);
 
-    void startPushListening(final Command startLongPollCommand, final SignalCommand interruptLongPollCommand);
+    void connect();
 
-    void stopPushListening();
+    void disconnect();
 }

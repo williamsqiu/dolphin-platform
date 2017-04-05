@@ -161,7 +161,7 @@ public abstract class DolphinPlatformApplication extends Application {
                         ClientDolphin clientDolphin = ReflectionHelper.getPrivileged(ReflectionHelper.getInheritedDeclaredField(ClientContextImpl.class, "clientDolphin"), clientContext);
 
                         //TODO: Not workin with the current connector. We need to stop the connector on disconnect.
-                        //clientDolphin.stopPushListening();
+                        //clientDolphin.disconnect();
                         //clientDolphin.sync(() -> System.out.println("SYNC"));
 
                         clientContext.disconnect().get(getClientConfiguration().getConnectionTimeout(), TimeUnit.MILLISECONDS);

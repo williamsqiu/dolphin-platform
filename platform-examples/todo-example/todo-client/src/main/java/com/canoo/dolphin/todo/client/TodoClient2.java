@@ -19,18 +19,19 @@ public class TodoClient2 {
             }
         });
         clientConfiguration.setRemotingExceptionHandler(e -> e.printStackTrace());
+
+        System.out.println("Connect!");
         ClientContext clientContext = ClientContextFactory.connect(clientConfiguration).get();
-
-
+        System.out.println("Create Controller!");
         clientContext.createController(TodoAppConstants.TODO_CONTROLLER_NAME);
-        Thread.sleep(2000);
+        Thread.sleep(1000);
+        System.out.println("Reconnect!");
+        clientContext.reconnect().get();
+        System.out.println("Create Controller!");
+        clientContext.createController(TodoAppConstants.TODO_CONTROLLER_NAME);
+        Thread.sleep(1000);
         System.out.println("Disconnect!");
-        clientContext.disconnect();
-
-        //while (true) {
-        //    Thread.sleep(2000);
-          //  clientContext.createController(TodoAppConstants.TODO_CONTROLLER_NAME);
-      //  }
-
+        clientContext.disconnect().get();
+        Thread.sleep(10000);
     }
 }
