@@ -201,7 +201,7 @@ public abstract class AbstractClientConnector implements ClientConnector {
      * Release the current push listener, which blocks the sending queue.
      * Does nothing in case that the push listener is not active.
      */
-    private void release() {
+    protected void release() {
         if (!releaseNeeded.get()) {
             return; // there is no point in releasing if we do not wait. Avoid excessive releasing.
         }
