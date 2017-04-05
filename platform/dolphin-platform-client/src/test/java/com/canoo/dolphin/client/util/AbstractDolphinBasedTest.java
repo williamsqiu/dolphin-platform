@@ -34,6 +34,7 @@ import org.opendolphin.core.client.ClientDolphin;
 import org.opendolphin.core.client.ClientModelStore;
 import org.opendolphin.core.client.DefaultModelSynchronizer;
 import org.opendolphin.core.client.ModelSynchronizer;
+import org.opendolphin.core.client.comm.AbstractClientConnector;
 import org.opendolphin.core.client.comm.ClientConnector;
 import org.opendolphin.core.comm.Command;
 import org.opendolphin.core.server.ServerDolphin;
@@ -65,7 +66,7 @@ public abstract class AbstractDolphinBasedTest {
         }
     }
 
-    protected ClientDolphin createClientDolphin(final ClientConnector connector) {
+    protected ClientDolphin createClientDolphin(final AbstractClientConnector connector) {
         final ClientDolphin dolphin = new ClientDolphin();
         ModelSynchronizer defaultModelSynchronizer = new DefaultModelSynchronizer(new Provider<ClientConnector>() {
             @Override

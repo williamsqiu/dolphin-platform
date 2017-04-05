@@ -53,7 +53,9 @@ public abstract class AbstractClientConnector implements ClientConnector {
      */
     protected final AtomicBoolean releaseNeeded = new AtomicBoolean(false);
 
-    protected final AtomicBoolean brokenConnection = new AtomicBoolean(false);
+    protected final AtomicBoolean brokenConnectionFlag = new AtomicBoolean(false);
+
+    protected boolean brokenConnectionFlagForUiExecutor = false;
 
     /**
      * The named command that waits for pushes on the server side
@@ -81,17 +83,24 @@ public abstract class AbstractClientConnector implements ClientConnector {
     private void handleError(Exception exception) {
         Objects.requireNonNull(exception);
 
-        brokenConnection.set(true);
+        brokenConnectionFlag.set(true);
         stopPushListening();
-        if(exception instanceof DolphinRemotingException) {
-            remotingExceptionHandler.handle((DolphinRemotingException) exception);
-        } else {
-            remotingExceptionHandler.handle(new DolphinRemotingException("internal remoting error", exception));
-        }
+
+        uiExecutor.execute(new Runnable() {
+            @Override
+            public void run() {
+                brokenConnectionFlagForUiExecutor = true;
+                if(exception instanceof DolphinRemotingException) {
+                    remotingExceptionHandler.handle((DolphinRemotingException) exception);
+                } else {
+                    remotingExceptionHandler.handle(new DolphinRemotingException("internal remoting error", exception));
+                }
+            }
+        });
     }
 
     protected void commandProcessing() {
-        while (!brokenConnection.get()) {
+        while (!brokenConnectionFlag.get()) {
             try {
                 final List<CommandAndHandler> toProcess = commandBatcher.getWaitingBatches().getVal();
                 List<Command> commands = new ArrayList<>();
@@ -122,7 +131,7 @@ public abstract class AbstractClientConnector implements ClientConnector {
 
     @Override
     public void send(final Command command, final OnFinishedHandler callback, final HandlerType handlerType) {
-        if(brokenConnection.get()) {
+        if(brokenConnectionFlagForUiExecutor) {
             //TODO: Change to DolphinRemotingException
             throw new IllegalStateException("Conection is broken");
         }
@@ -173,7 +182,7 @@ public abstract class AbstractClientConnector implements ClientConnector {
      * listens for the pushListener to return. The pushListener must be set and pushEnabled must be true.
      */
     protected void listen() {
-        if(brokenConnection.get()) {
+        if(brokenConnectionFlag.get()) {
             return;
         }
 

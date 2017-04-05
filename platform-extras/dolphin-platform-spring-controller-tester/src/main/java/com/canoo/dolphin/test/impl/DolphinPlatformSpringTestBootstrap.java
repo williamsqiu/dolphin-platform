@@ -93,7 +93,7 @@ public class DolphinPlatformSpringTestBootstrap {
             }
         });
         clientConfiguration.setConnectionTimeout(Long.MAX_VALUE);
-        final DolphinCommandHandler dolphinCommandHandler = new DolphinCommandHandler(clientDolphin);
+        final DolphinCommandHandler dolphinCommandHandler = new DolphinCommandHandler(clientDolphin.getClientConnector());
         final EventDispatcher dispatcher = new ClientEventDispatcher(clientDolphin);
         final BeanRepository beanRepository = new BeanRepositoryImpl(clientDolphin, dispatcher);
         final Converters converters = new Converters(beanRepository);
