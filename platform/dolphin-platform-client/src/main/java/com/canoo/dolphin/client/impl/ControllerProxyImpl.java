@@ -70,7 +70,7 @@ public class ControllerProxyImpl<T> implements ControllerProxy<T> {
             @Override
             public void onFinished() {
                 if (bean.isError()) {
-                    result.completeExceptionally(new ControllerActionException());
+                    result.completeExceptionally(new ControllerActionException("Error on calling action on the server. Please check the server log."));
                 } else {
                     result.complete(null);
                 }
