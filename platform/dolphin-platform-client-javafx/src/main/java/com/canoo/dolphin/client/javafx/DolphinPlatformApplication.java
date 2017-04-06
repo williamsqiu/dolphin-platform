@@ -15,25 +15,19 @@
  */
 package com.canoo.dolphin.client.javafx;
 
-import com.canoo.dolphin.client.ClientConfiguration;
-import com.canoo.dolphin.client.ClientContext;
-import com.canoo.dolphin.client.ClientContextFactory;
-import com.canoo.dolphin.client.ClientInitializationException;
-import com.canoo.dolphin.client.ClientShutdownException;
-import com.canoo.dolphin.client.DolphinRuntimeException;
-import com.canoo.dolphin.client.impl.ClientContextImpl;
-import com.canoo.dolphin.impl.ReflectionHelper;
+import com.canoo.dolphin.client.*;
 import com.canoo.dolphin.util.Assert;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.stage.Stage;
-import org.opendolphin.core.client.ClientDolphin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.concurrent.TimeUnit;
-import java.net.URL;
 import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
+import java.util.function.BiFunction;
 
 /**
  * Defines a basic application class for Dolphin Platform based applications that can be used like the {@link Application}
@@ -65,10 +59,45 @@ public abstract class DolphinPlatformApplication extends Application {
                     onRuntimeError(primaryStage, new DolphinRuntimeException(thread, "Unhandled error in Dolphin Platform background thread", exception));
                 });
             });
-            clientContext = ClientContextFactory.connect(clientConfiguration).get(clientConfiguration.getConnectionTimeout(), TimeUnit.MILLISECONDS);
+            clientContext = ClientContextFactory.connect(clientConfiguration).handle(new BiFunction<ClientContext, Throwable, ClientContext>() {
+                @Override
+                public ClientContext apply(ClientContext clientContext, Throwable throwable) {
+                    if(throwable != null) {
+                        throw new RuntimeException("Error in creating client context", throwable);
+                    }
+                    try {
+                        clientContext.connect().get();
+                    } catch (Exception e) {
+                        throw new RuntimeException("Error in connection client context to server", e);
+                    }
+                    return clientContext;
+                }
+            }).get(clientConfiguration.getConnectionTimeout(), TimeUnit.MILLISECONDS);
+            clientContext.connect().get(clientConfiguration.getConnectionTimeout(), TimeUnit.MILLISECONDS);
         } catch (Exception e) {
             initializationException = new ClientInitializationException("Can not initialize Dolphin Platform Context", e);
         }
+    }
+
+    protected CompletableFuture<Void> disconnect() {
+        if(clientContext == null) {
+            throw new IllegalStateException("Client context not defined");
+        }
+        return clientContext.disconnect();
+    }
+
+    protected CompletableFuture<Void> reconnect() {
+        if(clientContext == null) {
+            throw new IllegalStateException("Client context not defined");
+        }
+        return clientContext.reconnect();
+    }
+
+    protected CompletableFuture<Void> connect() {
+        if(clientContext == null) {
+            throw new IllegalStateException("Client context not defined");
+        }
+        return clientContext.connect();
     }
 
     /**
@@ -105,10 +134,6 @@ public abstract class DolphinPlatformApplication extends Application {
      */
     @Override
     public final void start(final Stage primaryStage) throws Exception {
-        startImpl(primaryStage);
-    }
-
-    private final void startImpl(final Stage primaryStage) throws Exception {
         Assert.requireNonNull(primaryStage, "primaryStage");
         this.primaryStage = primaryStage;
         if (initializationException == null) {
@@ -153,36 +178,7 @@ public abstract class DolphinPlatformApplication extends Application {
     }
 
     protected final void reconnect(Stage primaryStage) {
-        final ClientConfiguration clientConfiguration = getClientConfiguration();
-        clientConfiguration.getBackgroundExecutor().submit(() -> {
-            try {
-                try {
-                    if (clientContext != null) {
-                        ClientDolphin clientDolphin = ReflectionHelper.getPrivileged(ReflectionHelper.getInheritedDeclaredField(ClientContextImpl.class, "clientDolphin"), clientContext);
 
-                        //TODO: Not workin with the current connector. We need to stop the connector on disconnect.
-                        //clientDolphin.disconnect();
-                        //clientDolphin.sync(() -> System.out.println("SYNC"));
-
-                        clientContext.disconnect().get(getClientConfiguration().getConnectionTimeout(), TimeUnit.MILLISECONDS);
-                    }
-                } catch (Exception e) {
-                    LOG.error("Error in disconnect. This can end in an memory leak on the server!");
-                } finally {
-                    clientContext = null;
-                }
-                init();
-                clientConfiguration.getUiExecutor().execute(() -> {
-                    try {
-                        startImpl(primaryStage);
-                    } catch (Exception e) {
-                        onInitializationError(primaryStage, new ClientInitializationException("Error in reconnect!", e));
-                    }
-                });
-            } catch (Exception e) {
-                clientConfiguration.getUiExecutor().execute(() -> onInitializationError(primaryStage, new ClientInitializationException("Error in reconnect!", e)));
-            }
-        });
     }
 
     /**
