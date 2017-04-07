@@ -84,7 +84,7 @@ public class DolphinPlatformHttpClientConnector extends AbstractClientConnector 
             return Collections.emptyList();
         }
 
-        //BLOCKADE FALLS DISCONNECT AUFGERUFEN WURDE
+        //block if diconnect is called in other thread (poll / release)
         for (Command command : commands) {
             if(command instanceof DestroyContextCommand) {
                 disconnecting.set(true);

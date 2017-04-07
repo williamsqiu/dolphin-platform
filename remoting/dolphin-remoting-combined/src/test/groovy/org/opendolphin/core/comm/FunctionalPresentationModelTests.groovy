@@ -68,7 +68,7 @@ class FunctionalPresentationModelTests extends GroovyTestCase {
 
     @Override
     protected void tearDown() {
-        assert context.done.await(50, TimeUnit.SECONDS)
+        assert context.done.await(10, TimeUnit.SECONDS)
     }
 
     void testQualifiersInClientPMs() {
@@ -223,63 +223,6 @@ class FunctionalPresentationModelTests extends GroovyTestCase {
             }
         }
     }
-
-    // This test do not fit to the connect / disconnect concept of the connection
-//    void testAsynchronousExceptionOnTheServer() {
-//        LogConfig.logOnLevel(Level.INFO);
-//        def count = 0
-//
-//        registerAction serverDolphin, SomeCommand.class, { cmd, response ->
-//            throw new RuntimeException("EXPECTED: some arbitrary exception on the server")
-//        }
-//
-//        clientDolphin.getClientConnector().send new SomeCommand(), new OnFinishedHandler() {
-//
-//            @Override
-//            void onFinished() {
-//                fail "the onFinished handler will not be reached in this case"
-//            }
-//        }
-//        clientDolphin.sync {
-//            assert !clientDolphin.clientConnector.isConnected()
-//        }
-//
-//        // provoke a second exception
-//        clientDolphin.getClientConnector().send new SomeCommand(), new OnFinishedHandler() {
-//
-//            @Override
-//            void onFinished() {
-//                fail "the onFinished handler will not be reached either"
-//            }
-//        }
-//        clientDolphin.sync {
-//            assert count == 2
-//        }
-//        clientDolphin.sync {
-//            context.assertionsDone()
-//        }
-//    }
-
-//    @Ignore
-//    void testAsynchronousExceptionInOnFinishedHandler() {
-//        context = new TestInMemoryConfig(DirectExecutor.getInstance());
-//        serverDolphin = context.serverDolphin
-//        clientDolphin = context.clientDolphin
-//
-//        // not "run later" we need it immediately here
-//        clientDolphin.clientConnector.onException = { context.assertionsDone() }
-//
-//        registerAction serverDolphin, SomeCommand.class, { cmd, response ->
-//            // nothing to do
-//        }
-//        clientDolphin.getClientConnector().send new SomeCommand(), new OnFinishedHandler() {
-//
-//            @Override
-//            void onFinished() {
-//                throw new RuntimeException("EXPECTED: some arbitrary exception in the onFinished handler")
-//            }
-//        }
-//    }
 
     void testUnregisteredCommandWithLog() {
         clientDolphin.getClientConnector().send new NoSuchActionRegisteredCommand(), new OnFinishedHandler() {
