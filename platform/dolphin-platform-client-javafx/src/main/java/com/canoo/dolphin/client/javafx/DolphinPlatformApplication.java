@@ -65,11 +65,6 @@ public abstract class DolphinPlatformApplication extends Application {
                     if(throwable != null) {
                         throw new RuntimeException("Error in creating client context", throwable);
                     }
-                    try {
-                        clientContext.connect().get();
-                    } catch (Exception e) {
-                        throw new RuntimeException("Error in connection client context to server", e);
-                    }
                     return clientContext;
                 }
             }).get(clientConfiguration.getConnectionTimeout(), TimeUnit.MILLISECONDS);

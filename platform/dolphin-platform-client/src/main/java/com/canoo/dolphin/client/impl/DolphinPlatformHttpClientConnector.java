@@ -102,6 +102,8 @@ public class DolphinPlatformHttpClientConnector extends AbstractClientConnector 
             conn.setRequestMethod(PlatformConstants.POST_METHOD);
             if(clientId != null) {
                 conn.setRequestProperty(PlatformConstants.CLIENT_ID_HTTP_HEADER_NAME, clientId);
+            } else {
+                LOG.debug("Sending first request to server. Dolphin client id not defined.");
             }
             setRequestCookies(conn);
             String content = codec.encode(commands);

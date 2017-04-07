@@ -16,7 +16,6 @@
 package com.canoo.dolphin.integration;
 
 import com.canoo.dolphin.client.*;
-import org.opendolphin.util.DolphinRemotingException;
 import org.testng.annotations.DataProvider;
 
 import java.io.IOException;
@@ -106,7 +105,7 @@ public class AbstractIntegrationTest {
         }
     }
 
-    @DataProvider(name = ENDPOINTS_DATAPROVIDER, parallel = true)
+    @DataProvider(name = ENDPOINTS_DATAPROVIDER, parallel = false)
     public Object[][] getEndpoints() {
         return new String[][]{{"Payara", "http://localhost:8081/integration-tests"},
                 {"TomEE", "http://localhost:8082/integration-tests"},

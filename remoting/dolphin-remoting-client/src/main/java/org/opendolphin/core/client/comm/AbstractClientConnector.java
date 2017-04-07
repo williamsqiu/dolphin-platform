@@ -51,6 +51,8 @@ public abstract class AbstractClientConnector implements ClientConnector {
 
     protected final AtomicBoolean connectedFlag = new AtomicBoolean(false);
 
+    protected final AtomicBoolean useLongPolling = new AtomicBoolean(false);
+
     protected boolean connectionFlagForUiExecutor = false;
 
     private StartLongPollCommand pushListener;
@@ -87,6 +89,7 @@ public abstract class AbstractClientConnector implements ClientConnector {
     }
 
     protected void commandProcessing() {
+        boolean longPollingActivated = false;
         while (connectedFlag.get()) {
             try {
                 final List<CommandAndHandler> toProcess = commandBatcher.getWaitingBatches().getVal();
@@ -120,7 +123,15 @@ public abstract class AbstractClientConnector implements ClientConnector {
                 } else {
                     LOG.warn("Remoting error based on broken connection in parallel request", e);
                 }
-
+            }
+            if(!longPollingActivated && useLongPolling.get()) {
+                uiExecutor.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        listen();
+                    }
+                });
+                longPollingActivated = true;
             }
         }
     }
@@ -251,9 +262,7 @@ public abstract class AbstractClientConnector implements ClientConnector {
                 commandProcessing();
             }
         });
-        if (longPoll) {
-            listen();
-        }
+        useLongPolling.set(longPoll);
     }
 
     @Override
