@@ -67,7 +67,7 @@ class ClientConnectorTests extends GroovyTestCase {
 
         attributeChangeListener = dolphin.getModelStore().@attributeChangeListener
 
-        clientConnector.connect();
+        clientConnector.connect(false);
 
         initLatch()
     }

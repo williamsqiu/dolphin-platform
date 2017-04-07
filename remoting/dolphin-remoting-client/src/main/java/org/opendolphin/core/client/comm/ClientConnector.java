@@ -31,5 +31,7 @@ public interface ClientConnector {
 
     void connect();
 
+    void connect(boolean longPoll);
+
     void disconnect();
 }
