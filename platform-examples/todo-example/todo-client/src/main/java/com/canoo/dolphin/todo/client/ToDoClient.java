@@ -19,16 +19,21 @@ import com.canoo.dolphin.client.ClientContext;
 import com.canoo.dolphin.client.ClientInitializationException;
 import com.canoo.dolphin.client.DolphinRuntimeException;
 import com.canoo.dolphin.client.javafx.DolphinPlatformApplication;
-import com.canoo.dolphin.client.javafx.JavaFXConfiguration;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
 import javafx.stage.Stage;
-import javafx.stage.Window;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -42,16 +47,6 @@ public class ToDoClient extends DolphinPlatformApplication {
     }
 
     @Override
-    protected JavaFXConfiguration getClientConfiguration() {
-        try {
-            JavaFXConfiguration configuration = new JavaFXConfiguration(new URL("http://localhost:8080/todo-app/dolphin"));
-            return configuration;
-        } catch (MalformedURLException e) {
-            throw new ClientInitializationException("Error in creating config", e);
-        }
-    }
-
-    @Override
     protected void start(Stage primaryStage, ClientContext clientContext) throws Exception {
         ToDoView viewController = new ToDoView(clientContext);
         Scene scene = new Scene(viewController.getParent());
@@ -60,18 +55,51 @@ public class ToDoClient extends DolphinPlatformApplication {
         primaryStage.show();
     }
 
-    private void showError(Window parent, String header, String content, Exception e) {
+    private void showError(Stage parent, String header, String content, Exception e) {
+        parent.hide();
         LOG.error("Dolphin Platform error!", e);
+
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
         alert.setHeaderText(header);
         alert.setContentText(content);
-        alert.showAndWait();
-        Platform.exit();
+
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+        e.printStackTrace(pw);
+        String exceptionText = sw.toString();
+
+        Label label = new Label("The exception stacktrace was:");
+
+        TextArea textArea = new TextArea(exceptionText);
+        textArea.setEditable(false);
+        textArea.setWrapText(true);
+
+        textArea.setMaxWidth(Double.MAX_VALUE);
+        textArea.setMaxHeight(Double.MAX_VALUE);
+        GridPane.setVgrow(textArea, Priority.ALWAYS);
+        GridPane.setHgrow(textArea, Priority.ALWAYS);
+
+        GridPane expContent = new GridPane();
+        expContent.setMaxWidth(Double.MAX_VALUE);
+        expContent.add(label, 0, 0);
+        expContent.add(textArea, 0, 1);
+
+        ButtonType reconnect = new ButtonType("reconnect");
+        alert.getButtonTypes().addAll(reconnect);
+
+        alert.getDialogPane().setExpandableContent(expContent);
+        ButtonType result = alert.showAndWait().orElse(null);
+
+        if(result != null && reconnect.equals(result)) {
+            reconnect(parent);
+        } else {
+            Platform.exit();
+        }
     }
 
     @Override
-    protected void onInitializationError(Stage primaryStage, ClientInitializationException initializationException) {
+    protected void onInitializationError(Stage primaryStage, ClientInitializationException initializationException, Iterable<DolphinRuntimeException> possibleCauses) {
         showError(primaryStage, "Error on initialization", "A error happened while initializing the Client and Connection", initializationException);
     }
 
@@ -81,6 +109,7 @@ public class ToDoClient extends DolphinPlatformApplication {
     }
 
     public static void main(String[] args) {
+        Platform.setImplicitExit(false);
         Application.launch(args);
     }
 }

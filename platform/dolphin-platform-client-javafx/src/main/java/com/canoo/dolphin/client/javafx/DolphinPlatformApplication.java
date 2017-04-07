@@ -25,9 +25,12 @@ import org.slf4j.LoggerFactory;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeUnit;
-import java.util.function.BiFunction;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Defines a basic application class for Dolphin Platform based applications that can be used like the {@link Application}
@@ -41,77 +44,11 @@ public abstract class DolphinPlatformApplication extends Application {
 
     private ClientInitializationException initializationException;
 
+    private final List<DolphinRuntimeException> runtimeExceptionsAtInitialization = new CopyOnWriteArrayList<>();
+
     private Stage primaryStage;
 
-    /**
-     * Creates the connection to the Dolphin Platform server. If this method will be overridden always call the super method.
-     *
-     * @throws Exception a exception if the connection can't be created
-     */
-    @Override
-    public void init() throws Exception {
-        try {
-            ClientConfiguration clientConfiguration = getClientConfiguration();
-            clientConfiguration.getDolphinPlatformThreadFactory().setUncaughtExceptionHandler((Thread thread, Throwable exception) -> {
-                clientConfiguration.getUiExecutor().execute(() -> {
-                    Assert.requireNonNull(thread, "thread");
-                    Assert.requireNonNull(exception, "exception");
-                    onRuntimeError(primaryStage, new DolphinRuntimeException(thread, "Unhandled error in Dolphin Platform background thread", exception));
-                });
-            });
-            clientContext = ClientContextFactory.connect(clientConfiguration).handle(new BiFunction<ClientContext, Throwable, ClientContext>() {
-                @Override
-                public ClientContext apply(ClientContext clientContext, Throwable throwable) {
-                    if(throwable != null) {
-                        throw new RuntimeException("Error in creating client context", throwable);
-                    }
-                    return clientContext;
-                }
-            }).get(clientConfiguration.getConnectionTimeout(), TimeUnit.MILLISECONDS);
-            clientContext.connect().get(clientConfiguration.getConnectionTimeout(), TimeUnit.MILLISECONDS);
-        } catch (Exception e) {
-            initializationException = new ClientInitializationException("Can not initialize Dolphin Platform Context", e);
-        }
-    }
-
-    protected CompletableFuture<Void> disconnect() {
-        if(clientContext == null) {
-            throw new IllegalStateException("Client context not defined");
-        }
-        return clientContext.disconnect();
-    }
-
-    protected CompletableFuture<Void> reconnect() {
-        if(clientContext == null) {
-            throw new IllegalStateException("Client context not defined");
-        }
-        return clientContext.reconnect();
-    }
-
-    protected CompletableFuture<Void> connect() {
-        if(clientContext == null) {
-            throw new IllegalStateException("Client context not defined");
-        }
-        return clientContext.connect();
-    }
-
-    /**
-     * Returns the Dolphin Platform configuration for the client. As long as all the default configurations can be used
-     * this method don't need to be overridden. The URL of the server will be configured by the {@link DolphinPlatformApplication#getServerEndpoint()}
-     * method.
-     *
-     * @return The Dolphin Platform configuration for this client
-     */
-    protected JavaFXConfiguration getClientConfiguration() {
-        JavaFXConfiguration configuration = null;
-        try {
-            configuration = new JavaFXConfiguration(getServerEndpoint());
-            configuration.setRemotingExceptionHandler(e -> onRuntimeError(primaryStage, new DolphinRuntimeException("Dolphin Platform remoting error!", e)));
-        } catch (MalformedURLException e) {
-            throw new ClientInitializationException("Client configuration cannot be created", e);
-        }
-        return configuration;
-    }
+    private AtomicBoolean initializationInProgress = new AtomicBoolean(false);
 
     /**
      * Returns the server url of the Dolphin Platform server endpoint.
@@ -121,28 +58,65 @@ public abstract class DolphinPlatformApplication extends Application {
     protected abstract URL getServerEndpoint() throws MalformedURLException;
 
     /**
-     * This methods defines parts of the Dolphin Platform lifecyycle and is therefore defined as final.
-     * Use the {@link DolphinPlatformApplication#start(Stage, ClientContext)} method instead.
+     * Returns the Dolphin Platform configuration for the client. As long as all the default configurations can be used
+     * this method don't need to be overridden. The URL of the server will be configured by the {@link DolphinPlatformApplication#getServerEndpoint()}
+     * method.
      *
-     * @param primaryStage the primary stage
-     * @throws Exception in case of an error
+     * @return The Dolphin Platform configuration for this client
+     */
+    protected JavaFXConfiguration createClientConfiguration() {
+        try {
+            JavaFXConfiguration configuration = new JavaFXConfiguration(getServerEndpoint());
+            configuration.setRemotingExceptionHandler(e -> {
+                if (initializationInProgress.get()) {
+                    runtimeExceptionsAtInitialization.add(new DolphinRuntimeException("Dolphin Platform remoting error", e));
+                } else {
+                    onRuntimeError(primaryStage, new DolphinRuntimeException("Dolphin Platform remoting error!", e));
+                }
+            });
+            return configuration;
+        } catch (MalformedURLException e) {
+            throw new ClientInitializationException("Client configuration cannot be created", e);
+        }
+    }
+
+    private final ClientContext createClientContext(final ClientConfiguration clientConfiguration) throws Exception {
+        Assert.requireNonNull(clientConfiguration, "clientConfiguration");
+        initializationInProgress.set(true);
+        try {
+            return ClientContextFactory.connect(clientConfiguration).get(clientConfiguration.getConnectionTimeout(), TimeUnit.MILLISECONDS);
+        } finally {
+            initializationInProgress.set(false);
+        }
+    }
+
+    /**
+     * Creates the connection to the Dolphin Platform server. If this method will be overridden always call the super method.
+     *
+     * @throws Exception a exception if the connection can't be created
      */
     @Override
-    public final void start(final Stage primaryStage) throws Exception {
-        Assert.requireNonNull(primaryStage, "primaryStage");
-        this.primaryStage = primaryStage;
-        if (initializationException == null) {
-            if (clientContext != null) {
-                try {
-                    start(primaryStage, clientContext);
-                } catch (Exception e) {
-                    onInitializationError(primaryStage, new ClientInitializationException("Error in application start!", e));
+    public final void init() throws Exception {
+        final ClientConfiguration clientConfiguration = createClientConfiguration();
+        clientConfiguration.getDolphinPlatformThreadFactory().setUncaughtExceptionHandler((Thread thread, Throwable exception) -> {
+            clientConfiguration.getUiExecutor().execute(() -> {
+                Assert.requireNonNull(thread, "thread");
+                Assert.requireNonNull(exception, "exception");
+
+                if (initializationInProgress.get()) {
+                    runtimeExceptionsAtInitialization.add(new DolphinRuntimeException(thread, "Unhandled error in Dolphin Platform background thread", exception));
+                } else {
+                    onRuntimeError(primaryStage, new DolphinRuntimeException(thread, "Unhandled error in Dolphin Platform background thread", exception));
                 }
-            } else {
-                onInitializationError(primaryStage, new ClientInitializationException("No clientContext was created!"));
-            }
-        } else {
-            onInitializationError(primaryStage, initializationException);
+            });
+        });
+
+        try {
+            clientContext = createClientContext(clientConfiguration);
+        } catch (ClientInitializationException e) {
+            initializationException = e;
+        } catch (Exception e) {
+            initializationException = new ClientInitializationException("Can not initialize Dolphin Platform Context", e);
         }
     }
 
@@ -157,37 +131,102 @@ public abstract class DolphinPlatformApplication extends Application {
     protected abstract void start(Stage primaryStage, ClientContext clientContext) throws Exception;
 
     /**
+     * This methods defines parts of the Dolphin Platform lifecyycle and is therefore defined as final.
+     * Use the {@link DolphinPlatformApplication#start(Stage, ClientContext)} method instead.
+     *
+     * @param primaryStage the primary stage
+     * @throws Exception in case of an error
+     */
+    @Override
+    public final void start(final Stage primaryStage) throws Exception {
+        Assert.requireNonNull(primaryStage, "primaryStage");
+
+        this.primaryStage = primaryStage;
+
+        if (initializationException == null) {
+            if (clientContext != null) {
+                try {
+                    start(primaryStage, clientContext);
+                } catch (Exception e) {
+                    handleInitializationError(primaryStage, new ClientInitializationException("Error in application start!", e));
+                }
+            } else {
+                handleInitializationError(primaryStage, new ClientInitializationException("No clientContext was created!"));
+            }
+        } else {
+            handleInitializationError(primaryStage, initializationException);
+        }
+    }
+
+    protected final CompletableFuture<Void> disconnect() {
+        if (clientContext != null) {
+            return clientContext.disconnect();
+        } else {
+            CompletableFuture<Void> result = new CompletableFuture<>();
+            result.complete(null);
+            return result;
+        }
+    }
+
+    /**
      * Whenever JavaFX calls the stop method the connection to the Dolphin Platform server will be closed.
      *
      * @throws Exception an error
      */
     @Override
     public final void stop() throws Exception {
-        if (clientContext != null) {
+        disconnect();
+    }
+
+    protected final CompletableFuture<Void> reconnect(final Stage primaryStage) {
+        Assert.requireNonNull(primaryStage, "primaryStage");
+        final CompletableFuture<Void> result = new CompletableFuture<>();
+
+        final ClientConfiguration clientConfiguration = createClientConfiguration();
+
+        clientConfiguration.getBackgroundExecutor().execute(() -> {
             try {
-                clientContext.disconnect();
+                disconnect().get(1_000, TimeUnit.MILLISECONDS);
             } catch (Exception e) {
-                onShutdownError(new ClientShutdownException(e));
+                LOG.warn("Can not disconnect. Trying to reconnect anyway.");
             }
-        }
+
+            initializationInProgress.set(true);
+            try {
+                if (clientContext == null) {
+                    clientContext = createClientContext(clientConfiguration);
+                } else {
+                    clientContext.connect().get(clientConfiguration.getConnectionTimeout(), TimeUnit.MILLISECONDS);
+                }
+                Platform.runLater(() -> {
+                    try {
+                        start(primaryStage, clientContext);
+                    } catch (Exception e) {
+                        handleInitializationError(primaryStage, new ClientInitializationException("Error in application reconnect", e));
+                    }
+                });
+            } catch (Exception e) {
+                Platform.runLater(() -> handleInitializationError(primaryStage, new ClientInitializationException("Error in application reconnect", e)));
+            } finally {
+                initializationInProgress.set(false);
+            }
+            result.complete(null);
+        });
+        return result;
     }
 
-    protected final void reconnect(Stage primaryStage) {
-
-    }
-
-    /**
-     * This method is called if the connection to the Dolphin Platform server can't be created. Application developers
-     * can define some kind of error handling here.
-     * By default the methods prints the exception in the log an call {@link System#exit(int)}
-     *
-     * @param primaryStage            the primary stage
-     * @param initializationException the exception
-     */
-    protected void onInitializationError(Stage primaryStage, ClientInitializationException initializationException) {
-        Assert.requireNonNull(initializationException, "initializationException");
+    protected void onInitializationError(Stage primaryStage, ClientInitializationException initializationException, Iterable<DolphinRuntimeException> possibleCauses) {
         LOG.error("Dolphin Platform initialization error", initializationException);
+        for (DolphinRuntimeException cause : possibleCauses) {
+            LOG.error("Possible cause", cause);
+        }
         Platform.exit();
+    }
+
+    private final void handleInitializationError(final Stage primaryStage, final ClientInitializationException initializationException) {
+        Iterable<DolphinRuntimeException> possibleCauses = Collections.unmodifiableList(runtimeExceptionsAtInitialization);
+        runtimeExceptionsAtInitialization.clear();
+        onInitializationError(primaryStage, initializationException, possibleCauses);
     }
 
     /**

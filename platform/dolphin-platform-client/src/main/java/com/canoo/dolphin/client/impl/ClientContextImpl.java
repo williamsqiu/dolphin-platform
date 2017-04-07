@@ -37,8 +37,6 @@ import org.opendolphin.util.Provider;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BiFunction;
 
-import static com.canoo.dolphin.client.impl.State.INITIALIZED;
-
 public class ClientContextImpl implements ClientContext {
 
     private final ClientConfiguration clientConfiguration;
@@ -56,8 +54,6 @@ public class ClientContextImpl implements ClientContext {
 
     private DolphinCommandHandler dolphinCommandHandler;
 
-    private State state = State.CREATED;
-
     public ClientContextImpl(ClientConfiguration clientConfiguration, final Function<ClientModelStore, AbstractClientConnector> connectorProvider) {
         this.clientConfiguration = Assert.requireNonNull(clientConfiguration, "clientConfiguration");
         this.connectorProvider = Assert.requireNonNull(connectorProvider, "connectorProvider");
@@ -67,7 +63,6 @@ public class ClientContextImpl implements ClientContext {
     @Override
     public synchronized <T> CompletableFuture<ControllerProxy<T>> createController(String name) {
         Assert.requireNonBlank(name, "name");
-        checkForInitializedState();
 
         return controllerProxyFactory.<T>create(name).handle(new BiFunction<ControllerProxy<T>, Throwable, ControllerProxy<T>>() {
             @Override
@@ -82,20 +77,16 @@ public class ClientContextImpl implements ClientContext {
 
     @Override
     public synchronized ClientBeanManager getBeanManager() {
-        checkForInitializedState();
         return clientBeanManager;
     }
 
     @Override
     public synchronized CompletableFuture<Void> disconnect() {
-        checkForInitializedState();
-        state = State.DESTROYING;
         final CompletableFuture<Void> result = new CompletableFuture<>();
 
         clientConfiguration.getBackgroundExecutor().execute(new Runnable() {
             @Override
             public void run() {
-                state = State.DESTROYED;
                 dolphinCommandHandler.invokeDolphinCommand(new DestroyContextCommand()).handle(new BiFunction<Void, Throwable, Object>() {
                     @Override
                     public Object apply(Void aVoid, Throwable throwable) {
@@ -123,10 +114,7 @@ public class ClientContextImpl implements ClientContext {
         });
 
         this.modelStore = new ClientModelStore(defaultModelSynchronizer);
-
         this.clientConnector = connectorProvider.call(modelStore);
-
-        //this.clientConnector = new DolphinPlatformHttpClientConnector(clientConfiguration, modelStore, new OptimizedJsonCodec(), clientConfiguration.getRemotingExceptionHandler());
 
         final EventDispatcher dispatcher = new ClientEventDispatcher(modelStore);
         final BeanRepository beanRepository = new BeanRepositoryImpl(modelStore, dispatcher);
@@ -148,10 +136,8 @@ public class ClientContextImpl implements ClientContext {
                     @Override
                     public Void apply(Void aVoid, Throwable throwable) {
                         if (throwable != null) {
-                            state = State.DESTROYED;
                             result.completeExceptionally(new ClientInitializationException("Can't call init action!", throwable));
                         } else {
-                            state = INITIALIZED;
                         }
                         result.complete(null);
                         return null;
@@ -160,40 +146,5 @@ public class ClientContextImpl implements ClientContext {
             }
         });
         return result;
-    }
-
-    public ClientModelStore getModelStore() {
-        return modelStore;
-    }
-
-    @Override
-    public CompletableFuture<Void> reconnect() {
-        final CompletableFuture<Void> result = new CompletableFuture<>();
-
-        clientConfiguration.getBackgroundExecutor().execute(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    disconnect().get();
-                    connect().get();
-                } catch (Exception e) {
-                    result.completeExceptionally(new DolphinRemotingException("Can't reconnect", e));
-                }
-                result.complete(null);
-            }
-        });
-
-        return result;
-    }
-
-    private void checkForInitializedState() {
-        switch (state) {
-            case CREATED:
-                throw new IllegalStateException("The client is initialized!");
-            case DESTROYED:
-                throw new IllegalStateException("The client is disconnected!");
-            case DESTROYING:
-                throw new IllegalStateException("The client is disconnecting!");
-        }
     }
 }

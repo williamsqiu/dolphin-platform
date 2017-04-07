@@ -98,7 +98,7 @@ public class ProcessMonitorClient extends DolphinPlatformApplication {
     }
 
     @Override
-    protected void onInitializationError(Stage primaryStage, ClientInitializationException initializationException) {
+    protected void handleInitializationError(Stage primaryStage, ClientInitializationException initializationException) {
         showError(primaryStage, "Error on initialization", "A error happened while initializing the Client and Connection", initializationException);
     }
 
