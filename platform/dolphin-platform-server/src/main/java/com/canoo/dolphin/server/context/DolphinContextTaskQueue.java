@@ -104,12 +104,13 @@ public class DolphinContextTaskQueue {
         }
         taskLock.lock();
         try {
-            LOG.trace("Running {} tasks in Dolphin Platform session {}", tasks.size(), dolphinSessionId);
+            LOG.debug("Running {} tasks in Dolphin Platform session {}", tasks.size(), dolphinSessionId);
             long endTime = System.currentTimeMillis() + maxExecutionTimeUnit.toMillis(maxExecutionTime);
             while (!interrupted.get()) {
                 if (tasks.isEmpty()) {
                     try {
                         if (!taskCondition.await(endTime - System.currentTimeMillis(), TimeUnit.MILLISECONDS)) {
+                            LOG.trace("Task executor for Dolphin Platform session {} ended after {} seconds with {} task still open", dolphinSessionId, maxExecutionTimeUnit.toSeconds(maxExecutionTime), tasks.size());
                             interrupted.set(true);
                         } else {
                             if (interrupted.get()) {
@@ -118,6 +119,7 @@ public class DolphinContextTaskQueue {
                             }
                         }
                     } catch (InterruptedException e) {
+                        LOG.trace("Task executor for Dolphin Platform session {} interrupted with {} task still open", dolphinSessionId, tasks.size());
                         interrupted.set(true);
                     }
                 } else {
@@ -126,20 +128,24 @@ public class DolphinContextTaskQueue {
                         Runnable task = taskIterator.next();
                         try {
                             task.run();
-                            LOG.trace("Executed task in Dolphin Platform session {}", dolphinSessionId);
+                            LOG.trace("Task executor executed task in Dolphin Platform session {}", dolphinSessionId);
                         } catch (Exception e) {
                             throw new DolphinTaskException("Error in running task in Dolphin Platform session " + dolphinSessionId, e);
                         } finally {
+                            LOG.info("Task executor for Dolphin Platform session {} ended after running task with {} task still open", dolphinSessionId, tasks.size());
                             interrupted.set(true);
                             tasks.remove(task);
                         }
                     } else {
+                        LOG.error("Concurrency error in task executor for Dolphin Platform session {}", dolphinSessionId);
                         interrupted.set(true);
+                        throw new IllegalStateException("Concurrency error in task executor for Dolphin Platform session " + dolphinSessionId);
                     }
                 }
             }
             interrupted.set(false);
-            LOG.trace("Task executor in Dolphin Platform session {} interrupted. Still {} tasks open", dolphinSessionId, tasks.size());
+        } catch (Exception e) {
+            LOG.error("Unexpected error in task executor in Dolphin Platform session " + dolphinSessionId, e);
         } finally {
             taskLock.unlock();
         }

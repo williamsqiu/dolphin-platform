@@ -51,10 +51,10 @@ public class AbstractIntegrationTest {
                     throw new IOException("URL " + healthUrl + " do not provide a HttpURLConnection!");
                 }
             } catch (Exception e) {
-                //
+                // do nothing since server is not up at the moment...
             }
             try {
-                Thread.sleep(100);
+                Thread.sleep(1_000);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
@@ -69,7 +69,7 @@ public class AbstractIntegrationTest {
         }
     }
 
-    protected ClientContext createClientContext(String endpoint) {
+    protected ClientContext connect(String endpoint) {
         try {
             waitUntilServerIsUp(endpoint, 5, TimeUnit.MINUTES);
             ClientConfiguration configuration = new ClientConfiguration(new URL(endpoint + "/dolphin"), r -> r.run());
@@ -94,6 +94,14 @@ public class AbstractIntegrationTest {
             controllerProxy.destroy().get(2, TimeUnit.MINUTES);
         } catch (Exception e) {
             throw new RuntimeException("Can not destroy controller for endpoint " + endpoint, e);
+        }
+    }
+
+    protected void disconnect(ClientContext clientContext, String endpoint) {
+        try {
+            clientContext.disconnect().get(2, TimeUnit.MINUTES);
+        } catch (Exception e) {
+            throw new RuntimeException("Can not disconnect client context for endpoint " + endpoint, e);
         }
     }
 
