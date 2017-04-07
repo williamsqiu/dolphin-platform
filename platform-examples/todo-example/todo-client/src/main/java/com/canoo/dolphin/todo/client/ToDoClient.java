@@ -16,30 +16,16 @@
 package com.canoo.dolphin.todo.client;
 
 import com.canoo.dolphin.client.ClientContext;
-import com.canoo.dolphin.client.ClientInitializationException;
-import com.canoo.dolphin.client.DolphinRuntimeException;
-import com.canoo.dolphin.client.javafx.DolphinPlatformApplication;
+import com.canoo.dolphin.client.javafx.SimpleDolphinPlatformApplication;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Priority;
 import javafx.stage.Stage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class ToDoClient extends DolphinPlatformApplication {
-
-    private static final Logger LOG = LoggerFactory.getLogger(ToDoClient.class);
+public class ToDoClient extends SimpleDolphinPlatformApplication {
 
     @Override
     protected URL getServerEndpoint() throws MalformedURLException {
@@ -52,60 +38,8 @@ public class ToDoClient extends DolphinPlatformApplication {
         Scene scene = new Scene(viewController.getParent());
         scene.getStylesheets().add(ToDoClient.class.getResource("style.css").toExternalForm());
         primaryStage.setScene(scene);
+        primaryStage.setOnCloseRequest(e -> System.exit(0));
         primaryStage.show();
-    }
-
-    private void showError(Stage parent, String header, String content, Exception e) {
-        parent.hide();
-        LOG.error("Dolphin Platform error!", e);
-
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Error");
-        alert.setHeaderText(header);
-        alert.setContentText(content);
-
-        StringWriter sw = new StringWriter();
-        PrintWriter pw = new PrintWriter(sw);
-        e.printStackTrace(pw);
-        String exceptionText = sw.toString();
-
-        Label label = new Label("The exception stacktrace was:");
-
-        TextArea textArea = new TextArea(exceptionText);
-        textArea.setEditable(false);
-        textArea.setWrapText(true);
-
-        textArea.setMaxWidth(Double.MAX_VALUE);
-        textArea.setMaxHeight(Double.MAX_VALUE);
-        GridPane.setVgrow(textArea, Priority.ALWAYS);
-        GridPane.setHgrow(textArea, Priority.ALWAYS);
-
-        GridPane expContent = new GridPane();
-        expContent.setMaxWidth(Double.MAX_VALUE);
-        expContent.add(label, 0, 0);
-        expContent.add(textArea, 0, 1);
-
-        ButtonType reconnect = new ButtonType("reconnect");
-        alert.getButtonTypes().addAll(reconnect);
-
-        alert.getDialogPane().setExpandableContent(expContent);
-        ButtonType result = alert.showAndWait().orElse(null);
-
-        if(result != null && reconnect.equals(result)) {
-            reconnect(parent);
-        } else {
-            Platform.exit();
-        }
-    }
-
-    @Override
-    protected void onInitializationError(Stage primaryStage, ClientInitializationException initializationException, Iterable<DolphinRuntimeException> possibleCauses) {
-        showError(primaryStage, "Error on initialization", "A error happened while initializing the Client and Connection", initializationException);
-    }
-
-    @Override
-    protected void onRuntimeError(Stage primaryStage, DolphinRuntimeException runtimeException) {
-        showError(primaryStage, "Error at runtime", "A error happened at runtime", runtimeException);
     }
 
     public static void main(String[] args) {
