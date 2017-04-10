@@ -13,9 +13,9 @@ The Maven projects contains 3 modules:
 ## How to use it
 
 Install bower dependencies(if asked for polymer version,
-choose option no 3, it should be __>=1.0.4__ __<=1.4.0__)
+choose option which has version of __>=1.0.4__ __<=1.4.0__)
 ```
-cd platform-examples/polymer-client
+cd platform-examples/web-deployment-example/polymer-client
 bower install
 ```
 
@@ -31,7 +31,8 @@ cd platform-examples/web-deployment-example
 mvn clean install
 ```
 
-* Copy the generated war file in the tomcat webapps directory
+* Copy the generated war file from __server/target__ directory & 
+paste it in tomcat __webapps__ directory
 
 * Run the Polymer client using following url
 ```
