@@ -1,10 +1,10 @@
-package com.test.controller;
+package com.canoo.webdeployment.controller;
 
 import com.canoo.dolphin.server.DolphinAction;
 import com.canoo.dolphin.server.DolphinController;
 import com.canoo.dolphin.server.DolphinModel;
-import com.test.Constants;
-import com.test.model.MyModel;
+import com.canoo.webdeployment.Constants;
+import com.canoo.webdeployment.model.MyModel;
 
 import javax.annotation.PostConstruct;
 

@@ -1,4 +1,4 @@
-package com.test;
+package com.canoo.webdeployment;
 
 /**
  * This class defines some constanst that are shared between Java clients and the server. Currently the client access

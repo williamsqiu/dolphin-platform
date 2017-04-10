@@ -1,16 +1,14 @@
-package com.test.view;
+package com.canoo.webdeployment.view;
 
 import com.canoo.dolphin.client.ClientContext;
 import com.canoo.dolphin.client.javafx.binding.FXBinder;
 import com.canoo.dolphin.client.javafx.view.AbstractFXMLViewBinder;
-import com.canoo.dolphin.client.javafx.view.AbstractViewBinder;
 
+import com.canoo.webdeployment.Constants;
+import com.canoo.webdeployment.model.MyModel;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-
-import com.test.Constants;
-import com.test.model.MyModel;
 
 
 /**

@@ -1,4 +1,4 @@
-package com.test.model;
+package com.canoo.webdeployment.model;
 
 import com.canoo.dolphin.mapping.DolphinBean;
 import com.canoo.dolphin.mapping.Property;
