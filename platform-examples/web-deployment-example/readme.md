@@ -5,29 +5,35 @@
 This automatically created project can be used as a basic skeleton for a Spring Boot based Dolphin Platform application.
 The Maven projects contains 3 modules: 
 
-* The __common__ module that contains the model taht is shared between client and server
+* The __common__ module that contains the model that is shared between client and server
 * The __server__ module that contains the Spring Boot Application and a first Dolphin Platform controller 
 * The __client__ module a JavaFX application that creates a view that is bound to the Dolphin Platform controller in the server module
 
 
 ## How to use it
-The project is created as a Maven project. You can directly import it in any IDE that supports Maven (like Eclipse, Netbeans or IntelliJ).
-If you want to start the application you need to start the __ServerApplication__ class in the server module and than the __ClientApplication__ class in the client module. The client can be started several times.
 
-If you want to start the application from commandline without IDE support you need to call a Maven install first in the main project folder:
-
+Install bower dependencies(if asked for polymer version,
+choose option no 3, it should be __>=1.0.4__ __<=1.4.0__)
 ```
-mvn install
-```
-
-Once this is done you can simply install the server from the server folder
-```
-cd server
-mvn spring-boot:run
+cd platform-examples/polymer-client
+bower install
 ```
 
-A client instance can be started by Maven, too:
+Steps for using/generating war file:
+* Open index.html
+
+* Edit the client context URL, Make sure you have war file Name in the (http://localhost:8080/WebDeployment/dolphin)
+
+* Generate war file by below command (go to web-deployment-example
+folder & then do mvn clean install)
 ```
-cd client
-mvn exec:java
+cd platform-examples/web-deployment-example
+mvn clean install
 ```
+
+* Copy the generated war file in the tomcat webapps directory
+
+* Run the Polymer client using following url
+```
+http://localhost:8080/WebDeployment/polymer/index.html
+``` 
