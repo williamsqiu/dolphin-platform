@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.test</groupId>
+        <groupId>com.canoo.webstarter</groupId>
         <artifactId>WebDeployment</artifactId>
         <version>1.0-SNAPSHOT</version>
         <relativePath>../</relativePath>
@@ -18,7 +18,7 @@
             <version>${dolphin-platform.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.test</groupId>
+            <groupId>com.canoo.webstarter</groupId>
             <artifactId>common</artifactId>
             <version>${project.version}</version>
         </dependency>
