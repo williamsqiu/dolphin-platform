@@ -42,6 +42,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * This class is used to sync the unique client scope id of the current dolphin
@@ -60,7 +61,7 @@ public class DolphinPlatformHttpClientConnector extends AbstractClientConnector 
 
     private final HttpURLConnectionResponseHandler responseHandler;
 
-    private String clientId;
+    private AtomicReference<String> clientId;
 
     public DolphinPlatformHttpClientConnector(ClientConfiguration configuration, ClientModelStore clientModelStore, Codec codec, RemotingExceptionHandler onException) {
         super(clientModelStore, Assert.requireNonNull(configuration, "configuration").getUiExecutor(), new BlindCommandBatcher(), onException, configuration.getBackgroundExecutor());
@@ -100,8 +101,8 @@ public class DolphinPlatformHttpClientConnector extends AbstractClientConnector 
             conn.setRequestProperty(PlatformConstants.CONTENT_TYPE_HEADER, PlatformConstants.JSON_MIME_TYPE);
             conn.setRequestProperty(PlatformConstants.ACCEPT_HEADER, PlatformConstants.JSON_MIME_TYPE);
             conn.setRequestMethod(PlatformConstants.POST_METHOD);
-            if(clientId != null) {
-                conn.setRequestProperty(PlatformConstants.CLIENT_ID_HTTP_HEADER_NAME, clientId);
+            if(clientId.get() != null) {
+                conn.setRequestProperty(PlatformConstants.CLIENT_ID_HTTP_HEADER_NAME, clientId.get());
             } else {
                 LOG.debug("Sending first request to server. Dolphin client id not defined.");
             }
@@ -165,10 +166,10 @@ public class DolphinPlatformHttpClientConnector extends AbstractClientConnector 
 
     private void updateClientId(HttpURLConnection conn) {
         String clientIdInHeader = conn.getHeaderField(PlatformConstants.CLIENT_ID_HTTP_HEADER_NAME);
-        if (this.clientId != null && !this.clientId.equals(clientIdInHeader)) {
+        if (this.clientId.get() != null && !this.clientId.get().equals(clientIdInHeader)) {
             throw new IllegalStateException("Error: client id conflict!");
         }
-        this.clientId = clientIdInHeader;
+        this.clientId.set(clientIdInHeader);
     }
 
     private byte[] inputStreamToByte(InputStream is) throws IOException {
