@@ -48,7 +48,7 @@ public abstract class DolphinPlatformApplication extends Application {
 
     private Stage primaryStage;
 
-    private AtomicBoolean initializationInProgress = new AtomicBoolean(false);
+    private AtomicBoolean connectInProgress = new AtomicBoolean(false);
 
     /**
      * Returns the server url of the Dolphin Platform server endpoint.
@@ -68,7 +68,7 @@ public abstract class DolphinPlatformApplication extends Application {
         try {
             JavaFXConfiguration configuration = new JavaFXConfiguration(getServerEndpoint());
             configuration.setRemotingExceptionHandler(e -> {
-                if (initializationInProgress.get()) {
+                if (connectInProgress.get()) {
                     runtimeExceptionsAtInitialization.add(new DolphinRuntimeException("Dolphin Platform remoting error", e));
                 } else {
                     onRuntimeError(primaryStage, new DolphinRuntimeException("Dolphin Platform remoting error!", e));
@@ -82,11 +82,11 @@ public abstract class DolphinPlatformApplication extends Application {
 
     private final ClientContext createClientContext(final ClientConfiguration clientConfiguration) throws Exception {
         Assert.requireNonNull(clientConfiguration, "clientConfiguration");
-        initializationInProgress.set(true);
+        connectInProgress.set(true);
         try {
             return ClientContextFactory.connect(clientConfiguration).get(clientConfiguration.getConnectionTimeout(), TimeUnit.MILLISECONDS);
         } finally {
-            initializationInProgress.set(false);
+            connectInProgress.set(false);
         }
     }
 
@@ -103,7 +103,7 @@ public abstract class DolphinPlatformApplication extends Application {
                 Assert.requireNonNull(thread, "thread");
                 Assert.requireNonNull(exception, "exception");
 
-                if (initializationInProgress.get()) {
+                if (connectInProgress.get()) {
                     runtimeExceptionsAtInitialization.add(new DolphinRuntimeException(thread, "Unhandled error in Dolphin Platform background thread", exception));
                 } else {
                     onRuntimeError(primaryStage, new DolphinRuntimeException(thread, "Unhandled error in Dolphin Platform background thread", exception));
@@ -191,11 +191,11 @@ public abstract class DolphinPlatformApplication extends Application {
                 LOG.warn("Can not disconnect. Trying to reconnect anyway.");
             }
 
-            initializationInProgress.set(true);
             try {
                 if (clientContext == null) {
                     clientContext = createClientContext(clientConfiguration);
                 } else {
+                    connectInProgress.set(true);
                     clientContext.connect().get(clientConfiguration.getConnectionTimeout(), TimeUnit.MILLISECONDS);
                 }
                 Platform.runLater(() -> {
@@ -208,7 +208,7 @@ public abstract class DolphinPlatformApplication extends Application {
             } catch (Exception e) {
                 Platform.runLater(() -> handleInitializationError(primaryStage, new ClientInitializationException("Error in application reconnect", e)));
             } finally {
-                initializationInProgress.set(false);
+                connectInProgress.set(false);
             }
             result.complete(null);
         });
