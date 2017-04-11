@@ -54,9 +54,9 @@ class ClientConnectorTests extends GroovyTestCase {
     @Override
     protected void setUp() {
         dolphin = new ClientDolphin()
-        ModelSynchronizer defaultModelSynchronizer = new DefaultModelSynchronizer(new Provider<ClientConnector>() {
+        ModelSynchronizer defaultModelSynchronizer = new DefaultModelSynchronizer(new Provider<AbstractClientConnector>() {
             @Override
-            ClientConnector get() {
+            AbstractClientConnector get() {
                 return dolphin.clientConnector;
             }
         });

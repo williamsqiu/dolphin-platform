@@ -16,9 +16,7 @@
 package com.canoo.dolphin.client.impl;
 
 import com.canoo.dolphin.util.Assert;
-import org.opendolphin.core.client.ClientDolphin;
 import org.opendolphin.core.client.comm.AbstractClientConnector;
-import org.opendolphin.core.client.comm.ClientConnector;
 import org.opendolphin.core.client.comm.OnFinishedHandler;
 import org.opendolphin.core.comm.Command;
 

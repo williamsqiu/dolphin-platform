@@ -30,7 +30,7 @@ import java.util.Objects;
 import java.util.concurrent.Executor;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public abstract class AbstractClientConnector implements ClientConnector {
+public abstract class AbstractClientConnector {
 
     private static final Logger LOG = LoggerFactory.getLogger(AbstractClientConnector.class);
 
@@ -138,7 +138,6 @@ public abstract class AbstractClientConnector implements ClientConnector {
 
     protected abstract List<Command> transmit(List<Command> commands) throws DolphinRemotingException;
 
-    @Override
     public void send(final Command command, final OnFinishedHandler callback, final HandlerType handlerType) {
         LOG.debug("Command of type {} should be send to server", command.getClass().getSimpleName());
         if (!connectedFlag.get()) {
@@ -154,12 +153,10 @@ public abstract class AbstractClientConnector implements ClientConnector {
         commandBatcher.batch(handler);
     }
 
-    @Override
     public void send(final Command command, final OnFinishedHandler callback) {
         send(command, callback, HandlerType.UI);
     }
 
-    @Override
     public void send(Command command) {
         send(command, null);
     }
@@ -242,7 +239,6 @@ public abstract class AbstractClientConnector implements ClientConnector {
         });
     }
 
-    @Override
     public void connect(final boolean longPoll) {
         if (connectedFlag.get()) {
             throw new IllegalStateException("Can not call connect on a connected connection");
@@ -265,12 +261,10 @@ public abstract class AbstractClientConnector implements ClientConnector {
         useLongPolling.set(longPoll);
     }
 
-    @Override
     public void connect() {
         connect(true);
     }
 
-    @Override
     public void disconnect() {
         if (!connectedFlag.get()) {
             throw new IllegalStateException("Can not call disconnect on a disconnected connection");
