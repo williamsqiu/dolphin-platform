@@ -184,6 +184,6 @@ public class ClientConfiguration {
     }
 
     public void setRemotingExceptionHandler(RemotingExceptionHandler remotingExceptionHandler) {
-        this.remotingExceptionHandler = remotingExceptionHandler;
+        this.remotingExceptionHandler = Assert.requireNonNull(remotingExceptionHandler, "remotingExceptionHandler");
     }
 }
