@@ -61,7 +61,7 @@ public class DolphinPlatformHttpClientConnector extends AbstractClientConnector 
 
     private final HttpURLConnectionResponseHandler responseHandler;
 
-    private AtomicReference<String> clientId;
+    private AtomicReference<String> clientId = new AtomicReference<>();
 
     public DolphinPlatformHttpClientConnector(ClientConfiguration configuration, ClientModelStore clientModelStore, Codec codec, RemotingExceptionHandler onException) {
         super(clientModelStore, Assert.requireNonNull(configuration, "configuration").getUiExecutor(), new BlindCommandBatcher(), onException, configuration.getBackgroundExecutor());
