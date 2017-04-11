@@ -110,6 +110,7 @@ public class DolphinContextTaskQueue {
                     taskLock.lock();
                     try {
                         if (tasks.isEmpty() && !taskCondition.await(endTime - System.currentTimeMillis(), TimeUnit.MILLISECONDS)) {
+                            LOG.trace("Task executor for Dolphin Platform session {} ended after {} seconds with {} task still open", dolphinSessionId, maxExecutionTimeUnit.toSeconds(maxExecutionTime), tasks.size());
                             break;
                         }
                     } finally {
@@ -118,16 +119,18 @@ public class DolphinContextTaskQueue {
                     if (tasks.isEmpty()) {
                         break;
                     }
-                } catch (InterruptedException e) {
-                    break;
+                } catch (Exception e) {
+                    LOG.error("Concurrency error in task executor for Dolphin Platform session {}", dolphinSessionId);
+                    throw new IllegalStateException("Concurrency error in task executor for Dolphin Platform session " + dolphinSessionId);
                 }
             } else {
                 try {
                     task.run();
-                    LOG.trace("Executed task in Dolphin Platform session {}", dolphinSessionId);
+                    LOG.trace("Task executor executed task in Dolphin Platform session {}", dolphinSessionId);
                 } catch (Exception e) {
                     throw new DolphinTaskException("Error in running task in Dolphin Platform session " + dolphinSessionId, e);
                 } finally {
+                    LOG.info("Task executor for Dolphin Platform session {} ended after running task with {} task still open", dolphinSessionId, tasks.size());
                     break;
                 }
             }
