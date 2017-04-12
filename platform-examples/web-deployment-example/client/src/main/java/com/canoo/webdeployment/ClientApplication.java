@@ -27,7 +27,8 @@ public class ClientApplication extends DolphinPlatformApplication {
 
     @Override
     protected URL getServerEndpoint() throws MalformedURLException {
-        return new URL("http://localhost:8080/dolphin");
+//        return new URL("http://localhost:8080/dolphin");
+        return new URL("http://localhost:8080/WebDeployment/dolphin");
     }
 
     @Override

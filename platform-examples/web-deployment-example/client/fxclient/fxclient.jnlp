@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<jnlp spec="1.0+" codebase="http://localhost:8080/WebDeployment/fxclient">
+
+    <information>
+        <title>Dolphin FXClient JNLP</title>
+        <vendor>Canoo Engineering AG</vendor>
+        <homepage href="http://www.canoo.com/"/>
+    </information>
+
+    <security>
+        <all-permissions/>
+    </security>
+
+    <resources>
+        <j2se version="1.8+" />
+        <jar href="FXClient.jar" />
+    </resources>
+
+    <application-desc main-class="com.canoo.webdeployment.ClientApplication" />
+</jnlp>

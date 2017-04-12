@@ -40,11 +40,11 @@
                             <targetPath>polymer</targetPath>
                             <directory>../polymer-client</directory>
                         </resource>
-                        <!--<resource>-->
-                            <!--&lt;!&ndash; this is relative to the pom.xml directory &ndash;&gt;-->
-                            <!--<targetPath>angular</targetPath>-->
-                            <!--<directory>../angularjs-client</directory>-->
-                        <!--</resource>-->
+                        <resource>
+                            <!-- this is relative to the pom.xml directory -->
+                            <targetPath>fxclient</targetPath>
+                            <directory>../client/fxclient</directory>
+                        </resource>
                     </webResources>
                 </configuration>
             </plugin>

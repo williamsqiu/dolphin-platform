@@ -38,3 +38,7 @@ paste it in tomcat __webapps__ directory
 ```
 http://localhost:8080/WebDeployment/polymer/index.html
 ``` 
+
+Note:- If you are starting a explicitly starting server without using 
+war file, then accordingly you have to make changes in the index.html file
+for the Client Context URL
