@@ -36,12 +36,11 @@
                 <configuration>
                     <webResources>
                         <resource>
-                            <!-- this is relative to the pom.xml directory -->
                             <targetPath>polymer</targetPath>
                             <directory>../polymer-client</directory>
                         </resource>
+
                         <resource>
-                            <!-- this is relative to the pom.xml directory -->
                             <targetPath>fxclient</targetPath>
                             <directory>../client/fxclient</directory>
                         </resource>

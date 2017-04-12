@@ -10,6 +10,7 @@
     </parent>
 
     <artifactId>client</artifactId>
+    <packaging>jar</packaging>
 
     <dependencies>
         <dependency>
@@ -27,6 +28,7 @@
     <build>
         <finalName>FXClient</finalName>
         <plugins>
+
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <executions>
@@ -39,13 +41,45 @@
                     </execution>
                 </executions>
                 <configuration>
+                    <archive>
+                        <manifestFile>fxclient/MANIFEST.MF</manifestFile>
+                    </archive>
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>
                     </descriptorRefs>
                     <appendAssemblyId>false</appendAssemblyId>
                     <outputDirectory>fxclient</outputDirectory>
                 </configuration>
+
             </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jarsigner-plugin</artifactId>
+                <version>1.2</version>
+                <executions>
+                    <execution>
+                        <id>sign</id>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>verify</id>
+                        <goals>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <archiveDirectory>fxclient</archiveDirectory>
+                    <keystore>${project.basedir}/keystore/test.keystore</keystore>
+                    <alias>test</alias>
+                    <keypass>123456</keypass>
+                    <storepass>123456</storepass>
+                </configuration>
+            </plugin>
+
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
@@ -54,6 +88,7 @@
                     <mainClass>com.canoo.webdeployment.ClientApplication</mainClass>
                 </configuration>
             </plugin>
+
         </plugins>
     </build>
 
