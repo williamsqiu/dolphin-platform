@@ -1,21 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<jnlp spec="1.0+" codebase="http://localhost:8080/WebDeployment/fxclient">
-
+<jnlp spec="1.0+" xmlns:jfx="http://javafx.com"
+      codebase="http://localhost:8080/WebDeployment/fxclient"
+      href="fxclient.jnlp">
     <information>
-        <title>Dolphin FXClient JNLP</title>
+        <title>DolphinPlatform Web Deployment Example</title>
         <vendor>Canoo Engineering AG</vendor>
-        <homepage href="http://www.canoo.com/"/>
+        <homepage href="http://www.dolphin-platform.io/" />
+        <description>Start DolphinPlatform JavaFx client with JWS</description>
     </information>
 
-    <security>
-        <all-permissions/>
-    </security>
+    <security><all-permissions/></security>
 
     <resources>
         <j2se version="1.8+"/>
-        <jar href="FXClient.jar" />
+        <jfx:javafx-runtime version="8" />
+        <jar href="FXClient.jar"  />
     </resources>
-
-    <application-desc main-class="com.canoo.webdeployment.ClientApplication" />
-
+    <jfx:javafx-desc  width="800" height="600"
+                      main-class="com.canoo.webdeployment.ClientApplication">
+    </jfx:javafx-desc>
 </jnlp>
