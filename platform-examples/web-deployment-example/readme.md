@@ -1,44 +1,88 @@
-# Dolphin Platform Spring Boot Sample
+# Web Deployment Sample
 
-![Dolphin Platform Logo](http://www.guigarage.com/wordpress/wp-content/uploads/2015/10/logo.png)
+This is a sample to demonstrate web deployment of a DolphinPlatform application
 
-This automatically created project can be used as a basic skeleton for a Spring Boot based Dolphin Platform application.
-The Maven projects contains 3 modules: 
+## Getting Started
+These instructions will produce a war file which can be deployed in an App server
+like Tomcat. Following are the outcome of the steps
+* A **war** is generated for deploying it on app server.
+* **Polymer client** will be part of war & can be started directly by typing the url
+of client's html file in a browser
+* **JavaFx client** will be part of war & can be started directly by typing the url
+of client's jnlp file in the browser
 
-* The __common__ module that contains the model that is shared between client and server
-* The __server__ module that contains the Spring Boot Application and a first Dolphin Platform controller 
-* The __client__ module a JavaFX application that creates a view that is bound to the Dolphin Platform controller in the server module
+### Prerequisites
 
-
-## How to use it
-
-Install bower dependencies(if asked for polymer version,
-choose option which has version of __>=1.0.4__ __<=1.4.0__)
+Go to the polymer-client directory of the project
 ```
-cd platform-examples/web-deployment-example/polymer-client
+cd dolphin-platform-examples/platform-examples/web-deployment-example/polymer-client
+```
+
+Install bower dependencies(if asked for polymer version, 
+choose option which has version described as __>=1.0.4__ __<=1.4.0__)
+```
 bower install
 ```
 
-Steps for using/generating war file:
-* Open index.html
+Go to **web-deployment-example** directory & add the pom.xml file as a Maven project in Intellij
 
-* Edit the client context URL, Make sure you have war file Name in the (http://localhost:8080/WebDeployment/dolphin)
+### Installing
 
-* Generate war file by below command (go to web-deployment-example
-folder & then do mvn clean install)
+#### Polymer Client
+
+If you want to change the dolphin connection URL then,
+open index.html of polymer-client
 ```
-cd platform-examples/web-deployment-example
+vi index.html
+```
+
+Edit the client context URL, Make sure you have war file Name in the URL (http://localhost:8080/WebDeployment/dolphin)
+
+#### JavaFx Client
+If you want to change the dolphin connection URL then,
+open **ClientApplication** file which resides in 
+**dolphin-platform-examples/platform-examples/web-deployment-example/client/src/main/java/com/canoo/webdeployment**
+directory.
+
+If you want to provide your own **MANIFEST.MF** file then edit the file which resides in
+**dolphin-platform-examples/platform-examples/web-deployment-example/client/fxclient** 
+directory, but remeber  Manisfest file must contain below 3 properites
+* Application-Name: YOUR_APPLICATION_NAME
+* Permissions: all-permissions
+* Codebase: *
+
+If you want to provide your own keystore then add your keystore file in 
+**dolphin-platform-examples/platform-examples/web-deployment-example/client/keystore** 
+directory & then replace the file name in the **pom.xml** file of client as well.
+
+
+#### Generate war file
+Go to web-deployment-example folder & then do mvn clean install
+```
+cd dolphin-platform-examples/platform-examples/web-deployment-example
 mvn clean install
 ```
 
-* Copy the generated war file from __server/target__ directory & 
+Copy the generated war file from __server/target__ directory & 
 paste it in tomcat __webapps__ directory
 
-* Run the Polymer client using following url
+
+### Usage
+
+After the application is successfully deployed, you can then run below client's
+
+#### Polymer Client
 ```
 http://localhost:8080/WebDeployment/polymer/index.html
-``` 
+```
+ 
+#### JavaFx Client
+```
+http://localhost:8080/WebDeployment/fxclient/fxclient.jnlp
+```
+After downloading file, you run as a Webstart application
 
-Note:- If you are starting a explicitly starting server without using 
-war file, then accordingly you have to make changes in the index.html file
-for the Client Context URL
+## Authors
+
+* **Janak Mulani**
+* **Ganesh Deshvini**

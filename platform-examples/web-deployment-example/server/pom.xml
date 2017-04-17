@@ -43,6 +43,9 @@
                         <resource>
                             <targetPath>fxclient</targetPath>
                             <directory>../client/fxclient</directory>
+                            <excludes>
+                                <exclude>**/*.MF</exclude>
+                            </excludes>
                         </resource>
                     </webResources>
                 </configuration>
