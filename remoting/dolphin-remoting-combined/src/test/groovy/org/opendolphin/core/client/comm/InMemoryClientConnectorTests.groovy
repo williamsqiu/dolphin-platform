@@ -16,10 +16,12 @@
 package org.opendolphin.core.client.comm
 
 import core.client.comm.InMemoryClientConnector
+import org.junit.Assert
 import org.opendolphin.core.client.ClientDolphin
 import org.opendolphin.core.client.ClientModelStore
 import org.opendolphin.core.client.DefaultModelSynchronizer
 import org.opendolphin.core.client.ModelSynchronizer
+import org.opendolphin.core.comm.Command
 import org.opendolphin.core.comm.EmptyNotification
 import org.opendolphin.core.server.ServerConnector
 import org.opendolphin.util.DirectExecutor
@@ -29,9 +31,13 @@ class InMemoryClientConnectorTests extends GroovyTestCase {
 
     void testCallConnector_NoServerConnectorWired() {
 
-        def serverConnector = [receive: { cmd ->
-            return []
-        }] as ServerConnector
+        //given:
+        ServerConnector serverConnector = new  ServerConnector() {
+            @Override
+            List<Command> receive(Command command) {
+                return Collections.emptyList();
+            }
+        };
 
         ClientDolphin clientDolphin = new ClientDolphin();
         ModelSynchronizer defaultModelSynchronizer = new DefaultModelSynchronizer(new Provider<AbstractClientConnector>() {
@@ -46,15 +52,24 @@ class InMemoryClientConnectorTests extends GroovyTestCase {
         clientDolphin.setClientConnector(connector);
         clientDolphin.setClientModelStore(modelStore);
 
-        assert [] == connector.transmit([new EmptyNotification()])
+        //when:
+        List<Command> ret = connector.transmit([new EmptyNotification()]);
+
+        //then:
+        Assert.assertEquals(Collections.emptyList(), ret);
     }
 
     void testCallConnector_ServerWired() {
+
+        //given:
         boolean serverCalled = false
-        def serverConnector = [receive: { cmd ->
-            serverCalled = true
-            return []
-        }] as ServerConnector
+        ServerConnector serverConnector = new  ServerConnector() {
+            @Override
+            List<Command> receive(Command command) {
+                serverCalled = true;
+                return Collections.emptyList();
+            }
+        };
 
         ClientDolphin clientDolphin = new ClientDolphin();
         ModelSynchronizer defaultModelSynchronizer = new DefaultModelSynchronizer(new Provider<AbstractClientConnector>() {
@@ -69,18 +84,24 @@ class InMemoryClientConnectorTests extends GroovyTestCase {
         clientDolphin.setClientConnector(connector);
         clientDolphin.setClientModelStore(modelStore);
 
-        def command = new EmptyNotification()
-        connector.transmit([command])
-        assert serverCalled
+        //when:
+        connector.transmit(Collections.singletonList(new EmptyNotification()));
+
+        //then:
+        Assert.assertTrue(serverCalled);
     }
 
     void testCallConnector_ServerWiredWithSleep() {
-        boolean serverCalled = false
-        def serverConnector = [receive: { cmd ->
-            serverCalled = true
-            return []
-        }] as ServerConnector
 
+        //given:
+        boolean serverCalled = false
+        ServerConnector serverConnector = new  ServerConnector() {
+            @Override
+            List<Command> receive(Command command) {
+                serverCalled = true;
+                return Collections.emptyList();
+            }
+        };
         ClientDolphin clientDolphin = new ClientDolphin();
         ModelSynchronizer defaultModelSynchronizer = new DefaultModelSynchronizer(new Provider<AbstractClientConnector>() {
             @Override
@@ -90,14 +111,15 @@ class InMemoryClientConnectorTests extends GroovyTestCase {
         });
         ClientModelStore modelStore = new ClientModelStore(defaultModelSynchronizer);
         AbstractClientConnector connector = new InMemoryClientConnector(modelStore, serverConnector, new CommandBatcher(), DirectExecutor.getInstance());
-
         clientDolphin.setClientConnector(connector);
         clientDolphin.setClientModelStore(modelStore);
+        connector.setSleepMillis(10);
 
-        connector.sleepMillis = 10
-        def command = new EmptyNotification()
-        connector.transmit([command])
-        assert serverCalled
+        //when:
+        connector.transmit(Collections.singletonList(new EmptyNotification()));
+
+        //then:
+        Assert.assertTrue(serverCalled);
     }
 
 }
