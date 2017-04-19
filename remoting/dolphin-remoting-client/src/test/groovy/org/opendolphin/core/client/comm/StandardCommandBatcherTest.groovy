@@ -15,32 +15,37 @@
  */
 package org.opendolphin.core.client.comm
 
-class StandardCommandBatcherTest extends GroovyTestCase {
+import org.junit.Assert
 
-	CommandBatcher batcher
+public class StandardCommandBatcherTest extends GroovyTestCase {
 
-	@Override
-	protected void setUp() throws Exception {
-		batcher = new CommandBatcher()
-	}
+    private CommandBatcher batcher
 
-	void testEmpty() {
-		assert batcher.isEmpty()
-	}
+    @Override
+    protected void setUp() throws Exception {
+        batcher = new CommandBatcher();
+    }
 
-	void testOne() {
-		def cah = new CommandAndHandler(null)
-		batcher.batch(cah)
-        assert batcher.waitingBatches.val == [cah]
-	}
+    public void testEmpty() {
+        Assert.assertTrue(batcher.isEmpty());
+    }
 
-	void testMultipleDoesNotBatch() {
-		def list = [new CommandAndHandler(null)] * 3
+    public void testOne() {
+        CommandAndHandler cah = new CommandAndHandler(null);
+        batcher.batch(cah);
+        //TODO: How to convert this to Java?
+        Assert.assertEquals(Collections.singletonList(cah), batcher.getWaitingBatches().getVal());
+    }
 
-		list.each { cwh -> batcher.batch(cwh) }
+    public void testMultipleDoesNotBatch() {
 
-        assert batcher.waitingBatches.val == [list[0]]
-        assert batcher.waitingBatches.val == [list[1]]
-        assert batcher.waitingBatches.val == [list[2]]
-	}
+        List<CommandAndHandler> list = Arrays.asList(new CommandAndHandler(null), new CommandAndHandler(null), new CommandAndHandler(null));
+        for(CommandAndHandler cwh : list) {
+            batcher.batch(cwh);
+        }
+
+        Assert.assertEquals(Collections.singletonList(list.get(0)), batcher.getWaitingBatches().getVal());
+        Assert.assertEquals(Collections.singletonList(list.get(1)), batcher.getWaitingBatches().getVal());
+        Assert.assertEquals(Collections.singletonList(list.get(2)), batcher.getWaitingBatches().getVal());
+    }
 }

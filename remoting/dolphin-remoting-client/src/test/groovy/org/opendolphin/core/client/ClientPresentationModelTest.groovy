@@ -13,22 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.opendolphin.core.client;
+package org.opendolphin.core.client
 
-public class ClientPresentationModelTest extends GroovyTestCase{
+import org.junit.Assert
 
-    void testStandardCtor() {
-        def model = new ClientPresentationModel('x',[])
-        assert model.id == 'x'
+public class ClientPresentationModelTest extends GroovyTestCase {
+
+    public void testStandardCtor() {
+        ClientPresentationModel model = new ClientPresentationModel('x',Collections.emptyList());
+        Assert.assertEquals('x', model.getId());
     }
-    void testNullIdCtor() {
-        def model1 = new ClientPresentationModel([])
-        def model2 = new ClientPresentationModel([])
-        assert model1.id != model2.id
+
+    public void testNullIdCtor() {
+        ClientPresentationModel model1 = new ClientPresentationModel(Collections.emptyList());
+        ClientPresentationModel model2 = new ClientPresentationModel(Collections.emptyList());
+        Assert.assertNotEquals(model1.getId(), model2.getId());
     }
-    void testBadIdCtor() {
+
+    public void testBadIdCtor() {
         shouldFail(IllegalArgumentException) {
-            new ClientPresentationModel("1000-AUTO-CLT",[])
+            new ClientPresentationModel("1000-AUTO-CLT", Collections.emptyList())
         }
     }
 }
