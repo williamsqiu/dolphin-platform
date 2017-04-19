@@ -1,0 +1,20 @@
+description = ''
+apply plugin: 'war'
+
+compileJava{
+    sourceCompatibility = '1.8'
+    targetCompatibility = '1.8'
+}
+
+dependencies {
+    compile project(':common')
+    compile project(':dolphin-platform-server')
+    compile project(':dolphin-platform-server-spring')
+}
+
+war {
+    archiveName = 'WebDeployment.war'
+    into 'polymer', {
+        from '../polymer-client'
+    }
+}
