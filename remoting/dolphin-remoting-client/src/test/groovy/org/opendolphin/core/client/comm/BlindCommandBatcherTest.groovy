@@ -15,6 +15,7 @@
  */
 package org.opendolphin.core.client.comm
 
+import org.junit.Assert
 import org.opendolphin.LogConfig
 import org.opendolphin.core.comm.Command
 import org.opendolphin.core.comm.CreatePresentationModelCommand
@@ -26,151 +27,197 @@ import java.util.logging.Level
 
 class BlindCommandBatcherTest extends GroovyTestCase {
 
-    BlindCommandBatcher batcher
+    private BlindCommandBatcher batcher;
 
     @Override
     protected void setUp() throws Exception {
-        batcher = new BlindCommandBatcher()
-        batcher.deferMillis = 50
+        batcher = new BlindCommandBatcher();
+        batcher.setDeferMillis(50);
     }
 
     void testMultipleBlindsAreBatchedNonMerging() {
-        doMultipleBlindsAreBatched()
+        doMultipleBlindsAreBatched();
     }
+
     void testMultipleBlindsAreBatchedMerging() {
-        batcher.mergeValueChanges = true
-        doMultipleBlindsAreBatched()
+        batcher.setMergeValueChanges(true);
+        doMultipleBlindsAreBatched();
     }
 
     void doMultipleBlindsAreBatched() {
-        assert batcher.isEmpty()
-        def list = [new CommandAndHandler(null), new CommandAndHandler(null), new CommandAndHandler(null)]
-
-        list.each { commandAndHandler -> batcher.batch(commandAndHandler) }
-        assert batcher.waitingBatches.val == list
+        Assert.assertTrue(batcher.isEmpty());
+        List<CommandAndHandler> list = Arrays.asList(new CommandAndHandler(null), new CommandAndHandler(null), new CommandAndHandler(null));
+        for (CommandAndHandler commandAndHandler : list) {
+            batcher.batch(commandAndHandler);
+        }
+        Assert.assertEquals(list, batcher.getWaitingBatches().getVal());
     }
 
     void testNonBlindForcesBatchNonMerging() {
-        doNonBlindForcesBatch()
+        doNonBlindForcesBatch();
     }
+
     void testNonBlindForcesBatchMerging() {
-        batcher.mergeValueChanges = true
-        doNonBlindForcesBatch()
+        batcher.setMergeValueChanges(true);
+        doNonBlindForcesBatch();
     }
 
     void doNonBlindForcesBatch() {
-        assert batcher.isEmpty()
-        def list = [new CommandAndHandler(null), new CommandAndHandler(null), new CommandAndHandler(null)]
-        list << new CommandAndHandler(null, new OnFinishedHandler() {
+        Assert.assertTrue(batcher.isEmpty());
+
+        List<CommandAndHandler> list = new ArrayList<>();
+        list.add(new CommandAndHandler(null));
+        list.add(new CommandAndHandler(null));
+        list.add(new CommandAndHandler(null));
+        list.add(new CommandAndHandler(null, new OnFinishedHandler() {
 
             @Override
             void onFinished() {
 
             }
-        })
-
-        list.each { commandAndHandler -> batcher.batch(commandAndHandler) }
-        assert batcher.waitingBatches.val == list[0..2]
-        assert batcher.waitingBatches.val == [list[3]]
+        }));
+        for (CommandAndHandler commandAndHandler : list) {
+            batcher.batch(commandAndHandler);
+        }
+        Assert.assertEquals(4, list.size());
+        Assert.assertEquals(list.subList(0, 3), batcher.getWaitingBatches().getVal());
+        Assert.assertEquals(Collections.singletonList(list.get(3)), batcher.getWaitingBatches().getVal());
     }
 
 
     void testMaxBatchSizeNonMerging() {
-        doMaxBatchSize()
+        doMaxBatchSize();
     }
+
     void testMaxBatchSizeMerging() {
-        batcher.mergeValueChanges = true
-        doMaxBatchSize()
+        batcher.setMergeValueChanges(true);
+        doMaxBatchSize();
     }
 
     void doMaxBatchSize() {
-        batcher.maxBatchSize = 4
-        def list = [new CommandAndHandler(null)] * 17
-
-        list.each { commandAndHandler -> batcher.batch(commandAndHandler) }
-
-        4.times {
-            assert batcher.waitingBatches.val.size() == 4
+        //given:
+        batcher.setMaxBatchSize(4);
+        ArrayList<CommandAndHandler> list = new ArrayList<>();
+        for (int i = 0; i < 17; i++) {
+            list.add(new CommandAndHandler(null));
         }
-        assert batcher.waitingBatches.val.size() == 1
-        assert batcher.empty
+
+        //when:
+        for (CommandAndHandler commandAndHandler : list) {
+            batcher.batch(commandAndHandler);
+        }
+
+        //then:
+        Assert.assertEquals(4, batcher.getWaitingBatches().getVal().size());
+        Assert.assertEquals(4, batcher.getWaitingBatches().getVal().size());
+        Assert.assertEquals(4, batcher.getWaitingBatches().getVal().size());
+        Assert.assertEquals(4, batcher.getWaitingBatches().getVal().size());
+        Assert.assertEquals(1, batcher.getWaitingBatches().getVal().size());
+        Assert.assertTrue(batcher.isEmpty());
     }
 
     void testMergeInOneCommand() {
-        LogConfig.logOnLevel(Level.ALL)
 
-        batcher.mergeValueChanges = true
-        def list = [
-          new CommandAndHandler(new ValueChangedCommand(attributeId: 0, oldValue: 0, newValue: 1)),
-          new CommandAndHandler(new ValueChangedCommand(attributeId: 0, oldValue: 1, newValue: 2)),
-          new CommandAndHandler(new ValueChangedCommand(attributeId: 0, oldValue: 2, newValue: 3)),
-        ]
+        //given:
+        LogConfig.logOnLevel(Level.ALL);
+        batcher.setMergeValueChanges(true);
+        List<CommandAndHandler> list = new ArrayList<>();
+        list.add(new CommandAndHandler(new ValueChangedCommand(attributeId: 0, oldValue: 0, newValue: 1)));
+        list.add(new CommandAndHandler(new ValueChangedCommand(attributeId: 0, oldValue: 1, newValue: 2)));
+        list.add(new CommandAndHandler(new ValueChangedCommand(attributeId: 0, oldValue: 2, newValue: 3)));
 
-        list.each { commandAndHandler -> batcher.batch(commandAndHandler) }
+        //when:
+        for (CommandAndHandler commandAndHandler : list) {
+            batcher.batch(commandAndHandler);
+        }
 
-        def nextBatch = batcher.waitingBatches.val
-        assert nextBatch.size() == 1
-        assert nextBatch.first().command.oldValue == 0
-        assert nextBatch.first().command.newValue == 3
-        assert batcher.empty
-
+        //then:
+        List<CommandAndHandler> nextBatch = batcher.getWaitingBatches().getVal();
+        Assert.assertEquals(1, nextBatch.size());
+        Assert.assertEquals(ValueChangedCommand.class, nextBatch.get(0).getCommand().class);
+        ValueChangedCommand cmd = nextBatch.get(0).getCommand();
+        Assert.assertEquals(0, cmd.getOldValue());
+        Assert.assertEquals(3, cmd.getNewValue());
+        Assert.assertTrue(batcher.isEmpty());
     }
 
     void testMergeCreatePmAfterValueChange() {
 
-        batcher.mergeValueChanges = true
-        def list = [
-          new CommandAndHandler(new ValueChangedCommand(attributeId: 0, oldValue: 0, newValue: 1)),
-          new CommandAndHandler(new CreatePresentationModelCommand()),
-        ]
+        //given:
+        batcher.setMergeValueChanges(true);
+        List<CommandAndHandler> list = new ArrayList<>();
+        list.add(new CommandAndHandler(new ValueChangedCommand(attributeId: 0, oldValue: 0, newValue: 1)));
+        list.add(new CommandAndHandler(new CreatePresentationModelCommand()));
 
-        list.each { commandAndHandler -> batcher.batch(commandAndHandler) }
+        //when:
+        for (CommandAndHandler commandAndHandler : list) {
+            batcher.batch(commandAndHandler);
+        }
 
-        def nextBatch = batcher.waitingBatches.val
-        assert nextBatch.size() == 2
-        assert nextBatch[0].command instanceof ValueChangedCommand
-        assert nextBatch[1].command instanceof CreatePresentationModelCommand
-        assert batcher.empty
+        //then:
+        List<CommandAndHandler> nextBatch = batcher.getWaitingBatches().getVal();
+        Assert.assertEquals(2, nextBatch.size());
+        Assert.assertEquals(ValueChangedCommand.class, nextBatch.get(0).getCommand().class);
+        Assert.assertEquals(CreatePresentationModelCommand.class, nextBatch.get(1).getCommand().class);
+        Assert.assertTrue(batcher.isEmpty());
 
     }
 
     void testDropMultipleGetPmCommands() {
+
+        //given:
         Command cmd1 = new GetPresentationModelCommand(pmId: 1)
         Command cmd2 = new GetPresentationModelCommand(pmId: 1)
-        OnFinishedHandler sameHandler = [onFinished: { /* do nothing*/ }] as OnFinishedHandler
+        OnFinishedHandler sameHandler = new OnFinishedHandler() {
+            @Override
+            void onFinished() {
 
-        def list = [
-          new CommandAndHandler(cmd1, sameHandler),
-          new CommandAndHandler(cmd2, sameHandler), // same handler can be dropped
-          new CommandAndHandler(cmd2),        // null handler can be dropped
-        ]
+            }
+        };
+        List<CommandAndHandler> list = new ArrayList<>();
+        list.add(new CommandAndHandler(cmd1, sameHandler));
+        list.add(new CommandAndHandler(cmd2, sameHandler));
+        list.add(new CommandAndHandler(cmd2));
 
-        list.each { commandAndHandler -> batcher.batch(commandAndHandler) }
 
-        def nextBatch = batcher.waitingBatches.val
-        assert nextBatch.size() == 1
-        assert nextBatch[0].command instanceof GetPresentationModelCommand
-        assert batcher.empty
+        //when:
+        for (CommandAndHandler commandAndHandler : list) {
+            batcher.batch(commandAndHandler);
+        }
+
+        //then:
+        List<CommandAndHandler> nextBatch = batcher.getWaitingBatches().getVal();
+        Assert.assertEquals(1, nextBatch.size());
+        Assert.assertEquals(GetPresentationModelCommand.class, nextBatch.get(0).getCommand().class);
+        Assert.assertTrue(batcher.isEmpty());
     }
 
     void testVeryManyGetPmCommands() {
-        def list = []
-        300.times {
-            Command cmd1 = new GetPresentationModelCommand(pmId: it)
-            Command cmd2 = new GetPresentationModelCommand(pmId: it)
-            list << new CommandAndHandler(cmd1, null) // will be batched
-            list << new CommandAndHandler(cmd2, null) // will be dropped
+        //given:
+        ArrayList<CommandAndHandler> list = new ArrayList<>();
+        for (int i = 0; i < 300; i++) {
+            Command cmd1 = new GetPresentationModelCommand();
+            cmd1.setPmId("" + i);
+            Command cmd2 = new GetPresentationModelCommand();
+            cmd2.setPmId("" + i);
+            list.add(new CommandAndHandler(cmd1, null)); // will be batched
+            list.add(new CommandAndHandler(cmd2, null)); // will be dropped
         }
 
-        list.each { commandAndHandler -> batcher.batch(commandAndHandler) }
+        //when:
+        for (CommandAndHandler commandAndHandler : list) {
+            batcher.batch(commandAndHandler);
+        }
 
+        //then:
         def resultCount = 0
-        def nextBatch = batcher.waitingBatches.getVal(1, TimeUnit.SECONDS)
-        while (nextBatch ) {
-            resultCount += nextBatch.size()
-            nextBatch = batcher.waitingBatches.getVal(100, TimeUnit.MILLISECONDS)
+        List<CommandAndHandler> nextBatch = batcher.getWaitingBatches().getVal(1, TimeUnit.SECONDS);
+        while (nextBatch != null && !nextBatch.isEmpty()) {
+            resultCount += nextBatch.size();
+            nextBatch = batcher.getWaitingBatches().getVal(100, TimeUnit.MILLISECONDS);
+
         }
-        assert resultCount == 300
+        Assert.assertEquals(300, resultCount);
     }
 
 }
