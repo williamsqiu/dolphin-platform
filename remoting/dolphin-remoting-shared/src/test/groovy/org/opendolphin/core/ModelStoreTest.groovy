@@ -15,53 +15,63 @@
  */
 package org.opendolphin.core
 
+import org.junit.Assert
+
 class ModelStoreTest extends GroovyTestCase {
 
-    void testSimpleAccessAndStoreEventListening() {
-        PresentationModel parent = new BasePresentationModel("0", [])
-        parent.presentationModelType = 'parent'
-        PresentationModel child1 = new BasePresentationModel("1", [])
+    public void testSimpleAccessAndStoreEventListening() {
 
-        TestStoreListener storeListener = new TestStoreListener()
-        TestStoreListener parentStoreListener = new TestStoreListener()
+        //given:
 
-        ModelStore modelStore = new ModelStore()
-        modelStore.addModelStoreListener(storeListener)
-        modelStore.addModelStoreListener('parent', parentStoreListener)
+        BasePresentationModel parent = new BasePresentationModel("0", new ArrayList());
+        parent.setPresentationModelType('parent');
+        BasePresentationModel child1 = new BasePresentationModel("1", new ArrayList())
+        TestStoreListener storeListener = new TestStoreListener();
+        TestStoreListener parentStoreListener = new TestStoreListener();
+        ModelStore modelStore = new ModelStore();
+        modelStore.addModelStoreListener(storeListener);
+        modelStore.addModelStoreListener('parent', parentStoreListener);
+        modelStore.add(parent);
 
-        modelStore.add(parent)
+        //then:
 
-        assert storeListener.event
-        assert storeListener.event.toString()
-        assert storeListener.event.hashCode()
-        assert storeListener.event == storeListener.event
-        assert storeListener.event != null
-        assert storeListener.event != new Object()
-        assert storeListener.event.presentationModel == parent
-        assert storeListener.event.type == ModelStoreEvent.Type.ADDED
-        assert parentStoreListener.event
-        assert parentStoreListener.event.presentationModel == parent
-        assert parentStoreListener.event.type == ModelStoreEvent.Type.ADDED
+        Assert.assertNotNull(storeListener.getEvent());
+        Assert.assertNotNull(storeListener.getEvent().toString());
+        Assert.assertNotNull(storeListener.getEvent().hashCode());
+        Assert.assertEquals(parent, storeListener.getEvent().getPresentationModel());
+        Assert.assertEquals(ModelStoreEvent.Type.ADDED, storeListener.getEvent().getType());
+        Assert.assertNotNull(parentStoreListener.getEvent());
+        Assert.assertEquals(parent, parentStoreListener.getEvent().getPresentationModel());
+        Assert.assertEquals(ModelStoreEvent.Type.ADDED, parentStoreListener.getEvent().getType());
 
-        storeListener.event = null
-        parentStoreListener.event = null
 
-        modelStore.add(child1)
+        //when:
 
-        assert storeListener.event
-        assert storeListener.event.presentationModel == child1
-        assert storeListener.event.type == ModelStoreEvent.Type.ADDED
-        assert !parentStoreListener.event
+        storeListener.setEvent(null);
+        parentStoreListener.setEvent(null);
+        modelStore.add(child1);
+
+        //then:
+
+        Assert.assertNotNull(storeListener.getEvent());
+        Assert.assertEquals(child1, storeListener.getEvent().getPresentationModel());
+        Assert.assertEquals(ModelStoreEvent.Type.ADDED, storeListener.getEvent().getType());
+        Assert.assertNull(parentStoreListener.getEvent());
     }
 }
 
 
 class TestStoreListener implements ModelStoreListener {
+
     ModelStoreEvent event
 
     @Override
     void modelStoreChanged(ModelStoreEvent event) {
         this.event = event
+    }
+
+    ModelStoreEvent getEvent() {
+        return event
     }
 }
 
