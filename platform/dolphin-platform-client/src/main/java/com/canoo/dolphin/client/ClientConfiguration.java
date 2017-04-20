@@ -34,7 +34,7 @@ import java.util.logging.Level;
 
 /**
  * Configuration class for a Dolphin Platform client. A configuration is needed to create a {@link ClientContext} by
- * using the {@link ClientContextFactory} (see {@link ClientContextFactory#connect(ClientConfiguration)}).
+ * using the {@link ClientContextFactory} (see {@link ClientContextFactory#create(ClientConfiguration)}).
  * The configuration wraps the url to the Dolphin Platform server endpoint and a specific ui thread handler.
  * Since Dolphin Platform manages UI releated concurrency for you it needs a handler to call methods directly on the
  * ui thread. For platforms like JavaFX the JavaFX client lib of Dolphin Platform contains a specific
