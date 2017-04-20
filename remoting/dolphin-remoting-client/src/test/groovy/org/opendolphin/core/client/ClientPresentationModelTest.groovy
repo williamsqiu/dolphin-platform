@@ -1,9 +1,7 @@
-package org.opendolphin.core.client;
+package org.opendolphin.core.client
 
-import org.junit.Assert;
-import org.junit.Test;
-
-import java.util.Collections;
+import org.junit.Assert
+import org.junit.Test
 
 public class ClientPresentationModelTest {
 
