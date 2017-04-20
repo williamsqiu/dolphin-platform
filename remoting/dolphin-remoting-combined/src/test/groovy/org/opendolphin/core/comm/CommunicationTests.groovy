@@ -15,6 +15,7 @@
  */
 package org.opendolphin.core.comm
 
+import org.junit.Assert
 import org.opendolphin.LogConfig
 import org.opendolphin.core.client.ClientAttribute
 import org.opendolphin.core.client.ClientDolphin
@@ -34,130 +35,127 @@ import java.util.logging.Level
 
 class CommunicationTests extends GroovyTestCase {
 
-	ServerConnector     serverConnector
-	AbstractClientConnector clientConnector
-    ClientModelStore    clientModelStore
-    ClientDolphin       clientDolphin
-    TestInMemoryConfig config
+    private ServerConnector serverConnector;
+    private AbstractClientConnector clientConnector;
+    private ClientModelStore clientModelStore;
+    private ClientDolphin clientDolphin;
+    private TestInMemoryConfig config;
 
     private final class ButtonActionCommand extends Command {}
 
 
     @Override
-	protected void setUp() {
-		LogConfig.logOnLevel(Level.INFO);
-		config = new TestInMemoryConfig()
-        serverConnector  = config.serverDolphin.serverConnector
-        clientConnector  = config.clientDolphin.clientConnector
-        clientModelStore = config.clientDolphin.getModelStore()
-        clientDolphin    = config.clientDolphin
-	}
+    protected void setUp() {
+        LogConfig.logOnLevel(Level.INFO);
+        config = new TestInMemoryConfig();
+        serverConnector = config.getServerDolphin().getServerConnector();
+        clientConnector = config.getClientConnector();
+        clientModelStore = config.getClientDolphin().getModelStore();
+        clientDolphin = config.getClientDolphin();
+    }
 
     @Override
     protected void tearDown() {
-        assert config.done.await(2, TimeUnit.SECONDS)
+        Assert.assertTrue(config.getDone().await(2, TimeUnit.SECONDS));
     }
 
-	void testSimpleAttributeChangeIsVisibleOnServer() {
-		def ca  = new ClientAttribute('name', null)
-        def cpm = new ClientPresentationModel('model', [ca])
-        clientModelStore.add cpm
+    void testSimpleAttributeChangeIsVisibleOnServer() {
+        ClientAttribute ca = new ClientAttribute('name', null)
+        ClientPresentationModel cpm = new ClientPresentationModel('model', Arrays.asList(ca));
+        clientModelStore.add(cpm);
 
-		Command receivedCommand = null
-		def testServerAction = new CommandHandler<ValueChangedCommand>() {
+        Command receivedCommand = null;
+        CommandHandler testServerAction = new CommandHandler<ValueChangedCommand>() {
 
             @Override
             void handleCommand(ValueChangedCommand command, List<Command> response) {
-                receivedCommand = command
+                receivedCommand = command;
             }
         }
-		serverConnector.registry.register ValueChangedCommand, testServerAction
-		ca.value = 'initial'
+        serverConnector.getRegistry().register(ValueChangedCommand.class, testServerAction);
+        ca.setValue('initial');
 
         clientDolphin.sync {
-            assert receivedCommand
-            assert receivedCommand.id == 'ValueChanged'
-            assert receivedCommand in ValueChangedCommand
-            assert receivedCommand.oldValue == null
-            assert receivedCommand.newValue == 'initial'
-            config.assertionsDone()
+            Assert.assertNotNull(receivedCommand);
+            Assert.assertEquals('ValueChanged', receivedCommand.getId());
+            Assert.assertEquals(ValueChangedCommand.class, receivedCommand.getClass());
+
+            ValueChangedCommand cmd = receivedCommand;
+            Assert.assertEquals(null, cmd.getOldValue());
+            Assert.assertEquals('initial', cmd.getNewValue());
+            config.assertionsDone();
         }
-	}
+    }
 
-	void testServerIsNotifiedAboutNewAttributesAndTheirPms() {
-
-		Command receivedCommand = null
-		def testServerAction = new CommandHandler<CreatePresentationModelCommand>() {
+    void testServerIsNotifiedAboutNewAttributesAndTheirPms() {
+        Command receivedCommand = null
+        CommandHandler testServerAction = new CommandHandler<CreatePresentationModelCommand>() {
 
             @Override
             void handleCommand(CreatePresentationModelCommand command, List<Command> response) {
                 receivedCommand = command
             }
-        }
-		serverConnector.registry.register CreatePresentationModelCommand, testServerAction
-
-        clientModelStore.add new ClientPresentationModel('testPm', [new ClientAttribute('name', null)])
-
+        };
+        serverConnector.getRegistry().register(CreatePresentationModelCommand.class, testServerAction);
+        clientModelStore.add(new ClientPresentationModel('testPm', Arrays.asList(new ClientAttribute('name', null))));
         clientDolphin.sync {
-            assert receivedCommand.id == "CreatePresentationModel"
-            assert receivedCommand instanceof CreatePresentationModelCommand
-            assert receivedCommand.pmId == 'testPm'
-            assert receivedCommand.attributes.name
-            config.assertionsDone()
+            Assert.assertNotNull(receivedCommand);
+            Assert.assertEquals('CreatePresentationModel', receivedCommand.getId());
+            Assert.assertEquals(CreatePresentationModelCommand.class, receivedCommand.getClass());
+            CreatePresentationModelCommand cmd = receivedCommand;
+            Assert.assertEquals('testPm', cmd.getPmId());
+
+            config.assertionsDone();
         }
-	}
+    }
 
-	void testWhenServerChangesValueThisTriggersUpdateOnClient() {
-		def ca = new ClientAttribute('name', null)
+    void testWhenServerChangesValueThisTriggersUpdateOnClient() {
+        ClientAttribute ca = new ClientAttribute('name', null);
 
-		def setValueAction = new CommandHandler<CreatePresentationModelCommand>() {
+        CommandHandler setValueAction = new CommandHandler<CreatePresentationModelCommand>() {
 
             @Override
             void handleCommand(CreatePresentationModelCommand command, List<Command> response) {
-                response << new ValueChangedCommand(
-                        attributeId: command.attributes.id.first(),
-                        newValue: "set from server",
-                        oldValue: null
-                )
+                response.add(new ValueChangedCommand(command.attributes.id.first(), null, "set from server"));
             }
         };
 
-		Command receivedCommand = null
-		def valueChangedAction = new CommandHandler<ValueChangedCommand>() {
+        Command receivedCommand = null
+        CommandHandler valueChangedAction = new CommandHandler<ValueChangedCommand>() {
 
             @Override
             void handleCommand(ValueChangedCommand command, List<Command> response) {
                 receivedCommand = command
-                clientDolphin.sync {                            // there is no onFinished for value changes, so we have to do it here
-                    assert ca.value == "set from server"        // client is updated
-                    assert receivedCommand.attributeId == ca.id // client notified server about value change
-                    config.assertionsDone()
+                clientDolphin.sync {
+                    // there is no onFinished for value changes, so we have to do it here
+                    Assert.assertEquals("set from server", ca.getValue()); // client is updated
+                    Assert.assertEquals(ca.id, receivedCommand.attributeId); // client notified server about value change
+                    config.assertionsDone();
                 }
             }
         };
 
-        serverConnector.registry.register CreatePresentationModelCommand, setValueAction
-		serverConnector.registry.register ValueChangedCommand, valueChangedAction
-
-        clientModelStore.add new ClientPresentationModel('testPm', [ca]) // trigger the whole cycle
+        serverConnector.getRegistry().register(CreatePresentationModelCommand.class, setValueAction);
+        serverConnector.getRegistry().register(ValueChangedCommand.class, valueChangedAction);
+        clientModelStore.add(new ClientPresentationModel('testPm', Arrays.asList(ca))); // trigger the whole cycle
     }
 
 
-	void testRequestingSomeGeneralCommandExecution() {
-		boolean reached = false
-		serverConnector.registry.register(ButtonActionCommand.class, new CommandHandler<ButtonActionCommand>(){
+    void testRequestingSomeGeneralCommandExecution() {
+        boolean reached = false;
+        serverConnector.getRegistry().register(ButtonActionCommand.class, new CommandHandler<ButtonActionCommand>() {
 
             @Override
             void handleCommand(ButtonActionCommand command, List response) {
-                reached = true
+                reached = true;
             }
         });
-		clientConnector.send(new ButtonActionCommand())
+        clientConnector.send(new ButtonActionCommand());
 
         clientDolphin.sync {
-            assert reached
-            config.assertionsDone()
+            Assert.assertTrue(reached);
+            config.assertionsDone();
         }
-	}
+    }
 
 }
