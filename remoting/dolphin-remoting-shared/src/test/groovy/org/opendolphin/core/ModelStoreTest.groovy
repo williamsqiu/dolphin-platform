@@ -1,9 +1,7 @@
-package org.opendolphin.core;
+package org.opendolphin.core
 
-import org.junit.Assert;
-import org.junit.Test;
-
-import java.util.ArrayList;
+import org.junit.Assert
+import org.junit.Test
 
 public class ModelStoreTest {
 
