@@ -13,17 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.opendolphin.core;
+package org.opendolphin.core
+
+import org.junit.Assert
 
 public class ModelStoreListenerWrapperTest extends GroovyTestCase {
 
     void testEquals() {
-        ModelStoreListener listener = {} as ModelStoreListener
-        def wrapper = new ModelStoreListenerWrapper('no-type', listener)
-        assert wrapper == wrapper
-        assert wrapper == new ModelStoreListenerWrapper('no-type', listener)
-        assert wrapper != new Object()
-        assert wrapper != new ModelStoreListenerWrapper('other-type', listener)
-        assert wrapper != new ModelStoreListenerWrapper('no-type', {} as ModelStoreListener)
+
+        //given:
+        ModelStoreListener listener = new ModelStoreListener() {
+            @Override
+            void modelStoreChanged(ModelStoreEvent event) {
+
+            }
+        };
+        ModelStoreListenerWrapper wrapper = new ModelStoreListenerWrapper('no-type', listener);
+
+
+        //then:
+        Assert.assertEquals(new ModelStoreListenerWrapper('no-type', listener), wrapper);
+        Assert.assertNotEquals(new ModelStoreListenerWrapper('other-type', listener), wrapper);
     }
 }
