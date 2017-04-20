@@ -1,6 +1,5 @@
 package org.opendolphin.core.comm;
 
-import org.codehaus.groovy.runtime.DefaultGroovyMethods;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -249,7 +248,7 @@ public class ServerControlledFunctionalTests {
         registerAction(serverDolphin, SetAndUnsetQualifierCommand.class, new CommandHandler<SetAndUnsetQualifierCommand>() {
             @Override
             public void handleCommand(SetAndUnsetQualifierCommand command, List<Command> response) {
-                PresentationModel myPm = DefaultGroovyMethods.first(serverDolphin.getModelStore().findAllPresentationModelsByType("myType"));
+                PresentationModel myPm = serverDolphin.getModelStore().findAllPresentationModelsByType("myType").get(0);
                 ((ServerPresentationModel) myPm).getAttribute("a").setQualifier("myQualifier");
                 ((ServerPresentationModel) myPm).getAttribute("a").setQualifier("othervalue");
             }
@@ -259,7 +258,7 @@ public class ServerControlledFunctionalTests {
         clientDolphin.getClientConnector().send(new CreatePmCommand(), new OnFinishedHandler() {
             @Override
             public void onFinished() {
-                final ClientPresentationModel pm = DefaultGroovyMethods.first(clientDolphin.getModelStore().findAllPresentationModelsByType("myType"));
+                final ClientPresentationModel pm = clientDolphin.getModelStore().findAllPresentationModelsByType("myType").get(0);
                 pm.getAttribute("a").addPropertyChangeListener("qualifier", new PropertyChangeListener() {
                     @Override
                     public void propertyChange(PropertyChangeEvent evt) {// assume a client side listener
