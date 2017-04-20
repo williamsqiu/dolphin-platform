@@ -15,7 +15,9 @@
  */
 package org.opendolphin.core.server.action
 
+import org.junit.Assert
 import org.opendolphin.core.comm.ChangeAttributeMetadataCommand
+import org.opendolphin.core.comm.Command
 import org.opendolphin.core.server.DefaultServerDolphin
 import org.opendolphin.core.server.ServerAttribute
 import org.opendolphin.core.server.ServerDolphinFactory
@@ -23,21 +25,24 @@ import org.opendolphin.core.server.ServerPresentationModel
 import org.opendolphin.core.server.comm.ActionRegistry
 
 class StoreAttributeActionTests extends GroovyTestCase {
-    DefaultServerDolphin dolphin
-    ActionRegistry registry
+
+    private DefaultServerDolphin dolphin;
+    private ActionRegistry registry;
 
     @Override
     protected void setUp() throws Exception {
-        dolphin = ServerDolphinFactory.create()
-        dolphin.getModelStore().currentResponse = []
-        registry = new ActionRegistry()
+        dolphin = ServerDolphinFactory.create();
+        dolphin.getModelStore().setCurrentResponse(new ArrayList<Command>());
+        registry = new ActionRegistry();
     }
 
     void testChangeAttributeMetadata() {
-        new StoreAttributeAction(serverModelStore: dolphin.modelStore).registerIn registry
-        ServerAttribute attribute = new ServerAttribute('newAttribute', '')
-        dolphin.getModelStore().add(new ServerPresentationModel('model', [attribute], dolphin.getModelStore()))
-        registry.getActionsFor(ChangeAttributeMetadataCommand.class).first().handleCommand(new ChangeAttributeMetadataCommand(attributeId: attribute.id, metadataName: 'value', value: 'newValue'), [])
-        assert 'newValue' == attribute.value
+        StoreAttributeAction action = new StoreAttributeAction();
+        action.setServerModelStore(dolphin.getModelStore());
+        action.registerIn(registry);
+        ServerAttribute attribute = new ServerAttribute('newAttribute', '');
+        dolphin.getModelStore().add(new ServerPresentationModel('model', Collections.singletonList(attribute), dolphin.getModelStore()))
+        registry.getActionsFor(ChangeAttributeMetadataCommand.class).get(0).handleCommand(new ChangeAttributeMetadataCommand(attribute.getId(), 'value', 'newValue'), Collections.emptyList())
+        Assert.assertEquals('newValue', attribute.getValue());
     }
 }
