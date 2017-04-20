@@ -15,6 +15,7 @@
  */
 package org.opendolphin.core.server.action
 
+import org.junit.Assert
 import org.opendolphin.core.comm.CreatePresentationModelCommand
 import org.opendolphin.core.comm.ValueChangedCommand
 import org.opendolphin.core.server.DTO
@@ -23,7 +24,7 @@ import org.opendolphin.core.server.comm.ActionRegistry
 
 class DolphinServerActionTests extends GroovyTestCase {
 
-    DolphinServerAction action;
+    private DolphinServerAction action;
 
     @Override
     protected void setUp() throws Exception {
@@ -32,21 +33,21 @@ class DolphinServerActionTests extends GroovyTestCase {
             void registerIn(ActionRegistry registry) {
 
             }
-        }
-        action.dolphinResponse = []
+        };
+        action.setDolphinResponse(new ArrayList<>());
     }
 
     void testCreatePresentationModel() {
-        action.presentationModel('p1', 'person', new DTO())
-        assert 1 == action.dolphinResponse.size()
-        assert CreatePresentationModelCommand == action.dolphinResponse.first().class
-        assert 'p1' == action.dolphinResponse.first().pmId
-        assert 'person' == action.dolphinResponse.first().pmType
+        action.presentationModel('p1', 'person', new DTO());
+        Assert.assertEquals(1, action.getDolphinResponse().size());
+        Assert.assertEquals(CreatePresentationModelCommand.class, action.getDolphinResponse().get(0).getClass());
+        Assert.assertEquals('p1', ((CreatePresentationModelCommand)action.getDolphinResponse().get(0)).getPmId());
+        Assert.assertEquals('person', ((CreatePresentationModelCommand)action.getDolphinResponse().get(0)).getPmType());
     }
 
     void testChangeValue() {
-        action.changeValue(new ServerAttribute('attr', 'initial'), 'newValue')
-        assert 1 == action.dolphinResponse.size()
-        assert ValueChangedCommand == action.dolphinResponse.first().class
+        action.changeValue(new ServerAttribute('attr', 'initial'), 'newValue');
+        Assert.assertEquals(1, action.getDolphinResponse().size());
+        Assert.assertEquals(ValueChangedCommand.class, action.getDolphinResponse().get(0).getClass());
     }
 }
