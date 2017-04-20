@@ -15,11 +15,9 @@
  */
 package org.opendolphin.core
 
-import java.util.logging.Handler
-import java.util.logging.Level
-import java.util.logging.Logger
-import java.util.logging.SimpleFormatter
-import java.util.logging.StreamHandler
+import org.junit.Assert
+
+import java.util.logging.*
 
 class ModelStoreConfigTest extends GroovyTestCase {
 
@@ -27,74 +25,121 @@ class ModelStoreConfigTest extends GroovyTestCase {
 
     @Override
     void setUp() {
-        modelStoreConfig = new ModelStoreConfig()
+        modelStoreConfig = new ModelStoreConfig();
     }
 
     void testDefaultCapacitiesPowerOfTwo() {
         // no warn message should be logged
-        assert getLog {new ModelStoreConfig()}.isEmpty()
+        String log1 = getLog(new Runnable() {
+            @Override
+            void run() {
+                new ModelStoreConfig();
+            }
+        });
+        Assert.assertTrue(log1.isEmpty());
     }
 
     void testAttributeCapacity() {
         // no warn message should be logged
-        assert getLog {modelStoreConfig.setAttributeCapacity(4)}.isEmpty()
-        assert 4 == modelStoreConfig.getAttributeCapacity()
+        String log1 = getLog(new Runnable() {
+            @Override
+            void run() {
+                modelStoreConfig.setAttributeCapacity(4)
+            }
+        });
+        Assert.assertTrue(log1.isEmpty());
+        Assert.assertEquals(4, modelStoreConfig.getAttributeCapacity());
 
         // a warn message should be logged
-        assert getLog {modelStoreConfig.setAttributeCapacity(5)}.contains('attributeCapacity')
-        assert 5 == modelStoreConfig.getAttributeCapacity()
+        String log2 = getLog(new Runnable() {
+            @Override
+            void run() {
+                modelStoreConfig.setAttributeCapacity(5)
+            }
+        });
+        Assert.assertTrue(log2.contains('attributeCapacity'));
+        Assert.assertEquals(5, modelStoreConfig.getAttributeCapacity());
     }
 
     void testSetPmCapacity() {
         // no warn message should be logged
-        assert getLog {modelStoreConfig.setPmCapacity(4)}.isEmpty()
-        assert 4 == modelStoreConfig.getPmCapacity()
+        String log1 = getLog(new Runnable() {
+            @Override
+            void run() {
+                modelStoreConfig.setPmCapacity(4)
+            }
+        });
+        Assert.assertTrue(log1.isEmpty());
+        Assert.assertEquals(4, modelStoreConfig.getPmCapacity());
 
         // a warn message should be logged
-        assert getLog {modelStoreConfig.setPmCapacity(5)}.contains('pmCapacity')
-        assert 5 == modelStoreConfig.getPmCapacity()
+        String log2 = getLog(new Runnable() {
+            @Override
+            void run() {
+                modelStoreConfig.setPmCapacity(5)
+            }
+        });
+        Assert.assertTrue(log2.contains('pmCapacity'));
+        Assert.assertEquals(5, modelStoreConfig.getPmCapacity());
     }
 
     void testQualifierCapacity() {
         // no warn message should be logged
-        assert getLog {modelStoreConfig.setQualifierCapacity(4)}.isEmpty()
-        assert 4 == modelStoreConfig.getQualifierCapacity()
+        String log1 = getLog(new Runnable() {
+            @Override
+            void run() {
+                modelStoreConfig.setQualifierCapacity(4)
+            }
+        });
+        Assert.assertTrue(log1.isEmpty());
+        Assert.assertEquals(4, modelStoreConfig.getQualifierCapacity());
 
         // a warn message should be logged
-        assert getLog {modelStoreConfig.setQualifierCapacity(5)}.contains('qualifierCapacity')
-        assert 5 == modelStoreConfig.getQualifierCapacity()
+        String log2 = getLog(new Runnable() {
+            @Override
+            void run() {
+                modelStoreConfig.setQualifierCapacity(5)
+            }
+        });
+        Assert.assertTrue(log2.contains('qualifierCapacity'));
+        Assert.assertEquals(5, modelStoreConfig.getQualifierCapacity());
     }
 
     void testTypeCapacity() {
         // no warn message should be logged
-        assert getLog {modelStoreConfig.setTypeCapacity(4)}.isEmpty()
-        assert 4 == modelStoreConfig.getTypeCapacity()
+        String log1 = getLog(new Runnable() {
+            @Override
+            void run() {
+                modelStoreConfig.setTypeCapacity(4)
+            }
+        });
+        Assert.assertTrue(log1.isEmpty());
+        Assert.assertEquals(4, modelStoreConfig.getTypeCapacity());
 
         // a warn message should be logged
-        assert getLog {modelStoreConfig.setTypeCapacity(5)}.contains('typeCapacity')
-        assert 5 == modelStoreConfig.getTypeCapacity()
+        String log2 = getLog(new Runnable() {
+            @Override
+            void run() {
+                modelStoreConfig.setTypeCapacity(5)
+            }
+        });
+        Assert.assertTrue(log2.contains('typeCapacity'));
+        Assert.assertEquals(5, modelStoreConfig.getTypeCapacity());
     }
 
 
-    private static String getLog(Closure inClosure) {
-        return stringLog(Level.WARNING, ModelStoreConfig.class.getName(), inClosure)
-    }
+    private String getLog(Runnable runnable) {
+        Logger logger = Logger.getLogger(ModelStoreConfig.class.getName());
+        ByteArrayOutputStream out = new ByteArrayOutputStream(1024);
+        Handler stringHandler = new StreamHandler(out, new SimpleFormatter());
+        stringHandler.setLevel(Level.WARNING);
+        logger.addHandler(stringHandler);
 
-    // Apparently the cobertura plugin does not run tests from groovy.lang.GroovyLogTestCase
-    // This method provides a simplified version of the code used in GroovyLogTestCase
-    private static String stringLog(Level level, String qualifier, Closure yield){
-        Logger logger = Logger.getLogger(qualifier)
+        runnable.run();
 
-        def out = new ByteArrayOutputStream(1024)
-        Handler stringHandler = new StreamHandler(out, new SimpleFormatter())
-        stringHandler.level = level
-        logger.addHandler(stringHandler)
-
-        yield()
-
-        stringHandler.flush()
-        out.close()
-        logger.removeHandler(stringHandler)
-        return out.toString()
+        stringHandler.flush();
+        out.close();
+        logger.removeHandler(stringHandler);
+        return out.toString();
     }
 }
