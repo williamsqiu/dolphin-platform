@@ -36,7 +36,7 @@ public class DistributedEventBusProvider implements EventBusProvider {
         }
         Assert.requireNonNull(hazelcastProvider, "hazelcastProvider");
 
-        LOG.error("Using Hazelcast provider {}", hazelcastProvider.getClass());
+        LOG.debug("Using Hazelcast provider {}", hazelcastProvider.getClass());
 
         return new DistributedEventBus(hazelcastProvider.getHazelcastInstance(configuration), DolphinPlatformBootstrap.getSessionProvider(), DolphinPlatformBootstrap.getSessionLifecycleHandler());
     }
