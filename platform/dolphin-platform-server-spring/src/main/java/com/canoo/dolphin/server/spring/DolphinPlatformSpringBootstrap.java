@@ -108,5 +108,8 @@ public class DolphinPlatformSpringBootstrap implements ServletContextInitializer
         if(platformProperties.getActive() != null) {
             configuration.setActive(platformProperties.getActive());
         }
+        if(platformProperties.getEventbusType() != null) {
+            configuration.setEventbusType(platformProperties.getEventbusType());
+        }
     }
 }
