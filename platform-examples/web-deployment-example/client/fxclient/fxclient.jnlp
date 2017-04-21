@@ -14,7 +14,7 @@
     <resources>
         <j2se version="1.8+"/>
         <jfx:javafx-runtime version="8" />
-        <jar href="FXClient.jar"  />
+        <jar href="fxclient.jar"  />
     </resources>
     <jfx:javafx-desc  width="800" height="600"
                       main-class="com.canoo.webdeployment.ClientApplication">

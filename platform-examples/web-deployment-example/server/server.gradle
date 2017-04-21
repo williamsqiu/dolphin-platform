@@ -1,14 +1,13 @@
 description = ''
 apply plugin: 'war'
 
-compileJava{
+compileJava {
     sourceCompatibility = '1.8'
     targetCompatibility = '1.8'
 }
 
 dependencies {
     compile project(':common')
-    compile project(':dolphin-platform-server')
     compile project(':dolphin-platform-server-spring')
 }
 
@@ -17,4 +16,11 @@ war {
     into 'polymer', {
         from '../polymer-client'
     }
+
+    into 'fxclient', {
+        from '../client/fxclient'
+    }
+    exclude '**/*.MF'
 }
+
+build.dependsOn war

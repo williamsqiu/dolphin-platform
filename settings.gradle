@@ -31,6 +31,7 @@ include 'integration-tests-jee'
 include 'integration-tests'
 include 'platform-examples/web-deployment-example/common'
 include 'platform-examples/web-deployment-example/server'
+include 'platform-examples/web-deployment-example/client'
 
 rootProject.children.each { project ->
     int slash = project.name.lastIndexOf('/')
