@@ -71,7 +71,7 @@ public class DistributedEventBus extends AbstractEventBus {
             Assert.requireNonNull(hazelcastTopic, "hazelcastTopic");
 
             final Integer currentCount = iTopicCount.get(topic.getName());
-            if (currentCount == 0) {
+            if (currentCount == null || currentCount == 0) {
                 registerHazelcastEventPipe(topic);
             } else {
                 iTopicCount.put(topic.getName(), currentCount + 1);
