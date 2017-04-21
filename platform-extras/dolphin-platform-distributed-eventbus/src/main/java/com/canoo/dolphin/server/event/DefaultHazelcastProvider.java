@@ -19,8 +19,13 @@ import com.canoo.dolphin.server.config.DolphinPlatformConfiguration;
 import com.hazelcast.client.HazelcastClient;
 import com.hazelcast.client.config.ClientConfig;
 import com.hazelcast.core.HazelcastInstance;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class DefaultHazelcastProvider implements HazelcastProvider {
+
+    private static final Logger LOG = LoggerFactory.getLogger(DefaultHazelcastProvider.class);
+
 
     private static final String HAZELCAST_SERVER_NAME = "hazelcast.server.name";
 
@@ -52,6 +57,10 @@ public class DefaultHazelcastProvider implements HazelcastProvider {
             if(groupName == null) {
                 groupName = DEFAULT_HAZELCAST_GROUP_NAME;
             }
+
+            LOG.debug("Hazelcast server name: {}", serverName);
+            LOG.debug("Hazelcast server port: {}", serverPort);
+            LOG.debug("Hazelcast group name: {}", groupName);
 
             ClientConfig clientConfig = new ClientConfig();
             clientConfig.getNetworkConfig().addAddress(serverName + ":" + serverPort);
