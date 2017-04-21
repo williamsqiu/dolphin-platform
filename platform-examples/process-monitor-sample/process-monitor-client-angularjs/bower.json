@@ -7,7 +7,7 @@
   "main": "",
   "license": "MIT",
   "dependencies": {
-    "dolphin-platform-angularjs": "0.8.14",
+    "dolphin-platform-angularjs": "0.8.15",
     "bootstrap": "^3.3.7"
   }
 }
