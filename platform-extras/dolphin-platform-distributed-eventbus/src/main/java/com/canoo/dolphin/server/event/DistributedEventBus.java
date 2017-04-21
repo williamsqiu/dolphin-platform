@@ -27,17 +27,18 @@ public class DistributedEventBus extends AbstractEventBus {
 
     public DistributedEventBus(final HazelcastInstance hazelcastClient, final DolphinSessionProvider sessionProvider, final DolphinSessionLifecycleHandler lifecycleHandler) {
         super(sessionProvider, lifecycleHandler);
-        this.hazelcastClient = hazelcastClient;
+        this.hazelcastClient = Assert.requireNonNull(hazelcastClient, "hazelcastClient");
     }
 
     protected <T extends Serializable> void publishForOtherSessions(final DolphinEvent<T> event) {
+        Assert.requireNonNull(event, "event");
         final ITopic<DolphinEvent<T>> topic = toHazelcastTopic(event.getTopic());
         topic.publish(event);
     }
 
     @Override
     public <T extends Serializable> Subscription subscribe(final Topic<T> topic, final MessageListener<? super T> handler) {
-        final Subscription basicSubscription = subscribe(topic, handler);
+        final Subscription basicSubscription = super.subscribe(topic, handler);
         final Subscription hazelcastSubscription = createHazelcastSubscription(topic);
         return new Subscription() {
             @Override
