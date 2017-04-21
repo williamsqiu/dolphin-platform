@@ -76,7 +76,7 @@ public class AbstractIntegrationTest {
             ClientConfiguration configuration = new ClientConfiguration(new URL(endpoint + "/dolphin"), r -> r.run());
             configuration.setDolphinLogLevel(Level.FINE);
             configuration.setConnectionTimeout(10_000L);
-            ClientContext clientContext = ClientContextFactory.create(configuration).get(configuration.getConnectionTimeout(), TimeUnit.MILLISECONDS);
+            ClientContext clientContext = ClientContextFactory.create(configuration);
             Assert.requireNonNull(clientContext, "clientContext");
 
             clientContext.connect().get(configuration.getConnectionTimeout(), TimeUnit.MILLISECONDS);

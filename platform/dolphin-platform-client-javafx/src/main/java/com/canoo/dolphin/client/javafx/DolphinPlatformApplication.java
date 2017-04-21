@@ -82,7 +82,7 @@ public abstract class DolphinPlatformApplication extends Application {
 
     private final ClientContext createClientContext(final ClientConfiguration clientConfiguration) throws Exception {
         Assert.requireNonNull(clientConfiguration, "clientConfiguration");
-        return ClientContextFactory.create(clientConfiguration).get(clientConfiguration.getConnectionTimeout(), TimeUnit.MILLISECONDS);
+        return ClientContextFactory.create(clientConfiguration);
     }
 
     /**

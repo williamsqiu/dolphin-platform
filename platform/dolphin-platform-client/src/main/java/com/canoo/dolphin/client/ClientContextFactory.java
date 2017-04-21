@@ -46,43 +46,19 @@ public class ClientContextFactory {
      * @param clientConfiguration the configuration
      * @return the future
      */
-    public static CompletableFuture<ClientContext> create(final ClientConfiguration clientConfiguration) {
+    public static ClientContext create(final ClientConfiguration clientConfiguration) {
         Assert.requireNonNull(clientConfiguration, "clientConfiguration");
-        final CompletableFuture<ClientContext> result = new CompletableFuture<>();
 
         Level openDolphinLogLevel = clientConfiguration.getDolphinLogLevel();
         Logger openDolphinLogger = Logger.getLogger("org.opendolphin");
         openDolphinLogger.setLevel(openDolphinLogLevel);
 
-        clientConfiguration.getBackgroundExecutor().execute(new Runnable() {
+        return new ClientContextImpl(clientConfiguration, new Function<ClientModelStore, AbstractClientConnector>() {
             @Override
-            public void run() {
-                try {
-
-                    final ClientContext clientContext = new ClientContextImpl(clientConfiguration, new Function<ClientModelStore, AbstractClientConnector>() {
-                        @Override
-                        public AbstractClientConnector call(final ClientModelStore clientModelStore) {
-                            return new DolphinPlatformHttpClientConnector(clientConfiguration, clientModelStore, new OptimizedJsonCodec(), clientConfiguration.getRemotingExceptionHandler());
-                        }
-                    });
-
-                    clientConfiguration.getUiExecutor().execute(new Runnable() {
-                        @Override
-                        public void run() {
-                            result.complete(clientContext);
-                        }
-                    });
-                } catch (final Exception exception) {
-                    clientConfiguration.getUiExecutor().execute(new Runnable() {
-                        @Override
-                        public void run() {
-                            result.obtrudeException(new ClientInitializationException("Can not create ClientContext!", exception));
-                        }
-                    });
-                }
+            public AbstractClientConnector call(final ClientModelStore clientModelStore) {
+                return new DolphinPlatformHttpClientConnector(clientConfiguration, clientModelStore, new OptimizedJsonCodec(), clientConfiguration.getRemotingExceptionHandler());
             }
         });
-        return result;
     }
 
 }
