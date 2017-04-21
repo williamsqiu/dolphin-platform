@@ -1,3 +1,0 @@
-Application-Name: My Application
-Permissions: all-permissions
-Codebase: *

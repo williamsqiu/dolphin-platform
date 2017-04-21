@@ -20,7 +20,6 @@ war {
     into 'fxclient', {
         from '../client/fxclient'
     }
-    exclude '**/*.MF'
 }
 
 build.dependsOn war

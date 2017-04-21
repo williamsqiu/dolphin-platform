@@ -22,7 +22,6 @@ jar {
 jar.doLast {
     def libFiles = files { file('build/libs').listFiles() }
     libFiles.each {
-        println "Initializing: " + it
 
         ant.jar(destfile: it, update: true) {
             delegate.manifest {

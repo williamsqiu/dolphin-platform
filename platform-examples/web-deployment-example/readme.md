@@ -24,8 +24,6 @@ choose option which has version described as __>=1.0.4__ __<=1.4.0__)
 bower install
 ```
 
-Go to **web-deployment-example** directory & add the pom.xml file as a Maven project in Intellij
-
 ### Installing
 
 #### Polymer Client
@@ -44,26 +42,25 @@ open **ClientApplication** file which resides in
 **dolphin-platform-examples/platform-examples/web-deployment-example/client/src/main/java/com/canoo/webdeployment**
 directory.
 
-If you want to provide your own **MANIFEST.MF** file then edit the file which resides in
-**dolphin-platform-examples/platform-examples/web-deployment-example/client/fxclient** 
-directory, but remeber  Manisfest file must contain below 3 properites
-* Application-Name: YOUR_APPLICATION_NAME
-* Permissions: all-permissions
-* Codebase: *
-
 If you want to provide your own keystore then add your keystore file in 
 **dolphin-platform-examples/platform-examples/web-deployment-example/client/keystore** 
 directory & then replace the file name in the **pom.xml** file of client as well.
 
 
 #### Generate war file
-Go to web-deployment-example folder & then do mvn clean install
+Build the client
 ```
-cd dolphin-platform-examples/platform-examples/web-deployment-example
-mvn clean install
+cd dolphin-platform-examples/platform-examples/web-deployment-example/client
+gradle clean build
 ```
 
-Copy the generated war file from __server/target__ directory & 
+Build the server
+```
+cd dolphin-platform-examples/platform-examples/web-deployment-example/server
+gradle clean build
+```
+
+Copy the generated war file from __server/build/libs__ directory & 
 paste it in tomcat __webapps__ directory
 
 
