@@ -195,6 +195,7 @@ public class DolphinPlatformBootstrap {
         while (iterator.hasNext()) {
             EventBusProvider provider = iterator.next();
             if (configuration.getEventbusType().equals(provider.getType())) {
+                LOG.debug("Using event bus of type {} with provider class {}", provider.getType(), provider.getClass());
                 return provider.create(configuration);
             }
         }
