@@ -113,8 +113,13 @@ public class DolphinContext {
                 }
             }
         });
-
-        taskQueue = new DolphinContextTaskQueue(id, dolphinSessionProvider, configuration.getMaxPollTime(), TimeUnit.MILLISECONDS);
+        CommunicationManager manager = new CommunicationManager() {
+            @Override
+            public boolean hasResponseCommands() {
+                return DolphinContext.this.hasResponseCommands();
+            }
+        };
+        taskQueue = new DolphinContextTaskQueue(id, dolphinSessionProvider, manager, configuration.getMaxPollTime(), TimeUnit.MILLISECONDS);
 
         //Init BeanRepository
         dispatcher = new ServerEventDispatcher(dolphin);
@@ -317,6 +322,10 @@ public class DolphinContext {
 
     public DolphinSession getDolphinSession() {
         return dolphinSession;
+    }
+
+    public boolean hasResponseCommands() {
+        return dolphin.getModelStore().hasResponseCommands();
     }
 
     @Override
