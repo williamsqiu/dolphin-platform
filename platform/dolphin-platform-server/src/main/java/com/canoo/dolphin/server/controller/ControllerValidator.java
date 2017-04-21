@@ -39,36 +39,36 @@ public class ControllerValidator {
         Assert.requireNonNull(clazz, "Controller class");
 
         if (isInterface(clazz)) {
-            throw new ControllerValidationException("Dolphin Controller "+ clazz.getName() +" must be a class.");
+            throw new ControllerValidationException("Dolphin Controller " + clazz.getName() + " must be a class.");
         }
         if (isAbstract(clazz)) {
-            throw new ControllerValidationException("Dolphin Controller "+ clazz.getName() +" can't be abstract.");
+            throw new ControllerValidationException("Dolphin Controller " + clazz.getName() + " can't be abstract.");
         }
         if (isFinal(clazz)) {
-            throw new ControllerValidationException("Dolphin Controller "+ clazz.getName() +" can't be final.");
+            throw new ControllerValidationException("Dolphin Controller " + clazz.getName() + " can't be final.");
         }
         if (postConstructContainsParameter(clazz)) {
-            throw new ControllerValidationException("PostConstruct method should not contain parameter in Controller "+ clazz.getName());
+            throw new ControllerValidationException("PostConstruct method should not contain parameter in Controller " + clazz.getName());
         }
         if (isMoreThanOnePostConstruct(clazz)) {
-            throw new ControllerValidationException("Only one PostConstruct method is allowed in Controller "+ clazz.getName());
+            throw new ControllerValidationException("Only one PostConstruct method is allowed in Controller " + clazz.getName());
         }
         if (preDestroyContainsParameter(clazz)) {
-            throw new ControllerValidationException("PreDestroy method should not contain parameter in Controller "+ clazz.getName());
+            throw new ControllerValidationException("PreDestroy method should not contain parameter in Controller " + clazz.getName());
         }
         if (isMoreThanOnePreDestroy(clazz)) {
-            throw new ControllerValidationException("Only one PreDestroy method is allowed in Controller "+ clazz.getName());
+            throw new ControllerValidationException("Only one PreDestroy method is allowed in Controller " + clazz.getName());
         }
         if (!isDolphinActionVoid(clazz)) {
-            throw new ControllerValidationException("DolphinAction must be void in Controller "+ clazz.getName());
+            throw new ControllerValidationException("DolphinAction must be void in Controller " + clazz.getName());
         }
         if (!isAnnotatedWithParam(clazz)) {
-            throw new ControllerValidationException("DolphinAction parameters must be annotated with @param in Controller "+ clazz.getName());
+            throw new ControllerValidationException("DolphinAction parameters must be annotated with @param in Controller " + clazz.getName());
         }
         if (!isDolphinModelPresent(clazz)) {
             throw new ControllerValidationException("Controller " + clazz.getName() + " must have a DolphinModel.");
         }
-        if(isMoreThanOneDolphinModel(clazz)){
+        if (isMoreThanOneDolphinModel(clazz)) {
             throw new ControllerValidationException("Controller " + clazz.getName() + " should not contain more than one DolphinModel.");
         }
     }
@@ -127,9 +127,16 @@ public class ControllerValidator {
         List<Method> methods = ReflectionHelper.getInheritedDeclaredMethods(clazz);
         for (Method method : methods) {
             if (method.isAnnotationPresent(DolphinAction.class)) {
-                Annotation[][] annotations = method.getParameterAnnotations();
-                for (int i = 0; i < annotations.length; i++) {
-                    if (annotations[i].length == 0 || annotations[i][0].annotationType() != Param.class) {
+                Annotation[][] paramAnnotations = method.getParameterAnnotations();
+                for(Annotation[] annotations : paramAnnotations) {
+                    boolean paramAnnotationFound = false;
+                    for(Annotation annotation : annotations) {
+                        if (annotation.annotationType().equals(Param.class)) {
+                            paramAnnotationFound = true;
+                            break;
+                        }
+                    }
+                    if(!paramAnnotationFound) {
                         return false;
                     }
                 }
