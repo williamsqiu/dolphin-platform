@@ -30,7 +30,7 @@ import java.util.logging.Logger;
 
 /**
  * Factory to create a {@link ClientContext}. Normally you will create a {@link ClientContext} at the bootstrap of your
- * client by using the {@link #connect(ClientConfiguration)} method and use this context as a singleton in your client.
+ * client by using the {@link #create(ClientConfiguration)} method and use this context as a singleton in your client.
  * The {@link ClientContext} defines the connection between the client and the Dolphin Platform server endpoint.
  */
 public class ClientContextFactory {
@@ -46,7 +46,7 @@ public class ClientContextFactory {
      * @param clientConfiguration the configuration
      * @return the future
      */
-    public static CompletableFuture<ClientContext> connect(final ClientConfiguration clientConfiguration) {
+    public static CompletableFuture<ClientContext> create(final ClientConfiguration clientConfiguration) {
         Assert.requireNonNull(clientConfiguration, "clientConfiguration");
         final CompletableFuture<ClientContext> result = new CompletableFuture<>();
 
@@ -65,7 +65,6 @@ public class ClientContextFactory {
                             return new DolphinPlatformHttpClientConnector(clientConfiguration, clientModelStore, new OptimizedJsonCodec(), clientConfiguration.getRemotingExceptionHandler());
                         }
                     });
-                    clientContext.connect().get(clientConfiguration.getConnectionTimeout(), TimeUnit.MILLISECONDS);
 
                     clientConfiguration.getUiExecutor().execute(new Runnable() {
                         @Override
@@ -77,7 +76,7 @@ public class ClientContextFactory {
                     clientConfiguration.getUiExecutor().execute(new Runnable() {
                         @Override
                         public void run() {
-                            result.obtrudeException(new ClientInitializationException("Can not connect to server!", exception));
+                            result.obtrudeException(new ClientInitializationException("Can not create ClientContext!", exception));
                         }
                     });
                 }
