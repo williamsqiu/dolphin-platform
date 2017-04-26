@@ -65,6 +65,10 @@ public class DolphinPlatformConfiguration implements Serializable {
 
     public static final String PLATFORM_ACTIVE = "active";
 
+
+
+
+
     private final static String USE_SESSION_INVALIDATION_SERVLET_DEFAULT_VALUE = "false";
 
     private final static String SESSION_TIMEOUT_DEFAULT_VALUE = "900";
@@ -81,7 +85,7 @@ public class DolphinPlatformConfiguration implements Serializable {
 
     private final static String ID_FILTER_URL_MAPPINGS_DEFAULT_VALUE = "/dolphin";
 
-    private final static Level OPEN_DOLPHIN_LOG_LEVEL_DEFAULT_VALUE = Level.SEVERE;
+    private final static String OPEN_DOLPHIN_LOG_LEVEL_DEFAULT_VALUE = "SEVERE";
 
     private final static String MAX_POLL_TIME_DEFAULT_VALUE = "5000";
 
@@ -103,6 +107,23 @@ public class DolphinPlatformConfiguration implements Serializable {
 
     public DolphinPlatformConfiguration() {
         this(new Properties());
+        setProperty(USE_SESSION_INVALIDATION_SERVLET, USE_SESSION_INVALIDATION_SERVLET_DEFAULT_VALUE);
+        setProperty(SESSION_TIMEOUT, SESSION_TIMEOUT_DEFAULT_VALUE);
+        setProperty(USE_CROSS_SITE_ORIGIN_FILTER, USE_CROSS_SITE_ORIGIN_FILTER_DEFAULT_VALUE);
+        setProperty(MBEAN_REGISTRATION, M_BEAN_REGISTRATION_DEFAULT_VALUE);
+        setProperty(DOLPHIN_PLATFORM_SERVLET_MAPPING, DOLPHIN_PLATFORM_SERVLET_MAPPING_DEFAULT_VALUE);
+        setProperty(ROOT_PACKAGE_FOR_CLASSPATH_SCAN, ROOT_PACKAGE_FOR_CLASSPATH_SCAN_DEFAULT_VALUE);
+        setProperty(EVENTBUS_TYPE, EVENTBUS_TYPE_DEFAULT_VALUE);
+        setProperty(ID_FILTER_URL_MAPPINGS, ID_FILTER_URL_MAPPINGS_DEFAULT_VALUE);
+        setProperty(OPEN_DOLPHIN_LOG_LEVEL, OPEN_DOLPHIN_LOG_LEVEL_DEFAULT_VALUE);
+        setProperty(MAX_POLL_TIME, MAX_POLL_TIME_DEFAULT_VALUE);
+        setProperty(MAX_CLIENTS_PER_SESSION, MAX_CLIENTS_PER_SESSION_DEFAULT_VALUE);
+        setProperty(GARBAGE_COLLECTION_ACTIVE, USE_GC_DEFAULT_VALUE);
+        setProperty(PLATFORM_ACTIVE, ACTIVE_DEFAULT_VALUE);
+        setProperty(ACCESS_CONTROL_ALLOW_HEADERS, ACCESS_CONTROL_ALLOW_HEADERS_DEFAULT_VALUE);
+        setProperty(ACCESS_CONTROL_ALLOW_METHODS, ACCESS_CONTROL_ALLOW_METHODS_DEFAULT_VALUE);
+        setProperty(ACCESS_CONTROL_ALLOW_CREDENTIALS, ACCESS_CONTROL_ALLOW_CREDENTIALS_DEFAULT_VALUE);
+        setProperty(ACCESS_CONTROL_MAXAGE, ACCESS_CONTROL_MAX_AGE_DEFAULT_VALUE);
     }
 
     public DolphinPlatformConfiguration(final Properties internalProperties) {
@@ -152,8 +173,7 @@ public class DolphinPlatformConfiguration implements Serializable {
     }
 
     public Level getOpenDolphinLogLevel() {
-        if (internalProperties.containsKey(OPEN_DOLPHIN_LOG_LEVEL)) {
-            String level = internalProperties.getProperty(OPEN_DOLPHIN_LOG_LEVEL);
+            String level = internalProperties.getProperty(OPEN_DOLPHIN_LOG_LEVEL, OPEN_DOLPHIN_LOG_LEVEL_DEFAULT_VALUE);
             if ("info".equalsIgnoreCase(level.trim())) {
                 return Level.INFO;
             } else if ("severe".equalsIgnoreCase(level.trim())) {
@@ -173,8 +193,7 @@ public class DolphinPlatformConfiguration implements Serializable {
             } else if ("warning".equalsIgnoreCase(level.trim())) {
                 return Level.WARNING;
             }
-        }
-        return OPEN_DOLPHIN_LOG_LEVEL_DEFAULT_VALUE;
+            return Level.SEVERE;
     }
 
     public int getMaxClientsPerSession() {
