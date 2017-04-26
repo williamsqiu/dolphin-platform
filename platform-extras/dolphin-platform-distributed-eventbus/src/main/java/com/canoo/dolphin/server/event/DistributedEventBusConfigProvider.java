@@ -1,12 +1,9 @@
 package com.canoo.dolphin.server.event;
 
 import com.canoo.dolphin.server.config.ConfigurationProvider;
-import com.canoo.dolphin.server.config.DolphinPlatformConfiguration;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import static com.canoo.dolphin.server.event.DistributedEventBusProvider.DISTRIBUTED_EVENTBUS_NAME;
 
 public class DistributedEventBusConfigProvider implements ConfigurationProvider {
 
@@ -26,11 +23,9 @@ public class DistributedEventBusConfigProvider implements ConfigurationProvider 
     public Map<String, String> getProperties() {
         Map<String, String> properties = new HashMap<>();
 
-        properties.put(DolphinPlatformConfiguration.EVENTBUS_TYPE, DISTRIBUTED_EVENTBUS_NAME);
-
         properties.put(HAZELCAST_SERVER_NAME, DEFAULT_HAZELCAST_SERVER);
         properties.put(HAZELCAST_SERVER_PORT, DEFAULT_HAZELCAST_PORT);
         properties.put(HAZELCAST_GROUP_NAME, DEFAULT_HAZELCAST_GROUP_NAME);
-        return null;
+        return properties;
     }
 }
