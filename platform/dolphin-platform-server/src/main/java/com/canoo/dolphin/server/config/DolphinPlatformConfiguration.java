@@ -31,71 +31,73 @@ public class DolphinPlatformConfiguration implements Serializable {
 
     private static final Logger LOG = LoggerFactory.getLogger(DolphinPlatformConfiguration.class);
 
-    private static final String OPEN_DOLPHIN_LOG_LEVEL = "openDolphinLogLevel";
+    public static final String OPEN_DOLPHIN_LOG_LEVEL = "openDolphinLogLevel";
 
-    private static final String DOLPHIN_PLATFORM_SERVLET_MAPPING = "servletMapping";
+    public static final String DOLPHIN_PLATFORM_SERVLET_MAPPING = "servletMapping";
 
-    private static final String USE_CROSS_SITE_ORIGIN_FILTER = "useCrossSiteOriginFilter";
+    public static final String USE_CROSS_SITE_ORIGIN_FILTER = "useCrossSiteOriginFilter";
 
-    private static final String ACCESS_CONTROL_ALLOW_HEADERS = "accessControlAllowHeaders";
+    public static final String ACCESS_CONTROL_ALLOW_HEADERS = "accessControlAllowHeaders";
 
-    private static final String ACCESS_CONTROL_ALLOW_METHODS = "accessControlAllowMethods";
+    public static final String ACCESS_CONTROL_ALLOW_METHODS = "accessControlAllowMethods";
 
-    private static final String ACCESS_CONTROL_ALLOW_CREDENTIALS = "accessControlAllowCredentials";
+    public static final String ACCESS_CONTROL_ALLOW_CREDENTIALS = "accessControlAllowCredentials";
 
-    private static final String ACCESS_CONTROL_MAXAGE = "accessControlMaxAge";
+    public static final String ACCESS_CONTROL_MAXAGE = "accessControlMaxAge";
 
-    private static final String USE_SESSION_INVALIDATION_SERVLET = "useSessionInvalidationServlet";
+    public static final String USE_SESSION_INVALIDATION_SERVLET = "useSessionInvalidationServlet";
 
-    private static final String GARBAGE_COLLECTION_ACTIVE = "garbageCollectionActive";
+    public static final String GARBAGE_COLLECTION_ACTIVE = "garbageCollectionActive";
 
-    private static final String SESSION_TIMEOUT = "sessionTimeout";
+    public static final String SESSION_TIMEOUT = "sessionTimeout";
 
-    private static final String MAX_CLIENTS_PER_SESSION = "maxClientsPerSession";
+    public static final String MAX_CLIENTS_PER_SESSION = "maxClientsPerSession";
 
-    private static final String ID_FILTER_URL_MAPPINGS = "idFilterUrlMappings";
+    public static final String ID_FILTER_URL_MAPPINGS = "idFilterUrlMappings";
 
-    private static final String ROOT_PACKAGE_FOR_CLASSPATH_SCAN = "rootPackageForClasspathScan";
+    public static final String ROOT_PACKAGE_FOR_CLASSPATH_SCAN = "rootPackageForClasspathScan";
 
-    private static final String MBEAN_REGISTRATION = "mBeanRegistration";
+    public static final String MBEAN_REGISTRATION = "mBeanRegistration";
 
-    private static final String MAX_POLL_TIME = "maxPollTime";
+    public static final String MAX_POLL_TIME = "maxPollTime";
 
-    private static final String EVENTBUS_TYPE = "eventbusType";
+    public static final String EVENTBUS_TYPE = "eventbusType";
 
-    private boolean useSessionInvalidationServlet = false;
+    public static final String PLATFORM_ACTIVE = "active";
 
-    public final static int SESSION_TIMEOUT_DEFAULT_VALUE = 15 * 60;
+    private final static String USE_SESSION_INVALIDATION_SERVLET_DEFAULT_VALUE = "false";
 
-    private boolean useCrossSiteOriginFilter = true;
+    private final static String SESSION_TIMEOUT_DEFAULT_VALUE = "900";
 
-    private boolean mBeanRegistration = true;
+    private final static String USE_CROSS_SITE_ORIGIN_FILTER_DEFAULT_VALUE = "true";
 
-    private String dolphinPlatformServletMapping = "/dolphin";
+    private final static String M_BEAN_REGISTRATION_DEFAULT_VALUE = "false";
 
-    private String rootPackageForClasspathScan = null;
+    private final static String DOLPHIN_PLATFORM_SERVLET_MAPPING_DEFAULT_VALUE = "/dolphin";
 
-    private String eventbusType = DefaultEventBusProvider.DEFAULT_EVENTBUS_NAME;
+    private final static String ROOT_PACKAGE_FOR_CLASSPATH_SCAN_DEFAULT_VALUE = null;
 
-    private List<String> idFilterUrlMappings = Arrays.asList("/dolphin");
+    private final static String EVENTBUS_TYPE_DEFAULT_VALUE = DefaultEventBusProvider.DEFAULT_EVENTBUS_NAME;
 
-    private Level openDolphinLogLevel = Level.SEVERE;
+    private final static String ID_FILTER_URL_MAPPINGS_DEFAULT_VALUE = "/dolphin";
 
-    private int sessionTimeout = SESSION_TIMEOUT_DEFAULT_VALUE;
+    private final static Level OPEN_DOLPHIN_LOG_LEVEL_DEFAULT_VALUE = Level.SEVERE;
 
-    private long maxPollTime = 5_000;
+    private final static String MAX_POLL_TIME_DEFAULT_VALUE = "5000";
 
-    private int maxClientsPerSession = 10;
+    private final static String MAX_CLIENTS_PER_SESSION_DEFAULT_VALUE = "10";
 
-    private boolean useGc = true;
+    private final static String USE_GC_DEFAULT_VALUE = "true";
 
-    private List<String> accessControlAllowHeaders = Arrays.asList("Content-Type", "x-requested-with", "origin", "authorization", "accept", "client-security-token");
+    private final static String ACTIVE_DEFAULT_VALUE = "true";
 
-    private List<String> accessControlAllowMethods = Arrays.asList("*");
+    private final static String ACCESS_CONTROL_ALLOW_HEADERS_DEFAULT_VALUE = "Content-Type,x-requested-with,origin,authorization,accept,client-security-token";
 
-    private boolean accessControlAllowCredentials = true;
+    private final static String ACCESS_CONTROL_ALLOW_METHODS_DEFAULT_VALUE = "*";
 
-    private long accessControlMaxAge = 86400;
+    private final static String ACCESS_CONTROL_ALLOW_CREDENTIALS_DEFAULT_VALUE = "true";
+
+    private final static String ACCESS_CONTROL_MAX_AGE_DEFAULT_VALUE = "86400";
 
     private final Properties internalProperties;
 
@@ -105,238 +107,132 @@ public class DolphinPlatformConfiguration implements Serializable {
 
     public DolphinPlatformConfiguration(final Properties internalProperties) {
         this.internalProperties = internalProperties;
+    }
 
-        if (internalProperties.containsKey(OPEN_DOLPHIN_LOG_LEVEL)) {
-            String level = internalProperties.getProperty(OPEN_DOLPHIN_LOG_LEVEL);
-            if ("info".equalsIgnoreCase(level.trim())) {
-                openDolphinLogLevel = Level.INFO;
-            } else if ("severe".equalsIgnoreCase(level.trim())) {
-                openDolphinLogLevel = Level.SEVERE;
-            } else if ("all".equalsIgnoreCase(level.trim())) {
-                openDolphinLogLevel = Level.ALL;
-            } else if ("config".equalsIgnoreCase(level.trim())) {
-                openDolphinLogLevel = Level.CONFIG;
-            } else if ("fine".equalsIgnoreCase(level.trim())) {
-                openDolphinLogLevel = Level.FINE;
-            } else if ("finer".equalsIgnoreCase(level.trim())) {
-                openDolphinLogLevel = Level.FINER;
-            } else if ("finest".equalsIgnoreCase(level.trim())) {
-                openDolphinLogLevel = Level.FINEST;
-            } else if ("off".equalsIgnoreCase(level.trim())) {
-                openDolphinLogLevel = Level.OFF;
-            } else if ("warning".equalsIgnoreCase(level.trim())) {
-                openDolphinLogLevel = Level.WARNING;
+    public boolean containsProperty(final String key) {
+        return internalProperties.containsKey(key);
+    }
+
+    public String getProperty(final String key) {
+        return getProperty(key, null);
+    }
+
+    public String getProperty(final String key, final String defaultValue) {
+        return internalProperties.getProperty(key, defaultValue);
+    }
+
+    public Set<String> getPropertyKeys() {
+        Set<String> ret = new HashSet<>();
+        for(Object key : internalProperties.keySet()) {
+            if(key != null) {
+                ret.add(key.toString());
             }
         }
+        return ret;
+    }
 
-        if (internalProperties.containsKey(DOLPHIN_PLATFORM_SERVLET_MAPPING)) {
-            dolphinPlatformServletMapping = internalProperties.getProperty(DOLPHIN_PLATFORM_SERVLET_MAPPING);
-        }
-
-        if (internalProperties.containsKey(ROOT_PACKAGE_FOR_CLASSPATH_SCAN)) {
-            rootPackageForClasspathScan = internalProperties.getProperty(ROOT_PACKAGE_FOR_CLASSPATH_SCAN);
-        }
-
-        if (internalProperties.containsKey(MBEAN_REGISTRATION)) {
-            mBeanRegistration = Boolean.parseBoolean(internalProperties.getProperty(MBEAN_REGISTRATION));
-        }
-
-        if (internalProperties.containsKey(USE_CROSS_SITE_ORIGIN_FILTER)) {
-            useCrossSiteOriginFilter = Boolean.parseBoolean(internalProperties.getProperty(DOLPHIN_PLATFORM_SERVLET_MAPPING));
-        }
-
-        if (internalProperties.containsKey(ACCESS_CONTROL_ALLOW_HEADERS)) {
-            String headers = internalProperties.getProperty(ACCESS_CONTROL_ALLOW_HEADERS);
-            if(null != headers){
-                accessControlAllowHeaders = Arrays.asList(headers.split(","));
-            }
-        }
-
-        if (internalProperties.containsKey(ACCESS_CONTROL_ALLOW_METHODS)) {
-            String headers = internalProperties.getProperty(ACCESS_CONTROL_ALLOW_METHODS);
-            if(null != headers) {
-                accessControlAllowMethods = Arrays.asList(headers.split(","));
-            }
-        }
-
-        if (internalProperties.containsKey(ACCESS_CONTROL_ALLOW_CREDENTIALS)) {
-            accessControlAllowCredentials = Boolean.parseBoolean(internalProperties.getProperty(ACCESS_CONTROL_ALLOW_CREDENTIALS));
-        }
-
-        if (internalProperties.containsKey(ACCESS_CONTROL_MAXAGE)) {
-            accessControlMaxAge = Long.parseLong(internalProperties.getProperty(ACCESS_CONTROL_MAXAGE));
-        }
-
-        if (internalProperties.containsKey(USE_SESSION_INVALIDATION_SERVLET)) {
-            useSessionInvalidationServlet = Boolean.parseBoolean(internalProperties.getProperty(USE_SESSION_INVALIDATION_SERVLET));
-        }
-
-        if (internalProperties.containsKey(GARBAGE_COLLECTION_ACTIVE)) {
-            useGc = Boolean.parseBoolean(internalProperties.getProperty(GARBAGE_COLLECTION_ACTIVE));
-        }
-
-        if (internalProperties.containsKey(SESSION_TIMEOUT)) {
-            sessionTimeout = Integer.parseInt(internalProperties.getProperty(SESSION_TIMEOUT));
-        }
-
-        if (internalProperties.containsKey(MAX_CLIENTS_PER_SESSION)) {
-            maxClientsPerSession = Integer.parseInt(internalProperties.getProperty(MAX_CLIENTS_PER_SESSION));
-        }
-
-        if (internalProperties.containsKey(ID_FILTER_URL_MAPPINGS)) {
-            String content = internalProperties.getProperty(ID_FILTER_URL_MAPPINGS);
-            idFilterUrlMappings = Arrays.asList(content.split(","));
-        }
-
-        if (internalProperties.containsKey(MAX_POLL_TIME)) {
-            maxPollTime = Long.parseLong(internalProperties.getProperty(MAX_POLL_TIME));
-        }
-
-        if (internalProperties.containsKey(EVENTBUS_TYPE)) {
-            eventbusType = internalProperties.getProperty(EVENTBUS_TYPE);
+    public void setProperty(final String key, final String value) {
+        if(value == null) {
+            LOG.warn("Setting property '{}' to null value will be ignored. Only value will be used if property is present");
+        } else {
+            internalProperties.setProperty(key, value);
         }
     }
 
     public int getSessionTimeout() {
-        return sessionTimeout;
+        return Integer.parseInt(internalProperties.getProperty(SESSION_TIMEOUT, SESSION_TIMEOUT_DEFAULT_VALUE));
     }
 
     public boolean isUseCrossSiteOriginFilter() {
-        return useCrossSiteOriginFilter;
+        return Boolean.parseBoolean(internalProperties.getProperty(USE_CROSS_SITE_ORIGIN_FILTER, USE_CROSS_SITE_ORIGIN_FILTER_DEFAULT_VALUE));
     }
 
     public String getDolphinPlatformServletMapping() {
-        return dolphinPlatformServletMapping;
+        return internalProperties.getProperty(DOLPHIN_PLATFORM_SERVLET_MAPPING, DOLPHIN_PLATFORM_SERVLET_MAPPING_DEFAULT_VALUE);
     }
 
     public Level getOpenDolphinLogLevel() {
-        return openDolphinLogLevel;
+        if (internalProperties.containsKey(OPEN_DOLPHIN_LOG_LEVEL)) {
+            String level = internalProperties.getProperty(OPEN_DOLPHIN_LOG_LEVEL);
+            if ("info".equalsIgnoreCase(level.trim())) {
+                return Level.INFO;
+            } else if ("severe".equalsIgnoreCase(level.trim())) {
+                return Level.SEVERE;
+            } else if ("all".equalsIgnoreCase(level.trim())) {
+                return Level.ALL;
+            } else if ("config".equalsIgnoreCase(level.trim())) {
+                return Level.CONFIG;
+            } else if ("fine".equalsIgnoreCase(level.trim())) {
+                return Level.FINE;
+            } else if ("finer".equalsIgnoreCase(level.trim())) {
+                return Level.FINER;
+            } else if ("finest".equalsIgnoreCase(level.trim())) {
+                return Level.FINEST;
+            } else if ("off".equalsIgnoreCase(level.trim())) {
+                return Level.OFF;
+            } else if ("warning".equalsIgnoreCase(level.trim())) {
+                return Level.WARNING;
+            }
+        }
+        return OPEN_DOLPHIN_LOG_LEVEL_DEFAULT_VALUE;
     }
 
     public int getMaxClientsPerSession() {
-        return maxClientsPerSession;
+        return Integer.parseInt(internalProperties.getProperty(MAX_CLIENTS_PER_SESSION, MAX_CLIENTS_PER_SESSION_DEFAULT_VALUE));
     }
 
     public boolean isUseSessionInvalidationServlet() {
-        return useSessionInvalidationServlet;
+        return Boolean.parseBoolean(internalProperties.getProperty(USE_SESSION_INVALIDATION_SERVLET, USE_SESSION_INVALIDATION_SERVLET_DEFAULT_VALUE));
     }
 
     public List<String> getIdFilterUrlMappings() {
-        return Collections.unmodifiableList(idFilterUrlMappings);
+        return Arrays.asList(internalProperties.getProperty(ID_FILTER_URL_MAPPINGS, ID_FILTER_URL_MAPPINGS_DEFAULT_VALUE).split(","));
     }
 
     public boolean isMBeanRegistration() {
-        return mBeanRegistration;
+        return Boolean.parseBoolean(internalProperties.getProperty(MBEAN_REGISTRATION, M_BEAN_REGISTRATION_DEFAULT_VALUE));
     }
 
     public String getRootPackageForClasspathScan() {
-        return rootPackageForClasspathScan;
+        return internalProperties.getProperty(ROOT_PACKAGE_FOR_CLASSPATH_SCAN, ROOT_PACKAGE_FOR_CLASSPATH_SCAN_DEFAULT_VALUE);
     }
 
     public long getMaxPollTime() {
-        return maxPollTime;
+        return Long.parseLong(internalProperties.getProperty(MAX_POLL_TIME, MAX_POLL_TIME_DEFAULT_VALUE));
     }
 
     public boolean isUseGc() {
-        return useGc;
-    }
-
-    public String getProperty(final String key) {
-        return internalProperties.getProperty(key);
+        return Boolean.parseBoolean(internalProperties.getProperty(GARBAGE_COLLECTION_ACTIVE, USE_GC_DEFAULT_VALUE));
     }
 
     public String getEventbusType() {
-        return eventbusType;
-    }
-
-    public void setUseSessionInvalidationServlet(boolean useSessionInvalidationServlet) {
-        this.useSessionInvalidationServlet = useSessionInvalidationServlet;
-    }
-
-    public void setUseCrossSiteOriginFilter(boolean useCrossSiteOriginFilter) {
-        this.useCrossSiteOriginFilter = useCrossSiteOriginFilter;
-    }
-
-    public void setmBeanRegistration(boolean mBeanRegistration) {
-        this.mBeanRegistration = mBeanRegistration;
-    }
-
-    public void setDolphinPlatformServletMapping(String dolphinPlatformServletMapping) {
-        this.dolphinPlatformServletMapping = dolphinPlatformServletMapping;
-    }
-
-    public void setRootPackageForClasspathScan(String rootPackageForClasspathScan) {
-        this.rootPackageForClasspathScan = rootPackageForClasspathScan;
-    }
-
-    public void setEventbusType(String eventbusType) {
-        this.eventbusType = eventbusType;
-    }
-
-    public void setIdFilterUrlMappings(List<String> idFilterUrlMappings) {
-        this.idFilterUrlMappings = idFilterUrlMappings;
-    }
-
-    public void setOpenDolphinLogLevel(Level openDolphinLogLevel) {
-        this.openDolphinLogLevel = openDolphinLogLevel;
-    }
-
-    public void setSessionTimeout(int sessionTimeout) {
-        this.sessionTimeout = sessionTimeout;
-    }
-
-    public void setMaxPollTime(long maxPollTime) {
-        this.maxPollTime = maxPollTime;
-    }
-
-    public void setMaxClientsPerSession(int maxClientsPerSession) {
-        this.maxClientsPerSession = maxClientsPerSession;
-    }
-
-    public void setUseGc(boolean useGc) {
-        this.useGc = useGc;
+        return internalProperties.getProperty(EVENTBUS_TYPE, EVENTBUS_TYPE_DEFAULT_VALUE);
     }
 
     public List<String> getAccessControlAllowHeaders() {
-        return Collections.unmodifiableList(accessControlAllowHeaders);
-    }
-
-    public void setAccessControlAllowHeaders(List<String> accessControlAllowHeaders) {
-        this.accessControlAllowHeaders = accessControlAllowHeaders;
+        return Arrays.asList(internalProperties.getProperty(ACCESS_CONTROL_ALLOW_HEADERS, ACCESS_CONTROL_ALLOW_HEADERS_DEFAULT_VALUE).split(","));
     }
 
     public List<String> getAccessControlAllowMethods() {
-        return accessControlAllowMethods;
-    }
-
-    public void setAccessControlAllowMethods(List<String> accessControlAllowMethods) {
-        this.accessControlAllowMethods = accessControlAllowMethods;
-    }
-
-    public static String getUseCrossSiteOriginFilter() {
-        return USE_CROSS_SITE_ORIGIN_FILTER;
-    }
-
-    public void setAccessControlAllowCredentials(boolean accessControlAllowCredentials) {
-        this.accessControlAllowCredentials = accessControlAllowCredentials;
+        return Arrays.asList(internalProperties.getProperty(ACCESS_CONTROL_ALLOW_METHODS, ACCESS_CONTROL_ALLOW_METHODS_DEFAULT_VALUE).split(","));
     }
 
     public boolean isAccessControlAllowCredentials() {
-        return accessControlAllowCredentials;
+        return Boolean.parseBoolean(internalProperties.getProperty(ACCESS_CONTROL_ALLOW_CREDENTIALS, ACCESS_CONTROL_ALLOW_CREDENTIALS_DEFAULT_VALUE));
     }
 
     public long getAccessControlMaxAge() {
-        return accessControlMaxAge;
+        return Long.parseLong(internalProperties.getProperty(ACCESS_CONTROL_MAXAGE, ACCESS_CONTROL_MAX_AGE_DEFAULT_VALUE));
     }
 
-    public void setAccessControlMaxAge(long accessControlMaxAge) {
-        this.accessControlMaxAge = accessControlMaxAge;
+    public boolean isActive() {
+        return Boolean.parseBoolean(internalProperties.getProperty(PLATFORM_ACTIVE, ACTIVE_DEFAULT_VALUE));
     }
 
-    public void log(){
+    public void log() {
         Set<Map.Entry<Object, Object>> properties = internalProperties.entrySet();
-        for(Map.Entry property:properties){
-            LOG.debug("Dolphin Platform starts with value for "+ property.getKey() +" = "+ property.getValue());
+        for (Map.Entry property : properties) {
+            LOG.debug("Dolphin Platform starts with value for " + property.getKey() + " = " + property.getValue());
         }
     }
 }
