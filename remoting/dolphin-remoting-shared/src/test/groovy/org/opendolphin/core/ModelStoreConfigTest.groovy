@@ -1,12 +1,10 @@
-package org.opendolphin.core;
+package org.opendolphin.core
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.Assert
+import org.junit.Before
+import org.junit.Test
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.util.logging.*;
+import java.util.logging.*
 
 public class ModelStoreConfigTest {
 
@@ -19,7 +17,8 @@ public class ModelStoreConfigTest {
 
     private String getLog(Runnable runnable) {
         Logger logger = Logger.getLogger(ModelStoreConfig.class.getName());
-        try(ByteArrayOutputStream out = new ByteArrayOutputStream(1024)) {
+        try{
+            ByteArrayOutputStream out = new ByteArrayOutputStream(1024);
             Handler stringHandler = new StreamHandler(out, new SimpleFormatter());
             stringHandler.setLevel(Level.WARNING);
             logger.addHandler(stringHandler);
