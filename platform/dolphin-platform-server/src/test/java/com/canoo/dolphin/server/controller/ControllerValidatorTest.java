@@ -6,6 +6,7 @@ import com.canoo.dolphin.server.Param;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
+import javax.annotation.Nonnull;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
@@ -85,6 +86,14 @@ class ValidController {
 
     @DolphinAction
     public void dolphinAction(@Param String test) {
+    }
+
+    @DolphinAction
+    public void dolphinAction2(@Param @Nonnull String test) {
+    }
+
+    @DolphinAction
+    public void dolphinAction3(@Nonnull @Param String test) {
     }
 }
 

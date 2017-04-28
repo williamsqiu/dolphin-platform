@@ -30,7 +30,7 @@ import java.util.logging.Logger;
 
 /**
  * Factory to create a {@link ClientContext}. Normally you will create a {@link ClientContext} at the bootstrap of your
- * client by using the {@link #connect(ClientConfiguration)} method and use this context as a singleton in your client.
+ * client by using the {@link #create(ClientConfiguration)} method and use this context as a singleton in your client.
  * The {@link ClientContext} defines the connection between the client and the Dolphin Platform server endpoint.
  */
 public class ClientContextFactory {
@@ -46,44 +46,19 @@ public class ClientContextFactory {
      * @param clientConfiguration the configuration
      * @return the future
      */
-    public static CompletableFuture<ClientContext> connect(final ClientConfiguration clientConfiguration) {
+    public static ClientContext create(final ClientConfiguration clientConfiguration) {
         Assert.requireNonNull(clientConfiguration, "clientConfiguration");
-        final CompletableFuture<ClientContext> result = new CompletableFuture<>();
 
         Level openDolphinLogLevel = clientConfiguration.getDolphinLogLevel();
         Logger openDolphinLogger = Logger.getLogger("org.opendolphin");
         openDolphinLogger.setLevel(openDolphinLogLevel);
 
-        clientConfiguration.getBackgroundExecutor().execute(new Runnable() {
+        return new ClientContextImpl(clientConfiguration, new Function<ClientModelStore, AbstractClientConnector>() {
             @Override
-            public void run() {
-                try {
-
-                    final ClientContext clientContext = new ClientContextImpl(clientConfiguration, new Function<ClientModelStore, AbstractClientConnector>() {
-                        @Override
-                        public AbstractClientConnector call(final ClientModelStore clientModelStore) {
-                            return new DolphinPlatformHttpClientConnector(clientConfiguration, clientModelStore, new OptimizedJsonCodec(), clientConfiguration.getRemotingExceptionHandler());
-                        }
-                    });
-                    clientContext.connect().get(clientConfiguration.getConnectionTimeout(), TimeUnit.MILLISECONDS);
-
-                    clientConfiguration.getUiExecutor().execute(new Runnable() {
-                        @Override
-                        public void run() {
-                            result.complete(clientContext);
-                        }
-                    });
-                } catch (final Exception exception) {
-                    clientConfiguration.getUiExecutor().execute(new Runnable() {
-                        @Override
-                        public void run() {
-                            result.obtrudeException(new ClientInitializationException("Can not connect to server!", exception));
-                        }
-                    });
-                }
+            public AbstractClientConnector call(final ClientModelStore clientModelStore) {
+                return new DolphinPlatformHttpClientConnector(clientConfiguration, clientModelStore, new OptimizedJsonCodec(), clientConfiguration.getRemotingExceptionHandler());
             }
         });
-        return result;
     }
 
 }

@@ -82,12 +82,7 @@ public abstract class DolphinPlatformApplication extends Application {
 
     private final ClientContext createClientContext(final ClientConfiguration clientConfiguration) throws Exception {
         Assert.requireNonNull(clientConfiguration, "clientConfiguration");
-        connectInProgress.set(true);
-        try {
-            return ClientContextFactory.connect(clientConfiguration).get(clientConfiguration.getConnectionTimeout(), TimeUnit.MILLISECONDS);
-        } finally {
-            connectInProgress.set(false);
-        }
+        return ClientContextFactory.create(clientConfiguration);
     }
 
     /**
@@ -113,10 +108,16 @@ public abstract class DolphinPlatformApplication extends Application {
 
         try {
             clientContext = createClientContext(clientConfiguration);
+            Assert.requireNonNull(clientContext, "clientContext");
+
+            connectInProgress.set(true);
+            clientContext.connect().get(clientConfiguration.getConnectionTimeout(), TimeUnit.MILLISECONDS);
         } catch (ClientInitializationException e) {
             initializationException = e;
         } catch (Exception e) {
             initializationException = new ClientInitializationException("Can not initialize Dolphin Platform Context", e);
+        } finally {
+            connectInProgress.set(false);
         }
     }
 
@@ -194,10 +195,12 @@ public abstract class DolphinPlatformApplication extends Application {
             try {
                 if (clientContext == null) {
                     clientContext = createClientContext(clientConfiguration);
-                } else {
-                    connectInProgress.set(true);
-                    clientContext.connect().get(clientConfiguration.getConnectionTimeout(), TimeUnit.MILLISECONDS);
                 }
+                Assert.requireNonNull(clientContext, "clientContext");
+
+                connectInProgress.set(true);
+                clientContext.connect().get(clientConfiguration.getConnectionTimeout(), TimeUnit.MILLISECONDS);
+
                 Platform.runLater(() -> {
                     try {
                         start(primaryStage, clientContext);

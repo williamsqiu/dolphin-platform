@@ -16,6 +16,7 @@
 package com.canoo.dolphin.integration;
 
 import com.canoo.dolphin.client.*;
+import com.canoo.dolphin.util.Assert;
 import org.testng.annotations.DataProvider;
 
 import java.io.IOException;
@@ -75,7 +76,12 @@ public class AbstractIntegrationTest {
             ClientConfiguration configuration = new ClientConfiguration(new URL(endpoint + "/dolphin"), r -> r.run());
             configuration.setDolphinLogLevel(Level.FINE);
             configuration.setConnectionTimeout(10_000L);
-            return ClientContextFactory.connect(configuration).get(configuration.getConnectionTimeout(), TimeUnit.MILLISECONDS);
+            ClientContext clientContext = ClientContextFactory.create(configuration);
+            Assert.requireNonNull(clientContext, "clientContext");
+
+            clientContext.connect().get(configuration.getConnectionTimeout(), TimeUnit.MILLISECONDS);
+
+            return clientContext;
         } catch (Exception e) {
             throw new RuntimeException("Can not create client context for endpoint " + endpoint, e);
         }
