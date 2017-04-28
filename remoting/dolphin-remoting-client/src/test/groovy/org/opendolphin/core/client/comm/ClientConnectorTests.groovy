@@ -207,8 +207,7 @@ public class ClientConnectorTests extends GroovyTestCase {
         ClientAttribute attribute = new ClientAttribute("attr", "initialValue");
         dolphin.getModelStore().registerAttribute(attribute);
 
-        //TODO: How to convert this to Java
-        assert !clientConnector.dispatchHandle(new ValueChangedCommand(attribute.id, "initialValue", "newValue"));
+        clientConnector.dispatchHandle(new ValueChangedCommand(attribute.id, "initialValue", "newValue"));
         Assert.assertEquals("newValue", attribute.getValue());
     }
 

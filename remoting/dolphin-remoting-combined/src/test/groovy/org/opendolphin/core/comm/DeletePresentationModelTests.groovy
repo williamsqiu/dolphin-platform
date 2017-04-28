@@ -99,7 +99,7 @@ class DeletePresentationModelTests extends GroovyTestCase {
         ClientPresentationModel model = clientDolphin.getModelStore().createModel(modelId, null, new ClientAttribute("someAttribute", "someValue"));
         // the model is in the client model store
         ClientPresentationModel found = clientDolphin.getModelStore().findPresentationModelById(modelId);
-        Assert.assertEquals(model, model);
+        Assert.assertEquals(model, found);
         // ... and in the server model store after roundtrip
         clientDolphin.sync {
             Assert.assertNotNull(serverDolphin.getModelStore().findPresentationModelById(modelId));
