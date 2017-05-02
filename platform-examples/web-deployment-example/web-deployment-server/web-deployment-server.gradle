@@ -7,7 +7,7 @@ compileJava {
 }
 
 dependencies {
-    compile project(':common')
+    compile project(':web-deployment-common')
     compile project(':dolphin-platform-server-spring')
 }
 

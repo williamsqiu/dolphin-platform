@@ -5,7 +5,7 @@
     <information>
         <title>DolphinPlatform Web Deployment Example</title>
         <vendor>Canoo Engineering AG</vendor>
-        <homepage href="http://www.dolphin-platform.io/" />
+        <homepage href="https://github.com/canoo/dolphin-platform" />
         <description>Start DolphinPlatform JavaFx client with JWS</description>
     </information>
 

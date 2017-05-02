@@ -17,7 +17,7 @@ public class ClientApplication extends SimpleDolphinPlatformApplication {
         // for web deployment
         return new URL("http://localhost:8080/WebDeployment/dolphin");
         // for stand alone mode
-        // return new URL("http://localhost:8080/dolphin");
+//         return new URL("http://localhost:8080/WebDeployment/dolphin");
     }
 
     @Override
