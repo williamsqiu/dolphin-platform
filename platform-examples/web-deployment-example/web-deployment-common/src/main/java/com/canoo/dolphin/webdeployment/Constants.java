@@ -1,4 +1,4 @@
-package com.canoo.webdeployment;
+package com.canoo.dolphin.webdeployment;
 
 /**
  * This class defines some constanst that are shared between Java clients and the server. Currently the client access

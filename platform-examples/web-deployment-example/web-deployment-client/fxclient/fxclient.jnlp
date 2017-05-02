@@ -17,6 +17,6 @@
         <jar href="fxclient.jar"  />
     </resources>
     <jfx:javafx-desc  width="800" height="600"
-                      main-class="com.canoo.webdeployment.ClientApplication">
+                      main-class="com.canoo.dolphin.webdeployment.client.ClientApplication">
     </jfx:javafx-desc>
 </jnlp>

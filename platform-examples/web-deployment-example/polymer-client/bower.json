@@ -1,5 +1,5 @@
 {
-  "name": "Test",
+  "name": "polymer-client",
   "ignore": [
     "**/.*",
     "node_modules",

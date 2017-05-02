@@ -1,6 +1,6 @@
 apply plugin: 'application'
 
-mainClassName = 'com.canoo.webdeployment.ClientApplication'
+mainClassName = 'com.canoo.dolphin.webdeployment.client.ClientApplication'
 
 compileJava {
     sourceCompatibility = '1.8'

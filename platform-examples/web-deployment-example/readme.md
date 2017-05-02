@@ -81,5 +81,5 @@ After downloading file, you run as a Webstart application
 
 ## Authors
 
-* **Janak Mulani**
-* **Ganesh Deshvini**
+* **Janak Mulani (janak.mulani@canoo.com)**
+* **Ganesh Deshvini (ganesh.Deshvini@canoo.com)**

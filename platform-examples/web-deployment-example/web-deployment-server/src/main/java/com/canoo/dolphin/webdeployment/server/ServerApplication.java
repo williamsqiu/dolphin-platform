@@ -1,4 +1,4 @@
-package com.canoo.webdeployment;
+package com.canoo.dolphin.webdeployment.server;
 
 import com.canoo.dolphin.server.spring.DolphinPlatformApplication;
 import org.springframework.boot.SpringApplication;

@@ -1,9 +1,9 @@
 
-package com.canoo.webdeployment;
+package com.canoo.dolphin.webdeployment.client;
 
 import com.canoo.dolphin.client.ClientContext;
 import com.canoo.dolphin.client.javafx.SimpleDolphinPlatformApplication;
-import com.canoo.webdeployment.view.MyView;
+import com.canoo.dolphin.webdeployment.client.view.MyView;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
@@ -14,10 +14,7 @@ public class ClientApplication extends SimpleDolphinPlatformApplication {
 
     @Override
     protected URL getServerEndpoint() throws MalformedURLException {
-        // for web deployment
-        return new URL("http://localhost:8080/WebDeployment/dolphin");
-        // for stand alone mode
-//         return new URL("http://localhost:8080/WebDeployment/dolphin");
+         return new URL("http://localhost:8080/WebDeployment/dolphin");
     }
 
     @Override
