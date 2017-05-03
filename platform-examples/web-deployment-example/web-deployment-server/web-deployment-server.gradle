@@ -17,7 +17,7 @@ war {
     }
 
     into 'fxclient', {
-        from '../client/fxclient'
+        from '../web-deployment-client/fxclient'
     }
 }
 
