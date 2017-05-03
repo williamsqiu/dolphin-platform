@@ -50,13 +50,13 @@ directory & then replace the file name in the **pom.xml** file of client as well
 #### Generate war file
 Build the client
 ```
-cd dolphin-platform-examples/platform-examples/web-deployment-example/client
+cd dolphin-platform-examples/platform-examples/web-deployment-example/web-deployment-client
 gradle clean build
 ```
 
 Build the server
 ```
-cd dolphin-platform-examples/platform-examples/web-deployment-example/server
+cd dolphin-platform-examples/platform-examples/web-deployment-example/web-deployment-server
 gradle clean build
 ```
 
