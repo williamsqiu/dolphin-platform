@@ -47,7 +47,7 @@ public class CommandBatcherQueue implements DataflowQueue<List<CommandAndHandler
     }
 
     @Override
-    public List<CommandAndHandler> getVal(long value, TimeUnit timeUnit) throws InterruptedException {
+    public List<CommandAndHandler> getVal(final long value, final TimeUnit timeUnit) throws InterruptedException {
         queueLock.lock();
         try {
             if (internalQueue.isEmpty()) {
@@ -63,7 +63,7 @@ public class CommandBatcherQueue implements DataflowQueue<List<CommandAndHandler
     }
 
     @Override
-    public void add(List<CommandAndHandler> value) {
+    public void add(final List<CommandAndHandler> value) {
         queueLock.lock();
         try {
             internalQueue.add(value);

@@ -46,7 +46,7 @@ public class ClientModelStore extends ModelStore<ClientAttribute, ClientPresenta
 
 
     @Override
-    public boolean add(ClientPresentationModel model) {
+    public boolean add(final ClientPresentationModel model) {
         boolean success = super.add(model);
         if (success) {
             List<ClientAttribute> attributes = model.getAttributes();
@@ -60,11 +60,11 @@ public class ClientModelStore extends ModelStore<ClientAttribute, ClientPresenta
         return success;
     }
 
-    public void delete(ClientPresentationModel model) {
+    public void delete(final ClientPresentationModel model) {
         delete(model, true);
     }
 
-    public void delete(ClientPresentationModel model, boolean notify) {
+    public void delete(final ClientPresentationModel model, boolean notify) {
         if (model == null) return;
         if (containsPresentationModel(model.getId())) {
             remove(model);
@@ -75,7 +75,7 @@ public class ClientModelStore extends ModelStore<ClientAttribute, ClientPresenta
     }
 
     @Override
-    public boolean remove(ClientPresentationModel model) {
+    public boolean remove(final ClientPresentationModel model) {
         boolean success = super.remove(model);
         for (ClientAttribute attribute : model.getAttributes()) {
             attribute.removePropertyChangeListener(attributeChangeListener);
@@ -85,13 +85,13 @@ public class ClientModelStore extends ModelStore<ClientAttribute, ClientPresenta
 
     @Override
     @Deprecated
-    public void registerAttribute(ClientAttribute attribute) {
+    public void registerAttribute(final ClientAttribute attribute) {
         super.registerAttribute(attribute);
         attribute.addPropertyChangeListener(attributeChangeListener);
     }
 
 
-    public ClientPresentationModel createModel(String id, String presentationModelType, ClientAttribute... attributes) {
+    public ClientPresentationModel createModel(final String id, final String presentationModelType, final ClientAttribute... attributes) {
         ClientPresentationModel result = new ClientPresentationModel(id, Arrays.asList(attributes));
         result.setPresentationModelType(presentationModelType);
         add(result);

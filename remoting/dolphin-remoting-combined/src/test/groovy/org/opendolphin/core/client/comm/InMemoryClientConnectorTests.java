@@ -44,7 +44,7 @@ public class InMemoryClientConnectorTests extends GroovyTestCase {
         clientDolphin.setClientModelStore(modelStore);
 
         //when:
-        List<Command> ret = connector.transmit(Collections.singletonList(new EmptyNotification()));
+        List<Command> ret = connector.transmit(Collections.<Command>singletonList(new EmptyNotification()));
 
         //then:
         Assert.assertEquals(Collections.emptyList(), ret);
@@ -78,7 +78,7 @@ public class InMemoryClientConnectorTests extends GroovyTestCase {
         clientDolphin.setClientModelStore(modelStore);
 
         //when:
-        ((InMemoryClientConnector) connector).transmit(Collections.singletonList(new EmptyNotification()));
+        ((InMemoryClientConnector) connector).transmit(Collections.<Command>singletonList(new EmptyNotification()));
 
         //then:
         Assert.assertTrue(serverCalled.get());
@@ -111,7 +111,7 @@ public class InMemoryClientConnectorTests extends GroovyTestCase {
         ((InMemoryClientConnector) connector).setSleepMillis(10);
 
         //when:
-        ((InMemoryClientConnector) connector).transmit(Collections.singletonList(new EmptyNotification()));
+        ((InMemoryClientConnector) connector).transmit(Collections.<Command>singletonList(new EmptyNotification()));
 
         //then:
         Assert.assertTrue(serverCalled.get());

@@ -31,11 +31,11 @@ public final class DTO {
 
     private List<Slot> slots;
 
-    public DTO(List<Slot> newSlots) {
+    public DTO(final List<Slot> newSlots) {
         slots = newSlots;
     }
 
-    public DTO(Slot... newSlots) {
+    public DTO(final Slot... newSlots) {
         this(Arrays.asList(newSlots));
     }
 

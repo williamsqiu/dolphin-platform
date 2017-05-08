@@ -35,7 +35,7 @@ public class ServerDolphinFactory {
      * @param serverConnector
      * @return
      */
-    public static ServerDolphin create(ServerModelStore serverModelStore, ServerConnector serverConnector) {
+    public static ServerDolphin create(final ServerModelStore serverModelStore, final ServerConnector serverConnector) {
         return new DefaultServerDolphin(serverModelStore, serverConnector);
     }
 }

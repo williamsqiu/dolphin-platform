@@ -16,9 +16,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
 public class BlindCommandBatcherTest extends GroovyTestCase {
-
-    private BlindCommandBatcher batcher;
-
     @Override
     protected void setUp() throws Exception {
         batcher = new BlindCommandBatcher();
@@ -41,12 +38,14 @@ public class BlindCommandBatcherTest extends GroovyTestCase {
             batcher.batch(commandAndHandler);
         }
 
+
         try {
             Assert.assertEquals(list, batcher.getWaitingBatches().getVal());
         } catch (InterruptedException e) {
             e.printStackTrace();
             Assert.fail(e.getMessage());
         }
+
     }
 
     public void testNonBlindForcesBatchNonMerging() {
@@ -62,10 +61,10 @@ public class BlindCommandBatcherTest extends GroovyTestCase {
         Assert.assertTrue(batcher.isEmpty());
 
         List<CommandAndHandler> list = new ArrayList<CommandAndHandler>();
-        list.add(new CommandAndHandler(null));
-        list.add(new CommandAndHandler(null));
-        list.add(new CommandAndHandler(null));
-        list.add(new CommandAndHandler(null, new OnFinishedHandler() {
+        ((ArrayList<CommandAndHandler>) list).add(new CommandAndHandler(null));
+        ((ArrayList<CommandAndHandler>) list).add(new CommandAndHandler(null));
+        ((ArrayList<CommandAndHandler>) list).add(new CommandAndHandler(null));
+        ((ArrayList<CommandAndHandler>) list).add(new CommandAndHandler(null, new OnFinishedHandler() {
             @Override
             public void onFinished() {
 
@@ -76,19 +75,22 @@ public class BlindCommandBatcherTest extends GroovyTestCase {
             batcher.batch(commandAndHandler);
         }
 
-        Assert.assertEquals(4, list.size());
+
+        Assert.assertEquals(4, ((ArrayList<CommandAndHandler>) list).size());
         try {
-            Assert.assertEquals(list.subList(0, 3), batcher.getWaitingBatches().getVal());
+            Assert.assertEquals(((ArrayList<CommandAndHandler>) list).subList(0, 3), batcher.getWaitingBatches().getVal());
         } catch (InterruptedException e) {
             e.printStackTrace();
             Assert.fail(e.getMessage());
         }
+
         try {
-            Assert.assertEquals(Collections.singletonList(list.get(3)), batcher.getWaitingBatches().getVal());
+            Assert.assertEquals(Collections.singletonList(((ArrayList<CommandAndHandler>) list).get(3)), batcher.getWaitingBatches().getVal());
         } catch (InterruptedException e) {
             e.printStackTrace();
             Assert.fail(e.getMessage());
         }
+
     }
 
     public void testMaxBatchSizeNonMerging() {
@@ -128,6 +130,7 @@ public class BlindCommandBatcherTest extends GroovyTestCase {
             Assert.fail(e.getMessage());
         }
 
+
     }
 
     public void testMergeInOneCommand() {
@@ -135,24 +138,24 @@ public class BlindCommandBatcherTest extends GroovyTestCase {
         //given:
         LogConfig.logOnLevel(Level.ALL);
         batcher.setMergeValueChanges(true);
-        List<CommandAndHandler> list = new ArrayList<>();
+        List<CommandAndHandler> list = new ArrayList<CommandAndHandler>();
         ValueChangedCommand command = new ValueChangedCommand();
         command.setAttributeId("0");
         command.setOldValue(0);
         command.setNewValue(1);
-        list.add(new CommandAndHandler(command));
+        ((ArrayList<CommandAndHandler>) list).add(new CommandAndHandler(command));
 
         ValueChangedCommand command1 = new ValueChangedCommand();
         command1.setAttributeId("0");
         command1.setOldValue(1);
         command1.setNewValue(2);
-        list.add(new CommandAndHandler(command1));
+        ((ArrayList<CommandAndHandler>) list).add(new CommandAndHandler(command1));
 
         ValueChangedCommand command2 = new ValueChangedCommand();
         command2.setAttributeId("0");
         command2.setOldValue(2);
         command2.setNewValue(3);
-        list.add(new CommandAndHandler(command2));
+        ((ArrayList<CommandAndHandler>) list).add(new CommandAndHandler(command2));
 
         //when:
         for (CommandAndHandler commandAndHandler : list) {
@@ -174,21 +177,22 @@ public class BlindCommandBatcherTest extends GroovyTestCase {
             Assert.fail(e.getMessage());
         }
 
+
     }
 
     public void testMergeCreatePmAfterValueChange() {
 
         //given:
         batcher.setMergeValueChanges(true);
-        List<CommandAndHandler> list = new ArrayList<>();
+        List<CommandAndHandler> list = new ArrayList<CommandAndHandler>();
         ValueChangedCommand command = new ValueChangedCommand();
         command.setAttributeId("0");
         command.setOldValue(0);
         command.setNewValue(1);
 
 
-        list.add(new CommandAndHandler(command));
-        list.add(new CommandAndHandler(new CreatePresentationModelCommand()));
+        ((ArrayList<CommandAndHandler>) list).add(new CommandAndHandler(command));
+        ((ArrayList<CommandAndHandler>) list).add(new CommandAndHandler(new CreatePresentationModelCommand()));
 
         //when:
         for (CommandAndHandler commandAndHandler : list) {
@@ -207,6 +211,7 @@ public class BlindCommandBatcherTest extends GroovyTestCase {
             e.printStackTrace();
             Assert.fail(e.getMessage());
         }
+
     }
 
     public void testDropMultipleGetPmCommands() {
@@ -225,10 +230,10 @@ public class BlindCommandBatcherTest extends GroovyTestCase {
             }
 
         };
-        List<CommandAndHandler> list = new ArrayList<>();
-        list.add(new CommandAndHandler(cmd1, sameHandler));
-        list.add(new CommandAndHandler(cmd2, sameHandler));
-        list.add(new CommandAndHandler(cmd2));
+        List<CommandAndHandler> list = new ArrayList<CommandAndHandler>();
+        ((ArrayList<CommandAndHandler>) list).add(new CommandAndHandler(cmd1, sameHandler));
+        ((ArrayList<CommandAndHandler>) list).add(new CommandAndHandler(cmd2, sameHandler));
+        ((ArrayList<CommandAndHandler>) list).add(new CommandAndHandler(cmd2));
 
 
         //when:
@@ -247,6 +252,7 @@ public class BlindCommandBatcherTest extends GroovyTestCase {
             e.printStackTrace();
             Assert.fail(e.getMessage());
         }
+
     }
 
     public void testVeryManyGetPmCommands() {
@@ -278,11 +284,14 @@ public class BlindCommandBatcherTest extends GroovyTestCase {
 
             }
 
+
             Assert.assertEquals(300, resultCount.intValue());
         } catch (InterruptedException e) {
             e.printStackTrace();
             Assert.fail(e.getMessage());
         }
+
     }
 
+    private BlindCommandBatcher batcher;
 }

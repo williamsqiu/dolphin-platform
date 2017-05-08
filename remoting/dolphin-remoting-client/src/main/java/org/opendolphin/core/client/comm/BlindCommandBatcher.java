@@ -76,7 +76,7 @@ public class BlindCommandBatcher extends CommandBatcher {
     }
 
     @Override
-    public void batch(CommandAndHandler commandWithHandler) {
+    public void batch(final CommandAndHandler commandWithHandler) {
         LOG.trace("batching {} with {} handler",  commandWithHandler.getCommand(), (commandWithHandler.getHandler() != null ? "" : "out"));
 
         if (canBeDropped(commandWithHandler)) {
@@ -107,7 +107,7 @@ public class BlindCommandBatcher extends CommandBatcher {
 
     }
 
-    protected boolean canBeDropped(CommandAndHandler commandWithHandler) {
+    protected boolean canBeDropped(final CommandAndHandler commandWithHandler) {
         if (!(commandWithHandler.getCommand() instanceof GetPresentationModelCommand)) {
             return false;
         }
@@ -186,7 +186,7 @@ public class BlindCommandBatcher extends CommandBatcher {
         });
     }
 
-    protected CommandAndHandler batchBlinds(List<CommandAndHandler> queue) {
+    protected CommandAndHandler batchBlinds(final List<CommandAndHandler> queue) {
         if (queue.isEmpty()) {
             return null;
         }
@@ -208,7 +208,7 @@ public class BlindCommandBatcher extends CommandBatcher {
         return val;// may be null or a cwh that has a handler
     }
 
-    protected void addToBlindsOrMerge(List<CommandAndHandler> blindCommands, CommandAndHandler val) {
+    protected void addToBlindsOrMerge(final List<CommandAndHandler> blindCommands, final CommandAndHandler val) {
         if (!wasMerged(blindCommands, val)) {
             blindCommands.add(val);
             if (val.getCommand() instanceof ValueChangedCommand) {
@@ -219,7 +219,7 @@ public class BlindCommandBatcher extends CommandBatcher {
 
     }
 
-    protected boolean wasMerged(List<CommandAndHandler> blindCommands, CommandAndHandler val) {
+    protected boolean wasMerged(final List<CommandAndHandler> blindCommands, final CommandAndHandler val) {
         if (!mergeValueChanges) {
             return false;
         }
@@ -264,7 +264,7 @@ public class BlindCommandBatcher extends CommandBatcher {
         return true;
     }
 
-    protected CommandAndHandler take(List<CommandAndHandler> intern) {
+    protected CommandAndHandler take(final List<CommandAndHandler> intern) {
         if (intern.isEmpty()) {
             return null;
         }
@@ -284,7 +284,7 @@ public class BlindCommandBatcher extends CommandBatcher {
         return deferMillis;
     }
 
-    public void setDeferMillis(long deferMillis) {
+    public void setDeferMillis(final long deferMillis) {
         this.deferMillis = deferMillis;
     }
 
@@ -292,11 +292,11 @@ public class BlindCommandBatcher extends CommandBatcher {
         return maxBatchSize;
     }
 
-    public void setMaxBatchSize(int maxBatchSize) {
+    public void setMaxBatchSize(final int maxBatchSize) {
         this.maxBatchSize = maxBatchSize;
     }
 
-    public void setMergeValueChanges(boolean mergeValueChanges) {
+    public void setMergeValueChanges(final boolean mergeValueChanges) {
         this.mergeValueChanges = mergeValueChanges;
     }
 

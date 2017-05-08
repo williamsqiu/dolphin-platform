@@ -24,10 +24,10 @@ import java.util.List;
 
 public class DeletePresentationModelAction extends DolphinServerAction {
 
-    public void registerIn(ActionRegistry registry) {
+    public void registerIn(final ActionRegistry registry) {
         registry.register(DeletedPresentationModelNotification.class, new CommandHandler<DeletedPresentationModelNotification>() {
             @Override
-            public void handleCommand(final DeletedPresentationModelNotification command, List response) {
+            public void handleCommand(final DeletedPresentationModelNotification command, final List response) {
                 ServerPresentationModel model = getServerModelStore().findPresentationModelById(command.getPmId());
                 getServerModelStore().checkClientRemoved(model);
             }

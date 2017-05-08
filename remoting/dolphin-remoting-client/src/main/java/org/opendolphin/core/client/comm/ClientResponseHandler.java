@@ -40,7 +40,7 @@ public class ClientResponseHandler {
         this.clientModelStore = Objects.requireNonNull(clientModelStore);
     }
 
-    public void dispatchHandle(Command command) {
+    public void dispatchHandle(final Command command) {
         if (command instanceof DeletePresentationModelCommand) {
             handleDeletePresentationModelCommand((DeletePresentationModelCommand) command);
         } else if (command instanceof CreatePresentationModelCommand) {
@@ -55,7 +55,7 @@ public class ClientResponseHandler {
 
     }
 
-    private void handleDeletePresentationModelCommand(DeletePresentationModelCommand serverCommand) {
+    private void handleDeletePresentationModelCommand(final DeletePresentationModelCommand serverCommand) {
         ClientPresentationModel model = clientModelStore.findPresentationModelById(serverCommand.getPmId());
         if (model == null) {
             return;
@@ -63,7 +63,7 @@ public class ClientResponseHandler {
         clientModelStore.delete(model);
     }
 
-    private void handleCreatePresentationModelCommand(CreatePresentationModelCommand serverCommand) {
+    private void handleCreatePresentationModelCommand(final CreatePresentationModelCommand serverCommand) {
         if (clientModelStore.containsPresentationModel(serverCommand.getPmId())) {
             throw new IllegalStateException("There already is a presentation model with id '" + serverCommand.getPmId() + "' known to the client.");
         }
@@ -94,7 +94,7 @@ public class ClientResponseHandler {
         clientModelStore.updateQualifiers(model);
     }
 
-    private void handleValueChangedCommand(ValueChangedCommand serverCommand) {
+    private void handleValueChangedCommand(final ValueChangedCommand serverCommand) {
         Attribute attribute = clientModelStore.findAttributeById(serverCommand.getAttributeId());
         if (attribute == null) {
             LOG.warn("C: attribute with id '{}' not found, cannot update old value '{}' to new value '{}'", serverCommand.getAttributeId() ,serverCommand.getOldValue(), serverCommand.getNewValue() );
@@ -117,7 +117,7 @@ public class ClientResponseHandler {
         return;
     }
 
-    private void handleAttributeMetadataChangedCommand(AttributeMetadataChangedCommand serverCommand) {
+    private void handleAttributeMetadataChangedCommand(final AttributeMetadataChangedCommand serverCommand) {
         ClientAttribute attribute = clientModelStore.findAttributeById(serverCommand.getAttributeId());
         if (attribute == null) {
             return;
@@ -136,7 +136,7 @@ public class ClientResponseHandler {
         }
     }
 
-    public void setStrictMode(boolean strictMode) {
+    public void setStrictMode(final boolean strictMode) {
         this.strictMode = strictMode;
     }
 

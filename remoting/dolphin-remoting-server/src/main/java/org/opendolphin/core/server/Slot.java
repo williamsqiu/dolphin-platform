@@ -30,7 +30,7 @@ public final class Slot {
 
     private final String qualifier;
 
-    public Slot(String propertyName, Object value) {
+    public Slot(final String propertyName, final Object value) {
         this(propertyName, value, null);
     }
 
@@ -38,7 +38,7 @@ public final class Slot {
      * Convenience method with positional parameters to create an attribute specification from name/value pairs.
      * Especially useful when creating DTO objects.
      */
-    public Slot(String propertyName, Object value, String qualifier) {
+    public Slot(final String propertyName, final Object value, final String qualifier) {
         this.propertyName = propertyName;
         this.value = value;
         this.qualifier = qualifier;

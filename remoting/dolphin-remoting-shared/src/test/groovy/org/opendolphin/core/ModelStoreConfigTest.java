@@ -1,15 +1,13 @@
-package org.opendolphin.core
+package org.opendolphin.core;
 
-import org.junit.Assert
-import org.junit.Before
-import org.junit.Test
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
-import java.util.logging.*
+import java.io.ByteArrayOutputStream;
+import java.util.logging.*;
 
 public class ModelStoreConfigTest {
-
-    private ModelStoreConfig modelStoreConfig;
-
     @Before
     public void setUp() {
         modelStoreConfig = new ModelStoreConfig();
@@ -17,7 +15,7 @@ public class ModelStoreConfigTest {
 
     private String getLog(Runnable runnable) {
         Logger logger = Logger.getLogger(ModelStoreConfig.class.getName());
-        try{
+        try {
             ByteArrayOutputStream out = new ByteArrayOutputStream(1024);
             Handler stringHandler = new StreamHandler(out, new SimpleFormatter());
             stringHandler.setLevel(Level.WARNING);
@@ -28,10 +26,11 @@ public class ModelStoreConfigTest {
             ((StreamHandler) stringHandler).flush();
             logger.removeHandler(stringHandler);
             return out.toString();
-        } catch (IOException e) {
+        } catch (Exception e) {
             Assert.fail(e.getMessage());
             throw new RuntimeException("error", e);
         }
+
     }
 
     @Test
@@ -146,4 +145,6 @@ public class ModelStoreConfigTest {
         Assert.assertTrue(log2.contains("typeCapacity"));
         Assert.assertEquals(5, modelStoreConfig.getTypeCapacity());
     }
+
+    private ModelStoreConfig modelStoreConfig;
 }

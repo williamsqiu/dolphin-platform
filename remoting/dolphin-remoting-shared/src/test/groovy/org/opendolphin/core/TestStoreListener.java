@@ -1,9 +1,6 @@
 package org.opendolphin.core;
 
 public class TestStoreListener implements ModelStoreListener {
-
-    private ModelStoreEvent event;
-
     @Override
     public void modelStoreChanged(ModelStoreEvent event) {
         this.event = event;
@@ -16,4 +13,6 @@ public class TestStoreListener implements ModelStoreListener {
     public void setEvent(ModelStoreEvent event) {
         this.event = event;
     }
+
+    private ModelStoreEvent event;
 }

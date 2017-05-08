@@ -27,21 +27,21 @@ public final class ClientPresentationModel extends BasePresentationModel<ClientA
 
     private boolean clientSideOnly = false;
 
-    public ClientPresentationModel(List<ClientAttribute> attributes) {
+    public ClientPresentationModel(final List<ClientAttribute> attributes) {
         this(null, attributes);
     }
 
     /**
      * @param id if id is null or empty, an auto-generated id will be used
      */
-    public ClientPresentationModel(String id, List<ClientAttribute> attributes) {
+    public ClientPresentationModel(final String id, final List<ClientAttribute> attributes) {
         super(createUniqueId(id), attributes);
         if (id != null && id.endsWith(CLIENT_PM_AUTO_ID_SUFFIX)) {
             throw new IllegalArgumentException("presentation model with self-provided id \'" + id + "\' may not end with suffix \'" + CLIENT_PM_AUTO_ID_SUFFIX + "\' since that is reserved.");
         }
     }
 
-    private static String createUniqueId(String id) {
+    private static String createUniqueId(final String id) {
         return (id != null && id.length() > 0) ? id : "" + instanceCount++ + CLIENT_PM_AUTO_ID_SUFFIX;
     }
 
@@ -49,7 +49,7 @@ public final class ClientPresentationModel extends BasePresentationModel<ClientA
         return clientSideOnly;
     }
 
-    public void setClientSideOnly(boolean clientSideOnly) {
+    public void setClientSideOnly(final boolean clientSideOnly) {
         this.clientSideOnly = clientSideOnly;
     }
 

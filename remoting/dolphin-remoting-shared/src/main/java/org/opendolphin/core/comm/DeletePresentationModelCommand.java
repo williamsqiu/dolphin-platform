@@ -17,10 +17,12 @@ package org.opendolphin.core.comm;
 
 public final class DeletePresentationModelCommand extends Command {
 
+    private String pmId;
+
     public DeletePresentationModelCommand() {
     }
 
-    public DeletePresentationModelCommand(String pmId) {
+    public DeletePresentationModelCommand(final String pmId) {
         this.pmId = pmId;
     }
 
@@ -28,7 +30,7 @@ public final class DeletePresentationModelCommand extends Command {
         return pmId;
     }
 
-    public void setPmId(String pmId) {
+    public void setPmId(final String pmId) {
         this.pmId = pmId;
     }
 
@@ -37,5 +39,4 @@ public final class DeletePresentationModelCommand extends Command {
         return super.toString() + " pmId " + pmId;
     }
 
-    private String pmId;
 }

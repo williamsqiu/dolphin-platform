@@ -28,10 +28,10 @@ public class StoreAttributeAction extends DolphinServerAction {
 
     private static final Logger LOG = Logger.getLogger(StoreAttributeAction.class.getName());
 
-    public void registerIn(ActionRegistry registry) {
+    public void registerIn(final ActionRegistry registry) {
         registry.register(ChangeAttributeMetadataCommand.class, new CommandHandler<ChangeAttributeMetadataCommand>() {
             @Override
-            public void handleCommand(final ChangeAttributeMetadataCommand command, List response) {
+            public void handleCommand(final ChangeAttributeMetadataCommand command, final List response) {
                 final Attribute attribute = getServerModelStore().findAttributeById(command.getAttributeId());
                 if (attribute == null) {
                     LOG.warning("Cannot find attribute with id '" + command.getAttributeId() + "'. Metadata remains unchanged.");

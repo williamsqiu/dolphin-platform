@@ -32,11 +32,11 @@ public abstract class DolphinServerAction implements ServerAction {
 
     private List<Command> dolphinResponse;
 
-    public void presentationModel(String id, String presentationModelType, DTO dto) {
+    public void presentationModel(final String id, final String presentationModelType, final DTO dto) {
         ServerModelStore.presentationModelCommand(dolphinResponse, id, presentationModelType, dto);
     }
 
-    public void changeValue(ServerAttribute attribute, String value) {
+    public void changeValue(final ServerAttribute attribute, final String value) {
         ServerModelStore.changeValueCommand(dolphinResponse, attribute, value);
     }
 
@@ -45,7 +45,7 @@ public abstract class DolphinServerAction implements ServerAction {
     }
 
     @Deprecated
-    public void setServerModelStore(ServerModelStore serverModelStore) {
+    public void setServerModelStore(final ServerModelStore serverModelStore) {
         this.serverModelStore = serverModelStore;
     }
 
@@ -53,7 +53,7 @@ public abstract class DolphinServerAction implements ServerAction {
         return dolphinResponse;
     }
 
-    public void setDolphinResponse(List<Command> dolphinResponse) {
+    public void setDolphinResponse(final List<Command> dolphinResponse) {
         this.dolphinResponse = dolphinResponse;
     }
 

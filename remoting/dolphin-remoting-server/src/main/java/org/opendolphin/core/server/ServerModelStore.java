@@ -60,7 +60,7 @@ public class ServerModelStore extends ModelStore<ServerAttribute, ServerPresenta
     public ServerModelStore() {
     }
 
-    public ServerModelStore(ModelStoreConfig config) {
+    public ServerModelStore(final ModelStoreConfig config) {
         super(config);
     }
 
@@ -81,12 +81,12 @@ public class ServerModelStore extends ModelStore<ServerAttribute, ServerPresenta
     /**
      * A shared mutable state that is safe to use since we are thread-confined
      */
-    public void setCurrentResponse(List<Command> currentResponse) {
+    public void setCurrentResponse(final List<Command> currentResponse) {
         this.currentResponse = currentResponse;
     }
 
     @Override
-    public boolean add(ServerPresentationModel model) {
+    public boolean add(final ServerPresentationModel model) {
         boolean added = super.add(model);
         if (!added) {
             throw new IllegalStateException("Model " + model + " already defined on server!");
@@ -96,7 +96,7 @@ public class ServerModelStore extends ModelStore<ServerAttribute, ServerPresenta
         return true;
     }
 
-    public boolean checkClientAdded(ServerPresentationModel model) {
+    public boolean checkClientAdded(final ServerPresentationModel model) {
         boolean added = super.add(model);
         //FIXME: Currently the client has the same event for a add answer and a add trigger
 
@@ -114,7 +114,7 @@ public class ServerModelStore extends ModelStore<ServerAttribute, ServerPresenta
     /**
      * Convenience method to let Dolphin removePresentationModel a presentation model directly on the server and notify the client.
      */
-    public boolean remove(ServerPresentationModel pm) {
+    public boolean remove(final ServerPresentationModel pm) {
         boolean deleted = super.remove(pm);
         if (!deleted) {
             throw new IllegalStateException("Model " + pm + " not found on the server!");
@@ -123,7 +123,7 @@ public class ServerModelStore extends ModelStore<ServerAttribute, ServerPresenta
         return deleted;
     }
 
-    public boolean checkClientRemoved(ServerPresentationModel pm) {
+    public boolean checkClientRemoved(final ServerPresentationModel pm) {
         boolean deleted = super.remove(pm);
 
         //FIXME: Currently the client has the same event for a remove answer and a remove trigger
@@ -137,7 +137,7 @@ public class ServerModelStore extends ModelStore<ServerAttribute, ServerPresenta
      * Convenience method to let Dolphin delete a presentation model on the client side
      */
     @Deprecated
-    public static void deleteCommand(List<Command> response, String pmId) {
+    public static void deleteCommand(final List<Command> response, final String pmId) {
         if (response == null || StringUtil.isBlank(pmId)) {
             return;
         }
@@ -151,7 +151,7 @@ public class ServerModelStore extends ModelStore<ServerAttribute, ServerPresenta
      * @param attribute must not be null
      */
     @Deprecated
-    public static void changeValueCommand(List<Command> response, ServerAttribute attribute, Object value) {
+    public static void changeValueCommand(final List<Command> response, final ServerAttribute attribute, final Object value) {
         if (response == null) {
             return;
         }
@@ -166,7 +166,7 @@ public class ServerModelStore extends ModelStore<ServerAttribute, ServerPresenta
      * @deprecated use forceChangeValueCommand(Object, List, ServerAttribute). You can use the "inline method refactoring". Will be removed in version 1.0!
      */
     @Deprecated
-    public static void forceChangeValue(Object value, List<Command> response, ServerAttribute attribute) {
+    public static void forceChangeValue(final Object value, final List<Command> response, final ServerAttribute attribute) {
         response.add(new ValueChangedCommand(attribute.getId(), attribute.getValue(), value));
     }
 
@@ -176,7 +176,7 @@ public class ServerModelStore extends ModelStore<ServerAttribute, ServerPresenta
      * The server model store remains untouched until the client has issued the notification.
      */
     @Deprecated
-    public static void presentationModelCommand(List<Command> response, String id, String presentationModelType, DTO dto) {
+    public static void presentationModelCommand(final List<Command> response, final String id, final String presentationModelType, final DTO dto) {
         if (response == null) {
             return;
         }
@@ -197,7 +197,7 @@ public class ServerModelStore extends ModelStore<ServerAttribute, ServerPresenta
      *
      * @throws IllegalArgumentException if a presentation model for this id already exists. No commands are sent in this case.
      */
-    public ServerPresentationModel presentationModel(String id, String presentationModelType, DTO dto) {
+    public ServerPresentationModel presentationModel(final String id, final String presentationModelType, final DTO dto) {
         List<ServerAttribute> attributes = new ArrayList<ServerAttribute>();
         for (final Slot slot : dto.getSlots()) {
             final ServerAttribute result = new ServerAttribute(slot.getPropertyName(), slot.getValue(), slot.getQualifier());

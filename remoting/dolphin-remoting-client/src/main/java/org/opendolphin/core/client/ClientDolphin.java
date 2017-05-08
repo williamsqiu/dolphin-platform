@@ -61,7 +61,7 @@ public class ClientDolphin implements Dolphin<ClientAttribute, ClientPresentatio
      * @param clientModelStore
      */
     @Deprecated
-    public void setClientModelStore(ClientModelStore clientModelStore) {
+    public void setClientModelStore(final ClientModelStore clientModelStore) {
         this.clientModelStore = clientModelStore;
     }
 
@@ -70,7 +70,7 @@ public class ClientDolphin implements Dolphin<ClientAttribute, ClientPresentatio
      * @param clientConnector
      */
     @Deprecated
-    public void setClientConnector(AbstractClientConnector clientConnector) {
+    public void setClientConnector(final AbstractClientConnector clientConnector) {
         this.clientConnector = clientConnector;
     }
 

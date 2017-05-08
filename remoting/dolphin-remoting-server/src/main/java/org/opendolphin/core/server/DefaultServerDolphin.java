@@ -35,7 +35,7 @@ public class DefaultServerDolphin implements ServerDolphin {
     private final ServerConnector serverConnector;
 
 
-    public DefaultServerDolphin(ServerModelStore serverModelStore, ServerConnector serverConnector) {
+    public DefaultServerDolphin(final ServerModelStore serverModelStore, final ServerConnector serverConnector) {
         this.serverModelStore = serverModelStore;
         this.serverConnector = serverConnector;
         this.serverConnector.setServerModelStore(serverModelStore);

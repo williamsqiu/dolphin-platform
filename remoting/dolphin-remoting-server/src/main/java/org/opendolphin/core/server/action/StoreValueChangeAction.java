@@ -28,10 +28,10 @@ public class StoreValueChangeAction extends DolphinServerAction {
 
     private static final Logger LOG = Logger.getLogger(StoreValueChangeAction.class.getName());
 
-    public void registerIn(ActionRegistry registry) {
+    public void registerIn(final ActionRegistry registry) {
         registry.register(ValueChangedCommand.class, new CommandHandler<ValueChangedCommand>() {
             @Override
-            public void handleCommand(final ValueChangedCommand command, List response) {
+            public void handleCommand(final ValueChangedCommand command, final List response) {
                 final ServerAttribute attribute = getServerModelStore().findAttributeById(command.getAttributeId());
                 if (attribute != null) {
                     if (! Objects.equals(attribute.getValue(), command.getOldValue())) {

@@ -32,13 +32,13 @@ public class AttributeChangeListener implements PropertyChangeListener {
 
     private final ModelSynchronizer modelSynchronizer;
 
-    public AttributeChangeListener(ClientModelStore clientModelStore, ModelSynchronizer modelSynchronizer) {
+    public AttributeChangeListener(final ClientModelStore clientModelStore, final ModelSynchronizer modelSynchronizer) {
         this.clientModelStore = clientModelStore;
         this.modelSynchronizer = modelSynchronizer;
     }
 
     @Override
-    public void propertyChange(PropertyChangeEvent evt) {
+    public void propertyChange(final PropertyChangeEvent evt) {
         if (evt.getPropertyName().equals(Attribute.VALUE_NAME)) {
             if (evt.getOldValue() == null && evt.getNewValue() == null || evt.getOldValue() != null && evt.getNewValue() != null && evt.getOldValue().equals(evt.getNewValue())) {
                 return;
@@ -61,7 +61,7 @@ public class AttributeChangeListener implements PropertyChangeListener {
         }
     }
 
-    private boolean isSendable(PropertyChangeEvent evt) {
+    private boolean isSendable(final PropertyChangeEvent evt) {
         PresentationModel pmOfAttribute = ((Attribute) evt.getSource()).getPresentationModel();
         if (pmOfAttribute == null) {
             return true;

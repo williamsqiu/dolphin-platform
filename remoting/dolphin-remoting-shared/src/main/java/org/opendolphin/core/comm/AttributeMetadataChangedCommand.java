@@ -26,7 +26,7 @@ public final class AttributeMetadataChangedCommand extends Command {
     public AttributeMetadataChangedCommand() {
     }
 
-    public AttributeMetadataChangedCommand(String attributeId, String metadataName, Object value) {
+    public AttributeMetadataChangedCommand(final String attributeId, final String metadataName, final Object value) {
         this.attributeId = attributeId;
         this.metadataName = metadataName;
         this.value = value;
@@ -36,7 +36,7 @@ public final class AttributeMetadataChangedCommand extends Command {
         return attributeId;
     }
 
-    public void setAttributeId(String attributeId) {
+    public void setAttributeId(final String attributeId) {
         this.attributeId = attributeId;
     }
 
@@ -44,7 +44,7 @@ public final class AttributeMetadataChangedCommand extends Command {
         return metadataName;
     }
 
-    public void setMetadataName(String metadataName) {
+    public void setMetadataName(final String metadataName) {
         this.metadataName = metadataName;
     }
 
@@ -52,7 +52,7 @@ public final class AttributeMetadataChangedCommand extends Command {
         return value;
     }
 
-    public void setValue(Object value) {
+    public void setValue(final Object value) {
         this.value = value;
     }
 
