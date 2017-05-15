@@ -52,7 +52,7 @@ public class CommunicationTests {
         ClientPresentationModel cpm = new ClientPresentationModel("model", Arrays.asList(ca));
         clientModelStore.add(cpm);
 
-        final AtomicReference<Command> receivedCommand = new AtomicReference<Command>(null);
+        final AtomicReference<Command> receivedCommand = new AtomicReference<>(null);
         CommandHandler testServerAction = new CommandHandler<ValueChangedCommand>() {
             @Override
             public void handleCommand(ValueChangedCommand command, List<Command> response) {
@@ -81,8 +81,8 @@ public class CommunicationTests {
 
     @Test
     public void testServerIsNotifiedAboutNewAttributesAndTheirPms() {
-        final AtomicReference<Command> receivedCommand = new AtomicReference<Command>(null);
-        CommandHandler testServerAction = new CommandHandler<CreatePresentationModelCommand>() {
+        final AtomicReference<Command> receivedCommand = new AtomicReference<>(null);
+        CommandHandler<CreatePresentationModelCommand> testServerAction = new CommandHandler<CreatePresentationModelCommand>() {
             @Override
             public void handleCommand(CreatePresentationModelCommand command, List<Command> response) {
                 receivedCommand.set(command);
@@ -110,7 +110,7 @@ public class CommunicationTests {
     public void testWhenServerChangesValueThisTriggersUpdateOnClient() {
         final ClientAttribute ca = new ClientAttribute("name", null);
 
-        CommandHandler setValueAction = new CommandHandler<CreatePresentationModelCommand>() {
+        CommandHandler<CreatePresentationModelCommand> setValueAction = new CommandHandler<CreatePresentationModelCommand>() {
             @Override
             public void handleCommand(CreatePresentationModelCommand command, List<Command> response) {
                 response.add(new ValueChangedCommand(command.getAttributes().get(0).get("id").toString(), null, "set from server"));
@@ -118,7 +118,7 @@ public class CommunicationTests {
 
         };
 
-        CommandHandler valueChangedAction = new CommandHandler<ValueChangedCommand>() {
+        CommandHandler<ValueChangedCommand> valueChangedAction = new CommandHandler<ValueChangedCommand>() {
             @Override
             public void handleCommand(final ValueChangedCommand command, List<Command> response) {
                 clientDolphin.sync(new Runnable() {

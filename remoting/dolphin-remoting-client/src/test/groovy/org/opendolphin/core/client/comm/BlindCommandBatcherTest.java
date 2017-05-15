@@ -61,10 +61,10 @@ public class BlindCommandBatcherTest extends GroovyTestCase {
         Assert.assertTrue(batcher.isEmpty());
 
         List<CommandAndHandler> list = new ArrayList<CommandAndHandler>();
-        ((ArrayList<CommandAndHandler>) list).add(new CommandAndHandler(null));
-        ((ArrayList<CommandAndHandler>) list).add(new CommandAndHandler(null));
-        ((ArrayList<CommandAndHandler>) list).add(new CommandAndHandler(null));
-        ((ArrayList<CommandAndHandler>) list).add(new CommandAndHandler(null, new OnFinishedHandler() {
+        list.add(new CommandAndHandler(null));
+        list.add(new CommandAndHandler(null));
+        list.add(new CommandAndHandler(null));
+        list.add(new CommandAndHandler(null, new OnFinishedHandler() {
             @Override
             public void onFinished() {
 
@@ -78,14 +78,14 @@ public class BlindCommandBatcherTest extends GroovyTestCase {
 
         Assert.assertEquals(4, ((ArrayList<CommandAndHandler>) list).size());
         try {
-            Assert.assertEquals(((ArrayList<CommandAndHandler>) list).subList(0, 3), batcher.getWaitingBatches().getVal());
+            Assert.assertEquals(list.subList(0, 3), batcher.getWaitingBatches().getVal());
         } catch (InterruptedException e) {
             e.printStackTrace();
             Assert.fail(e.getMessage());
         }
 
         try {
-            Assert.assertEquals(Collections.singletonList(((ArrayList<CommandAndHandler>) list).get(3)), batcher.getWaitingBatches().getVal());
+            Assert.assertEquals(Collections.singletonList(list.get(3)), batcher.getWaitingBatches().getVal());
         } catch (InterruptedException e) {
             e.printStackTrace();
             Assert.fail(e.getMessage());
@@ -143,19 +143,19 @@ public class BlindCommandBatcherTest extends GroovyTestCase {
         command.setAttributeId("0");
         command.setOldValue(0);
         command.setNewValue(1);
-        ((ArrayList<CommandAndHandler>) list).add(new CommandAndHandler(command));
+        list.add(new CommandAndHandler(command));
 
         ValueChangedCommand command1 = new ValueChangedCommand();
         command1.setAttributeId("0");
         command1.setOldValue(1);
         command1.setNewValue(2);
-        ((ArrayList<CommandAndHandler>) list).add(new CommandAndHandler(command1));
+        list.add(new CommandAndHandler(command1));
 
         ValueChangedCommand command2 = new ValueChangedCommand();
         command2.setAttributeId("0");
         command2.setOldValue(2);
         command2.setNewValue(3);
-        ((ArrayList<CommandAndHandler>) list).add(new CommandAndHandler(command2));
+        list.add(new CommandAndHandler(command2));
 
         //when:
         for (CommandAndHandler commandAndHandler : list) {
@@ -191,8 +191,8 @@ public class BlindCommandBatcherTest extends GroovyTestCase {
         command.setNewValue(1);
 
 
-        ((ArrayList<CommandAndHandler>) list).add(new CommandAndHandler(command));
-        ((ArrayList<CommandAndHandler>) list).add(new CommandAndHandler(new CreatePresentationModelCommand()));
+        list.add(new CommandAndHandler(command));
+        list.add(new CommandAndHandler(new CreatePresentationModelCommand()));
 
         //when:
         for (CommandAndHandler commandAndHandler : list) {
@@ -231,9 +231,9 @@ public class BlindCommandBatcherTest extends GroovyTestCase {
 
         };
         List<CommandAndHandler> list = new ArrayList<CommandAndHandler>();
-        ((ArrayList<CommandAndHandler>) list).add(new CommandAndHandler(cmd1, sameHandler));
-        ((ArrayList<CommandAndHandler>) list).add(new CommandAndHandler(cmd2, sameHandler));
-        ((ArrayList<CommandAndHandler>) list).add(new CommandAndHandler(cmd2));
+        list.add(new CommandAndHandler(cmd1, sameHandler));
+        list.add(new CommandAndHandler(cmd2, sameHandler));
+        list.add(new CommandAndHandler(cmd2));
 
 
         //when:
