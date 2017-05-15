@@ -35,7 +35,7 @@ public abstract class Command implements Serializable {
         this.id = null;
     }
 
-    public Command(String id) {
+    public Command(final String id) {
         this.id = id;
     }
 
@@ -46,7 +46,7 @@ public abstract class Command implements Serializable {
         return id;
     }
 
-    private static String idFor(Class commandClass) {
+    private static String idFor(final Class commandClass) {
         String id = commandClass.getSimpleName();
         id = id.replace("Command", "");
         id = id.replace("Notification", "");

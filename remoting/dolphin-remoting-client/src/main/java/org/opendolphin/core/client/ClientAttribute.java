@@ -27,11 +27,11 @@ import org.opendolphin.core.BaseAttribute;
  */
 public class ClientAttribute extends BaseAttribute {
 
-    public ClientAttribute(String propertyName, Object initialValue, String qualifier) {
+    public ClientAttribute(final String propertyName, final Object initialValue, final String qualifier) {
         super(propertyName, initialValue, qualifier);
     }
 
-    public ClientAttribute(String propertyName, Object initialValue) {
+    public ClientAttribute(final String propertyName, final Object initialValue) {
         this(propertyName, initialValue, null);
     }
 

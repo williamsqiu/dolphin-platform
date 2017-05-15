@@ -9,9 +9,6 @@ import java.util.Collections;
 import java.util.List;
 
 public class StandardCommandBatcherTest {
-
-    private CommandBatcher batcher;
-
     @Before
     public void setUp() throws Exception {
         batcher = new CommandBatcher();
@@ -32,6 +29,7 @@ public class StandardCommandBatcherTest {
             e.printStackTrace();
             Assert.fail(e.getMessage());
         }
+
     }
 
     @Test
@@ -42,6 +40,7 @@ public class StandardCommandBatcherTest {
             batcher.batch(cwh);
         }
 
+
         try {
             Assert.assertEquals(Collections.singletonList(list.get(0)), batcher.getWaitingBatches().getVal());
             Assert.assertEquals(Collections.singletonList(list.get(1)), batcher.getWaitingBatches().getVal());
@@ -50,6 +49,8 @@ public class StandardCommandBatcherTest {
             e.printStackTrace();
             Assert.fail(e.getMessage());
         }
+
     }
 
+    private CommandBatcher batcher;
 }

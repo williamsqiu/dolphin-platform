@@ -27,7 +27,7 @@ public final class DeletedPresentationModelNotification extends Command {
         return pmId;
     }
 
-    public void setPmId(String pmId) {
+    public void setPmId(final String pmId) {
         this.pmId = pmId;
     }
 

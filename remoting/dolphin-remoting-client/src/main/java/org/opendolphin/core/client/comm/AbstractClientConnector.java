@@ -59,7 +59,7 @@ public abstract class AbstractClientConnector {
 
     private InterruptLongPollCommand releaseCommand;
 
-    protected AbstractClientConnector(final ClientModelStore clientModelStore, final Executor uiExecutor, final ICommandBatcher commandBatcher, RemotingExceptionHandler remotingExceptionHandler, Executor backgroundExecutor) {
+    protected AbstractClientConnector(final ClientModelStore clientModelStore, final Executor uiExecutor, final ICommandBatcher commandBatcher, final RemotingExceptionHandler remotingExceptionHandler, final Executor backgroundExecutor) {
         this.uiExecutor = Objects.requireNonNull(uiExecutor);
         this.commandBatcher = Objects.requireNonNull(commandBatcher);
         this.remotingExceptionHandler = Objects.requireNonNull(remotingExceptionHandler);
@@ -136,7 +136,7 @@ public abstract class AbstractClientConnector {
         }
     }
 
-    protected abstract List<Command> transmit(List<Command> commands) throws DolphinRemotingException;
+    protected abstract List<Command> transmit(final List<Command> commands) throws DolphinRemotingException;
 
     public void send(final Command command, final OnFinishedHandler callback, final HandlerType handlerType) {
         LOG.debug("Command of type {} should be send to server", command.getClass().getSimpleName());
@@ -157,11 +157,11 @@ public abstract class AbstractClientConnector {
         send(command, callback, HandlerType.UI);
     }
 
-    public void send(Command command) {
+    public void send(final Command command) {
         send(command, null);
     }
 
-    protected void processResults(final List<? extends Command> response, List<CommandAndHandler> commandsAndHandlers) {
+    protected void processResults(final List<? extends Command> response, final List<CommandAndHandler> commandsAndHandlers) {
 
         if (LOG.isDebugEnabled() && response.size() > 0) {
             StringBuffer buffer = new StringBuffer();
@@ -190,7 +190,7 @@ public abstract class AbstractClientConnector {
         }
     }
 
-    protected void dispatchHandle(Command command) {
+    protected void dispatchHandle(final Command command) {
         responseHandler.dispatchHandle(command);
     }
 
@@ -278,7 +278,7 @@ public abstract class AbstractClientConnector {
         });
     }
 
-    public void setStrictMode(boolean strictMode) {
+    public void setStrictMode(final boolean strictMode) {
         this.responseHandler.setStrictMode(strictMode);
     }
 

@@ -46,7 +46,7 @@ public class ServerConnector {
     /**
      * doesn't fail on missing commands
      **/
-    public List<Command> receive(Command command) {
+    public List<Command> receive(final Command command) {
         LOG.info("Received command of type {}", command.getClass().getSimpleName());
         List<Command> response = new LinkedList();// collecting parameter pattern
 
@@ -81,7 +81,7 @@ public class ServerConnector {
         return response;
     }
 
-    public void register(DolphinServerAction action) {
+    public void register(final DolphinServerAction action) {
         action.setServerModelStore(serverModelStore);
         dolphinServerActions.add(action);
         action.registerIn(registry);
@@ -102,11 +102,11 @@ public class ServerConnector {
         return codec;
     }
 
-    public void setCodec(Codec codec) {
+    public void setCodec(final Codec codec) {
         this.codec = codec;
     }
 
-    public void setServerModelStore(ServerModelStore serverModelStore) {
+    public void setServerModelStore(final ServerModelStore serverModelStore) {
         this.serverModelStore = serverModelStore;
     }
 

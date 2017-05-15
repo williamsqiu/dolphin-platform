@@ -66,7 +66,4 @@ public class CommandAndHandler {
         return handler;
     }
 
-    public HandlerType getHandlerType() {
-        return handlerType;
-    }
 }

@@ -15,11 +15,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class StoreAttributeActionTests {
-
-    private DefaultServerDolphin dolphin;
-
-    private ActionRegistry registry;
-
     @Before
     public void setUp() throws Exception {
         dolphin = ((DefaultServerDolphin) (ServerDolphinFactory.create()));
@@ -38,4 +33,6 @@ public class StoreAttributeActionTests {
         Assert.assertEquals("newValue", attribute.getValue());
     }
 
+    private DefaultServerDolphin dolphin;
+    private ActionRegistry registry;
 }

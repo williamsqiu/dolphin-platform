@@ -30,7 +30,7 @@ public class ServerPresentationModel extends BasePresentationModel<ServerAttribu
     /**
      * @param id if id is null or empty, an auto-generated id will be used
      */
-    public ServerPresentationModel(String id, List<ServerAttribute> attributes, ServerModelStore serverModelStore) {
+    public ServerPresentationModel(final String id, final List<ServerAttribute> attributes, final ServerModelStore serverModelStore) {
         super((id != null && id.length() > 0) ? id : makeId(serverModelStore), attributes);
         if (id != null && id.endsWith(RemotingConstants.SERVER_PM_AUTO_ID_SUFFIX)) {
             LOG.info("Creating a PM with self-provided id \'" + id + "\' even though it ends with a reserved suffix.");
@@ -38,7 +38,7 @@ public class ServerPresentationModel extends BasePresentationModel<ServerAttribu
         modelStore = serverModelStore;
     }
 
-    private static String makeId(ServerModelStore serverModelStore) {
+    private static String makeId(final ServerModelStore serverModelStore) {
         long newId = serverModelStore.pmInstanceCount++;
         return String.valueOf(newId) + RemotingConstants.SERVER_PM_AUTO_ID_SUFFIX;
     }
@@ -47,7 +47,7 @@ public class ServerPresentationModel extends BasePresentationModel<ServerAttribu
         return modelStore;
     }
 
-    public void setModelStore(ServerModelStore modelStore) {
+    public void setModelStore(final ServerModelStore modelStore) {
         this.modelStore = modelStore;
     }
 }

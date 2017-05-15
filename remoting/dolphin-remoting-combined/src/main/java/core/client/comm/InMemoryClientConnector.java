@@ -50,7 +50,7 @@ public class InMemoryClientConnector extends AbstractClientConnector {
     }
 
     @Override
-    public List<Command> transmit(List<Command> commands) {
+    public List<Command> transmit(final List<Command> commands) {
         LOGGER.trace("transmitting {} commands", commands.size());
         if (serverConnector == null) {
             LOGGER.warn("no server connector wired for in-memory connector");
@@ -71,7 +71,7 @@ public class InMemoryClientConnector extends AbstractClientConnector {
         return result;
     }
 
-    public void setSleepMillis(long sleepMillis) {
+    public void setSleepMillis(final long sleepMillis) {
         this.sleepMillis = sleepMillis;
     }
 }

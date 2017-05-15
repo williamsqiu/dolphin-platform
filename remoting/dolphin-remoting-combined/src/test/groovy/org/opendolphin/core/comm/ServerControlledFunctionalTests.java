@@ -25,36 +25,6 @@ import java.util.concurrent.TimeUnit;
  * the application purely from server side.
  */
 public class ServerControlledFunctionalTests {
-
-
-    final private class CreatePmCommand extends Command {
-    }
-
-    final private class CheckPmIsThereCommand extends Command {
-    }
-
-    final private class DeleteAndRecreateCommand extends Command {
-    }
-
-    final private class AssertRetainedServerStateCommand extends Command {
-    }
-
-    final private class ChangeValueMultipleTimesAndBackToBaseCommand extends Command {
-    }
-
-    final private class RemoveCommand extends Command {
-    }
-
-    final private class SetAndUnsetQualifierCommand extends Command {
-    }
-
-    final private class SetQualifierCommand extends Command {
-    }
-
-    private volatile TestInMemoryConfig context;
-    private DefaultServerDolphin serverDolphin;
-    private ClientDolphin clientDolphin;
-
     @Before
     public void setUp() {
         context = new TestInMemoryConfig();
@@ -70,6 +40,7 @@ public class ServerControlledFunctionalTests {
             e.printStackTrace();
             Assert.fail(e.getMessage());
         }
+
     }
 
     private <T extends Command> void registerAction(ServerDolphin serverDolphin, final Class<T> commandType, final CommandHandler<T> handler) {
@@ -119,6 +90,7 @@ public class ServerControlledFunctionalTests {
                 for (ServerPresentationModel model : serverDolphin.getModelStore().findAllPresentationModelsByType("myType")) {
                     ((ArrayList<ServerPresentationModel>) toDelete).add(model);
                 }
+
 
                 for (ServerPresentationModel model : toDelete) {
                     serverDolphin.getModelStore().remove(model);
@@ -315,4 +287,31 @@ public class ServerControlledFunctionalTests {
         });
     }
 
+    private volatile TestInMemoryConfig context;
+    private DefaultServerDolphin serverDolphin;
+    private ClientDolphin clientDolphin;
+
+    final private class CreatePmCommand extends Command {
+    }
+
+    final private class CheckPmIsThereCommand extends Command {
+    }
+
+    final private class DeleteAndRecreateCommand extends Command {
+    }
+
+    final private class AssertRetainedServerStateCommand extends Command {
+    }
+
+    final private class ChangeValueMultipleTimesAndBackToBaseCommand extends Command {
+    }
+
+    final private class RemoveCommand extends Command {
+    }
+
+    final private class SetAndUnsetQualifierCommand extends Command {
+    }
+
+    final private class SetQualifierCommand extends Command {
+    }
 }

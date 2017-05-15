@@ -25,16 +25,6 @@ import java.util.logging.Level;
  * They are really more integration tests than unit tests.
  */
 public class CommunicationTests {
-
-    final private class ButtonActionCommand extends Command {
-    }
-
-    private ServerConnector serverConnector;
-    private AbstractClientConnector clientConnector;
-    private ClientModelStore clientModelStore;
-    private ClientDolphin clientDolphin;
-    private TestInMemoryConfig config;
-
     @Before
     public void setUp() {
         LogConfig.logOnLevel(Level.INFO);
@@ -53,6 +43,7 @@ public class CommunicationTests {
             e.printStackTrace();
             Assert.fail(e.getMessage());
         }
+
     }
 
     @Test
@@ -84,13 +75,14 @@ public class CommunicationTests {
                 Assert.assertEquals("initial", cmd.getNewValue());
                 config.assertionsDone();
             }
+
         });
     }
 
     @Test
     public void testServerIsNotifiedAboutNewAttributesAndTheirPms() {
         final AtomicReference<Command> receivedCommand = new AtomicReference<>(null);
-        CommandHandler testServerAction = new CommandHandler<CreatePresentationModelCommand>() {
+        CommandHandler<CreatePresentationModelCommand> testServerAction = new CommandHandler<CreatePresentationModelCommand>() {
             @Override
             public void handleCommand(CreatePresentationModelCommand command, List<Command> response) {
                 receivedCommand.set(command);
@@ -110,6 +102,7 @@ public class CommunicationTests {
 
                 config.assertionsDone();
             }
+
         });
     }
 
@@ -117,16 +110,17 @@ public class CommunicationTests {
     public void testWhenServerChangesValueThisTriggersUpdateOnClient() {
         final ClientAttribute ca = new ClientAttribute("name", null);
 
-        CommandHandler setValueAction = new CommandHandler<CreatePresentationModelCommand>() {
+        CommandHandler<CreatePresentationModelCommand> setValueAction = new CommandHandler<CreatePresentationModelCommand>() {
             @Override
             public void handleCommand(CreatePresentationModelCommand command, List<Command> response) {
                 response.add(new ValueChangedCommand(command.getAttributes().get(0).get("id").toString(), null, "set from server"));
             }
+
         };
 
-        CommandHandler valueChangedAction = new CommandHandler<ValueChangedCommand>() {
+        CommandHandler<ValueChangedCommand> valueChangedAction = new CommandHandler<ValueChangedCommand>() {
             @Override
-            public void handleCommand(ValueChangedCommand command, List<Command> response) {
+            public void handleCommand(final ValueChangedCommand command, List<Command> response) {
                 clientDolphin.sync(new Runnable() {
                     @Override
                     public void run() {
@@ -135,6 +129,7 @@ public class CommunicationTests {
                         Assert.assertEquals(ca.getId(), command.getAttributeId());// client notified server about value change
                         config.assertionsDone();
                     }
+
                 });
             }
 
@@ -163,7 +158,16 @@ public class CommunicationTests {
                 Assert.assertTrue(reached.get());
                 config.assertionsDone();
             }
+
         });
     }
 
+    private ServerConnector serverConnector;
+    private AbstractClientConnector clientConnector;
+    private ClientModelStore clientModelStore;
+    private ClientDolphin clientDolphin;
+    private TestInMemoryConfig config;
+
+    final private class ButtonActionCommand extends Command {
+    }
 }

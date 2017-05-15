@@ -11,7 +11,7 @@ public class DefaultModelSynchronizer implements ModelSynchronizer {
 
     private final Provider<AbstractClientConnector> connectionProvider;
 
-    public DefaultModelSynchronizer(Provider<AbstractClientConnector> connectionProvider) {
+    public DefaultModelSynchronizer(final Provider<AbstractClientConnector> connectionProvider) {
         this.connectionProvider = connectionProvider;
     }
 
@@ -39,7 +39,7 @@ public class DefaultModelSynchronizer implements ModelSynchronizer {
         send(command);
     }
 
-    private void send(Command command) {
+    private void send(final Command command) {
         AbstractClientConnector clientConnector = connectionProvider.get();
         if(clientConnector == null) {
             throw new IllegalStateException("No connection defined!");

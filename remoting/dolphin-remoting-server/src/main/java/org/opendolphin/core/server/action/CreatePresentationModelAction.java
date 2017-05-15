@@ -32,17 +32,17 @@ public class CreatePresentationModelAction extends DolphinServerAction {
 
     private static final Logger LOG = Logger.getLogger(CreatePresentationModelAction.class.getName());
 
-    public void registerIn(ActionRegistry registry) {
+    public void registerIn(final ActionRegistry registry) {
 
         registry.register(CreatePresentationModelCommand.class, new CommandHandler<CreatePresentationModelCommand>() {
             @Override
-            public void handleCommand(final CreatePresentationModelCommand command, List response) {
+            public void handleCommand(final CreatePresentationModelCommand command, final List response) {
                 createPresentationModel(command, getServerModelStore());
             }
         });
     }
 
-    private static void createPresentationModel(CreatePresentationModelCommand command, ServerModelStore serverModelStore) {
+    private static void createPresentationModel(final CreatePresentationModelCommand command, final ServerModelStore serverModelStore) {
         if (serverModelStore.findPresentationModelById(command.getPmId()) != null) {
             LOG.info("Ignoring create PM '" + command.getPmId() + "' since it is already in the model store.");
             return;

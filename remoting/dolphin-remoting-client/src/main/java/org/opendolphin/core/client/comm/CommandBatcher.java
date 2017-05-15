@@ -26,7 +26,7 @@ public class CommandBatcher implements ICommandBatcher {
         this.waitingBatches = new CommandBatcherQueue();
     }
 
-    public void batch(CommandAndHandler commandAndHandler) {
+    public void batch(final CommandAndHandler commandAndHandler) {
         waitingBatches.add(Collections.singletonList(commandAndHandler));
     }
 

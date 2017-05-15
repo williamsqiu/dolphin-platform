@@ -33,14 +33,14 @@ public final class CreatePresentationModelCommand extends Command {
 
     private List<Map<String, Object>> attributes = new ArrayList<Map<String, Object>>();
 
-    public CreatePresentationModelCommand(String pmId, String pmType, List<Map<String, Object>> attributes, boolean clientSideOnly) {
+    public CreatePresentationModelCommand(final String pmId, String pmType, final List<Map<String, Object>> attributes, final boolean clientSideOnly) {
         this.pmId = pmId;
         this.pmType = pmType;
         this.clientSideOnly = clientSideOnly;
         this.attributes = attributes;
     }
 
-    public CreatePresentationModelCommand(String pmId, String pmType, List<Map<String, Object>> attributes) {
+    public CreatePresentationModelCommand(final String pmId, final String pmType, final List<Map<String, Object>> attributes) {
         this.pmId = pmId;
         this.pmType = pmType;
         this.attributes = attributes;
@@ -52,7 +52,7 @@ public final class CreatePresentationModelCommand extends Command {
     /**
      * @deprecated use ServerFacade convenience methods (it is ok to use it from the client atm)
      */
-    public static <T extends Attribute> CreatePresentationModelCommand makeFrom(PresentationModel<T> model) {
+    public static <T extends Attribute> CreatePresentationModelCommand makeFrom(final PresentationModel<T> model) {
         CreatePresentationModelCommand result = new CreatePresentationModelCommand();
         result.setPmId(model.getId());
         result.setPmType(model.getPresentationModelType());
@@ -77,7 +77,7 @@ public final class CreatePresentationModelCommand extends Command {
         return pmId;
     }
 
-    public void setPmId(String pmId) {
+    public void setPmId(final String pmId) {
         this.pmId = pmId;
     }
 
@@ -85,7 +85,7 @@ public final class CreatePresentationModelCommand extends Command {
         return pmType;
     }
 
-    public void setPmType(String pmType) {
+    public void setPmType(final String pmType) {
         this.pmType = pmType;
     }
 
@@ -97,7 +97,7 @@ public final class CreatePresentationModelCommand extends Command {
         return clientSideOnly;
     }
 
-    public void setClientSideOnly(boolean clientSideOnly) {
+    public void setClientSideOnly(final boolean clientSideOnly) {
         this.clientSideOnly = clientSideOnly;
     }
 
@@ -105,7 +105,7 @@ public final class CreatePresentationModelCommand extends Command {
         return attributes;
     }
 
-    public void setAttributes(List<Map<String, Object>> attributes) {
+    public void setAttributes(final List<Map<String, Object>> attributes) {
         this.attributes = attributes;
     }
 }

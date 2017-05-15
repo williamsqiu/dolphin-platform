@@ -26,11 +26,11 @@ public class ServerAttribute extends BaseAttribute {
 
     private boolean notifyClient = true;
 
-    public ServerAttribute(String propertyName, Object initialValue) {
+    public ServerAttribute(final String propertyName, final Object initialValue) {
         super(propertyName, initialValue);
     }
 
-    public ServerAttribute(String propertyName, Object baseValue, String qualifier) {
+    public ServerAttribute(final String propertyName, final Object baseValue, final String qualifier) {
         super(propertyName, baseValue, qualifier);
     }
 
@@ -71,7 +71,7 @@ public class ServerAttribute extends BaseAttribute {
     }
 
     @Override
-    public void setQualifier(String value) {
+    public void setQualifier(final String value) {
         super.setQualifier(value);
         if (notifyClient) {
             getPresentationModel().getModelStore().getCurrentResponse().add(new AttributeMetadataChangedCommand(getId(), Attribute.QUALIFIER_NAME, value));
@@ -86,7 +86,7 @@ public class ServerAttribute extends BaseAttribute {
     /**
      * Do the applyChange without creating commands that are sent to the client
      */
-    public void silently(Runnable applyChange) {
+    public void silently(final Runnable applyChange) {
         boolean temp = notifyClient;
         notifyClient = false;
         try {
@@ -99,7 +99,7 @@ public class ServerAttribute extends BaseAttribute {
     /**
      * Do the applyChange with enforced creation of commands that are sent to the client
      */
-    protected void verbosely(Runnable applyChange) {
+    protected void verbosely(final Runnable applyChange) {
         boolean temp = notifyClient;
         notifyClient = true;
         try {

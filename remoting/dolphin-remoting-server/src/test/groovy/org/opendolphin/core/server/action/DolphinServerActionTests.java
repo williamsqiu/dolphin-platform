@@ -11,9 +11,6 @@ import org.opendolphin.core.server.comm.ActionRegistry;
 import java.util.ArrayList;
 
 public class DolphinServerActionTests extends GroovyTestCase {
-
-    private DolphinServerAction action;
-
     @Override
     protected void setUp() throws Exception {
         action = new DolphinServerAction() {
@@ -21,6 +18,7 @@ public class DolphinServerActionTests extends GroovyTestCase {
             public void registerIn(ActionRegistry registry) {
 
             }
+
         };
         action.setDolphinResponse(new ArrayList());
     }
@@ -38,4 +36,6 @@ public class DolphinServerActionTests extends GroovyTestCase {
         Assert.assertEquals(1, action.getDolphinResponse().size());
         Assert.assertEquals(ValueChangedCommand.class, action.getDolphinResponse().get(0).getClass());
     }
+
+    private DolphinServerAction action;
 }
