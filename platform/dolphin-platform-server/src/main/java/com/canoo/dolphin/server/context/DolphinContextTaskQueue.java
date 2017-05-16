@@ -18,6 +18,7 @@ package com.canoo.dolphin.server.context;
 import com.canoo.dolphin.server.DolphinSession;
 import com.canoo.dolphin.util.Assert;
 import com.google.common.util.concurrent.SettableFuture;
+import java.util.concurrent.atomic.AtomicBoolean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,6 +53,8 @@ public class DolphinContextTaskQueue {
     private final Lock taskLock = new ReentrantLock();
 
     private final Condition taskCondition = taskLock.newCondition();
+
+    private final AtomicBoolean interrupted = new AtomicBoolean(false);
 
     public DolphinContextTaskQueue(final String dolphinSessionId, final DolphinSessionProvider sessionProvider, final CommunicationManager communicationManager, final long maxExecutionTime, final TimeUnit maxExecutionTimeUnit) {
         this.dolphinSessionId = Assert.requireNonBlank(dolphinSessionId, "dolphinSessionId");
@@ -90,6 +93,7 @@ public class DolphinContextTaskQueue {
     public void interrupt() {
         taskLock.lock();
         try {
+            interrupted.set(true);
             LOG.trace("Tasks in Dolphin Platform context {} interrupted", dolphinSessionId);
             taskCondition.signal();
         } finally {
@@ -107,13 +111,17 @@ public class DolphinContextTaskQueue {
         long endTime = System.currentTimeMillis() + maxExecutionTimeUnit.toMillis(maxExecutionTime);
 
         while (!communicationManager.hasResponseCommands()) {
+            if (interrupted.get()) {
+                interrupted.set(false);
+                break;
+            }
             final Runnable task = tasks.poll();
             if (task == null) {
                 try {
                     taskLock.lock();
                     try {
                         if (tasks.isEmpty() && !taskCondition.await(endTime - System.currentTimeMillis(), TimeUnit.MILLISECONDS)) {
-                            LOG.trace("Task executor for Dolphin Platform session {} ended after {} seconds with {} task still open", dolphinSessionId, maxExecutionTimeUnit.toSeconds(maxExecutionTime), tasks.size());
+                            interrupted.set(false);
                             break;
                         }
                     } finally {
@@ -122,7 +130,7 @@ public class DolphinContextTaskQueue {
                     if (tasks.isEmpty()) {
                         break;
                     }
-                } catch (Exception e) {
+                } catch (InterruptedException e) {
                     LOG.error("Concurrency error in task executor for Dolphin Platform session {}", dolphinSessionId);
                     throw new IllegalStateException("Concurrency error in task executor for Dolphin Platform session " + dolphinSessionId);
                 }
@@ -135,6 +143,6 @@ public class DolphinContextTaskQueue {
                 }
             }
         }
-        LOG.trace("Task executor in Dolphin Platform session {} ended. Still {} tasks open", dolphinSessionId, tasks.size());
+        LOG.trace("Task executor for Dolphin Platform session {} ended after {} seconds with {} task still open", dolphinSessionId, maxExecutionTimeUnit.toSeconds(maxExecutionTime), tasks.size());
     }
 }
