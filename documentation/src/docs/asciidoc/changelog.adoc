@@ -8,6 +8,16 @@ be true most of the public API of the Dolphin Platform is stable since 0.8.5 and
 package structure or adding additional methods to public interfaces. In addition it will be best practice to not use any
 method of the API is annotated by `@Deprecated` since we plan to remove all this methods and classes for the final 1.0.0 release.
 
+== Version 0.13.0
+_Release date: May 17, 2017_
+
+* Better EventBus handling (https://github.com/canoo/dolphin-platform/issues/470[issue])
+* Added sample application to demonstrate web deployement (https://github.com/canoo/dolphin-platform/issues/454[issue])
+* BugFix for wrong method called from destroyController (https://github.com/canoo/dolphin-platform/issues/484[issue])
+* BugFix for Controller Validation is wrong if method param has more than one Annotation (https://github.com/canoo/dolphin-platform/issues/463[issue])
+* BugFix for ClientContextFactory should not connect automatically (https://github.com/canoo/dolphin-platform/issues/445[issue])
+
+
 == Version 0.12.0
 _Release date: Apr 18, 2017_
 
