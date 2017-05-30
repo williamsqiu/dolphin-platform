@@ -50,6 +50,11 @@ public class InMemoryClientConnector extends AbstractClientConnector {
     }
 
     @Override
+    public String getClientId() {
+        return null;
+    }
+
+    @Override
     public List<Command> transmit(final List<Command> commands) {
         LOGGER.trace("transmitting {} commands", commands.size());
         if (serverConnector == null) {

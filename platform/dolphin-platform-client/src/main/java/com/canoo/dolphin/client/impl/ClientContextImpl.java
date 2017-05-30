@@ -56,7 +56,6 @@ public class ClientContextImpl implements ClientContext {
     public ClientContextImpl(ClientConfiguration clientConfiguration, final Function<ClientModelStore, AbstractClientConnector> connectorProvider) {
         this.clientConfiguration = Assert.requireNonNull(clientConfiguration, "clientConfiguration");
         this.connectorProvider = Assert.requireNonNull(connectorProvider, "connectorProvider");
-
     }
 
     @Override
@@ -145,5 +144,14 @@ public class ClientContextImpl implements ClientContext {
             }
         });
         return result;
+    }
+
+    @Override
+    public String getClientId() {
+        if(clientConnector == null || clientConnector.getClientId() == null) {
+            throw new IllegalStateException("Can not get clientId. Maybe the client is not connected to the server");
+        } else {
+            return clientConnector.getClientId();
+        }
     }
 }
