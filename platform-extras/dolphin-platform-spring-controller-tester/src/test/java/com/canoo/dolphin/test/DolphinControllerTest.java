@@ -17,9 +17,7 @@ package com.canoo.dolphin.test;
 
 import org.testng.annotations.Test;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.fail;
+import static org.testng.Assert.*;
 
 public class DolphinControllerTest extends SpringTestNGControllerTest {
 

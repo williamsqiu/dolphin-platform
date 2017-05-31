@@ -6,24 +6,15 @@ import com.canoo.dolphin.integration.server.TestConfiguration;
 import com.canoo.dolphin.test.ControllerTestException;
 import com.canoo.dolphin.test.ControllerUnderTest;
 import com.canoo.dolphin.test.SpringTestNGControllerTest;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import static com.canoo.dolphin.integration.action.ActionTestConstants.ACTION_CONTROLLER_NAME;
-import static com.canoo.dolphin.integration.action.ActionTestConstants.PARAM_NAME;
-import static com.canoo.dolphin.integration.action.ActionTestConstants.PARAM_NAME_1;
-import static com.canoo.dolphin.integration.action.ActionTestConstants.PARAM_NAME_2;
-import static com.canoo.dolphin.integration.action.ActionTestConstants.PARAM_NAME_3;
-import static com.canoo.dolphin.integration.action.ActionTestConstants.PRIVATE_ACTION;
-import static com.canoo.dolphin.integration.action.ActionTestConstants.PUBLIC_ACTION;
-import static com.canoo.dolphin.integration.action.ActionTestConstants.WITH_EXCEPTION_ACTION;
-import static com.canoo.dolphin.integration.action.ActionTestConstants.WITH_SEVERAL_PARAMS_ACTION;
-import static com.canoo.dolphin.integration.action.ActionTestConstants.WITH_STRING_PARAM_ACTION;
+import static com.canoo.dolphin.integration.action.ActionTestConstants.*;
 
-@SpringApplicationConfiguration(classes = TestConfiguration.class)
+@SpringBootTest(classes = TestConfiguration.class)
 public class ActionTestControllerTest extends SpringTestNGControllerTest {
 
     private ControllerUnderTest<ActionTestBean> controller;

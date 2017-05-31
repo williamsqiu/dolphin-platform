@@ -19,17 +19,13 @@ import com.canoo.dolphin.client.Param;
 import com.canoo.dolphin.test.ControllerUnderTest;
 import com.canoo.dolphin.test.SpringTestNGControllerTest;
 import com.canoo.dolphin.todo.pm.ToDoList;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import static com.canoo.dolphin.todo.TodoAppConstants.ADD_ACTION;
-import static com.canoo.dolphin.todo.TodoAppConstants.CHANGE_ACTION;
-import static com.canoo.dolphin.todo.TodoAppConstants.ITEM_PARAM;
-import static com.canoo.dolphin.todo.TodoAppConstants.REMOVE_ACTION;
-import static com.canoo.dolphin.todo.TodoAppConstants.TODO_CONTROLLER_NAME;
+import static com.canoo.dolphin.todo.TodoAppConstants.*;
 
-@SpringApplicationConfiguration(ToDoServerConfiguration.class)
+@SpringBootTest(classes = ToDoServerConfiguration.class)
 public class ToDoControllerTests extends SpringTestNGControllerTest {
 
     @Test
