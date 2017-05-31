@@ -5,14 +5,14 @@ import com.canoo.dolphin.integration.server.TestConfiguration;
 import com.canoo.dolphin.mapping.Property;
 import com.canoo.dolphin.test.ControllerUnderTest;
 import com.canoo.dolphin.test.SpringTestNGControllerTest;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import static com.canoo.dolphin.integration.enterprise.EnterpriseTestConstants.ENTERPRISE_CONTROLLER_NAME;
 
-@SpringApplicationConfiguration(classes = TestConfiguration.class)
+@SpringBootTest(classes = TestConfiguration.class)
 public class EnterpriseTestControllerTest extends SpringTestNGControllerTest {
 
     private ControllerUnderTest<EnterpriseTestBean> controller;

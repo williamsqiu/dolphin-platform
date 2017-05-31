@@ -20,8 +20,11 @@ import com.canoo.dolphin.server.config.ConfigurationFileLoader;
 import com.canoo.dolphin.server.config.DolphinPlatformConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.embedded.ServletContextInitializer;
+import org.springframework.boot.web.servlet.ServletContextInitializer;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 
@@ -34,7 +37,7 @@ import javax.servlet.ServletException;
  * @author Hendrik Ebbers
  */
 @Configuration
-public class DolphinPlatformSpringBootstrap implements ServletContextInitializer {
+public class DolphinPlatformSpringBootstrap implements ServletContextInitializer, ApplicationContextAware {
 
     private static final Logger LOG = LoggerFactory.getLogger(DolphinPlatformSpringBootstrap.class);
 
@@ -45,6 +48,7 @@ public class DolphinPlatformSpringBootstrap implements ServletContextInitializer
 
     @Autowired(required = false)
     private DolphinPlatformConfiguration injectedConfig;
+
 
     @Override
     public void onStartup(final ServletContext servletContext) throws ServletException {
@@ -67,5 +71,15 @@ public class DolphinPlatformSpringBootstrap implements ServletContextInitializer
                 configuration.setProperty(key, valInSpringConfig);
             }
         }
+    }
+
+    private static ApplicationContext ctx = null;
+
+    public static ApplicationContext getApplicationContext() {
+        return ctx;
+    }
+
+    public void setApplicationContext(ApplicationContext ctx) throws BeansException {
+        this.ctx = ctx;
     }
 }

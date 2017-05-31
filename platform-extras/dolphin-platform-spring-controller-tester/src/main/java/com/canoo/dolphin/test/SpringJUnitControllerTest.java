@@ -22,16 +22,16 @@ import com.canoo.dolphin.util.Assert;
 import org.junit.Rule;
 import org.junit.rules.ExternalResource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
-import org.springframework.test.context.web.WebAppConfiguration;
 
 /**
  * Base class for JUnit based controller tests in Spring. This class can be extended to write custom controller tests.
  */
-@WebAppConfiguration
-@SpringApplicationConfiguration(classes = DolphinPlatformSpringTestBootstrap.class)
+@SpringBootTest
+@ContextConfiguration(classes = DolphinPlatformSpringTestBootstrap.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public abstract class SpringJUnitControllerTest extends AbstractJUnit4SpringContextTests implements ControllerTest {
 
