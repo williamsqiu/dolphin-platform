@@ -72,22 +72,16 @@ public class MBeanRegistry {
                         }
                     }
                 };
+            } else {
+                return new Subscription() {
+                    @Override
+                    public void unsubscribe() {
+                    }
+                };
             }
         } catch (Exception e) {
-            //TODO: Throw exception
-            LOG.warn("Can not register MBean!", e);
+            throw new RuntimeException("Can not register MBean!", e);
         }
-        return new Subscription() {
-            @Override
-            public void unsubscribe() {
-                try {
-                    final ObjectName objectName = new ObjectName(name);
-                    server.unregisterMBean(objectName);
-                }catch (Exception e) {
-                    LOG.warn("Can not unregister MBean!", e);
-                }
-            }
-        };
     }
 
     /**
