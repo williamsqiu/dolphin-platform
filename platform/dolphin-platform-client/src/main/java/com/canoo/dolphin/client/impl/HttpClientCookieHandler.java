@@ -1,8 +1,8 @@
 package com.canoo.dolphin.client.impl;
 
-import com.canoo.dolphin.impl.PlatformConstants;
+import com.canoo.dolphin.PlatformConstants;
+import com.canoo.dolphin.client.DolphinRuntimeException;
 import com.canoo.dolphin.util.Assert;
-import org.opendolphin.util.DolphinRemotingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,7 +24,7 @@ public class HttpClientCookieHandler {
         this.cookieStore = Assert.requireNonNull(cookieStore, "cookieStore");
     }
 
-    public void updateCookiesFromResponse(final HttpURLConnection conn) throws URISyntaxException, DolphinRemotingException {
+    public void updateCookiesFromResponse(final HttpURLConnection conn) throws URISyntaxException {
         LOG.debug("adding cookies from response to cookie store");
         Map<String, List<String>> headerFields = conn.getHeaderFields();
         List<String> cookiesHeader = headerFields.get(PlatformConstants.SET_COOKIE_HEADER);
@@ -39,7 +39,7 @@ public class HttpClientCookieHandler {
                 try {
                     cookies.addAll(HttpCookie.parse(cookie));
                 } catch (Exception e) {
-                    throw new DolphinRemotingException("Can not convert '" + PlatformConstants.SET_COOKIE_HEADER + "' response header field to http cookies. Bad content: " + cookie);
+                    throw new DolphinRuntimeException("Can not convert '" + PlatformConstants.SET_COOKIE_HEADER + "' response header field to http cookies. Bad content: " + cookie, e);
                 }
                 LOG.debug("Found {} http cookies in header", cookies.size());
                 for (HttpCookie httpCookie : cookies) {

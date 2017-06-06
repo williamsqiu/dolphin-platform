@@ -22,6 +22,8 @@ import com.canoo.dolphin.impl.converters.AbstractStringConverter;
 
 import java.time.Period;
 
+import static com.canoo.dolphin.converters.ValueFieldTypes.PERIODE_FIELD_TYPE;
+
 public class PeriodConverterFactory extends AbstractConverterFactory {
 
     private final static Converter CONVERTER = new PeriodConverter();
@@ -33,7 +35,7 @@ public class PeriodConverterFactory extends AbstractConverterFactory {
 
     @Override
     public int getTypeIdentifier() {
-        return ValueFieldTypes.PERIODE_FIELD_TYPE;
+        return PERIODE_FIELD_TYPE;
     }
 
     @Override

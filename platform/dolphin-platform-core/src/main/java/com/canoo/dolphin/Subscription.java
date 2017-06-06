@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.dolphin.event;
+package com.canoo.dolphin;
 
 /**
  * Defines a function interface that is used to handle a unsubscription or unregistration procedure.

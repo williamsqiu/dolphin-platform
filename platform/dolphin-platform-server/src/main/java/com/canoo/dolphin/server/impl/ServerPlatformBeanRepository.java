@@ -17,7 +17,7 @@ package com.canoo.dolphin.server.impl;
 
 import com.canoo.dolphin.impl.Converters;
 import com.canoo.dolphin.impl.InternalAttributesBean;
-import com.canoo.dolphin.impl.PlatformConstants;
+import com.canoo.dolphin.impl.PlatformRemotingConstants;
 import com.canoo.dolphin.internal.BeanRepository;
 import com.canoo.dolphin.internal.DolphinEventHandler;
 import com.canoo.dolphin.internal.EventDispatcher;
@@ -38,7 +38,7 @@ public class ServerPlatformBeanRepository {
             public void onEvent(PresentationModel model) {
                 final String type = model.getPresentationModelType();
                 switch (type) {
-                    case PlatformConstants.CONTROLLER_ACTION_CALL_BEAN_NAME:
+                    case PlatformRemotingConstants.CONTROLLER_ACTION_CALL_BEAN_NAME:
                         controllerActionCallBean = new ServerControllerActionCallBean(converters, model);
                         break;
                 }
@@ -50,7 +50,7 @@ public class ServerPlatformBeanRepository {
             public void onEvent(PresentationModel model) {
                 final String type = model.getPresentationModelType();
                 switch (type) {
-                    case PlatformConstants.CONTROLLER_ACTION_CALL_BEAN_NAME:
+                    case PlatformRemotingConstants.CONTROLLER_ACTION_CALL_BEAN_NAME:
                         controllerActionCallBean = null;
                         break;
                 }

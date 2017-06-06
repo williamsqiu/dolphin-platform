@@ -15,7 +15,7 @@
  */
 package com.canoo.dolphin.server.controller;
 
-import com.canoo.dolphin.event.Subscription;
+import com.canoo.dolphin.Subscription;
 import com.canoo.dolphin.impl.ReflectionHelper;
 import com.canoo.dolphin.internal.BeanRepository;
 import com.canoo.dolphin.server.DolphinAction;

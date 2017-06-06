@@ -15,7 +15,7 @@
  */
 package com.canoo.dolphin.server.event.impl;
 
-import com.canoo.dolphin.event.Subscription;
+import com.canoo.dolphin.Subscription;
 import com.canoo.dolphin.server.DolphinSession;
 import com.canoo.dolphin.server.context.DolphinContextUtils;
 import com.canoo.dolphin.server.context.DolphinSessionLifecycleHandler;

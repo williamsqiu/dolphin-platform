@@ -15,7 +15,7 @@
  */
 package com.canoo.dolphin.server.context;
 
-import com.canoo.dolphin.impl.PlatformConstants;
+import com.canoo.dolphin.impl.PlatformRemotingConstants;
 import com.canoo.dolphin.server.config.DolphinPlatformConfiguration;
 import com.canoo.dolphin.server.container.ContainerManager;
 import com.canoo.dolphin.util.Assert;
@@ -63,7 +63,7 @@ public class DolphinContextFilter implements Filter {
 
         try {
             DolphinContext dolphinContext;
-            final String clientId = servletRequest.getHeader(PlatformConstants.CLIENT_ID_HTTP_HEADER_NAME);
+            final String clientId = servletRequest.getHeader(PlatformRemotingConstants.CLIENT_ID_HTTP_HEADER_NAME);
             if (clientId == null || clientId.trim().isEmpty()) {
                 if (DolphinContextUtils.getOrCreateContextMapInSession(httpSession).size() >= configuration.getMaxClientsPerSession()) {
                     servletResponse.sendError(HttpServletResponse.SC_SERVICE_UNAVAILABLE, "Maximum size for clients in session is reached");
@@ -95,7 +95,7 @@ public class DolphinContextFilter implements Filter {
                 }
             }
             DolphinContextUtils.setContextForCurrentThread(dolphinContext);
-            servletResponse.setHeader(PlatformConstants.CLIENT_ID_HTTP_HEADER_NAME, dolphinContext.getId());
+            servletResponse.setHeader(PlatformRemotingConstants.CLIENT_ID_HTTP_HEADER_NAME, dolphinContext.getId());
             chain.doFilter(request, response);
         } finally {
             DolphinContextUtils.setContextForCurrentThread(null);

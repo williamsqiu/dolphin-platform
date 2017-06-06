@@ -17,7 +17,6 @@ package com.canoo.dolphin.converters;
 
 import com.canoo.dolphin.converter.Converter;
 import com.canoo.dolphin.converter.ValueConverterException;
-import com.canoo.dolphin.impl.PlatformConstants;
 import com.canoo.dolphin.impl.converters.AbstractConverterFactory;
 import com.canoo.dolphin.impl.converters.AbstractStringConverter;
 
@@ -28,6 +27,10 @@ import java.time.ZonedDateTime;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
+
+import static com.canoo.dolphin.PlatformConstants.REMOTING_DATE_FORMAT_PATTERN;
+import static com.canoo.dolphin.PlatformConstants.TIMEZONE_UTC;
+import static com.canoo.dolphin.converters.ValueFieldTypes.ZONED_DATE_TIME_FIELD_TYPE;
 
 public class ZonedDateTimeConverterFactory extends AbstractConverterFactory {
 
@@ -40,7 +43,7 @@ public class ZonedDateTimeConverterFactory extends AbstractConverterFactory {
 
     @Override
     public int getTypeIdentifier() {
-        return ValueFieldTypes.ZONED_DATE_TIME_FIELD_TYPE;
+        return ZONED_DATE_TIME_FIELD_TYPE;
     }
 
     @Override
@@ -53,8 +56,8 @@ public class ZonedDateTimeConverterFactory extends AbstractConverterFactory {
         private final DateFormat dateFormat;
 
         public ZonedDateTimeConverter(){
-            dateFormat = new SimpleDateFormat(PlatformConstants.REMOTING_DATE_FORMAT_PATTERN);
-            dateFormat.setTimeZone(TimeZone.getTimeZone(PlatformConstants.TIMEZONE_UTC));
+            dateFormat = new SimpleDateFormat(REMOTING_DATE_FORMAT_PATTERN);
+            dateFormat.setTimeZone(TimeZone.getTimeZone(TIMEZONE_UTC));
         }
         @Override
         public ZonedDateTime convertFromDolphin(String value) throws ValueConverterException {

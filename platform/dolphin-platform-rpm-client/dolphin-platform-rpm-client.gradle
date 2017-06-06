@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2016 Canoo Engineering AG.
+ * Copyright 2012-2016 Canoo Engineering AG.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,17 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.dolphin.reactive;
 
-import com.canoo.dolphin.Subscription;
-import com.canoo.dolphin.mapping.Property;
-
-/**
- * A transformed property is a {@link Property} that can be created by using
- * the methods of {@link ReactiveTransormations}. Since a {@link TransformedProperty} is based on a transformation
- * the value of such a property can not be set manually.
- * @param <T> type of the property
- */
-public interface TransformedProperty<T> extends Property<T>, Subscription {
-
+dependencies {
+    compile project(':dolphin-platform-rpm-common')
+    compile project(':dolphin-platform-client')
+    compile project(':dolphin-remoting-client')
+    testCompile project(':dolphin-remoting-combined')
 }

@@ -15,7 +15,7 @@
  */
 package com.canoo.dolphin.reactive;
 
-import com.canoo.dolphin.event.Subscription;
+import com.canoo.dolphin.Subscription;
 import com.canoo.dolphin.impl.AbstractProperty;
 import com.canoo.dolphin.util.Assert;
 import rx.functions.Action1;

@@ -19,7 +19,7 @@ import com.canoo.dolphin.client.Param;
 import com.canoo.dolphin.converter.ValueConverterException;
 import com.canoo.dolphin.impl.AbstractControllerActionCallBean;
 import com.canoo.dolphin.impl.Converters;
-import com.canoo.dolphin.impl.PlatformConstants;
+import com.canoo.dolphin.impl.PlatformRemotingConstants;
 import com.canoo.dolphin.mapping.MappingException;
 import com.canoo.dolphin.util.Assert;
 import org.opendolphin.core.client.ClientModelStore;
@@ -34,7 +34,7 @@ public class ClientControllerActionCallBean extends AbstractControllerActionCall
         this.modelStore = Assert.requireNonNull(modelStore, "modelStore");
 
         final ClientPresentationModelBuilder builder = new ClientPresentationModelBuilder(modelStore);
-        builder.withType(PlatformConstants.CONTROLLER_ACTION_CALL_BEAN_NAME)
+        builder.withType(PlatformRemotingConstants.CONTROLLER_ACTION_CALL_BEAN_NAME)
                 .withAttribute(CONTROLLER_ID, controllerId)
                 .withAttribute(ACTION_NAME, actionName)
                 .withAttribute(ERROR_CODE);

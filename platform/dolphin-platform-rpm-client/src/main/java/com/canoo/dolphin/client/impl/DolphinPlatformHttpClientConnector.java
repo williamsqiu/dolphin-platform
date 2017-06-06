@@ -19,7 +19,7 @@ import com.canoo.dolphin.client.ClientConfiguration;
 import com.canoo.dolphin.client.DolphinSessionException;
 import com.canoo.dolphin.client.HttpURLConnectionFactory;
 import com.canoo.dolphin.client.HttpURLConnectionResponseHandler;
-import com.canoo.dolphin.impl.PlatformConstants;
+import com.canoo.dolphin.impl.PlatformRemotingConstants;
 import com.canoo.dolphin.impl.commands.DestroyContextCommand;
 import com.canoo.dolphin.util.Assert;
 import org.opendolphin.core.client.ClientModelStore;
@@ -43,6 +43,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
+
+import static com.canoo.dolphin.PlatformConstants.*;
 
 /**
  * This class is used to sync the unique client scope id of the current dolphin
@@ -98,18 +100,18 @@ public class DolphinPlatformHttpClientConnector extends AbstractClientConnector 
             final HttpURLConnection conn = connectionFactory.create(servletUrl);
             conn.setDoOutput(true);
             conn.setDoInput(true);
-            conn.setRequestProperty(PlatformConstants.CONTENT_TYPE_HEADER, PlatformConstants.JSON_MIME_TYPE);
-            conn.setRequestProperty(PlatformConstants.ACCEPT_HEADER, PlatformConstants.JSON_MIME_TYPE);
-            conn.setRequestMethod(PlatformConstants.POST_METHOD);
+            conn.setRequestProperty(CONTENT_TYPE_HEADER, JSON_MIME_TYPE);
+            conn.setRequestProperty(ACCEPT_HEADER, JSON_MIME_TYPE);
+            conn.setRequestMethod(POST_METHOD);
             if (clientId.get() != null) {
-                conn.setRequestProperty(PlatformConstants.CLIENT_ID_HTTP_HEADER_NAME, clientId.get());
+                conn.setRequestProperty(PlatformRemotingConstants.CLIENT_ID_HTTP_HEADER_NAME, clientId.get());
             } else {
                 LOG.debug("Sending first request to server. Dolphin client id not defined.");
             }
             httpClientCookieHandler.setRequestCookies(conn);
             String content = codec.encode(commands);
             OutputStream w = conn.getOutputStream();
-            w.write(content.getBytes(PlatformConstants.CHARSET));
+            w.write(content.getBytes(CHARSET));
             w.close();
 
             //RESPONSE
@@ -128,7 +130,7 @@ public class DolphinPlatformHttpClientConnector extends AbstractClientConnector 
             if (commands.size() == 1 && commands.get(0) == getReleaseCommand()) {
                 return new ArrayList<>();
             } else {
-                String receivedContent = new String(inputStreamToByte(conn.getInputStream()), PlatformConstants.CHARSET);
+                String receivedContent = new String(inputStreamToByte(conn.getInputStream()), CHARSET);
                 return codec.decode(receivedContent);
             }
         } catch (Exception e) {
@@ -137,7 +139,7 @@ public class DolphinPlatformHttpClientConnector extends AbstractClientConnector 
     }
 
     private void updateClientId(HttpURLConnection conn) {
-        String clientIdInHeader = conn.getHeaderField(PlatformConstants.CLIENT_ID_HTTP_HEADER_NAME);
+        String clientIdInHeader = conn.getHeaderField(PlatformRemotingConstants.CLIENT_ID_HTTP_HEADER_NAME);
         if (this.clientId.get() != null && !this.clientId.get().equals(clientIdInHeader)) {
             throw new IllegalStateException("Error: client id conflict!");
         }

@@ -22,6 +22,8 @@ import com.canoo.dolphin.impl.converters.AbstractStringConverter;
 
 import java.time.Duration;
 
+import static com.canoo.dolphin.converters.ValueFieldTypes.DURATION_FIELD_TYPE;
+
 public class DurationConverterFactory extends AbstractConverterFactory {
 
     private final static Converter CONVERTER = new DurationConverter();
@@ -33,7 +35,7 @@ public class DurationConverterFactory extends AbstractConverterFactory {
 
     @Override
     public int getTypeIdentifier() {
-        return ValueFieldTypes.DURATION_FIELD_TYPE;
+        return DURATION_FIELD_TYPE;
     }
 
     @Override

@@ -15,7 +15,7 @@
  */
 package com.canoo.dolphin.client.impl;
 
-import com.canoo.dolphin.event.Subscription;
+import com.canoo.dolphin.Subscription;
 import com.canoo.dolphin.util.Assert;
 import com.canoo.dolphin.util.Callback;
 

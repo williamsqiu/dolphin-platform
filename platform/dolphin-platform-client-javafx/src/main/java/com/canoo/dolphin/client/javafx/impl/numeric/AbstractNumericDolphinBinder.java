@@ -15,11 +15,11 @@
  */
 package com.canoo.dolphin.client.javafx.impl.numeric;
 
-import com.canoo.dolphin.client.javafx.binding.BidirectionalConverter;
+import com.canoo.dolphin.Subscription;
 import com.canoo.dolphin.binding.Binding;
+import com.canoo.dolphin.client.javafx.binding.BidirectionalConverter;
 import com.canoo.dolphin.client.javafx.binding.NumericDolphinBinder;
 import com.canoo.dolphin.client.javafx.impl.DefaultDolphinBinder;
-import com.canoo.dolphin.event.Subscription;
 import com.canoo.dolphin.mapping.Property;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;

@@ -16,7 +16,7 @@
 package com.canoo.dolphin.server.context;
 
 import com.canoo.dolphin.BeanManager;
-import com.canoo.dolphin.event.Subscription;
+import com.canoo.dolphin.Subscription;
 import com.canoo.dolphin.impl.*;
 import com.canoo.dolphin.impl.collections.ListMapperImpl;
 import com.canoo.dolphin.impl.commands.*;

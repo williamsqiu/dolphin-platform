@@ -15,7 +15,7 @@
  */
 package com.canoo.dolphin.collections;
 
-import com.canoo.dolphin.event.Subscription;
+import com.canoo.dolphin.Subscription;
 
 import java.util.Collection;
 import java.util.List;

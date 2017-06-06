@@ -15,7 +15,7 @@
  */
 package com.canoo.dolphin.server.servlet;
 
-import com.canoo.dolphin.impl.PlatformConstants;
+import com.canoo.dolphin.impl.PlatformRemotingConstants;
 import com.canoo.dolphin.server.config.DolphinPlatformConfiguration;
 
 import javax.servlet.Filter;
@@ -49,7 +49,7 @@ public class CrossSiteOriginFilter implements Filter {
         HttpServletResponse resp = (HttpServletResponse) response;
 
         //Access-Control-Allow-Headers
-        String accessControlAllowHeaders = PlatformConstants.CLIENT_ID_HTTP_HEADER_NAME;
+        String accessControlAllowHeaders = PlatformRemotingConstants.CLIENT_ID_HTTP_HEADER_NAME;
         String headerValues = getAsCommaSeparatedList(configuration.getAccessControlAllowHeaders());
         if(!headerValues.isEmpty()){
             accessControlAllowHeaders = accessControlAllowHeaders + ", " + headerValues;
@@ -65,7 +65,7 @@ public class CrossSiteOriginFilter implements Filter {
             resp.setHeader("Access-Control-Allow-Methods", allowedMethods);
         }
         resp.setHeader("Access-Control-Allow-Headers", accessControlAllowHeaders);
-        resp.setHeader("Access-Control-Expose-Headers", PlatformConstants.CLIENT_ID_HTTP_HEADER_NAME);
+        resp.setHeader("Access-Control-Expose-Headers", PlatformRemotingConstants.CLIENT_ID_HTTP_HEADER_NAME);
         resp.setHeader("Access-Control-Allow-Credentials", "" + configuration.isAccessControlAllowCredentials());
         resp.setHeader("Access-Control-Max-Age", "" + configuration.getAccessControlMaxAge());
 

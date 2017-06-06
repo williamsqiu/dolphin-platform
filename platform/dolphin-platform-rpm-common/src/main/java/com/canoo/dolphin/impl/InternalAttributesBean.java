@@ -43,7 +43,7 @@ public class InternalAttributesBean {
     public InternalAttributesBean(final BeanRepository beanRepository, final PresentationModelBuilder builder) {
         this(
             beanRepository,
-                Assert.requireNonNull(builder, "builder").withType(PlatformConstants.INTERNAL_ATTRIBUTES_BEAN_NAME)
+                Assert.requireNonNull(builder, "builder").withType(PlatformRemotingConstants.INTERNAL_ATTRIBUTES_BEAN_NAME)
                 .withAttribute(CONTROLLER_NAME)
                 .withAttribute(CONTROLLER_ID)
                 .withAttribute(MODEL)

@@ -55,12 +55,12 @@ public class ClassRepositoryImpl implements ClassRepository {
         this.converters = Assert.requireNonNull(converters, "converters");
         this.builderFactory = Assert.requireNonNull(builderFactory, "builderFactory");
 
-        Assert.requireNonNull(modelStore, "modelStore").addModelStoreListener(PlatformConstants.DOLPHIN_BEAN, new ModelStoreListener() {
+        Assert.requireNonNull(modelStore, "modelStore").addModelStoreListener(PlatformRemotingConstants.DOLPHIN_BEAN, new ModelStoreListener() {
             @Override
             public void modelStoreChanged(final ModelStoreEvent event) {
                 Assert.requireNonNull(event, "event");
                 try {
-                    final String className = (String) event.getPresentationModel().getAttribute(PlatformConstants.JAVA_CLASS).getValue();
+                    final String className = (String) event.getPresentationModel().getAttribute(PlatformRemotingConstants.JAVA_CLASS).getValue();
                     final Class<?> beanClass = Class.forName(className);
                     final ClassInfo classInfo = createClassInfoForClass(beanClass);
                     Assert.requireNonNull(classInfo, "classInfo");
@@ -95,8 +95,8 @@ public class ClassRepositoryImpl implements ClassRepository {
         final String id = DolphinUtils.getDolphinPresentationModelTypeForClass(beanClass);
         final PresentationModelBuilder builder = builderFactory.createBuilder()
                 .withId(id)
-                .withType(PlatformConstants.DOLPHIN_BEAN)
-                .withAttribute(PlatformConstants.JAVA_CLASS, beanClass.getName());
+                .withType(PlatformRemotingConstants.DOLPHIN_BEAN)
+                .withAttribute(PlatformRemotingConstants.JAVA_CLASS, beanClass.getName());
 
         for (final Field field : ReflectionHelper.getInheritedDeclaredFields(beanClass)) {
             if (Property.class.isAssignableFrom(field.getType()) || ObservableList.class.isAssignableFrom(field.getType())) {

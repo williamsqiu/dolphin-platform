@@ -17,7 +17,7 @@ package com.canoo.dolphin.impl;
 
 import org.opendolphin.RemotingConstants;
 
-public interface PlatformConstants {
+public interface PlatformRemotingConstants {
 
     String CREATE_CONTROLLER_COMMAND_NAME = RemotingConstants.DOLPHIN_PLATFORM_PREFIX + "registerController";
 
@@ -39,15 +39,4 @@ public interface PlatformConstants {
 
     String CONTROLLER_ACTION_CALL_BEAN_NAME = "@@@ CONTROLLER_ACTION_CALL_BEAN @@@";
     String INTERNAL_ATTRIBUTES_BEAN_NAME = "@@@ HIGHLANDER_BEAN @@@";
-
-    String REMOTING_DATE_FORMAT_PATTERN = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
-
-    String TIMEZONE_UTC = "UTC";
-    String CHARSET = "UTF-8";
-    String CONTENT_TYPE_HEADER = "Content-Type";
-    String ACCEPT_HEADER = "Accept";
-    String COOKIE_HEADER = "Cookie";
-    String SET_COOKIE_HEADER = "Set-Cookie";
-    String POST_METHOD = "POST";
-    String JSON_MIME_TYPE = "application/json";
 }
