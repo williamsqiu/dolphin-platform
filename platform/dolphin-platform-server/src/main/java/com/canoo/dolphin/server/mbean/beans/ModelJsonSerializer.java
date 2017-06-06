@@ -16,6 +16,7 @@
 package com.canoo.dolphin.server.mbean.beans;
 
 import com.canoo.dolphin.collections.ObservableList;
+import com.canoo.dolphin.impl.DolphinUtils;
 import com.canoo.dolphin.impl.ReflectionHelper;
 import com.canoo.dolphin.mapping.Property;
 import com.google.gson.JsonArray;
@@ -37,7 +38,7 @@ public class ModelJsonSerializer {
         JsonObject jsonObject = new JsonObject();
 
         for(Field field : ReflectionHelper.getInheritedDeclaredFields(dolphinModel.getClass())) {
-            if(ReflectionHelper.isProperty(field.getType())) {
+            if(DolphinUtils.isProperty(field.getType())) {
                 Property property = (Property) ReflectionHelper.getPrivileged(field, dolphinModel);
                 Object value = property.get();
                 if(value == null) {
@@ -51,7 +52,7 @@ public class ModelJsonSerializer {
                 } else {
                     jsonObject.add(field.getName(), toJson(value));
                 }
-            } else if(ReflectionHelper.isObservableList(field.getType())) {
+            } else if(DolphinUtils.isObservableList(field.getType())) {
                 ObservableList list = (ObservableList) ReflectionHelper.getPrivileged(field, dolphinModel);
                 JsonArray jsonArray = new JsonArray();
                 for(Object value : list) {

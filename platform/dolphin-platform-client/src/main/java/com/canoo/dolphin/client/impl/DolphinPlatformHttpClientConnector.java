@@ -167,6 +167,11 @@ public class DolphinPlatformHttpClientConnector extends AbstractClientConnector 
         clientId.set(null);
         disconnecting.set(false);
     }
+
+    @Override
+    public String getClientId() {
+        return clientId.get();
+    }
 }
 
 

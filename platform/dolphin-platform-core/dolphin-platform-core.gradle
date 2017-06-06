@@ -15,6 +15,6 @@
  */
 
 dependencies {
-    compile project(':dolphin-remoting-shared')
+    compile "org.slf4j:slf4j-api:$slf4jVersion"
     compile "com.google.guava:guava:$guavaVersion"
 }

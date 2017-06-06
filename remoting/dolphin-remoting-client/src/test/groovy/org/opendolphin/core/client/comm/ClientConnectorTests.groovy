@@ -317,6 +317,11 @@ public class ClientConnectorTests extends GroovyTestCase {
             return result;
         }
 
+        @Override
+        String getClientId() {
+            return null;
+        }
+
         public List<Command> transmitCommand(Command command) {
             System.out.print("transmitCommand: " + command);
 

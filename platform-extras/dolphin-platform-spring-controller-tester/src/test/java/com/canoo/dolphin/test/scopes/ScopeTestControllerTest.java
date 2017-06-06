@@ -17,12 +17,13 @@ package com.canoo.dolphin.test.scopes;
 
 import com.canoo.dolphin.test.ControllerUnderTest;
 import com.canoo.dolphin.test.SpringTestNGControllerTest;
+import com.canoo.dolphin.test.impl.DolphinPlatformSpringTestBootstrap;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-@SpringApplicationConfiguration(classes = ScopesConfig.class)
+@SpringBootTest(classes = ScopesConfig.class)
 public class ScopeTestControllerTest extends SpringTestNGControllerTest {
 
     @Autowired

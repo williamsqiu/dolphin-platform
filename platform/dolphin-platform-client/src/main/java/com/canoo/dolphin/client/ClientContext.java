@@ -54,4 +54,6 @@ public interface ClientContext {
     CompletableFuture<Void> disconnect();
 
     CompletableFuture<Void> connect();
+
+    String getClientId();
 }
