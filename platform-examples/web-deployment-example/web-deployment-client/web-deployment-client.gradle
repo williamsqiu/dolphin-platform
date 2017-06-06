@@ -9,7 +9,7 @@ compileJava {
 
 dependencies {
     compile project(':web-deployment-common')
-    compile project(':dolphin-platform-client-javafx')
+    compile project(':dolphin-platform-rpm-client-javafx')
 }
 
 jar {
