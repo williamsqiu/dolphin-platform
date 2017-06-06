@@ -4,6 +4,8 @@ import com.canoo.dolphin.server.config.DolphinPlatformConfiguration;
 
 public interface ServerModule {
 
+    int DEFAULT_ORDER = 0;
+
     String getName();
 
     int getOrder();
