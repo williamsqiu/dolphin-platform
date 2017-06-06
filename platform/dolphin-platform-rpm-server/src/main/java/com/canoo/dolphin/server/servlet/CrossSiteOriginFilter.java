@@ -16,25 +16,20 @@
 package com.canoo.dolphin.server.servlet;
 
 import com.canoo.dolphin.impl.PlatformRemotingConstants;
-import com.canoo.dolphin.server.config.DolphinPlatformConfiguration;
+import com.canoo.dolphin.server.config.PlatformConfiguration;
+import com.canoo.dolphin.util.Assert;
 
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
+import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
-import com.canoo.dolphin.util.Assert;
 
 public class CrossSiteOriginFilter implements Filter {
 
-    private final DolphinPlatformConfiguration configuration;
+    private final PlatformConfiguration configuration;
 
-    public CrossSiteOriginFilter(final DolphinPlatformConfiguration configuration){
+    public CrossSiteOriginFilter(final PlatformConfiguration configuration){
         this.configuration = Assert.requireNonNull(configuration, "configuration");
     }
 

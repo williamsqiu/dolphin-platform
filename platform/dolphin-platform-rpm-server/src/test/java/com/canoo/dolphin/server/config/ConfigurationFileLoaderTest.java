@@ -17,8 +17,6 @@ package com.canoo.dolphin.server.config;
 
 import org.testng.annotations.Test;
 
-import java.util.logging.Level;
-
 import static org.testng.Assert.*;
 
 public class ConfigurationFileLoaderTest {
@@ -27,12 +25,11 @@ public class ConfigurationFileLoaderTest {
     public void testConfigLoad() {
         try {
             //given:
-            DolphinPlatformConfiguration configuration = ConfigurationFileLoader.loadConfiguration();
+            PlatformConfiguration configuration = ConfigurationFileLoader.loadConfiguration();
 
             //then:
             assertEquals(configuration.isUseCrossSiteOriginFilter(), false);
-            assertEquals(configuration.getDolphinPlatformServletMapping(), "/test");
-            assertEquals(configuration.getOpenDolphinLogLevel(), Level.FINER);
+            assertEquals(configuration.getRootPackageForClasspathScan(), null);
         } catch (Exception e) {
             fail("Error in test", e);
         }
@@ -42,7 +39,7 @@ public class ConfigurationFileLoaderTest {
     public void testConfigurationProvider() {
         try {
             //given:
-            DolphinPlatformConfiguration configuration = ConfigurationFileLoader.loadConfiguration();
+            PlatformConfiguration configuration = ConfigurationFileLoader.loadConfiguration();
 
             //then:
             assertEquals(configuration.getProperty(TestConfigurationProvider.PROPERTY_1_NAME), TestConfigurationProvider.PROPERTY_1_VALUE);
@@ -58,11 +55,11 @@ public class ConfigurationFileLoaderTest {
     public void testConfigurationProviderDoNotOverwrite() {
         try {
             //given:
-            DolphinPlatformConfiguration configuration = ConfigurationFileLoader.loadConfiguration();
+            PlatformConfiguration configuration = ConfigurationFileLoader.loadConfiguration();
 
             //then:
             assertEquals(configuration.isUseCrossSiteOriginFilter(), false);
-            assertEquals(configuration.getProperty(DolphinPlatformConfiguration.USE_CROSS_SITE_ORIGIN_FILTER), "false");
+            assertEquals(configuration.getProperty(PlatformConfiguration.USE_CROSS_SITE_ORIGIN_FILTER), "false");
         } catch (Exception e) {
             fail("Error in test", e);
         }
@@ -72,7 +69,7 @@ public class ConfigurationFileLoaderTest {
     public void testNullPropertyWillNotBeAdded() {
         try {
             //given:
-            DolphinPlatformConfiguration configuration = ConfigurationFileLoader.loadConfiguration();
+            PlatformConfiguration configuration = ConfigurationFileLoader.loadConfiguration();
 
             //when:
             configuration.setProperty("test-key", null);
@@ -92,7 +89,7 @@ public class ConfigurationFileLoaderTest {
     public void testNullPropertyWillNotRemoveOldValue() {
         try {
             //given:
-            DolphinPlatformConfiguration configuration = ConfigurationFileLoader.loadConfiguration();
+            PlatformConfiguration configuration = ConfigurationFileLoader.loadConfiguration();
 
             //when:
             configuration.setProperty("test-key", "a");

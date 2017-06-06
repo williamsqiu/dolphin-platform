@@ -26,7 +26,7 @@ import java.util.Properties;
 import java.util.ServiceLoader;
 
 /**
- * This class loads a Dolphin Platform configuration (see {@link DolphinPlatformConfiguration}) based on a property file.
+ * This class loads a Dolphin Platform configuration (see {@link PlatformConfiguration}) based on a property file.
  * The file must be placed under "META-INF/dolphin.properties" (normal for a JAR) or under
  * "WEB-INF/classes/META-INF/dolphin.properties" (normal for a WAR). If no file can be found a default
  * confihuration will be returned.
@@ -51,13 +51,13 @@ public class ConfigurationFileLoader {
     }
 
     /**
-     * Tries to load a {@link DolphinPlatformConfiguration} based on a file. if no config file
+     * Tries to load a {@link PlatformConfiguration} based on a file. if no config file
      * can be found a default config will be returned.
      *
      * @return a configuration
      */
-    public static DolphinPlatformConfiguration loadConfiguration() {
-        DolphinPlatformConfiguration configuration = createConfiguration();
+    public static PlatformConfiguration loadConfiguration() {
+        PlatformConfiguration configuration = createConfiguration();
 
         ServiceLoader<ConfigurationProvider> serviceLoader = ServiceLoader.load(ConfigurationProvider.class);
         for(ConfigurationProvider provider : serviceLoader) {
@@ -78,7 +78,7 @@ public class ConfigurationFileLoader {
         return configuration;
     }
 
-    private static DolphinPlatformConfiguration createConfiguration() {
+    private static PlatformConfiguration createConfiguration() {
         try {
             ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 
@@ -91,7 +91,7 @@ public class ConfigurationFileLoader {
             try (InputStream inputStream = classLoader.getResourceAsStream(WAR_LOCATION)) {
                 if (inputStream == null) {
                     LOG.info("Can not read configuration. Maybe no dolphin.properties file is defined. Will use a default configuration!");
-                    return new DolphinPlatformConfiguration();
+                    return new PlatformConfiguration();
                 } else {
                     return readConfig(inputStream);
                 }
@@ -101,10 +101,10 @@ public class ConfigurationFileLoader {
         }
     }
 
-    private static DolphinPlatformConfiguration readConfig(InputStream input) throws IOException {
+    private static PlatformConfiguration readConfig(InputStream input) throws IOException {
         Properties prop = new Properties();
         prop.load(input);
 
-        return  new DolphinPlatformConfiguration(prop);
+        return new PlatformConfiguration(prop);
     }
 }

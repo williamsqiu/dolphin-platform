@@ -25,7 +25,7 @@ public class DolphinPlatformConfigurationTest {
     @Test
     public void testDefaultConfiguration() {
         //given:
-        DolphinPlatformConfiguration configuration = new DolphinPlatformConfiguration();
+        RemotingConfiguration configuration = new RemotingConfiguration();
 
         //then:
         Assert.assertEquals(configuration.isUseCrossSiteOriginFilter(), true);

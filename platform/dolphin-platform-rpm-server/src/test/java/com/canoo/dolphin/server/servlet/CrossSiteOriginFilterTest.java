@@ -15,7 +15,7 @@
  */
 package com.canoo.dolphin.server.servlet;
 
-import com.canoo.dolphin.server.config.DolphinPlatformConfiguration;
+import com.canoo.dolphin.server.config.PlatformConfiguration;
 import org.testng.annotations.Test;
 
 import java.util.Arrays;
@@ -26,13 +26,13 @@ public class CrossSiteOriginFilterTest {
 
     @Test
     public void testCommaSeparatedStringWithValidList(){
-        CrossSiteOriginFilter crossSiteOriginFilter = new CrossSiteOriginFilter(new DolphinPlatformConfiguration());
+        CrossSiteOriginFilter crossSiteOriginFilter = new CrossSiteOriginFilter(new PlatformConfiguration());
         String commaSeparatedList = crossSiteOriginFilter.getAsCommaSeparatedList(Arrays.asList("origin", "authorization", "accept"));
         assertEquals("origin,authorization,accept",commaSeparatedList);
     }
     @Test(expectedExceptions = NullPointerException.class)
     public void testCommaSeparatedList(){
-        CrossSiteOriginFilter crossSiteOriginFilter = new CrossSiteOriginFilter(new DolphinPlatformConfiguration());
+        CrossSiteOriginFilter crossSiteOriginFilter = new CrossSiteOriginFilter(new PlatformConfiguration());
         crossSiteOriginFilter.getAsCommaSeparatedList(null);
     }
 }

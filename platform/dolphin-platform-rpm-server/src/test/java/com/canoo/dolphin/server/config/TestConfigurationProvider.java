@@ -25,7 +25,7 @@ public class TestConfigurationProvider implements ConfigurationProvider {
         ret.put(PROPERTY_3_NAME, PROPERTY_3_VALUE);
 
         //This should not be overwritten from dolphin.properties
-        ret.put(DolphinPlatformConfiguration.USE_CROSS_SITE_ORIGIN_FILTER, "true");
+        ret.put(PlatformConfiguration.USE_CROSS_SITE_ORIGIN_FILTER, "true");
         return ret;
     }
 }

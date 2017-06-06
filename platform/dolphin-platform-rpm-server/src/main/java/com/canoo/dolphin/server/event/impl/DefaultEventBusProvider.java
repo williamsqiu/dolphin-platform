@@ -15,7 +15,7 @@
  */
 package com.canoo.dolphin.server.event.impl;
 
-import com.canoo.dolphin.server.config.DolphinPlatformConfiguration;
+import com.canoo.dolphin.server.config.RemotingConfiguration;
 import com.canoo.dolphin.server.event.DolphinEventBus;
 
 public class DefaultEventBusProvider implements EventBusProvider {
@@ -28,7 +28,7 @@ public class DefaultEventBusProvider implements EventBusProvider {
     }
 
     @Override
-    public DolphinEventBus create(DolphinPlatformConfiguration configuration) {
+    public DolphinEventBus create(RemotingConfiguration configuration) {
         return new DefaultDolphinEventBus();
     }
 }

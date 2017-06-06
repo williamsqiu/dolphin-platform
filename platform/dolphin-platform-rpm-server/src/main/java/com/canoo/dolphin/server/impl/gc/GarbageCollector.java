@@ -20,7 +20,7 @@ import com.canoo.dolphin.impl.DolphinUtils;
 import com.canoo.dolphin.impl.IdentitySet;
 import com.canoo.dolphin.impl.ReflectionHelper;
 import com.canoo.dolphin.mapping.Property;
-import com.canoo.dolphin.server.config.DolphinPlatformConfiguration;
+import com.canoo.dolphin.server.config.RemotingConfiguration;
 import com.canoo.dolphin.util.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,14 +59,14 @@ public class GarbageCollector {
 
     private long removedBeansCount = 0;
 
-    private final DolphinPlatformConfiguration configuration;
+    private final RemotingConfiguration configuration;
 
     /**
      * Constructor
      *
      * @param onRemoveCallback callback that will be called for each garbage collection call.
      */
-    public GarbageCollector(DolphinPlatformConfiguration configuration, GarbageCollectionCallback onRemoveCallback) {
+    public GarbageCollector(RemotingConfiguration configuration, GarbageCollectionCallback onRemoveCallback) {
         this.onRemoveCallback = Assert.requireNonNull(onRemoveCallback, "onRemoveCallback");
         this.configuration = Assert.requireNonNull(configuration, "configuration");
     }

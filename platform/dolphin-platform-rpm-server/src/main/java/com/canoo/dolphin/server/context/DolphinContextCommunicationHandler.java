@@ -15,7 +15,7 @@
  */
 package com.canoo.dolphin.server.context;
 
-import com.canoo.dolphin.server.config.DolphinPlatformConfiguration;
+import com.canoo.dolphin.server.config.RemotingConfiguration;
 import com.canoo.dolphin.util.Assert;
 import org.opendolphin.core.comm.Command;
 import org.slf4j.Logger;
@@ -31,9 +31,9 @@ public class DolphinContextCommunicationHandler {
 
     private static final Logger LOG = LoggerFactory.getLogger(DolphinContextCommunicationHandler.class);
 
-    private final DolphinPlatformConfiguration configuration;
+    private final RemotingConfiguration configuration;
 
-    public DolphinContextCommunicationHandler(final DolphinPlatformConfiguration configuration) {
+    public DolphinContextCommunicationHandler(final RemotingConfiguration configuration) {
         this.configuration = Assert.requireNonNull(configuration, "configuration");
     }
 

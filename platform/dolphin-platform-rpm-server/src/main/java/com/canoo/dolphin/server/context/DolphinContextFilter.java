@@ -16,7 +16,7 @@
 package com.canoo.dolphin.server.context;
 
 import com.canoo.dolphin.impl.PlatformRemotingConstants;
-import com.canoo.dolphin.server.config.DolphinPlatformConfiguration;
+import com.canoo.dolphin.server.config.RemotingConfiguration;
 import com.canoo.dolphin.server.container.ContainerManager;
 import com.canoo.dolphin.util.Assert;
 import org.slf4j.Logger;
@@ -39,7 +39,7 @@ public class DolphinContextFilter implements Filter {
 
     private static final String DOLPHIN_PLATFORM_INITIALIZED_IN_SESSION = "DOLPHIN_PLATFORM_INITIALIZED_IN_SESSION";
 
-    private final DolphinPlatformConfiguration configuration;
+    private final RemotingConfiguration configuration;
 
     private final ContainerManager containerManager;
 
@@ -47,7 +47,7 @@ public class DolphinContextFilter implements Filter {
 
     private final DolphinSessionLifecycleHandler lifecycleHandler;
 
-    public DolphinContextFilter(final DolphinPlatformConfiguration configuration, final ContainerManager containerManager, final DolphinContextFactory dolphinContextFactory, final DolphinSessionLifecycleHandler lifecycleHandler) {
+    public DolphinContextFilter(final RemotingConfiguration configuration, final ContainerManager containerManager, final DolphinContextFactory dolphinContextFactory, final DolphinSessionLifecycleHandler lifecycleHandler) {
         this.configuration = Assert.requireNonNull(configuration, "configuration");
         this.containerManager = Assert.requireNonNull(containerManager, "containerManager");
         this.dolphinContextFactory = Assert.requireNonNull(dolphinContextFactory, "dolphinContextFactory");

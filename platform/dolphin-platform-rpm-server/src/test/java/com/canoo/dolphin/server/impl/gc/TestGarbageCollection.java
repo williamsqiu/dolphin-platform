@@ -15,7 +15,8 @@
  */
 package com.canoo.dolphin.server.impl.gc;
 
-import com.canoo.dolphin.server.config.DolphinPlatformConfiguration;
+import com.canoo.dolphin.server.config.PlatformConfiguration;
+import com.canoo.dolphin.server.config.RemotingConfiguration;
 import com.canoo.dolphin.util.Assert;
 import org.testng.annotations.Test;
 
@@ -769,7 +770,7 @@ public class TestGarbageCollection {
         };
         Properties properties = new Properties();
         properties.setProperty("garbageCollectionActive", "false");
-        DolphinPlatformConfiguration configuration = new DolphinPlatformConfiguration(properties);
+        RemotingConfiguration configuration = new RemotingConfiguration(new PlatformConfiguration(properties));
         GarbageCollector garbageCollector = new GarbageCollector(configuration, gcConsumer);
 
         BeanWithLists parentBeanA = new BeanWithLists(garbageCollector);
@@ -848,7 +849,7 @@ public class TestGarbageCollection {
     private GarbageCollector createGarbageCollection(final GarbageCollectionCallback gcConsumer) {
         Assert.requireNonNull(gcConsumer, "gcConsumer");
 
-        final DolphinPlatformConfiguration configuration = new DolphinPlatformConfiguration();
+        final RemotingConfiguration configuration = new RemotingConfiguration();
         return new GarbageCollector(configuration, gcConsumer);
     }
 }

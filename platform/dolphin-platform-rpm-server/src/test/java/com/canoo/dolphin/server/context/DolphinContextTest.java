@@ -17,7 +17,7 @@ package com.canoo.dolphin.server.context;
 
 import com.canoo.dolphin.impl.commands.*;
 import com.canoo.dolphin.server.DolphinSession;
-import com.canoo.dolphin.server.config.DolphinPlatformConfiguration;
+import com.canoo.dolphin.server.config.RemotingConfiguration;
 import com.canoo.dolphin.server.container.ContainerManager;
 import com.canoo.dolphin.server.container.ModelInjector;
 import com.canoo.dolphin.server.controller.ControllerRepository;
@@ -143,7 +143,7 @@ public class DolphinContextTest {
     private final ClasspathScanner classpathScanner = new ClasspathScanner("com.canoo.dolphin");
 
     private DolphinContext createContext() throws ControllerValidationException {
-        return new DolphinContext(new DolphinPlatformConfiguration(), new DolphinSessionProvider() {
+        return new DolphinContext(new RemotingConfiguration(), new DolphinSessionProvider() {
             @Override
             public DolphinSession getCurrentDolphinSession() {
                 return null;

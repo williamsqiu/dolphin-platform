@@ -15,7 +15,7 @@
  */
 package com.canoo.dolphin.server.context;
 
-import com.canoo.dolphin.server.config.DolphinPlatformConfiguration;
+import com.canoo.dolphin.server.config.RemotingConfiguration;
 import com.canoo.dolphin.server.container.ContainerManager;
 import com.canoo.dolphin.server.controller.ControllerRepository;
 import com.canoo.dolphin.server.controller.ControllerValidationException;
@@ -30,7 +30,7 @@ public class DefaultDolphinContextFactory implements DolphinContextFactory {
 
     private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(DefaultDolphinContextFactory.class);
 
-    private final DolphinPlatformConfiguration configuration;
+    private final RemotingConfiguration configuration;
 
     private final ControllerRepository controllerRepository;
 
@@ -42,7 +42,7 @@ public class DefaultDolphinContextFactory implements DolphinContextFactory {
 
     private final DolphinSessionLifecycleHandler lifecycleHandler;
 
-    public DefaultDolphinContextFactory(final DolphinPlatformConfiguration configuration, DolphinSessionProvider sessionProvider, final ContainerManager containerManager, final ClasspathScanner scanner, final DolphinSessionLifecycleHandler lifecycleHandler)
+    public DefaultDolphinContextFactory(final RemotingConfiguration configuration, DolphinSessionProvider sessionProvider, final ContainerManager containerManager, final ClasspathScanner scanner, final DolphinSessionLifecycleHandler lifecycleHandler)
     throws ControllerValidationException {
         this.configuration = Assert.requireNonNull(configuration, "configuration");
         this.sessionProvider = Assert.requireNonNull(sessionProvider, "sessionProvider");

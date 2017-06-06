@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.dolphin.server.context;
+package com.canoo.dolphin.server.servlet;
 
-import com.canoo.dolphin.server.config.DolphinPlatformConfiguration;
+import com.canoo.dolphin.server.config.PlatformConfiguration;
 import com.canoo.dolphin.util.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,16 +23,13 @@ import org.slf4j.LoggerFactory;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 
-/**
- * A {@link HttpSessionListener} that destroys all {@link DolphinContext} instances for a session
- */
 public class DolphinHttpSessionListener implements HttpSessionListener {
 
     private static final Logger LOG = LoggerFactory.getLogger(DolphinHttpSessionListener.class);
 
-    private int sessionTimeoutInSeconds;
+    private final int sessionTimeoutInSeconds;
 
-    public void init(final DolphinPlatformConfiguration configuration) {
+    public DolphinHttpSessionListener(final PlatformConfiguration configuration) {
         this.sessionTimeoutInSeconds = Assert.requireNonNull(configuration, "configuration").getSessionTimeout();
     }
 
@@ -47,9 +44,5 @@ public class DolphinHttpSessionListener implements HttpSessionListener {
     }
 
     @Override
-    public void sessionDestroyed(HttpSessionEvent sessionEvent) {
-        Assert.requireNonNull(sessionEvent, "sessionEvent");
-        LOG.trace("Session " + sessionEvent.getSession().getId() + " destroyed! Will remove all DolphinContext instances for the session.");
-        DolphinContextUtils.removeAllContextsInSession(sessionEvent.getSession());
-    }
+    public void sessionDestroyed(HttpSessionEvent se) {}
 }
