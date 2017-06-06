@@ -9,7 +9,7 @@ include 'platform/dolphin-platform-client'
 include 'platform/dolphin-platform-rpm-common'
 include 'platform/dolphin-platform-rpm-client'
 include 'platform/dolphin-platform-rpm-client-javafx'
-include 'platform/dolphin-platform-server'
+include 'platform/dolphin-platform-rpm-server'
 include 'platform/dolphin-platform-server-javaee'
 include 'platform/dolphin-platform-server-spring'
 
