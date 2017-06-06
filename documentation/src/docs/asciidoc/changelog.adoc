@@ -14,7 +14,7 @@ method of the API is annotated by `@Deprecated` since we plan to remove all this
 _Release date: Jun 06, 2017_
 
 * Updated to new Spring-Boot version (https://github.com/canoo/dolphin-platform/issues/28[issue])
-* ClientId access on client side (https://github.com/canoo/dolphin-platform/issues/490)
+* ClientId access on client side (https://github.com/canoo/dolphin-platform/issues/490[issue])
 * Bugfix for platform tries to register mbeans even if mbean registration is set to false (https://github.com/canoo/dolphin-platform/issues/482[issue])
 
 
