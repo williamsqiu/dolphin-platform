@@ -18,7 +18,6 @@ package com.canoo.dolphin.converters;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.*;
-import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;

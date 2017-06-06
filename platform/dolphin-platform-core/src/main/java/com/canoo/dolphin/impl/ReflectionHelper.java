@@ -15,18 +15,11 @@
  */
 package com.canoo.dolphin.impl;
 
-import com.canoo.dolphin.collections.ObservableList;
-import com.canoo.dolphin.mapping.Property;
 import com.canoo.dolphin.util.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.beans.PropertyDescriptor;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Proxy;
+import java.lang.reflect.*;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.ArrayList;
@@ -139,32 +132,7 @@ public class ReflectionHelper {
         return result;
     }
 
-    public static boolean isProperty(final PropertyDescriptor descriptor) {
-        Assert.requireNonNull(descriptor, "descriptor");
-        return isProperty(descriptor.getPropertyType());
-    }
 
-    public static boolean isProperty(final Class<?> propertyType) {
-        return Property.class.isAssignableFrom(propertyType);
-    }
-
-    public static boolean isObservableList(final Class<?> propertyType) {
-        return ObservableList.class.isAssignableFrom(propertyType);
-    }
-
-    public static boolean isEnumType(final Class<?> cls) {
-        Assert.requireNonNull(cls, "cls");
-        return cls.isEnum();
-    }
-
-    public static boolean isAllowedForUnmanaged(final Class<?> cls) {
-        return isBasicType(cls) || isProperty(cls) || isEnumType(cls);
-    }
-
-    public static boolean isBasicType(final Class<?> cls) {
-        Assert.requireNonNull(cls, "cls");
-        return cls.isPrimitive() || cls.equals(String.class) || cls.equals(Boolean.class) || cls.equals(Byte.class) || Number.class.isAssignableFrom(cls);
-    }
 
     public static boolean isProxyInstance(final Object bean) {
         Assert.requireNonNull(bean, "bean");
