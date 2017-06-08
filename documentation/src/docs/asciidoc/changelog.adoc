@@ -8,6 +8,14 @@ be true most of the public API of the Dolphin Platform is stable since 0.8.5 and
 package structure or adding additional methods to public interfaces. In addition it will be best practice to not use any
 method of the API is annotated by `@Deprecated` since we plan to remove all this methods and classes for the final 1.0.0 release.
 
+== Version 0.14.0
+_Release date: Jun 06, 2017_
+
+* Updated to new Spring-Boot version (https://github.com/canoo/dolphin-platform/issues/28[issue])
+* ClientId access on client side (https://github.com/canoo/dolphin-platform/issues/490[issue])
+* Bugfix for platform tries to register mbeans even if mbean registration is set to false (https://github.com/canoo/dolphin-platform/issues/482[issue])
+
+
 == Version 0.13.0
 _Release date: May 17, 2017_
 

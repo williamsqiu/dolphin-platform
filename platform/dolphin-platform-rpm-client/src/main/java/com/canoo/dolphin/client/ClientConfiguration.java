@@ -15,9 +15,10 @@
  */
 package com.canoo.dolphin.client;
 
+import com.canoo.dolphin.concurrency.DolphinPlatformThreadFactory;
 import com.canoo.dolphin.client.impl.DefaultHttpURLConnectionFactory;
 import com.canoo.dolphin.client.impl.DefaultHttpURLConnectionResponseHandler;
-import com.canoo.dolphin.client.impl.DolphinPlatformThreadFactoryImpl;
+import com.canoo.dolphin.concurrency.SimpleDolphinPlatformThreadFactory;
 import com.canoo.dolphin.util.Assert;
 import org.opendolphin.core.client.comm.RemotingExceptionHandler;
 import org.opendolphin.core.client.comm.SimpleExceptionHandler;
@@ -72,14 +73,14 @@ public class ClientConfiguration {
      * Default constructor of a client configuration
      *
      * @param serverEndpoint the Dolphin Platform server url
-     * @param uiExecutor the ui thread handler
+     * @param uiExecutor     the ui thread handler
      */
     public ClientConfiguration(URL serverEndpoint, Executor uiExecutor) {
         this.serverEndpoint = Assert.requireNonNull(serverEndpoint, "serverEndpoint");
         this.uiExecutor = Assert.requireNonNull(uiExecutor, "uiExecutor");
         this.dolphinLogLevel = Level.SEVERE;
         this.connectionTimeout = DEFAULT_CONNECTION_TIMEOUT;
-        dolphinPlatformThreadFactory = new DolphinPlatformThreadFactoryImpl();
+        dolphinPlatformThreadFactory = new SimpleDolphinPlatformThreadFactory();
         backgroundExecutor = Executors.newCachedThreadPool(dolphinPlatformThreadFactory);
         cookieStore = new CookieManager().getCookieStore();
         connectionFactory = new DefaultHttpURLConnectionFactory();
