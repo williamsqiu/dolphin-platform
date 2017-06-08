@@ -18,7 +18,7 @@ package com.canoo.dolphin.impl.collections;
 import com.canoo.dolphin.collections.ListChangeEvent;
 import com.canoo.dolphin.collections.ListChangeListener;
 import com.canoo.dolphin.collections.ObservableList;
-import com.canoo.dolphin.event.Subscription;
+import com.canoo.dolphin.Subscription;
 
 import java.util.ArrayList;
 import java.util.Arrays;

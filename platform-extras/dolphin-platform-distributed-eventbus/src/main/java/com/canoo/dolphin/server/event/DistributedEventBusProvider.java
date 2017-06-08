@@ -16,7 +16,7 @@
 package com.canoo.dolphin.server.event;
 
 import com.canoo.dolphin.server.bootstrap.DolphinPlatformBootstrap;
-import com.canoo.dolphin.server.config.DolphinPlatformConfiguration;
+import com.canoo.dolphin.server.config.RemotingConfiguration;
 import com.canoo.dolphin.server.event.impl.EventBusProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,7 +35,7 @@ public class DistributedEventBusProvider implements EventBusProvider {
         return DISTRIBUTED_EVENTBUS_NAME;
     }
 
-    public DolphinEventBus create(final DolphinPlatformConfiguration configuration) {
+    public DolphinEventBus create(final RemotingConfiguration configuration) {
         LOG.debug("creating distributed event bus");
 
         HazelcastProvider hazelcastProvider = null;
@@ -55,7 +55,7 @@ public class DistributedEventBusProvider implements EventBusProvider {
 
         LOG.debug("Using Hazelcast provider {}", hazelcastProvider.getClass());
 
-        return new DistributedEventBus(hazelcastProvider.getHazelcastInstance(configuration), DolphinPlatformBootstrap.getSessionProvider(), DolphinPlatformBootstrap.getSessionLifecycleHandler());
+        return new DistributedEventBus(hazelcastProvider.getHazelcastInstance(new HazelcastConfig(configuration.getConfiguration())), DolphinPlatformBootstrap.getSessionProvider(), DolphinPlatformBootstrap.getSessionLifecycleHandler());
     }
 
 }

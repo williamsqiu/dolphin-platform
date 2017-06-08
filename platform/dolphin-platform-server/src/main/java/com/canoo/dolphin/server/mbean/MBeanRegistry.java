@@ -15,7 +15,7 @@
  */
 package com.canoo.dolphin.server.mbean;
 
-import com.canoo.dolphin.event.Subscription;
+import com.canoo.dolphin.Subscription;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

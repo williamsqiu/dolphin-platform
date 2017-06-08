@@ -86,21 +86,21 @@ public abstract class EventDispatcherImpl implements EventDispatcher {
         Assert.requireNonNull(model, "model");
         final String type = model.getPresentationModelType();
         switch (type) {
-            case PlatformConstants.DOLPHIN_BEAN:
+            case PlatformRemotingConstants.DOLPHIN_BEAN:
                 // ignore
                 break;
-            case PlatformConstants.CONTROLLER_ACTION_CALL_BEAN_NAME:
+            case PlatformRemotingConstants.CONTROLLER_ACTION_CALL_BEAN_NAME:
                 for (final DolphinEventHandler handler : controllerActionCallBeanAddedHandlers) {
                     handler.onEvent(model);
                 }
                 break;
-            case PlatformConstants.INTERNAL_ATTRIBUTES_BEAN_NAME:
+            case PlatformRemotingConstants.INTERNAL_ATTRIBUTES_BEAN_NAME:
                 for (final DolphinEventHandler handler : internalAttributesBeanAddedHandlers) {
                     handler.onEvent(model);
                 }
                 internalAttributesBeanAddedHandlers.clear();
                 break;
-            case PlatformConstants.LIST_SPLICE:
+            case PlatformRemotingConstants.LIST_SPLICE:
                 for (final DolphinEventHandler handler : listSpliceHandlers) {
                     handler.onEvent(model);
                 }
@@ -117,12 +117,12 @@ public abstract class EventDispatcherImpl implements EventDispatcher {
         Assert.requireNonNull(model, "model");
         final String type = model.getPresentationModelType();
         switch (type) {
-            case PlatformConstants.DOLPHIN_BEAN:
-            case PlatformConstants.LIST_SPLICE:
-            case PlatformConstants.INTERNAL_ATTRIBUTES_BEAN_NAME:
+            case PlatformRemotingConstants.DOLPHIN_BEAN:
+            case PlatformRemotingConstants.LIST_SPLICE:
+            case PlatformRemotingConstants.INTERNAL_ATTRIBUTES_BEAN_NAME:
                 // ignore
                 break;
-            case PlatformConstants.CONTROLLER_ACTION_CALL_BEAN_NAME:
+            case PlatformRemotingConstants.CONTROLLER_ACTION_CALL_BEAN_NAME:
                 for (final DolphinEventHandler handler : controllerActionCallBeanRemovedHandlers) {
                     handler.onEvent(model);
                 }

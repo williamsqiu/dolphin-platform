@@ -16,10 +16,7 @@
 package com.canoo.dolphin;
 
 import com.canoo.dolphin.event.BeanAddedListener;
-import com.canoo.dolphin.event.BeanRemovedListener;
-import com.canoo.dolphin.event.Subscription;
 
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -61,8 +58,8 @@ import java.util.List;
  * </pre>
  * </blockquote>
  * There are no method to removePresentationModel registered handler from the {@link com.canoo.dolphin.BeanManager}. Here Dolphin Platform
- * implement an approach by using the Subscription Pattern: Each hander registration returns a {@link com.canoo.dolphin.event.Subscription}
- * instance that provides the {@link com.canoo.dolphin.event.Subscription#unsubscribe()} method to removePresentationModel the handler.
+ * implement an approach by using the Subscription Pattern: Each hander registration returns a {@link Subscription}
+ * instance that provides the {@link Subscription#unsubscribe()} method to removePresentationModel the handler.
  * </p>
  * <p>To deleta a synchronized model the {@link com.canoo.dolphin.BeanManager} provides several methods. Here a developer can
  * for example choose to delete a specific instance (see {@link #remove(Object)}) or all instances for a given type (see {@link #removeAll(Class)}).</p>
@@ -97,7 +94,7 @@ public interface BeanManager {
      * @param beanClass the class for which creation events should be received
      * @param listener the listener which receives the creation-events
      * @param <T> the bean type
-     * @return the (@link com.canoo.dolphin.event.Subscription} that can be used to unsubscribe the listener
+     * @return the (@link com.canoo.dolphin.Subscription} that can be used to unsubscribe the listener
      */
     @Deprecated
     <T> Subscription onAdded(Class<T> beanClass, BeanAddedListener<? super T> listener);

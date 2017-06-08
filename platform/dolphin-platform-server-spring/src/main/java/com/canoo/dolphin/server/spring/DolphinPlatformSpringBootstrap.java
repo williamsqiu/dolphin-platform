@@ -17,7 +17,8 @@ package com.canoo.dolphin.server.spring;
 
 import com.canoo.dolphin.server.bootstrap.DolphinPlatformBootstrap;
 import com.canoo.dolphin.server.config.ConfigurationFileLoader;
-import com.canoo.dolphin.server.config.DolphinPlatformConfiguration;
+import com.canoo.dolphin.server.config.PlatformConfiguration;
+import com.canoo.dolphin.server.config.RemotingConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -47,23 +48,22 @@ public class DolphinPlatformSpringBootstrap implements ServletContextInitializer
     private Environment environment;
 
     @Autowired(required = false)
-    private DolphinPlatformConfiguration injectedConfig;
-
+    private PlatformConfiguration injectedConfig;
 
     @Override
     public void onStartup(final ServletContext servletContext) throws ServletException {
-        DolphinPlatformConfiguration configuration = injectedConfig;
+        PlatformConfiguration configuration = injectedConfig;
         if(configuration == null) {
             configuration = ConfigurationFileLoader.loadConfiguration();
         }
         updateConfigurationBySpring(configuration);
         if(configuration.isActive()) {
-            final DolphinPlatformBootstrap bootstrap = new DolphinPlatformBootstrap(servletContext, configuration);
+            final DolphinPlatformBootstrap bootstrap = new DolphinPlatformBootstrap(servletContext, new RemotingConfiguration(configuration));
             bootstrap.start();
         }
     }
 
-    private void updateConfigurationBySpring(DolphinPlatformConfiguration configuration) {
+    private void updateConfigurationBySpring(PlatformConfiguration configuration) {
         for(String key : configuration.getPropertyKeys()) {
             String valInSpringConfig = environment.getProperty(PREFIX + key);
             if(valInSpringConfig != null) {

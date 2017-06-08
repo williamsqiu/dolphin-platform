@@ -1,6 +1,6 @@
 package com.canoo.dolphin.server.bootstrap;
 
-import com.canoo.dolphin.server.config.DolphinPlatformConfiguration;
+import com.canoo.dolphin.server.config.PlatformConfiguration;
 
 public interface ServerModule {
 
@@ -10,7 +10,7 @@ public interface ServerModule {
 
     int getOrder();
 
-    boolean shouldBoot(DolphinPlatformConfiguration configuration);
+    boolean shouldBoot(PlatformConfiguration configuration);
 
     void initialize(final ServerCoreComponents coreComponents) throws InitializationException;
 }

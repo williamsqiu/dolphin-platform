@@ -5,6 +5,7 @@ import com.canoo.dolphin.client.ClientContext;
 import com.canoo.dolphin.client.impl.ClientContextImpl;
 import com.canoo.dolphin.server.DolphinSession;
 import com.canoo.dolphin.server.config.ConfigurationFileLoader;
+import com.canoo.dolphin.server.config.RemotingConfiguration;
 import com.canoo.dolphin.server.context.DefaultOpenDolphinFactory;
 import com.canoo.dolphin.server.context.DolphinContext;
 import com.canoo.dolphin.server.context.DolphinSessionProvider;
@@ -58,7 +59,7 @@ public class TestConfiguration {
         final TestSpringContainerManager containerManager = new TestSpringContainerManager(context);
         containerManager.init(context.getServletContext());
         final DolphinContextProviderMock dolphinContextProviderMock = new DolphinContextProviderMock();
-        dolphinTestContext = new DolphinTestContext(ConfigurationFileLoader.loadConfiguration(), dolphinContextProviderMock, containerManager, controllerRepository, new DefaultOpenDolphinFactory());
+        dolphinTestContext = new DolphinTestContext(new RemotingConfiguration(ConfigurationFileLoader.loadConfiguration()), dolphinContextProviderMock, containerManager, controllerRepository, new DefaultOpenDolphinFactory());
         dolphinContextProviderMock.setCurrentContext(dolphinTestContext);
     }
 

@@ -16,7 +16,7 @@
 package com.canoo.dolphin.impl.collections;
 
 import com.canoo.dolphin.collections.ListChangeEvent;
-import com.canoo.dolphin.impl.PlatformConstants;
+import com.canoo.dolphin.impl.PlatformRemotingConstants;
 import com.canoo.dolphin.impl.PresentationModelBuilderFactory;
 import com.canoo.dolphin.internal.*;
 import com.canoo.dolphin.internal.collections.ListMapper;
@@ -95,7 +95,7 @@ public class ListMapperImpl implements ListMapper {
             final int count = newElements.size();
 
             final PresentationModelBuilder builder = builderFactory.createBuilder();
-            builder.withType(PlatformConstants.LIST_SPLICE)
+            builder.withType(PlatformRemotingConstants.LIST_SPLICE)
                     .withAttribute("source", sourceId)
                     .withAttribute("attribute", attributeName)
                     .withAttribute("from", from)

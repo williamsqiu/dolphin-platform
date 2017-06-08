@@ -17,7 +17,7 @@ package com.canoo.dolphin.impl;
 
 import com.canoo.dolphin.BeanManager;
 import com.canoo.dolphin.event.BeanAddedListener;
-import com.canoo.dolphin.event.Subscription;
+import com.canoo.dolphin.Subscription;
 import com.canoo.dolphin.internal.BeanBuilder;
 import com.canoo.dolphin.internal.BeanRepository;
 import com.canoo.dolphin.util.Assert;
