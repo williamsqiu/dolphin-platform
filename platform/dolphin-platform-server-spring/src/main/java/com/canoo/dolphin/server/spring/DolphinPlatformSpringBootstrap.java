@@ -15,10 +15,9 @@
  */
 package com.canoo.dolphin.server.spring;
 
-import com.canoo.dolphin.server.bootstrap.DolphinPlatformBootstrap;
-import com.canoo.dolphin.server.config.ConfigurationFileLoader;
-import com.canoo.dolphin.server.config.PlatformConfiguration;
-import com.canoo.dolphin.server.config.RemotingConfiguration;
+import com.canoo.impl.server.bootstrap.PlatformBootstrap;
+import com.canoo.impl.server.config.ConfigurationFileLoader;
+import com.canoo.impl.server.config.PlatformConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -57,10 +56,8 @@ public class DolphinPlatformSpringBootstrap implements ServletContextInitializer
             configuration = ConfigurationFileLoader.loadConfiguration();
         }
         updateConfigurationBySpring(configuration);
-        if(configuration.isActive()) {
-            final DolphinPlatformBootstrap bootstrap = new DolphinPlatformBootstrap(servletContext, new RemotingConfiguration(configuration));
-            bootstrap.start();
-        }
+        PlatformBootstrap bootstrap = new PlatformBootstrap();
+        bootstrap.init(servletContext, configuration);
     }
 
     private void updateConfigurationBySpring(PlatformConfiguration configuration) {

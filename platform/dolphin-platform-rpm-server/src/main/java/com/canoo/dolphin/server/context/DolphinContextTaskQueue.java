@@ -15,10 +15,10 @@
  */
 package com.canoo.dolphin.server.context;
 
-import com.canoo.dolphin.server.DolphinSession;
 import com.canoo.dolphin.util.Assert;
+import com.canoo.impl.server.client.ClientSessionProvider;
+import com.canoo.platform.server.client.ClientSession;
 import com.google.common.util.concurrent.SettableFuture;
-import java.util.concurrent.atomic.AtomicBoolean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,6 +26,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Future;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -46,7 +47,7 @@ public class DolphinContextTaskQueue {
 
     private final TimeUnit maxExecutionTimeUnit;
 
-    private final DolphinSessionProvider sessionProvider;
+    private final ClientSessionProvider sessionProvider;
 
     private final CommunicationManager communicationManager;
 
@@ -56,7 +57,7 @@ public class DolphinContextTaskQueue {
 
     private final AtomicBoolean interrupted = new AtomicBoolean(false);
 
-    public DolphinContextTaskQueue(final String dolphinSessionId, final DolphinSessionProvider sessionProvider, final CommunicationManager communicationManager, final long maxExecutionTime, final TimeUnit maxExecutionTimeUnit) {
+    public DolphinContextTaskQueue(final String dolphinSessionId, final ClientSessionProvider sessionProvider, final CommunicationManager communicationManager, final long maxExecutionTime, final TimeUnit maxExecutionTimeUnit) {
         this.dolphinSessionId = Assert.requireNonBlank(dolphinSessionId, "dolphinSessionId");
         this.tasks = new LinkedBlockingQueue<>();
         this.communicationManager = Assert.requireNonNull(communicationManager, "communicationManager");;
@@ -102,7 +103,7 @@ public class DolphinContextTaskQueue {
     }
 
     public void executeTasks() {
-        final DolphinSession currentSession = sessionProvider.getCurrentDolphinSession();
+        final ClientSession currentSession = sessionProvider.getCurrentDolphinSession();
         if (currentSession == null || !dolphinSessionId.equals(currentSession.getId())) {
             throw new IllegalStateException("Not in Dolphin Platform session " + dolphinSessionId);
         }

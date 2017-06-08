@@ -1,1 +1,1 @@
-com.canoo.dolphin.server.javaee.CdiContainerManager
+com.canoo.dolphin.server.javaee.CdiBeanManager

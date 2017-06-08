@@ -19,7 +19,7 @@ import com.canoo.dolphin.server.config.RemotingConfiguration;
 import com.canoo.dolphin.server.container.ContainerManager;
 import com.canoo.dolphin.server.context.DolphinContext;
 import com.canoo.dolphin.server.context.DolphinContextUtils;
-import com.canoo.dolphin.server.context.DolphinSessionProvider;
+import com.canoo.impl.server.client.ClientSessionProvider;
 import com.canoo.dolphin.server.context.OpenDolphinFactory;
 import com.canoo.dolphin.server.controller.ControllerRepository;
 import com.canoo.dolphin.util.Callback;
@@ -29,7 +29,7 @@ import java.util.List;
 
 public class DolphinTestContext extends DolphinContext {
 
-    public DolphinTestContext(RemotingConfiguration configuration, DolphinSessionProvider dolphinSessionProvider, ContainerManager containerManager, ControllerRepository controllerRepository, OpenDolphinFactory openDolphinFactory) {
+    public DolphinTestContext(RemotingConfiguration configuration, ClientSessionProvider dolphinSessionProvider, ContainerManager containerManager, ControllerRepository controllerRepository, OpenDolphinFactory openDolphinFactory) {
         super(configuration, dolphinSessionProvider, containerManager, controllerRepository,openDolphinFactory, createEmptyCallback(), createEmptyCallback());
         DolphinContextUtils.setContextForCurrentThread(this);
     }

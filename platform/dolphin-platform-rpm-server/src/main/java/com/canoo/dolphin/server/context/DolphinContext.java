@@ -23,9 +23,7 @@ import com.canoo.dolphin.impl.commands.*;
 import com.canoo.dolphin.internal.ClassRepository;
 import com.canoo.dolphin.internal.EventDispatcher;
 import com.canoo.dolphin.internal.collections.ListMapper;
-import com.canoo.dolphin.server.DolphinSession;
 import com.canoo.dolphin.server.config.RemotingConfiguration;
-import com.canoo.dolphin.server.container.ContainerManager;
 import com.canoo.dolphin.server.controller.ControllerHandler;
 import com.canoo.dolphin.server.controller.ControllerRepository;
 import com.canoo.dolphin.server.impl.*;
@@ -35,6 +33,9 @@ import com.canoo.dolphin.server.impl.gc.Instance;
 import com.canoo.dolphin.server.mbean.DolphinContextMBeanRegistry;
 import com.canoo.dolphin.util.Assert;
 import com.canoo.dolphin.util.Callback;
+import com.canoo.impl.server.beans.ManagedBeanFactory;
+import com.canoo.impl.server.client.ClientSessionProvider;
+import com.canoo.platform.server.client.ClientSession;
 import org.opendolphin.core.comm.Command;
 import org.opendolphin.core.server.DefaultServerDolphin;
 import org.opendolphin.core.server.action.DolphinServerAction;
@@ -47,7 +48,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
-import java.util.concurrent.Executor;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
@@ -81,25 +81,27 @@ public class DolphinContext {
 
     private final Callback<DolphinContext> onDestroyCallback;
 
-    private final Callback<DolphinContext> preDestroyCallback;
-
     private final Subscription mBeanSubscription;
-
-    private final DolphinSession dolphinSession;
 
     private final GarbageCollector garbageCollector;
 
     private final DolphinContextTaskQueue taskQueue;
 
+    private final ClientSession clientSession;
+
+    private final ClientSessionProvider clientSessionProvider;
+
     private boolean hasResponseCommands = false;
 
-    public DolphinContext(final RemotingConfiguration configuration, DolphinSessionProvider dolphinSessionProvider, ContainerManager containerManager, ControllerRepository controllerRepository, OpenDolphinFactory dolphinFactory, Callback<DolphinContext> preDestroyCallback, Callback<DolphinContext> onDestroyCallback) {
+    public DolphinContext(final RemotingConfiguration configuration, ClientSession clientSession, ClientSessionProvider clientSessionProvider, ManagedBeanFactory beanFactory, ControllerRepository controllerRepository, OpenDolphinFactory dolphinFactory, Callback<DolphinContext> onDestroyCallback) {
         this.configuration = Assert.requireNonNull(configuration, "configuration");
-        Assert.requireNonNull(containerManager, "containerManager");
+        Assert.requireNonNull(beanFactory, "beanFactory");
         Assert.requireNonNull(controllerRepository, "controllerRepository");
         Assert.requireNonNull(dolphinFactory, "dolphinFactory");
-        this.preDestroyCallback = Assert.requireNonNull(preDestroyCallback, "preDestroyCallback");
         this.onDestroyCallback = Assert.requireNonNull(onDestroyCallback, "onDestroyCallback");
+        this.clientSession = Assert.requireNonNull(clientSession, "clientSession");
+        this.clientSessionProvider = Assert.requireNonNull(clientSessionProvider, "clientSessionProvider");
+
 
         //ID
         id = UUID.randomUUID().toString();
@@ -115,13 +117,14 @@ public class DolphinContext {
                 }
             }
         });
+
         CommunicationManager manager = new CommunicationManager() {
             @Override
             public boolean hasResponseCommands() {
                 return hasResponseCommands || dolphin.getModelStore().hasResponseCommands();
             }
         };
-        taskQueue = new DolphinContextTaskQueue(id, dolphinSessionProvider, manager, configuration.getMaxPollTime(), TimeUnit.MILLISECONDS);
+        taskQueue = new DolphinContextTaskQueue(id, clientSessionProvider, manager, configuration.getMaxPollTime(), TimeUnit.MILLISECONDS);
 
         //Init BeanRepository
         dispatcher = new ServerEventDispatcher(dolphin);
@@ -139,19 +142,23 @@ public class DolphinContext {
         mBeanRegistry = new DolphinContextMBeanRegistry(id);
 
         //Init ControllerHandler
-        controllerHandler = new ControllerHandler(mBeanRegistry, containerManager, beanBuilder, beanRepository, controllerRepository);
-
-        dolphinSession = new DolphinSessionImpl(id, new Executor() {
-            @Override
-            public void execute(final Runnable command) {
-                runLater(command);
-            }
-        });
+        controllerHandler = new ControllerHandler(mBeanRegistry, beanFactory, beanBuilder, beanRepository, controllerRepository);
 
         //Register commands
         registerDolphinPlatformDefaultCommands();
+        mBeanSubscription = mBeanRegistry.registerDolphinContext(clientSession, garbageCollector);
 
-        mBeanSubscription = mBeanRegistry.registerDolphinContext(dolphinSession, garbageCollector);
+
+        //TODO: Executor!!!!!!
+        //dolphinSession = new DolphinSessionImpl(id, new Executor() {
+        //    @Override
+        //    public void execute(final Runnable command) {
+        //        runLater(command);
+        //    }
+        //});
+
+
+
     }
 
     private <T extends Command> void registerCommand(final ActionRegistry registry, final Class<T> commandClass, final Callback<T> handler) {
@@ -240,12 +247,6 @@ public class DolphinContext {
     }
 
     public void destroy() {
-        preDestroyCallback.call(this);
-
-        //Deregister from event bus
-        //dolphinEventBus.unsubscribeSession(getId());
-
-        //Destroy all controllers
         controllerHandler.destroyAllControllers();
 
         if (mBeanSubscription != null) {
@@ -323,8 +324,8 @@ public class DolphinContext {
         return results;
     }
 
-    public DolphinSession getDolphinSession() {
-        return dolphinSession;
+    public ClientSession getDolphinSession() {
+        return clientSession;
     }
 
     @Override

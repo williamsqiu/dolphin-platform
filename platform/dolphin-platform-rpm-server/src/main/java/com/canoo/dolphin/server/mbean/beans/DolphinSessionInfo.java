@@ -15,9 +15,9 @@
  */
 package com.canoo.dolphin.server.mbean.beans;
 
-import com.canoo.dolphin.server.DolphinSession;
 import com.canoo.dolphin.server.impl.gc.GarbageCollector;
 import com.canoo.dolphin.util.Assert;
+import com.canoo.platform.server.client.ClientSession;
 
 import java.lang.ref.WeakReference;
 import java.util.Set;
@@ -27,17 +27,17 @@ import java.util.Set;
  */
 public class DolphinSessionInfo implements DolphinSessionInfoMBean {
 
-    private final WeakReference<DolphinSession> dolphinSessionRef;
+    private final WeakReference<ClientSession> dolphinSessionRef;
 
     private final WeakReference<GarbageCollector> garbageCollectionRef;
 
-    public DolphinSessionInfo(DolphinSession dolphinSession, GarbageCollector garbageCollector) {
+    public DolphinSessionInfo(ClientSession dolphinSession, GarbageCollector garbageCollector) {
         this.dolphinSessionRef = new WeakReference<>(dolphinSession);
         this.garbageCollectionRef = new WeakReference<>(garbageCollector);
     }
 
-    private DolphinSession getSession() {
-        DolphinSession session = dolphinSessionRef.get();
+    private ClientSession getSession() {
+        ClientSession session = dolphinSessionRef.get();
         Assert.requireNonNull(session, "session");
         return session;
     }

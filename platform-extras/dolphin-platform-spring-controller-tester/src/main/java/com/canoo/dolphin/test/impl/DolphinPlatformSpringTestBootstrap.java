@@ -17,14 +17,14 @@ package com.canoo.dolphin.test.impl;
 
 import com.canoo.dolphin.BeanManager;
 import com.canoo.dolphin.client.ClientContext;
-import com.canoo.dolphin.server.DolphinSession;
 import com.canoo.dolphin.server.binding.PropertyBinder;
 import com.canoo.dolphin.server.binding.impl.PropertyBinderImpl;
-import com.canoo.dolphin.server.context.DolphinSessionProvider;
 import com.canoo.dolphin.server.event.DolphinEventBus;
 import com.canoo.dolphin.server.event.impl.DefaultDolphinEventBus;
 import com.canoo.dolphin.server.spring.ClientScope;
 import com.canoo.dolphin.util.Assert;
+import com.canoo.impl.server.client.ClientSessionProvider;
+import com.canoo.platform.server.client.ClientSession;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.beans.factory.config.CustomScopeConfigurer;
 import org.springframework.context.annotation.Bean;
@@ -74,7 +74,7 @@ public class DolphinPlatformSpringTestBootstrap {
 
     @Bean(name = "dolphinSession")
     @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
-    protected DolphinSession createDolphinSession(final TestConfiguration testConfiguration) {
+    protected ClientSession createDolphinSession(final TestConfiguration testConfiguration) {
         Assert.requireNonNull(testConfiguration, "testConfiguration");
         return testConfiguration.getDolphinTestContext().getDolphinSession();
     }
@@ -86,14 +86,16 @@ public class DolphinPlatformSpringTestBootstrap {
      */
     @Bean(name = "dolphinEventBus")
     @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
-    protected DolphinEventBus createEventBus(final DolphinSession dolphinSession) {
-        Assert.requireNonNull(dolphinSession, "dolphinSession");
-        return new DefaultDolphinEventBus(new DolphinSessionProvider() {
+    protected DolphinEventBus createEventBus(final ClientSession clientSession) {
+        Assert.requireNonNull(clientSession, "clientSession");
+        DefaultDolphinEventBus eventBus = new DefaultDolphinEventBus();
+        eventBus.init(new ClientSessionProvider() {
             @Override
-            public DolphinSession getCurrentDolphinSession() {
-                return dolphinSession;
+            public ClientSession getCurrentDolphinSession() {
+                return clientSession;
             }
-        });
+        }, null);
+        return eventBus;
     }
 
     @Bean(name = "propertyBinder")
@@ -103,13 +105,13 @@ public class DolphinPlatformSpringTestBootstrap {
     }
 
     @Bean(name = "customScopeConfigurer")
-    public static CustomScopeConfigurer createClientScope(final DolphinSession dolphinSession) {
-        Assert.requireNonNull(dolphinSession, "dolphinSession");
+    public static CustomScopeConfigurer createClientScope(final ClientSession clientSession) {
+        Assert.requireNonNull(clientSession, "clientSession");
         CustomScopeConfigurer configurer = new CustomScopeConfigurer();
-        configurer.addScope(ClientScope.CLIENT_SCOPE, new ClientScope(new DolphinSessionProvider() {
+        configurer.addScope(ClientScope.CLIENT_SCOPE, new ClientScope(new ClientSessionProvider() {
             @Override
-            public DolphinSession getCurrentDolphinSession() {
-                return dolphinSession;
+            public ClientSession getCurrentDolphinSession() {
+                return clientSession;
             }
         }));
         return configurer;

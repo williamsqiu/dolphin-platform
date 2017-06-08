@@ -1,1 +1,1 @@
-com.canoo.dolphin.server.spring.SpringContainerManager
+com.canoo.dolphin.server.spring.SpringManagedBeanFactory

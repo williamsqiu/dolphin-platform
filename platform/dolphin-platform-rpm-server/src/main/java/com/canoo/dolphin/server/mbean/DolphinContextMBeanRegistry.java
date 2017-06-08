@@ -16,14 +16,12 @@
 package com.canoo.dolphin.server.mbean;
 
 import com.canoo.dolphin.Subscription;
-import com.canoo.dolphin.server.DolphinSession;
 import com.canoo.dolphin.server.impl.gc.GarbageCollector;
-import com.canoo.dolphin.server.mbean.beans.DolphinControllerInfo;
-import com.canoo.dolphin.server.mbean.beans.DolphinControllerInfoMBean;
-import com.canoo.dolphin.server.mbean.beans.DolphinSessionInfo;
-import com.canoo.dolphin.server.mbean.beans.DolphinSessionInfoMBean;
-import com.canoo.dolphin.server.mbean.beans.ModelProvider;
+import com.canoo.dolphin.server.mbean.beans.*;
 import com.canoo.dolphin.util.Assert;
+import com.canoo.impl.server.mbean.MBeanDescription;
+import com.canoo.impl.server.mbean.MBeanRegistry;
+import com.canoo.platform.server.client.ClientSession;
 
 /**
  * Helper method to register MBeans for Dolphin Platform
@@ -45,7 +43,7 @@ public class DolphinContextMBeanRegistry {
      * @param session the session
      * @return the subscription for deregistration
      */
-    public Subscription registerDolphinContext(DolphinSession session, GarbageCollector garbageCollector) {
+    public Subscription registerDolphinContext(ClientSession session, GarbageCollector garbageCollector) {
         Assert.requireNonNull(session, "session");
         Assert.requireNonNull(garbageCollector, "garbageCollector");
         DolphinSessionInfoMBean mBean = new DolphinSessionInfo(session, garbageCollector);

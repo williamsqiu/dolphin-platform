@@ -15,7 +15,7 @@
  */
 package com.canoo.dolphin.client;
 
-import com.canoo.dolphin.concurrency.DolphinPlatformThreadFactory;
+import com.canoo.dolphin.concurrency.PlatformThreadFactory;
 import com.canoo.dolphin.client.impl.DefaultHttpURLConnectionFactory;
 import com.canoo.dolphin.client.impl.DefaultHttpURLConnectionResponseHandler;
 import com.canoo.dolphin.concurrency.SimpleDolphinPlatformThreadFactory;
@@ -53,7 +53,7 @@ public class ClientConfiguration {
 
     private final ExecutorService backgroundExecutor;
 
-    private final DolphinPlatformThreadFactory dolphinPlatformThreadFactory;
+    private final PlatformThreadFactory dolphinPlatformThreadFactory;
 
     private RemotingExceptionHandler remotingExceptionHandler;
 
@@ -152,7 +152,7 @@ public class ClientConfiguration {
         return backgroundExecutor;
     }
 
-    public DolphinPlatformThreadFactory getDolphinPlatformThreadFactory() {
+    public PlatformThreadFactory getDolphinPlatformThreadFactory() {
         return dolphinPlatformThreadFactory;
     }
 

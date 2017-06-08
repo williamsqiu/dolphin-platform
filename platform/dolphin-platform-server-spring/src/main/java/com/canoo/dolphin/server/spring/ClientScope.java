@@ -16,9 +16,9 @@
 package com.canoo.dolphin.server.spring;
 
 
-import com.canoo.dolphin.server.DolphinSession;
-import com.canoo.dolphin.server.context.DolphinSessionProvider;
 import com.canoo.dolphin.util.Assert;
+import com.canoo.impl.server.client.ClientSessionProvider;
+import com.canoo.platform.server.client.ClientSession;
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.config.Scope;
 
@@ -35,9 +35,9 @@ public class ClientScope implements Scope {
 
     private final static String CLIENT_STORE_ATTRIBUTE = "DolphinPlatformSpringClientScopeStore";
 
-    private final DolphinSessionProvider dolphinSessionProvider;
+    private final ClientSessionProvider dolphinSessionProvider;
 
-    public ClientScope(final DolphinSessionProvider dolphinSessionProvider) {
+    public ClientScope(final ClientSessionProvider dolphinSessionProvider) {
         Assert.requireNonNull(dolphinSessionProvider, "dolphinSessionProvider");
         this.dolphinSessionProvider = dolphinSessionProvider;
     }
@@ -69,7 +69,7 @@ public class ClientScope implements Scope {
     }
 
     private Map<String, Object> getLocalStore() {
-        DolphinSession session = getDolphinSession();
+        ClientSession session = getClientSession();
         if(session == null) {
             throw new IllegalStateException("No dolphin request found! Looks like you try to use the " + ClientScope.class.getSimpleName() + " ouside of the dolphin context!");
         }
@@ -83,10 +83,10 @@ public class ClientScope implements Scope {
 
     @Override
     public String getConversationId() {
-        return getDolphinSession().getId();
+        return getClientSession().getId();
     }
 
-    private DolphinSession getDolphinSession() {
+    private ClientSession getClientSession() {
         return dolphinSessionProvider.getCurrentDolphinSession();
     }
 }

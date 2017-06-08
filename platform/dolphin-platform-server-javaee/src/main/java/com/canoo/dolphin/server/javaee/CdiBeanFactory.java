@@ -16,16 +16,18 @@
 package com.canoo.dolphin.server.javaee;
 
 import com.canoo.dolphin.BeanManager;
-import com.canoo.dolphin.server.DolphinSession;
 import com.canoo.dolphin.server.binding.PropertyBinder;
 import com.canoo.dolphin.server.binding.impl.PropertyBinderImpl;
-import com.canoo.dolphin.server.bootstrap.DolphinPlatformBootstrap;
-import com.canoo.dolphin.server.context.DolphinContextUtils;
+import com.canoo.dolphin.server.context.DolphinContext;
+import com.canoo.dolphin.server.context.DolphinContextCommunicationHandler;
 import com.canoo.dolphin.server.event.DolphinEventBus;
+import com.canoo.dolphin.util.Assert;
+import com.canoo.impl.server.bootstrap.PlatformBootstrap;
+import com.canoo.impl.server.client.ClientSessionProvider;
+import com.canoo.platform.server.client.ClientSession;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
-import javax.servlet.ServletContext;
 
 /**
  * Factory that provides all needed Dolphin Platform extensions as CDI beans.
@@ -38,19 +40,25 @@ public class CdiBeanFactory {
     @Produces
     @ClientScoped
     public BeanManager createManager() {
-        return DolphinContextUtils.getContextForCurrentThread().getBeanManager();
+        final ClientSessionProvider provider = PlatformBootstrap.getServerCoreComponents().getInstance(ClientSessionProvider.class);
+        Assert.requireNonNull(provider, "provider");
+        final DolphinContext context = DolphinContextCommunicationHandler.getContext(provider.getCurrentDolphinSession());
+        Assert.requireNonNull(context, "context");
+        return context.getBeanManager();
     }
 
     @Produces
     @ClientScoped
-    public DolphinSession createDolphinSession() {
-        return DolphinPlatformBootstrap.getSessionProvider().getCurrentDolphinSession();
+    public ClientSession createDolphinSession() {
+        final ClientSessionProvider provider = PlatformBootstrap.getServerCoreComponents().getInstance(ClientSessionProvider.class);
+        Assert.requireNonNull(provider, "provider");
+        return provider.getCurrentDolphinSession();
     }
 
     @Produces
     @ApplicationScoped
-    public DolphinEventBus createEventBus(ServletContext servletContext) {
-        return DolphinPlatformBootstrap.createEventBus(DolphinPlatformBootstrap.getConfiguration(servletContext));
+    public DolphinEventBus createEventBus() {
+        return PlatformBootstrap.getServerCoreComponents().getInstance(DolphinEventBus.class);
     }
 
     @Produces

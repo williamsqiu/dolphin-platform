@@ -15,8 +15,8 @@
  */
 package com.canoo.dolphin.server.spring;
 
-import com.canoo.dolphin.server.container.ModelInjector;
 import com.canoo.dolphin.util.Assert;
+import com.canoo.impl.server.beans.PostConstructInterceptor;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.InstantiationAwareBeanPostProcessorAdapter;
 
@@ -29,18 +29,18 @@ import org.springframework.beans.factory.config.InstantiationAwareBeanPostProces
  */
 public class SpringModelInjector extends InstantiationAwareBeanPostProcessorAdapter {
 
-    private final ThreadLocal<ModelInjector> currentModelInjector = new ThreadLocal<>();
+    private final ThreadLocal<PostConstructInterceptor> currentInterceptor = new ThreadLocal<>();
 
     private final ThreadLocal<Class> currentControllerClass = new ThreadLocal<>();
 
     private static final SpringModelInjector instance = new SpringModelInjector();
 
-    public void prepare(final Class controllerClass, final ModelInjector injector) {
+    public void prepare(final Class controllerClass, final PostConstructInterceptor interceptor) {
         Assert.requireNonNull(controllerClass, "controllerClass");
-        Assert.requireNonNull(injector, "injector");
+        Assert.requireNonNull(interceptor, "interceptor");
 
         currentControllerClass.set(controllerClass);
-        currentModelInjector.set(injector);
+        currentInterceptor.set(interceptor);
     }
 
     @Override
@@ -48,12 +48,12 @@ public class SpringModelInjector extends InstantiationAwareBeanPostProcessorAdap
         Assert.requireNonNull(bean, "bean");
         Class controllerClass = currentControllerClass.get();
         if (controllerClass != null && controllerClass.isAssignableFrom(bean.getClass())) {
-            ModelInjector modelInjector = currentModelInjector.get();
+            PostConstructInterceptor modelInjector = currentInterceptor.get();
             if (modelInjector != null) {
-                modelInjector.inject(bean);
+                modelInjector.intercept(bean);
             }
             currentControllerClass.set(null);
-            currentModelInjector.set(null);
+            currentInterceptor.set(null);
         }
         return true;
     }

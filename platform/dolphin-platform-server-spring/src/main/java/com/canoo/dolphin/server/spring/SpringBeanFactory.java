@@ -16,19 +16,20 @@
 package com.canoo.dolphin.server.spring;
 
 import com.canoo.dolphin.BeanManager;
-import com.canoo.dolphin.server.DolphinSession;
 import com.canoo.dolphin.server.binding.PropertyBinder;
 import com.canoo.dolphin.server.binding.impl.PropertyBinderImpl;
-import com.canoo.dolphin.server.bootstrap.DolphinPlatformBootstrap;
-import com.canoo.dolphin.server.context.DolphinContextUtils;
+import com.canoo.dolphin.server.context.DolphinContext;
+import com.canoo.dolphin.server.context.DolphinContextCommunicationHandler;
 import com.canoo.dolphin.server.event.DolphinEventBus;
+import com.canoo.dolphin.util.Assert;
+import com.canoo.impl.server.bootstrap.PlatformBootstrap;
+import com.canoo.impl.server.client.ClientSessionProvider;
+import com.canoo.platform.server.client.ClientSession;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.beans.factory.config.CustomScopeConfigurer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
-
-import javax.servlet.ServletContext;
 
 /**
  * Provides all Dolphin Platform Beans and Scopes for CDI
@@ -44,13 +45,19 @@ public class SpringBeanFactory {
     @Bean(name = "beanManager")
     @ClientScoped
     protected BeanManager createManager() {
-        return DolphinContextUtils.getContextForCurrentThread().getBeanManager();
+        final ClientSessionProvider provider = PlatformBootstrap.getServerCoreComponents().getInstance(ClientSessionProvider.class);
+        Assert.requireNonNull(provider, "provider");
+        final DolphinContext context = DolphinContextCommunicationHandler.getContext(provider.getCurrentDolphinSession());
+        Assert.requireNonNull(context, "context");
+        return context.getBeanManager();
     }
 
-    @Bean(name = "dolphinSession")
+    @Bean(name = "clientSession")
     @ClientScoped
-    protected DolphinSession createDolphinSession() {
-        return DolphinPlatformBootstrap.getSessionProvider().getCurrentDolphinSession();
+    protected ClientSession createClientSession() {
+        final ClientSessionProvider provider = PlatformBootstrap.getServerCoreComponents().getInstance(ClientSessionProvider.class);
+        Assert.requireNonNull(provider, "provider");
+        return provider.getCurrentDolphinSession();
     }
 
     /**
@@ -60,8 +67,8 @@ public class SpringBeanFactory {
      */
     @Bean(name = "dolphinEventBus")
     @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
-    protected DolphinEventBus createEventBus(ServletContext servletContext) {
-        return DolphinPlatformBootstrap.createEventBus(DolphinPlatformBootstrap.getConfiguration(servletContext));
+    protected DolphinEventBus createEventBus() {
+        return PlatformBootstrap.getServerCoreComponents().getInstance(DolphinEventBus.class);
     }
 
     @Bean(name = "propertyBinder")
@@ -72,8 +79,10 @@ public class SpringBeanFactory {
 
     @Bean(name = "customScopeConfigurer")
     public static CustomScopeConfigurer createClientScope() {
-        CustomScopeConfigurer configurer = new CustomScopeConfigurer();
-        configurer.addScope(ClientScope.CLIENT_SCOPE, new ClientScope(DolphinPlatformBootstrap.getSessionProvider()));
+        final ClientSessionProvider provider = PlatformBootstrap.getServerCoreComponents().getInstance(ClientSessionProvider.class);
+        Assert.requireNonNull(provider, "provider");
+        final CustomScopeConfigurer configurer = new CustomScopeConfigurer();
+        configurer.addScope(ClientScope.CLIENT_SCOPE, new ClientScope(provider));
         return configurer;
     }
 }

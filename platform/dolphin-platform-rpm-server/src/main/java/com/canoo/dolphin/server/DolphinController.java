@@ -40,7 +40,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * </p>
  * <p>
  * Since the controller instances are managed by the platform you can use all teh default annotations and APIs
- * that are supported by the Platform like {@link javax.annotation.PostConstruct} or {@link javax.inject.Inject}.
+ * that are supported by the Platform like {@link javax.annotation.PostConstruct} or {@code javax.inject.Inject}.
  * In addition Dolphin Platform supports some custom annotations that can be used in a controller:
  * <ul>
  * <li>{@link com.canoo.dolphin.server.DolphinModel}</li>

@@ -17,6 +17,7 @@ package com.canoo.dolphin.server.config;
 
 import com.canoo.dolphin.server.event.impl.DefaultEventBusProvider;
 import com.canoo.dolphin.util.Assert;
+import com.canoo.impl.server.config.PlatformConfiguration;
 
 import java.io.Serializable;
 import java.util.Arrays;
@@ -25,7 +26,7 @@ import java.util.logging.Level;
 
 /**
  * This class defines the configuration of the Dolphin Platform. Normally the configuration is created based
- * on defaults and a property file (see {@link ConfigurationFileLoader}).
+ * on defaults and a property file (see {@link com.canoo.impl.server.config.ConfigurationFileLoader}).
  */
 public class RemotingConfiguration implements Serializable {
 

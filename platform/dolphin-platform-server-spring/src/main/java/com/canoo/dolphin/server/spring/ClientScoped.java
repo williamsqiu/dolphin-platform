@@ -24,7 +24,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * A custom scope that is bound to the lifecycle of a {@link com.canoo.dolphin.server.DolphinSession}
+ * A custom scope that is bound to the lifecycle of a {@link com.canoo.platform.server.client.ClientSession}
  */
 @Qualifier
 @Scope(ClientScope.CLIENT_SCOPE)
