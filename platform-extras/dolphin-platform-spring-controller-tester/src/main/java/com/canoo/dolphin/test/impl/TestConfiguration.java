@@ -3,16 +3,16 @@ package com.canoo.dolphin.test.impl;
 import com.canoo.dolphin.client.ClientConfiguration;
 import com.canoo.dolphin.client.ClientContext;
 import com.canoo.dolphin.client.impl.ClientContextImpl;
-import com.canoo.dolphin.server.DolphinSession;
-import com.canoo.dolphin.server.config.ConfigurationFileLoader;
 import com.canoo.dolphin.server.config.RemotingConfiguration;
 import com.canoo.dolphin.server.context.DefaultOpenDolphinFactory;
 import com.canoo.dolphin.server.context.DolphinContext;
-import com.canoo.impl.server.client.ClientSessionProvider;
 import com.canoo.dolphin.server.controller.ControllerRepository;
 import com.canoo.dolphin.server.controller.ControllerValidationException;
-import com.canoo.dolphin.server.impl.ClasspathScanner;
 import com.canoo.dolphin.util.Assert;
+import com.canoo.impl.server.client.ClientSessionProvider;
+import com.canoo.impl.server.config.ConfigurationFileLoader;
+import com.canoo.impl.server.scanner.ClasspathScanner;
+import com.canoo.platform.server.client.ClientSession;
 import org.opendolphin.core.client.ClientModelStore;
 import org.opendolphin.core.client.comm.AbstractClientConnector;
 import org.opendolphin.core.comm.Command;
@@ -80,7 +80,7 @@ public class TestConfiguration {
         }
 
         @Override
-        public DolphinSession getCurrentDolphinSession() {
+        public ClientSession getCurrentDolphinSession() {
             return currentContext.getDolphinSession();
         }
     }

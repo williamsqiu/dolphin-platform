@@ -16,22 +16,20 @@
 package com.canoo.dolphin.test.impl;
 
 import com.canoo.dolphin.server.config.RemotingConfiguration;
-import com.canoo.dolphin.server.container.ContainerManager;
 import com.canoo.dolphin.server.context.DolphinContext;
-import com.canoo.dolphin.server.context.DolphinContextUtils;
-import com.canoo.impl.server.client.ClientSessionProvider;
 import com.canoo.dolphin.server.context.OpenDolphinFactory;
 import com.canoo.dolphin.server.controller.ControllerRepository;
 import com.canoo.dolphin.util.Callback;
+import com.canoo.impl.server.beans.ManagedBeanFactory;
+import com.canoo.impl.server.client.ClientSessionProvider;
 import org.opendolphin.core.comm.Command;
 
 import java.util.List;
 
 public class DolphinTestContext extends DolphinContext {
 
-    public DolphinTestContext(RemotingConfiguration configuration, ClientSessionProvider dolphinSessionProvider, ContainerManager containerManager, ControllerRepository controllerRepository, OpenDolphinFactory openDolphinFactory) {
-        super(configuration, dolphinSessionProvider, containerManager, controllerRepository,openDolphinFactory, createEmptyCallback(), createEmptyCallback());
-        DolphinContextUtils.setContextForCurrentThread(this);
+    public DolphinTestContext(RemotingConfiguration configuration, ClientSessionProvider dolphinSessionProvider, ManagedBeanFactory managedBeanFactory, ControllerRepository controllerRepository, OpenDolphinFactory openDolphinFactory) {
+        super(configuration, dolphinSessionProvider.getCurrentDolphinSession(), dolphinSessionProvider, managedBeanFactory, controllerRepository,openDolphinFactory, createEmptyCallback());
     }
 
     private static Callback<DolphinContext> createEmptyCallback() {
@@ -45,7 +43,6 @@ public class DolphinTestContext extends DolphinContext {
 
     @Override
     public List<Command> handle(List<Command> commands) {
-        DolphinContextUtils.setContextForCurrentThread(this);
         return super.handle(commands);
     }
 }
