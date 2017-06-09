@@ -123,7 +123,7 @@ public class DolphinPlatformSpringTestBootstrap {
     public static CustomScopeConfigurer createClientScope(final ClientSession clientSession) {
         Assert.requireNonNull(clientSession, "clientSession");
         CustomScopeConfigurer configurer = new CustomScopeConfigurer();
-        configurer.addScope(ClientScope.CLIENT_SCOPE, new ClientScope());
+        configurer.addScope(ClientScope.CLIENT_SCOPE, new TestClientScope(clientSession));
         return configurer;
     }
 }

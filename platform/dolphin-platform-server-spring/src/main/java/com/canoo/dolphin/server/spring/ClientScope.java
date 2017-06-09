@@ -80,7 +80,9 @@ public class ClientScope implements Scope {
         return getClientSession().getId();
     }
 
-    private ClientSession getClientSession() {
-        return PlatformBootstrap.getServerCoreComponents().getInstance(ClientSessionProvider.class).getCurrentClientSession();
+    protected ClientSession getClientSession() {
+        final ClientSessionProvider clientSessionProvider = PlatformBootstrap.getServerCoreComponents().getInstance(ClientSessionProvider.class);
+        Assert.requireNonNull(clientSessionProvider, "clientSessionProvider");
+        return clientSessionProvider.getCurrentClientSession();
     }
 }

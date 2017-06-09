@@ -34,6 +34,7 @@ import javax.servlet.ServletContext;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import static org.testng.Assert.*;
 
@@ -145,7 +146,7 @@ public class DolphinContextTest {
     private final ClasspathScanner classpathScanner = new ClasspathScanner("com.canoo.dolphin");
 
     private DolphinContext createContext() throws ControllerValidationException {
-        final ClientSession session = new ClientSessionImpl("Test-ID");
+        final ClientSession session = new ClientSessionImpl("Test-ID-" + UUID.randomUUID().toString());
         return new DolphinContext(new RemotingConfiguration(), session, new ClientSessionProvider() {
             @Override
             public ClientSession getCurrentClientSession() {
