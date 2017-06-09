@@ -47,9 +47,7 @@ public class ClientContextFactory {
      */
     public static ClientContext create(final ClientConfiguration clientConfiguration) {
         Assert.requireNonNull(clientConfiguration, "clientConfiguration");
-
-        Logger openDolphinLogger = LoggerFactory.getLogger("org.opendolphin");
-
+        
         return new ClientContextImpl(clientConfiguration, new Function<ClientModelStore, AbstractClientConnector>() {
             @Override
             public AbstractClientConnector call(final ClientModelStore clientModelStore) {
