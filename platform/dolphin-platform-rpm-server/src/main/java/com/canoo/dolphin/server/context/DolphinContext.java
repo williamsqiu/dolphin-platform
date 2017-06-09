@@ -138,18 +138,6 @@ public class DolphinContext {
         //Register commands
         registerDolphinPlatformDefaultCommands();
         mBeanSubscription = mBeanRegistry.registerDolphinContext(clientSession, garbageCollector);
-
-
-        //TODO: Executor!!!!!!
-        //dolphinSession = new DolphinSessionImpl(id, new Executor() {
-        //    @Override
-        //    public void execute(final Runnable command) {
-        //        runLater(command);
-        //    }
-        //});
-
-
-
     }
 
     private <T extends Command> void registerCommand(final ActionRegistry registry, final Class<T> commandClass, final Callback<T> handler) {

@@ -34,7 +34,6 @@ public final class PlatformConfiguration implements Serializable {
 
     public static final String CORS_ENDPOINTS_URL_MAPPINGS = "corsUrlMappings";
 
-
     private final static int SESSION_TIMEOUT_DEFAULT_VALUE = 900;
 
     private final static boolean USE_CROSS_SITE_ORIGIN_FILTER_DEFAULT_VALUE = true;
@@ -153,8 +152,7 @@ public final class PlatformConfiguration implements Serializable {
             for (String value : values) {
                 builder.append(value + ", ");
             }
-            builder.deleteCharAt(builder.length() - 1);
-            builder.deleteCharAt(builder.length() - 1);
+            builder.setLength(builder.length() - 2);
             setProperty(key, builder.toString());
         }
     }

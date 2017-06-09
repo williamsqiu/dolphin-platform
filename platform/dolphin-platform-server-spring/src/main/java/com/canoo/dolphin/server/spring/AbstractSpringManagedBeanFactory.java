@@ -42,7 +42,6 @@ public abstract class AbstractSpringManagedBeanFactory implements ManagedBeanFac
     public <T> T createDependendInstance(Class<T> cls, PostConstructInterceptor<T> interceptor) {
         Assert.requireNonNull(cls, "cls");
         Assert.requireNonNull(interceptor, "interceptor");
-        // SpringBeanAutowiringSupport kann man auch nutzen
         ApplicationContext context = getContext();
         AutowireCapableBeanFactory beanFactory = context.getAutowireCapableBeanFactory();
         SpringModelInjector.getInstance().prepare(cls, interceptor);

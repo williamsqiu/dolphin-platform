@@ -1,8 +1,5 @@
 package com.canoo.dolphin.ansi;
 
-/**
- * Created by hendrikebbers on 09.06.17.
- */
 public class AnsiOut {
 
     public static final String ANSI_RESET = "\u001B[0m";
@@ -25,9 +22,5 @@ public class AnsiOut {
     public static final String ANSI_PURPLE_BACKGROUND = "\u001B[45m";
     public static final String ANSI_CYAN_BACKGROUND = "\u001B[46m";
     public static final String ANSI_WHITE_BACKGROUND = "\u001B[47m";
-
-    public static void printGreen(final String text) {
-        System.out.println(ANSI_GREEN + text + ANSI_RESET);
-    }
 
 }

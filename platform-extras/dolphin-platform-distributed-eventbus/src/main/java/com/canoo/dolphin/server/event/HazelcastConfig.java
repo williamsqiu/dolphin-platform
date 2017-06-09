@@ -6,9 +6,6 @@ import java.io.Serializable;
 
 import static com.canoo.dolphin.server.event.DistributedEventBusConfigProvider.*;
 
-/**
- * Created by hendrikebbers on 06.06.17.
- */
 public class HazelcastConfig implements Serializable {
 
     private final PlatformConfiguration configuration;

@@ -15,7 +15,7 @@ public class ClientSessionFilter implements Filter {
 
     private static final Logger LOG = LoggerFactory.getLogger(ClientSessionFilter.class);
 
-    private static final String DOLPHIN_PLATFORM_INITIALIZED_IN_SESSION = "DOLPHIN_PLATFORM_INITIALIZED_IN_SESSION";
+    private static final String INITIALIZED_IN_SESSION = "PD_INITIALIZED_IN_SESSION";
 
     private final ClientSessionManager clientSessionManager;
 
@@ -42,7 +42,7 @@ public class ClientSessionFilter implements Filter {
             } else {
                 LOG.trace("Trying to find client session {} in http session {}", clientId, httpSession.getId());
                 if (!clientSessionManager.checkValidClientSession(httpSession, clientId)) {
-                    if (httpSession.getAttribute(DOLPHIN_PLATFORM_INITIALIZED_IN_SESSION) == null) {
+                    if (httpSession.getAttribute(INITIALIZED_IN_SESSION) == null) {
                         LOG.warn("Can not find requested client for id {} in session {} (session timeout)", clientId, httpSession.getId());
                         servletResponse.sendError(HttpServletResponse.SC_REQUEST_TIMEOUT, "Can not find requested client (session timeout)!");
                     } else {
@@ -63,9 +63,9 @@ public class ClientSessionFilter implements Filter {
     private void continueRequest(HttpServletRequest request, HttpServletResponse response, FilterChain chain, final HttpSession httpSession, final String clientSessionId) throws IOException, ServletException {
         clientSessionManager.setClientSessionForThread(httpSession, clientSessionId);
         try {
-            final Object init = httpSession.getAttribute(DOLPHIN_PLATFORM_INITIALIZED_IN_SESSION);
+            final Object init = httpSession.getAttribute(INITIALIZED_IN_SESSION);
             if (init == null) {
-                httpSession.setAttribute(DOLPHIN_PLATFORM_INITIALIZED_IN_SESSION, true);
+                httpSession.setAttribute(INITIALIZED_IN_SESSION, true);
             }
 
             response.setHeader(PlatformConstants.CLIENT_ID_HTTP_HEADER_NAME, clientSessionId);

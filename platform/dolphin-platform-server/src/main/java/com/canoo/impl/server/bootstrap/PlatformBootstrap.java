@@ -41,6 +41,7 @@ public class PlatformBootstrap {
 
 
                 //TODO: We need to provide a container specific thread factory that contains managed threads
+                //See https://github.com/canoo/dolphin-platform/issues/498
                 final PlatformThreadFactory threadFactory = new SimpleDolphinPlatformThreadFactory();
                 final ManagedBeanFactory beanFactory = getBeanFactory(servletContext);
                 final ClasspathScanner classpathScanner = new ClasspathScanner(configuration.getRootPackageForClasspathScan());

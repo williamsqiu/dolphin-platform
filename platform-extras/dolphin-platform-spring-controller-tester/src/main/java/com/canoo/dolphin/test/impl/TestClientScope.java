@@ -4,9 +4,6 @@ import com.canoo.dolphin.server.spring.ClientScope;
 import com.canoo.dolphin.util.Assert;
 import com.canoo.platform.server.client.ClientSession;
 
-/**
- * Created by hendrikebbers on 09.06.17.
- */
 public class TestClientScope extends ClientScope {
 
     private final ClientSession clientSession;
