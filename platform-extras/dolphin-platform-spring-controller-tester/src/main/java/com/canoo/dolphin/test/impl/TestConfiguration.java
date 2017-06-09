@@ -4,7 +4,6 @@ import com.canoo.dolphin.client.ClientConfiguration;
 import com.canoo.dolphin.client.ClientContext;
 import com.canoo.dolphin.client.impl.ClientContextImpl;
 import com.canoo.dolphin.server.config.RemotingConfiguration;
-import com.canoo.dolphin.server.context.DefaultOpenDolphinFactory;
 import com.canoo.dolphin.server.context.DolphinContext;
 import com.canoo.dolphin.server.controller.ControllerRepository;
 import com.canoo.dolphin.server.controller.ControllerValidationException;
@@ -59,7 +58,7 @@ public class TestConfiguration {
         final TestSpringManagedBeanFactory containerManager = new TestSpringManagedBeanFactory(context);
         containerManager.init(context.getServletContext());
         final DolphinContextProviderMock dolphinContextProviderMock = new DolphinContextProviderMock();
-        dolphinTestContext = new DolphinTestContext(new RemotingConfiguration(ConfigurationFileLoader.loadConfiguration()), dolphinContextProviderMock, containerManager, controllerRepository, new DefaultOpenDolphinFactory());
+        dolphinTestContext = new DolphinTestContext(new RemotingConfiguration(ConfigurationFileLoader.loadConfiguration()), dolphinContextProviderMock, containerManager, controllerRepository);
         dolphinContextProviderMock.setCurrentContext(dolphinTestContext);
     }
 

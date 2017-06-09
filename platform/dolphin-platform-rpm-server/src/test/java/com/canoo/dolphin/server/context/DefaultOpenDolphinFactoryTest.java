@@ -28,7 +28,7 @@ public class DefaultOpenDolphinFactoryTest {
 
     @Test
     public void testDolphinCreation() {
-        OpenDolphinFactory factory = new DefaultOpenDolphinFactory();
+        OpenDolphinFactory factory = new OpenDolphinFactory();
         DefaultServerDolphin serverDolphin = factory.create();
         assertNotNull(serverDolphin);
         assertNotNull(serverDolphin.getModelStore());

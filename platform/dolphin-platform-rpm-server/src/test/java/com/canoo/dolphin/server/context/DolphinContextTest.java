@@ -151,7 +151,7 @@ public class DolphinContextTest {
             public ClientSession getCurrentClientSession() {
                 return session;
             }
-        }, new ManagedBeanFactoryMock(), new ControllerRepository(classpathScanner), new DefaultOpenDolphinFactory(), new DestroyCallbackMock());
+        }, new ManagedBeanFactoryMock(), new ControllerRepository(classpathScanner), new DestroyCallbackMock());
     }
 
     private class DestroyCallbackMock implements Callback<DolphinContext> {

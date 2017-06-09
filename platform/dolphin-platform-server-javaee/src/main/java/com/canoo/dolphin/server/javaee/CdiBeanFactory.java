@@ -16,10 +16,11 @@
 package com.canoo.dolphin.server.javaee;
 
 import com.canoo.dolphin.BeanManager;
+import com.canoo.dolphin.server.RemotingContext;
 import com.canoo.dolphin.server.binding.PropertyBinder;
-import com.canoo.dolphin.server.binding.impl.PropertyBinderImpl;
 import com.canoo.dolphin.server.context.DolphinContext;
-import com.canoo.dolphin.server.context.DolphinContextCommunicationHandler;
+import com.canoo.dolphin.server.context.DolphinContextProvider;
+import com.canoo.dolphin.server.context.RemotingContextImpl;
 import com.canoo.dolphin.server.event.DolphinEventBus;
 import com.canoo.dolphin.util.Assert;
 import com.canoo.impl.server.bootstrap.PlatformBootstrap;
@@ -39,12 +40,23 @@ public class CdiBeanFactory {
 
     @Produces
     @ClientScoped
-    public BeanManager createManager() {
-        final ClientSessionProvider provider = PlatformBootstrap.getServerCoreComponents().getInstance(ClientSessionProvider.class);
-        Assert.requireNonNull(provider, "provider");
-        final DolphinContext context = DolphinContextCommunicationHandler.getContext(provider.getCurrentClientSession());
+    public BeanManager createManager(RemotingContext remotingContext) {
+        Assert.requireNonNull(remotingContext, "remotingContext");
+        return remotingContext.getBeanManager();
+    }
+
+    @Produces
+    @ClientScoped
+    public RemotingContext createRemotingContext(DolphinEventBus eventBus) {
+        Assert.requireNonNull(eventBus, "eventBus");
+
+        final DolphinContextProvider contextProvider = PlatformBootstrap.getServerCoreComponents().getInstance(DolphinContextProvider.class);
+        Assert.requireNonNull(contextProvider, "contextProvider");
+
+        final DolphinContext context =contextProvider.getCurrentDolphinContext();
         Assert.requireNonNull(context, "context");
-        return context.getBeanManager();
+
+        return new RemotingContextImpl(context, eventBus);
     }
 
     @Produces
@@ -62,8 +74,9 @@ public class CdiBeanFactory {
     }
 
     @Produces
-    @ApplicationScoped
-    public PropertyBinder createPropertyBinder() {
-        return new PropertyBinderImpl();
+    @ClientScoped
+    public PropertyBinder createPropertyBinder(RemotingContext remotingContext) {
+        Assert.requireNonNull(remotingContext, "remotingContext");
+        return remotingContext.getBinder();
     }
 }

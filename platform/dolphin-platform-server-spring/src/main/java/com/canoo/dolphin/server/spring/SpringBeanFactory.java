@@ -16,10 +16,11 @@
 package com.canoo.dolphin.server.spring;
 
 import com.canoo.dolphin.BeanManager;
+import com.canoo.dolphin.server.RemotingContext;
 import com.canoo.dolphin.server.binding.PropertyBinder;
-import com.canoo.dolphin.server.binding.impl.PropertyBinderImpl;
 import com.canoo.dolphin.server.context.DolphinContext;
 import com.canoo.dolphin.server.context.DolphinContextProvider;
+import com.canoo.dolphin.server.context.RemotingContextImpl;
 import com.canoo.dolphin.server.event.DolphinEventBus;
 import com.canoo.dolphin.util.Assert;
 import com.canoo.impl.server.bootstrap.PlatformBootstrap;
@@ -37,6 +38,20 @@ import org.springframework.context.annotation.Scope;
 @Configuration
 public class SpringBeanFactory {
 
+    @Bean(name = "remotingContext")
+    @ClientScoped
+    protected RemotingContext createRemotingContext(DolphinEventBus eventBus) {
+        Assert.requireNonNull(eventBus, "eventBus");
+
+        final DolphinContextProvider contextProvider = PlatformBootstrap.getServerCoreComponents().getInstance(DolphinContextProvider.class);
+        Assert.requireNonNull(contextProvider, "contextProvider");
+
+        final DolphinContext context =contextProvider.getCurrentDolphinContext();
+        Assert.requireNonNull(context, "context");
+
+        return new RemotingContextImpl(context, eventBus);
+    }
+
     /**
      * Method to create a spring managed {@link com.canoo.dolphin.impl.BeanManagerImpl} instance in client scope.
      *
@@ -44,19 +59,9 @@ public class SpringBeanFactory {
      */
     @Bean(name = "beanManager")
     @ClientScoped
-    protected BeanManager createManager() {
-        final ClientSessionProvider clientSessionProvider = PlatformBootstrap.getServerCoreComponents().getInstance(ClientSessionProvider.class);
-        Assert.requireNonNull(clientSessionProvider, "clientSessionProvider");
-
-        final DolphinContextProvider dolphinContextProvider = PlatformBootstrap.getServerCoreComponents().getInstance(DolphinContextProvider.class);
-        Assert.requireNonNull(dolphinContextProvider, "dolphinContextProvider");
-
-        final ClientSession currentClientSession = clientSessionProvider.getCurrentClientSession();
-        Assert.requireNonNull(currentClientSession, "currentClientSession");
-
-        final DolphinContext context = dolphinContextProvider.getContext(currentClientSession);
-        Assert.requireNonNull(context, "context");
-        return context.getBeanManager();
+    protected BeanManager createManager(RemotingContext remotingContext) {
+        Assert.requireNonNull(remotingContext, "remotingContext");
+        return remotingContext.getBeanManager();
     }
 
     @Bean(name = "clientSession")
@@ -79,9 +84,10 @@ public class SpringBeanFactory {
     }
 
     @Bean(name = "propertyBinder")
-    @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
-    protected PropertyBinder createPropertyBinder() {
-        return new PropertyBinderImpl();
+    @ClientScoped
+    protected PropertyBinder createPropertyBinder(RemotingContext remotingContext) {
+        Assert.requireNonNull(remotingContext, "remotingContext");
+        return remotingContext.getBinder();
     }
 
     @Bean(name = "customScopeConfigurer")

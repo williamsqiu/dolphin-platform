@@ -47,6 +47,7 @@ import org.slf4j.LoggerFactory;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
@@ -86,21 +87,17 @@ public class DolphinContext {
 
     private final ClientSession clientSession;
 
-    private final ClientSessionProvider clientSessionProvider;
-
     private boolean hasResponseCommands = false;
 
-    public DolphinContext(final RemotingConfiguration configuration, ClientSession clientSession, ClientSessionProvider clientSessionProvider, ManagedBeanFactory beanFactory, ControllerRepository controllerRepository, OpenDolphinFactory dolphinFactory, Callback<DolphinContext> onDestroyCallback) {
+    public DolphinContext(final RemotingConfiguration configuration, ClientSession clientSession, ClientSessionProvider clientSessionProvider, ManagedBeanFactory beanFactory, ControllerRepository controllerRepository, Callback<DolphinContext> onDestroyCallback) {
         this.configuration = Assert.requireNonNull(configuration, "configuration");
         Assert.requireNonNull(beanFactory, "beanFactory");
         Assert.requireNonNull(controllerRepository, "controllerRepository");
-        Assert.requireNonNull(dolphinFactory, "dolphinFactory");
         this.onDestroyCallback = Assert.requireNonNull(onDestroyCallback, "onDestroyCallback");
         this.clientSession = Assert.requireNonNull(clientSession, "clientSession");
-        this.clientSessionProvider = Assert.requireNonNull(clientSessionProvider, "clientSessionProvider");
 
         //Init Open Dolphin
-        dolphin = dolphinFactory.create();
+        dolphin = new OpenDolphinFactory().create();
 
         //Init Garbage Collection
         garbageCollector = new GarbageCollector(configuration, new GarbageCollectionCallback() {
@@ -339,5 +336,9 @@ public class DolphinContext {
 
     public Future<Void> runLater(final Runnable runnable) {
         return taskQueue.addTask(runnable);
+    }
+
+    public <T> Future<T> callLater(final Callable<T> callable) {
+        return taskQueue.addTask(callable);
     }
 }

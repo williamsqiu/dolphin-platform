@@ -15,7 +15,6 @@
  */
 package com.canoo.dolphin.server.impl;
 
-import com.canoo.dolphin.server.context.DefaultOpenDolphinFactory;
 import com.canoo.dolphin.server.context.OpenDolphinFactory;
 import org.opendolphin.RemotingConstants;
 import org.testng.annotations.Test;
@@ -27,7 +26,7 @@ public class ServerEventDispatcherTest {
     @Test
     public void testLocalSystemIdentifier() {
         //given:
-        OpenDolphinFactory factory = new DefaultOpenDolphinFactory();
+        OpenDolphinFactory factory = new OpenDolphinFactory();
         ServerEventDispatcher dispatcher = new ServerEventDispatcher(factory.create());
 
         //then:

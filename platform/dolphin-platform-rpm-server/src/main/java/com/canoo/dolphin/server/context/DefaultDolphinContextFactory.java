@@ -31,8 +31,6 @@ public class DefaultDolphinContextFactory implements DolphinContextFactory {
 
     private final ControllerRepository controllerRepository;
 
-    private final OpenDolphinFactory dolphinFactory;
-
     private final ManagedBeanFactory beanFactory;
 
     private final ClientSessionProvider sessionProvider;
@@ -43,12 +41,11 @@ public class DefaultDolphinContextFactory implements DolphinContextFactory {
         this.sessionProvider = Assert.requireNonNull(sessionProvider, "sessionProvider");
         this.beanFactory = Assert.requireNonNull(beanFactory, "beanFactory");
         this.controllerRepository = new ControllerRepository(scanner);
-        this.dolphinFactory = new DefaultOpenDolphinFactory();
     }
 
     @Override
     public DolphinContext create(final ClientSession clientSession, final Callback<DolphinContext> onDestroyCallback) {
         Assert.requireNonNull(clientSession, "clientSession");
-        return new DolphinContext(configuration, clientSession, sessionProvider, beanFactory, controllerRepository, dolphinFactory, onDestroyCallback);
+        return new DolphinContext(configuration, clientSession, sessionProvider, beanFactory, controllerRepository, onDestroyCallback);
     }
 }

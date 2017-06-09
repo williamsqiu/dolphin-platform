@@ -15,6 +15,7 @@
  */
 package com.canoo.dolphin.server;
 
+import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 
 /**
@@ -27,6 +28,8 @@ public interface ClientSessionExecutor {
      * @param task the task
      * @return a future that is finished once the task is finished.
      */
-    Future<Void> runLaterInClientSession(Runnable task);
+    Future<Void> runLaterInClientSession(final Runnable runnable);
+
+    <T> Future<T> callLaterInClientSession(final Callable<T> callable);
 
 }

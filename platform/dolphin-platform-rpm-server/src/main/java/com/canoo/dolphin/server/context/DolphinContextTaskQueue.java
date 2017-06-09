@@ -22,10 +22,7 @@ import com.google.common.util.concurrent.SettableFuture;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.Future;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
@@ -66,15 +63,15 @@ public class DolphinContextTaskQueue {
         this.maxExecutionTimeUnit = Assert.requireNonNull(maxExecutionTimeUnit, "maxExecutionTimeUnit");
     }
 
-    public Future<Void> addTask(final Runnable task) {
+    public <T> Future<T> addTask(final Callable<T> task) {
         Assert.requireNonNull(task, "task");
-        final SettableFuture<Void> future = SettableFuture.create();
+        final SettableFuture<T> future = SettableFuture.<T>create();
         tasks.offer(new Runnable() {
             @Override
             public void run() {
                 try {
-                    task.run();
-                    future.set(null);
+                    final T result = task.call();
+                    future.set(result);
                 } catch (Exception e) {
                     future.setException(e);
                 }
@@ -88,7 +85,17 @@ public class DolphinContextTaskQueue {
             taskLock.unlock();
         }
         return future;
+    }
 
+    public Future<Void> addTask(final Runnable task) {
+        Assert.requireNonNull(task, "task");
+        return addTask(new Callable<Void>() {
+            @Override
+            public Void call() throws Exception {
+                task.run();
+                return null;
+            }
+        });
     }
 
     public void interrupt() {
