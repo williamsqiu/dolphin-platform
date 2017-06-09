@@ -16,8 +16,6 @@
 package com.canoo.dolphin.server.event;
 
 import com.canoo.dolphin.Subscription;
-import com.canoo.dolphin.server.context.DolphinSessionLifecycleHandler;
-import com.canoo.dolphin.server.context.DolphinSessionProvider;
 import com.canoo.dolphin.server.event.impl.AbstractEventBus;
 import com.canoo.dolphin.server.event.impl.DolphinEvent;
 import com.canoo.dolphin.util.Assert;
@@ -40,8 +38,7 @@ public class DistributedEventBus extends AbstractEventBus {
 
     private final Lock hazelcastEventPipeLock = new ReentrantLock();
 
-    public DistributedEventBus(final HazelcastInstance hazelcastClient, final DolphinSessionProvider sessionProvider, final DolphinSessionLifecycleHandler lifecycleHandler) {
-        super(sessionProvider, lifecycleHandler);
+    public DistributedEventBus(final HazelcastInstance hazelcastClient) {
         this.hazelcastClient = Assert.requireNonNull(hazelcastClient, "hazelcastClient");
     }
 

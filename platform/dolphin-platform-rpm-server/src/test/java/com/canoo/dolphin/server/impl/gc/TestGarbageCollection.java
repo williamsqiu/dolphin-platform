@@ -15,9 +15,9 @@
  */
 package com.canoo.dolphin.server.impl.gc;
 
-import com.canoo.dolphin.server.config.PlatformConfiguration;
 import com.canoo.dolphin.server.config.RemotingConfiguration;
 import com.canoo.dolphin.util.Assert;
+import com.canoo.impl.server.config.PlatformConfiguration;
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;
@@ -27,9 +27,7 @@ import java.util.Set;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertTrue;
-import static org.testng.Assert.fail;
+import static org.testng.Assert.*;
 
 public class TestGarbageCollection {
 

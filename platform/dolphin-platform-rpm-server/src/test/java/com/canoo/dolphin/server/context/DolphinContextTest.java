@@ -16,14 +16,16 @@
 package com.canoo.dolphin.server.context;
 
 import com.canoo.dolphin.impl.commands.*;
-import com.canoo.dolphin.server.DolphinSession;
 import com.canoo.dolphin.server.config.RemotingConfiguration;
-import com.canoo.dolphin.server.container.ContainerManager;
-import com.canoo.dolphin.server.container.ModelInjector;
 import com.canoo.dolphin.server.controller.ControllerRepository;
 import com.canoo.dolphin.server.controller.ControllerValidationException;
-import com.canoo.dolphin.server.impl.ClasspathScanner;
 import com.canoo.dolphin.util.Callback;
+import com.canoo.impl.server.beans.ManagedBeanFactory;
+import com.canoo.impl.server.beans.PostConstructInterceptor;
+import com.canoo.impl.server.client.ClientSessionImpl;
+import com.canoo.impl.server.client.ClientSessionProvider;
+import com.canoo.impl.server.scanner.ClasspathScanner;
+import com.canoo.platform.server.client.ClientSession;
 import org.opendolphin.core.comm.Command;
 import org.opendolphin.core.server.comm.CommandHandler;
 import org.testng.annotations.Test;
@@ -32,6 +34,7 @@ import javax.servlet.ServletContext;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import static org.testng.Assert.*;
 
@@ -41,7 +44,7 @@ public class DolphinContextTest {
     public void testUniqueId() throws ControllerValidationException {
         //given:
         List<DolphinContext> contextList = new ArrayList<>();
-        for(int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 1000; i++) {
             DolphinContext dolphinContext = createContext();
             contextList.add(dolphinContext);
         }
@@ -50,7 +53,7 @@ public class DolphinContextTest {
         assertEquals(contextList.size(), 1000);
         while (!contextList.isEmpty()) {
             DolphinContext dolphinContext = contextList.remove(0);
-            for(DolphinContext toCompare : contextList) {
+            for (DolphinContext toCompare : contextList) {
                 assertFalse(dolphinContext.getId().equals(toCompare.getId()));
                 assertTrue(dolphinContext.hashCode() != toCompare.hashCode());
                 assertFalse(dolphinContext.equals(toCompare));
@@ -62,7 +65,7 @@ public class DolphinContextTest {
     public void testUniqueBeanManager() throws ControllerValidationException {
         //given:
         List<DolphinContext> contextList = new ArrayList<>();
-        for(int i = 0; i < 100; i++) {
+        for (int i = 0; i < 100; i++) {
             DolphinContext dolphinContext = createContext();
             contextList.add(dolphinContext);
         }
@@ -70,7 +73,7 @@ public class DolphinContextTest {
         //then:
         while (!contextList.isEmpty()) {
             DolphinContext dolphinContext = contextList.remove(0);
-            for(DolphinContext toCompare : contextList) {
+            for (DolphinContext toCompare : contextList) {
                 assertFalse(dolphinContext.getBeanManager().equals(toCompare.getBeanManager()));
             }
         }
@@ -80,7 +83,7 @@ public class DolphinContextTest {
     public void testUniqueDolphin() throws ControllerValidationException {
         //given:
         List<DolphinContext> contextList = new ArrayList<>();
-        for(int i = 0; i < 100; i++) {
+        for (int i = 0; i < 100; i++) {
             DolphinContext dolphinContext = createContext();
             contextList.add(dolphinContext);
         }
@@ -88,7 +91,7 @@ public class DolphinContextTest {
         //then:
         while (!contextList.isEmpty()) {
             DolphinContext dolphinContext = contextList.remove(0);
-            for(DolphinContext toCompare : contextList) {
+            for (DolphinContext toCompare : contextList) {
                 assertFalse(dolphinContext.getDolphin().equals(toCompare.getDolphin()));
             }
         }
@@ -98,7 +101,7 @@ public class DolphinContextTest {
     public void testUniqueDolphinSession() throws ControllerValidationException {
         //given:
         List<DolphinContext> contextList = new ArrayList<>();
-        for(int i = 0; i < 100; i++) {
+        for (int i = 0; i < 100; i++) {
             DolphinContext dolphinContext = createContext();
             contextList.add(dolphinContext);
         }
@@ -106,7 +109,7 @@ public class DolphinContextTest {
         //then:
         while (!contextList.isEmpty()) {
             DolphinContext dolphinContext = contextList.remove(0);
-            for(DolphinContext toCompare : contextList) {
+            for (DolphinContext toCompare : contextList) {
                 assertFalse(dolphinContext.getDolphinSession().equals(toCompare.getDolphinSession()));
             }
         }
@@ -143,12 +146,13 @@ public class DolphinContextTest {
     private final ClasspathScanner classpathScanner = new ClasspathScanner("com.canoo.dolphin");
 
     private DolphinContext createContext() throws ControllerValidationException {
-        return new DolphinContext(new RemotingConfiguration(), new DolphinSessionProvider() {
+        final ClientSession session = new ClientSessionImpl("Test-ID-" + UUID.randomUUID().toString());
+        return new DolphinContext(new RemotingConfiguration(), session, new ClientSessionProvider() {
             @Override
-            public DolphinSession getCurrentDolphinSession() {
-                return null;
+            public ClientSession getCurrentClientSession() {
+                return session;
             }
-        }, new ContainerManagerMock(), new ControllerRepository(classpathScanner), new DefaultOpenDolphinFactory(), new DestroyCallbackMock(), new DestroyCallbackMock());
+        }, new ManagedBeanFactoryMock(), new ControllerRepository(classpathScanner), new DestroyCallbackMock());
     }
 
     private class DestroyCallbackMock implements Callback<DolphinContext> {
@@ -159,7 +163,7 @@ public class DolphinContextTest {
         }
     }
 
-    private class ContainerManagerMock implements ContainerManager {
+    private class ManagedBeanFactoryMock implements ManagedBeanFactory {
 
         @Override
         public void init(ServletContext servletContext) {
@@ -167,19 +171,20 @@ public class DolphinContextTest {
         }
 
         @Override
-        public <T> T createManagedController(Class<T> controllerClass, ModelInjector modelInjector) {
+        public <T> T createDependendInstance(Class<T> cls) {
             return null;
         }
 
         @Override
-        public <T> T createListener(Class<T> listenerClass) {
+        public <T> T createDependendInstance(Class<T> cls, PostConstructInterceptor<T> interceptor) {
             return null;
         }
 
         @Override
-        public void destroyController(Object instance, Class controllerClass) {
+        public <T> void destroyDependendInstance(T instance, Class<T> cls) {
 
         }
+
+
     }
-
 }

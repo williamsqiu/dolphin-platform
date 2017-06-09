@@ -15,8 +15,10 @@
  */
 package com.canoo.dolphin.server.javaee;
 
-import com.canoo.dolphin.server.DolphinSession;
-import com.canoo.dolphin.server.bootstrap.DolphinPlatformBootstrap;
+import com.canoo.dolphin.util.Assert;
+import com.canoo.impl.server.bootstrap.PlatformBootstrap;
+import com.canoo.impl.server.client.ClientSessionProvider;
+import com.canoo.platform.server.client.ClientSession;
 import org.apache.deltaspike.core.util.context.AbstractContext;
 import org.apache.deltaspike.core.util.context.ContextualStorage;
 
@@ -65,8 +67,10 @@ public class ClientScopeContext extends AbstractContext {
         return getDolphinSession() != null;
     }
 
-    private DolphinSession getDolphinSession() {
-        return DolphinPlatformBootstrap.getSessionProvider().getCurrentDolphinSession();
+    private ClientSession getDolphinSession() {
+        final ClientSessionProvider provider = PlatformBootstrap.getServerCoreComponents().getInstance(ClientSessionProvider.class);
+        Assert.requireNonNull(provider, "provider");
+        return provider.getCurrentClientSession();
     }
 
     public void destroy() {

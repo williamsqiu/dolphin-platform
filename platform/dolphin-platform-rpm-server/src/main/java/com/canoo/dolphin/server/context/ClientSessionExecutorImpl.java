@@ -19,6 +19,7 @@ import com.canoo.dolphin.server.ClientSessionExecutor;
 import com.canoo.dolphin.util.Assert;
 import com.google.common.util.concurrent.SettableFuture;
 
+import java.util.concurrent.Callable;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Future;
 
@@ -33,13 +34,25 @@ public class ClientSessionExecutorImpl implements ClientSessionExecutor {
     @Override
     public Future<Void> runLaterInClientSession(final Runnable task) {
         Assert.requireNonNull(task, "task");
-        final SettableFuture<Void> future = SettableFuture.create();
+        return callLaterInClientSession(new Callable<Void>() {
+            @Override
+            public Void call() throws Exception {
+                task.run();
+                return null;
+            }
+        });
+    }
+
+    @Override
+    public <T> Future<T> callLaterInClientSession(final Callable<T> task) {
+        Assert.requireNonNull(task, "task");
+        final SettableFuture<T> future = SettableFuture.<T>create();
         runLaterExecutor.execute(new Runnable() {
             @Override
             public void run() {
                 try {
-                    task.run();
-                    future.set(null);
+                    T result = task.call();
+                    future.set(result);
                 } catch (Exception e) {
                     future.setException(e);
                 }

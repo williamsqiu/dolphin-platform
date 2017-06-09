@@ -21,26 +21,20 @@ import com.canoo.dolphin.internal.BeanRepository;
 import com.canoo.dolphin.server.DolphinAction;
 import com.canoo.dolphin.server.DolphinModel;
 import com.canoo.dolphin.server.Param;
-import com.canoo.dolphin.server.container.ContainerManager;
-import com.canoo.dolphin.server.container.ModelInjector;
 import com.canoo.dolphin.server.impl.ServerBeanBuilder;
 import com.canoo.dolphin.server.impl.ServerControllerActionCallBean;
 import com.canoo.dolphin.server.mbean.DolphinContextMBeanRegistry;
 import com.canoo.dolphin.server.mbean.beans.ModelProvider;
 import com.canoo.dolphin.util.Assert;
+import com.canoo.impl.server.beans.ManagedBeanFactory;
+import com.canoo.impl.server.beans.PostConstructInterceptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * This class wrapps the complete Dolphin Platform controller handling.
@@ -58,7 +52,7 @@ public class ControllerHandler {
 
     private final Map<String, Object> models = new HashMap<>();
 
-    private final ContainerManager containerManager;
+    private final ManagedBeanFactory beanFactory;
 
     private final ServerBeanBuilder beanBuilder;
 
@@ -68,9 +62,9 @@ public class ControllerHandler {
 
     private final BeanRepository beanRepository;
 
-    public ControllerHandler(DolphinContextMBeanRegistry mBeanRegistry, ContainerManager containerManager, ServerBeanBuilder beanBuilder, BeanRepository beanRepository, ControllerRepository controllerRepository) {
+    public ControllerHandler(DolphinContextMBeanRegistry mBeanRegistry, ManagedBeanFactory beanFactory, ServerBeanBuilder beanBuilder, BeanRepository beanRepository, ControllerRepository controllerRepository) {
         this.mBeanRegistry = Assert.requireNonNull(mBeanRegistry, "mBeanRegistry");
-        this.containerManager = Assert.requireNonNull(containerManager, "containerManager");
+        this.beanFactory = Assert.requireNonNull(beanFactory, "beanFactory");
         this.beanBuilder = Assert.requireNonNull(beanBuilder, "beanBuilder");
         this.controllerRepository = Assert.requireNonNull(controllerRepository, "controllerRepository");
         this.beanRepository = Assert.requireNonNull(beanRepository, "beanRepository");
@@ -89,9 +83,9 @@ public class ControllerHandler {
         }
 
         final String id = UUID.randomUUID().toString();
-        Object instance = containerManager.createManagedController(controllerClass, new ModelInjector() {
+        Object instance = beanFactory.createDependendInstance(controllerClass, new PostConstructInterceptor() {
             @Override
-            public void inject(Object controller) {
+            public void intercept(Object controller) {
                 attachModel(id, controller);
             }
         });
@@ -113,7 +107,7 @@ public class ControllerHandler {
     public void destroyController(String id) {
         Object controller = controllers.remove(id);
         Class controllerClass = controllerClassMapping.remove(id);
-        containerManager.destroyController(controller, controllerClass);
+        beanFactory.destroyDependendInstance(controller, controllerClass);
 
         Object model = models.remove(id);
         if (model != null) {

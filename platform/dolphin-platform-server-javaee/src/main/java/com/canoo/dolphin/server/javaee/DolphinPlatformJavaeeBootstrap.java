@@ -15,12 +15,9 @@
  */
 package com.canoo.dolphin.server.javaee;
 
-import com.canoo.dolphin.server.bootstrap.DolphinPlatformBootstrap;
-import com.canoo.dolphin.server.config.ConfigurationFileLoader;
-import com.canoo.dolphin.server.config.PlatformConfiguration;
-import com.canoo.dolphin.server.config.RemotingConfiguration;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.canoo.impl.server.bootstrap.PlatformBootstrap;
+import com.canoo.impl.server.config.ConfigurationFileLoader;
+import com.canoo.impl.server.config.PlatformConfiguration;
 
 import javax.servlet.ServletContainerInitializer;
 import javax.servlet.ServletContext;
@@ -34,14 +31,10 @@ import java.util.Set;
  */
 public class DolphinPlatformJavaeeBootstrap implements ServletContainerInitializer {
 
-    private static final Logger LOG = LoggerFactory.getLogger(DolphinPlatformJavaeeBootstrap.class);
-
     @Override
     public void onStartup(final Set<Class<?>> c, final ServletContext servletContext) throws ServletException {
         PlatformConfiguration configuration = ConfigurationFileLoader.loadConfiguration();
-        if(configuration.isActive()) {
-            final DolphinPlatformBootstrap bootstrap = new DolphinPlatformBootstrap(servletContext, new RemotingConfiguration(configuration));
-            bootstrap.start();
-        }
+        PlatformBootstrap bootstrap = new PlatformBootstrap();
+        bootstrap.init(servletContext, configuration);
     }
 }

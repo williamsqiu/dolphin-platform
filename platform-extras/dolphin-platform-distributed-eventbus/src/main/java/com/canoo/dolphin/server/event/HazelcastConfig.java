@@ -1,16 +1,11 @@
 package com.canoo.dolphin.server.event;
 
-import com.canoo.dolphin.server.config.PlatformConfiguration;
+import com.canoo.impl.server.config.PlatformConfiguration;
 
 import java.io.Serializable;
 
-import static com.canoo.dolphin.server.event.DistributedEventBusConfigProvider.HAZELCAST_GROUP_NAME;
-import static com.canoo.dolphin.server.event.DistributedEventBusConfigProvider.HAZELCAST_SERVER_NAME;
-import static com.canoo.dolphin.server.event.DistributedEventBusConfigProvider.HAZELCAST_SERVER_PORT;
+import static com.canoo.dolphin.server.event.DistributedEventBusConfigProvider.*;
 
-/**
- * Created by hendrikebbers on 06.06.17.
- */
 public class HazelcastConfig implements Serializable {
 
     private final PlatformConfiguration configuration;

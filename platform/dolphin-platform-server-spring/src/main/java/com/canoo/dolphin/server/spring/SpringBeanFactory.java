@@ -16,25 +16,41 @@
 package com.canoo.dolphin.server.spring;
 
 import com.canoo.dolphin.BeanManager;
-import com.canoo.dolphin.server.DolphinSession;
+import com.canoo.dolphin.server.RemotingContext;
 import com.canoo.dolphin.server.binding.PropertyBinder;
-import com.canoo.dolphin.server.binding.impl.PropertyBinderImpl;
-import com.canoo.dolphin.server.bootstrap.DolphinPlatformBootstrap;
-import com.canoo.dolphin.server.context.DolphinContextUtils;
+import com.canoo.dolphin.server.context.DolphinContext;
+import com.canoo.dolphin.server.context.DolphinContextProvider;
+import com.canoo.dolphin.server.context.RemotingContextImpl;
 import com.canoo.dolphin.server.event.DolphinEventBus;
+import com.canoo.dolphin.util.Assert;
+import com.canoo.impl.server.bootstrap.PlatformBootstrap;
+import com.canoo.impl.server.client.ClientSessionProvider;
+import com.canoo.platform.server.client.ClientSession;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.beans.factory.config.CustomScopeConfigurer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 
-import javax.servlet.ServletContext;
-
 /**
  * Provides all Dolphin Platform Beans and Scopes for CDI
  */
 @Configuration
 public class SpringBeanFactory {
+
+    @Bean(name = "remotingContext")
+    @ClientScoped
+    protected RemotingContext createRemotingContext(DolphinEventBus eventBus) {
+        Assert.requireNonNull(eventBus, "eventBus");
+
+        final DolphinContextProvider contextProvider = PlatformBootstrap.getServerCoreComponents().getInstance(DolphinContextProvider.class);
+        Assert.requireNonNull(contextProvider, "contextProvider");
+
+        final DolphinContext context =contextProvider.getCurrentDolphinContext();
+        Assert.requireNonNull(context, "context");
+
+        return new RemotingContextImpl(context, eventBus);
+    }
 
     /**
      * Method to create a spring managed {@link com.canoo.dolphin.impl.BeanManagerImpl} instance in client scope.
@@ -43,14 +59,17 @@ public class SpringBeanFactory {
      */
     @Bean(name = "beanManager")
     @ClientScoped
-    protected BeanManager createManager() {
-        return DolphinContextUtils.getContextForCurrentThread().getBeanManager();
+    protected BeanManager createManager(RemotingContext remotingContext) {
+        Assert.requireNonNull(remotingContext, "remotingContext");
+        return remotingContext.getBeanManager();
     }
 
-    @Bean(name = "dolphinSession")
+    @Bean(name = "clientSession")
     @ClientScoped
-    protected DolphinSession createDolphinSession() {
-        return DolphinPlatformBootstrap.getSessionProvider().getCurrentDolphinSession();
+    protected ClientSession createClientSession() {
+        final ClientSessionProvider provider = PlatformBootstrap.getServerCoreComponents().getInstance(ClientSessionProvider.class);
+        Assert.requireNonNull(provider, "provider");
+        return provider.getCurrentClientSession();
     }
 
     /**
@@ -60,20 +79,21 @@ public class SpringBeanFactory {
      */
     @Bean(name = "dolphinEventBus")
     @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
-    protected DolphinEventBus createEventBus(ServletContext servletContext) {
-        return DolphinPlatformBootstrap.createEventBus(DolphinPlatformBootstrap.getConfiguration(servletContext));
+    protected DolphinEventBus createEventBus() {
+        return PlatformBootstrap.getServerCoreComponents().getInstance(DolphinEventBus.class);
     }
 
     @Bean(name = "propertyBinder")
-    @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
-    protected PropertyBinder createPropertyBinder() {
-        return new PropertyBinderImpl();
+    @ClientScoped
+    protected PropertyBinder createPropertyBinder(RemotingContext remotingContext) {
+        Assert.requireNonNull(remotingContext, "remotingContext");
+        return remotingContext.getBinder();
     }
 
     @Bean(name = "customScopeConfigurer")
     public static CustomScopeConfigurer createClientScope() {
-        CustomScopeConfigurer configurer = new CustomScopeConfigurer();
-        configurer.addScope(ClientScope.CLIENT_SCOPE, new ClientScope(DolphinPlatformBootstrap.getSessionProvider()));
+        final CustomScopeConfigurer configurer = new CustomScopeConfigurer();
+        configurer.addScope(ClientScope.CLIENT_SCOPE, new ClientScope());
         return configurer;
     }
 }

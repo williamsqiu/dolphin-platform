@@ -15,27 +15,27 @@
  */
 package com.canoo.dolphin.server.javaee;
 
-import com.canoo.dolphin.server.DolphinListener;
-import com.canoo.dolphin.server.DolphinSession;
-import com.canoo.dolphin.server.DolphinSessionListener;
 import com.canoo.dolphin.util.Assert;
+import com.canoo.platform.server.ServerListener;
+import com.canoo.platform.server.client.ClientSession;
+import com.canoo.platform.server.client.ClientSessionListener;
 import org.apache.deltaspike.core.api.provider.BeanManagerProvider;
 
 import javax.enterprise.inject.spi.BeanManager;
 
 /**
- * This listener destroyes the {@link ClientScoped} CDI scope whenever a {@link DolphinSession} will be destroyed
+ * This listener destroyes the {@link ClientScoped} CDI scope whenever a {@link ClientSession} will be destroyed
  */
-@DolphinListener
-public class DolphinContextListenerCdi implements DolphinSessionListener {
+@ServerListener
+public class DolphinContextListenerCdi implements ClientSessionListener {
 
     @Override
-    public void sessionCreated(DolphinSession dolphinSession) {
+    public void sessionCreated(ClientSession dolphinSession) {
 
     }
 
     @Override
-    public void sessionDestroyed(DolphinSession dolphinSession) {
+    public void sessionDestroyed(ClientSession dolphinSession) {
         Assert.requireNonNull(dolphinSession, "dolphinSession");
         BeanManager bm = BeanManagerProvider.getInstance().getBeanManager();
         ClientScopeContext clientContext = (ClientScopeContext) bm.getContext(ClientScoped.class);

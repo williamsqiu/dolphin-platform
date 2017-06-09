@@ -39,6 +39,7 @@ public class ServerConnector {
 
     private final AtomicBoolean initialized = new AtomicBoolean(false);
 
+    @Deprecated
     private Codec codec;
 
     private ServerModelStore serverModelStore;
@@ -98,10 +99,12 @@ public class ServerConnector {
         register(new DeletePresentationModelAction());
     }
 
+    @Deprecated
     public Codec getCodec() {
         return codec;
     }
 
+    @Deprecated
     public void setCodec(final Codec codec) {
         this.codec = codec;
     }

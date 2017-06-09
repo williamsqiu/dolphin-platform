@@ -1,6 +1,6 @@
 package com.canoo.dolphin.server.event;
 
-import com.canoo.dolphin.server.config.ConfigurationProvider;
+import com.canoo.impl.server.config.ConfigurationProvider;
 
 import java.util.HashMap;
 import java.util.Map;

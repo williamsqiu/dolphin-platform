@@ -15,10 +15,11 @@
  */
 package com.canoo.dolphin.server.context;
 
-import javax.servlet.http.HttpSession;
+import com.canoo.dolphin.util.Callback;
+import com.canoo.platform.server.client.ClientSession;
 
 public interface DolphinContextFactory {
 
-    DolphinContext create(HttpSession httpSession);
+    DolphinContext create(final ClientSession clientSession, Callback<DolphinContext> onDestroyCallback );
 
 }

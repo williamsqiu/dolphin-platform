@@ -10,7 +10,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class SimpleDolphinPlatformThreadFactory implements DolphinPlatformThreadFactory {
+public class SimpleDolphinPlatformThreadFactory implements PlatformThreadFactory {
 
     private static final Logger LOG = LoggerFactory.getLogger(SimpleDolphinPlatformThreadFactory.class);
 
