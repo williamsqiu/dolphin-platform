@@ -4,7 +4,6 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.opendolphin.LogConfig;
 import org.opendolphin.core.client.ClientAttribute;
 import org.opendolphin.core.client.ClientDolphin;
 import org.opendolphin.core.client.ClientModelStore;
@@ -18,7 +17,6 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.logging.Level;
 
 /**
  * Tests for the sequence between client requests and server responses.
@@ -27,7 +25,6 @@ import java.util.logging.Level;
 public class CommunicationTests {
     @Before
     public void setUp() {
-        LogConfig.logOnLevel(Level.INFO);
         config = new TestInMemoryConfig();
         serverConnector = config.getServerDolphin().getServerConnector();
         clientConnector = config.getClientConnector();

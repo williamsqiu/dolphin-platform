@@ -1,33 +1,27 @@
-package org.opendolphin.core.comm;
+package org.opendolphin.core.comm
 
-import core.client.comm.InMemoryClientConnector;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.opendolphin.LogConfig;
-import org.opendolphin.core.Attribute;
-import org.opendolphin.core.PresentationModel;
-import org.opendolphin.core.client.ClientAttribute;
-import org.opendolphin.core.client.ClientDolphin;
-import org.opendolphin.core.client.ClientPresentationModel;
-import org.opendolphin.core.client.comm.BlindCommandBatcher;
-import org.opendolphin.core.client.comm.OnFinishedHandler;
-import org.opendolphin.core.client.comm.RunLaterUiThreadHandler;
-import org.opendolphin.core.server.*;
-import org.opendolphin.core.server.action.DolphinServerAction;
-import org.opendolphin.core.server.comm.ActionRegistry;
-import org.opendolphin.core.server.comm.CommandHandler;
+import core.client.comm.InMemoryClientConnector
+import org.junit.After
+import org.junit.Assert
+import org.junit.Before
+import org.junit.Test
+import org.opendolphin.core.Attribute
+import org.opendolphin.core.PresentationModel
+import org.opendolphin.core.client.ClientAttribute
+import org.opendolphin.core.client.ClientDolphin
+import org.opendolphin.core.client.ClientPresentationModel
+import org.opendolphin.core.client.comm.BlindCommandBatcher
+import org.opendolphin.core.client.comm.OnFinishedHandler
+import org.opendolphin.core.client.comm.RunLaterUiThreadHandler
+import org.opendolphin.core.server.*
+import org.opendolphin.core.server.action.DolphinServerAction
+import org.opendolphin.core.server.comm.ActionRegistry
+import org.opendolphin.core.server.comm.CommandHandler
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicLong;
-import java.util.logging.Level;
-
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
+import java.util.concurrent.atomic.AtomicBoolean
+import java.util.concurrent.atomic.AtomicLong
 /**
  * Showcase for how to test an application without the GUI by
  * issuing the respective commands and model changes against the
@@ -81,7 +75,6 @@ public class FunctionalPresentationModelTests {
         context = new TestInMemoryConfig();
         serverDolphin = ((DefaultServerDolphin) (context.getServerDolphin()));
         clientDolphin = context.getClientDolphin();
-        LogConfig.logOnLevel(Level.OFF);
     }
 
     @After
@@ -391,7 +384,6 @@ public class FunctionalPresentationModelTests {
 
     @Test
     public void testStateConflictBetweenClientAndServer() {
-        LogConfig.logOnLevel(Level.INFO);
         final CountDownLatch latch = new CountDownLatch(1);
         ClientPresentationModel pm = clientDolphin.getModelStore().createModel("pm", null, new ClientAttribute("attr", 1));
         final ClientAttribute attr = pm.getAttribute("attr");

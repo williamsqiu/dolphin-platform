@@ -15,8 +15,9 @@
  */
 package org.opendolphin.core;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 /**
  * Contains four values which are used in initialization of a ModelStore.  These values specify the
@@ -28,7 +29,7 @@ import java.util.logging.Logger;
  */
 public class ModelStoreConfig {
 
-    private static final Logger log  = Logger.getLogger(ModelStoreConfig.class.getName());
+    private static final Logger LOG  = LoggerFactory.getLogger(ModelStoreConfig.class);
 
     private int pmCapacity;
     private int typeCapacity;
@@ -81,9 +82,7 @@ public class ModelStoreConfig {
     // all the capacities will be used to initialize HashMaps so they should be powers of two
     private void ensurePowerOfTwo(String parameter, int number) {
         if (Integer.bitCount(number) > 1) {
-            if (log.isLoggable(Level.WARNING)) {
-                log.warning("Parameter '" + parameter + "' should be power of two but was " + number);
-            }
+            LOG.warn("Parameter {} should be power of two but was {}", parameter, number);
         }
     }
 }

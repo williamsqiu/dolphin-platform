@@ -2,7 +2,6 @@ package org.opendolphin.core.client.comm;
 
 import groovy.util.GroovyTestCase;
 import org.junit.Assert;
-import org.opendolphin.LogConfig;
 import org.opendolphin.core.comm.Command;
 import org.opendolphin.core.comm.CreatePresentationModelCommand;
 import org.opendolphin.core.comm.GetPresentationModelCommand;
@@ -13,7 +12,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
 
 public class BlindCommandBatcherTest extends GroovyTestCase {
     @Override
@@ -136,7 +134,6 @@ public class BlindCommandBatcherTest extends GroovyTestCase {
     public void testMergeInOneCommand() {
 
         //given:
-        LogConfig.logOnLevel(Level.ALL);
         batcher.setMergeValueChanges(true);
         List<CommandAndHandler> list = new ArrayList<CommandAndHandler>();
         ValueChangedCommand command = new ValueChangedCommand();

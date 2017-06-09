@@ -16,7 +16,6 @@
 package org.opendolphin.core.comm
 
 import org.junit.Assert
-import org.opendolphin.LogConfig
 import org.opendolphin.RemotingConstants
 import org.opendolphin.core.Attribute
 import org.opendolphin.core.ModelStoreConfig
@@ -34,8 +33,6 @@ import java.beans.PropertyChangeEvent
 import java.beans.PropertyChangeListener
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
-import java.util.logging.Level
-
 /**
  * Functional tests for the server-side state changes.
  */
@@ -71,7 +68,6 @@ class ServerPresentationModelTests extends GroovyTestCase {
         context = new TestInMemoryConfig();
         serverDolphin = context.getServerDolphin();
         clientDolphin = context.getClientDolphin();
-        LogConfig.logOnLevel(Level.ALL);
     }
 
     @Override
