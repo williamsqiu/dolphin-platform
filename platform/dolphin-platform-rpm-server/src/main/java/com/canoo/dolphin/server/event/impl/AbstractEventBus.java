@@ -16,7 +16,7 @@
 package com.canoo.dolphin.server.event.impl;
 
 import com.canoo.dolphin.Subscription;
-import com.canoo.dolphin.server.context.DolphinContextUtils;
+import com.canoo.dolphin.server.context.DolphinContextCommunicationHandler;
 import com.canoo.dolphin.server.event.DolphinEventBus;
 import com.canoo.dolphin.server.event.EventSessionFilter;
 import com.canoo.dolphin.server.event.MessageListener;
@@ -127,7 +127,7 @@ public abstract class AbstractEventBus implements DolphinEventBus {
                     LOG.trace("Event listener for topic {} was already called in Dolphin Platform context {}", topic.getName(), sessionId);
                 } else {
                     LOG.trace("Event listener for topic {} must be called later in Dolphin Platform context {}", topic.getName(), sessionId);
-                    DolphinContextUtils.runLaterInClientSession(sessionId, new Runnable() {
+                    DolphinContextCommunicationHandler.getContextById(sessionId).runLater(new Runnable() {
 
                         @Override
                         public void run() {

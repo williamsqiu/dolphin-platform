@@ -23,6 +23,7 @@ import com.canoo.dolphin.server.event.DolphinEventBus;
 import com.canoo.dolphin.server.event.impl.DefaultDolphinEventBus;
 import com.canoo.dolphin.server.spring.ClientScope;
 import com.canoo.dolphin.util.Assert;
+import com.canoo.impl.server.client.ClientSessionLifecycleHandlerImpl;
 import com.canoo.impl.server.client.ClientSessionProvider;
 import com.canoo.platform.server.client.ClientSession;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -94,7 +95,7 @@ public class DolphinPlatformSpringTestBootstrap {
             public ClientSession getCurrentDolphinSession() {
                 return clientSession;
             }
-        }, null);
+        }, new ClientSessionLifecycleHandlerImpl());
         return eventBus;
     }
 
@@ -108,12 +109,7 @@ public class DolphinPlatformSpringTestBootstrap {
     public static CustomScopeConfigurer createClientScope(final ClientSession clientSession) {
         Assert.requireNonNull(clientSession, "clientSession");
         CustomScopeConfigurer configurer = new CustomScopeConfigurer();
-        configurer.addScope(ClientScope.CLIENT_SCOPE, new ClientScope(new ClientSessionProvider() {
-            @Override
-            public ClientSession getCurrentDolphinSession() {
-                return clientSession;
-            }
-        }));
+        configurer.addScope(ClientScope.CLIENT_SCOPE, new ClientScope());
         return configurer;
     }
 }

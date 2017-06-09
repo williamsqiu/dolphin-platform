@@ -27,6 +27,7 @@ import com.canoo.dolphin.server.servlet.DolphinPlatformServlet;
 import com.canoo.impl.server.beans.ManagedBeanFactory;
 import com.canoo.impl.server.bootstrap.ServerCoreComponents;
 import com.canoo.impl.server.bootstrap.modules.ClientSessionModule;
+import com.canoo.impl.server.client.ClientSessionLifecycleHandler;
 import com.canoo.impl.server.client.ClientSessionProvider;
 import com.canoo.impl.server.config.PlatformConfiguration;
 import com.canoo.impl.server.scanner.ClasspathScanner;
@@ -45,9 +46,9 @@ import java.util.ServiceLoader;
 import static com.canoo.dolphin.server.servlet.ServletConstants.DOLPHIN_SERVLET_NAME;
 
 @ModuleDefinition(value = "RPM", order = 101)
-public class RpmModule implements ServerModule {
+public class RemotingModule implements ServerModule {
 
-    private static final Logger LOG = LoggerFactory.getLogger(RpmModule.class);
+    private static final Logger LOG = LoggerFactory.getLogger(RemotingModule.class);
 
     @Override
     public List<String> getModuleDependencies() {
@@ -56,7 +57,8 @@ public class RpmModule implements ServerModule {
 
     @Override
     public boolean shouldBoot(PlatformConfiguration configuration) {
-        return false;
+        final RemotingConfiguration remotingConfiguration = new RemotingConfiguration(configuration);
+        return remotingConfiguration.isRemotingActive();
     }
 
     @Override
@@ -70,6 +72,8 @@ public class RpmModule implements ServerModule {
             final ClientSessionProvider sessionProvider = coreComponents.getInstance(ClientSessionProvider.class);
             final DolphinContextFactory dolphinContextFactory = new DefaultDolphinContextFactory(configuration, sessionProvider, beanFactory, classpathScanner);
             final DolphinContextCommunicationHandler communicationHandler = new DolphinContextCommunicationHandler(sessionProvider, dolphinContextFactory);
+            final ClientSessionLifecycleHandler lifecycleHandler = coreComponents.getInstance(ClientSessionLifecycleHandler.class);
+
             servletContext.addServlet(DOLPHIN_SERVLET_NAME, new DolphinPlatformServlet(communicationHandler)).addMapping(configuration.getDolphinPlatformServletMapping());
             LOG.debug("Dolphin Platform initialized under context \"" + servletContext.getContextPath() + "\"");
             LOG.debug("Dolphin Platform endpoint defined as " + configuration.getDolphinPlatformServletMapping());
@@ -87,28 +91,13 @@ public class RpmModule implements ServerModule {
                     providerFound = true;
                     DolphinEventBus eventBus = provider.create(configuration);
                     if(eventBus instanceof AbstractEventBus) {
-                        ((AbstractEventBus) eventBus).init(sessionProvider, null);
+                        ((AbstractEventBus) eventBus).init(sessionProvider, lifecycleHandler);
                     }
                     coreComponents.provideInstance(DolphinEventBus.class, eventBus);
                 }
             }
-
-
         }catch (ControllerValidationException cve){
             throw new ModuleInitializationException("Can not start Remote Presentation Model support based on bad controller definition", cve);
         }
     }
-
-    public static DolphinEventBus createEventBus(RemotingConfiguration configuration) {
-        Iterator<EventBusProvider> iterator = ServiceLoader.load(EventBusProvider.class).iterator();
-        while (iterator.hasNext()) {
-            EventBusProvider provider = iterator.next();
-            if (configuration.getEventbusType().equals(provider.getType())) {
-                LOG.debug("Using event bus of type {} with provider class {}", provider.getType(), provider.getClass());
-                return provider.create(configuration);
-            }
-        }
-        throw new IllegalArgumentException("No event bus provider of type " + configuration.getEventbusType() + " found!");
-    }
-
 }

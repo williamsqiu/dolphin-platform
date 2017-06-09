@@ -79,10 +79,8 @@ public class SpringBeanFactory {
 
     @Bean(name = "customScopeConfigurer")
     public static CustomScopeConfigurer createClientScope() {
-        final ClientSessionProvider provider = PlatformBootstrap.getServerCoreComponents().getInstance(ClientSessionProvider.class);
-        Assert.requireNonNull(provider, "provider");
         final CustomScopeConfigurer configurer = new CustomScopeConfigurer();
-        configurer.addScope(ClientScope.CLIENT_SCOPE, new ClientScope(provider));
+        configurer.addScope(ClientScope.CLIENT_SCOPE, new ClientScope());
         return configurer;
     }
 }

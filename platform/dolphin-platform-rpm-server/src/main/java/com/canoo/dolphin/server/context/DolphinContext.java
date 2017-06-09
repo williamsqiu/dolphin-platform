@@ -47,7 +47,6 @@ import org.slf4j.LoggerFactory;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
@@ -75,8 +74,6 @@ public class DolphinContext {
 
     private ServerPlatformBeanRepository platformBeanRepository;
 
-    private final String id;
-
     private final DolphinContextMBeanRegistry mBeanRegistry;
 
     private final Callback<DolphinContext> onDestroyCallback;
@@ -102,9 +99,6 @@ public class DolphinContext {
         this.clientSession = Assert.requireNonNull(clientSession, "clientSession");
         this.clientSessionProvider = Assert.requireNonNull(clientSessionProvider, "clientSessionProvider");
 
-
-        //ID
-        id = UUID.randomUUID().toString();
         //Init Open Dolphin
         dolphin = dolphinFactory.create();
 
@@ -124,7 +118,7 @@ public class DolphinContext {
                 return hasResponseCommands || dolphin.getModelStore().hasResponseCommands();
             }
         };
-        taskQueue = new DolphinContextTaskQueue(id, clientSessionProvider, manager, configuration.getMaxPollTime(), TimeUnit.MILLISECONDS);
+        taskQueue = new DolphinContextTaskQueue(clientSession.getId(), clientSessionProvider, manager, configuration.getMaxPollTime(), TimeUnit.MILLISECONDS);
 
         //Init BeanRepository
         dispatcher = new ServerEventDispatcher(dolphin);
@@ -139,7 +133,7 @@ public class DolphinContext {
         beanManager = new BeanManagerImpl(beanRepository, beanBuilder);
 
         //Init MBean Support
-        mBeanRegistry = new DolphinContextMBeanRegistry(id);
+        mBeanRegistry = new DolphinContextMBeanRegistry(clientSession.getId());
 
         //Init ControllerHandler
         controllerHandler = new ControllerHandler(mBeanRegistry, beanFactory, beanBuilder, beanRepository, controllerRepository);
@@ -312,7 +306,7 @@ public class DolphinContext {
     }
 
     public String getId() {
-        return id;
+        return clientSession.getId();
     }
 
     public List<Command> handle(List<Command> commands) {
@@ -335,12 +329,12 @@ public class DolphinContext {
 
         DolphinContext that = (DolphinContext) o;
 
-        return id.equals(that.id);
+        return getId().equals(that.getId());
     }
 
     @Override
     public int hashCode() {
-        return id.hashCode();
+        return getId().hashCode();
     }
 
     public Future<Void> runLater(final Runnable runnable) {

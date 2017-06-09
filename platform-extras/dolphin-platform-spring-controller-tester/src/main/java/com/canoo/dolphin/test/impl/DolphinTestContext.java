@@ -21,6 +21,7 @@ import com.canoo.dolphin.server.context.OpenDolphinFactory;
 import com.canoo.dolphin.server.controller.ControllerRepository;
 import com.canoo.dolphin.util.Callback;
 import com.canoo.impl.server.beans.ManagedBeanFactory;
+import com.canoo.impl.server.client.ClientSessionImpl;
 import com.canoo.impl.server.client.ClientSessionProvider;
 import org.opendolphin.core.comm.Command;
 
@@ -29,7 +30,7 @@ import java.util.List;
 public class DolphinTestContext extends DolphinContext {
 
     public DolphinTestContext(RemotingConfiguration configuration, ClientSessionProvider dolphinSessionProvider, ManagedBeanFactory managedBeanFactory, ControllerRepository controllerRepository, OpenDolphinFactory openDolphinFactory) {
-        super(configuration, dolphinSessionProvider.getCurrentDolphinSession(), dolphinSessionProvider, managedBeanFactory, controllerRepository,openDolphinFactory, createEmptyCallback());
+        super(configuration, new ClientSessionImpl("Test-123"), dolphinSessionProvider, managedBeanFactory, controllerRepository,openDolphinFactory, createEmptyCallback());
     }
 
     private static Callback<DolphinContext> createEmptyCallback() {

@@ -23,6 +23,7 @@ import com.canoo.dolphin.server.DolphinController;
 import com.canoo.dolphin.server.DolphinModel;
 import com.canoo.dolphin.server.DolphinSession;
 import com.canoo.dolphin.server.context.ClientSessionExecutorImpl;
+import com.canoo.platform.server.client.ClientSession;
 import oshi.SystemInfo;
 import oshi.hardware.GlobalMemory;
 import oshi.software.os.OSProcess;
@@ -49,7 +50,7 @@ public class ProcessMonitorController {
     private BeanManager beanManager;
 
     @Inject
-    private DolphinSession session;
+    private ClientSession session;
 
     private ClientSessionExecutor sessionExecutor;
 

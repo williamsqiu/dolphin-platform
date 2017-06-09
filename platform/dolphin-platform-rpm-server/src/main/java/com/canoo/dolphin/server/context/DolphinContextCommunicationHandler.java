@@ -30,7 +30,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class DolphinContextCommunicationHandler {
@@ -44,6 +46,8 @@ public class DolphinContextCommunicationHandler {
     private final Codec codec = new OptimizedJsonCodec();
 
     private final DolphinContextFactory contextFactory;
+
+    private static final HashMap<String, WeakReference<DolphinContext>> weakContextMap = new HashMap<>();
 
     public DolphinContextCommunicationHandler(final ClientSessionProvider sessionProvider, DolphinContextFactory contextFactory) {
         this.sessionProvider = Assert.requireNonNull(sessionProvider, "sessionProvider");
@@ -162,6 +166,7 @@ public class DolphinContextCommunicationHandler {
         Assert.requireNonNull(clientSession, "clientSession");
         Assert.requireNonNull(context, "context");
         clientSession.setAttribute(DOLPHIN_CONTEXT_ATTRIBUTE_NAME, context);
+        weakContextMap.put(clientSession.getId(), new WeakReference<>(context));
     }
 
     private void remove(final ClientSession clientSession) {
@@ -174,4 +179,13 @@ public class DolphinContextCommunicationHandler {
         return clientSession.getAttribute(DOLPHIN_CONTEXT_ATTRIBUTE_NAME);
     }
 
+    public static DolphinContext getContextById(String clientSessionId) {
+        Assert.requireNonBlank(clientSessionId, "clientSessionId");
+
+        WeakReference<DolphinContext> ref = weakContextMap.get(clientSessionId);
+        DolphinContext dolphinContext = ref.get();
+        Assert.requireNonNull(dolphinContext, "dolphinContext");
+
+        return dolphinContext;
+    }
 }

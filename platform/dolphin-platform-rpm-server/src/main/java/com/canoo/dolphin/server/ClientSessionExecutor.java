@@ -18,13 +18,12 @@ package com.canoo.dolphin.server;
 import java.util.concurrent.Future;
 
 /**
- * The ClientSessionExecutor can be used to execute tasks later on a specific client session (see {@link DolphinSession}).
+ * The ClientSessionExecutor can be used to execute tasks later on a specific client session (see {@link com.canoo.platform.server.client.ClientSession}).
  */
 public interface ClientSessionExecutor {
 
     /**
      * Executes the given task later in the given client session
-     * @param clientSessionId id of the client session
      * @param task the task
      * @return a future that is finished once the task is finished.
      */

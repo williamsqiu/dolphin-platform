@@ -49,7 +49,9 @@ public class PlatformBootstrap {
 
                 final Map<String, ServerModule> modules = new HashMap<>();
                 for (final Class<?> moduleClass : moduleClasses) {
-                    modules.put(moduleClass.getAnnotation(ModuleDefinition.class).value(), (ServerModule) moduleClass.newInstance());
+                    ModuleDefinition moduleDefinition = moduleClass.getAnnotation(ModuleDefinition.class);
+                    ServerModule instance = (ServerModule) moduleClass.newInstance();
+                    modules.put(moduleDefinition.value(), (ServerModule) instance);
                 }
 
                 LOG.info("Found {} Dolphin Plaform modules", modules.size());

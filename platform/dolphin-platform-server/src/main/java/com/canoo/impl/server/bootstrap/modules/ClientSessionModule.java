@@ -44,7 +44,8 @@ public class ClientSessionModule extends AbstractBaseModule {
         final ManagedBeanFactory beanFactory = coreComponents.getManagedBeanFactory();
 
         final ClientSessionLifecycleHandlerImpl lifecycleHandler = new ClientSessionLifecycleHandlerImpl();
-        coreComponents.provideInstance(ClientSessionProvider.class, new ClientSessionProvider() {
+        coreComponents.provideInstance(ClientSessionLifecycleHandler.class, lifecycleHandler);
+                coreComponents.provideInstance(ClientSessionProvider.class, new ClientSessionProvider() {
             @Override
             public ClientSession getCurrentDolphinSession() {
                 return lifecycleHandler.getCurrentDolphinSession();
