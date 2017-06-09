@@ -31,7 +31,6 @@ import java.net.URL;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.logging.Level;
 
 /**
  * Configuration class for a Dolphin Platform client. A configuration is needed to create a {@link ClientContext} by
@@ -57,8 +56,6 @@ public class ClientConfiguration {
 
     private RemotingExceptionHandler remotingExceptionHandler;
 
-    private Level dolphinLogLevel;
-
     private long connectionTimeout;
 
     private HttpURLConnectionFactory connectionFactory;
@@ -78,7 +75,6 @@ public class ClientConfiguration {
     public ClientConfiguration(URL serverEndpoint, Executor uiExecutor) {
         this.serverEndpoint = Assert.requireNonNull(serverEndpoint, "serverEndpoint");
         this.uiExecutor = Assert.requireNonNull(uiExecutor, "uiExecutor");
-        this.dolphinLogLevel = Level.SEVERE;
         this.connectionTimeout = DEFAULT_CONNECTION_TIMEOUT;
         dolphinPlatformThreadFactory = new SimpleDolphinPlatformThreadFactory();
         backgroundExecutor = Executors.newCachedThreadPool(dolphinPlatformThreadFactory);
@@ -104,25 +100,6 @@ public class ClientConfiguration {
      */
     public URL getServerEndpoint() {
         return serverEndpoint;
-    }
-
-    /**
-     * Returns the logging level for the remoting layer
-     *
-     * @return the logging level for the remoting layer
-     */
-    public Level getDolphinLogLevel() {
-        return dolphinLogLevel;
-    }
-
-    /**
-     * Sets the logging level for the remoting layer
-     *
-     * @param dolphinLogLevel the logging level for the remoting layer
-     */
-    public void setDolphinLogLevel(Level dolphinLogLevel) {
-        Assert.requireNonNull(dolphinLogLevel, "dolphinLogLevel");
-        this.dolphinLogLevel = dolphinLogLevel;
     }
 
     /**

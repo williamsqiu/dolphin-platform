@@ -33,7 +33,6 @@ import java.util.ServiceLoader;
  * <p>
  * Currently the following properties will be supported in the "dolphin.properties" file
  * <p>
- * - openDolphinLogLevel that defines the level of the remoting logging (supported: "INFO", "WARN", etc.)
  * - servletMapping that defines the endpoint of the Dolphin Platform servlet
  * - useCrossSiteOriginFilter (true / false) that defines if a cross site origin filter should be used
  * <p>

@@ -19,14 +19,15 @@ import org.opendolphin.core.comm.ValueChangedCommand;
 import org.opendolphin.core.server.ServerAttribute;
 import org.opendolphin.core.server.comm.ActionRegistry;
 import org.opendolphin.core.server.comm.CommandHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.logging.Logger;
 
 public class StoreValueChangeAction extends DolphinServerAction {
 
-    private static final Logger LOG = Logger.getLogger(StoreValueChangeAction.class.getName());
+    private static final Logger LOG = LoggerFactory.getLogger(StoreValueChangeAction.class);
 
     public void registerIn(final ActionRegistry registry) {
         registry.register(ValueChangedCommand.class, new CommandHandler<ValueChangedCommand>() {
@@ -35,7 +36,7 @@ public class StoreValueChangeAction extends DolphinServerAction {
                 final ServerAttribute attribute = getServerModelStore().findAttributeById(command.getAttributeId());
                 if (attribute != null) {
                     if (! Objects.equals(attribute.getValue(), command.getOldValue())) {
-                        LOG.warning("S: updating attribute with id '" + command.getAttributeId() + "' to new value '" + command.getNewValue() + "' even though its old command value '" + command.getOldValue() + "' does not conform to the old value of '" + attribute.getValue() + "'. Client overrules server.");
+                        LOG.warn("S: updating attribute with id '{}' to new value '{}' even though its old command value '{}' does not conform to the old value of '{}'. Client overrules server.", command.getAttributeId(), command.getNewValue(), command.getOldValue(), attribute.getValue());
                     }
 
                     attribute.silently(new Runnable() {
@@ -46,7 +47,7 @@ public class StoreValueChangeAction extends DolphinServerAction {
 
                     });
                 } else {
-                    LOG.severe("S: cannot find attribute with id '" + command.getAttributeId() + "' to change value from '" + command.getOldValue() + "' to '" + command.getNewValue() + "'.");
+                    LOG.error("S: cannot find attribute with id '{}' to change value from '{}' to '{}'.", command.getAttributeId(), command.getOldValue(), command.getNewValue());
                 }
             }
         });

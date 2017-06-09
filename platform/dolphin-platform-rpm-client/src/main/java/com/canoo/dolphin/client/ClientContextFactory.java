@@ -22,11 +22,10 @@ import com.canoo.dolphin.util.Assert;
 import org.opendolphin.core.client.ClientModelStore;
 import org.opendolphin.core.client.comm.AbstractClientConnector;
 import org.opendolphin.util.Function;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Factory to create a {@link ClientContext}. Normally you will create a {@link ClientContext} at the bootstrap of your
@@ -48,11 +47,7 @@ public class ClientContextFactory {
      */
     public static ClientContext create(final ClientConfiguration clientConfiguration) {
         Assert.requireNonNull(clientConfiguration, "clientConfiguration");
-
-        Level openDolphinLogLevel = clientConfiguration.getDolphinLogLevel();
-        Logger openDolphinLogger = Logger.getLogger("org.opendolphin");
-        openDolphinLogger.setLevel(openDolphinLogLevel);
-
+        
         return new ClientContextImpl(clientConfiguration, new Function<ClientModelStore, AbstractClientConnector>() {
             @Override
             public AbstractClientConnector call(final ClientModelStore clientModelStore) {

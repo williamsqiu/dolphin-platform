@@ -17,13 +17,14 @@ package org.opendolphin.core.server;
 
 import org.opendolphin.RemotingConstants;
 import org.opendolphin.core.BasePresentationModel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
-import java.util.logging.Logger;
 
 public class ServerPresentationModel extends BasePresentationModel<ServerAttribute> {
 
-    private static final Logger LOG = Logger.getLogger(ServerPresentationModel.class.getName());
+    private static final Logger LOG = LoggerFactory.getLogger(ServerPresentationModel.class);
 
     private ServerModelStore modelStore;
 
@@ -33,7 +34,7 @@ public class ServerPresentationModel extends BasePresentationModel<ServerAttribu
     public ServerPresentationModel(final String id, final List<ServerAttribute> attributes, final ServerModelStore serverModelStore) {
         super((id != null && id.length() > 0) ? id : makeId(serverModelStore), attributes);
         if (id != null && id.endsWith(RemotingConstants.SERVER_PM_AUTO_ID_SUFFIX)) {
-            LOG.info("Creating a PM with self-provided id \'" + id + "\' even though it ends with a reserved suffix.");
+            LOG.info("Creating a PM with self-provided id '{}' even though it ends with a reserved suffix.", id);
         }
         modelStore = serverModelStore;
     }

@@ -20,13 +20,14 @@ import org.opendolphin.core.comm.ChangeAttributeMetadataCommand;
 import org.opendolphin.core.server.ServerAttribute;
 import org.opendolphin.core.server.comm.ActionRegistry;
 import org.opendolphin.core.server.comm.CommandHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
-import java.util.logging.Logger;
 
 public class StoreAttributeAction extends DolphinServerAction {
 
-    private static final Logger LOG = Logger.getLogger(StoreAttributeAction.class.getName());
+    private static final Logger LOG = LoggerFactory.getLogger(StoreAttributeAction.class);
 
     public void registerIn(final ActionRegistry registry) {
         registry.register(ChangeAttributeMetadataCommand.class, new CommandHandler<ChangeAttributeMetadataCommand>() {
@@ -34,7 +35,7 @@ public class StoreAttributeAction extends DolphinServerAction {
             public void handleCommand(final ChangeAttributeMetadataCommand command, final List response) {
                 final Attribute attribute = getServerModelStore().findAttributeById(command.getAttributeId());
                 if (attribute == null) {
-                    LOG.warning("Cannot find attribute with id '" + command.getAttributeId() + "'. Metadata remains unchanged.");
+                    LOG.warn("Cannot find attribute with id '{}'. Metadata remains unchanged.", command.getAttributeId());
                     return;
                 }
 

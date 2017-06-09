@@ -7,7 +7,6 @@ as `project/src/main/resources/META-INF/dolphin.properties`. This file must be d
 Here is an example how such a file might look:
 [source,txt]
 ----
-openDolphinLogLevel=OFF
 useCrossSiteOriginFilter=true
 ----
 
@@ -18,11 +17,6 @@ Currently the following properties are supported by the Dolphin Platform:
 .Table title
 |===
 |Name |Description |Supported values |Default value
-
-|openDolphinLogLevel
-|Defines the logging level for the remoting layer.
-|off, severe, warning, info, config, fine, finer, finest, all
-|severe
 
 |useCrossSiteOriginFilter
 |Boolean property that defines if the HTTP filter for the cross site origin policy should be used. By default the filter

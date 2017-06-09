@@ -22,13 +22,14 @@ import org.opendolphin.core.comm.Command;
 import org.opendolphin.core.comm.CreatePresentationModelCommand;
 import org.opendolphin.core.comm.DeletePresentationModelCommand;
 import org.opendolphin.core.comm.ValueChangedCommand;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.logging.Logger;
 
 /**
  * The ServerModelStore is a {@link org.opendolphin.core.ModelStore} with customized behavior appropriate to the
@@ -37,7 +38,7 @@ import java.util.logging.Logger;
  */
 public class ServerModelStore extends ModelStore<ServerAttribute, ServerPresentationModel> {
 
-    private static final Logger LOG = Logger.getLogger(ServerModelStore.class.getName());
+    private static final Logger LOG = LoggerFactory.getLogger(ServerModelStore.class);
 
 
     /**
@@ -156,7 +157,7 @@ public class ServerModelStore extends ModelStore<ServerAttribute, ServerPresenta
             return;
         }
         if (attribute == null) {
-            LOG.severe("Cannot change value on a null attribute to '" + value);
+            LOG.error("Cannot change value on a null attribute to '{}'", value);
             return;
         }
         forceChangeValue(value, response, attribute);

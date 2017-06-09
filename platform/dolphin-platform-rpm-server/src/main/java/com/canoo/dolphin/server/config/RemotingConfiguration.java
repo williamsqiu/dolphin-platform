@@ -20,7 +20,6 @@ import com.canoo.dolphin.util.Assert;
 import com.canoo.impl.server.config.PlatformConfiguration;
 
 import java.io.Serializable;
-import java.util.logging.Level;
 
 /**
  * This class defines the configuration of the Dolphin Platform. Normally the configuration is created based
@@ -29,8 +28,6 @@ import java.util.logging.Level;
 public class RemotingConfiguration implements Serializable {
 
     public static final String ACTIVE = "remoting.active";
-
-    public static final String OPEN_DOLPHIN_LOG_LEVEL = "openDolphinLogLevel";
 
     public static final String DOLPHIN_PLATFORM_SERVLET_MAPPING = "servletMapping";
 
@@ -58,7 +55,6 @@ public class RemotingConfiguration implements Serializable {
         this(new PlatformConfiguration());
         configuration.setProperty(DOLPHIN_PLATFORM_SERVLET_MAPPING, DOLPHIN_PLATFORM_SERVLET_MAPPING_DEFAULT_VALUE);
         configuration.setProperty(EVENTBUS_TYPE, EVENTBUS_TYPE_DEFAULT_VALUE);
-        configuration.setProperty(OPEN_DOLPHIN_LOG_LEVEL, OPEN_DOLPHIN_LOG_LEVEL_DEFAULT_VALUE);
         configuration.setLongProperty(MAX_POLL_TIME, MAX_POLL_TIME_DEFAULT_VALUE);
         configuration.setBooleanProperty(GARBAGE_COLLECTION_ACTIVE, USE_GC_DEFAULT_VALUE);
     }
@@ -69,30 +65,6 @@ public class RemotingConfiguration implements Serializable {
 
     public String getDolphinPlatformServletMapping() {
         return configuration.getProperty(DOLPHIN_PLATFORM_SERVLET_MAPPING, DOLPHIN_PLATFORM_SERVLET_MAPPING_DEFAULT_VALUE);
-    }
-
-    public Level getOpenDolphinLogLevel() {
-        String level = configuration.getProperty(OPEN_DOLPHIN_LOG_LEVEL, OPEN_DOLPHIN_LOG_LEVEL_DEFAULT_VALUE);
-        if ("info".equalsIgnoreCase(level.trim())) {
-            return Level.INFO;
-        } else if ("severe".equalsIgnoreCase(level.trim())) {
-            return Level.SEVERE;
-        } else if ("all".equalsIgnoreCase(level.trim())) {
-            return Level.ALL;
-        } else if ("config".equalsIgnoreCase(level.trim())) {
-            return Level.CONFIG;
-        } else if ("fine".equalsIgnoreCase(level.trim())) {
-            return Level.FINE;
-        } else if ("finer".equalsIgnoreCase(level.trim())) {
-            return Level.FINER;
-        } else if ("finest".equalsIgnoreCase(level.trim())) {
-            return Level.FINEST;
-        } else if ("off".equalsIgnoreCase(level.trim())) {
-            return Level.OFF;
-        } else if ("warning".equalsIgnoreCase(level.trim())) {
-            return Level.WARNING;
-        }
-        return Level.SEVERE;
     }
 
     public long getMaxPollTime() {

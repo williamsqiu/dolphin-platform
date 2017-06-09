@@ -22,15 +22,16 @@ import org.opendolphin.core.server.ServerModelStore;
 import org.opendolphin.core.server.ServerPresentationModel;
 import org.opendolphin.core.server.comm.ActionRegistry;
 import org.opendolphin.core.server.comm.CommandHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
 
 public class CreatePresentationModelAction extends DolphinServerAction {
 
-    private static final Logger LOG = Logger.getLogger(CreatePresentationModelAction.class.getName());
+    private static final Logger LOG = LoggerFactory.getLogger(CreatePresentationModelAction.class);
 
     public void registerIn(final ActionRegistry registry) {
 
@@ -44,12 +45,12 @@ public class CreatePresentationModelAction extends DolphinServerAction {
 
     private static void createPresentationModel(final CreatePresentationModelCommand command, final ServerModelStore serverModelStore) {
         if (serverModelStore.findPresentationModelById(command.getPmId()) != null) {
-            LOG.info("Ignoring create PM '" + command.getPmId() + "' since it is already in the model store.");
+            LOG.info("Ignoring create PM '{}' since it is already in the model store.", command.getPmId());
             return;
         }
 
         if (command.getPmId().endsWith(RemotingConstants.SERVER_PM_AUTO_ID_SUFFIX)) {
-            LOG.info("Creating the PM '" + command.getPmId() + "' with reserved server-auto-suffix.");
+            LOG.info("Creating the PM '{}' with reserved server-auto-suffix.", command.getPmId());
         }
 
         List<ServerAttribute> attributes = new LinkedList();
