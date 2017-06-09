@@ -44,7 +44,7 @@ public class ClientSessionExecutorImpl implements ClientSessionExecutor {
     }
 
     @Override
-    public <T> Future<T> callLaterInClientSession(Callable<T> task) {
+    public <T> Future<T> callLaterInClientSession(final Callable<T> task) {
         Assert.requireNonNull(task, "task");
         final SettableFuture<T> future = SettableFuture.<T>create();
         runLaterExecutor.execute(new Runnable() {

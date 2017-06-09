@@ -1,5 +1,6 @@
 package com.canoo.impl.server.bootstrap;
 
+import com.canoo.dolphin.ansi.AnsiOut;
 import com.canoo.dolphin.concurrency.PlatformThreadFactory;
 import com.canoo.dolphin.concurrency.SimpleDolphinPlatformThreadFactory;
 import com.canoo.dolphin.util.Assert;
@@ -28,8 +29,8 @@ public class PlatformBootstrap {
         Assert.requireNonNull(servletContext, "servletContext");
         Assert.requireNonNull(configuration, "configuration");
 
-
         if(configuration.isActive()) {
+            printLogo();
             try {
                 LOG.info("Will boot Dolphin Plaform now");
 
@@ -102,5 +103,36 @@ public class PlatformBootstrap {
 
     public static ServerCoreComponents getServerCoreComponents() {
         return serverCoreComponents;
+    }
+
+    private void printLogo() {
+        final String strokeColor = AnsiOut.ANSI_BLUE;
+        final String textColor = AnsiOut.ANSI_RED;
+        final String borderColor = AnsiOut.ANSI_GREEN;
+
+
+        final String borderStart = AnsiOut.ANSI_BOLD + borderColor;
+        final String borderEnd = AnsiOut.ANSI_RESET;
+        final String borderPipe = borderStart + "|" + borderEnd;
+        final String logoStart = AnsiOut.ANSI_BOLD + strokeColor;
+        final String logoEnd = AnsiOut.ANSI_RESET;
+        final String textStart = textColor;
+        final String textEnd = AnsiOut.ANSI_RESET;
+        final String boldTextStart = AnsiOut.ANSI_BOLD + textColor;
+        final String boldTextEnd = AnsiOut.ANSI_RESET;
+
+        System.out.println("");
+        System.out.println("  " + borderStart + "_____________________________________________________________________________________" + borderEnd);
+        System.out.println("  " + borderPipe + logoStart + "   _____        _       _     _       _____  _       _    __                       " + borderPipe);
+        System.out.println("  " + borderPipe + logoStart + "  |  __ \\      | |     | |   (_)     |  __ \\| |     | |  / _|                      " + borderPipe);
+        System.out.println("  " + borderPipe + logoStart + "  | |  | | ___ | |_ __ | |__  _ _ __ | |__) | | __ _| |_| |_ ___  _ __ _ __ ___    " + borderPipe);
+        System.out.println("  " + borderPipe + logoStart + "  | |  | |/ _ \\| | '_ \\| '_ \\| | '_ \\|  ___/| |/ _` | __|  _/ _ \\| '__| '_ ` _ \\   " + borderPipe);
+        System.out.println("  " + borderPipe + logoStart + "  | |  | | (_) | | |_) | | | | | | | | |    | | (_| | |_| || (_) | |  | | | | | |  " + borderPipe);
+        System.out.println("  " + borderPipe + logoStart + "  | |__| |\\___/|_| .__/|_| |_|_|_| |_|_|    |_|\\__,_|\\__|_| \\___/|_|  |_| |_| | |  " + borderPipe);
+        System.out.println("  " + borderPipe + logoStart + "  |_____/        | |                                                          |_|  " + borderPipe);
+        System.out.println("  " + borderPipe + logoStart + "                 |_|   " + textStart + "supported by " + textEnd + boldTextStart + "canoo.com" + boldTextEnd + "                                      " + borderPipe);
+        System.out.println("  " + borderPipe + borderStart + "___________________________________________________________________________________" + borderEnd + borderPipe);
+        System.out.println("");
+        System.out.println("");
     }
 }
