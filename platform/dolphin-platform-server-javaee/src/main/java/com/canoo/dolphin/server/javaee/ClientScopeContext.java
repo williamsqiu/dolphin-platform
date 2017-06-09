@@ -70,7 +70,7 @@ public class ClientScopeContext extends AbstractContext {
     private ClientSession getDolphinSession() {
         final ClientSessionProvider provider = PlatformBootstrap.getServerCoreComponents().getInstance(ClientSessionProvider.class);
         Assert.requireNonNull(provider, "provider");
-        return provider.getCurrentDolphinSession();
+        return provider.getCurrentClientSession();
     }
 
     public void destroy() {

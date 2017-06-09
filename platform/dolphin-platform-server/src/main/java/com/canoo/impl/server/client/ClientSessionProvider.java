@@ -26,5 +26,5 @@ public interface ClientSessionProvider {
      * Returns the current dolphin session
      * @return the current dolphin session
      */
-    ClientSession getCurrentDolphinSession();
+    ClientSession getCurrentClientSession();
 }

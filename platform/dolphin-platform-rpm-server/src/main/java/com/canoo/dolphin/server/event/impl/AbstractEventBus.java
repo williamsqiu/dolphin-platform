@@ -16,7 +16,8 @@
 package com.canoo.dolphin.server.event.impl;
 
 import com.canoo.dolphin.Subscription;
-import com.canoo.dolphin.server.context.DolphinContextCommunicationHandler;
+import com.canoo.dolphin.server.context.DolphinContext;
+import com.canoo.dolphin.server.context.DolphinContextProvider;
 import com.canoo.dolphin.server.event.DolphinEventBus;
 import com.canoo.dolphin.server.event.EventSessionFilter;
 import com.canoo.dolphin.server.event.MessageListener;
@@ -24,7 +25,6 @@ import com.canoo.dolphin.server.event.Topic;
 import com.canoo.dolphin.util.Assert;
 import com.canoo.dolphin.util.Callback;
 import com.canoo.impl.server.client.ClientSessionLifecycleHandler;
-import com.canoo.impl.server.client.ClientSessionProvider;
 import com.canoo.platform.server.client.ClientSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,7 +42,7 @@ public abstract class AbstractEventBus implements DolphinEventBus {
 
     private static final Logger LOG = LoggerFactory.getLogger(AbstractEventBus.class);
 
-    private ClientSessionProvider sessionProvider;
+    private DolphinContextProvider contextProvider;
 
     private final Map<Topic<?>, List<MessageListener<?>>> topicToListenerMap = new ConcurrentHashMap<>();
 
@@ -52,8 +52,8 @@ public abstract class AbstractEventBus implements DolphinEventBus {
 
     private final AtomicBoolean initialized = new AtomicBoolean(false);
 
-    public void init(final ClientSessionProvider sessionProvider, final ClientSessionLifecycleHandler lifecycleHandler) {
-        this.sessionProvider = Assert.requireNonNull(sessionProvider, "sessionProvider");
+    public void init(final DolphinContextProvider contextProvider, final ClientSessionLifecycleHandler lifecycleHandler) {
+        this.contextProvider = Assert.requireNonNull(contextProvider, "contextProvider");
         Assert.requireNonNull(lifecycleHandler, "lifecycleHandler").addSessionDestroyedListener(new Callback<ClientSession>() {
             @Override
             public void call(final ClientSession dolphinSession) {
@@ -80,11 +80,11 @@ public abstract class AbstractEventBus implements DolphinEventBus {
         Assert.requireNonNull(topic, "topic");
         Assert.requireNonNull(listener, "listener");
 
-        final ClientSession subscriptionSession = getCurrentClientSession();
-        if (subscriptionSession == null) {
+        final DolphinContext subscriptionContext = getCurrentContext();
+        if (subscriptionContext == null) {
             throw new IllegalStateException("Subscription can only be done from Dolphin Context!");
         }
-        final String subscriptionSessionId = subscriptionSession.getId();
+        final String subscriptionSessionId = subscriptionContext.getId();
         LOG.trace("Adding subscription for topic {} in Dolphin Platform context {}", topic.getName(), subscriptionSessionId);
         List<MessageListener<?>> listeners = topicToListenerMap.get(topic);
         if (listeners == null) {
@@ -127,7 +127,7 @@ public abstract class AbstractEventBus implements DolphinEventBus {
                     LOG.trace("Event listener for topic {} was already called in Dolphin Platform context {}", topic.getName(), sessionId);
                 } else {
                     LOG.trace("Event listener for topic {} must be called later in Dolphin Platform context {}", topic.getName(), sessionId);
-                    DolphinContextCommunicationHandler.getContextById(sessionId).runLater(new Runnable() {
+                    contextProvider.getContextById(sessionId).runLater(new Runnable() {
 
                         @Override
                         public void run() {
@@ -167,11 +167,11 @@ public abstract class AbstractEventBus implements DolphinEventBus {
     }
 
     private <T extends Serializable> void publishData(final Topic<T> topic, final T data, final EventSessionFilter filter) {
-        final ClientSession currentSession = getCurrentClientSession();
-        final DolphinEvent event = new DolphinEvent(currentSession != null ? currentSession.getId() : null, new DefaultMessage(topic, data, System.currentTimeMillis()), filter);
+        final DolphinContext currentContext = getCurrentContext();
+        final DolphinEvent event = new DolphinEvent(currentContext != null ? currentContext.getId() : null, new DefaultMessage(topic, data, System.currentTimeMillis()), filter);
 
-        if (currentSession != null && filter.shouldHandleEvent(currentSession.getId())) {
-            final List<MessageListener<T>> listenersInCurrentSession = getListenersForSessionAndTopic(currentSession.getId(), topic);
+        if (currentContext != null && filter.shouldHandleEvent(currentContext.getId())) {
+            final List<MessageListener<T>> listenersInCurrentSession = getListenersForSessionAndTopic(currentContext.getId(), topic);
             for (MessageListener<T> listener : listenersInCurrentSession) {
                 listener.onMessage(event.getMessage());
             }
@@ -206,7 +206,7 @@ public abstract class AbstractEventBus implements DolphinEventBus {
         }
     }
 
-    private ClientSession getCurrentClientSession() {
-        return sessionProvider.getCurrentDolphinSession();
+    private DolphinContext getCurrentContext() {
+        return contextProvider.getCurrentDolphinContext();
     }
 }

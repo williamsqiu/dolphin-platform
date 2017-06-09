@@ -47,7 +47,7 @@ public class ClientSessionModule extends AbstractBaseModule {
         coreComponents.provideInstance(ClientSessionLifecycleHandler.class, lifecycleHandler);
                 coreComponents.provideInstance(ClientSessionProvider.class, new ClientSessionProvider() {
             @Override
-            public ClientSession getCurrentDolphinSession() {
+            public ClientSession getCurrentClientSession() {
                 return lifecycleHandler.getCurrentDolphinSession();
             }
         });

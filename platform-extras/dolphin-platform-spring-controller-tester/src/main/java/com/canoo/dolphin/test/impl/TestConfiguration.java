@@ -80,7 +80,7 @@ public class TestConfiguration {
         }
 
         @Override
-        public ClientSession getCurrentDolphinSession() {
+        public ClientSession getCurrentClientSession() {
             return currentContext.getDolphinSession();
         }
     }

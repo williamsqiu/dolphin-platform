@@ -58,7 +58,7 @@ public class DolphinContextCommunicationHandler {
         Assert.requireNonNull(request, "request");
         Assert.requireNonNull(response, "response");
         final HttpSession httpSession = Assert.requireNonNull(request.getSession(), "request.getSession()");
-        final ClientSession clientSession = sessionProvider.getCurrentDolphinSession();
+        final ClientSession clientSession = sessionProvider.getCurrentClientSession();
         if (clientSession == null) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             LOG.error("No client session provided for request in http session {}", httpSession.getId());
@@ -106,6 +106,25 @@ public class DolphinContextCommunicationHandler {
             LOG.warn("Can not find or create matching dolphin context in session " + httpSession.getId());
             return;
         }
+    }
+
+    public DolphinContext getContext(final ClientSession clientSession) {
+        Assert.requireNonNull(clientSession, "clientSession");
+        return clientSession.getAttribute(DOLPHIN_CONTEXT_ATTRIBUTE_NAME);
+    }
+
+    public DolphinContext getContextById(String clientSessionId) {
+        Assert.requireNonBlank(clientSessionId, "clientSessionId");
+
+        WeakReference<DolphinContext> ref = weakContextMap.get(clientSessionId);
+        DolphinContext dolphinContext = ref.get();
+        Assert.requireNonNull(dolphinContext, "dolphinContext");
+
+        return dolphinContext;
+    }
+
+    public DolphinContext getCurrentDolphinContext() {
+        return getContext(sessionProvider.getCurrentClientSession());
     }
 
     private DolphinContext getOrCreateContext(final ClientSession clientSession, final List<Command> commands) {
@@ -174,18 +193,4 @@ public class DolphinContextCommunicationHandler {
         clientSession.removeAttribute(DOLPHIN_CONTEXT_ATTRIBUTE_NAME);
     }
 
-    public static DolphinContext getContext(final ClientSession clientSession) {
-        Assert.requireNonNull(clientSession, "clientSession");
-        return clientSession.getAttribute(DOLPHIN_CONTEXT_ATTRIBUTE_NAME);
-    }
-
-    public static DolphinContext getContextById(String clientSessionId) {
-        Assert.requireNonBlank(clientSessionId, "clientSessionId");
-
-        WeakReference<DolphinContext> ref = weakContextMap.get(clientSessionId);
-        DolphinContext dolphinContext = ref.get();
-        Assert.requireNonNull(dolphinContext, "dolphinContext");
-
-        return dolphinContext;
-    }
 }

@@ -103,7 +103,7 @@ public class DolphinContextTaskQueue {
     }
 
     public void executeTasks() {
-        final ClientSession currentSession = sessionProvider.getCurrentDolphinSession();
+        final ClientSession currentSession = sessionProvider.getCurrentClientSession();
         if (currentSession == null || !dolphinSessionId.equals(currentSession.getId())) {
             throw new IllegalStateException("Not in Dolphin Platform session " + dolphinSessionId);
         }

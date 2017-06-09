@@ -81,6 +81,6 @@ public class ClientScope implements Scope {
     }
 
     private ClientSession getClientSession() {
-        return PlatformBootstrap.getServerCoreComponents().getInstance(ClientSessionProvider.class).getCurrentDolphinSession();
+        return PlatformBootstrap.getServerCoreComponents().getInstance(ClientSessionProvider.class).getCurrentClientSession();
     }
 }

@@ -19,7 +19,7 @@ import com.canoo.dolphin.BeanManager;
 import com.canoo.dolphin.server.binding.PropertyBinder;
 import com.canoo.dolphin.server.binding.impl.PropertyBinderImpl;
 import com.canoo.dolphin.server.context.DolphinContext;
-import com.canoo.dolphin.server.context.DolphinContextCommunicationHandler;
+import com.canoo.dolphin.server.context.DolphinContextProvider;
 import com.canoo.dolphin.server.event.DolphinEventBus;
 import com.canoo.dolphin.util.Assert;
 import com.canoo.impl.server.bootstrap.PlatformBootstrap;
@@ -45,9 +45,16 @@ public class SpringBeanFactory {
     @Bean(name = "beanManager")
     @ClientScoped
     protected BeanManager createManager() {
-        final ClientSessionProvider provider = PlatformBootstrap.getServerCoreComponents().getInstance(ClientSessionProvider.class);
-        Assert.requireNonNull(provider, "provider");
-        final DolphinContext context = DolphinContextCommunicationHandler.getContext(provider.getCurrentDolphinSession());
+        final ClientSessionProvider clientSessionProvider = PlatformBootstrap.getServerCoreComponents().getInstance(ClientSessionProvider.class);
+        Assert.requireNonNull(clientSessionProvider, "clientSessionProvider");
+
+        final DolphinContextProvider dolphinContextProvider = PlatformBootstrap.getServerCoreComponents().getInstance(DolphinContextProvider.class);
+        Assert.requireNonNull(dolphinContextProvider, "dolphinContextProvider");
+
+        final ClientSession currentClientSession = clientSessionProvider.getCurrentClientSession();
+        Assert.requireNonNull(currentClientSession, "currentClientSession");
+
+        final DolphinContext context = dolphinContextProvider.getContext(currentClientSession);
         Assert.requireNonNull(context, "context");
         return context.getBeanManager();
     }
@@ -57,7 +64,7 @@ public class SpringBeanFactory {
     protected ClientSession createClientSession() {
         final ClientSessionProvider provider = PlatformBootstrap.getServerCoreComponents().getInstance(ClientSessionProvider.class);
         Assert.requireNonNull(provider, "provider");
-        return provider.getCurrentDolphinSession();
+        return provider.getCurrentClientSession();
     }
 
     /**

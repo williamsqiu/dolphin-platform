@@ -42,7 +42,7 @@ public class CdiBeanFactory {
     public BeanManager createManager() {
         final ClientSessionProvider provider = PlatformBootstrap.getServerCoreComponents().getInstance(ClientSessionProvider.class);
         Assert.requireNonNull(provider, "provider");
-        final DolphinContext context = DolphinContextCommunicationHandler.getContext(provider.getCurrentDolphinSession());
+        final DolphinContext context = DolphinContextCommunicationHandler.getContext(provider.getCurrentClientSession());
         Assert.requireNonNull(context, "context");
         return context.getBeanManager();
     }
@@ -52,7 +52,7 @@ public class CdiBeanFactory {
     public ClientSession createDolphinSession() {
         final ClientSessionProvider provider = PlatformBootstrap.getServerCoreComponents().getInstance(ClientSessionProvider.class);
         Assert.requireNonNull(provider, "provider");
-        return provider.getCurrentDolphinSession();
+        return provider.getCurrentClientSession();
     }
 
     @Produces

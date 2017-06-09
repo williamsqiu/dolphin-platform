@@ -19,12 +19,13 @@ import com.canoo.dolphin.BeanManager;
 import com.canoo.dolphin.client.ClientContext;
 import com.canoo.dolphin.server.binding.PropertyBinder;
 import com.canoo.dolphin.server.binding.impl.PropertyBinderImpl;
+import com.canoo.dolphin.server.context.DolphinContext;
+import com.canoo.dolphin.server.context.DolphinContextProvider;
 import com.canoo.dolphin.server.event.DolphinEventBus;
 import com.canoo.dolphin.server.event.impl.DefaultDolphinEventBus;
 import com.canoo.dolphin.server.spring.ClientScope;
 import com.canoo.dolphin.util.Assert;
 import com.canoo.impl.server.client.ClientSessionLifecycleHandlerImpl;
-import com.canoo.impl.server.client.ClientSessionProvider;
 import com.canoo.platform.server.client.ClientSession;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.beans.factory.config.CustomScopeConfigurer;
@@ -87,15 +88,28 @@ public class DolphinPlatformSpringTestBootstrap {
      */
     @Bean(name = "dolphinEventBus")
     @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
-    protected DolphinEventBus createEventBus(final ClientSession clientSession) {
-        Assert.requireNonNull(clientSession, "clientSession");
-        DefaultDolphinEventBus eventBus = new DefaultDolphinEventBus();
-        eventBus.init(new ClientSessionProvider() {
+    protected DolphinEventBus createEventBus(final TestConfiguration testConfiguration) {
+        Assert.requireNonNull(testConfiguration, "testConfiguration");
+
+        final DolphinContextProvider contextProvider = new DolphinContextProvider() {
             @Override
-            public ClientSession getCurrentDolphinSession() {
-                return clientSession;
+            public DolphinContext getContext(ClientSession clientSession) {
+                return getCurrentDolphinContext();
             }
-        }, new ClientSessionLifecycleHandlerImpl());
+
+            @Override
+            public DolphinContext getContextById(String clientSessionId) {
+                return getCurrentDolphinContext();
+            }
+
+            @Override
+            public DolphinContext getCurrentDolphinContext() {
+                return testConfiguration.getDolphinTestContext();
+            }
+        };
+
+        DefaultDolphinEventBus eventBus = new DefaultDolphinEventBus();
+        eventBus.init(contextProvider, new ClientSessionLifecycleHandlerImpl());
         return eventBus;
     }
 

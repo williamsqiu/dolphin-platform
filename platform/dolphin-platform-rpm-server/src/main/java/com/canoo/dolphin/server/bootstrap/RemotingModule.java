@@ -16,9 +16,7 @@
 package com.canoo.dolphin.server.bootstrap;
 
 import com.canoo.dolphin.server.config.RemotingConfiguration;
-import com.canoo.dolphin.server.context.DefaultDolphinContextFactory;
-import com.canoo.dolphin.server.context.DolphinContextCommunicationHandler;
-import com.canoo.dolphin.server.context.DolphinContextFactory;
+import com.canoo.dolphin.server.context.*;
 import com.canoo.dolphin.server.controller.ControllerValidationException;
 import com.canoo.dolphin.server.event.DolphinEventBus;
 import com.canoo.dolphin.server.event.impl.AbstractEventBus;
@@ -31,6 +29,7 @@ import com.canoo.impl.server.client.ClientSessionLifecycleHandler;
 import com.canoo.impl.server.client.ClientSessionProvider;
 import com.canoo.impl.server.config.PlatformConfiguration;
 import com.canoo.impl.server.scanner.ClasspathScanner;
+import com.canoo.platform.server.client.ClientSession;
 import com.canoo.platform.server.spi.ModuleDefinition;
 import com.canoo.platform.server.spi.ModuleInitializationException;
 import com.canoo.platform.server.spi.ServerModule;
@@ -72,6 +71,25 @@ public class RemotingModule implements ServerModule {
             final ClientSessionProvider sessionProvider = coreComponents.getInstance(ClientSessionProvider.class);
             final DolphinContextFactory dolphinContextFactory = new DefaultDolphinContextFactory(configuration, sessionProvider, beanFactory, classpathScanner);
             final DolphinContextCommunicationHandler communicationHandler = new DolphinContextCommunicationHandler(sessionProvider, dolphinContextFactory);
+            final DolphinContextProvider contextProvider = new DolphinContextProvider() {
+                @Override
+                public DolphinContext getContext(final ClientSession clientSession) {
+                    return communicationHandler.getContext(clientSession);
+                }
+
+                @Override
+                public DolphinContext getContextById(String clientSessionId) {
+                    return communicationHandler.getContextById(clientSessionId);
+                }
+
+                @Override
+                public DolphinContext getCurrentDolphinContext() {
+                    return communicationHandler.getCurrentDolphinContext();
+                }
+            };
+            coreComponents.provideInstance(DolphinContextProvider.class, contextProvider);
+
+
             final ClientSessionLifecycleHandler lifecycleHandler = coreComponents.getInstance(ClientSessionLifecycleHandler.class);
 
             servletContext.addServlet(DOLPHIN_SERVLET_NAME, new DolphinPlatformServlet(communicationHandler)).addMapping(configuration.getDolphinPlatformServletMapping());
@@ -91,7 +109,7 @@ public class RemotingModule implements ServerModule {
                     providerFound = true;
                     DolphinEventBus eventBus = provider.create(configuration);
                     if(eventBus instanceof AbstractEventBus) {
-                        ((AbstractEventBus) eventBus).init(sessionProvider, lifecycleHandler);
+                        ((AbstractEventBus) eventBus).init(contextProvider, lifecycleHandler);
                     }
                     coreComponents.provideInstance(DolphinEventBus.class, eventBus);
                 }

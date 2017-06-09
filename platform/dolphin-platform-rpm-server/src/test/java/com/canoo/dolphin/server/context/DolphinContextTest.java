@@ -148,7 +148,7 @@ public class DolphinContextTest {
         final ClientSession session = new ClientSessionImpl("Test-ID");
         return new DolphinContext(new RemotingConfiguration(), session, new ClientSessionProvider() {
             @Override
-            public ClientSession getCurrentDolphinSession() {
+            public ClientSession getCurrentClientSession() {
                 return session;
             }
         }, new ManagedBeanFactoryMock(), new ControllerRepository(classpathScanner), new DefaultOpenDolphinFactory(), new DestroyCallbackMock());
