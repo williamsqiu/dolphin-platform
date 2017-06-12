@@ -16,8 +16,9 @@
 package com.canoo.impl.server.servlet;
 
 import com.canoo.dolphin.PlatformConstants;
-import com.canoo.impl.server.config.PlatformConfiguration;
 import com.canoo.dolphin.util.Assert;
+import com.canoo.impl.server.config.DefaultModuleConfig;
+import com.canoo.platform.server.spi.PlatformConfiguration;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -45,13 +46,13 @@ public class CrossSiteOriginFilter implements Filter {
 
         //Access-Control-Allow-Headers
         String accessControlAllowHeaders = PlatformConstants.CLIENT_ID_HTTP_HEADER_NAME;
-        String headerValues = getAsCommaSeparatedList(configuration.getAccessControlAllowHeaders());
+        String headerValues = getAsCommaSeparatedList(DefaultModuleConfig.getAccessControlAllowHeaders(configuration));
         if(!headerValues.isEmpty()){
             accessControlAllowHeaders = accessControlAllowHeaders + ", " + headerValues;
         }
 
         //Access-Control-Allow-Methods
-        String allowedMethods = getAsCommaSeparatedList(configuration.getAccessControlAllowMethods());
+        String allowedMethods = getAsCommaSeparatedList(DefaultModuleConfig.getAccessControlAllowMethods(configuration));
 
 
         String clientOrigin = req.getHeader("origin");
@@ -61,8 +62,8 @@ public class CrossSiteOriginFilter implements Filter {
         }
         resp.setHeader("Access-Control-Allow-Headers", accessControlAllowHeaders);
         resp.setHeader("Access-Control-Expose-Headers", PlatformConstants.CLIENT_ID_HTTP_HEADER_NAME);
-        resp.setHeader("Access-Control-Allow-Credentials", "" + configuration.isAccessControlAllowCredentials());
-        resp.setHeader("Access-Control-Max-Age", "" + configuration.getAccessControlMaxAge());
+        resp.setHeader("Access-Control-Allow-Credentials", "" + DefaultModuleConfig.isAccessControlAllowCredentials(configuration));
+        resp.setHeader("Access-Control-Max-Age", "" + DefaultModuleConfig.getAccessControlMaxAge(configuration));
 
         chain.doFilter(request, response);
     }

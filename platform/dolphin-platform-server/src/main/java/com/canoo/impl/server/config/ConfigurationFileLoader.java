@@ -16,17 +16,19 @@
 package com.canoo.impl.server.config;
 
 import com.canoo.impl.server.bootstrap.PlatformBoostrapException;
+import com.canoo.platform.server.spi.ConfigurationProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.ServiceLoader;
 
 /**
- * This class loads a Dolphin Platform configuration (see {@link PlatformConfiguration}) based on a property file.
+ * This class loads a Dolphin Platform configuration (see {@link DefaultPlatformConfiguration}) based on a property file.
  * The file must be placed under "META-INF/dolphin.properties" (normal for a JAR) or under
  * "WEB-INF/classes/META-INF/dolphin.properties" (normal for a WAR). If no file can be found a default
  * confihuration will be returned.
@@ -50,20 +52,44 @@ public class ConfigurationFileLoader {
     }
 
     /**
-     * Tries to load a {@link PlatformConfiguration} based on a file. if no config file
+     * Tries to load a {@link DefaultPlatformConfiguration} based on a file. if no config file
      * can be found a default config will be returned.
      *
      * @return a configuration
      */
-    public static PlatformConfiguration loadConfiguration() {
-        PlatformConfiguration configuration = createConfiguration();
+    public static DefaultPlatformConfiguration loadConfiguration() {
+        DefaultPlatformConfiguration configuration = createConfiguration();
 
         ServiceLoader<ConfigurationProvider> serviceLoader = ServiceLoader.load(ConfigurationProvider.class);
         for(ConfigurationProvider provider : serviceLoader) {
-            Map<String, String> additionalProperties = provider.getProperties();
-            for(Map.Entry<String, String> property : additionalProperties.entrySet()) {
+            Map<String, String> additionalStringProperties = provider.getStringProperties();
+            for(Map.Entry<String, String> property : additionalStringProperties.entrySet()) {
                 if(!configuration.containsProperty(property.getKey())) {
                     configuration.setProperty(property.getKey(), property.getValue());
+                }
+            }
+            Map<String, List<String>> additionalListProperties = provider.getListProperties();
+            for(Map.Entry<String, List<String>> property : additionalListProperties.entrySet()) {
+                if(!configuration.containsProperty(property.getKey())) {
+                    configuration.setListProperty(property.getKey(), property.getValue());
+                }
+            }
+            Map<String, Boolean> additionalBooleanProperties = provider.getBooleanProperties();
+            for(Map.Entry<String, Boolean> property : additionalBooleanProperties.entrySet()) {
+                if(!configuration.containsProperty(property.getKey())) {
+                    configuration.setBooleanProperty(property.getKey(), property.getValue());
+                }
+            }
+            Map<String, Integer> additionalIntegerProperties = provider.getIntegerProperties();
+            for(Map.Entry<String, Integer> property : additionalIntegerProperties.entrySet()) {
+                if(!configuration.containsProperty(property.getKey())) {
+                    configuration.setIntProperty(property.getKey(), property.getValue());
+                }
+            }
+            Map<String, Long> additionalLongProperties = provider.getLongProperties();
+            for(Map.Entry<String, Long> property : additionalLongProperties.entrySet()) {
+                if(!configuration.containsProperty(property.getKey())) {
+                    configuration.setLongProperty(property.getKey(), property.getValue());
                 }
             }
         }
@@ -77,7 +103,7 @@ public class ConfigurationFileLoader {
         return configuration;
     }
 
-    private static PlatformConfiguration createConfiguration() {
+    private static DefaultPlatformConfiguration createConfiguration() {
         try {
             ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 
@@ -90,7 +116,7 @@ public class ConfigurationFileLoader {
             try (InputStream inputStream = classLoader.getResourceAsStream(WAR_LOCATION)) {
                 if (inputStream == null) {
                     LOG.info("Can not read configuration. Maybe no dolphin.properties file is defined. Will use a default configuration!");
-                    return new PlatformConfiguration();
+                    return new DefaultPlatformConfiguration();
                 } else {
                     return readConfig(inputStream);
                 }
@@ -100,10 +126,10 @@ public class ConfigurationFileLoader {
         }
     }
 
-    private static PlatformConfiguration readConfig(InputStream input) throws IOException {
+    private static DefaultPlatformConfiguration readConfig(InputStream input) throws IOException {
         Properties prop = new Properties();
         prop.load(input);
 
-        return new PlatformConfiguration(prop);
+        return new DefaultPlatformConfiguration(prop);
     }
 }

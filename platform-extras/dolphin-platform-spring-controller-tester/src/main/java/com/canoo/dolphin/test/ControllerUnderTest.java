@@ -16,9 +16,11 @@
 package com.canoo.dolphin.test;
 
 import com.canoo.dolphin.client.Param;
+import com.canoo.platform.server.DolphinAction;
+import com.canoo.platform.server.DolphinController;
 
 /**
- * Provides acces to a controller (see {@link com.canoo.dolphin.server.DolphinController}) and its model for tests
+ * Provides acces to a controller (see {@link DolphinController}) and its model for tests
  * @param <T> type of the model
  */
 public interface ControllerUnderTest<T> {
@@ -30,7 +32,7 @@ public interface ControllerUnderTest<T> {
     T getModel();
 
     /**
-     * Invokes an action on the controller. See {@link com.canoo.dolphin.server.DolphinAction}
+     * Invokes an action on the controller. See {@link DolphinAction}
      * @param actionName
      * @param params
      */

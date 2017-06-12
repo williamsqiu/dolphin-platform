@@ -1,8 +1,8 @@
 package com.canoo.dolphin.integration.server.enterprise;
 
 import com.canoo.dolphin.integration.enterprise.EnterpriseTestBean;
-import com.canoo.dolphin.server.DolphinController;
-import com.canoo.dolphin.server.DolphinModel;
+import com.canoo.platform.server.DolphinController;
+import com.canoo.platform.server.DolphinModel;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;

@@ -5,12 +5,11 @@ import com.canoo.dolphin.concurrency.PlatformThreadFactory;
 import com.canoo.dolphin.concurrency.SimpleDolphinPlatformThreadFactory;
 import com.canoo.dolphin.util.Assert;
 import com.canoo.impl.server.beans.ManagedBeanFactory;
-import com.canoo.impl.server.config.PlatformConfiguration;
+import com.canoo.impl.server.config.DefaultModuleConfig;
+import com.canoo.impl.server.config.DefaultPlatformConfiguration;
 import com.canoo.impl.server.mbean.MBeanRegistry;
-import com.canoo.impl.server.scanner.ClasspathScanner;
-import com.canoo.platform.server.spi.ModuleDefinition;
-import com.canoo.platform.server.spi.ModuleInitializationException;
-import com.canoo.platform.server.spi.ServerModule;
+import com.canoo.impl.server.scanner.DefaultClasspathScanner;
+import com.canoo.platform.server.spi.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,11 +24,11 @@ public class PlatformBootstrap {
 
     private static ServerCoreComponents serverCoreComponents;
 
-    public void init(final ServletContext servletContext, final PlatformConfiguration configuration) {
+    public void init(final ServletContext servletContext, final DefaultPlatformConfiguration configuration) {
         Assert.requireNonNull(servletContext, "servletContext");
         Assert.requireNonNull(configuration, "configuration");
 
-        if(configuration.isActive()) {
+        if(DefaultModuleConfig.isActive(configuration)) {
             printLogo();
             try {
                 LOG.info("Will boot Dolphin Plaform now");
@@ -37,15 +36,15 @@ public class PlatformBootstrap {
                 servletContext.setAttribute(CONFIGURATION_ATTRIBUTE_NAME, configuration);
                 configuration.log();
 
-                MBeanRegistry.getInstance().setMbeanSupport(configuration.isMBeanRegistration());
+                MBeanRegistry.getInstance().setMbeanSupport(DefaultModuleConfig.isMBeanRegistration(configuration));
 
 
                 //TODO: We need to provide a container specific thread factory that contains managed threads
                 //See https://github.com/canoo/dolphin-platform/issues/498
                 final PlatformThreadFactory threadFactory = new SimpleDolphinPlatformThreadFactory();
                 final ManagedBeanFactory beanFactory = getBeanFactory(servletContext);
-                final ClasspathScanner classpathScanner = new ClasspathScanner(configuration.getRootPackageForClasspathScan());
-                serverCoreComponents = new ServerCoreComponents(servletContext, configuration, threadFactory, classpathScanner, beanFactory);
+                final DefaultClasspathScanner classpathScanner = new DefaultClasspathScanner(DefaultModuleConfig.getRootPackageForClasspathScan(configuration));
+                serverCoreComponents = new ServerCoreComponentsImpl(servletContext, configuration, threadFactory, classpathScanner, beanFactory);
 
                 final Set<Class<?>> moduleClasses = classpathScanner.getTypesAnnotatedWith(ModuleDefinition.class);
 

@@ -1,1 +1,1 @@
-com.canoo.dolphin.server.event.DistributedEventBusConfigProvider
+com.canoo.impl.server.event.DistributedEventBusConfigProvider

@@ -26,7 +26,7 @@ public class ClientEventDispatcher extends EventDispatcherImpl {
     }
 
     @Override
-    protected String getLocalSystemIdentifier() {
+    public String getLocalSystemIdentifier() {
         return RemotingConstants.SOURCE_SYSTEM_CLIENT;
     }
 }

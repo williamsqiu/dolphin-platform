@@ -1,10 +1,7 @@
 package com.canoo.impl.server.bootstrap.modules;
 
-import com.canoo.impl.server.bootstrap.ServerCoreComponents;
-import com.canoo.impl.server.config.PlatformConfiguration;
 import com.canoo.impl.server.servlet.HttpSessionTimeoutListener;
-import com.canoo.platform.server.spi.ModuleDefinition;
-import com.canoo.platform.server.spi.ModuleInitializationException;
+import com.canoo.platform.server.spi.*;
 
 import javax.servlet.ServletContext;
 
