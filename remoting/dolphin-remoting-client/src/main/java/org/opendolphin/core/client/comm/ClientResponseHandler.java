@@ -50,7 +50,7 @@ public class ClientResponseHandler {
         } else if (command instanceof AttributeMetadataChangedCommand) {
             handleAttributeMetadataChangedCommand((AttributeMetadataChangedCommand) command);
         } else {
-            LOG.info("C: cannot handle unknown command '{}'", command );
+            LOG.error("C: cannot handle unknown command '{}'", command );
         }
 
     }
@@ -97,7 +97,7 @@ public class ClientResponseHandler {
     private void handleValueChangedCommand(final ValueChangedCommand serverCommand) {
         Attribute attribute = clientModelStore.findAttributeById(serverCommand.getAttributeId());
         if (attribute == null) {
-            LOG.debug("C: attribute with id '{}' not found, cannot update old value '{}' to new value '{}'", serverCommand.getAttributeId() ,serverCommand.getOldValue(), serverCommand.getNewValue() );
+            LOG.warn("C: attribute with id '{}' not found, cannot update old value '{}' to new value '{}'", serverCommand.getAttributeId() ,serverCommand.getOldValue(), serverCommand.getNewValue() );
             return;
         }
 
@@ -108,7 +108,7 @@ public class ClientResponseHandler {
 
         if (strictMode && ((attribute.getValue() == null && serverCommand.getOldValue() != null) || (attribute.getValue() != null && serverCommand.getOldValue() == null) || (attribute.getValue() != null && !attribute.getValue().equals(serverCommand.getOldValue())))) {
             // todo dk: think about sending a RejectCommand here to tell the server about a possible lost update
-            LOG.debug("C: attribute with id '{}' and value '{}' cannot be set to new value '{}' because the change was based on an outdated old value of '{}'.", serverCommand.getAttributeId(), attribute.getValue(), serverCommand.getNewValue(), serverCommand.getOldValue());
+            LOG.warn("C: attribute with id '{}' and value '{}' cannot be set to new value '{}' because the change was based on an outdated old value of '{}'.", serverCommand.getAttributeId(), attribute.getValue(), serverCommand.getNewValue(), serverCommand.getOldValue());
             return;
         }
 

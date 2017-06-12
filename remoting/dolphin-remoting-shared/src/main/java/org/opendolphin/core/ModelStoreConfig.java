@@ -82,7 +82,7 @@ public class ModelStoreConfig {
     // all the capacities will be used to initialize HashMaps so they should be powers of two
     private void ensurePowerOfTwo(String parameter, int number) {
         if (Integer.bitCount(number) > 1) {
-            LOG.debug("Parameter {} should be power of two but was {}", parameter, number);
+            LOG.warn("Parameter {} should be power of two but was {}", parameter, number);
         }
     }
 }

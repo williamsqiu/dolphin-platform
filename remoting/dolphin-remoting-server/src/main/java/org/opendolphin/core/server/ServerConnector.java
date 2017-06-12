@@ -90,7 +90,7 @@ public class ServerConnector {
 
     public void registerDefaultActions() {
         if (initialized.getAndSet(true)) {
-            LOG.debug("Attempt to initialize default actions more than once!");
+            LOG.warn("Attempt to initialize default actions more than once!");
             return;
         }
         register(new StoreValueChangeAction());

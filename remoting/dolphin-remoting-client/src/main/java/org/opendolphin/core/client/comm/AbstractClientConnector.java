@@ -184,7 +184,7 @@ public abstract class AbstractClientConnector {
             try {
                 callback.onFinished();
             } catch (Exception e) {
-                LOG.info("Error in handling callback", e);
+                LOG.error("Error in handling callback", e);
                 throw e;
             }
         }
@@ -212,7 +212,7 @@ public abstract class AbstractClientConnector {
                 }
             });
         } catch (Exception e) {
-            LOG.info("Error in sending long poll", e);
+            LOG.error("Error in sending long poll", e);
         }
     }
 

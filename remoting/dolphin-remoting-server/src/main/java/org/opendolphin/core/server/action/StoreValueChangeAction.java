@@ -36,7 +36,7 @@ public class StoreValueChangeAction extends DolphinServerAction {
                 final ServerAttribute attribute = getServerModelStore().findAttributeById(command.getAttributeId());
                 if (attribute != null) {
                     if (! Objects.equals(attribute.getValue(), command.getOldValue())) {
-                        LOG.debug("S: updating attribute with id '{}' to new value '{}' even though its old command value '{}' does not conform to the old value of '{}'. Client overrules server.", command.getAttributeId(), command.getNewValue(), command.getOldValue(), attribute.getValue());
+                        LOG.warn("S: updating attribute with id '{}' to new value '{}' even though its old command value '{}' does not conform to the old value of '{}'. Client overrules server.", command.getAttributeId(), command.getNewValue(), command.getOldValue(), attribute.getValue());
                     }
 
                     attribute.silently(new Runnable() {
@@ -47,7 +47,7 @@ public class StoreValueChangeAction extends DolphinServerAction {
 
                     });
                 } else {
-                    LOG.info("S: cannot find attribute with id '{}' to change value from '{}' to '{}'.", command.getAttributeId(), command.getOldValue(), command.getNewValue());
+                    LOG.error("S: cannot find attribute with id '{}' to change value from '{}' to '{}'.", command.getAttributeId(), command.getOldValue(), command.getNewValue());
                 }
             }
         });
