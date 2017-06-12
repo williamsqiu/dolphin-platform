@@ -121,7 +121,7 @@ public abstract class AbstractClientConnector {
                 if (connectedFlag.get()) {
                     handleError(e);
                 } else {
-                    LOG.debug("Remoting error based on broken connection in parallel request", e);
+                    LOG.warn("Remoting error based on broken connection in parallel request", e);
                 }
             }
             if(!longPollingActivated && useLongPolling.get()) {
