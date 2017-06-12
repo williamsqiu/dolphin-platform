@@ -34,7 +34,7 @@ public class ServerPresentationModel extends BasePresentationModel<ServerAttribu
     public ServerPresentationModel(final String id, final List<ServerAttribute> attributes, final ServerModelStore serverModelStore) {
         super((id != null && id.length() > 0) ? id : makeId(serverModelStore), attributes);
         if (id != null && id.endsWith(RemotingConstants.SERVER_PM_AUTO_ID_SUFFIX)) {
-            LOG.info("Creating a PM with self-provided id '{}' even though it ends with a reserved suffix.", id);
+            LOG.trace("Creating a PM with self-provided id '{}' even though it ends with a reserved suffix.", id);
         }
         modelStore = serverModelStore;
     }
