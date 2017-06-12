@@ -104,9 +104,9 @@ public abstract class AbstractClientConnector {
                         buffer.append(command.getClass().getSimpleName());
                         buffer.append(", ");
                     }
-                    LOG.debug("Sending {} commands to server: {}", commands.size(), buffer.substring(0, buffer.length() - 2));
+                    LOG.trace("Sending {} commands to server: {}", commands.size(), buffer.substring(0, buffer.length() - 2));
                 } else {
-                    LOG.info("Sending {} commands to server", commands.size());
+                    LOG.trace("Sending {} commands to server", commands.size());
                 }
 
                 final List<? extends Command> answers = transmit(commands);
@@ -121,7 +121,7 @@ public abstract class AbstractClientConnector {
                 if (connectedFlag.get()) {
                     handleError(e);
                 } else {
-                    LOG.warn("Remoting error based on broken connection in parallel request", e);
+                    LOG.debug("Remoting error based on broken connection in parallel request", e);
                 }
             }
             if(!longPollingActivated && useLongPolling.get()) {
@@ -139,7 +139,7 @@ public abstract class AbstractClientConnector {
     protected abstract List<Command> transmit(final List<Command> commands) throws DolphinRemotingException;
 
     public void send(final Command command, final OnFinishedHandler callback, final HandlerType handlerType) {
-        LOG.debug("Command of type {} should be send to server", command.getClass().getSimpleName());
+        LOG.trace("Command of type {} should be send to server", command.getClass().getSimpleName());
         if (!connectedFlag.get()) {
             //TODO: Change to DolphinRemotingException
             throw new IllegalStateException("Connection is broken");
@@ -169,9 +169,9 @@ public abstract class AbstractClientConnector {
                 buffer.append(command.getClass().getSimpleName());
                 buffer.append(", ");
             }
-            LOG.debug("Processing {} commands from server: {}", response.size(), buffer.substring(0, buffer.length() - 2));
+            LOG.trace("Processing {} commands from server: {}", response.size(), buffer.substring(0, buffer.length() - 2));
         } else {
-            LOG.info("Processing {} commands from server", response.size());
+            LOG.trace("Processing {} commands from server", response.size());
         }
 
         for (Command serverCommand : response) {
@@ -180,11 +180,11 @@ public abstract class AbstractClientConnector {
 
         OnFinishedHandler callback = commandsAndHandlers.get(0).getHandler();
         if (callback != null) {
-            LOG.debug("Handling registered callback");
+            LOG.trace("Handling registered callback");
             try {
                 callback.onFinished();
             } catch (Exception e) {
-                LOG.error("Error in handling callback", e);
+                LOG.info("Error in handling callback", e);
                 throw e;
             }
         }
@@ -212,7 +212,7 @@ public abstract class AbstractClientConnector {
                 }
             });
         } catch (Exception e) {
-            LOG.error("Error in sending long poll", e);
+            LOG.info("Error in sending long poll", e);
         }
     }
 

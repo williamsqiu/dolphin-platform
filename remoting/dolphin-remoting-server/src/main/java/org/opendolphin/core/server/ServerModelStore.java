@@ -157,7 +157,7 @@ public class ServerModelStore extends ModelStore<ServerAttribute, ServerPresenta
             return;
         }
         if (attribute == null) {
-            LOG.error("Cannot change value on a null attribute to '{}'", value);
+            LOG.info("Cannot change value on a null attribute to '{}'", value);
             return;
         }
         forceChangeValue(value, response, attribute);

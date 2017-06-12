@@ -33,7 +33,7 @@ import java.util.concurrent.Executors;
 
 public class InMemoryClientConnector extends AbstractClientConnector {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(InMemoryClientConnector.class);
+    private static final Logger LOG = LoggerFactory.getLogger(InMemoryClientConnector.class);
 
     private final ServerConnector serverConnector;
 
@@ -56,9 +56,9 @@ public class InMemoryClientConnector extends AbstractClientConnector {
 
     @Override
     public List<Command> transmit(final List<Command> commands) {
-        LOGGER.trace("transmitting {} commands", commands.size());
+        LOG.trace("transmitting {} commands", commands.size());
         if (serverConnector == null) {
-            LOGGER.warn("no server connector wired for in-memory connector");
+            LOG.debug("no server connector wired for in-memory connector");
             return Collections.EMPTY_LIST;
         }
         if (sleepMillis > 0) {
@@ -70,7 +70,7 @@ public class InMemoryClientConnector extends AbstractClientConnector {
         }
         List<Command> result = new LinkedList<Command>();
         for (Command command : commands) {
-            LOGGER.trace("processing {}", command);
+            LOG.trace("processing {}", command);
             result.addAll(serverConnector.receive(command));// there is no need for encoding since we are in-memory
         }
         return result;

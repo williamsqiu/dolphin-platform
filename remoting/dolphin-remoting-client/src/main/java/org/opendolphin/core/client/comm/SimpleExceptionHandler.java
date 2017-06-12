@@ -29,6 +29,6 @@ public class SimpleExceptionHandler implements RemotingExceptionHandler {
 
     @Override
     public void handle(final DolphinRemotingException e) {
-        LOG.error(" Error in remoting layer: ", e);
+        LOG.info(" Error in remoting layer: ", e);
     }
 }

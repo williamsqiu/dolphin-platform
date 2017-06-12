@@ -48,7 +48,7 @@ public class ServerConnector {
      * doesn't fail on missing commands
      **/
     public List<Command> receive(final Command command) {
-        LOG.info("Received command of type {}", command.getClass().getSimpleName());
+        LOG.trace("Received command of type {}", command.getClass().getSimpleName());
         List<Command> response = new LinkedList();// collecting parameter pattern
 
         if (!(command instanceof SignalCommand)) {// signal commands must not update thread-confined state
@@ -62,7 +62,7 @@ public class ServerConnector {
 
         List<CommandHandler> actions = registry.getActionsFor(command.getClass());
         if (actions.isEmpty()) {
-            LOG.warn("There is no server action registered for received command type {}, known commands types are {}", command.getClass().getSimpleName(), registry.getActions().keySet());
+            LOG.debug("There is no server action registered for received command type {}, known commands types are {}", command.getClass().getSimpleName(), registry.getActions().keySet());
             return response;
         }
 
@@ -90,7 +90,7 @@ public class ServerConnector {
 
     public void registerDefaultActions() {
         if (initialized.getAndSet(true)) {
-            LOG.warn("Attempt to initialize default actions more than once!");
+            LOG.debug("Attempt to initialize default actions more than once!");
             return;
         }
         register(new StoreValueChangeAction());

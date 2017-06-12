@@ -35,7 +35,7 @@ public class StoreAttributeAction extends DolphinServerAction {
             public void handleCommand(final ChangeAttributeMetadataCommand command, final List response) {
                 final Attribute attribute = getServerModelStore().findAttributeById(command.getAttributeId());
                 if (attribute == null) {
-                    LOG.warn("Cannot find attribute with id '{}'. Metadata remains unchanged.", command.getAttributeId());
+                    LOG.debug("Cannot find attribute with id '{}'. Metadata remains unchanged.", command.getAttributeId());
                     return;
                 }
 
