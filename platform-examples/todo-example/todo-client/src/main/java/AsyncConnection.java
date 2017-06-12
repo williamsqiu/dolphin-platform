@@ -1,6 +1,11 @@
+import com.canoo.dolphin.async.CommandCodec;
+import com.canoo.dolphin.async.RemoteCommand;
+import com.canoo.dolphin.async.RemoteMessage;
 import com.canoo.dolphin.util.Assert;
 import org.atmosphere.wasync.*;
-import org.atmosphere.wasync.impl.AtmosphereClient;
+import org.atmosphere.wasync.serial.DefaultSerializedFireStage;
+import org.atmosphere.wasync.serial.SerializedClient;
+import org.atmosphere.wasync.serial.SerializedOptionsBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,10 +24,37 @@ public class AsyncConnection {
 
     public AsyncConnection(final String endpoint, final boolean ws, final boolean sse, boolean stream) {
         Assert.requireNonBlank(endpoint, "endpoint");
-        client = ClientFactory.getDefault().newClient(AtmosphereClient.class);
 
-        final RequestBuilder requestBuilder = client.newRequestBuilder().
-                uri(endpoint);
+
+        client = ClientFactory.getDefault().newClient(SerializedClient.class);
+        SerializedOptionsBuilder b = ((SerializedClient)client).newOptionsBuilder();
+        b.serializedFireStage(new DefaultSerializedFireStage());
+
+
+        //client = ClientFactory.getDefault().newClient(AtmosphereClient.class);
+
+        final CommandCodec codec = new CommandCodec();
+
+        final RequestBuilder requestBuilder = client.newRequestBuilder();
+        requestBuilder.uri(endpoint);
+        requestBuilder.encoder(new Encoder<RemoteMessage, String>() {
+            @Override
+            public String encode(RemoteMessage message) {
+                return codec.encode(message);
+            }
+        });
+        requestBuilder.decoder(new Decoder<String, Object>() {
+            @Override
+            public Object decode(Event e, String s) {
+                LOG.info("DECODE MESSAGE FOR TYPE {} - {}", e, s);
+                if(e.equals(Event.MESSAGE)) {
+                    return codec.decode(s);
+                } else {
+                    return s;
+                }
+            }
+        });
+
         if (ws) {
             requestBuilder.transport(Request.TRANSPORT.WEBSOCKET);
         }
@@ -42,7 +74,12 @@ public class AsyncConnection {
                 on(Event.CLOSE.name(), s -> onClose()).
                 on(Event.REOPENED, s -> onReopen()).
                 on(Event.TRANSPORT, t -> onTransport((String) t)).
-                on(Event.MESSAGE, s -> onMessage((String) s)).
+                on(Event.MESSAGE, new Function<RemoteMessage>() {
+                    @Override
+                    public void on(RemoteMessage message) {
+                        onMessage(message);
+                    }
+                }).
                 on(Event.ERROR, t -> onError((Throwable) t)).
                 open(request);
     }
@@ -63,16 +100,23 @@ public class AsyncConnection {
         LOG.info("REOPEN");
     }
 
-    public void onMessage(String message) {
+    public void onMessage(RemoteMessage message) {
         LOG.info("MESSAGE - {}", message);
-        send("Pong");
+        message.getCommands().stream().filter(c -> c.getType().equals("ping")).findAny().ifPresent(c -> {
+            RemoteCommand pongCommand = new RemoteCommand();
+            pongCommand.setType("pong");
+            RemoteMessage pongMessage = new RemoteMessage();
+            pongMessage.getCommands().add(pongCommand);
+            send(pongMessage);
+        });
+
     }
 
     public void onError(Throwable t) {
         LOG.info("ERROR");
     }
 
-    public void send(String message) {
+    public void send(RemoteMessage message) {
         try {
             LOG.info("SENDING - " + message);
             socket.fire(message);
@@ -94,7 +138,6 @@ public class AsyncConnection {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                connection.send("HUHU");
             }
         });
     }
