@@ -76,7 +76,7 @@ public abstract class DolphinPlatformApplication extends Application {
             });
             return configuration;
         } catch (MalformedURLException e) {
-            throw new ClientInitializationException("Client configuration cannot be created", e);
+            throw new ClientInitializationException("AsyncSample configuration cannot be created", e);
         }
     }
 

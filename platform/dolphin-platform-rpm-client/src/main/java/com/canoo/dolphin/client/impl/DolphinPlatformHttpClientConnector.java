@@ -117,7 +117,7 @@ public class DolphinPlatformHttpClientConnector extends AbstractClientConnector 
             //RESPONSE
             int responseCode = conn.getResponseCode();
             if (responseCode == HttpStatus.SC_REQUEST_TIMEOUT) {
-                throw new DolphinSessionException("Server can not handle Dolphin Client ID");
+                throw new DolphinSessionException("Server can not handle Dolphin AsyncSample ID");
             }
             if (responseCode >= HttpStatus.SC_MULTIPLE_CHOICES) {
                 throw new DolphinHttpResponseException(responseCode, conn.getResponseMessage());

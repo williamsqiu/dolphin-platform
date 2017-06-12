@@ -34,7 +34,7 @@ public class TestConfiguration {
     public TestConfiguration(final WebApplicationContext context) throws ControllerValidationException, MalformedURLException, ExecutionException, InterruptedException {
         Assert.requireNonNull(context, "context");
 
-        //Client
+        //AsyncSample
         final ExecutorService clientExecutor = Executors.newSingleThreadExecutor();
         final ClientConfiguration clientConfiguration = new ClientConfiguration(new URL("http://dummyURL"), clientExecutor);
         clientConfiguration.setConnectionTimeout(Long.MAX_VALUE);

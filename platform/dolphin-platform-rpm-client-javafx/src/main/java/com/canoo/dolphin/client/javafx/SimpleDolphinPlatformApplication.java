@@ -60,7 +60,7 @@ public abstract class SimpleDolphinPlatformApplication extends DolphinPlatformAp
 
     @Override
     protected void onInitializationError(Stage primaryStage, ClientInitializationException initializationException, Iterable<DolphinRuntimeException> possibleCauses) {
-        showError(primaryStage, "Error on initialization", "A error happened while initializing the Client and Connection", initializationException);
+        showError(primaryStage, "Error on initialization", "A error happened while initializing the AsyncSample and Connection", initializationException);
     }
 
     @Override
