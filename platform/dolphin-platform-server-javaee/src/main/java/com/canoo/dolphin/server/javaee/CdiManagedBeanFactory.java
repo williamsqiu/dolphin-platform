@@ -15,7 +15,7 @@
  */
 package com.canoo.dolphin.server.javaee;
 
-import com.canoo.dolphin.util.Assert;
+import com.canoo.impl.platform.core.Assert;
 import com.canoo.impl.server.beans.ManagedBeanFactory;
 import com.canoo.impl.server.beans.PostConstructInterceptor;
 import org.apache.deltaspike.core.api.provider.BeanManagerProvider;

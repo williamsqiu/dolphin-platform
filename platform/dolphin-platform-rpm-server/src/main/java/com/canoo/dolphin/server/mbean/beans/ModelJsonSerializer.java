@@ -17,7 +17,7 @@ package com.canoo.dolphin.server.mbean.beans;
 
 import com.canoo.dolphin.collections.ObservableList;
 import com.canoo.dolphin.impl.DolphinUtils;
-import com.canoo.dolphin.impl.ReflectionHelper;
+import com.canoo.impl.platform.core.ReflectionHelper;
 import com.canoo.dolphin.mapping.Property;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;

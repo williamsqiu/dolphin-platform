@@ -1,7 +1,7 @@
 package com.canoo.dolphin.test.impl;
 
 import com.canoo.dolphin.server.spring.ClientScope;
-import com.canoo.dolphin.util.Assert;
+import com.canoo.impl.platform.core.Assert;
 import com.canoo.platform.server.client.ClientSession;
 
 public class TestClientScope extends ClientScope {

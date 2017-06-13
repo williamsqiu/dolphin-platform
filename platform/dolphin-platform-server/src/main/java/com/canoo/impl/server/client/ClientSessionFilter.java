@@ -1,7 +1,7 @@
 package com.canoo.impl.server.client;
 
-import com.canoo.dolphin.PlatformConstants;
-import com.canoo.dolphin.util.Assert;
+import com.canoo.impl.platform.core.PlatformConstants;
+import com.canoo.impl.platform.core.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

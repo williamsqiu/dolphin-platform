@@ -15,7 +15,7 @@
  */
 package com.canoo.dolphin.mapping;
 
-import com.canoo.dolphin.Subscription;
+import com.canoo.platform.core.functional.Subscription;
 import com.canoo.dolphin.event.ValueChangeListener;
 
 /**

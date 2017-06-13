@@ -16,7 +16,7 @@
 package com.canoo.dolphin.client.impl;
 
 import com.canoo.dolphin.impl.AbstractPresentationModelBuilder;
-import com.canoo.dolphin.util.Assert;
+import com.canoo.impl.platform.core.Assert;
 import org.opendolphin.RemotingConstants;
 import org.opendolphin.core.client.ClientAttribute;
 import org.opendolphin.core.client.ClientModelStore;

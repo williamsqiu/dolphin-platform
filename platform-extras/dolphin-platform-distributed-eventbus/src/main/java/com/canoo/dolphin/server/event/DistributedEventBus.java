@@ -15,10 +15,10 @@
  */
 package com.canoo.dolphin.server.event;
 
-import com.canoo.dolphin.Subscription;
+import com.canoo.platform.core.functional.Subscription;
 import com.canoo.dolphin.server.event.impl.AbstractEventBus;
 import com.canoo.dolphin.server.event.impl.DolphinEvent;
-import com.canoo.dolphin.util.Assert;
+import com.canoo.impl.platform.core.Assert;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.ITopic;
 

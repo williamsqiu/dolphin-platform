@@ -18,7 +18,7 @@ package com.canoo.dolphin.test.impl;
 import com.canoo.dolphin.server.config.RemotingConfiguration;
 import com.canoo.dolphin.server.context.DolphinContext;
 import com.canoo.dolphin.server.controller.ControllerRepository;
-import com.canoo.dolphin.util.Callback;
+import com.canoo.platform.core.functional.Callback;
 import com.canoo.impl.server.beans.ManagedBeanFactory;
 import com.canoo.impl.server.client.ClientSessionImpl;
 import com.canoo.impl.server.client.ClientSessionProvider;

@@ -1,9 +1,9 @@
 package com.canoo.impl.server.bootstrap;
 
-import com.canoo.dolphin.ansi.AnsiOut;
-import com.canoo.dolphin.concurrency.PlatformThreadFactory;
-import com.canoo.dolphin.concurrency.SimpleDolphinPlatformThreadFactory;
-import com.canoo.dolphin.util.Assert;
+import com.canoo.impl.platform.core.ansi.AnsiOut;
+import com.canoo.platform.core.PlatformThreadFactory;
+import com.canoo.impl.platform.core.SimpleDolphinPlatformThreadFactory;
+import com.canoo.impl.platform.core.Assert;
 import com.canoo.impl.server.beans.ManagedBeanFactory;
 import com.canoo.impl.server.config.PlatformConfiguration;
 import com.canoo.impl.server.mbean.MBeanRegistry;

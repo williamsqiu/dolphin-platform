@@ -15,7 +15,7 @@
  */
 package com.canoo.dolphin.client.javafx.binding;
 
-import com.canoo.dolphin.util.Assert;
+import com.canoo.impl.platform.core.Assert;
 
 public class DefaultBidirectionalConverter<T, U> implements BidirectionalConverter<T, U> {
 

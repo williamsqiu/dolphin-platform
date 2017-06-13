@@ -16,7 +16,7 @@
 package com.canoo.dolphin.client.javafx;
 
 import com.canoo.dolphin.client.*;
-import com.canoo.dolphin.util.Assert;
+import com.canoo.impl.platform.core.Assert;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.stage.Stage;

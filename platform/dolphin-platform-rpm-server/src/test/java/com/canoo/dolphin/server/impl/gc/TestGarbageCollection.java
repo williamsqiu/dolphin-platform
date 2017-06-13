@@ -16,7 +16,7 @@
 package com.canoo.dolphin.server.impl.gc;
 
 import com.canoo.dolphin.server.config.RemotingConfiguration;
-import com.canoo.dolphin.util.Assert;
+import com.canoo.impl.platform.core.Assert;
 import com.canoo.impl.server.config.PlatformConfiguration;
 import org.testng.annotations.Test;
 

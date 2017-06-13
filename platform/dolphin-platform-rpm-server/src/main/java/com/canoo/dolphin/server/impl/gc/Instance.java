@@ -16,7 +16,7 @@
 package com.canoo.dolphin.server.impl.gc;
 
 import com.canoo.dolphin.collections.ObservableList;
-import com.canoo.dolphin.impl.IdentitySet;
+import com.canoo.impl.platform.core.IdentitySet;
 import com.canoo.dolphin.mapping.Property;
 
 import java.util.ArrayList;

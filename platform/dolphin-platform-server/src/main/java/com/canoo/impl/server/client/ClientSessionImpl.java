@@ -16,7 +16,7 @@
 package com.canoo.impl.server.client;
 
 import com.canoo.platform.server.client.ClientSession;
-import com.canoo.dolphin.util.Assert;
+import com.canoo.impl.platform.core.Assert;
 
 import java.util.Collections;
 import java.util.Map;

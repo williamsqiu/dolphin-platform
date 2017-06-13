@@ -15,11 +15,11 @@
  */
 package com.canoo.dolphin.client;
 
-import com.canoo.dolphin.concurrency.PlatformThreadFactory;
+import com.canoo.platform.core.PlatformThreadFactory;
 import com.canoo.dolphin.client.impl.DefaultHttpURLConnectionFactory;
 import com.canoo.dolphin.client.impl.DefaultHttpURLConnectionResponseHandler;
-import com.canoo.dolphin.concurrency.SimpleDolphinPlatformThreadFactory;
-import com.canoo.dolphin.util.Assert;
+import com.canoo.impl.platform.core.SimpleDolphinPlatformThreadFactory;
+import com.canoo.impl.platform.core.Assert;
 import org.opendolphin.core.client.comm.RemotingExceptionHandler;
 import org.opendolphin.core.client.comm.SimpleExceptionHandler;
 import org.slf4j.Logger;

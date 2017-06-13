@@ -15,7 +15,7 @@
  */
 package com.canoo.dolphin.impl.codec;
 
-import com.canoo.dolphin.util.Assert;
+import com.canoo.impl.platform.core.Assert;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import org.opendolphin.core.comm.ValueChangedCommand;

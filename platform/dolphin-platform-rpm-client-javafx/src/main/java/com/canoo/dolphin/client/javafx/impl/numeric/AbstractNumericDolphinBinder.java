@@ -15,7 +15,7 @@
  */
 package com.canoo.dolphin.client.javafx.impl.numeric;
 
-import com.canoo.dolphin.Subscription;
+import com.canoo.platform.core.functional.Subscription;
 import com.canoo.dolphin.binding.Binding;
 import com.canoo.dolphin.client.javafx.binding.BidirectionalConverter;
 import com.canoo.dolphin.client.javafx.binding.NumericDolphinBinder;

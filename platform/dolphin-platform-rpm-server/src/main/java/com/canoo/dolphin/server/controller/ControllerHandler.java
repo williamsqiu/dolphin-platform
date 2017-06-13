@@ -15,8 +15,8 @@
  */
 package com.canoo.dolphin.server.controller;
 
-import com.canoo.dolphin.Subscription;
-import com.canoo.dolphin.impl.ReflectionHelper;
+import com.canoo.platform.core.functional.Subscription;
+import com.canoo.impl.platform.core.ReflectionHelper;
 import com.canoo.dolphin.internal.BeanRepository;
 import com.canoo.dolphin.server.DolphinAction;
 import com.canoo.dolphin.server.DolphinModel;
@@ -25,7 +25,7 @@ import com.canoo.dolphin.server.impl.ServerBeanBuilder;
 import com.canoo.dolphin.server.impl.ServerControllerActionCallBean;
 import com.canoo.dolphin.server.mbean.DolphinContextMBeanRegistry;
 import com.canoo.dolphin.server.mbean.beans.ModelProvider;
-import com.canoo.dolphin.util.Assert;
+import com.canoo.impl.platform.core.Assert;
 import com.canoo.impl.server.beans.ManagedBeanFactory;
 import com.canoo.impl.server.beans.PostConstructInterceptor;
 import org.slf4j.Logger;
