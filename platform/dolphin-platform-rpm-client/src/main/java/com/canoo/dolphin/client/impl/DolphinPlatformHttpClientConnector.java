@@ -17,8 +17,10 @@ package com.canoo.dolphin.client.impl;
 
 import com.canoo.dolphin.client.ClientConfiguration;
 import com.canoo.dolphin.client.DolphinSessionException;
-import com.canoo.dolphin.client.HttpURLConnectionFactory;
-import com.canoo.dolphin.client.HttpURLConnectionResponseHandler;
+import com.canoo.impl.platform.client.HttpClientCookieHandler;
+import com.canoo.impl.platform.client.HttpStatus;
+import com.canoo.platform.client.HttpURLConnectionFactory;
+import com.canoo.platform.client.HttpURLConnectionResponseHandler;
 import com.canoo.dolphin.impl.PlatformRemotingConstants;
 import com.canoo.dolphin.impl.commands.DestroyContextCommand;
 import com.canoo.impl.platform.core.Assert;

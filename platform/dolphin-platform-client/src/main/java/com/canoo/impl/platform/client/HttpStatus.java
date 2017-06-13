@@ -13,17 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.dolphin.util;
+package com.canoo.impl.platform.client;
 
-/**
- * A basic callback interface.
- */
-public interface Callback<T> {
+public interface HttpStatus {
 
-    /**
-     * the callback method
-     * @param t the callback parameter
-     */
-    void call(T t);
+    int HTTP_OK = 200;
 
+    int SC_REQUEST_TIMEOUT = 408;
+
+    int SC_MULTIPLE_CHOICES = 300;
 }
