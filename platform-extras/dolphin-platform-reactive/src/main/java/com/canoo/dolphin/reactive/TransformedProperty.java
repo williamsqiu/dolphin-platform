@@ -15,7 +15,7 @@
  */
 package com.canoo.dolphin.reactive;
 
-import com.canoo.dolphin.Subscription;
+import com.canoo.platform.core.functional.Subscription;
 import com.canoo.dolphin.mapping.Property;
 
 /**

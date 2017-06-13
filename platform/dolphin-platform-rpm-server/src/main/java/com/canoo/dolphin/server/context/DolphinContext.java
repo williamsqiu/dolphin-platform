@@ -16,7 +16,7 @@
 package com.canoo.dolphin.server.context;
 
 import com.canoo.dolphin.BeanManager;
-import com.canoo.dolphin.Subscription;
+import com.canoo.platform.core.functional.Subscription;
 import com.canoo.dolphin.impl.*;
 import com.canoo.dolphin.impl.collections.ListMapperImpl;
 import com.canoo.dolphin.impl.commands.*;
@@ -31,8 +31,8 @@ import com.canoo.dolphin.server.impl.gc.GarbageCollectionCallback;
 import com.canoo.dolphin.server.impl.gc.GarbageCollector;
 import com.canoo.dolphin.server.impl.gc.Instance;
 import com.canoo.dolphin.server.mbean.DolphinContextMBeanRegistry;
-import com.canoo.dolphin.util.Assert;
-import com.canoo.dolphin.util.Callback;
+import com.canoo.impl.platform.core.Assert;
+import com.canoo.platform.core.functional.Callback;
 import com.canoo.impl.server.beans.ManagedBeanFactory;
 import com.canoo.impl.server.client.ClientSessionProvider;
 import com.canoo.platform.server.client.ClientSession;

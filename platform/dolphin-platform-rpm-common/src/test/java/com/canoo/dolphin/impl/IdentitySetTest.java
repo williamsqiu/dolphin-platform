@@ -15,6 +15,7 @@
  */
 package com.canoo.dolphin.impl;
 
+import com.canoo.impl.platform.core.IdentitySet;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 

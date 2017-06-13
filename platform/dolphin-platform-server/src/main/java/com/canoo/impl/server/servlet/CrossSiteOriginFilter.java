@@ -15,9 +15,9 @@
  */
 package com.canoo.impl.server.servlet;
 
-import com.canoo.dolphin.PlatformConstants;
+import com.canoo.impl.platform.core.PlatformConstants;
 import com.canoo.impl.server.config.PlatformConfiguration;
-import com.canoo.dolphin.util.Assert;
+import com.canoo.impl.platform.core.Assert;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;

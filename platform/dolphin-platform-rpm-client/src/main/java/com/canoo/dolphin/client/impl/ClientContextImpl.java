@@ -24,7 +24,7 @@ import com.canoo.dolphin.impl.commands.DestroyContextCommand;
 import com.canoo.dolphin.internal.BeanRepository;
 import com.canoo.dolphin.internal.ClassRepository;
 import com.canoo.dolphin.internal.EventDispatcher;
-import com.canoo.dolphin.util.Assert;
+import com.canoo.impl.platform.core.Assert;
 import org.opendolphin.core.client.ClientModelStore;
 import org.opendolphin.core.client.DefaultModelSynchronizer;
 import org.opendolphin.core.client.ModelSynchronizer;

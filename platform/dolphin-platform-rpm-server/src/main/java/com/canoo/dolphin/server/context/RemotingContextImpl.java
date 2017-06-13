@@ -6,7 +6,7 @@ import com.canoo.dolphin.server.RemotingContext;
 import com.canoo.dolphin.server.binding.PropertyBinder;
 import com.canoo.dolphin.server.binding.impl.PropertyBinderImpl;
 import com.canoo.dolphin.server.event.DolphinEventBus;
-import com.canoo.dolphin.util.Assert;
+import com.canoo.impl.platform.core.Assert;
 
 import java.util.concurrent.Executor;
 

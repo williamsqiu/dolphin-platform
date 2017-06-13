@@ -15,11 +15,11 @@
  */
 package com.canoo.dolphin.server.controller;
 
-import com.canoo.dolphin.impl.ReflectionHelper;
+import com.canoo.impl.platform.core.ReflectionHelper;
 import com.canoo.dolphin.server.DolphinAction;
 import com.canoo.dolphin.server.DolphinModel;
 import com.canoo.dolphin.server.Param;
-import com.canoo.dolphin.util.Assert;
+import com.canoo.impl.platform.core.Assert;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;

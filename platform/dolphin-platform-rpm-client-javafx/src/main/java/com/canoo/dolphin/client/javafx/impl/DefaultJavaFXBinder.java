@@ -18,9 +18,9 @@ package com.canoo.dolphin.client.javafx.impl;
 import com.canoo.dolphin.binding.Binding;
 import com.canoo.dolphin.client.javafx.binding.Converter;
 import com.canoo.dolphin.client.javafx.binding.JavaFXBinder;
-import com.canoo.dolphin.Subscription;
+import com.canoo.platform.core.functional.Subscription;
 import com.canoo.dolphin.mapping.Property;
-import com.canoo.dolphin.util.Assert;
+import com.canoo.impl.platform.core.Assert;
 import javafx.beans.value.WritableValue;
 
 public class DefaultJavaFXBinder<S> implements JavaFXBinder<S> {

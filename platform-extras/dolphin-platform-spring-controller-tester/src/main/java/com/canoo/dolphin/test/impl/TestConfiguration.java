@@ -7,7 +7,7 @@ import com.canoo.dolphin.server.config.RemotingConfiguration;
 import com.canoo.dolphin.server.context.DolphinContext;
 import com.canoo.dolphin.server.controller.ControllerRepository;
 import com.canoo.dolphin.server.controller.ControllerValidationException;
-import com.canoo.dolphin.util.Assert;
+import com.canoo.impl.platform.core.Assert;
 import com.canoo.impl.server.client.ClientSessionProvider;
 import com.canoo.impl.server.config.ConfigurationFileLoader;
 import com.canoo.impl.server.scanner.ClasspathScanner;

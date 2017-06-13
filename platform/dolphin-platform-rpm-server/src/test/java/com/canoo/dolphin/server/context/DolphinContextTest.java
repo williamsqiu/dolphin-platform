@@ -19,7 +19,7 @@ import com.canoo.dolphin.impl.commands.*;
 import com.canoo.dolphin.server.config.RemotingConfiguration;
 import com.canoo.dolphin.server.controller.ControllerRepository;
 import com.canoo.dolphin.server.controller.ControllerValidationException;
-import com.canoo.dolphin.util.Callback;
+import com.canoo.platform.core.functional.Callback;
 import com.canoo.impl.server.beans.ManagedBeanFactory;
 import com.canoo.impl.server.beans.PostConstructInterceptor;
 import com.canoo.impl.server.client.ClientSessionImpl;

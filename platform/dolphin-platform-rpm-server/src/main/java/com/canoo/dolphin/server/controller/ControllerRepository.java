@@ -16,7 +16,7 @@
 package com.canoo.dolphin.server.controller;
 
 import com.canoo.dolphin.server.DolphinController;
-import com.canoo.dolphin.util.Assert;
+import com.canoo.impl.platform.core.Assert;
 import com.canoo.impl.server.scanner.ClasspathScanner;
 
 import java.util.HashMap;

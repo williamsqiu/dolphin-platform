@@ -22,7 +22,7 @@ import com.canoo.dolphin.server.context.DolphinContext;
 import com.canoo.dolphin.server.context.DolphinContextProvider;
 import com.canoo.dolphin.server.context.RemotingContextImpl;
 import com.canoo.dolphin.server.event.DolphinEventBus;
-import com.canoo.dolphin.util.Assert;
+import com.canoo.impl.platform.core.Assert;
 import com.canoo.impl.server.bootstrap.PlatformBootstrap;
 import com.canoo.impl.server.client.ClientSessionProvider;
 import com.canoo.platform.server.client.ClientSession;

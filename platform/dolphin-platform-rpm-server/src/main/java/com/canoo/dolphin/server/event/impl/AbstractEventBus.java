@@ -15,15 +15,15 @@
  */
 package com.canoo.dolphin.server.event.impl;
 
-import com.canoo.dolphin.Subscription;
+import com.canoo.platform.core.functional.Subscription;
 import com.canoo.dolphin.server.context.DolphinContext;
 import com.canoo.dolphin.server.context.DolphinContextProvider;
 import com.canoo.dolphin.server.event.DolphinEventBus;
 import com.canoo.dolphin.server.event.EventSessionFilter;
 import com.canoo.dolphin.server.event.MessageListener;
 import com.canoo.dolphin.server.event.Topic;
-import com.canoo.dolphin.util.Assert;
-import com.canoo.dolphin.util.Callback;
+import com.canoo.impl.platform.core.Assert;
+import com.canoo.platform.core.functional.Callback;
 import com.canoo.impl.server.client.ClientSessionLifecycleHandler;
 import com.canoo.platform.server.client.ClientSession;
 import org.slf4j.Logger;

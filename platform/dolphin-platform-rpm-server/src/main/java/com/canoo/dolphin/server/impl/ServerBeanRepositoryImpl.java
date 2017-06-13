@@ -18,7 +18,7 @@ package com.canoo.dolphin.server.impl;
 import com.canoo.dolphin.impl.BeanRepositoryImpl;
 import com.canoo.dolphin.internal.EventDispatcher;
 import com.canoo.dolphin.server.impl.gc.GarbageCollector;
-import com.canoo.dolphin.util.Assert;
+import com.canoo.impl.platform.core.Assert;
 import org.opendolphin.core.Dolphin;
 
 public class ServerBeanRepositoryImpl extends BeanRepositoryImpl implements ServerBeanRepository{

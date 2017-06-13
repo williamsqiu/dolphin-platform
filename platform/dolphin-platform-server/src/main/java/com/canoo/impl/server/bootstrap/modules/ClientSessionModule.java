@@ -1,7 +1,7 @@
 package com.canoo.impl.server.bootstrap.modules;
 
-import com.canoo.dolphin.util.Assert;
-import com.canoo.dolphin.util.Callback;
+import com.canoo.impl.platform.core.Assert;
+import com.canoo.platform.core.functional.Callback;
 import com.canoo.impl.server.beans.ManagedBeanFactory;
 import com.canoo.impl.server.bootstrap.ServerCoreComponents;
 import com.canoo.impl.server.client.*;

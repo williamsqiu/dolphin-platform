@@ -15,7 +15,7 @@
  */
 package com.canoo.dolphin.server.context;
 
-import com.canoo.dolphin.util.Callback;
+import com.canoo.platform.core.functional.Callback;
 import com.canoo.platform.server.client.ClientSession;
 
 public interface DolphinContextFactory {

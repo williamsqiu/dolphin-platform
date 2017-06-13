@@ -18,12 +18,10 @@ package com.canoo.dolphin.client;
 import com.canoo.dolphin.client.impl.ClientContextImpl;
 import com.canoo.dolphin.client.impl.DolphinPlatformHttpClientConnector;
 import com.canoo.dolphin.impl.codec.OptimizedJsonCodec;
-import com.canoo.dolphin.util.Assert;
+import com.canoo.impl.platform.core.Assert;
 import org.opendolphin.core.client.ClientModelStore;
 import org.opendolphin.core.client.comm.AbstractClientConnector;
 import org.opendolphin.util.Function;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.CompletableFuture;
 

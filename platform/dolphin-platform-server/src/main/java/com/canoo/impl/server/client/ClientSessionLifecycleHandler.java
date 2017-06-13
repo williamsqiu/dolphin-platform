@@ -1,7 +1,7 @@
 package com.canoo.impl.server.client;
 
-import com.canoo.dolphin.Subscription;
-import com.canoo.dolphin.util.Callback;
+import com.canoo.platform.core.functional.Subscription;
+import com.canoo.platform.core.functional.Callback;
 import com.canoo.platform.server.client.ClientSession;
 
 public interface ClientSessionLifecycleHandler {

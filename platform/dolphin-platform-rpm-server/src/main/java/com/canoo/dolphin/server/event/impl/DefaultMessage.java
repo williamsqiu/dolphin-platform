@@ -17,7 +17,7 @@ package com.canoo.dolphin.server.event.impl;
 
 import com.canoo.dolphin.server.event.Message;
 import com.canoo.dolphin.server.event.Topic;
-import com.canoo.dolphin.util.Assert;
+import com.canoo.impl.platform.core.Assert;
 
 import java.io.Serializable;
 

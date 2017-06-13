@@ -16,7 +16,7 @@
 package com.canoo.dolphin.integration;
 
 import com.canoo.dolphin.client.*;
-import com.canoo.dolphin.util.Assert;
+import com.canoo.impl.platform.core.Assert;
 import org.testng.annotations.DataProvider;
 
 import java.io.IOException;
