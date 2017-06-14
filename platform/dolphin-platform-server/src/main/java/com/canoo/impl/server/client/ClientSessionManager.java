@@ -1,8 +1,9 @@
 package com.canoo.impl.server.client;
 
 import com.canoo.impl.platform.core.Assert;
-import com.canoo.impl.server.config.PlatformConfiguration;
+import com.canoo.impl.server.config.DefaultModuleConfig;
 import com.canoo.platform.server.client.ClientSession;
+import com.canoo.platform.server.spi.PlatformConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,7 +35,7 @@ public class ClientSessionManager {
             throw new MaxSessionCountReachedException();
         }
 
-        final ClientSession clientSession = new ClientSessionImpl();
+        final ClientSession clientSession = new HttpClientSessionImpl(httpSession.getId());
         add(httpSession, clientSession);
 
         lifecycleHandler.onSessionCreated(clientSession);
@@ -94,7 +95,7 @@ public class ClientSessionManager {
         Lock lock = getOrCreateClientSessionLockForHttpSession(httpSession);
         lock.lock();
         try {
-            return getOrCreateClientSessionMapInHttpSession(httpSession).size() < configuration.getMaxClientsPerSession();
+            return getOrCreateClientSessionMapInHttpSession(httpSession).size() < DefaultModuleConfig.getMaxClientsPerSession(configuration);
         } finally {
             lock.unlock();
         }

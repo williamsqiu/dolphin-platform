@@ -1,8 +1,8 @@
 package com.canoo.dolphin.webdeployment.server.controller;
 
-import com.canoo.dolphin.server.DolphinAction;
-import com.canoo.dolphin.server.DolphinController;
-import com.canoo.dolphin.server.DolphinModel;
+import com.canoo.platform.server.DolphinAction;
+import com.canoo.platform.server.DolphinController;
+import com.canoo.platform.server.DolphinModel;
 import com.canoo.dolphin.webdeployment.Constants;
 import com.canoo.dolphin.webdeployment.model.MyModel;
 

@@ -15,13 +15,13 @@
  */
 package com.canoo.dolphin.test.impl;
 
-import com.canoo.dolphin.server.config.RemotingConfiguration;
-import com.canoo.dolphin.server.context.DolphinContext;
-import com.canoo.dolphin.server.controller.ControllerRepository;
-import com.canoo.platform.core.functional.Callback;
 import com.canoo.impl.server.beans.ManagedBeanFactory;
-import com.canoo.impl.server.client.ClientSessionImpl;
 import com.canoo.impl.server.client.ClientSessionProvider;
+import com.canoo.impl.server.client.HttpClientSessionImpl;
+import com.canoo.impl.server.config.RemotingConfiguration;
+import com.canoo.impl.server.context.DolphinContext;
+import com.canoo.impl.server.controller.ControllerRepository;
+import com.canoo.platform.core.functional.Callback;
 import org.opendolphin.core.comm.Command;
 
 import java.util.List;
@@ -29,7 +29,7 @@ import java.util.List;
 public class DolphinTestContext extends DolphinContext {
 
     public DolphinTestContext(RemotingConfiguration configuration, ClientSessionProvider dolphinSessionProvider, ManagedBeanFactory managedBeanFactory, ControllerRepository controllerRepository) {
-        super(configuration, new ClientSessionImpl("Test-123"), dolphinSessionProvider, managedBeanFactory, controllerRepository, createEmptyCallback());
+        super(configuration, new HttpClientSessionImpl(), dolphinSessionProvider, managedBeanFactory, controllerRepository, createEmptyCallback());
     }
 
     private static Callback<DolphinContext> createEmptyCallback() {

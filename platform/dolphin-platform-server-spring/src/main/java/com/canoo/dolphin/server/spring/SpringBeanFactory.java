@@ -16,16 +16,16 @@
 package com.canoo.dolphin.server.spring;
 
 import com.canoo.dolphin.BeanManager;
-import com.canoo.dolphin.server.RemotingContext;
-import com.canoo.dolphin.server.binding.PropertyBinder;
-import com.canoo.dolphin.server.context.DolphinContext;
-import com.canoo.dolphin.server.context.DolphinContextProvider;
-import com.canoo.dolphin.server.context.RemotingContextImpl;
-import com.canoo.dolphin.server.event.DolphinEventBus;
 import com.canoo.impl.platform.core.Assert;
 import com.canoo.impl.server.bootstrap.PlatformBootstrap;
 import com.canoo.impl.server.client.ClientSessionProvider;
+import com.canoo.impl.server.context.DolphinContext;
+import com.canoo.impl.server.context.DolphinContextProvider;
+import com.canoo.impl.server.context.RemotingContextImpl;
+import com.canoo.platform.server.RemotingContext;
+import com.canoo.platform.server.binding.PropertyBinder;
 import com.canoo.platform.server.client.ClientSession;
+import com.canoo.platform.server.event.DolphinEventBus;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.beans.factory.config.CustomScopeConfigurer;
 import org.springframework.context.annotation.Bean;

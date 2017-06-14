@@ -16,11 +16,11 @@
 package com.canoo.dolphin.todo.server;
 
 import com.canoo.dolphin.BeanManager;
-import com.canoo.dolphin.server.DolphinAction;
-import com.canoo.dolphin.server.DolphinController;
-import com.canoo.dolphin.server.DolphinModel;
-import com.canoo.dolphin.server.Param;
-import com.canoo.dolphin.server.event.DolphinEventBus;
+import com.canoo.platform.server.DolphinAction;
+import com.canoo.platform.server.DolphinController;
+import com.canoo.platform.server.DolphinModel;
+import com.canoo.platform.server.Param;
+import com.canoo.platform.server.event.DolphinEventBus;
 import com.canoo.dolphin.todo.pm.ToDoItem;
 import com.canoo.dolphin.todo.pm.ToDoList;
 

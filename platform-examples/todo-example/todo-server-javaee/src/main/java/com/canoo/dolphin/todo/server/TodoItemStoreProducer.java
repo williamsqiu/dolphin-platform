@@ -15,7 +15,7 @@
  */
 package com.canoo.dolphin.todo.server;
 
-import com.canoo.dolphin.server.event.DolphinEventBus;
+import com.canoo.platform.server.event.DolphinEventBus;
 
 import javax.enterprise.inject.Produces;
 import javax.inject.Singleton;

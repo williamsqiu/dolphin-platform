@@ -17,10 +17,10 @@ package com.canoo.dolphin.test.qualifier;
 
 import com.canoo.dolphin.BeanManager;
 import com.canoo.dolphin.binding.Binding;
-import com.canoo.dolphin.server.DolphinAction;
-import com.canoo.dolphin.server.DolphinController;
-import com.canoo.dolphin.server.DolphinModel;
-import com.canoo.dolphin.server.binding.PropertyBinder;
+import com.canoo.platform.server.DolphinAction;
+import com.canoo.platform.server.DolphinController;
+import com.canoo.platform.server.DolphinModel;
+import com.canoo.platform.server.binding.PropertyBinder;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;

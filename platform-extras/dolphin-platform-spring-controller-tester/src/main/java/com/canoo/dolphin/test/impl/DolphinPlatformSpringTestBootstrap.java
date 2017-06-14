@@ -17,12 +17,12 @@ package com.canoo.dolphin.test.impl;
 
 import com.canoo.dolphin.BeanManager;
 import com.canoo.dolphin.client.ClientContext;
-import com.canoo.dolphin.server.binding.PropertyBinder;
-import com.canoo.dolphin.server.binding.impl.PropertyBinderImpl;
-import com.canoo.dolphin.server.context.DolphinContext;
-import com.canoo.dolphin.server.context.DolphinContextProvider;
-import com.canoo.dolphin.server.event.DolphinEventBus;
-import com.canoo.dolphin.server.event.impl.DefaultDolphinEventBus;
+import com.canoo.platform.server.binding.PropertyBinder;
+import com.canoo.impl.server.binding.PropertyBinderImpl;
+import com.canoo.impl.server.context.DolphinContext;
+import com.canoo.impl.server.context.DolphinContextProvider;
+import com.canoo.platform.server.event.DolphinEventBus;
+import com.canoo.impl.server.event.DefaultDolphinEventBus;
 import com.canoo.dolphin.server.spring.ClientScope;
 import com.canoo.impl.platform.core.Assert;
 import com.canoo.impl.server.client.ClientSessionLifecycleHandlerImpl;

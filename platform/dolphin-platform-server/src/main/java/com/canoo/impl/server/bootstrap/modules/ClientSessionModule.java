@@ -3,15 +3,12 @@ package com.canoo.impl.server.bootstrap.modules;
 import com.canoo.impl.platform.core.Assert;
 import com.canoo.platform.core.functional.Callback;
 import com.canoo.impl.server.beans.ManagedBeanFactory;
-import com.canoo.impl.server.bootstrap.ServerCoreComponents;
 import com.canoo.impl.server.client.*;
-import com.canoo.impl.server.config.PlatformConfiguration;
-import com.canoo.impl.server.scanner.ClasspathScanner;
+import com.canoo.impl.server.config.DefaultModuleConfig;
 import com.canoo.platform.server.ServerListener;
 import com.canoo.platform.server.client.ClientSession;
 import com.canoo.platform.server.client.ClientSessionListener;
-import com.canoo.platform.server.spi.ModuleDefinition;
-import com.canoo.platform.server.spi.ModuleInitializationException;
+import com.canoo.platform.server.spi.*;
 
 import javax.servlet.DispatcherType;
 import javax.servlet.FilterRegistration;
@@ -55,7 +52,7 @@ public class ClientSessionModule extends AbstractBaseModule {
 
         final ClientSessionManager clientSessionManager = new ClientSessionManager(configuration, lifecycleHandler);
 
-        final List<String> endpointList = configuration.getIdFilterUrlMappings();
+        final List<String> endpointList = DefaultModuleConfig.getIdFilterUrlMappings(configuration);
         final String[] endpoints = endpointList.toArray(new String[endpointList.size()]);
         final ClientSessionFilter filter = new ClientSessionFilter(clientSessionManager);
         final FilterRegistration.Dynamic createdFilter = servletContext.addFilter(DOLPHIN_CLIENT_ID_FILTER_NAME, filter);
@@ -84,7 +81,19 @@ public class ClientSessionModule extends AbstractBaseModule {
             }
         }
 
-
+        final ClientSessionMutextHolder mutextHolder = new ClientSessionMutextHolder();
+        lifecycleHandler.addSessionDestroyedListener(new Callback<ClientSession>() {
+            @Override
+            public void call(ClientSession clientSession) {
+                mutextHolder.sessionDestroyed(clientSession);
+            }
+        });
+        lifecycleHandler.addSessionCreatedListener(new Callback<ClientSession>() {
+            @Override
+            public void call(ClientSession clientSession) {
+                mutextHolder.sessionCreated(clientSession);
+            }
+        });
 
     }
 }

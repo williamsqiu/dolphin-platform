@@ -15,8 +15,9 @@
  */
 package com.canoo.impl.server.servlet;
 
-import com.canoo.impl.server.config.PlatformConfiguration;
 import com.canoo.impl.platform.core.Assert;
+import com.canoo.impl.server.config.DefaultModuleConfig;
+import com.canoo.platform.server.spi.PlatformConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,7 +31,7 @@ public class HttpSessionTimeoutListener implements HttpSessionListener {
     private final int sessionTimeoutInSeconds;
 
     public HttpSessionTimeoutListener(final PlatformConfiguration configuration) {
-        this.sessionTimeoutInSeconds = Assert.requireNonNull(configuration, "configuration").getSessionTimeout();
+        this.sessionTimeoutInSeconds = DefaultModuleConfig.getSessionTimeout(configuration);
     }
 
     @Override

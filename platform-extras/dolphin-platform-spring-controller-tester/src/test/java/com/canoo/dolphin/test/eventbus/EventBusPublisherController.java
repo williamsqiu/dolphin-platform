@@ -15,10 +15,10 @@
  */
 package com.canoo.dolphin.test.eventbus;
 
-import com.canoo.dolphin.server.DolphinAction;
-import com.canoo.dolphin.server.DolphinController;
-import com.canoo.dolphin.server.DolphinModel;
-import com.canoo.dolphin.server.event.DolphinEventBus;
+import com.canoo.platform.server.DolphinAction;
+import com.canoo.platform.server.DolphinController;
+import com.canoo.platform.server.DolphinModel;
+import com.canoo.platform.server.event.DolphinEventBus;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @DolphinController(EventBusTestConstants.EVENT_BUS_PUBLISHER_CONTROLLER_NAME)

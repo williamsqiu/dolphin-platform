@@ -15,7 +15,7 @@
  */
 package com.canoo.dolphin.todo.server;
 
-import com.canoo.dolphin.server.event.DolphinEventBus;
+import com.canoo.platform.server.event.DolphinEventBus;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

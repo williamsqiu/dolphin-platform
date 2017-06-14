@@ -17,7 +17,7 @@ package com.canoo.dolphin.server.javaee;
 
 import com.canoo.impl.server.bootstrap.PlatformBootstrap;
 import com.canoo.impl.server.config.ConfigurationFileLoader;
-import com.canoo.impl.server.config.PlatformConfiguration;
+import com.canoo.impl.server.config.DefaultPlatformConfiguration;
 
 import javax.servlet.ServletContainerInitializer;
 import javax.servlet.ServletContext;
@@ -33,7 +33,7 @@ public class DolphinPlatformJavaeeBootstrap implements ServletContainerInitializ
 
     @Override
     public void onStartup(final Set<Class<?>> c, final ServletContext servletContext) throws ServletException {
-        PlatformConfiguration configuration = ConfigurationFileLoader.loadConfiguration();
+        DefaultPlatformConfiguration configuration = ConfigurationFileLoader.loadConfiguration();
         PlatformBootstrap bootstrap = new PlatformBootstrap();
         bootstrap.init(servletContext, configuration);
     }

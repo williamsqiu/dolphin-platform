@@ -141,5 +141,5 @@ public abstract class EventDispatcherImpl implements EventDispatcher {
         return getLocalSystemIdentifier().equals(value);
     }
 
-    protected abstract String getLocalSystemIdentifier();
+    public abstract String getLocalSystemIdentifier();
 }

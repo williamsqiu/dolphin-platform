@@ -1,10 +1,8 @@
 package com.canoo.impl.server.bootstrap.modules;
 
-import com.canoo.impl.server.bootstrap.ServerCoreComponents;
-import com.canoo.impl.server.config.PlatformConfiguration;
+import com.canoo.impl.server.config.DefaultModuleConfig;
 import com.canoo.impl.server.servlet.CrossSiteOriginFilter;
-import com.canoo.platform.server.spi.ModuleDefinition;
-import com.canoo.platform.server.spi.ModuleInitializationException;
+import com.canoo.platform.server.spi.*;
 
 import javax.servlet.DispatcherType;
 import javax.servlet.FilterRegistration;
@@ -30,7 +28,7 @@ public class CorsModule extends AbstractBaseModule {
     public void initialize(ServerCoreComponents coreComponents) throws ModuleInitializationException {
         final ServletContext servletContext = coreComponents.getServletContext();
         final PlatformConfiguration configuration = coreComponents.getConfiguration();
-        final List<String> endpointList = configuration.getCorsEndpoints();
+        final List<String> endpointList = DefaultModuleConfig.getCorsEndpoints(configuration);
 
         final String[] endpoints = endpointList.toArray(new String[endpointList.size()]);
         final CrossSiteOriginFilter filter = new CrossSiteOriginFilter(configuration);

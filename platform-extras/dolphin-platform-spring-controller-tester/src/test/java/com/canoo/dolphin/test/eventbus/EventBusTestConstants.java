@@ -15,7 +15,7 @@
  */
 package com.canoo.dolphin.test.eventbus;
 
-import com.canoo.dolphin.server.event.Topic;
+import com.canoo.platform.server.event.Topic;
 
 public interface EventBusTestConstants {
     String EVENT_BUS_SUBSCIBER_CONTROLLER_NAME = "EventBusSubscriberController";

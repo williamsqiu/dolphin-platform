@@ -3,14 +3,14 @@ package com.canoo.dolphin.test.impl;
 import com.canoo.dolphin.client.ClientConfiguration;
 import com.canoo.dolphin.client.ClientContext;
 import com.canoo.dolphin.client.impl.ClientContextImpl;
-import com.canoo.dolphin.server.config.RemotingConfiguration;
-import com.canoo.dolphin.server.context.DolphinContext;
-import com.canoo.dolphin.server.controller.ControllerRepository;
-import com.canoo.dolphin.server.controller.ControllerValidationException;
 import com.canoo.impl.platform.core.Assert;
 import com.canoo.impl.server.client.ClientSessionProvider;
 import com.canoo.impl.server.config.ConfigurationFileLoader;
-import com.canoo.impl.server.scanner.ClasspathScanner;
+import com.canoo.impl.server.config.RemotingConfiguration;
+import com.canoo.impl.server.context.DolphinContext;
+import com.canoo.impl.server.controller.ControllerRepository;
+import com.canoo.impl.server.controller.ControllerValidationException;
+import com.canoo.impl.server.scanner.DefaultClasspathScanner;
 import com.canoo.platform.server.client.ClientSession;
 import org.opendolphin.core.client.ClientModelStore;
 import org.opendolphin.core.client.comm.AbstractClientConnector;
@@ -54,7 +54,7 @@ public class TestConfiguration {
 
 
         //Server
-        final ControllerRepository controllerRepository = new ControllerRepository(new ClasspathScanner());
+        final ControllerRepository controllerRepository = new ControllerRepository(new DefaultClasspathScanner());
         final TestSpringManagedBeanFactory containerManager = new TestSpringManagedBeanFactory(context);
         containerManager.init(context.getServletContext());
         final DolphinContextProviderMock dolphinContextProviderMock = new DolphinContextProviderMock();

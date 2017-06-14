@@ -15,7 +15,7 @@
  */
 package com.canoo.dolphin.todo.server;
 
-import com.canoo.dolphin.server.event.Topic;
+import com.canoo.platform.server.event.Topic;
 
 public interface ToDoEventTopics {
 
