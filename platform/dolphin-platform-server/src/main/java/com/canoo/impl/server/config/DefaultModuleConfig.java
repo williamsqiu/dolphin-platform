@@ -52,7 +52,7 @@ public class DefaultModuleConfig {
 
     public final static int MAX_CLIENTS_PER_SESSION_DEFAULT_VALUE = 10;
 
-    public final static List<String> ID_FILTER_URL_MAPPINGS_DEFAULT_VALUE = Arrays.asList("/dolphin", "/dolphin-interrupt");
+    public final static List<String> ID_FILTER_URL_MAPPINGS_DEFAULT_VALUE = Arrays.asList("/dolphin");
 
     public final static List<String> CORS_ENDPOINTS_URL_MAPPINGS_DEFAULT_VALUE = Arrays.asList("/*");
 
