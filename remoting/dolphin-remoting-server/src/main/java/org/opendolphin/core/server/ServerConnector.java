@@ -48,7 +48,7 @@ public class ServerConnector {
      * doesn't fail on missing commands
      **/
     public List<Command> receive(final Command command) {
-        LOG.info("Received command of type {}", command.getClass().getSimpleName());
+        LOG.trace("Received command of type {}", command.getClass().getSimpleName());
         List<Command> response = new LinkedList();// collecting parameter pattern
 
         if (!(command instanceof SignalCommand)) {// signal commands must not update thread-confined state

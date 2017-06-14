@@ -16,7 +16,7 @@
 package com.canoo.impl.server;
 
 import com.canoo.dolphin.BeanManager;
-import com.canoo.dolphin.Subscription;
+import com.canoo.platform.core.functional.Subscription;
 import com.canoo.dolphin.event.ValueChangeEvent;
 import com.canoo.dolphin.event.ValueChangeListener;
 import com.canoo.dolphin.mapping.Property;

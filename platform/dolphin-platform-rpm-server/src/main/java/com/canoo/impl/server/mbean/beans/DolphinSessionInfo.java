@@ -15,8 +15,8 @@
  */
 package com.canoo.impl.server.mbean.beans;
 
+import com.canoo.impl.platform.core.Assert;
 import com.canoo.impl.server.gc.GarbageCollector;
-import com.canoo.dolphin.util.Assert;
 import com.canoo.platform.server.client.ClientSession;
 
 import java.lang.ref.WeakReference;

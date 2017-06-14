@@ -1,6 +1,6 @@
 package com.canoo.dolphin.integration.server.property;
 
-import com.canoo.dolphin.Subscription;
+import com.canoo.platform.core.functional.Subscription;
 import com.canoo.dolphin.integration.property.PropertyTestBean;
 import com.canoo.platform.server.DolphinAction;
 import com.canoo.platform.server.DolphinController;

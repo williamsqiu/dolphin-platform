@@ -1,6 +1,6 @@
 package com.canoo.impl.server.servlet;
 
-import com.canoo.dolphin.util.Assert;
+import com.canoo.impl.platform.core.Assert;
 
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionEvent;

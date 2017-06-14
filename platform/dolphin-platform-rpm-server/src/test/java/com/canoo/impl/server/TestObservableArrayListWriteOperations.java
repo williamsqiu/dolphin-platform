@@ -17,7 +17,7 @@ package com.canoo.impl.server;
 
 import com.canoo.dolphin.collections.ListChangeEvent;
 import com.canoo.dolphin.collections.ListChangeListener;
-import com.canoo.dolphin.Subscription;
+import com.canoo.platform.core.functional.Subscription;
 import com.canoo.dolphin.impl.collections.ObservableArrayList;
 import org.hamcrest.MatcherAssert;
 import org.testng.annotations.Test;

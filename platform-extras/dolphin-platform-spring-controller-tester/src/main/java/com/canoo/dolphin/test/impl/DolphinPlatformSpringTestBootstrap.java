@@ -24,7 +24,7 @@ import com.canoo.impl.server.context.DolphinContextProvider;
 import com.canoo.platform.server.event.DolphinEventBus;
 import com.canoo.impl.server.event.DefaultDolphinEventBus;
 import com.canoo.dolphin.server.spring.ClientScope;
-import com.canoo.dolphin.util.Assert;
+import com.canoo.impl.platform.core.Assert;
 import com.canoo.impl.server.client.ClientSessionLifecycleHandlerImpl;
 import com.canoo.platform.server.client.ClientSession;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;

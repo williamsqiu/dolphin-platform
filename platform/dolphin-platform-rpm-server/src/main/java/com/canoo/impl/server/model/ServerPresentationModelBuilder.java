@@ -16,7 +16,7 @@
 package com.canoo.impl.server.model;
 
 import com.canoo.dolphin.impl.AbstractPresentationModelBuilder;
-import com.canoo.dolphin.util.Assert;
+import com.canoo.impl.platform.core.Assert;
 import org.opendolphin.RemotingConstants;
 import org.opendolphin.core.server.DTO;
 import org.opendolphin.core.server.ServerDolphin;

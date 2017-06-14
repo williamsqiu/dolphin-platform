@@ -112,7 +112,7 @@ public class ClientResponseHandler {
             return;
         }
 
-        LOG.info("C: updating '{}' id '{}' from '{}' to '{}' " + attribute.getPropertyName(), serverCommand.getAttributeId(), attribute.getValue(), serverCommand.getNewValue());
+        LOG.trace("C: updating '{}' id '{}' from '{}' to '{}' ", attribute.getPropertyName(), serverCommand.getAttributeId(), attribute.getValue(), serverCommand.getNewValue());
         attribute.setValue(serverCommand.getNewValue());
         return;
     }

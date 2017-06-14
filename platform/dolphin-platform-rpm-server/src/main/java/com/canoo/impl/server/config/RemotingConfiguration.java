@@ -15,8 +15,8 @@
  */
 package com.canoo.impl.server.config;
 
+import com.canoo.impl.platform.core.Assert;
 import com.canoo.impl.server.event.DefaultEventBusProvider;
-import com.canoo.dolphin.util.Assert;
 import com.canoo.platform.server.spi.PlatformConfiguration;
 
 import java.io.Serializable;

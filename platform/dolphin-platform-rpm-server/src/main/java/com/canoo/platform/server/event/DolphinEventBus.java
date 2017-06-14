@@ -15,7 +15,7 @@
  */
 package com.canoo.platform.server.event;
 
-import com.canoo.dolphin.Subscription;
+import com.canoo.platform.core.functional.Subscription;
 import com.canoo.platform.server.DolphinController;
 
 import java.io.Serializable;

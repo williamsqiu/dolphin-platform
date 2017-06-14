@@ -16,8 +16,8 @@
 package com.canoo.dolphin.client.javafx.stage;
 
 import com.canoo.dolphin.client.javafx.view.AbstractViewBinder;
-import com.canoo.dolphin.Subscription;
-import com.canoo.dolphin.util.Assert;
+import com.canoo.platform.core.functional.Subscription;
+import com.canoo.impl.platform.core.Assert;
 import javafx.event.EventHandler;
 import javafx.stage.Window;
 import javafx.stage.WindowEvent;

@@ -15,8 +15,8 @@
  */
 package com.canoo.impl.server.servlet;
 
-import com.canoo.dolphin.PlatformConstants;
-import com.canoo.dolphin.util.Assert;
+import com.canoo.impl.platform.core.Assert;
+import com.canoo.impl.platform.core.PlatformConstants;
 import com.canoo.impl.server.config.DefaultModuleConfig;
 import com.canoo.platform.server.spi.PlatformConfiguration;
 

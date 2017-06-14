@@ -15,7 +15,7 @@
  */
 package com.canoo.dolphin.server.javaee;
 
-import com.canoo.dolphin.util.Assert;
+import com.canoo.impl.platform.core.Assert;
 import com.canoo.impl.server.bootstrap.PlatformBootstrap;
 import com.canoo.impl.server.client.ClientSessionProvider;
 import com.canoo.platform.server.client.ClientSession;

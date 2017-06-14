@@ -1,8 +1,8 @@
 package com.canoo.impl.server.servlet;
 
+import com.canoo.impl.platform.core.Assert;
 import com.canoo.impl.server.context.DolphinContext;
 import com.canoo.impl.server.context.DolphinContextProvider;
-import com.canoo.dolphin.util.Assert;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;

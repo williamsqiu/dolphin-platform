@@ -16,15 +16,15 @@
 package com.canoo.impl.server.context;
 
 import com.canoo.dolphin.BeanManager;
-import com.canoo.dolphin.Subscription;
+import com.canoo.platform.core.functional.Subscription;
 import com.canoo.dolphin.impl.*;
 import com.canoo.dolphin.impl.collections.ListMapperImpl;
 import com.canoo.dolphin.impl.commands.*;
 import com.canoo.dolphin.internal.ClassRepository;
 import com.canoo.dolphin.internal.EventDispatcher;
 import com.canoo.dolphin.internal.collections.ListMapper;
-import com.canoo.dolphin.util.Assert;
-import com.canoo.dolphin.util.Callback;
+import com.canoo.impl.platform.core.Assert;
+import com.canoo.platform.core.functional.Callback;
 import com.canoo.impl.server.beans.ManagedBeanFactory;
 import com.canoo.impl.server.client.ClientSessionProvider;
 import com.canoo.impl.server.config.RemotingConfiguration;

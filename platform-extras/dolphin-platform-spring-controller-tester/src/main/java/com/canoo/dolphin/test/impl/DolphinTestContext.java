@@ -15,13 +15,13 @@
  */
 package com.canoo.dolphin.test.impl;
 
+import com.canoo.impl.server.beans.ManagedBeanFactory;
+import com.canoo.impl.server.client.ClientSessionProvider;
+import com.canoo.impl.server.client.HttpClientSessionImpl;
 import com.canoo.impl.server.config.RemotingConfiguration;
 import com.canoo.impl.server.context.DolphinContext;
 import com.canoo.impl.server.controller.ControllerRepository;
-import com.canoo.dolphin.util.Callback;
-import com.canoo.impl.server.beans.ManagedBeanFactory;
-import com.canoo.impl.server.client.HttpClientSessionImpl;
-import com.canoo.impl.server.client.ClientSessionProvider;
+import com.canoo.platform.core.functional.Callback;
 import org.opendolphin.core.comm.Command;
 
 import java.util.List;

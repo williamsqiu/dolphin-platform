@@ -45,12 +45,12 @@ public class CreatePresentationModelAction extends DolphinServerAction {
 
     private static void createPresentationModel(final CreatePresentationModelCommand command, final ServerModelStore serverModelStore) {
         if (serverModelStore.findPresentationModelById(command.getPmId()) != null) {
-            LOG.info("Ignoring create PM '{}' since it is already in the model store.", command.getPmId());
+            LOG.trace("Ignoring create PM '{}' since it is already in the model store.", command.getPmId());
             return;
         }
 
         if (command.getPmId().endsWith(RemotingConstants.SERVER_PM_AUTO_ID_SUFFIX)) {
-            LOG.info("Creating the PM '{}' with reserved server-auto-suffix.", command.getPmId());
+            LOG.trace("Creating the PM '{}' with reserved server-auto-suffix.", command.getPmId());
         }
 
         List<ServerAttribute> attributes = new LinkedList();

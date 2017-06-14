@@ -1,7 +1,7 @@
 package com.canoo.impl.server.bootstrap;
 
-import com.canoo.dolphin.concurrency.PlatformThreadFactory;
-import com.canoo.dolphin.util.Assert;
+import com.canoo.platform.core.PlatformThreadFactory;
+import com.canoo.impl.platform.core.Assert;
 import com.canoo.impl.server.beans.ManagedBeanFactory;
 import com.canoo.platform.server.spi.ClasspathScanner;
 import com.canoo.platform.server.spi.PlatformConfiguration;

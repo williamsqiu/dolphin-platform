@@ -17,12 +17,12 @@ package com.canoo.dolphin.impl;
 
 import com.canoo.dolphin.event.BeanAddedListener;
 import com.canoo.dolphin.event.BeanRemovedListener;
-import com.canoo.dolphin.Subscription;
+import com.canoo.platform.core.functional.Subscription;
 import com.canoo.dolphin.internal.BeanRepository;
 import com.canoo.dolphin.internal.DolphinEventHandler;
 import com.canoo.dolphin.internal.EventDispatcher;
 import com.canoo.dolphin.internal.UpdateSource;
-import com.canoo.dolphin.util.Assert;
+import com.canoo.impl.platform.core.Assert;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import org.opendolphin.core.ModelStore;

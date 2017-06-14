@@ -17,7 +17,7 @@ package com.canoo.dolphin.client.impl;
 
 import com.canoo.dolphin.client.ClientConfiguration;
 import com.canoo.dolphin.client.DummyUiThreadHandler;
-import com.canoo.dolphin.client.HttpURLConnectionFactory;
+import com.canoo.platform.client.HttpURLConnectionFactory;
 import com.canoo.dolphin.impl.commands.CreateContextCommand;
 import org.opendolphin.core.client.ClientDolphin;
 import org.opendolphin.core.client.ClientModelStore;

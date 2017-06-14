@@ -1,6 +1,6 @@
 package com.canoo.platform.server.spi;
 
-import com.canoo.dolphin.util.Assert;
+import com.canoo.impl.platform.core.Assert;
 
 import java.util.Collections;
 import java.util.List;

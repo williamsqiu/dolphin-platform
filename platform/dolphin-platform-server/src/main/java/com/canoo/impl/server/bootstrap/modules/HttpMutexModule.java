@@ -1,13 +1,15 @@
 package com.canoo.impl.server.bootstrap.modules;
 
-import com.canoo.dolphin.util.Assert;
+import com.canoo.impl.platform.core.Assert;
 import com.canoo.impl.server.servlet.HttpSessionMutexHolder;
 import com.canoo.platform.server.spi.AbstractBaseModule;
+import com.canoo.platform.server.spi.ModuleDefinition;
 import com.canoo.platform.server.spi.ModuleInitializationException;
 import com.canoo.platform.server.spi.ServerCoreComponents;
 
 import javax.servlet.ServletContext;
 
+@ModuleDefinition(HttpMutexModule.HTTP_MUTEX_MODULE)
 public class HttpMutexModule extends AbstractBaseModule {
 
     public static final String HTTP_MUTEX_MODULE = "HttpMutexModule";

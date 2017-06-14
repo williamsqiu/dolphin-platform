@@ -1,7 +1,7 @@
 package com.canoo.platform.server.spi;
 
-import com.canoo.dolphin.concurrency.PlatformThreadFactory;
 import com.canoo.impl.server.beans.ManagedBeanFactory;
+import com.canoo.platform.core.PlatformThreadFactory;
 
 import javax.servlet.ServletContext;
 

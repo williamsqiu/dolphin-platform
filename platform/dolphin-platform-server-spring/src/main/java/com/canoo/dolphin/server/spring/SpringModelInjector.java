@@ -15,7 +15,7 @@
  */
 package com.canoo.dolphin.server.spring;
 
-import com.canoo.dolphin.util.Assert;
+import com.canoo.impl.platform.core.Assert;
 import com.canoo.impl.server.beans.PostConstructInterceptor;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.InstantiationAwareBeanPostProcessorAdapter;

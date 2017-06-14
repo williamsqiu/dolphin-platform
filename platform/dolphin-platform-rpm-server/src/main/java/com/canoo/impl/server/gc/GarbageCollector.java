@@ -17,11 +17,11 @@ package com.canoo.impl.server.gc;
 
 import com.canoo.dolphin.collections.ObservableList;
 import com.canoo.dolphin.impl.DolphinUtils;
-import com.canoo.dolphin.impl.IdentitySet;
-import com.canoo.dolphin.impl.ReflectionHelper;
 import com.canoo.dolphin.mapping.Property;
+import com.canoo.impl.platform.core.Assert;
+import com.canoo.impl.platform.core.IdentitySet;
+import com.canoo.impl.platform.core.ReflectionHelper;
 import com.canoo.impl.server.config.RemotingConfiguration;
-import com.canoo.dolphin.util.Assert;
 import com.canoo.platform.server.DolphinModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

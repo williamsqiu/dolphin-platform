@@ -15,8 +15,8 @@
  */
 package com.canoo.impl.server.event;
 
-import com.canoo.dolphin.Subscription;
-import com.canoo.dolphin.util.Assert;
+import com.canoo.impl.platform.core.Assert;
+import com.canoo.platform.core.functional.Subscription;
 import com.canoo.platform.server.event.MessageListener;
 import com.canoo.platform.server.event.Topic;
 import com.hazelcast.core.HazelcastInstance;

@@ -15,7 +15,7 @@
  */
 package com.canoo.impl.server.scanner;
 
-import com.canoo.dolphin.util.Assert;
+import com.canoo.impl.platform.core.Assert;
 import com.canoo.platform.server.spi.ClasspathScanner;
 import org.reflections.Reflections;
 import org.reflections.util.ClasspathHelper;

@@ -15,8 +15,8 @@
  */
 package com.canoo.impl.server.context;
 
+import com.canoo.impl.platform.core.Assert;
 import com.canoo.platform.server.ClientSessionExecutor;
-import com.canoo.dolphin.util.Assert;
 import com.google.common.util.concurrent.SettableFuture;
 
 import java.util.concurrent.Callable;

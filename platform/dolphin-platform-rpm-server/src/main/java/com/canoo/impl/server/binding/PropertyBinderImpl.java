@@ -18,11 +18,11 @@ package com.canoo.impl.server.binding;
 import com.canoo.dolphin.binding.Binding;
 import com.canoo.dolphin.binding.BindingException;
 import com.canoo.dolphin.impl.PropertyImpl;
-import com.canoo.dolphin.impl.ReflectionHelper;
 import com.canoo.dolphin.mapping.Property;
-import com.canoo.platform.server.binding.Qualifier;
+import com.canoo.impl.platform.core.Assert;
+import com.canoo.impl.platform.core.ReflectionHelper;
 import com.canoo.platform.server.binding.PropertyBinder;
-import com.canoo.dolphin.util.Assert;
+import com.canoo.platform.server.binding.Qualifier;
 import org.opendolphin.core.server.ServerAttribute;
 
 import java.lang.reflect.Field;

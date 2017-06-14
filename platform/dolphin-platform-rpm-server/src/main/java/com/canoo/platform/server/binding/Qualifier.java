@@ -15,7 +15,7 @@
  */
 package com.canoo.platform.server.binding;
 
-import com.canoo.dolphin.util.Assert;
+import com.canoo.impl.platform.core.Assert;
 
 import java.util.UUID;
 

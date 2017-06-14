@@ -15,10 +15,10 @@
  */
 package com.canoo.impl.server.mbean;
 
-import com.canoo.dolphin.Subscription;
+import com.canoo.impl.platform.core.Assert;
 import com.canoo.impl.server.gc.GarbageCollector;
-import com.canoo.dolphin.util.Assert;
 import com.canoo.impl.server.mbean.beans.*;
+import com.canoo.platform.core.functional.Subscription;
 import com.canoo.platform.server.client.ClientSession;
 
 /**

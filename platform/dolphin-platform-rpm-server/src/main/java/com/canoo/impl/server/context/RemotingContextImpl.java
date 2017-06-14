@@ -1,12 +1,12 @@
 package com.canoo.impl.server.context;
 
 import com.canoo.dolphin.BeanManager;
+import com.canoo.impl.platform.core.Assert;
+import com.canoo.impl.server.binding.PropertyBinderImpl;
 import com.canoo.platform.server.ClientSessionExecutor;
 import com.canoo.platform.server.RemotingContext;
 import com.canoo.platform.server.binding.PropertyBinder;
-import com.canoo.impl.server.binding.PropertyBinderImpl;
 import com.canoo.platform.server.event.DolphinEventBus;
-import com.canoo.dolphin.util.Assert;
 
 import java.util.concurrent.Executor;
 

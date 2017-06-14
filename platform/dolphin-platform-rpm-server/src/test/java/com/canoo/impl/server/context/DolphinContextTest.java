@@ -16,15 +16,15 @@
 package com.canoo.impl.server.context;
 
 import com.canoo.dolphin.impl.commands.*;
+import com.canoo.impl.server.beans.ManagedBeanFactory;
+import com.canoo.impl.server.beans.PostConstructInterceptor;
+import com.canoo.impl.server.client.ClientSessionProvider;
+import com.canoo.impl.server.client.HttpClientSessionImpl;
 import com.canoo.impl.server.config.RemotingConfiguration;
 import com.canoo.impl.server.controller.ControllerRepository;
 import com.canoo.impl.server.controller.ControllerValidationException;
-import com.canoo.dolphin.util.Callback;
-import com.canoo.impl.server.beans.ManagedBeanFactory;
-import com.canoo.impl.server.beans.PostConstructInterceptor;
-import com.canoo.impl.server.client.HttpClientSessionImpl;
-import com.canoo.impl.server.client.ClientSessionProvider;
 import com.canoo.impl.server.scanner.DefaultClasspathScanner;
+import com.canoo.platform.core.functional.Callback;
 import com.canoo.platform.server.client.ClientSession;
 import org.opendolphin.core.comm.Command;
 import org.opendolphin.core.server.comm.CommandHandler;

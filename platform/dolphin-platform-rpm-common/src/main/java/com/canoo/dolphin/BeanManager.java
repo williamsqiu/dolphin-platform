@@ -16,6 +16,7 @@
 package com.canoo.dolphin;
 
 import com.canoo.dolphin.event.BeanAddedListener;
+import com.canoo.platform.core.functional.Subscription;
 
 import java.util.List;
 
@@ -94,7 +95,7 @@ public interface BeanManager {
      * @param beanClass the class for which creation events should be received
      * @param listener the listener which receives the creation-events
      * @param <T> the bean type
-     * @return the (@link com.canoo.dolphin.Subscription} that can be used to unsubscribe the listener
+     * @return the (@link com.canoo.platform.core.functional.Subscription} that can be used to unsubscribe the listener
      */
     @Deprecated
     <T> Subscription onAdded(Class<T> beanClass, BeanAddedListener<? super T> listener);

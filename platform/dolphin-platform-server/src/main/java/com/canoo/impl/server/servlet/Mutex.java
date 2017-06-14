@@ -1,6 +1,6 @@
 package com.canoo.impl.server.servlet;
 
-import com.canoo.dolphin.util.Assert;
+import com.canoo.impl.platform.core.Assert;
 
 import java.io.Serializable;
 import java.util.concurrent.Callable;
