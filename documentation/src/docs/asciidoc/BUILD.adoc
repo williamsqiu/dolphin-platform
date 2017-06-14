@@ -54,6 +54,7 @@ asciidoctor:: Generate Asciidoc documentation.
 license:: Check if license headers are up to date.
 licenseFormat:: Update all license headers.
 check:: Execute quality control and tests.
+publishToMavenLocal:: install artifacts in local maven repo
 
 
 You can obtain a list of all available tasks by invoking `tasks --all`.
