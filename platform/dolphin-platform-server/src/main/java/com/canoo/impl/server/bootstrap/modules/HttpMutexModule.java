@@ -25,7 +25,7 @@ public class HttpMutexModule extends AbstractBaseModule {
         final ServletContext servletContext = coreComponents.getServletContext();
         Assert.requireNonNull(servletContext, "servletContext");
 
-        HttpSessionMutexHolder mutexHolder = new HttpSessionMutexHolder();
+        final HttpSessionMutexHolder mutexHolder = new HttpSessionMutexHolder();
         servletContext.addListener(mutexHolder);
     }
 }

@@ -1,5 +1,6 @@
 package com.canoo.impl.server.config;
 
+import com.canoo.dolphin.util.Assert;
 import com.canoo.platform.server.spi.PlatformConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +30,7 @@ public final class DefaultPlatformConfiguration implements PlatformConfiguration
     }
 
     public DefaultPlatformConfiguration(final Properties internalProperties) {
+        Assert.requireNonNull(internalProperties, "internalProperties");
         this.internalProperties = internalProperties;
     }
 
@@ -40,7 +42,7 @@ public final class DefaultPlatformConfiguration implements PlatformConfiguration
         return getProperty(key, null);
     }
 
-    public boolean getBooleanProperty(final String key, boolean defaultValue) {
+    public boolean getBooleanProperty(final String key, final boolean defaultValue) {
         return Boolean.parseBoolean(internalProperties.getProperty(key, defaultValue + ""));
     }
 
@@ -48,11 +50,11 @@ public final class DefaultPlatformConfiguration implements PlatformConfiguration
         return getBooleanProperty(key, false);
     }
 
-    public int getIntProperty(final String key, int defaultValue) {
+    public int getIntProperty(final String key, final int defaultValue) {
         return Integer.parseInt(internalProperties.getProperty(key, defaultValue + ""));
     }
 
-    public long getLongProperty(final String key, long defaultValue) {
+    public long getLongProperty(final String key, final long defaultValue) {
         return Long.parseLong(internalProperties.getProperty(key, defaultValue + ""));
     }
 
@@ -74,7 +76,7 @@ public final class DefaultPlatformConfiguration implements PlatformConfiguration
 
     public Set<String> getPropertyKeys() {
         final Set<String> ret = new HashSet<>();
-        for (Object key : internalProperties.keySet()) {
+        for (final Object key : internalProperties.keySet()) {
             if (key != null) {
                 ret.add(key.toString());
             }
@@ -100,7 +102,7 @@ public final class DefaultPlatformConfiguration implements PlatformConfiguration
         } else if (values.isEmpty()) {
             setProperty(key, "");
         } else {
-            StringBuilder builder = new StringBuilder();
+            final StringBuilder builder = new StringBuilder();
             for (String value : values) {
                 builder.append(value + ", ");
             }
@@ -118,7 +120,7 @@ public final class DefaultPlatformConfiguration implements PlatformConfiguration
     }
 
     public void log() {
-        Set<Map.Entry<Object, Object>> properties = internalProperties.entrySet();
+        final Set<Map.Entry<Object, Object>> properties = internalProperties.entrySet();
         for (Map.Entry property : properties) {
             LOG.debug("Dolphin Platform starts with value for " + property.getKey() + " = " + property.getValue());
         }

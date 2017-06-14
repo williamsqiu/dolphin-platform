@@ -15,6 +15,7 @@
  */
 package com.canoo.impl.server.config;
 
+import com.canoo.dolphin.util.Assert;
 import com.canoo.impl.server.bootstrap.PlatformBoostrapException;
 import com.canoo.platform.server.spi.ConfigurationProvider;
 import org.slf4j.Logger;
@@ -58,23 +59,24 @@ public class ConfigurationFileLoader {
      * @return a configuration
      */
     public static DefaultPlatformConfiguration loadConfiguration() {
-        DefaultPlatformConfiguration configuration = createConfiguration();
+        final DefaultPlatformConfiguration configuration = createConfiguration();
+        Assert.requireNonNull(configuration, "configuration");
 
-        ServiceLoader<ConfigurationProvider> serviceLoader = ServiceLoader.load(ConfigurationProvider.class);
+        final ServiceLoader<ConfigurationProvider> serviceLoader = ServiceLoader.load(ConfigurationProvider.class);
         for(ConfigurationProvider provider : serviceLoader) {
-            Map<String, String> additionalStringProperties = provider.getStringProperties();
+            final Map<String, String> additionalStringProperties = provider.getStringProperties();
             for(Map.Entry<String, String> property : additionalStringProperties.entrySet()) {
                 if(!configuration.containsProperty(property.getKey())) {
                     configuration.setProperty(property.getKey(), property.getValue());
                 }
             }
-            Map<String, List<String>> additionalListProperties = provider.getListProperties();
+            final Map<String, List<String>> additionalListProperties = provider.getListProperties();
             for(Map.Entry<String, List<String>> property : additionalListProperties.entrySet()) {
                 if(!configuration.containsProperty(property.getKey())) {
                     configuration.setListProperty(property.getKey(), property.getValue());
                 }
             }
-            Map<String, Boolean> additionalBooleanProperties = provider.getBooleanProperties();
+            final Map<String, Boolean> additionalBooleanProperties = provider.getBooleanProperties();
             for(Map.Entry<String, Boolean> property : additionalBooleanProperties.entrySet()) {
                 if(!configuration.containsProperty(property.getKey())) {
                     configuration.setBooleanProperty(property.getKey(), property.getValue());
@@ -86,7 +88,7 @@ public class ConfigurationFileLoader {
                     configuration.setIntProperty(property.getKey(), property.getValue());
                 }
             }
-            Map<String, Long> additionalLongProperties = provider.getLongProperties();
+            final Map<String, Long> additionalLongProperties = provider.getLongProperties();
             for(Map.Entry<String, Long> property : additionalLongProperties.entrySet()) {
                 if(!configuration.containsProperty(property.getKey())) {
                     configuration.setLongProperty(property.getKey(), property.getValue());
@@ -105,15 +107,15 @@ public class ConfigurationFileLoader {
 
     private static DefaultPlatformConfiguration createConfiguration() {
         try {
-            ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+            final ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 
-            try (InputStream inputStream = classLoader.getResourceAsStream(JAR_LOCATION)) {
+            try (final InputStream inputStream = classLoader.getResourceAsStream(JAR_LOCATION)) {
                 if (inputStream != null) {
                     return readConfig(inputStream);
                 }
             }
 
-            try (InputStream inputStream = classLoader.getResourceAsStream(WAR_LOCATION)) {
+            try (final InputStream inputStream = classLoader.getResourceAsStream(WAR_LOCATION)) {
                 if (inputStream == null) {
                     LOG.info("Can not read configuration. Maybe no dolphin.properties file is defined. Will use a default configuration!");
                     return new DefaultPlatformConfiguration();
@@ -126,8 +128,9 @@ public class ConfigurationFileLoader {
         }
     }
 
-    private static DefaultPlatformConfiguration readConfig(InputStream input) throws IOException {
-        Properties prop = new Properties();
+    private static DefaultPlatformConfiguration readConfig(final InputStream input) throws IOException {
+        Assert.requireNonNull(input, "input");
+        final Properties prop = new Properties();
         prop.load(input);
 
         return new DefaultPlatformConfiguration(prop);

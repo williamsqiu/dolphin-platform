@@ -4,10 +4,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by hendrikebbers on 12.06.17.
- */
-public class ConfigurationProviderAdapter implements ConfigurationProvider{
+public class ConfigurationProviderAdapter implements ConfigurationProvider {
     @Override
     public Map<String, String> getStringProperties() {
         return Collections.emptyMap();

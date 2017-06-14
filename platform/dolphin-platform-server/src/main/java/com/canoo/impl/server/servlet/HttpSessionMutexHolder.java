@@ -16,9 +16,9 @@ public class HttpSessionMutexHolder implements HttpSessionListener {
     private final static String SESSION_MUTEX_ATTRIBUTE = "Session-Mutex";
 
     @Override
-    public void sessionCreated(HttpSessionEvent sessionEvent) {
+    public void sessionCreated(final HttpSessionEvent sessionEvent) {
         Assert.requireNonNull(sessionEvent, "sessionEvent");
-        HttpSession session = sessionEvent.getSession();
+        final HttpSession session = sessionEvent.getSession();
         Assert.requireNonNull(session, "session");
         final Mutex mutex = new Mutex();
         session.setAttribute(SESSION_MUTEX_ATTRIBUTE, mutex);
@@ -26,16 +26,16 @@ public class HttpSessionMutexHolder implements HttpSessionListener {
     }
 
     @Override
-    public void sessionDestroyed(HttpSessionEvent sessionEvent) {
+    public void sessionDestroyed(final HttpSessionEvent sessionEvent) {
         Assert.requireNonNull(sessionEvent, "sessionEvent");
-        HttpSession session = sessionEvent.getSession();
+        final HttpSession session = sessionEvent.getSession();
         Assert.requireNonNull(session, "session");
         sessionMutexMap.remove(session.getId());
     }
 
     public Mutex getMutexForHttpSession(final String sessionId) {
         Assert.requireNonBlank(sessionId, "sessionId");
-        WeakReference<Mutex> mutexReference = sessionMutexMap.get(sessionId);
+        final WeakReference<Mutex> mutexReference = sessionMutexMap.get(sessionId);
         Assert.requireNonNull(mutexReference, "mutexReference");
         return mutexReference.get();
     }

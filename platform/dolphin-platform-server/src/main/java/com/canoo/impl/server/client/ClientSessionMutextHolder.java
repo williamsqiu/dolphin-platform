@@ -16,7 +16,7 @@ public class ClientSessionMutextHolder implements ClientSessionListener {
     private final static String SESSION_MUTEX_ATTRIBUTE = "Session-Mutex";
 
     @Override
-    public void sessionCreated(ClientSession clientSession) {
+    public void sessionCreated(final ClientSession clientSession) {
         Assert.requireNonNull(clientSession, "clientSession");
         final Mutex mutex = new Mutex();
         clientSession.setAttribute(SESSION_MUTEX_ATTRIBUTE, mutex);
@@ -24,14 +24,14 @@ public class ClientSessionMutextHolder implements ClientSessionListener {
     }
 
     @Override
-    public void sessionDestroyed(ClientSession clientSession) {
+    public void sessionDestroyed(final ClientSession clientSession) {
         Assert.requireNonNull(clientSession, "clientSession");
         sessionMutexMap.remove(clientSession.getId());
     }
 
     public Mutex getMutexForClientSession(final String sessionId) {
         Assert.requireNonBlank(sessionId, "sessionId");
-        WeakReference<Mutex> mutexReference = sessionMutexMap.get(sessionId);
+        final WeakReference<Mutex> mutexReference = sessionMutexMap.get(sessionId);
         Assert.requireNonNull(mutexReference, "mutexReference");
         return mutexReference.get();
     }
