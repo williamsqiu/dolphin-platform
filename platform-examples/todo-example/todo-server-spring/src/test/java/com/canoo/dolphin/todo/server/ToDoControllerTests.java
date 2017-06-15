@@ -15,7 +15,7 @@
  */
 package com.canoo.dolphin.todo.server;
 
-import com.canoo.dolphin.client.Param;
+import com.canoo.platform.client.Param;
 import com.canoo.dolphin.test.ControllerUnderTest;
 import com.canoo.dolphin.test.SpringTestNGControllerTest;
 import com.canoo.dolphin.todo.pm.ToDoList;

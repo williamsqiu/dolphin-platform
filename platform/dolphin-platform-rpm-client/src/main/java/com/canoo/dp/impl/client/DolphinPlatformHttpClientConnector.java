@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.dolphin.client.impl;
+package com.canoo.dp.impl.client;
 
-import com.canoo.dolphin.client.ClientConfiguration;
-import com.canoo.dolphin.client.DolphinSessionException;
+import com.canoo.platform.client.ClientConfiguration;
+import com.canoo.platform.client.DolphinSessionException;
 import com.canoo.impl.platform.client.HttpClientCookieHandler;
 import com.canoo.impl.platform.client.HttpStatus;
 import com.canoo.platform.client.HttpURLConnectionFactory;
@@ -65,9 +65,9 @@ public class DolphinPlatformHttpClientConnector extends AbstractClientConnector 
 
     private final HttpClientCookieHandler httpClientCookieHandler;
 
-    private AtomicReference<String> clientId = new AtomicReference<>();
+    private final AtomicReference<String> clientId = new AtomicReference<>();
 
-    public DolphinPlatformHttpClientConnector(ClientConfiguration configuration, ClientModelStore clientModelStore, Codec codec, RemotingExceptionHandler onException) {
+    public DolphinPlatformHttpClientConnector(final ClientConfiguration configuration, final ClientModelStore clientModelStore, final Codec codec, final RemotingExceptionHandler onException) {
         super(clientModelStore, Assert.requireNonNull(configuration, "configuration").getUiExecutor(), new BlindCommandBatcher(), onException, configuration.getBackgroundExecutor());
         this.servletUrl = configuration.getServerEndpoint();
         this.connectionFactory = configuration.getConnectionFactory();

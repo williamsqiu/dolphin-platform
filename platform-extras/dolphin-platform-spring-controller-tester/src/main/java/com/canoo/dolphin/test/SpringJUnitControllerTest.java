@@ -15,7 +15,7 @@
  */
 package com.canoo.dolphin.test;
 
-import com.canoo.dolphin.client.ClientContext;
+import com.canoo.platform.client.ClientContext;
 import com.canoo.dolphin.test.impl.ClientTestFactory;
 import com.canoo.dolphin.test.impl.DolphinPlatformSpringTestBootstrap;
 import com.canoo.impl.platform.core.Assert;

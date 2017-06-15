@@ -13,13 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.dolphin.client.impl;
+package com.canoo.platform.client;
 
-import com.canoo.dolphin.client.ControllerProxy;
+public class ControllerInitalizationException extends RuntimeException {
 
-import java.util.concurrent.CompletableFuture;
+    private static final long serialVersionUID = 4212442538247238882L;
 
-public interface ControllerProxyFactory {
+    public ControllerInitalizationException() {
+    }
 
-    <T> CompletableFuture<ControllerProxy<T>> create(String name);
+    public ControllerInitalizationException(String message) {
+        super(message);
+    }
+
+    public ControllerInitalizationException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public ControllerInitalizationException(Throwable cause) {
+        super(cause);
+    }
 }

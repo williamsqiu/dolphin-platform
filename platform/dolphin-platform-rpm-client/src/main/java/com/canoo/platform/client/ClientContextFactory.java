@@ -13,14 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.dolphin.client;
+package com.canoo.platform.client;
 
-import com.canoo.dolphin.client.impl.ClientContextImpl;
-import com.canoo.dolphin.client.impl.DolphinPlatformHttpClientConnector;
+import com.canoo.dp.impl.client.ClientContextImpl;
+import com.canoo.dp.impl.client.DolphinPlatformHttpClientConnector;
 import com.canoo.dolphin.impl.codec.OptimizedJsonCodec;
 import com.canoo.impl.platform.core.Assert;
 import org.opendolphin.core.client.ClientModelStore;
 import org.opendolphin.core.client.comm.AbstractClientConnector;
+import org.opendolphin.core.client.comm.RemotingExceptionHandler;
+import org.opendolphin.util.DolphinRemotingException;
 import org.opendolphin.util.Function;
 
 import java.util.concurrent.CompletableFuture;
@@ -49,7 +51,14 @@ public class ClientContextFactory {
         return new ClientContextImpl(clientConfiguration, new Function<ClientModelStore, AbstractClientConnector>() {
             @Override
             public AbstractClientConnector call(final ClientModelStore clientModelStore) {
-                return new DolphinPlatformHttpClientConnector(clientConfiguration, clientModelStore, new OptimizedJsonCodec(), clientConfiguration.getRemotingExceptionHandler());
+                return new DolphinPlatformHttpClientConnector(clientConfiguration, clientModelStore, new OptimizedJsonCodec(), new RemotingExceptionHandler() {
+                    @Override
+                    public void handle(DolphinRemotingException e) {
+                        for(RemotingExceptionHandler handler : clientConfiguration.getRemotingExceptionHandlers()) {
+                            handler.handle(e);
+                        }
+                    }
+                });
             }
         });
     }

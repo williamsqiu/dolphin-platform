@@ -16,7 +16,6 @@
 package com.canoo.impl.server.config;
 
 import com.canoo.impl.platform.core.Assert;
-import com.canoo.impl.server.bootstrap.PlatformBoostrapException;
 import com.canoo.platform.server.spi.ConfigurationProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -124,7 +123,7 @@ public class ConfigurationFileLoader {
                 }
             }
         } catch (IOException e) {
-            throw new PlatformBoostrapException("Can not create configuration!", e);
+            throw new RuntimeException("Can not create configuration!", e);
         }
     }
 

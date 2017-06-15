@@ -15,7 +15,7 @@
  */
 package com.canoo.dolphin.client.javafx.view;
 
-import com.canoo.dolphin.client.ClientContext;
+import com.canoo.platform.client.ClientContext;
 import com.canoo.impl.platform.core.Assert;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;

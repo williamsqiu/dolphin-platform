@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.dolphin.client.impl;
+package com.canoo.dp.impl.client;
 
-import com.canoo.dolphin.client.ControllerProxy;
+import com.canoo.platform.client.ControllerProxy;
 import com.canoo.dolphin.impl.Converters;
 import com.canoo.dolphin.impl.InternalAttributesBean;
 import com.canoo.dolphin.impl.commands.CreateControllerCommand;

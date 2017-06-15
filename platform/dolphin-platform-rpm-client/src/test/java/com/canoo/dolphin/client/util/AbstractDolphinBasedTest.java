@@ -16,9 +16,9 @@
 package com.canoo.dolphin.client.util;
 
 import com.canoo.dolphin.BeanManager;
-import com.canoo.dolphin.client.impl.ClientBeanBuilderImpl;
-import com.canoo.dolphin.client.impl.ClientEventDispatcher;
-import com.canoo.dolphin.client.impl.ClientPresentationModelBuilderFactory;
+import com.canoo.dp.impl.client.ClientBeanBuilderImpl;
+import com.canoo.dp.impl.client.ClientEventDispatcher;
+import com.canoo.dp.impl.client.ClientPresentationModelBuilderFactory;
 import com.canoo.dolphin.impl.*;
 import com.canoo.dolphin.impl.collections.ListMapperImpl;
 import com.canoo.dolphin.internal.BeanBuilder;

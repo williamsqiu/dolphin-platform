@@ -15,7 +15,7 @@
  */
 package com.canoo.dolphin.todo.client;
 
-import com.canoo.dolphin.client.ClientContext;
+import com.canoo.platform.client.ClientContext;
 import com.canoo.dolphin.client.javafx.SimpleDolphinPlatformApplication;
 import javafx.application.Application;
 import javafx.application.Platform;

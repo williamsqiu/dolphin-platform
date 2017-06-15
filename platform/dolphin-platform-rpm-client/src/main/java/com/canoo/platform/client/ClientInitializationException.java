@@ -13,20 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.dolphin.client;
+package com.canoo.platform.client;
 
 /**
- * This exception is thrown when a client can't disconnect
+ * This exception is thrown if a error occurs while creating the {@link ClientContext}
  */
-public class ClientShutdownException extends Exception {
+public class ClientInitializationException extends RuntimeException {
 
-    private static final long serialVersionUID = 8453749162802045073L;
+    private static final long serialVersionUID = -2590161524286922625L;
 
     /**
      * constructor
      * @param message the error message
      */
-    public ClientShutdownException(String message) {
+    public ClientInitializationException(String message) {
         super(message);
     }
 
@@ -35,7 +35,7 @@ public class ClientShutdownException extends Exception {
      * @param message the error message
      * @param cause the cause
      */
-    public ClientShutdownException(String message, Throwable cause) {
+    public ClientInitializationException(String message, Throwable cause) {
         super(message, cause);
     }
 
@@ -43,7 +43,8 @@ public class ClientShutdownException extends Exception {
      * constructor
      * @param cause the cause
      */
-    public ClientShutdownException(Throwable cause) {
+    public ClientInitializationException(Throwable cause) {
         super(cause);
     }
+
 }
