@@ -77,7 +77,7 @@ public class PlatformBootstrap {
                 }
                 LOG.info("Dolphin Plaform booted");
             } catch (Exception e) {
-                throw new PlatformBoostrapException("Can not boot Dolphin Platform", e);
+                throw new RuntimeException("Can not boot Dolphin Platform", e);
             }
         } else {
             LOG.info("Dolphin Plaform is deactivated");
