@@ -22,7 +22,7 @@ import com.google.gson.JsonParseException;
 
 import static com.canoo.dolphin.impl.codec.CommandConstants.*;
 
-public class CreateControllerCommandEncoder implements CommandEncoder<CreateControllerCommand> {
+public class CreateControllerCommandEncoder extends AbstractCommandEncoder<CreateControllerCommand> {
 
     @Override
     public JsonObject encode(final CreateControllerCommand command) {
@@ -39,10 +39,10 @@ public class CreateControllerCommandEncoder implements CommandEncoder<CreateCont
         Assert.requireNonNull(jsonObject, "jsonObject");
         try {
             final CreateControllerCommand command = new CreateControllerCommand();
-            if(jsonObject.has(PARENT_CONTROLLER_ID) && !jsonObject.get(PARENT_CONTROLLER_ID).isJsonNull()) {
-                command.setParentControllerId(jsonObject.getAsJsonPrimitive(PARENT_CONTROLLER_ID).getAsString());
+            if(jsonObject.has(PARENT_CONTROLLER_ID) && !isElementJsonNull(jsonObject, PARENT_CONTROLLER_ID)) {
+                command.setParentControllerId(getStringElement(jsonObject, PARENT_CONTROLLER_ID));
             }
-            command.setControllerName(jsonObject.getAsJsonPrimitive(CONTROLLER_NAME).getAsString());
+            command.setControllerName(getStringElement(jsonObject, CONTROLLER_NAME));
             return command;
         } catch (Exception ex) {
             throw new JsonParseException("Illegal JSON detected", ex);

@@ -26,7 +26,7 @@ import java.util.Map;
 
 import static com.canoo.dolphin.impl.codec.CommandConstants.*;
 
-public class CallActionCommandEncoder implements CommandEncoder<CallActionCommand> {
+public class CallActionCommandEncoder extends AbstractCommandEncoder<CallActionCommand> {
 
     @Override
     public JsonObject encode(final CallActionCommand command) {
@@ -53,14 +53,14 @@ public class CallActionCommandEncoder implements CommandEncoder<CallActionComman
         Assert.requireNonNull(jsonObject, "jsonObject");
         try {
             final CallActionCommand command = new CallActionCommand();
-            command.setControllerId(jsonObject.getAsJsonPrimitive(CONTROLLER_ID).getAsString());
-            command.setActionName(jsonObject.getAsJsonPrimitive(ACTION_NAME).getAsString());
+            command.setControllerId(getStringElement(jsonObject, CONTROLLER_ID));
+            command.setActionName(getStringElement(jsonObject, ACTION_NAME));
 
             final JsonArray jsonArray = jsonObject.getAsJsonArray(PARAMS);
             if(jsonArray != null) {
                 for (final JsonElement jsonElement : jsonArray) {
                     final JsonObject paramObject = jsonElement.getAsJsonObject();
-                    command.addParam(paramObject.getAsJsonPrimitive(PARAM_NAME).getAsString(), ValueEncoder.decodeValue(paramObject.get(PARAM_VALUE)));
+                    command.addParam(getStringElement(paramObject, PARAM_NAME), ValueEncoder.decodeValue(paramObject.get(PARAM_VALUE)));
                 }
             }
             return command;

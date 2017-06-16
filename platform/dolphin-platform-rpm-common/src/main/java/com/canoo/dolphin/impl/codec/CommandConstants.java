@@ -21,18 +21,23 @@ public interface CommandConstants {
 
 
     String VALUE_CHANGED_COMMAND_ID = "ValueChanged";
+    String VALUE_CHANGED_ATTRIBUTE_ID = "a";
+    String OLD_VALUE = "o";
+    String NEW_VALUE = "n";
 
     String CREATE_PRESENTATION_MODEL_COMMAND_ID = "CreatePresentationModel";
+    String VALUE = "value";
+    String PROPERTY_NAME = "propertyName";
+
 
     String PM_ID = "p";
     String PM_TYPE = "t";
     String PM_ATTRIBUTES = "a";
 
-    String ATTRIBUTE_NAME =  "n";
-    String ATTRIBUTE_ID =    "i";
+    String ATTRIBUTE_NAME = "n";
+    String ATTRIBUTE_ID = "i";
     String ATTRIBUTE_VALUE = "v";
-    String ATTRIBUTE_TAG =   "t";
-
+    String ATTRIBUTE_TAG = "t";
 
 
     String CREATE_CONTROLLER_COMMAND_ID = "CreateController";

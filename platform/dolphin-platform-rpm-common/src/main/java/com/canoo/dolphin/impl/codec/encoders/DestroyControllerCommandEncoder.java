@@ -22,7 +22,7 @@ import com.google.gson.JsonParseException;
 
 import static com.canoo.dolphin.impl.codec.CommandConstants.*;
 
-public class DestroyControllerCommandEncoder implements CommandEncoder<DestroyControllerCommand> {
+public class DestroyControllerCommandEncoder extends AbstractCommandEncoder<DestroyControllerCommand> {
 
     @Override
     public JsonObject encode(final DestroyControllerCommand command) {
@@ -38,7 +38,7 @@ public class DestroyControllerCommandEncoder implements CommandEncoder<DestroyCo
         Assert.requireNonNull(jsonObject, "jsonObject");
         try {
             final DestroyControllerCommand command = new DestroyControllerCommand();
-            command.setControllerId(jsonObject.getAsJsonPrimitive(CONTROLLER_ID).getAsString());
+            command.setControllerId(getStringElement(jsonObject, CONTROLLER_ID));
             return command;
         } catch (Exception ex) {
             throw new JsonParseException("Illegal JSON detected", ex);
