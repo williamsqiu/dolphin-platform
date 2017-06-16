@@ -43,7 +43,7 @@ public interface CommandConstants {
     String CONTROLLER_ID = "c";
 
     String CALL_ACTION_COMMAND_ID = "CallAction";
-    String ACTION_NAME = "a";
+    String ACTION_NAME = "n";
     String PARAMS = "p";
     String PARAM_NAME = "n";
     String PARAM_VALUE = "v";

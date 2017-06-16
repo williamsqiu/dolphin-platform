@@ -15,17 +15,36 @@
  */
 package com.canoo.dolphin.impl.codec;
 
-import com.canoo.dolphin.impl.codec.encoders.*;
+import com.canoo.dolphin.impl.codec.encoders.CallActionCommandEncoder;
+import com.canoo.dolphin.impl.codec.encoders.CommandEncoder;
+import com.canoo.dolphin.impl.codec.encoders.CreateControllerCommandEncoder;
+import com.canoo.dolphin.impl.codec.encoders.CreatePresentationModelEncoder;
+import com.canoo.dolphin.impl.codec.encoders.DestroyControllerCommandEncoder;
+import com.canoo.dolphin.impl.codec.encoders.ValueChangedCommandEncoder;
 import com.canoo.dolphin.impl.commands.CallActionCommand;
 import com.canoo.dolphin.impl.commands.CreateControllerCommand;
 import com.canoo.dolphin.impl.commands.DestroyControllerCommand;
 import com.canoo.impl.platform.core.Assert;
-import com.google.gson.*;
-import org.opendolphin.core.comm.*;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonPrimitive;
+import org.opendolphin.core.comm.Codec;
+import org.opendolphin.core.comm.Command;
+import org.opendolphin.core.comm.CreatePresentationModelCommand;
+import org.opendolphin.core.comm.JsonCodec;
+import org.opendolphin.core.comm.ValueChangedCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static com.canoo.dolphin.impl.codec.CommandConstants.*;
 
@@ -108,7 +127,7 @@ public class OptimizedJsonCodec implements Codec {
                 JsonPrimitive idPrimitive = command.getAsJsonPrimitive("id");
 
                 String id = null;
-                if(idPrimitive != null) {
+                if (idPrimitive != null) {
                     id = idPrimitive.getAsString();
                 }
                 LOG.trace("Decoding command: {}", id);
