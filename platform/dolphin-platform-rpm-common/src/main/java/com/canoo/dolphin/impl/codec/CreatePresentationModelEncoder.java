@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.dolphin.impl.codec.encoders;
+package com.canoo.dolphin.impl.codec;
 
 import com.canoo.impl.platform.core.Assert;
 import com.google.gson.JsonArray;
@@ -34,6 +34,8 @@ import static com.canoo.dolphin.impl.codec.CommandConstants.ID;
 import static com.canoo.dolphin.impl.codec.CommandConstants.PM_ATTRIBUTES;
 import static com.canoo.dolphin.impl.codec.CommandConstants.PM_ID;
 import static com.canoo.dolphin.impl.codec.CommandConstants.PM_TYPE;
+import static com.canoo.dolphin.impl.codec.ValueEncoder.decodeValue;
+import static com.canoo.dolphin.impl.codec.ValueEncoder.encodeValue;
 
 public class  CreatePresentationModelEncoder implements CommandEncoder<CreatePresentationModelCommand> {
 
@@ -52,7 +54,7 @@ public class  CreatePresentationModelEncoder implements CommandEncoder<CreatePre
             jsonAttribute.addProperty(ATTRIBUTE_ID, String.valueOf(attribute.get("id")));
             final Object value = attribute.get("value");
             if (value != null) {
-                jsonAttribute.add(ATTRIBUTE_VALUE, ValueEncoder.encodeValue(attribute.get("value")));
+                jsonAttribute.add(ATTRIBUTE_VALUE, encodeValue(attribute.get("value")));
             }
             jsonArray.add(jsonAttribute);
         }
@@ -80,7 +82,7 @@ public class  CreatePresentationModelEncoder implements CommandEncoder<CreatePre
                 final HashMap<String, Object> map = new HashMap<>();
                 map.put("propertyName", attribute.getAsJsonPrimitive(ATTRIBUTE_NAME).getAsString());
                 map.put("id", attribute.getAsJsonPrimitive(ATTRIBUTE_ID).getAsString());
-                final Object value = attribute.has(ATTRIBUTE_VALUE)? ValueEncoder.decodeValue(attribute.get(ATTRIBUTE_VALUE)) : null;
+                final Object value = attribute.has(ATTRIBUTE_VALUE)? decodeValue(attribute.get(ATTRIBUTE_VALUE)) : null;
                 map.put("value", value);
                 map.put("baseValue", value);
                 map.put("qualifier", null);

@@ -26,11 +26,11 @@ public class DolphinCommandHandler {
 
     private final AbstractClientConnector clientConnector;
 
-    public DolphinCommandHandler(final AbstractClientConnector clientConnector) {
+    public DolphinCommandHandler(AbstractClientConnector clientConnector) {
         this.clientConnector = Assert.requireNonNull(clientConnector, "clientDolphin");
     }
 
-    public CompletableFuture<Void> invokeDolphinCommand(final Command command) {
+    public CompletableFuture<Void> invokeDolphinCommand(Command command) {
         Assert.requireNonNull(command, "command");
         final CompletableFuture<Void> result = new CompletableFuture<>();
         clientConnector.send(command, new OnFinishedHandler() {

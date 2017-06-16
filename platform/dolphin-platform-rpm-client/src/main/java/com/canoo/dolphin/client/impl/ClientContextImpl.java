@@ -66,7 +66,7 @@ public class ClientContextImpl implements ClientContext {
             throw new IllegalStateException("connect was not called!");
         }
 
-        return controllerProxyFactory.<T>create(name, null).handle(new BiFunction<ControllerProxy<T>, Throwable, ControllerProxy<T>>() {
+        return controllerProxyFactory.<T>create(name).handle(new BiFunction<ControllerProxy<T>, Throwable, ControllerProxy<T>>() {
             @Override
             public ControllerProxy<T> apply(ControllerProxy<T> controllerProxy, Throwable throwable) {
                 if (throwable != null) {

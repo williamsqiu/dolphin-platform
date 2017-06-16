@@ -15,19 +15,27 @@
  */
 package com.canoo.dolphin.impl.codec;
 
-import com.canoo.dolphin.impl.codec.encoders.*;
-import com.canoo.dolphin.impl.commands.CallActionCommand;
-import com.canoo.dolphin.impl.commands.CreateControllerCommand;
-import com.canoo.dolphin.impl.commands.DestroyControllerCommand;
 import com.canoo.impl.platform.core.Assert;
-import com.google.gson.*;
-import org.opendolphin.core.comm.*;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonPrimitive;
+import org.opendolphin.core.comm.Codec;
+import org.opendolphin.core.comm.Command;
+import org.opendolphin.core.comm.CreatePresentationModelCommand;
+import org.opendolphin.core.comm.JsonCodec;
+import org.opendolphin.core.comm.ValueChangedCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
-
-import static com.canoo.dolphin.impl.codec.CommandConstants.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class OptimizedJsonCodec implements Codec {
 
@@ -41,23 +49,11 @@ public class OptimizedJsonCodec implements Codec {
     static {
         final CreatePresentationModelEncoder createPresentationModelEncoder = new CreatePresentationModelEncoder();
         ENCODERS.put(CreatePresentationModelCommand.class, createPresentationModelEncoder);
-        DECODERS.put(CREATE_PRESENTATION_MODEL_COMMAND_ID, createPresentationModelEncoder);
+        DECODERS.put("CreatePresentationModel", createPresentationModelEncoder);
 
         final ValueChangedCommandEncoder valueChangedCommandEncoder = new ValueChangedCommandEncoder();
         ENCODERS.put(ValueChangedCommand.class, valueChangedCommandEncoder);
-        DECODERS.put(VALUE_CHANGED_COMMAND_ID, valueChangedCommandEncoder);
-
-        final CreateControllerCommandEncoder createControllerCommandEncoder = new CreateControllerCommandEncoder();
-        ENCODERS.put(CreateControllerCommand.class, createControllerCommandEncoder);
-        DECODERS.put(CREATE_CONTROLLER_COMMAND_ID, createControllerCommandEncoder);
-
-        final DestroyControllerCommandEncoder destroyControllerCommandEncoder = new DestroyControllerCommandEncoder();
-        ENCODERS.put(DestroyControllerCommand.class, destroyControllerCommandEncoder);
-        DECODERS.put(DESTROY_CONTROLLER_COMMAND_ID, destroyControllerCommandEncoder);
-
-        final CallActionCommandEncoder callActionCommandEncoder = new CallActionCommandEncoder();
-        ENCODERS.put(CallActionCommand.class, callActionCommandEncoder);
-        DECODERS.put(CALL_ACTION_COMMAND_ID, callActionCommandEncoder);
+        DECODERS.put("ValueChanged", valueChangedCommandEncoder);
     }
 
     private final Codec fallBack = new JsonCodec();

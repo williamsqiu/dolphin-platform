@@ -44,15 +44,12 @@ public class ControllerProxyFactoryImpl implements ControllerProxyFactory {
     }
 
     @Override
-    public <T> CompletableFuture<ControllerProxy<T>> create(String name, String parentControllerId) {
+    public <T> CompletableFuture<ControllerProxy<T>> create(String name) {
         Assert.requireNonBlank(name, "name");
         final InternalAttributesBean bean = platformBeanRepository.getInternalAttributesBean();
+        bean.setControllerName(name);
 
-        final CreateControllerCommand createControllerCommand = new CreateControllerCommand();
-        createControllerCommand.setControllerName(name);
-        createControllerCommand.setParentControllerId(parentControllerId);
-
-        return dolphinCommandHandler.invokeDolphinCommand(createControllerCommand).thenApply(new Function<Void, ControllerProxy<T>>() {
+        return dolphinCommandHandler.invokeDolphinCommand(new CreateControllerCommand()).thenApply(new Function<Void, ControllerProxy<T>>() {
             @Override
             public ControllerProxy<T> apply(Void aVoid) {
                 return new ControllerProxyImpl<T>(bean.getControllerId(), (T) bean.getModel(), clientConnector, platformBeanRepository, ControllerProxyFactoryImpl.this);

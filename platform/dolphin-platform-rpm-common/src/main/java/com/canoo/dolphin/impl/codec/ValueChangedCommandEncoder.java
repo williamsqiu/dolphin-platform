@@ -13,12 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.dolphin.impl.codec.encoders;
+package com.canoo.dolphin.impl.codec;
 
 import com.canoo.impl.platform.core.Assert;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import org.opendolphin.core.comm.ValueChangedCommand;
+
+import static com.canoo.dolphin.impl.codec.ValueEncoder.decodeValue;
+import static com.canoo.dolphin.impl.codec.ValueEncoder.encodeValue;
 
 public class ValueChangedCommandEncoder implements CommandEncoder<ValueChangedCommand> {
 
@@ -29,10 +32,10 @@ public class ValueChangedCommandEncoder implements CommandEncoder<ValueChangedCo
         final JsonObject jsonCommand = new JsonObject();
         jsonCommand.addProperty("a", command.getAttributeId());
         if (command.getOldValue() != null) {
-            jsonCommand.add("o", ValueEncoder.encodeValue(command.getOldValue()));
+            jsonCommand.add("o", encodeValue(command.getOldValue()));
         }
         if (command.getNewValue() != null) {
-            jsonCommand.add("n", ValueEncoder.encodeValue(command.getNewValue()));
+            jsonCommand.add("n", encodeValue(command.getNewValue()));
         }
         jsonCommand.addProperty("id", "ValueChanged");
         return jsonCommand;
@@ -45,8 +48,8 @@ public class ValueChangedCommandEncoder implements CommandEncoder<ValueChangedCo
         try {
             final ValueChangedCommand command = new ValueChangedCommand();
 
-            command.setNewValue(ValueEncoder.decodeValue(jsonObject.get("n")));
-            command.setOldValue(ValueEncoder.decodeValue(jsonObject.get("o")));
+            command.setNewValue(decodeValue(jsonObject.get("n")));
+            command.setOldValue(decodeValue(jsonObject.get("o")));
             command.setAttributeId(jsonObject.get("a").getAsString());
 
             return command;
