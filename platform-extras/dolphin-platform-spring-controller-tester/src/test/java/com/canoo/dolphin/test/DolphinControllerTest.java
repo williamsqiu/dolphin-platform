@@ -15,6 +15,9 @@
  */
 package com.canoo.dolphin.test;
 
+import com.canoo.platform.spring.test.ControllerTestException;
+import com.canoo.platform.spring.test.ControllerUnderTest;
+import com.canoo.platform.spring.test.SpringTestNGControllerTest;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.*;

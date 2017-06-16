@@ -15,9 +15,8 @@
  */
 package com.canoo.dolphin.test.scopes;
 
-import com.canoo.dolphin.test.ControllerUnderTest;
-import com.canoo.dolphin.test.SpringTestNGControllerTest;
-import com.canoo.dolphin.test.impl.DolphinPlatformSpringTestBootstrap;
+import com.canoo.platform.spring.test.ControllerUnderTest;
+import com.canoo.platform.spring.test.SpringTestNGControllerTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.testng.Assert;

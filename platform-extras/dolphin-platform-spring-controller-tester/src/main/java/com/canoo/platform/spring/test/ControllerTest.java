@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.dolphin.test;
+package com.canoo.platform.spring.test;
 
 import com.canoo.platform.server.DolphinController;
 

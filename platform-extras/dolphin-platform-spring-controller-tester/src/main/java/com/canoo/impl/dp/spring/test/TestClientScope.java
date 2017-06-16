@@ -1,4 +1,4 @@
-package com.canoo.dolphin.test.impl;
+package com.canoo.impl.dp.spring.test;
 
 import com.canoo.dolphin.server.spring.ClientScope;
 import com.canoo.impl.platform.core.Assert;

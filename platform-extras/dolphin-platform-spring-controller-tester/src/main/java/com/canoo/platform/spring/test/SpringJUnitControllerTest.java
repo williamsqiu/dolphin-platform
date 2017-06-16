@@ -13,48 +13,49 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.dolphin.test;
+package com.canoo.platform.spring.test;
 
 import com.canoo.dolphin.client.ClientContext;
-import com.canoo.dolphin.test.impl.ClientTestFactory;
-import com.canoo.dolphin.test.impl.DolphinPlatformSpringTestBootstrap;
+import com.canoo.impl.dp.spring.test.ClientTestFactory;
+import com.canoo.impl.dp.spring.test.DolphinPlatformSpringTestBootstrap;
 import com.canoo.impl.platform.core.Assert;
+import org.junit.Rule;
+import org.junit.rules.ExternalResource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
+import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 
 /**
- * Base class for TestNG based controller tests in Spring. This class can be extended to write custom controller tests.
+ * Base class for JUnit based controller tests in Spring. This class can be extended to write custom controller tests.
  */
 @SpringBootTest
 @ContextConfiguration(classes = DolphinPlatformSpringTestBootstrap.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-public abstract class SpringTestNGControllerTest extends AbstractTestNGSpringContextTests implements ControllerTest {
+public abstract class SpringJUnitControllerTest extends AbstractJUnit4SpringContextTests implements ControllerTest {
 
     @Autowired
     private ClientContext clientContext;
 
-    @BeforeMethod(alwaysRun = true)
-    protected void connectClientContext() {
-        try {
+    @Rule
+    public ExternalResource clientConnector = new ExternalResource() {
+        @Override
+        protected void before() throws Throwable {
+            super.before();
             clientContext.connect().get();
-        } catch (Exception e) {
-            throw new ControllerTestException("Can not connect client context!", e);
         }
-    }
 
-    @AfterMethod(alwaysRun = true)
-    protected void disconnectClientContext() {
-        try {
-            clientContext.disconnect().get();
-        } catch (Exception e) {
-            throw new ControllerTestException("Can not disconnect client context!", e);
+        @Override
+        protected void after() {
+            super.after();
+            try {
+                clientContext.disconnect().get();
+            } catch (Exception e) {
+                throw new ControllerTestException("Can not disconnect client context!", e);
+            }
         }
-    }
+    };
 
     public <T> ControllerUnderTest<T> createController(final String controllerName) {
         Assert.requireNonBlank(controllerName, "controllerName");
@@ -65,4 +66,3 @@ public abstract class SpringTestNGControllerTest extends AbstractTestNGSpringCon
         }
     }
 }
-
