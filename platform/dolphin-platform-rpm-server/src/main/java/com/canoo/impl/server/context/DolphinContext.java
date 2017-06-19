@@ -245,7 +245,7 @@ public class DolphinContext {
         if (platformBeanRepository == null) {
             throw new IllegalStateException("An action was called before the init-command was sent.");
         }
-        //TODO: Remove this. Should be handled by commands.
+        //TODO: Remove this. Should be handled by commands. See https://github.com/canoo/dolphin-platform/issues/522
         final InternalAttributesBean bean = platformBeanRepository.getInternalAttributesBean();
         final String controllerId = controllerHandler.createController(controllerName, parentControllerId);
 
