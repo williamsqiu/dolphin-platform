@@ -15,9 +15,9 @@
  */
 package com.canoo.dolphin.test.impl;
 
-import com.canoo.dolphin.client.ClientContext;
-import com.canoo.dolphin.client.ControllerProxy;
-import com.canoo.dolphin.client.Param;
+import com.canoo.platform.client.ClientContext;
+import com.canoo.platform.client.ControllerProxy;
+import com.canoo.platform.client.Param;
 import com.canoo.dolphin.test.ControllerTestException;
 import com.canoo.dolphin.test.ControllerUnderTest;
 import com.canoo.impl.platform.core.Assert;

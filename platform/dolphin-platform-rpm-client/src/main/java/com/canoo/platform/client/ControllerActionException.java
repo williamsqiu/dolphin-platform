@@ -13,29 +13,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.dolphin.client;
+package com.canoo.platform.client;
 
 /**
- * This exception is thrown if a error occurs while creating the {@link ClientContext}
+ * Exception that is thrown when the invocation of a Dolphin Platform action in the server controller throwed
+ * an exception. This exception will be thrown on the client.
  */
-public class ClientInitializationException extends RuntimeException {
+public class ControllerActionException extends Exception {
 
-    private static final long serialVersionUID = -2590161524286922625L;
+    private static final long serialVersionUID = -7706398106144587910L;
 
     /**
      * constructor
-     * @param message the error message
      */
-    public ClientInitializationException(String message) {
+    public ControllerActionException() {
+    }
+
+    /**
+     * constructor
+     * @param message error message
+     */
+    public ControllerActionException(String message) {
         super(message);
     }
 
     /**
      * constructor
-     * @param message the error message
+     * @param message error message
      * @param cause the cause
      */
-    public ClientInitializationException(String message, Throwable cause) {
+    public ControllerActionException(String message, Throwable cause) {
         super(message, cause);
     }
 
@@ -43,8 +50,7 @@ public class ClientInitializationException extends RuntimeException {
      * constructor
      * @param cause the cause
      */
-    public ClientInitializationException(Throwable cause) {
+    public ControllerActionException(Throwable cause) {
         super(cause);
     }
-
 }

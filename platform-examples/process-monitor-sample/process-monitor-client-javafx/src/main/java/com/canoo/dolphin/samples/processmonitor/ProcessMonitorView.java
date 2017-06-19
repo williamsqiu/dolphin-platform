@@ -15,7 +15,7 @@
  */
 package com.canoo.dolphin.samples.processmonitor;
 
-import com.canoo.dolphin.client.ClientContext;
+import com.canoo.platform.client.ClientContext;
 import com.canoo.dolphin.client.javafx.binding.FXBinder;
 import com.canoo.dolphin.client.javafx.binding.FXWrapper;
 import com.canoo.dolphin.client.javafx.view.AbstractViewBinder;

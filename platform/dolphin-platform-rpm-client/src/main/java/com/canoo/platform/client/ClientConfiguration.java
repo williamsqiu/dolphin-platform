@@ -13,15 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.dolphin.client;
+package com.canoo.platform.client;
 
-import com.canoo.platform.client.HttpURLConnectionFactory;
-import com.canoo.platform.client.HttpURLConnectionResponseHandler;
-import com.canoo.platform.core.PlatformThreadFactory;
 import com.canoo.impl.platform.client.DefaultHttpURLConnectionFactory;
 import com.canoo.impl.platform.client.DefaultHttpURLConnectionResponseHandler;
-import com.canoo.impl.platform.core.SimpleDolphinPlatformThreadFactory;
 import com.canoo.impl.platform.core.Assert;
+import com.canoo.impl.platform.core.IdentitySet;
+import com.canoo.impl.platform.core.SimpleDolphinPlatformThreadFactory;
+import com.canoo.platform.core.PlatformThreadFactory;
+import com.canoo.platform.core.functional.Subscription;
 import org.opendolphin.core.client.comm.RemotingExceptionHandler;
 import org.opendolphin.core.client.comm.SimpleExceptionHandler;
 import org.slf4j.Logger;
@@ -30,6 +30,8 @@ import org.slf4j.LoggerFactory;
 import java.net.CookieManager;
 import java.net.CookieStore;
 import java.net.URL;
+import java.util.Collections;
+import java.util.Set;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -56,7 +58,7 @@ public class ClientConfiguration {
 
     private final PlatformThreadFactory dolphinPlatformThreadFactory;
 
-    private RemotingExceptionHandler remotingExceptionHandler;
+    protected Set<RemotingExceptionHandler> remotingExceptionHandlers = new IdentitySet<>();
 
     private long connectionTimeout;
 
@@ -83,7 +85,7 @@ public class ClientConfiguration {
         cookieStore = new CookieManager().getCookieStore();
         connectionFactory = new DefaultHttpURLConnectionFactory();
         responseHandler = new DefaultHttpURLConnectionResponseHandler();
-        remotingExceptionHandler = new SimpleExceptionHandler();
+        remotingExceptionHandlers.add(new SimpleExceptionHandler());
     }
 
     /**
@@ -159,11 +161,19 @@ public class ClientConfiguration {
         this.responseHandler = Assert.requireNonNull(responseHandler, "responseHandler");
     }
 
-    public RemotingExceptionHandler getRemotingExceptionHandler() {
-        return remotingExceptionHandler;
+    public Set<RemotingExceptionHandler> getRemotingExceptionHandlers() {
+        return Collections.unmodifiableSet(remotingExceptionHandlers);
     }
 
-    public void setRemotingExceptionHandler(RemotingExceptionHandler remotingExceptionHandler) {
-        this.remotingExceptionHandler = Assert.requireNonNull(remotingExceptionHandler, "remotingExceptionHandler");
+    public Subscription addRemotingExceptionHandler(final RemotingExceptionHandler remotingExceptionHandler) {
+        Assert.requireNonNull(remotingExceptionHandler, "remotingExceptionHandlers");
+        this.remotingExceptionHandlers.add(remotingExceptionHandler);
+        return new Subscription() {
+
+            @Override
+            public void unsubscribe() {
+                ClientConfiguration.this.remotingExceptionHandlers.remove(remotingExceptionHandler);
+            }
+        };
     }
 }

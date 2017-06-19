@@ -1,6 +1,6 @@
 package com.canoo.dolphin.integration.server.action;
 
-import com.canoo.dolphin.client.Param;
+import com.canoo.platform.client.Param;
 import com.canoo.dolphin.integration.action.ActionTestBean;
 import com.canoo.dolphin.integration.server.TestConfiguration;
 import com.canoo.dolphin.test.ControllerTestException;

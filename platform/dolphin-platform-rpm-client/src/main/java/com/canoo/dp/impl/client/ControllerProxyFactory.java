@@ -13,20 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.dolphin.client.impl;
+package com.canoo.dp.impl.client;
 
-import com.canoo.dolphin.impl.EventDispatcherImpl;
-import org.opendolphin.RemotingConstants;
-import org.opendolphin.core.ModelStore;
+import com.canoo.platform.client.ControllerProxy;
 
-public class ClientEventDispatcher extends EventDispatcherImpl {
+import java.util.concurrent.CompletableFuture;
 
-    public ClientEventDispatcher(final ModelStore modelStore) {
-        super(modelStore);
-    }
+public interface ControllerProxyFactory {
 
-    @Override
-    public String getLocalSystemIdentifier() {
-        return RemotingConstants.SOURCE_SYSTEM_CLIENT;
-    }
+    <T> CompletableFuture<ControllerProxy<T>> create(String name);
 }

@@ -13,36 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.dolphin.client;
+package com.canoo.platform.client;
 
 /**
- * Exception that is thrown when the invocation of a Dolphin Platform action in the server controller throwed
- * an exception. This exception will be thrown on the client.
+ * This exception is thrown when a client can't disconnect
  */
-public class ControllerActionException extends Exception {
+public class ClientShutdownException extends Exception {
 
-    private static final long serialVersionUID = -7706398106144587910L;
-
-    /**
-     * constructor
-     */
-    public ControllerActionException() {
-    }
+    private static final long serialVersionUID = 8453749162802045073L;
 
     /**
      * constructor
-     * @param message error message
+     * @param message the error message
      */
-    public ControllerActionException(String message) {
+    public ClientShutdownException(String message) {
         super(message);
     }
 
     /**
      * constructor
-     * @param message error message
+     * @param message the error message
      * @param cause the cause
      */
-    public ControllerActionException(String message, Throwable cause) {
+    public ClientShutdownException(String message, Throwable cause) {
         super(message, cause);
     }
 
@@ -50,7 +43,7 @@ public class ControllerActionException extends Exception {
      * constructor
      * @param cause the cause
      */
-    public ControllerActionException(Throwable cause) {
+    public ClientShutdownException(Throwable cause) {
         super(cause);
     }
 }

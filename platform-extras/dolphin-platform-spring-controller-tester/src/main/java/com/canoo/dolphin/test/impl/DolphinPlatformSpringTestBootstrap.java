@@ -16,7 +16,7 @@
 package com.canoo.dolphin.test.impl;
 
 import com.canoo.dolphin.BeanManager;
-import com.canoo.dolphin.client.ClientContext;
+import com.canoo.platform.client.ClientContext;
 import com.canoo.platform.server.binding.PropertyBinder;
 import com.canoo.impl.server.binding.PropertyBinderImpl;
 import com.canoo.impl.server.context.DolphinContext;
