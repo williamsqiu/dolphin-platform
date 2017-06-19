@@ -15,7 +15,7 @@
  */
 package com.canoo.impl.dp.spring.test;
 
-import com.canoo.dolphin.server.spring.ClientScope;
+import com.canoo.dp.impl.server.spring.ClientScope;
 import com.canoo.impl.platform.core.Assert;
 import com.canoo.platform.server.client.ClientSession;
 

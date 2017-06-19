@@ -16,8 +16,8 @@
 package com.canoo.dolphin.todo.client;
 
 import com.canoo.platform.client.ClientContext;
-import com.canoo.dolphin.client.javafx.binding.FXBinder;
-import com.canoo.dolphin.client.javafx.view.AbstractFXMLViewBinder;
+import com.canoo.platform.client.javafx.FXBinder;
+import com.canoo.platform.client.javafx.view.AbstractFXMLViewBinder;
 import com.canoo.dolphin.todo.pm.ToDoItem;
 import com.canoo.dolphin.todo.pm.ToDoList;
 import javafx.fxml.FXML;

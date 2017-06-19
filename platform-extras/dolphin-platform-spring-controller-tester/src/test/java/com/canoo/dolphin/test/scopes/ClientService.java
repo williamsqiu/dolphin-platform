@@ -15,7 +15,7 @@
  */
 package com.canoo.dolphin.test.scopes;
 
-import com.canoo.dolphin.server.spring.ClientScoped;
+import com.canoo.platform.server.spring.ClientScoped;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;

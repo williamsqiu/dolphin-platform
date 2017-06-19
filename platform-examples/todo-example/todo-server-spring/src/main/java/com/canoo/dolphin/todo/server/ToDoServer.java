@@ -15,7 +15,7 @@
  */
 package com.canoo.dolphin.todo.server;
 
-import com.canoo.dolphin.server.spring.DolphinPlatformApplication;
+import com.canoo.platform.server.spring.DolphinPlatformApplication;
 import org.springframework.boot.SpringApplication;
 
 @DolphinPlatformApplication

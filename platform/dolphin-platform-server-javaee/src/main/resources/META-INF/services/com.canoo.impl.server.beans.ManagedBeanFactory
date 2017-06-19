@@ -1,1 +1,1 @@
-com.canoo.dolphin.server.javaee.CdiManagedBeanFactory
+com.canoo.dp.impl.server.javaee.CdiManagedBeanFactory

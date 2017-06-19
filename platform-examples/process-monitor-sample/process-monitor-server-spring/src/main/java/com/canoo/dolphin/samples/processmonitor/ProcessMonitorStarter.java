@@ -15,7 +15,7 @@
  */
 package com.canoo.dolphin.samples.processmonitor;
 
-import com.canoo.dolphin.server.spring.DolphinPlatformApplication;
+import com.canoo.platform.server.spring.DolphinPlatformApplication;
 import com.canoo.dolphin.todo.server.AsyncServerRunner;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.boot.SpringApplication;
