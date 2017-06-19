@@ -1,8 +1,8 @@
 package com.canoo.impl.dp.spring.test;
 
-import com.canoo.dolphin.client.ClientConfiguration;
-import com.canoo.dolphin.client.ClientContext;
-import com.canoo.dolphin.client.impl.ClientContextImpl;
+import com.canoo.platform.client.ClientConfiguration;
+import com.canoo.platform.client.ClientContext;
+import com.canoo.dp.impl.client.ClientContextImpl;
 import com.canoo.impl.platform.core.Assert;
 import com.canoo.impl.server.client.ClientSessionProvider;
 import com.canoo.impl.server.config.ConfigurationFileLoader;

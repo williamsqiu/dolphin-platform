@@ -13,24 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.dolphin.client;
+package com.canoo.dp.impl.client;
 
-public class ControllerInitalizationException extends RuntimeException {
+import com.canoo.platform.client.ClientContext;
 
-    private static final long serialVersionUID = 4212442538247238882L;
-
-    public ControllerInitalizationException() {
-    }
-
-    public ControllerInitalizationException(String message) {
-        super(message);
-    }
-
-    public ControllerInitalizationException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public ControllerInitalizationException(Throwable cause) {
-        super(cause);
-    }
+/**
+ * Defines the states of the {@link ClientContext}
+ */
+public enum State {
+    CREATED, INITIALIZED, DESTROYING, DESTROYED;
 }

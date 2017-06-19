@@ -15,8 +15,8 @@
  */
 package com.canoo.dolphin.todo.client;
 
-import com.canoo.dolphin.client.ControllerProxy;
-import com.canoo.dolphin.client.Param;
+import com.canoo.platform.client.ControllerProxy;
+import com.canoo.platform.client.Param;
 import com.canoo.dolphin.client.javafx.binding.FXBinder;
 import com.canoo.dolphin.todo.pm.ToDoItem;
 import com.canoo.dolphin.todo.pm.ToDoList;

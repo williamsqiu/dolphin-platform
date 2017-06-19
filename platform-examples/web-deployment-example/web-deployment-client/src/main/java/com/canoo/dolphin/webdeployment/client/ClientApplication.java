@@ -1,7 +1,7 @@
 
 package com.canoo.dolphin.webdeployment.client;
 
-import com.canoo.dolphin.client.ClientContext;
+import com.canoo.platform.client.ClientContext;
 import com.canoo.dolphin.client.javafx.SimpleDolphinPlatformApplication;
 import com.canoo.dolphin.webdeployment.client.view.MyView;
 import javafx.scene.Scene;

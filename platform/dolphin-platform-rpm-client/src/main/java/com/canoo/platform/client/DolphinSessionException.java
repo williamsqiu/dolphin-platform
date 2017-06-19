@@ -13,13 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.dolphin.client.impl;
+package com.canoo.platform.client;
 
-import com.canoo.dolphin.client.ClientContext;
+public class DolphinSessionException extends RuntimeException {
 
-/**
- * Defines the states of the {@link ClientContext}
- */
-public enum State {
-    CREATED, INITIALIZED, DESTROYING, DESTROYED;
+    private static final long serialVersionUID = -661120767433339452L;
+
+    public DolphinSessionException() {
+    }
+
+    public DolphinSessionException(String message) {
+        super(message);
+    }
+
+    public DolphinSessionException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public DolphinSessionException(Throwable cause) {
+        super(cause);
+    }
 }

@@ -13,10 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.dolphin.client.impl;
+package com.canoo.dp.impl.client;
 
 import com.canoo.dolphin.BeanManager;
-import com.canoo.dolphin.client.*;
 import com.canoo.dolphin.impl.*;
 import com.canoo.dolphin.impl.collections.ListMapperImpl;
 import com.canoo.dolphin.impl.commands.CreateContextCommand;
@@ -25,6 +24,7 @@ import com.canoo.dolphin.internal.BeanRepository;
 import com.canoo.dolphin.internal.ClassRepository;
 import com.canoo.dolphin.internal.EventDispatcher;
 import com.canoo.impl.platform.core.Assert;
+import com.canoo.platform.client.*;
 import org.opendolphin.core.client.ClientModelStore;
 import org.opendolphin.core.client.DefaultModelSynchronizer;
 import org.opendolphin.core.client.ModelSynchronizer;

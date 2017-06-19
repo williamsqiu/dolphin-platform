@@ -15,7 +15,7 @@
  */
 package com.canoo.platform.spring.test;
 
-import com.canoo.dolphin.client.Param;
+import com.canoo.platform.client.Param;
 import com.canoo.platform.server.DolphinAction;
 import com.canoo.platform.server.DolphinController;
 

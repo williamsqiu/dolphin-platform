@@ -15,12 +15,12 @@
  */
 package com.canoo.impl.dp.spring.test;
 
-import com.canoo.dolphin.client.ClientContext;
-import com.canoo.dolphin.client.ControllerProxy;
-import com.canoo.dolphin.client.Param;
+import com.canoo.impl.platform.core.Assert;
+import com.canoo.platform.client.ClientContext;
+import com.canoo.platform.client.ControllerProxy;
+import com.canoo.platform.client.Param;
 import com.canoo.platform.spring.test.ControllerTestException;
 import com.canoo.platform.spring.test.ControllerUnderTest;
-import com.canoo.impl.platform.core.Assert;
 
 public class ClientTestFactory {
 

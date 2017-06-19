@@ -13,24 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.dolphin.client;
+package com.canoo.dp.impl.client;
 
-public class DolphinSessionException extends RuntimeException {
+import com.canoo.dolphin.impl.EventDispatcherImpl;
+import org.opendolphin.RemotingConstants;
+import org.opendolphin.core.ModelStore;
 
-    private static final long serialVersionUID = -661120767433339452L;
+public class ClientEventDispatcher extends EventDispatcherImpl {
 
-    public DolphinSessionException() {
+    public ClientEventDispatcher(final ModelStore modelStore) {
+        super(modelStore);
     }
 
-    public DolphinSessionException(String message) {
-        super(message);
-    }
-
-    public DolphinSessionException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public DolphinSessionException(Throwable cause) {
-        super(cause);
+    @Override
+    public String getLocalSystemIdentifier() {
+        return RemotingConstants.SOURCE_SYSTEM_CLIENT;
     }
 }

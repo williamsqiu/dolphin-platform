@@ -15,9 +15,9 @@
  */
 package com.canoo.dolphin.todo.server;
 
-import com.canoo.dolphin.client.Param;
-import com.canoo.platform.spring.test.ControllerUnderTest;
-import com.canoo.platform.spring.test.SpringTestNGControllerTest;
+import com.canoo.platform.client.Param;
+import com.canoo.dolphin.test.ControllerUnderTest;
+import com.canoo.dolphin.test.SpringTestNGControllerTest;
 import com.canoo.dolphin.todo.pm.ToDoList;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.testng.Assert;

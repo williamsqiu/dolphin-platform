@@ -15,8 +15,8 @@
  */
 package com.canoo.dolphin.client.javafx;
 
-import com.canoo.dolphin.client.*;
 import com.canoo.impl.platform.core.Assert;
+import com.canoo.platform.client.*;
 import com.canoo.platform.core.DolphinRuntimeException;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -68,7 +68,7 @@ public abstract class DolphinPlatformApplication extends Application {
     protected JavaFXConfiguration createClientConfiguration() {
         try {
             JavaFXConfiguration configuration = new JavaFXConfiguration(getServerEndpoint());
-            configuration.setRemotingExceptionHandler(e -> {
+            configuration.addRemotingExceptionHandler(e -> {
                 if (connectInProgress.get()) {
                     runtimeExceptionsAtInitialization.add(new DolphinRuntimeException("Dolphin Platform remoting error", e));
                 } else {
