@@ -64,9 +64,17 @@ public class ControllerProxyImpl<T> implements ControllerProxy<T> {
 
         final ClientControllerActionCallBean bean = platformBeanRepository.createControllerActionCallBean(controllerId, actionName, params);
 
+        CallActionCommand callActionCommand = new CallActionCommand();
+        callActionCommand.setControllerId(getId());
+        callActionCommand.setActionName(actionName);
+        if(params != null) {
+            for (Param param : params) {
+                callActionCommand.addParam(param.getName(), param.getValue());
+            }
+        }
 
         final CompletableFuture<Void> result = new CompletableFuture<>();
-        clientConnector.send(new CallActionCommand(), new OnFinishedHandler(){
+        clientConnector.send(callActionCommand, new OnFinishedHandler(){
             @Override
             public void onFinished() {
                 if (bean.isError()) {
@@ -88,11 +96,13 @@ public class ControllerProxyImpl<T> implements ControllerProxy<T> {
         destroyed = true;
 
         final InternalAttributesBean bean = platformBeanRepository.getInternalAttributesBean();
-        bean.setControllerId(controllerId);
 
         final CompletableFuture<Void> ret = new CompletableFuture<>();
 
-        clientConnector.send(new DestroyControllerCommand(), new OnFinishedHandler() {
+        final DestroyControllerCommand destroyControllerCommand = new DestroyControllerCommand();
+        destroyControllerCommand.setControllerId(getId());
+
+        clientConnector.send(destroyControllerCommand, new OnFinishedHandler() {
             @Override
             public void onFinished() {
                 model = null;
@@ -111,7 +121,7 @@ public class ControllerProxyImpl<T> implements ControllerProxy<T> {
     public <C> CompletableFuture<ControllerProxy<C>> createController(String name) {
         Assert.requireNonBlank(name, "name");
 
-        return controllerProxyFactory.<C>create(name).handle(new BiFunction<ControllerProxy<C>, Throwable, ControllerProxy<C>>() {
+        return controllerProxyFactory.<C>create(name, getId()).handle(new BiFunction<ControllerProxy<C>, Throwable, ControllerProxy<C>>() {
             @Override
             public ControllerProxy<C> apply(ControllerProxy<C> cControllerProxy, Throwable throwable) {
                 if (throwable != null) {

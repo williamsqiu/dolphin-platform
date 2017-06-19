@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.dolphin.impl.codec;
+package com.canoo.dolphin.impl.codec.encoders;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;

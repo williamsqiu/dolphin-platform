@@ -62,9 +62,7 @@ public interface ControllerProxy<T> {
     String getId();
 
     /**
-     * Creates a {@link ControllerProxy} instance for the controller with the given name.
-     * Currently this methods does exactly the same as {@link ClientContext#createController(String)} but in a future
-     * release controller hierarchies will be supported by this method.
+     * Creates a {@link ControllerProxy} instance for the controller with the given name as a child controller.
      * @param name the unique name of the controller type
      * @param <T> the type of the model that is bound to the controller and view
      * @return a {@link CompletableFuture} that defines the creation of the controller.

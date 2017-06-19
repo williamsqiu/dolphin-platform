@@ -13,31 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.dolphin.impl.codec;
+package com.canoo.dolphin.impl.codec.encoders;
 
 import com.canoo.impl.platform.core.Assert;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import org.opendolphin.core.comm.ValueChangedCommand;
 
-import static com.canoo.dolphin.impl.codec.ValueEncoder.decodeValue;
-import static com.canoo.dolphin.impl.codec.ValueEncoder.encodeValue;
+import static com.canoo.dolphin.impl.codec.CommandConstants.*;
 
-public class ValueChangedCommandEncoder implements CommandEncoder<ValueChangedCommand> {
+public class ValueChangedCommandEncoder extends AbstractCommandEncoder<ValueChangedCommand> {
 
     @Override
     public JsonObject encode(ValueChangedCommand command) {
         Assert.requireNonNull(command, "command");
 
         final JsonObject jsonCommand = new JsonObject();
-        jsonCommand.addProperty("a", command.getAttributeId());
+        jsonCommand.addProperty(VALUE_CHANGED_ATTRIBUTE_ID, command.getAttributeId());
         if (command.getOldValue() != null) {
-            jsonCommand.add("o", encodeValue(command.getOldValue()));
+            jsonCommand.add(OLD_VALUE, ValueEncoder.encodeValue(command.getOldValue()));
         }
         if (command.getNewValue() != null) {
-            jsonCommand.add("n", encodeValue(command.getNewValue()));
+            jsonCommand.add(NEW_VALUE, ValueEncoder.encodeValue(command.getNewValue()));
         }
-        jsonCommand.addProperty("id", "ValueChanged");
+        jsonCommand.addProperty(ID, VALUE_CHANGED_COMMAND_ID);
         return jsonCommand;
     }
 
@@ -48,13 +47,14 @@ public class ValueChangedCommandEncoder implements CommandEncoder<ValueChangedCo
         try {
             final ValueChangedCommand command = new ValueChangedCommand();
 
-            command.setNewValue(decodeValue(jsonObject.get("n")));
-            command.setOldValue(decodeValue(jsonObject.get("o")));
-            command.setAttributeId(jsonObject.get("a").getAsString());
+            command.setNewValue(ValueEncoder.decodeValue(jsonObject.get(NEW_VALUE)));
+            command.setOldValue(ValueEncoder.decodeValue(jsonObject.get(OLD_VALUE)));
+            command.setAttributeId(getStringElement(jsonObject, VALUE_CHANGED_ATTRIBUTE_ID));
 
             return command;
         } catch (IllegalStateException | ClassCastException | NullPointerException ex) {
             throw new JsonParseException("Illegal JSON detected", ex);
-        }    }
+        }
+    }
 
 }

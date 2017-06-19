@@ -16,17 +16,17 @@
 package com.canoo.impl.dp.spring.test;
 
 import com.canoo.dolphin.BeanManager;
-import com.canoo.platform.client.ClientContext;
-import com.canoo.platform.server.binding.PropertyBinder;
-import com.canoo.impl.server.binding.PropertyBinderImpl;
-import com.canoo.impl.server.context.DolphinContext;
-import com.canoo.impl.server.context.DolphinContextProvider;
-import com.canoo.platform.server.event.DolphinEventBus;
-import com.canoo.impl.server.event.DefaultDolphinEventBus;
 import com.canoo.dolphin.server.spring.ClientScope;
 import com.canoo.impl.platform.core.Assert;
+import com.canoo.impl.server.binding.PropertyBinderImpl;
 import com.canoo.impl.server.client.ClientSessionLifecycleHandlerImpl;
+import com.canoo.impl.server.context.DolphinContext;
+import com.canoo.impl.server.context.DolphinContextProvider;
+import com.canoo.impl.server.event.DefaultDolphinEventBus;
+import com.canoo.platform.client.ClientContext;
+import com.canoo.platform.server.binding.PropertyBinder;
 import com.canoo.platform.server.client.ClientSession;
+import com.canoo.platform.server.event.DolphinEventBus;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.beans.factory.config.CustomScopeConfigurer;
 import org.springframework.context.annotation.Bean;

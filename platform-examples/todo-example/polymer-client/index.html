@@ -15,8 +15,12 @@
         }
     </style>
     <script>
-        clientContext = dolphin.connect('http://localhost:8080/todo-app/dolphin');
-        clientContext.on('error', function(error) {console.log('error', error)});
+        clientContext = dolphin.clientContext('http://localhost:8080/todo-app/dolphin');
+        clientContext.onConnect().then(function() {
+            console.log('Dolphin connected...');
+        }, function(error){
+            console.log('error', error);
+        });
     </script>
     <link href="todo-view.html" rel="import">
 </head>

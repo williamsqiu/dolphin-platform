@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.dolphin.impl.codec;
+package com.canoo.dolphin.impl.codec.encoders;
 
 import com.canoo.impl.platform.core.Assert;
 import com.google.gson.JsonArray;
@@ -27,17 +27,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.canoo.dolphin.impl.codec.CommandConstants.ATTRIBUTE_ID;
-import static com.canoo.dolphin.impl.codec.CommandConstants.ATTRIBUTE_NAME;
-import static com.canoo.dolphin.impl.codec.CommandConstants.ATTRIBUTE_VALUE;
-import static com.canoo.dolphin.impl.codec.CommandConstants.ID;
-import static com.canoo.dolphin.impl.codec.CommandConstants.PM_ATTRIBUTES;
-import static com.canoo.dolphin.impl.codec.CommandConstants.PM_ID;
-import static com.canoo.dolphin.impl.codec.CommandConstants.PM_TYPE;
-import static com.canoo.dolphin.impl.codec.ValueEncoder.decodeValue;
-import static com.canoo.dolphin.impl.codec.ValueEncoder.encodeValue;
+import static com.canoo.dolphin.impl.codec.CommandConstants.*;
 
-public class  CreatePresentationModelEncoder implements CommandEncoder<CreatePresentationModelCommand> {
+public class  CreatePresentationModelEncoder extends AbstractCommandEncoder<CreatePresentationModelCommand> {
 
     @Override
     public JsonObject encode(CreatePresentationModelCommand command) {
@@ -50,16 +42,16 @@ public class  CreatePresentationModelEncoder implements CommandEncoder<CreatePre
         final JsonArray jsonArray = new JsonArray();
         for (final Map<String, Object> attribute : command.getAttributes()) {
             final JsonObject jsonAttribute = new JsonObject();
-            jsonAttribute.addProperty(ATTRIBUTE_NAME, String.valueOf(attribute.get("propertyName")));
-            jsonAttribute.addProperty(ATTRIBUTE_ID, String.valueOf(attribute.get("id")));
-            final Object value = attribute.get("value");
+            jsonAttribute.addProperty(ATTRIBUTE_NAME, String.valueOf(attribute.get(PROPERTY_NAME)));
+            jsonAttribute.addProperty(ATTRIBUTE_ID, String.valueOf(attribute.get(ID)));
+            final Object value = attribute.get(VALUE);
             if (value != null) {
-                jsonAttribute.add(ATTRIBUTE_VALUE, encodeValue(attribute.get("value")));
+                jsonAttribute.add(ATTRIBUTE_VALUE, ValueEncoder.encodeValue(attribute.get(VALUE)));
             }
             jsonArray.add(jsonAttribute);
         }
         jsonCommand.add(PM_ATTRIBUTES, jsonArray);
-        jsonCommand.addProperty(ID, "CreatePresentationModel");
+        jsonCommand.addProperty(ID, CREATE_PRESENTATION_MODEL_COMMAND_ID);
 
         return jsonCommand;
     }
@@ -71,8 +63,8 @@ public class  CreatePresentationModelEncoder implements CommandEncoder<CreatePre
         try {
             final CreatePresentationModelCommand command = new CreatePresentationModelCommand();
 
-            command.setPmId(jsonObject.getAsJsonPrimitive(PM_ID).getAsString());
-            command.setPmType(jsonObject.getAsJsonPrimitive(PM_TYPE).getAsString());
+            command.setPmId(getStringElement(jsonObject, PM_ID));
+            command.setPmType(getStringElement(jsonObject, PM_TYPE));
             command.setClientSideOnly(false);
 
             final JsonArray jsonArray = jsonObject.getAsJsonArray(PM_ATTRIBUTES);
@@ -80,10 +72,10 @@ public class  CreatePresentationModelEncoder implements CommandEncoder<CreatePre
             for (final JsonElement jsonElement : jsonArray) {
                 final JsonObject attribute = jsonElement.getAsJsonObject();
                 final HashMap<String, Object> map = new HashMap<>();
-                map.put("propertyName", attribute.getAsJsonPrimitive(ATTRIBUTE_NAME).getAsString());
-                map.put("id", attribute.getAsJsonPrimitive(ATTRIBUTE_ID).getAsString());
-                final Object value = attribute.has(ATTRIBUTE_VALUE)? decodeValue(attribute.get(ATTRIBUTE_VALUE)) : null;
-                map.put("value", value);
+                map.put(PROPERTY_NAME,getStringElement(attribute, ATTRIBUTE_NAME));
+                map.put(ID, getStringElement(attribute, ATTRIBUTE_ID));
+                final Object value = attribute.has(ATTRIBUTE_VALUE)? ValueEncoder.decodeValue(attribute.get(ATTRIBUTE_VALUE)) : null;
+                map.put(VALUE, value);
                 map.put("baseValue", value);
                 map.put("qualifier", null);
                 attributes.add(map);

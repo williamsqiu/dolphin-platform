@@ -39,6 +39,7 @@ public abstract class Command implements Serializable {
         this.id = id;
     }
 
+    @Deprecated
     public String getId() {
         if(id == null) {
             return idFor(getClass());
@@ -46,6 +47,8 @@ public abstract class Command implements Serializable {
         return id;
     }
 
+    //TODO: REMOVE THIS!!!!!!!!!! see https://github.com/canoo/dolphin-platform/issues/513
+    @Deprecated
     private static String idFor(final Class commandClass) {
         String id = commandClass.getSimpleName();
         id = id.replace("Command", "");

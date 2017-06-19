@@ -46,6 +46,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
@@ -160,14 +161,14 @@ public class DolphinContext {
 
                 registerCommand(registry, CreateContextCommand.class, new Callback<CreateContextCommand>() {
                     @Override
-                    public void call(CreateContextCommand createContextCommand) {
+                    public void call(final CreateContextCommand createContextCommand) {
                         onInitContext();
                     }
                 });
 
                 registerCommand(registry, DestroyContextCommand.class, new Callback<DestroyContextCommand>() {
                     @Override
-                    public void call(DestroyContextCommand createContextCommand) {
+                    public void call(final DestroyContextCommand destroyContextCommand) {
                         onDestroyContext();
                     }
                 });
@@ -175,29 +176,32 @@ public class DolphinContext {
 
                 registerCommand(registry, CreateControllerCommand.class, new Callback<CreateControllerCommand>() {
                     @Override
-                    public void call(CreateControllerCommand createContextCommand) {
-                        onRegisterController();
+                    public void call(final CreateControllerCommand createControllerCommand) {
+                        Assert.requireNonNull(createControllerCommand, "createControllerCommand");
+                        onCreateController(createControllerCommand.getControllerName(), createControllerCommand.getParentControllerId());
                     }
                 });
 
 
                 registerCommand(registry, DestroyControllerCommand.class, new Callback<DestroyControllerCommand>() {
                     @Override
-                    public void call(DestroyControllerCommand createContextCommand) {
-                        onDestroyController();
+                    public void call(final DestroyControllerCommand destroyControllerCommand) {
+                        Assert.requireNonNull(destroyControllerCommand, "destroyControllerCommand");
+                        onDestroyController(destroyControllerCommand.getControllerId());
                     }
                 });
 
                 registerCommand(registry, CallActionCommand.class, new Callback<CallActionCommand>() {
                     @Override
-                    public void call(CallActionCommand createContextCommand) {
-                        onCallControllerAction();
+                    public void call(final CallActionCommand callActionCommand) {
+                        Assert.requireNonNull(callActionCommand, "callActionCommand");
+                        onCallControllerAction(callActionCommand.getControllerId(), callActionCommand.getActionName(), callActionCommand.getParams());
                     }
                 });
 
                 registerCommand(registry, StartLongPollCommand.class, new Callback<StartLongPollCommand>() {
                     @Override
-                    public void call(StartLongPollCommand createContextCommand) {
+                    public void call(final StartLongPollCommand startLongPollCommand) {
                         if (configuration.isUseGc()) {
                             LOG.trace("Handling GarbageCollection for DolphinContext {}", getId());
                             onGarbageCollection();
@@ -208,7 +212,7 @@ public class DolphinContext {
 
                 registerCommand(registry, InterruptLongPollCommand.class, new Callback<InterruptLongPollCommand>() {
                     @Override
-                    public void call(InterruptLongPollCommand createContextCommand) {
+                    public void call(final InterruptLongPollCommand interruptLongPollCommand) {
                         interrupt();
                     }
                 });
@@ -235,12 +239,16 @@ public class DolphinContext {
         onDestroyCallback.call(this);
     }
 
-    private void onRegisterController() {
+    private void onCreateController(final String controllerName, final String parentControllerId) {
+        Assert.requireNonBlank(controllerName, "controllerName");
+
         if (platformBeanRepository == null) {
             throw new IllegalStateException("An action was called before the init-command was sent.");
         }
+        //TODO: Remove this. Should be handled by commands. See https://github.com/canoo/dolphin-platform/issues/522
         final InternalAttributesBean bean = platformBeanRepository.getInternalAttributesBean();
-        String controllerId = controllerHandler.createController(bean.getControllerName());
+        final String controllerId = controllerHandler.createController(controllerName, parentControllerId);
+
         bean.setControllerId(controllerId);
         Object model = controllerHandler.getControllerModel(controllerId);
         if (model != null) {
@@ -248,24 +256,31 @@ public class DolphinContext {
         }
     }
 
-    private void onDestroyController() {
+    private void onDestroyController(final String controllerId) {
+        Assert.requireNonBlank(controllerId, "controllerId");
         if (platformBeanRepository == null) {
             throw new IllegalStateException("An action was called before the init-command was sent.");
         }
-        final InternalAttributesBean bean = platformBeanRepository.getInternalAttributesBean();
-        controllerHandler.destroyController(bean.getControllerId());
+        controllerHandler.destroyController(controllerId);
     }
 
-    private void onCallControllerAction() {
+    private void onCallControllerAction(final String controllerId, final String actionName, final Map<String, Object> params) {
+        Assert.requireNonBlank(controllerId, "controllerId");
+        Assert.requireNonBlank(actionName, "actionName");
+        Assert.requireNonNull(params, "params");
+
+        //TODO: Remove this. Should bve handled by commands.
+        final ServerControllerActionCallBean bean = platformBeanRepository.getControllerActionCallBean();
+        Assert.requireNonNull(bean, "bean");
+
         if (platformBeanRepository == null) {
             throw new IllegalStateException("An action was called before the init-command was sent.");
         }
-        final ServerControllerActionCallBean bean = platformBeanRepository.getControllerActionCallBean();
         try {
-            controllerHandler.invokeAction(bean);
+            controllerHandler.invokeAction(controllerId, actionName, params);
         } catch (Exception e) {
             LOG.error("Unexpected exception while invoking action {} on controller {}",
-                    bean.getActionName(), bean.getControllerId(), e);
+                    actionName, controllerId, e);
             bean.setError(true);
         }
     }

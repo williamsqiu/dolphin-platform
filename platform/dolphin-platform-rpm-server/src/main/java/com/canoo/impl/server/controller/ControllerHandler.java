@@ -23,18 +23,26 @@ import com.canoo.impl.server.beans.PostConstructInterceptor;
 import com.canoo.impl.server.mbean.DolphinContextMBeanRegistry;
 import com.canoo.impl.server.mbean.beans.ModelProvider;
 import com.canoo.impl.server.model.ServerBeanBuilder;
-import com.canoo.impl.server.model.ServerControllerActionCallBean;
 import com.canoo.platform.core.functional.Subscription;
 import com.canoo.platform.server.DolphinAction;
 import com.canoo.platform.server.DolphinModel;
 import com.canoo.platform.server.Param;
+import com.canoo.platform.server.ParentController;
+import com.canoo.platform.server.PostChildCreated;
+import com.canoo.platform.server.PreChildDestroyed;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 
 /**
  * This class wrapps the complete Dolphin Platform controller handling.
@@ -52,6 +60,10 @@ public class ControllerHandler {
 
     private final Map<String, Object> models = new HashMap<>();
 
+    private final Map<String, List<String>> parentChildRelations = new HashMap<>();
+
+    private final Map<String, String> childToParentRelations = new HashMap<>();
+
     private final ManagedBeanFactory beanFactory;
 
     private final ServerBeanBuilder beanBuilder;
@@ -62,7 +74,7 @@ public class ControllerHandler {
 
     private final BeanRepository beanRepository;
 
-    public ControllerHandler(DolphinContextMBeanRegistry mBeanRegistry, ManagedBeanFactory beanFactory, ServerBeanBuilder beanBuilder, BeanRepository beanRepository, ControllerRepository controllerRepository) {
+    public ControllerHandler(final DolphinContextMBeanRegistry mBeanRegistry, final ManagedBeanFactory beanFactory, final ServerBeanBuilder beanBuilder, final BeanRepository beanRepository, final ControllerRepository controllerRepository) {
         this.mBeanRegistry = Assert.requireNonNull(mBeanRegistry, "mBeanRegistry");
         this.beanFactory = Assert.requireNonNull(beanFactory, "beanFactory");
         this.beanBuilder = Assert.requireNonNull(beanBuilder, "beanBuilder");
@@ -74,19 +86,22 @@ public class ControllerHandler {
         return models.get(id);
     }
 
-    public String createController(final String name) {
+    public String createController(final String name, final String parentControllerId) {
         Assert.requireNonBlank(name, "name");
-        Class<?> controllerClass = controllerRepository.getControllerClassForName(name);
+        final Class<?> controllerClass = controllerRepository.getControllerClassForName(name);
 
         if(controllerClass == null) {
             throw new ControllerCreationException("Can not find controller class for name " + name);
         }
 
         final String id = UUID.randomUUID().toString();
-        Object instance = beanFactory.createDependendInstance(controllerClass, new PostConstructInterceptor() {
+        final Object instance = beanFactory.createDependendInstance(controllerClass, new PostConstructInterceptor() {
             @Override
             public void intercept(Object controller) {
                 attachModel(id, controller);
+                if(parentControllerId != null) {
+                    attachParent(id, controller, parentControllerId);
+                }
             }
         });
         controllers.put(id, instance);
@@ -99,22 +114,46 @@ public class ControllerHandler {
             }
         }));
 
+        if(parentControllerId != null) {
+            final Object parentController = controllers.get(parentControllerId);
+            Assert.requireNonNull(parentController, "parentController");
+            firePostChildCreated(parentController, instance);
+        }
+
         LOG.trace("Created Controller of type %s and id %s for name %s", controllerClass.getName(), id, name);
 
         return id;
     }
 
-    public void destroyController(String id) {
-        Object controller = controllers.remove(id);
-        Class controllerClass = controllerClassMapping.remove(id);
+    public void destroyController(final String id) {
+        Assert.requireNonBlank(id, "id");
+
+        final List<String> childControllerIds = parentChildRelations.remove(id);
+        if(childControllerIds != null && !childControllerIds.isEmpty()) {
+            for(String childControllerId : childControllerIds) {
+                destroyController(childControllerId);
+            }
+        }
+
+        final Object controller = controllers.remove(id);
+        Assert.requireNonNull(controller, "controller");
+
+        final String parentControllerId = childToParentRelations.remove(id);
+        if(parentControllerId != null) {
+            Object parentController = controllers.get(parentControllerId);
+            Assert.requireNonNull(parentController, "parentController");
+            firePreChildDestroyed(parentController, controller);
+        }
+
+        final Class controllerClass = controllerClassMapping.remove(id);
         beanFactory.destroyDependendInstance(controller, controllerClass);
 
-        Object model = models.remove(id);
+        final Object model = models.remove(id);
         if (model != null) {
             beanRepository.delete(model);
         }
 
-        Subscription subscription = mBeanSubscriptions.remove(id);
+        final Subscription subscription = mBeanSubscriptions.remove(id);
         if(subscription != null) {
             subscription.unsubscribe();
         }
@@ -127,7 +166,37 @@ public class ControllerHandler {
         }
     }
 
-    private void attachModel(String controllerId, Object controller) {
+    private void firePostChildCreated(final Object parentController, final Object childController) {
+        Assert.requireNonNull(parentController, "parentController");
+        Assert.requireNonNull(childController, "childController");
+
+        final List<Method> allMethods = ReflectionHelper.getInheritedDeclaredMethods(parentController.getClass());
+
+        for(Method method : allMethods) {
+            if(method.isAnnotationPresent(PostChildCreated.class)) {
+                if(method.getParameters()[0].getType().isAssignableFrom(childController.getClass())) {
+                    ReflectionHelper.invokePrivileged(method, parentController, childController);
+                }
+            }
+        }
+    }
+
+    private void firePreChildDestroyed(final Object parentController, final Object childController) {
+        final List<Method> allMethods = ReflectionHelper.getInheritedDeclaredMethods(parentController.getClass());
+
+        for(Method method : allMethods) {
+            if(method.isAnnotationPresent(PreChildDestroyed.class)) {
+                if(method.getParameters()[0].getType().isAssignableFrom(childController.getClass())) {
+                    ReflectionHelper.invokePrivileged(method, parentController, childController);
+                }
+            }
+        }
+    }
+
+    private void attachModel(final String controllerId, final Object controller) {
+        Assert.requireNonNull(controllerId, "controllerId");
+        Assert.requireNonNull(controller, "controller");
+
         List<Field> allFields = ReflectionHelper.getInheritedDeclaredFields(controller.getClass());
 
         Field modelField = null;
@@ -148,24 +217,58 @@ public class ControllerHandler {
         }
     }
 
-    public void invokeAction(ServerControllerActionCallBean bean) throws InvokeActionException {
-        Assert.requireNonNull(bean, "bean");
-        Assert.requireNonBlank(bean.getControllerId(), "bean.getControllerId()");
-        Assert.requireNonBlank(bean.getActionName(), "bean.getActionName()");
+    private void attachParent(final String controllerId, final Object controller, final String parentControllerId) {
+        Assert.requireNonNull(controllerId, "controllerId");
+        Assert.requireNonNull(controller, "controller");
+        Assert.requireNonNull(parentControllerId, "parentControllerId");
+
+        final List<Field> allFields = ReflectionHelper.getInheritedDeclaredFields(controller.getClass());
+
+        Field parentField = null;
+
+        for (Field field : allFields) {
+            if (field.isAnnotationPresent(ParentController.class)) {
+                if (parentField != null) {
+                    throw new RuntimeException("More than one parent was found for controller " + controller.getClass().getName());
+                }
+                parentField = field;
+            }
+        }
+        if (parentField != null) {
+            final Object parentController = controllers.get(parentControllerId);
+            Assert.requireNonNull(parentController, "parentController");
+
+            if(!parentField.getType().getClass().isAssignableFrom(parentController.getClass())) {
+                throw new RuntimeException("Parent controller in " + controller.getClass() + " defined of wrong type. Should be " + parentController.getClass());
+            }
+            ReflectionHelper.setPrivileged(parentField, controller, parentController);
+            if(parentChildRelations.get(parentControllerId) == null) {
+                parentChildRelations.put(parentControllerId, new ArrayList<String>());
+            }
+            parentChildRelations.get(parentControllerId).add(controllerId);
+            childToParentRelations.put(controllerId, parentControllerId);
+        }
+    }
+
+    public void invokeAction(final String controllerId, final String actionName, final Map<String, Object> params) throws InvokeActionException {
+        Assert.requireNonBlank(controllerId, "controllerId");
+        Assert.requireNonBlank(actionName, "actionName");
+        Assert.requireNonNull(params, "params");
+
         try {
-            final Object controller = controllers.get(bean.getControllerId());
+            final Object controller = controllers.get(controllerId);
             if(controller == null) {
-                throw new InvokeActionException("No controller for id " + bean.getControllerId() + " found");
+                throw new InvokeActionException("No controller for id " + controllerId + " found");
             }
-            final Class controllerClass = controllerClassMapping.get(bean.getControllerId());
+            final Class controllerClass = controllerClassMapping.get(controllerId);
             if(controllerClass == null) {
-                throw new InvokeActionException("No controllerClass for id " + bean.getControllerId() + " found");
+                throw new InvokeActionException("No controllerClass for id " + controllerId + " found");
             }
-            final Method actionMethod = getActionMethod(controllerClass, bean.getActionName());
+            final Method actionMethod = getActionMethod(controllerClass, actionName);
             if(actionMethod == null) {
-                throw new InvokeActionException("No actionMethod with name " + bean.getActionName() + " in controller class " + controllerClass.getName() + " found");
+                throw new InvokeActionException("No actionMethod with name " + actionName + " in controller class " + controllerClass.getName() + " found");
             }
-            final List<Object> args = getArgs(actionMethod, bean);
+            final List<Object> args = getArgs(actionMethod, params);
             ReflectionHelper.invokePrivileged(actionMethod, controller, args.toArray());
         } catch (InvokeActionException e) {
             throw e;
@@ -174,15 +277,14 @@ public class ControllerHandler {
         }
     }
 
-    private List<Object> getArgs(Method method, ServerControllerActionCallBean bean) {
+    private List<Object> getArgs(Method method, final Map<String, Object> params) {
         Assert.requireNonNull(method, "method");
-        Assert.requireNonNull(bean, "bean");
+        Assert.requireNonNull(params, "params");
 
         final int n = method.getParameterTypes().length;
         final List<Object> args = new ArrayList<>(n);
 
         for (int i = 0; i < n; i++) {
-            final Class<?> paramType = method.getParameterTypes()[i];
             String paramName = Integer.toString(i);
             for (Annotation annotation : method.getParameterAnnotations()[i]) {
                 if (annotation.annotationType().equals(Param.class)) {
@@ -192,7 +294,7 @@ public class ControllerHandler {
                     }
                 }
             }
-            args.add(bean.getParam(paramName, paramType));
+            args.add(params.get(paramName));
         }
         return args;
     }

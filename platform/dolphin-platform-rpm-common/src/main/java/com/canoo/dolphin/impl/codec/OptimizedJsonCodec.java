@@ -15,6 +15,15 @@
  */
 package com.canoo.dolphin.impl.codec;
 
+import com.canoo.dolphin.impl.codec.encoders.CallActionCommandEncoder;
+import com.canoo.dolphin.impl.codec.encoders.CommandEncoder;
+import com.canoo.dolphin.impl.codec.encoders.CreateControllerCommandEncoder;
+import com.canoo.dolphin.impl.codec.encoders.CreatePresentationModelEncoder;
+import com.canoo.dolphin.impl.codec.encoders.DestroyControllerCommandEncoder;
+import com.canoo.dolphin.impl.codec.encoders.ValueChangedCommandEncoder;
+import com.canoo.dolphin.impl.commands.CallActionCommand;
+import com.canoo.dolphin.impl.commands.CreateControllerCommand;
+import com.canoo.dolphin.impl.commands.DestroyControllerCommand;
 import com.canoo.impl.platform.core.Assert;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -37,6 +46,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.canoo.dolphin.impl.codec.CommandConstants.*;
+
 public class OptimizedJsonCodec implements Codec {
 
     private static final Logger LOG = LoggerFactory.getLogger(OptimizedJsonCodec.class);
@@ -49,11 +60,23 @@ public class OptimizedJsonCodec implements Codec {
     static {
         final CreatePresentationModelEncoder createPresentationModelEncoder = new CreatePresentationModelEncoder();
         ENCODERS.put(CreatePresentationModelCommand.class, createPresentationModelEncoder);
-        DECODERS.put("CreatePresentationModel", createPresentationModelEncoder);
+        DECODERS.put(CREATE_PRESENTATION_MODEL_COMMAND_ID, createPresentationModelEncoder);
 
         final ValueChangedCommandEncoder valueChangedCommandEncoder = new ValueChangedCommandEncoder();
         ENCODERS.put(ValueChangedCommand.class, valueChangedCommandEncoder);
-        DECODERS.put("ValueChanged", valueChangedCommandEncoder);
+        DECODERS.put(VALUE_CHANGED_COMMAND_ID, valueChangedCommandEncoder);
+
+        final CreateControllerCommandEncoder createControllerCommandEncoder = new CreateControllerCommandEncoder();
+        ENCODERS.put(CreateControllerCommand.class, createControllerCommandEncoder);
+        DECODERS.put(CREATE_CONTROLLER_COMMAND_ID, createControllerCommandEncoder);
+
+        final DestroyControllerCommandEncoder destroyControllerCommandEncoder = new DestroyControllerCommandEncoder();
+        ENCODERS.put(DestroyControllerCommand.class, destroyControllerCommandEncoder);
+        DECODERS.put(DESTROY_CONTROLLER_COMMAND_ID, destroyControllerCommandEncoder);
+
+        final CallActionCommandEncoder callActionCommandEncoder = new CallActionCommandEncoder();
+        ENCODERS.put(CallActionCommand.class, callActionCommandEncoder);
+        DECODERS.put(CALL_ACTION_COMMAND_ID, callActionCommandEncoder);
     }
 
     private final Codec fallBack = new JsonCodec();
@@ -104,7 +127,7 @@ public class OptimizedJsonCodec implements Codec {
                 JsonPrimitive idPrimitive = command.getAsJsonPrimitive("id");
 
                 String id = null;
-                if(idPrimitive != null) {
+                if (idPrimitive != null) {
                     id = idPrimitive.getAsString();
                 }
                 LOG.trace("Decoding command: {}", id);

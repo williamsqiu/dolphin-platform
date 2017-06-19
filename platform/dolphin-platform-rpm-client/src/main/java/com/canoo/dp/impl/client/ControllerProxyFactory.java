@@ -22,4 +22,6 @@ import java.util.concurrent.CompletableFuture;
 public interface ControllerProxyFactory {
 
     <T> CompletableFuture<ControllerProxy<T>> create(String name);
+
+    <T> CompletableFuture<ControllerProxy<T>> create(String name, String parentControllerId);
 }
