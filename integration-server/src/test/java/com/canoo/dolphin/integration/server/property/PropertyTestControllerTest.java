@@ -3,8 +3,8 @@ package com.canoo.dolphin.integration.server.property;
 
 import com.canoo.dolphin.integration.property.PropertyTestBean;
 import com.canoo.dolphin.integration.server.TestConfiguration;
-import com.canoo.dolphin.test.ControllerUnderTest;
-import com.canoo.dolphin.test.SpringTestNGControllerTest;
+import com.canoo.platform.spring.test.ControllerUnderTest;
+import com.canoo.platform.spring.test.SpringTestNGControllerTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.dolphin.test.impl;
+package com.canoo.impl.dp.spring.test;
 
 import com.canoo.dolphin.server.spring.AbstractSpringManagedBeanFactory;
 import com.canoo.impl.platform.core.Assert;

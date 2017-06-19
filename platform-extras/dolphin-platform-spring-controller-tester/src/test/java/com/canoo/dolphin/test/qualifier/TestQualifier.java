@@ -15,8 +15,8 @@
  */
 package com.canoo.dolphin.test.qualifier;
 
-import com.canoo.dolphin.test.ControllerUnderTest;
-import com.canoo.dolphin.test.SpringTestNGControllerTest;
+import com.canoo.platform.spring.test.ControllerUnderTest;
+import com.canoo.platform.spring.test.SpringTestNGControllerTest;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
