@@ -25,6 +25,8 @@ periode of 2 weeks. This release will be created from the master branches of all
 * A bugfix (minor) release provides a critical bugfix and will be created based on a regular /major Dolphin Platform
 release. This release will normally be based on the release branch of the major release.
 
+To manage releases and the containing issues we use waffle.io as kanban board. You can find it
+https://waffle.io/canoo/dolphin-platform[here]
 
 == Install needed tools for the release
 TODO: some tools must be installed on the local machine. Add overview for all tools

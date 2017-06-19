@@ -15,7 +15,7 @@
  */
 package com.canoo.dolphin.client.javafx;
 
-import com.canoo.dolphin.client.ClientInitializationException;
+import com.canoo.platform.client.ClientInitializationException;
 import com.canoo.platform.core.DolphinRuntimeException;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;

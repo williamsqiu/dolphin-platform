@@ -15,7 +15,7 @@
  */
 package com.canoo.dolphin.client.javafx;
 
-import com.canoo.dolphin.client.ClientConfiguration;
+import com.canoo.platform.client.ClientConfiguration;
 import javafx.application.Platform;
 
 import java.net.URL;

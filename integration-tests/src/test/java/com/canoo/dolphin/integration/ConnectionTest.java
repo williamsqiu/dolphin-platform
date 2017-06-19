@@ -15,7 +15,7 @@
  */
 package com.canoo.dolphin.integration;
 
-import com.canoo.dolphin.client.ClientContext;
+import com.canoo.platform.client.ClientContext;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 

@@ -15,7 +15,7 @@
  */
 package com.canoo.dolphin.webdeployment.client.view;
 
-import com.canoo.dolphin.client.ClientContext;
+import com.canoo.platform.client.ClientContext;
 import com.canoo.dolphin.client.javafx.binding.FXBinder;
 
 import com.canoo.dolphin.client.javafx.view.AbstractFXMLViewBinder;
