@@ -38,8 +38,8 @@ public class CallActionCommandEncoder extends AbstractCommandEncoder<CallActionC
         final JsonArray paramArray = new JsonArray();
         for(Map.Entry<String, Object> paramEntry : command.getParams().entrySet()) {
             final JsonObject paramObject = new JsonObject();
-            jsonCommand.addProperty(PARAM_NAME, paramEntry.getKey());
-            jsonCommand.add(PARAM_VALUE, ValueEncoder.encodeValue(paramEntry.getValue()));
+            paramObject.addProperty(PARAM_NAME, paramEntry.getKey());
+            paramObject.add(PARAM_VALUE, ValueEncoder.encodeValue(paramEntry.getValue()));
             paramArray.add(paramObject);
         }
         jsonCommand.add(PARAMS, paramArray);
