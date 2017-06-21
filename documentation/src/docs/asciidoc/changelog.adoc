@@ -8,6 +8,19 @@ be true most of the public API of the Dolphin Platform is stable since 0.8.5 and
 package structure or adding additional methods to public interfaces. In addition it will be best practice to not use any
 method of the API is annotated by `@Deprecated` since we plan to remove all this methods and classes for the final 1.0.0 release.
 
+== Version 0.15.0
+_Release date: Jun 21, 2017_
+
+* Bugfix for eventbus session filtering (https://github.com/canoo/dolphin-platform/issues/523[issue])
+* Remoting error handler for JS clients (https://github.com/canoo/dolphin-platform/issues/509[issue])
+* Definition of public API (https://github.com/canoo/dolphin-platform/issues/508[issue])
+* Support for multiple remoting error handlers (https://github.com/canoo/dolphin-platform/issues/510[issue])
+* Parent-Child-Relationship (https://github.com/canoo/dolphin-platform/issues/382[issue])
+* All old JS code is converted to ES6 (https://github.com/canoo/dolphin-platform/issues/496[issue])
+* Better logging levels for remoting layer (https://github.com/canoo/dolphin-platform/issues/499[issue])
+* Dolphin Platform core modules (https://github.com/canoo/dolphin-platform/issues/497[issue])
+* Refactoring of connect and disconnect in JS (https://github.com/canoo/dolphin-platform/issues/443[issue])
+
 == Version 0.14.0
 _Release date: Jun 06, 2017_
 
@@ -15,6 +28,11 @@ _Release date: Jun 06, 2017_
 * ClientId access on client side (https://github.com/canoo/dolphin-platform/issues/490[issue])
 * Bugfix for platform tries to register mbeans even if mbean registration is set to false (https://github.com/canoo/dolphin-platform/issues/482[issue])
 
+== Version 0.13.1
+_Release date: Jun 21, 2017_
+
+* Bugfix-Release that contains only a release of the Java part.
+* Contains fix for (https://github.com/canoo/dolphin-platform/issues/523[#523])
 
 == Version 0.13.0
 _Release date: May 17, 2017_

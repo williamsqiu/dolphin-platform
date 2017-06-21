@@ -5,7 +5,7 @@
     <script src="bower_components/webcomponentsjs/webcomponents.js"></script>
     <link rel="import" href="bower_components/paper-styles/paper-styles.html">
     <link rel="import" href="bower_components/font-roboto/roboto.html">
-    <script src="bower_components/dolphin-platform-polymer/dist/dolphin-platform-polymer.js"></script>
+    <script src="../dist/dolphin-platform-polymer.js"></script>
     <style>
         body {
             font-family: 'Roboto', 'Noto', sans-serif;
@@ -15,7 +15,8 @@
         }
     </style>
     <script>
-        clientContext = dolphin.clientContext('http://localhost:8080/process-monitor/dolphin');
+
+        clientContext = dolphin.clientContext('http://localhost:8080/todo-app/dolphin');
         clientContext.onConnect().then(function() {
             console.log('Dolphin connected...');
         }, function(error){
@@ -23,9 +24,9 @@
         });
 
     </script>
-    <link href="process-view.html" rel="import">
+    <link href="todo-view.html" rel="import">
 </head>
 <body unresolved class="fullbleed">
-<process-view></process-view>
+<todo-view></todo-view>
 </body>
 </html>
