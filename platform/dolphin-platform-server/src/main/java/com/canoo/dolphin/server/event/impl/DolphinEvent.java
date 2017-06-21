@@ -47,4 +47,8 @@ public class DolphinEvent<T extends Serializable> implements Serializable {
     public String getSenderSessionId() {
         return senderSessionId;
     }
+
+    public EventSessionFilter getSessionFilter() {
+        return sessionFilter;
+    }
 }
