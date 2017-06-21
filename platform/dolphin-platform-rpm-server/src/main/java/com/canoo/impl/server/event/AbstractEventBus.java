@@ -132,7 +132,10 @@ public abstract class AbstractEventBus implements DolphinEventBus {
                         @Override
                         public void run() {
                             LOG.trace("Calling event listener for topic {} in Dolphin Platform context {}", topic.getName(), sessionId);
-                            ((MessageListener<T>) listener).onMessage(event.getMessage());
+                            final EventSessionFilter sessionFilter = event.getSessionFilter();
+                            if(sessionFilter == null || sessionFilter.shouldHandleEvent(sessionId)) {
+                                ((MessageListener<T>) listener).onMessage(event.getMessage());
+                            }
                         }
                     });
                 }
@@ -140,7 +143,7 @@ public abstract class AbstractEventBus implements DolphinEventBus {
         }
     }
 
-    protected abstract <T extends Serializable> void publishForOtherSessions(DolphinEvent<T> event);
+    protected abstract <T extends Serializable> void publishForOtherSessions(final DolphinEvent<T> event);
 
     private void checkInitialization() {
         if(!initialized.get()) {
@@ -170,7 +173,8 @@ public abstract class AbstractEventBus implements DolphinEventBus {
         final DolphinContext currentContext = getCurrentContext();
         final DolphinEvent event = new DolphinEvent(currentContext != null ? currentContext.getId() : null, new DefaultMessage(topic, data, System.currentTimeMillis()), filter);
 
-        if (currentContext != null && filter.shouldHandleEvent(currentContext.getId())) {
+        //Handle listener in same session
+        if (currentContext != null && (filter == null || filter.shouldHandleEvent(currentContext.getId()))) {
             final List<MessageListener<T>> listenersInCurrentSession = getListenersForSessionAndTopic(currentContext.getId(), topic);
             for (MessageListener<T> listener : listenersInCurrentSession) {
                 listener.onMessage(event.getMessage());
