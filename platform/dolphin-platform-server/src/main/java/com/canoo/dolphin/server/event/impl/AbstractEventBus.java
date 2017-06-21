@@ -90,8 +90,7 @@ public abstract class AbstractEventBus implements DolphinEventBus {
     private <T extends Serializable> void publishData(final Topic<T> topic, final T data, final EventSessionFilter filter) {
         final DolphinSession currentSession = getCurrentDolphinSession();
         final DolphinEvent event = new DolphinEvent(currentSession != null ? currentSession.getId() : null, new DefaultMessage(topic, data, System.currentTimeMillis()), filter);
-
-        if (currentSession != null && filter.shouldHandleEvent(currentSession.getId())) {
+        if (currentSession != null && (filter == null || filter.shouldHandleEvent(currentSession.getId()))) {
             final List<MessageListener<T>> listenersInCurrentSession = getListenersForSessionAndTopic(currentSession.getId(), topic);
             for (MessageListener<T> listener : listenersInCurrentSession) {
                 listener.onMessage(event.getMessage());
@@ -126,7 +125,10 @@ public abstract class AbstractEventBus implements DolphinEventBus {
                         @Override
                         public void run() {
                             LOG.trace("Calling event listener for topic {} in Dolphin Platform context {}", topic.getName(), sessionId);
-                            ((MessageListener<T>) listener).onMessage(event.getMessage());
+                            final EventSessionFilter sessionFilter = event.getSessionFilter();
+                            if (sessionFilter == null || sessionFilter.shouldHandleEvent(sessionId)) {
+                                ((MessageListener<T>) listener).onMessage(event.getMessage());
+                            }
                         }
                     });
                 }
