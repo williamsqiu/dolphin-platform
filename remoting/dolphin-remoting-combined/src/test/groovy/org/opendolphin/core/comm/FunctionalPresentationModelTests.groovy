@@ -33,7 +33,6 @@ import org.opendolphin.core.server.action.DolphinServerAction
 import org.opendolphin.core.server.comm.ActionRegistry
 import org.opendolphin.core.server.comm.CommandHandler
 
-import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicLong
@@ -322,7 +321,7 @@ public class FunctionalPresentationModelTests {
 
     @Test
     public void testIdNotFoundInVariousCommands() {
-        clientDolphin.getClientConnector().send(new ValueChangedCommand("0", null, null));
+        clientDolphin.getClientConnector().send(new ValueChangedCommand("0", null));
         ServerModelStore.changeValueCommand(null, null, null);
         ServerModelStore.changeValueCommand(null, new ServerAttribute("a", 42), 42);
         context.assertionsDone();
@@ -395,55 +394,5 @@ public class FunctionalPresentationModelTests {
             }
 
         });
-    }
-
-    @Test
-    public void testStateConflictBetweenClientAndServer() {
-        final CountDownLatch latch = new CountDownLatch(1);
-        ClientPresentationModel pm = clientDolphin.getModelStore().createModel("pm", null, new ClientAttribute("attr", 1));
-        final ClientAttribute attr = pm.getAttribute("attr");
-
-        registerAction(serverDolphin, Set2Command.class, new CommandHandler<Set2Command>() {
-            @Override
-            public void handleCommand(Set2Command command, List<Command> response) {
-                try {
-                    latch.await();// mimic a server delay such that the client has enough time to change the value concurrently
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                    Assert.fail(e.getMessage());
-                }
-                Assert.assertEquals(1, serverDolphin.getModelStore().findPresentationModelById("pm").getAttribute("attr").getValue());
-                serverDolphin.getModelStore().findPresentationModelById("pm").getAttribute("attr").setValue(2);
-                Assert.assertEquals(2, serverDolphin.getModelStore().findPresentationModelById("pm").getAttribute("attr").getValue());// immediate change of server state
-            }
-
-        });
-
-        registerAction(serverDolphin, Assert3Command.class, new CommandHandler<Assert3Command>() {
-            @Override
-            public void handleCommand(Assert3Command command, List<Command> response) {
-                Assert.assertEquals(3, serverDolphin.getModelStore().findPresentationModelById("pm").getAttribute("attr").getValue());
-            }
-
-        });
-
-
-        clientDolphin.getClientConnector().send(new Set2Command(), null);
-        // a conflict could arise when the server value is changed ...
-        attr.setValue(3);// ... while the client value is changed concurrently
-        latch.countDown();
-        clientDolphin.getClientConnector().send(new Assert3Command(), null);
-        // since from the client perspective, the last change was to 3, server and client should both see the 3
-
-        // in between these calls a conflicting value change could be transferred, setting both value to 2
-        clientDolphin.getClientConnector().send(new Assert3Command(), new OnFinishedHandler() {
-            @Override
-            public void onFinished() {
-                Assert.assertEquals(3, attr.getValue());
-                context.assertionsDone();
-            }
-
-        });
-
     }
 }

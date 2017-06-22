@@ -153,19 +153,16 @@ public class BlindCommandBatcherTest extends GroovyTestCase {
         List<CommandAndHandler> list = new ArrayList<CommandAndHandler>();
         ValueChangedCommand command = new ValueChangedCommand();
         command.setAttributeId("0");
-        command.setOldValue(0);
         command.setNewValue(1);
         list.add(new CommandAndHandler(command));
 
         ValueChangedCommand command1 = new ValueChangedCommand();
         command1.setAttributeId("0");
-        command1.setOldValue(1);
         command1.setNewValue(2);
         list.add(new CommandAndHandler(command1));
 
         ValueChangedCommand command2 = new ValueChangedCommand();
         command2.setAttributeId("0");
-        command2.setOldValue(2);
         command2.setNewValue(3);
         list.add(new CommandAndHandler(command2));
 
@@ -181,7 +178,6 @@ public class BlindCommandBatcherTest extends GroovyTestCase {
             Assert.assertEquals(1, nextBatch.size());
             Assert.assertEquals(ValueChangedCommand.class, nextBatch.get(0).getCommand().getClass());
             ValueChangedCommand cmd = (ValueChangedCommand) nextBatch.get(0).getCommand();
-            Assert.assertEquals(0, cmd.getOldValue());
             Assert.assertEquals(3, cmd.getNewValue());
             Assert.assertTrue(batcher.isEmpty());
         } catch (InterruptedException e) {
@@ -199,7 +195,6 @@ public class BlindCommandBatcherTest extends GroovyTestCase {
         List<CommandAndHandler> list = new ArrayList<CommandAndHandler>();
         ValueChangedCommand command = new ValueChangedCommand();
         command.setAttributeId("0");
-        command.setOldValue(0);
         command.setNewValue(1);
 
 

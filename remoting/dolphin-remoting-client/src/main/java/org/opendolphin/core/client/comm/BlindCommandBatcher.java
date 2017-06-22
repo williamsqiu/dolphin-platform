@@ -245,23 +245,15 @@ public class BlindCommandBatcher extends CommandBatcher {
         shallWeEvenTryToMerge = true;
 
 
-        CommandAndHandler mergeable = null;
-        for (CommandAndHandler entry : blindCommands) {
-            if (entry.getCommand() != null && entry.getCommand() instanceof ValueChangedCommand && ((ValueChangedCommand) entry.getCommand()).getAttributeId().equals(valCmd.getAttributeId()) && ((ValueChangedCommand) entry.getCommand()).getNewValue().equals(valCmd.getOldValue())) {
-                mergeable = entry;
-                break;
+        if(blindCommands.get(blindCommands.size() -1).getCommand() instanceof ValueChangedCommand) {
+            ValueChangedCommand valueChangedCommand = (ValueChangedCommand) blindCommands.get(blindCommands.size() -1).getCommand();
+            if(valCmd.getAttributeId().equals(valueChangedCommand.getAttributeId())) {
+                LOG.trace("merging value changed command for attribute {} with new values {}  -> {}", valueChangedCommand.getAttributeId(), valueChangedCommand.getNewValue(), valCmd.getNewValue());
+                valueChangedCommand.setNewValue(valCmd.getNewValue());
+                return true;
             }
         }
-        if (mergeable == null){
-            return false;
-        }
-
-
-        ValueChangedCommand mergeableCmd = (ValueChangedCommand) mergeable.getCommand();
-        LOG.trace("merging value changed command for attribute {} with new values {}  -> {}", mergeableCmd.getAttributeId(), mergeableCmd.getNewValue(), valCmd.getNewValue());
-        mergeableCmd.setNewValue(valCmd.getNewValue());
-
-        return true;
+        return false;
     }
 
     protected CommandAndHandler take(final List<CommandAndHandler> intern) {

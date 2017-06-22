@@ -184,30 +184,21 @@ public class ClientConnectorTests extends GroovyTestCase {
 
     void testHandle_ValueChanged_AttrNotExists() {
         //TODO: How to convert this to Java?
-        assert !clientConnector.dispatchHandle(new ValueChangedCommand("0", "oldValue", "newValue"));
-    }
-
-    void testHandle_ValueChangedWithBadBaseValueIsIgnored() {
-        ClientAttribute attribute = new ClientAttribute("attr", "initialValue");
-        dolphin.getModelStore().registerAttribute(attribute);
-        clientConnector.dispatchHandle(new ValueChangedCommand(attribute.getId(), "no-such-base-value", "newValue"));
-        Assert.assertEquals("initialValue", attribute.getValue());
+        assert !clientConnector.dispatchHandle(new ValueChangedCommand("0", "newValue"));
     }
 
     void testHandle_ValueChangedWithBadBaseValueIgnoredInNonStrictMode() {
-        clientConnector.setStrictMode(false);
         ClientAttribute attribute = new ClientAttribute("attr", "initialValue");
         dolphin.getModelStore().registerAttribute(attribute);
-        clientConnector.dispatchHandle(new ValueChangedCommand(attribute.getId(), "no-such-base-value", "newValue"));
+        clientConnector.dispatchHandle(new ValueChangedCommand(attribute.getId(), "newValue"));
         Assert.assertEquals("newValue", attribute.getValue());
-        clientConnector.setStrictMode(true);
     }
 
     void testHandle_ValueChanged() {
         ClientAttribute attribute = new ClientAttribute("attr", "initialValue");
         dolphin.getModelStore().registerAttribute(attribute);
 
-        clientConnector.dispatchHandle(new ValueChangedCommand(attribute.id, "initialValue", "newValue"));
+        clientConnector.dispatchHandle(new ValueChangedCommand(attribute.id, "newValue"));
         Assert.assertEquals("newValue", attribute.getValue());
     }
 

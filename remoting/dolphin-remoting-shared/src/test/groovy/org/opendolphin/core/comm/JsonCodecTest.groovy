@@ -117,15 +117,12 @@ public class JsonCodecTest extends GroovyTestCase {
 
     private void assertCorrectEnAndDecoding(Object oldValue, Object newValue) {
         def codec = new JsonCodec()
-        def in_command = new ValueChangedCommand("bla", oldValue, newValue);
+        def in_command = new ValueChangedCommand("bla", newValue);
         def coded = codec.encode([in_command])
 
         def out_command = codec.decode(coded)[0];
         assert in_command != out_command;
         assert in_command.attributeId == out_command.attributeId
-//        assert in_command.oldValue.class == out_command.oldValue.class
-        assert in_command.oldValue == out_command.oldValue
-  //      assert in_command.newValue.class == out_command.newValue.class
         assert in_command.newValue == out_command.newValue
     }
 

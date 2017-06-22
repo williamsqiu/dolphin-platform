@@ -278,10 +278,6 @@ public abstract class AbstractClientConnector {
         });
     }
 
-    public void setStrictMode(final boolean strictMode) {
-        this.responseHandler.setStrictMode(strictMode);
-    }
-
     protected Command getReleaseCommand() {
         return releaseCommand;
     }

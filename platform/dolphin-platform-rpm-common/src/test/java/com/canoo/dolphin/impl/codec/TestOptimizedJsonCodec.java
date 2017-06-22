@@ -51,7 +51,6 @@ public class TestOptimizedJsonCodec {
     @Test
     public void shouldEncodeValueChangedCommandWithNulls() {
         final ValueChangedCommand command = new ValueChangedCommand();
-        command.setOldValue(null);
         command.setNewValue(null);
         command.setAttributeId("3357S");
         final String actual = new OptimizedJsonCodec().encode(Collections.<Command>singletonList(command));
@@ -61,61 +60,55 @@ public class TestOptimizedJsonCodec {
     @Test
     public void shouldEncodeValueChangedCommandWithStrings() {
         final ValueChangedCommand command = new ValueChangedCommand();
-        command.setOldValue("Hello World");
         command.setNewValue("Good Bye");
         command.setAttributeId("3357S");
         final String actual = new OptimizedJsonCodec().encode(Collections.<Command>singletonList(command));
-        assertThat(actual, is("[{\"a\":\"3357S\",\"o\":\"Hello World\",\"n\":\"Good Bye\",\"id\":\"ValueChanged\"}]"));
+        assertThat(actual, is("[{\"a\":\"3357S\",\"n\":\"Good Bye\",\"id\":\"ValueChanged\"}]"));
     }
 
     @Test
     public void shouldEncodeValueChangedCommandWithIntegers() {
         final ValueChangedCommand command = new ValueChangedCommand();
-        command.setOldValue(41);
         command.setNewValue(42);
         command.setAttributeId("3357S");
         final String actual = new OptimizedJsonCodec().encode(Collections.<Command>singletonList(command));
-        assertThat(actual, is("[{\"a\":\"3357S\",\"o\":41,\"n\":42,\"id\":\"ValueChanged\"}]"));
+        assertThat(actual, is("[{\"a\":\"3357S\",\"n\":42,\"id\":\"ValueChanged\"}]"));
     }
 
     @Test
     public void shouldEncodeValueChangedCommandWithLong() {
         final ValueChangedCommand command = new ValueChangedCommand();
-        command.setOldValue(1234567890987654321L);
         command.setNewValue(987654321234567890L);
         command.setAttributeId("3357S");
         final String actual = new OptimizedJsonCodec().encode(Collections.<Command>singletonList(command));
-        assertThat(actual, is("[{\"a\":\"3357S\",\"o\":1234567890987654321,\"n\":987654321234567890,\"id\":\"ValueChanged\"}]"));
+        assertThat(actual, is("[{\"a\":\"3357S\",\"n\":987654321234567890,\"id\":\"ValueChanged\"}]"));
     }
 
     @Test
     public void shouldEncodeValueChangedCommandWithFloats() {
         final ValueChangedCommand command = new ValueChangedCommand();
-        command.setOldValue(3.1415f);
         command.setNewValue(2.7182f);
         command.setAttributeId("3357S");
         final String actual = new OptimizedJsonCodec().encode(Collections.<Command>singletonList(command));
-        assertThat(actual, is("[{\"a\":\"3357S\",\"o\":3.1415,\"n\":2.7182,\"id\":\"ValueChanged\"}]"));
+        assertThat(actual, is("[{\"a\":\"3357S\",\"n\":2.7182,\"id\":\"ValueChanged\"}]"));
     }
 
     @Test
     public void shouldEncodeValueChangedCommandWithDoubles() {
         final ValueChangedCommand command = new ValueChangedCommand();
-        command.setOldValue(3.1415);
         command.setNewValue(2.7182);
         command.setAttributeId("3357S");
         final String actual = new OptimizedJsonCodec().encode(Collections.<Command>singletonList(command));
-        assertThat(actual, is("[{\"a\":\"3357S\",\"o\":3.1415,\"n\":2.7182,\"id\":\"ValueChanged\"}]"));
+        assertThat(actual, is("[{\"a\":\"3357S\",\"n\":2.7182,\"id\":\"ValueChanged\"}]"));
     }
 
     @Test
     public void shouldEncodeValueChangedCommandWithBooleans() {
         final ValueChangedCommand command = new ValueChangedCommand();
-        command.setOldValue(true);
         command.setNewValue(false);
         command.setAttributeId("3357S");
         final String actual = new OptimizedJsonCodec().encode(Collections.<Command>singletonList(command));
-        assertThat(actual, is("[{\"a\":\"3357S\",\"o\":true,\"n\":false,\"id\":\"ValueChanged\"}]"));
+        assertThat(actual, is("[{\"a\":\"3357S\",\"n\":false,\"id\":\"ValueChanged\"}]"));
     }
 
     @Test
@@ -174,7 +167,6 @@ public class TestOptimizedJsonCodec {
         final List<Command> commands = new OptimizedJsonCodec().decode("[{\"a\":\"3357S\",\"id\":\"ValueChanged\"}]");
 
         final ValueChangedCommand command = new ValueChangedCommand();
-        command.setOldValue(null);
         command.setNewValue(null);
         command.setAttributeId("3357S");
         assertThat(commands, hasSize(1));
@@ -183,10 +175,9 @@ public class TestOptimizedJsonCodec {
 
     @Test
     public void shouldDecodeValueChangedCommandWithStrings() {
-        final List<Command> commands = new OptimizedJsonCodec().decode("[{\"a\":\"3357S\",\"o\":\"Hello World\",\"n\":\"Good Bye\",\"id\":\"ValueChanged\"}]");
+        final List<Command> commands = new OptimizedJsonCodec().decode("[{\"a\":\"3357S\",\"n\":\"Good Bye\",\"id\":\"ValueChanged\"}]");
 
         final ValueChangedCommand command = new ValueChangedCommand();
-        command.setOldValue("Hello World");
         command.setNewValue("Good Bye");
         command.setAttributeId("3357S");
         assertThat(commands, hasSize(1));
@@ -195,70 +186,63 @@ public class TestOptimizedJsonCodec {
 
     @Test
     public void shouldDecodeValueChangedCommandWithIntegers() {
-        final List<Command> commands = new OptimizedJsonCodec().decode("[{\"a\":\"3357S\",\"o\":41,\"n\":42,\"id\":\"ValueChanged\"}]");
+        final List<Command> commands = new OptimizedJsonCodec().decode("[{\"a\":\"3357S\",\"n\":42,\"id\":\"ValueChanged\"}]");
 
         final ValueChangedCommand command = (ValueChangedCommand) commands.get(0);
         assertThat(command.getAttributeId(), is("3357S"));
-        assertThat(((Number)command.getOldValue()).intValue(), is(41));
         assertThat(((Number)command.getNewValue()).intValue(), is(42));
     }
 
     @Test
     public void shouldDecodeValueChangedCommandWithLong() {
-        final List<Command> commands = new OptimizedJsonCodec().decode("[{\"a\":\"3357S\",\"o\":1234567890987654321,\"n\":987654321234567890,\"id\":\"ValueChanged\"}]");
+        final List<Command> commands = new OptimizedJsonCodec().decode("[{\"a\":\"3357S\",\"n\":987654321234567890,\"id\":\"ValueChanged\"}]");
 
         final ValueChangedCommand command = (ValueChangedCommand) commands.get(0);
         assertThat(command.getAttributeId(), is("3357S"));
-        assertThat(((Number)command.getOldValue()).longValue(), is(1234567890987654321L));
         assertThat(((Number)command.getNewValue()).longValue(), is(987654321234567890L));
     }
 
     @Test
     public void shouldDecodeValueChangedCommandWithDoubles() {
-        final List<Command> commands = new OptimizedJsonCodec().decode("[{\"a\":\"3357S\",\"o\":3.1415,\"n\":2.7182,\"id\":\"ValueChanged\"}]");
+        final List<Command> commands = new OptimizedJsonCodec().decode("[{\"a\":\"3357S\",\"n\":2.7182,\"id\":\"ValueChanged\"}]");
 
         final ValueChangedCommand command = (ValueChangedCommand) commands.get(0);
         assertThat(command.getAttributeId(), is("3357S"));
-        assertThat(((Number)command.getOldValue()).doubleValue(), closeTo(3.1415, 1e-6));
         assertThat(((Number)command.getNewValue()).doubleValue(), closeTo(2.7182, 1e-6));
     }
 
     @Test
     public void shouldDecodeValueChangedCommandWithBigDecimal() {
-        final List<Command> commands = new OptimizedJsonCodec().decode("[{\"a\":\"3357S\",\"o\":3.1415,\"n\":2.7182,\"id\":\"ValueChanged\"}]");
+        final List<Command> commands = new OptimizedJsonCodec().decode("[{\"a\":\"3357S\",\"n\":2.7182,\"id\":\"ValueChanged\"}]");
 
         final ValueChangedCommand command = (ValueChangedCommand) commands.get(0);
         assertThat(command.getAttributeId(), is("3357S"));
-        assertThat(((Number) command.getOldValue()).doubleValue(), is(3.1415));
         assertThat(((Number) command.getNewValue()).doubleValue(), is(2.7182));
     }
 
     @Test
     public void shouldDecodeValueChangedCommandWithBigInteger() {
-        final List<Command> commands = new OptimizedJsonCodec().decode("[{\"a\":\"3357S\",\"o\":1234567890987654321,\"n\":987654321234567890,\"id\":\"ValueChanged\"}]");
+        final List<Command> commands = new OptimizedJsonCodec().decode("[{\"a\":\"3357S\",\"n\":987654321234567890,\"id\":\"ValueChanged\"}]");
 
         final ValueChangedCommand command = (ValueChangedCommand) commands.get(0);
         assertThat(command.getAttributeId(), is("3357S"));
-        assertThat(((Number) command.getOldValue()).longValue(), is(1234567890987654321L));
         assertThat(((Number) command.getNewValue()).longValue(), is(987654321234567890L));
     }
 
     @Test
     public void shouldDecodeValueChangedCommandWithUuid() {
-        final List<Command> commands = new OptimizedJsonCodec().decode("[{\"a\":\"3357S\",\"o\":\"8f0ef29c-279c-445a-abfd-c97a6b50a67a\",\"n\":\"{4b9e93fd-3738-4fe6-b2a4-1fea8d2e0dc4}\",\"id\":\"ValueChanged\"}]");
+        final List<Command> commands = new OptimizedJsonCodec().decode("[{\"a\":\"3357S\",\"n\":\"{4b9e93fd-3738-4fe6-b2a4-1fea8d2e0dc4}\",\"id\":\"ValueChanged\"}]");
 
         final ValueChangedCommand command = (ValueChangedCommand) commands.get(0);
         assertThat(command.getAttributeId(), is("3357S"));
-        assertThat(command.getOldValue().toString(), is("8f0ef29c-279c-445a-abfd-c97a6b50a67a"));
         assertThat(command.getNewValue().toString(), is("{4b9e93fd-3738-4fe6-b2a4-1fea8d2e0dc4}"));
     }
 
     @Test
     public void shouldDecodeValueChangedCommandWithBooleans() {
-        final List<Command> commands = new OptimizedJsonCodec().decode("[{\"a\":\"3357S\",\"o\":true,\"n\":false,\"id\":\"ValueChanged\"}]");
+        final List<Command> commands = new OptimizedJsonCodec().decode("[{\"a\":\"3357S\",\"n\":false,\"id\":\"ValueChanged\"}]");
 
         final ValueChangedCommand command = new ValueChangedCommand();
-        command.setOldValue(true);
         command.setNewValue(false);
         command.setAttributeId("3357S");
         assertThat(commands, hasSize(1));

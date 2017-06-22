@@ -23,7 +23,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
-import java.util.Objects;
 
 public class StoreValueChangeAction extends DolphinServerAction {
 
@@ -35,10 +34,6 @@ public class StoreValueChangeAction extends DolphinServerAction {
             public void handleCommand(final ValueChangedCommand command, final List response) {
                 final ServerAttribute attribute = getServerModelStore().findAttributeById(command.getAttributeId());
                 if (attribute != null) {
-                    if (! Objects.equals(attribute.getValue(), command.getOldValue())) {
-                        LOG.warn("S: updating attribute with id '{}' to new value '{}' even though its old command value '{}' does not conform to the old value of '{}'. Client overrules server.", command.getAttributeId(), command.getNewValue(), command.getOldValue(), attribute.getValue());
-                    }
-
                     attribute.silently(new Runnable() {
                         @Override
                         public void run() {
@@ -47,7 +42,7 @@ public class StoreValueChangeAction extends DolphinServerAction {
 
                     });
                 } else {
-                    LOG.error("S: cannot find attribute with id '{}' to change value from '{}' to '{}'.", command.getAttributeId(), command.getOldValue(), command.getNewValue());
+                    LOG.error("S: cannot find attribute with id '{}' to change value from to '{}'.", command.getAttributeId(), command.getNewValue());
                 }
             }
         });

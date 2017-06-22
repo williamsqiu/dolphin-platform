@@ -44,7 +44,7 @@ public class DefaultModelSynchronizer implements ModelSynchronizer {
 
     @Override
     public void onPropertyChanged(final PropertyChangeEvent evt) {
-        final Command command = new ValueChangedCommand(((Attribute) evt.getSource()).getId(), evt.getOldValue(), evt.getNewValue());
+        final Command command = new ValueChangedCommand(((Attribute) evt.getSource()).getId(),evt.getNewValue());
         send(command);
     }
 
