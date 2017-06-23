@@ -57,6 +57,7 @@ public class DolphinContextCommunicationHandler {
     public void handle(final HttpServletRequest request, final HttpServletResponse response) {
         Assert.requireNonNull(request, "request");
         Assert.requireNonNull(response, "response");
+
         final HttpSession httpSession = Assert.requireNonNull(request.getSession(), "request.getSession()");
         final ClientSession clientSession = sessionProvider.getCurrentClientSession();
         if (clientSession == null) {
@@ -169,10 +170,10 @@ public class DolphinContextCommunicationHandler {
     }
 
     private void writeCommands(final List<Command> commands, final HttpServletResponse response) throws IOException {
-        final String jsonResponse = codec.encode(commands);
-        response.getWriter().print(jsonResponse);
         response.setHeader("Content-Type", "application/json");
         response.setCharacterEncoding("UTF-8");
+        final String jsonResponse = codec.encode(commands);
+        response.getWriter().print(jsonResponse);
     }
 
     private List<Command> handle(final DolphinContext context, List<Command> commands) {
