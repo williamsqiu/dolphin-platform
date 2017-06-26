@@ -15,11 +15,13 @@
  */
 package com.canoo.dolphin.impl.codec;
 
+import com.canoo.dolphin.impl.commands.CallActionCommand;
 import org.hamcrest.Matchers;
 import org.opendolphin.core.comm.Command;
 import org.opendolphin.core.comm.CreatePresentationModelCommand;
 import org.opendolphin.core.comm.EmptyNotification;
 import org.opendolphin.core.comm.ValueChangedCommand;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.util.Arrays;
@@ -29,9 +31,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.closeTo;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 
 public class TestOptimizedJsonCodec {
 
@@ -46,6 +46,29 @@ public class TestOptimizedJsonCodec {
         final Command command = createCPMCommand();
         final String actual = new OptimizedJsonCodec().encode(Collections.singletonList(command));
         assertThat(actual, is("[" + createCPMCommandString() + "]"));
+    }
+
+    @Test
+    public void shouldEncodeCallActionCommand() {
+        final CallActionCommand command = new CallActionCommand();
+        command.setControllerId("4711");
+        command.setActionName("action");
+        final String actual = new OptimizedJsonCodec().encode(Collections.<Command>singletonList(command));
+        assertThat(actual, is("[{\"c\":\"4711\",\"n\":\"action\",\"p\":[],\"id\":\"CallAction\"}]"));
+    }
+
+    @Test
+    public void shouldEncodeCallActionWithParamsCommand() {
+        final CallActionCommand command = new CallActionCommand();
+        command.setControllerId("4711");
+        command.setActionName("action");
+        command.addParam("A", 1);
+        command.addParam("B", 7.6);
+        command.addParam("C", true);
+        command.addParam("D", null);
+        command.addParam("E", "Hello");
+        final String actual = new OptimizedJsonCodec().encode(Collections.<Command>singletonList(command));
+        assertThat(actual, is("[{\"c\":\"4711\",\"n\":\"action\",\"p\":[{\"n\":\"A\",\"v\":1},{\"n\":\"B\",\"v\":7.6},{\"n\":\"C\",\"v\":true},{\"n\":\"D\",\"v\":null},{\"n\":\"E\",\"v\":\"Hello\"}],\"id\":\"CallAction\"}]"));
     }
 
     @Test
@@ -271,6 +294,55 @@ public class TestOptimizedJsonCodec {
 
         assertThat(commands, hasSize(1));
         assertThat(commands.get(0), Matchers.<Command>samePropertyValuesAs(createCommand()));
+    }
+
+    @Test
+    public void shouldDecodeCallActionCommand() {
+        //given:
+        final String json = "[{\"c\":\"4711\",\"n\":\"action\",\"p\":[],\"id\":\"CallAction\"}]";
+
+        //when:
+        final List<Command> commands = new OptimizedJsonCodec().decode(json);
+
+        Assert.assertNotNull(commands);
+        Assert.assertEquals(commands.size(), 1);
+        Assert.assertNotNull(commands.get(0));
+        Assert.assertEquals(commands.get(0).getClass(), CallActionCommand.class);
+        Assert.assertEquals(((CallActionCommand)commands.get(0)).getActionName(), "action");
+        Assert.assertEquals(((CallActionCommand)commands.get(0)).getControllerId(), "4711");
+        Assert.assertNotNull(((CallActionCommand)commands.get(0)).getParams());
+        Assert.assertEquals(((CallActionCommand)commands.get(0)).getParams().size(), 0);
+
+    }
+
+    @Test
+    public void shouldDecodeCallActionWithParamsCommand() {
+        //given:
+        final String json = "[{\"c\":\"4711\",\"n\":\"action\",\"p\":[{\"n\":\"A\",\"v\":1},{\"n\":\"B\",\"v\":7.6},{\"n\":\"C\",\"v\":true},{\"n\":\"D\",\"v\":null},{\"n\":\"E\",\"v\":\"Hello\"}],\"id\":\"CallAction\"}]";
+
+        //when:
+        final List<Command> commands = new OptimizedJsonCodec().decode(json);
+
+        Assert.assertNotNull(commands);
+        Assert.assertEquals(commands.size(), 1);
+        Assert.assertNotNull(commands.get(0));
+        Assert.assertEquals(commands.get(0).getClass(), CallActionCommand.class);
+        Assert.assertEquals(((CallActionCommand)commands.get(0)).getActionName(), "action");
+        Assert.assertEquals(((CallActionCommand)commands.get(0)).getControllerId(), "4711");
+        Assert.assertNotNull(((CallActionCommand)commands.get(0)).getParams());
+        Assert.assertEquals(((CallActionCommand)commands.get(0)).getParams().size(), 5);
+        Assert.assertTrue(((CallActionCommand)commands.get(0)).getParams().containsKey("A"));
+        Assert.assertTrue(((CallActionCommand)commands.get(0)).getParams().containsKey("B"));
+        Assert.assertTrue(((CallActionCommand)commands.get(0)).getParams().containsKey("C"));
+        Assert.assertTrue(((CallActionCommand)commands.get(0)).getParams().containsKey("D"));
+        Assert.assertTrue(((CallActionCommand)commands.get(0)).getParams().containsKey("E"));
+        Assert.assertTrue(Number.class.isAssignableFrom(((CallActionCommand)commands.get(0)).getParams().get("A").getClass()));
+        Assert.assertEquals(((Number)((CallActionCommand)commands.get(0)).getParams().get("A")).intValue(), 1);
+        Assert.assertTrue(Number.class.isAssignableFrom(((CallActionCommand)commands.get(0)).getParams().get("B").getClass()));
+        Assert.assertEquals(((Number)((CallActionCommand)commands.get(0)).getParams().get("B")).doubleValue(), 7.6);
+        Assert.assertEquals(((CallActionCommand)commands.get(0)).getParams().get("C"), true);
+        Assert.assertEquals(((CallActionCommand)commands.get(0)).getParams().get("D"), null);
+        Assert.assertEquals(((CallActionCommand)commands.get(0)).getParams().get("E"), "Hello");
     }
 
 

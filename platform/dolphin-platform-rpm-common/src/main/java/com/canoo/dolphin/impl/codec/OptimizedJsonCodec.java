@@ -26,6 +26,7 @@ import com.canoo.dolphin.impl.commands.CreateControllerCommand;
 import com.canoo.dolphin.impl.commands.DestroyControllerCommand;
 import com.canoo.impl.platform.core.Assert;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -52,7 +53,7 @@ public class OptimizedJsonCodec implements Codec {
 
     private static final Logger LOG = LoggerFactory.getLogger(OptimizedJsonCodec.class);
 
-    private static final Gson GSON = new Gson();
+    private static final Gson GSON = new GsonBuilder().serializeNulls().create();
 
     private static final Map<Class<? extends Command>, CommandEncoder<?>> ENCODERS = new HashMap<>();
     private static final Map<String, CommandEncoder<?>> DECODERS = new HashMap<>();

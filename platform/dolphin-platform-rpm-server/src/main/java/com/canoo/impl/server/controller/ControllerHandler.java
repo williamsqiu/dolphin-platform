@@ -294,6 +294,9 @@ public class ControllerHandler {
                     }
                 }
             }
+            if(!params.containsKey(paramName)) {
+                throw new IllegalArgumentException("No value for param " + paramName + " specified!");
+            }
             args.add(params.get(paramName));
         }
         return args;

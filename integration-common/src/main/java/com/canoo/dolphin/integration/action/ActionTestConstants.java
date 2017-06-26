@@ -31,9 +31,11 @@ public interface ActionTestConstants {
 
     String PRIVATE_ACTION = "privateAction";
 
-    String WITH_STRING_PARAM_ACTION = "withStringParam";
+    String PRIVATE_WITH_STRING_PARAM_ACTION = "privateWithStringParam";
 
-    String WITH_SEVERAL_PARAMS_ACTION = "withSeveralParams";
+    String PUBLIC_WITH_BOOLEAN_PARAM_ACTION = "publicWithBooleanParam";
+
+    String PRIVATE_WITH_SEVERAL_PARAMS_ACTION = "privateWithSeveralParams";
 
     String WITH_EXCEPTION_ACTION = "withException";
 
