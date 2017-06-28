@@ -174,10 +174,12 @@ public abstract class AbstractEventBus implements DolphinEventBus {
         final DolphinEvent event = new DolphinEvent(currentContext != null ? currentContext.getId() : null, new DefaultMessage(topic, data, System.currentTimeMillis()), filter);
 
         //Handle listener in same session
-        if (currentContext != null && (filter == null || filter.shouldHandleEvent(currentContext.getId()))) {
-            final List<MessageListener<T>> listenersInCurrentSession = getListenersForSessionAndTopic(currentContext.getId(), topic);
-            for (MessageListener<T> listener : listenersInCurrentSession) {
-                listener.onMessage(event.getMessage());
+        if (currentContext != null) {
+            if (filter == null || filter.shouldHandleEvent(currentContext.getId())) {
+                final List<MessageListener<T>> listenersInCurrentSession = getListenersForSessionAndTopic(currentContext.getId(), topic);
+                for (MessageListener<T> listener : listenersInCurrentSession) {
+                    listener.onMessage(event.getMessage());
+                }
             }
         }
 
