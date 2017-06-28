@@ -70,6 +70,7 @@ A complete "Getting started" documentation can be found [here](https://canoo.git
 * [Documentation](https://canoo.github.io/dolphin-platform/)
 * [Dolphin Platform @ Twitter](https://twitter.com/DolphinPlatform)
 * [StackOverflow](http://stackoverflow.com/questions/tagged/dolphin-platform)
+* [Dolphin Platform community chat @ SLACK](https://join-dolphin-platform-slack.herokuapp.com/)
 
 The following GitHub repositories provides additional sources for the Dolphin Platform 
 * [Android client API Repository](https://github.com/canoo/dolphin-platform-android)
