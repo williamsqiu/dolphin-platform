@@ -10,6 +10,8 @@ other languages can be found in seperate repositories
 ([JavaScript](https://github.com/canoo/dolphin-platform-js), [AngularJS](https://github.com/canoo/dolphin-platform-angularjs), 
 [Polymer](https://github.com/canoo/dolphin-platform-polymer) and [Android](https://github.com/canoo/dolphin-platform-android)).
 
+If you have any questions or comments about Dolphin Platform you can [join our community chat at Slack](https://join-dolphin-platform-slack.herokuapp.com/).
+
 ![Dolphin Platform Logo](doc/logo.png)
 
 The Dolphin Platform is a framework that implements the presentation model pattern and provides a modern way to create enterprise applications. The Platform provides several client implementations that all can be used in combination with a general sever API.
