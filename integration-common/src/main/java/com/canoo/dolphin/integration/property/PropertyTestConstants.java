@@ -46,8 +46,7 @@ public interface PropertyTestConstants {
 
     String PING = "ping";
 
-
-    String STRING_VALUE = "Hello World!";
+    String STRING_VALUE = "Hello World! äüö €€€ @@@ 人物";
 
     Boolean BOOLEAN_VALUE = true;
 
