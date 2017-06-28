@@ -18,6 +18,7 @@ package com.canoo.impl.platform.core;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -27,6 +28,26 @@ public class ReflectionHelperTest {
     private List<String> forTypeParameterCheck1;
 
     private List forTypeParameterCheck2;
+
+    @Test
+    public void testIsNumber() {
+        Assert.assertTrue(ReflectionHelper.isNumber(Integer.class));
+        Assert.assertTrue(ReflectionHelper.isNumber(Integer.TYPE));
+        Assert.assertTrue(ReflectionHelper.isNumber(Long.class));
+        Assert.assertTrue(ReflectionHelper.isNumber(Long.TYPE));
+        Assert.assertTrue(ReflectionHelper.isNumber(Double.class));
+        Assert.assertTrue(ReflectionHelper.isNumber(Double.TYPE));
+        Assert.assertTrue(ReflectionHelper.isNumber(Float.class));
+        Assert.assertTrue(ReflectionHelper.isNumber(Float.TYPE));
+        Assert.assertTrue(ReflectionHelper.isNumber(Byte.class));
+        Assert.assertTrue(ReflectionHelper.isNumber(Byte.TYPE));
+        Assert.assertTrue(ReflectionHelper.isNumber(Short.class));
+        Assert.assertTrue(ReflectionHelper.isNumber(Short.TYPE));
+
+        Assert.assertFalse(ReflectionHelper.isNumber(Date.class));
+        Assert.assertFalse(ReflectionHelper.isNumber(String.class));
+        Assert.assertFalse(ReflectionHelper.isNumber(Object.class));
+    }
 
     @Test
     public void testGetTypeParameter() {

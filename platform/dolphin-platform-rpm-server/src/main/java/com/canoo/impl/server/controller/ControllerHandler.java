@@ -15,6 +15,7 @@
  */
 package com.canoo.impl.server.controller;
 
+import com.canoo.dolphin.impl.codec.JsonNumberUtils;
 import com.canoo.dolphin.internal.BeanRepository;
 import com.canoo.impl.platform.core.Assert;
 import com.canoo.impl.platform.core.ReflectionHelper;
@@ -269,6 +270,18 @@ public class ControllerHandler {
                 throw new InvokeActionException("No actionMethod with name " + actionName + " in controller class " + controllerClass.getName() + " found");
             }
             final List<Object> args = getArgs(actionMethod, params);
+            LOG.debug("Will call {} action for controller {} ({}.{}) with {} params.", actionName, controllerId, controllerClass, actionMethod.getName(), args.size());
+            if(LOG.isTraceEnabled()) {
+                int index = 1;
+                for(Object param : args) {
+                    if(param != null) {
+                        LOG.trace("Action param {}: {} with type {} is called with value \"{}\" and type {}", index, actionMethod.getParameters()[index - 1].getName(), actionMethod.getParameters()[index - 1].getType().getSimpleName(), param, param.getClass());
+                    } else {
+                        LOG.trace("Action param {}: {} with type {} is called with value null", index, actionMethod.getParameters()[index - 1].getName(), actionMethod.getParameters()[index - 1].getType().getSimpleName());
+                    }
+                    index++;
+                }
+            }
             ReflectionHelper.invokePrivileged(actionMethod, controller, args.toArray());
         } catch (InvokeActionException e) {
             throw e;
@@ -277,7 +290,7 @@ public class ControllerHandler {
         }
     }
 
-    private List<Object> getArgs(Method method, final Map<String, Object> params) {
+    private List<Object> getArgs(final Method method, final Map<String, Object> params) {
         Assert.requireNonNull(method, "method");
         Assert.requireNonNull(params, "params");
 
@@ -294,7 +307,20 @@ public class ControllerHandler {
                     }
                 }
             }
-            args.add(params.get(paramName));
+            if(!params.containsKey(paramName)) {
+                throw new IllegalArgumentException("No value for param " + paramName + " specified!");
+            }
+            Object value = params.get(paramName);
+            Class<?> type = method.getParameters()[i].getType();
+            if(value != null) {
+                LOG.trace("Param check of value {} with type {} for param with type {}", value, value.getClass(), type);
+            }
+            if(ReflectionHelper.isNumber(type)) {
+                args.add(JsonNumberUtils.convert(type, value));
+            } else {
+                args.add(value);
+            }
+
         }
         return args;
     }

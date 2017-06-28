@@ -59,21 +59,45 @@ public class ActionTestControllerTest extends SpringTestNGControllerTest {
     }
 
     @Test
-    public void callMethodWithStringParam() {
+    public void callPrivateMethodWithStringParam() {
         Assert.assertNull(controller.getModel().getBooleanValue());
         String value = "Hello Dolphin Platform!";
-        controller.invoke(WITH_STRING_PARAM_ACTION, new Param(PARAM_NAME, value));
+        controller.invoke(PRIVATE_WITH_STRING_PARAM_ACTION, new Param(PARAM_NAME, value));
         Assert.assertTrue(controller.getModel().getBooleanValue());
         Assert.assertEquals(controller.getModel().getStringValue(), value);
     }
 
     @Test
-    public void callMethodWithSeveralParams() {
+    public void callPrivateMethodWithNullParam() {
+        Assert.assertNull(controller.getModel().getBooleanValue());
+        controller.invoke(PRIVATE_WITH_STRING_PARAM_ACTION, new Param(PARAM_NAME, null));
+        Assert.assertTrue(controller.getModel().getBooleanValue());
+        Assert.assertNull(controller.getModel().getStringValue());
+    }
+
+    @Test
+    public void callPublicMethodWithBooleanParam() {
+        Assert.assertNull(controller.getModel().getBooleanValue());
+        String value = "Hello Dolphin Platform!";
+        controller.invoke(PUBLIC_WITH_BOOLEAN_PARAM_ACTION, new Param(PARAM_NAME, true));
+        Assert.assertTrue(controller.getModel().getBooleanValue());
+    }
+
+    @Test
+    public void callPublicMethodWithNullParam() {
+        Assert.assertNull(controller.getModel().getBooleanValue());
+        String value = "Hello Dolphin Platform!";
+        controller.invoke(PUBLIC_WITH_BOOLEAN_PARAM_ACTION, new Param(PARAM_NAME, null));
+        Assert.assertNull(controller.getModel().getBooleanValue());
+    }
+
+    @Test
+    public void callPrivateMethodWithSeveralParams() {
         Assert.assertNull(controller.getModel().getBooleanValue());
         String value1 = "Hello Dolphin Platform!";
         String value2 = "I want to test you!";
         int value3 = 356;
-        controller.invoke(WITH_SEVERAL_PARAMS_ACTION, new Param(PARAM_NAME_1, value1), new Param(PARAM_NAME_2, value2), new Param(PARAM_NAME_3, value3));
+        controller.invoke(PRIVATE_WITH_SEVERAL_PARAMS_ACTION, new Param(PARAM_NAME_1, value1), new Param(PARAM_NAME_2, value2), new Param(PARAM_NAME_3, value3));
         Assert.assertTrue(controller.getModel().getBooleanValue());
         Assert.assertEquals(controller.getModel().getStringValue(), value1 + value2 + value3);
     }
@@ -85,6 +109,6 @@ public class ActionTestControllerTest extends SpringTestNGControllerTest {
 
     @Test(expectedExceptions = ControllerTestException.class)
     public void callMethodWithWrongParamaters() {
-        controller.invoke(WITH_STRING_PARAM_ACTION);
+        controller.invoke(PRIVATE_WITH_STRING_PARAM_ACTION);
     }
 }

@@ -16,6 +16,7 @@
 package com.canoo.dolphin.impl.codec.encoders;
 
 import com.google.gson.JsonElement;
+import com.google.gson.JsonNull;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonPrimitive;
 
@@ -24,6 +25,9 @@ class ValueEncoder {
     private ValueEncoder() {}
 
     static JsonElement encodeValue(Object value) {
+        if(value == null) {
+            return JsonNull.INSTANCE;
+        }
         if (value instanceof String) {
             return new JsonPrimitive((String) value);
         }
@@ -33,7 +37,7 @@ class ValueEncoder {
         if (value instanceof Boolean) {
             return new JsonPrimitive((Boolean) value);
         }
-        throw new IllegalStateException("Only String, Number, and Boolean are allowed currently");
+        throw new JsonParseException("Only String, Number, and Boolean are allowed currently");
     }
 
     static Object decodeValue(JsonElement jsonElement) {
