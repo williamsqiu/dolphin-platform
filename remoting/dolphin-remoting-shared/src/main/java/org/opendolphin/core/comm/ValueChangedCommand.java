@@ -19,16 +19,13 @@ public final class ValueChangedCommand extends Command {
 
     private String attributeId;
 
-    private Object oldValue;
-
     private Object newValue;
 
     public ValueChangedCommand() {
     }
 
-    public ValueChangedCommand(String attributeId, Object oldValue, Object newValue) {
+    public ValueChangedCommand(String attributeId, Object newValue) {
         this.attributeId = attributeId;
-        this.oldValue = oldValue;
         this.newValue = newValue;
     }
 
@@ -38,14 +35,6 @@ public final class ValueChangedCommand extends Command {
 
     public void setAttributeId(String attributeId) {
         this.attributeId = attributeId;
-    }
-
-    public Object getOldValue() {
-        return oldValue;
-    }
-
-    public void setOldValue(Object oldValue) {
-        this.oldValue = oldValue;
     }
 
     public Object getNewValue() {
@@ -58,7 +47,7 @@ public final class ValueChangedCommand extends Command {
 
     @Override
     public String toString() {
-        return super.toString() + " attr:" + attributeId + ", " + String.valueOf(oldValue) + " -> " + String.valueOf(newValue);
+        return super.toString() + " attr:" + attributeId + " -> " + String.valueOf(newValue);
     }
 
 }

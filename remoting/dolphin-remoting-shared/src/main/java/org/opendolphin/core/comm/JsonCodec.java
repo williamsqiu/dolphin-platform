@@ -140,7 +140,6 @@ public class JsonCodec implements Codec {
     private Command createValueChangedCommand(JsonObject commandElement) {
         ValueChangedCommand command = new ValueChangedCommand();
         command.setAttributeId(stringOrNull(commandElement.get("attributeId")));
-        command.setOldValue(toValidValue(commandElement.get("oldValue")));
         command.setNewValue(toValidValue(commandElement.get("newValue")));
         return command;
     }

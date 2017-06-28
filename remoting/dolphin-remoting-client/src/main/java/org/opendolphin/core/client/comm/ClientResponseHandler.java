@@ -34,8 +34,6 @@ public class ClientResponseHandler {
 
     private final ClientModelStore clientModelStore;
 
-    private boolean strictMode = true;
-
     public ClientResponseHandler(final ClientModelStore clientModelStore) {
         this.clientModelStore = Objects.requireNonNull(clientModelStore);
     }
@@ -97,18 +95,11 @@ public class ClientResponseHandler {
     private void handleValueChangedCommand(final ValueChangedCommand serverCommand) {
         Attribute attribute = clientModelStore.findAttributeById(serverCommand.getAttributeId());
         if (attribute == null) {
-            LOG.warn("C: attribute with id '{}' not found, cannot update old value '{}' to new value '{}'", serverCommand.getAttributeId() ,serverCommand.getOldValue(), serverCommand.getNewValue() );
+            LOG.warn("C: attribute with id '{}' not found, cannot update to new value '{}'", serverCommand.getAttributeId() , serverCommand.getNewValue() );
             return;
         }
 
         if (attribute.getValue() == null && serverCommand.getNewValue() == null || (attribute.getValue() != null && serverCommand.getNewValue() != null && attribute.getValue().equals(serverCommand.getNewValue()))) {
-            return;
-        }
-
-
-        if (strictMode && ((attribute.getValue() == null && serverCommand.getOldValue() != null) || (attribute.getValue() != null && serverCommand.getOldValue() == null) || (attribute.getValue() != null && !attribute.getValue().equals(serverCommand.getOldValue())))) {
-            // todo dk: think about sending a RejectCommand here to tell the server about a possible lost update
-            LOG.warn("C: attribute with id '{}' and value '{}' cannot be set to new value '{}' because the change was based on an outdated old value of '{}'.", serverCommand.getAttributeId(), attribute.getValue(), serverCommand.getNewValue(), serverCommand.getOldValue());
             return;
         }
 
@@ -134,10 +125,6 @@ public class ClientResponseHandler {
                 attribute.setQualifier(serverCommand.getValue().toString());
             }
         }
-    }
-
-    public void setStrictMode(final boolean strictMode) {
-        this.strictMode = strictMode;
     }
 
 }

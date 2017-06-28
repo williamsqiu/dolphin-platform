@@ -83,7 +83,6 @@ public class CommunicationTests {
                 Assert.assertEquals(ValueChangedCommand.class, receivedCommand.get().getClass());
 
                 ValueChangedCommand cmd = (ValueChangedCommand) receivedCommand.get();
-                Assert.assertEquals(null, cmd.getOldValue());
                 Assert.assertEquals("initial", cmd.getNewValue());
                 config.assertionsDone();
             }
@@ -125,7 +124,7 @@ public class CommunicationTests {
         CommandHandler<CreatePresentationModelCommand> setValueAction = new CommandHandler<CreatePresentationModelCommand>() {
             @Override
             public void handleCommand(CreatePresentationModelCommand command, List<Command> response) {
-                response.add(new ValueChangedCommand(command.getAttributes().get(0).get("id").toString(), null, "set from server"));
+                response.add(new ValueChangedCommand(command.getAttributes().get(0).get("id").toString(), "set from server"));
             }
 
         };

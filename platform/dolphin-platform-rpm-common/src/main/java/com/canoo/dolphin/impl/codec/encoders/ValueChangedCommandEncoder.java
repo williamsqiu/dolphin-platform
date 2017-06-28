@@ -30,9 +30,6 @@ public class ValueChangedCommandEncoder extends AbstractCommandEncoder<ValueChan
 
         final JsonObject jsonCommand = new JsonObject();
         jsonCommand.addProperty(VALUE_CHANGED_ATTRIBUTE_ID, command.getAttributeId());
-        if (command.getOldValue() != null) {
-            jsonCommand.add(OLD_VALUE, ValueEncoder.encodeValue(command.getOldValue()));
-        }
         if (command.getNewValue() != null) {
             jsonCommand.add(NEW_VALUE, ValueEncoder.encodeValue(command.getNewValue()));
         }
@@ -48,7 +45,6 @@ public class ValueChangedCommandEncoder extends AbstractCommandEncoder<ValueChan
             final ValueChangedCommand command = new ValueChangedCommand();
 
             command.setNewValue(ValueEncoder.decodeValue(jsonObject.get(NEW_VALUE)));
-            command.setOldValue(ValueEncoder.decodeValue(jsonObject.get(OLD_VALUE)));
             command.setAttributeId(getStringElement(jsonObject, VALUE_CHANGED_ATTRIBUTE_ID));
 
             return command;

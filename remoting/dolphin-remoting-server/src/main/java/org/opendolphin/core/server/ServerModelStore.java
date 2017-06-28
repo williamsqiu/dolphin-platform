@@ -168,7 +168,7 @@ public class ServerModelStore extends ModelStore<ServerAttribute, ServerPresenta
      */
     @Deprecated
     public static void forceChangeValue(final Object value, final List<Command> response, final ServerAttribute attribute) {
-        response.add(new ValueChangedCommand(attribute.getId(), attribute.getValue(), value));
+        response.add(new ValueChangedCommand(attribute.getId(), value));
     }
 
 
