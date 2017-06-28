@@ -2,7 +2,7 @@
 <a href="http://www.canoo.com"><img src="http://www.guigarage.com/wordpress/wp-content/uploads/2016/08/canoo_support.png"/></a>
 </p>
 
-# Dolphin Platform [![Travis Build](https://travis-ci.org/canoo/dolphin-platform.svg?branch=master)](https://travis-ci.org/canoo/dolphin-platform) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.canoo.dolphin-platform/dolphin-platform-core/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.canoo.dolphin-platform/dolphin-platform-core)[![Slack chat](https://join-dolphin-platform-slack.herokuapp.com/badge.svg)](https://join-dolphin-platform-slack.herokuapp.com/)
+# Dolphin Platform [![Travis Build](https://travis-ci.org/canoo/dolphin-platform.svg?branch=master)](https://travis-ci.org/canoo/dolphin-platform) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.canoo.dolphin-platform/dolphin-platform-core/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.canoo.dolphin-platform/dolphin-platform-core) [![Slack chat](https://join-dolphin-platform-slack.herokuapp.com/badge.svg)](https://join-dolphin-platform-slack.herokuapp.com/)
                                                                                                                                
 
 This repository contains all Java related sources of the Dolphin Platform. Clients for 
