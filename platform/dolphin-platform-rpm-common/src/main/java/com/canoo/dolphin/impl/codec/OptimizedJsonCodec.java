@@ -17,12 +17,16 @@ package com.canoo.dolphin.impl.codec;
 
 import com.canoo.dolphin.impl.codec.encoders.CallActionCommandEncoder;
 import com.canoo.dolphin.impl.codec.encoders.CommandEncoder;
+import com.canoo.dolphin.impl.codec.encoders.CreateContextCommandEncoder;
 import com.canoo.dolphin.impl.codec.encoders.CreateControllerCommandEncoder;
 import com.canoo.dolphin.impl.codec.encoders.CreatePresentationModelEncoder;
+import com.canoo.dolphin.impl.codec.encoders.DestroyContextCommandEncoder;
 import com.canoo.dolphin.impl.codec.encoders.DestroyControllerCommandEncoder;
 import com.canoo.dolphin.impl.codec.encoders.ValueChangedCommandEncoder;
 import com.canoo.dolphin.impl.commands.CallActionCommand;
+import com.canoo.dolphin.impl.commands.CreateContextCommand;
 import com.canoo.dolphin.impl.commands.CreateControllerCommand;
+import com.canoo.dolphin.impl.commands.DestroyContextCommand;
 import com.canoo.dolphin.impl.commands.DestroyControllerCommand;
 import com.canoo.impl.platform.core.Assert;
 import com.google.gson.Gson;
@@ -78,6 +82,14 @@ public class OptimizedJsonCodec implements Codec {
         final CallActionCommandEncoder callActionCommandEncoder = new CallActionCommandEncoder();
         ENCODERS.put(CallActionCommand.class, callActionCommandEncoder);
         DECODERS.put(CALL_ACTION_COMMAND_ID, callActionCommandEncoder);
+
+        final CreateContextCommandEncoder createContextCommandEncoder = new CreateContextCommandEncoder();
+        ENCODERS.put(CreateContextCommand.class, createContextCommandEncoder);
+        DECODERS.put(CREATE_CONTEXT_COMMAND_ID, createContextCommandEncoder);
+
+        final DestroyContextCommandEncoder destroyContextCommandEncoder = new DestroyContextCommandEncoder();
+        ENCODERS.put(DestroyContextCommand.class, destroyContextCommandEncoder);
+        DECODERS.put(DESTROY_CONTEXT_COMMAND_ID, destroyContextCommandEncoder);
     }
 
     private final Codec fallBack = new JsonCodec();
