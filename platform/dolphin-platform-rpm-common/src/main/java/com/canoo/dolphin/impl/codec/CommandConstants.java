@@ -19,6 +19,10 @@ public interface CommandConstants {
 
     String ID = "id";
 
+    String CREATE_CONTEXT_COMMAND_ID = "CreateContext";
+    String DESTROY_CONTEXT_COMMAND_ID = "DestroyContext";
+
+
 
     String VALUE_CHANGED_COMMAND_ID = "ValueChanged";
     String VALUE_CHANGED_ATTRIBUTE_ID = "a";
