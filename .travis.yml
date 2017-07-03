@@ -25,10 +25,10 @@ script:
 after_success:
   - ./gradlew coveralls
   - if [ "$TRAVIS_BRANCH" == "master" ]; then
-    echo 'Building documentation with asciidoctor'
+    echo 'Building documentation with asciidoctor';
     ./gradlew :documentation:asciidoctor;
     cd documentation/build/asciidoc/html5/;
-    echo 'Copy JavaDoc'
+    echo 'Copy JavaDoc';
     mkdir javadoc;
     mkdir javadoc/core;
     cp -a ../../../../platform/dolphin-platform-core/build/docs/javadoc/. javadoc/core;
@@ -48,13 +48,15 @@ after_success:
     cp -a ../../../../platform/dolphin-platform-server-javaee/build/docs/javadoc/. javadoc/server-jee;
     mkdir javadoc/server-spring;
     cp -a ../../../../platform/dolphin-platform-server-javaee/build/docs/javadoc/. javadoc/server-spring;
-    echo 'Create local git repo'
+    echo 'Create local git repo';
     git init;
     git config user.name "${GH_USER_NAME}";
     git config user.email "{GH_USER_EMAIL}";
-    echo 'Add files to git repo'
-    git add . ; git commit -m "Deploy to GitHub Pages";
-    echo 'Push to Github Pages repo'
+    echo 'Add files to git repo';
+    git add .;
+    echo 'Commit files to git repo';
+    git commit -m "Deploy to GitHub Pages";
+    echo 'Push to Github Pages repo';
     git push --force "https://${GH_TOKEN}@${GH_REF}" master:gh-pages;
-    echo 'Done'
+    echo 'Done';
     fi
