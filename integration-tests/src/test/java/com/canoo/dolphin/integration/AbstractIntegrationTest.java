@@ -73,7 +73,7 @@ public class AbstractIntegrationTest {
         try {
             waitUntilServerIsUp(endpoint, 5, TimeUnit.MINUTES);
             ClientConfiguration configuration = new ClientConfiguration(new URL(endpoint + "/dolphin"), r -> r.run());
-            configuration.setConnectionTimeout(10_000L);
+            configuration.setConnectionTimeout(60_000L);
             ClientContext clientContext = ClientContextFactory.create(configuration);
             Assert.requireNonNull(clientContext, "clientContext");
 
