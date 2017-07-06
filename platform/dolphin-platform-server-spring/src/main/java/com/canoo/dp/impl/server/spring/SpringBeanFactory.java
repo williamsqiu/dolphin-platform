@@ -33,6 +33,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
+
 /**
  * Provides all Dolphin Platform Beans and Scopes for CDI
  */
@@ -47,7 +51,7 @@ public class SpringBeanFactory {
         final DolphinContextProvider contextProvider = PlatformBootstrap.getServerCoreComponents().getInstance(DolphinContextProvider.class);
         Assert.requireNonNull(contextProvider, "contextProvider");
 
-        final DolphinContext context =contextProvider.getCurrentDolphinContext();
+        final DolphinContext context = contextProvider.getCurrentDolphinContext();
         Assert.requireNonNull(context, "context");
 
         return new RemotingContextImpl(context, eventBus);
@@ -81,7 +85,20 @@ public class SpringBeanFactory {
     @Bean(name = "dolphinEventBus")
     @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
     protected DolphinEventBus createEventBus() {
-        return PlatformBootstrap.getServerCoreComponents().getInstance(DolphinEventBus.class);
+        return (DolphinEventBus) Proxy.newProxyInstance(getClass().getClassLoader(), new Class[]{DolphinEventBus.class}, new InvocationHandler() {
+            @Override
+            public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+                DolphinEventBus instance = PlatformBootstrap.getServerCoreComponents().getInstance(DolphinEventBus.class);
+                if (instance != null) {
+                    return method.invoke(instance, args);
+                }
+                if (method.getName().equals("publish")) {
+                    return null;
+                } else {
+                    throw new IllegalStateException("Subscription can only be done from Dolphin Context!");
+                }
+            }
+        });
     }
 
     @Bean(name = "propertyBinder")

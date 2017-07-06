@@ -30,6 +30,9 @@ import com.canoo.platform.server.javaee.ClientScoped;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 
 /**
  * Factory that provides all needed Dolphin Platform extensions as CDI beans.
@@ -71,7 +74,20 @@ public class CdiBeanFactory {
     @Produces
     @ApplicationScoped
     public DolphinEventBus createEventBus() {
-        return PlatformBootstrap.getServerCoreComponents().getInstance(DolphinEventBus.class);
+        return (DolphinEventBus) Proxy.newProxyInstance(getClass().getClassLoader(), new Class[]{DolphinEventBus.class}, new InvocationHandler() {
+            @Override
+            public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+                DolphinEventBus instance = PlatformBootstrap.getServerCoreComponents().getInstance(DolphinEventBus.class);
+                if (instance != null) {
+                    return method.invoke(instance, args);
+                }
+                if (method.getName().equals("publish")) {
+                    return null;
+                } else {
+                    throw new IllegalStateException("Subscription can only be done from Dolphin Context!");
+                }
+            }
+        });
     }
 
     @Produces
