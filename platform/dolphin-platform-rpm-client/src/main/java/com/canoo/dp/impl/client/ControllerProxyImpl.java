@@ -86,7 +86,7 @@ public class ControllerProxyImpl<T> implements ControllerProxy<T> {
                     try {
                         callActionCommand.addParam(param.getName(), converters.getConverter(value.getClass()).convertToDolphin(value));
                     } catch (ValueConverterException e) {
-                        throw new MappingException("Error in value conversion for action param", e);
+                        throw new MappingException("Error in value conversion of param '" + param.getName() + "' for action '" + actionName + "'", e);
                     }
                 }
             }
