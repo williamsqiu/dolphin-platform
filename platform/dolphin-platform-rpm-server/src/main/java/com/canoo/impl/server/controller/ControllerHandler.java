@@ -84,7 +84,7 @@ public class ControllerHandler {
         this.beanBuilder = Assert.requireNonNull(beanBuilder, "beanBuilder");
         this.controllerRepository = Assert.requireNonNull(controllerRepository, "controllerRepository");
         this.beanRepository = Assert.requireNonNull(beanRepository, "beanRepository");
-        this.converters = converters;
+        this.converters = Assert.requireNonNull(converters, "converters");
     }
 
     public Object getControllerModel(String id) {
