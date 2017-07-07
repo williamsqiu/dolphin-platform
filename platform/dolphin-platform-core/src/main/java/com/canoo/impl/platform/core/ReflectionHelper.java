@@ -19,7 +19,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Proxy;
@@ -88,7 +87,7 @@ public class ReflectionHelper {
                     method.setAccessible(true);
                     method.invoke(instance, args);
                     return null; // return nothing...
-                } catch (InvocationTargetException | IllegalAccessException ex) {
+                } catch (Exception ex) {
                     throw new IllegalStateException("Cannot invoke method: "
                             + method, ex);
                 } finally {

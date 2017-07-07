@@ -283,10 +283,8 @@ public class ControllerHandler {
                 }
             }
             ReflectionHelper.invokePrivileged(actionMethod, controller, args.toArray());
-        } catch (InvokeActionException e) {
-            throw e;
         } catch (Exception e) {
-            throw new InvokeActionException(e);
+            throw new InvokeActionException("Can not call action '" + actionName + "'", e);
         }
     }
 
