@@ -88,8 +88,8 @@ public class ReflectionHelper {
                     method.invoke(instance, args);
                     return null; // return nothing...
                 } catch (Exception ex) {
-                    throw new IllegalStateException("Cannot invoke method: "
-                            + method, ex);
+                    throw new IllegalArgumentException("Cannot invoke method '"
+                            + method.getName() + "' on instance of type '" + instance.getClass() + "'. Method details: " + method.toGenericString(), ex);
                 } finally {
                     method.setAccessible(wasAccessible);
                 }
