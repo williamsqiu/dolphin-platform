@@ -320,6 +320,9 @@ public class ControllerHandler {
                 LOG.trace("Param check of value {} with type {} for param with type {}", value, value.getClass(), type);
                 args.add(converters.getConverter(type).convertFromDolphin(value));
             } else {
+                if(type.isPrimitive()) {
+                    throw new IllegalArgumentException("Can not use 'null' for primitive type of parameter '" + paramName + "'");
+                }
                 args.add(null);
             }
         }
