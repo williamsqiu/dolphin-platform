@@ -89,7 +89,7 @@ public class ReflectionHelper {
                     return null; // return nothing...
                 } catch (Exception ex) {
                     throw new IllegalArgumentException("Cannot invoke method '"
-                            + method + "' on instance '" + instance + "'", ex);
+                            + method.getName() + "' on instance of type '" + instance.getClass() + "'. Method details: " + method, ex);
                 } finally {
                     method.setAccessible(wasAccessible);
                 }
