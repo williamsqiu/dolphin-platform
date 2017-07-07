@@ -86,16 +86,22 @@ public class SpringBeanFactory {
     @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
     protected DolphinEventBus createEventBus() {
         return (DolphinEventBus) Proxy.newProxyInstance(getClass().getClassLoader(), new Class[]{DolphinEventBus.class}, new InvocationHandler() {
+
+            private String dummyObject = "";
+
             @Override
             public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
                 DolphinEventBus instance = PlatformBootstrap.getServerCoreComponents().getInstance(DolphinEventBus.class);
                 if (instance != null) {
                     return method.invoke(instance, args);
                 }
-                if (method.getName().equals("publish")) {
-                    return null;
-                } else {
+                if(method.getDeclaringClass().equals(Object.class)) {
+                    return method.invoke(dummyObject, args);
+                }
+                if (method.getName().equals("subscribe")) {
                     throw new IllegalStateException("Subscription can only be done from Dolphin Context!");
+                } else {
+                    return null;
                 }
             }
         });
