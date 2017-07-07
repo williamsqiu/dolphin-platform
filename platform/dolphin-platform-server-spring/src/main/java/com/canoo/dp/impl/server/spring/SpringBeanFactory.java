@@ -22,6 +22,7 @@ import com.canoo.impl.server.client.ClientSessionProvider;
 import com.canoo.impl.server.context.DolphinContext;
 import com.canoo.impl.server.context.DolphinContextProvider;
 import com.canoo.impl.server.context.RemotingContextImpl;
+import com.canoo.impl.server.event.LazyEventBusInvocationHandler;
 import com.canoo.platform.server.RemotingContext;
 import com.canoo.platform.server.binding.PropertyBinder;
 import com.canoo.platform.server.client.ClientSession;
@@ -33,8 +34,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
 /**
@@ -85,26 +84,7 @@ public class SpringBeanFactory {
     @Bean(name = "dolphinEventBus")
     @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
     protected DolphinEventBus createEventBus() {
-        return (DolphinEventBus) Proxy.newProxyInstance(getClass().getClassLoader(), new Class[]{DolphinEventBus.class}, new InvocationHandler() {
-
-            private String dummyObject = "";
-
-            @Override
-            public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-                DolphinEventBus instance = PlatformBootstrap.getServerCoreComponents().getInstance(DolphinEventBus.class);
-                if (instance != null) {
-                    return method.invoke(instance, args);
-                }
-                if(method.getDeclaringClass().equals(Object.class)) {
-                    return method.invoke(dummyObject, args);
-                }
-                if (method.getName().equals("subscribe")) {
-                    throw new IllegalStateException("Subscription can only be done from Dolphin Context!");
-                } else {
-                    return null;
-                }
-            }
-        });
+        return (DolphinEventBus) Proxy.newProxyInstance(getClass().getClassLoader(), new Class[]{DolphinEventBus.class}, new LazyEventBusInvocationHandler());
     }
 
     @Bean(name = "propertyBinder")
