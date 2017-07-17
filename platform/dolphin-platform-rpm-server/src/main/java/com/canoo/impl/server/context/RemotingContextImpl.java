@@ -21,6 +21,7 @@ import com.canoo.impl.server.binding.PropertyBinderImpl;
 import com.canoo.platform.server.ClientSessionExecutor;
 import com.canoo.platform.server.RemotingContext;
 import com.canoo.platform.server.binding.PropertyBinder;
+import com.canoo.platform.server.client.ClientSession;
 import com.canoo.platform.server.event.DolphinEventBus;
 
 import java.util.concurrent.Executor;
@@ -69,5 +70,10 @@ public class RemotingContextImpl implements RemotingContext {
     @Override
     public DolphinEventBus getEventBus() {
         return eventBus;
+    }
+
+    @Override
+    public ClientSession getClientSession() {
+        return dolphinContext.getDolphinSession();
     }
 }
