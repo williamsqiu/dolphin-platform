@@ -17,6 +17,7 @@ package com.canoo.platform.server;
 
 import com.canoo.dolphin.BeanManager;
 import com.canoo.platform.server.binding.PropertyBinder;
+import com.canoo.platform.server.client.ClientSession;
 import com.canoo.platform.server.event.DolphinEventBus;
 
 public interface RemotingContext {
@@ -30,4 +31,6 @@ public interface RemotingContext {
     BeanManager getBeanManager();
 
     DolphinEventBus getEventBus();
+
+    ClientSession getClientSession();
 }
