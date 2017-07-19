@@ -1,41 +1,36 @@
-/*
- * Copyright 2015-2017 Canoo Engineering AG.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-package org.opendolphin.core.comm
+package org.opendolphin.core.comm;
 
-import core.client.comm.InMemoryClientConnector
-import org.junit.After
-import org.junit.Assert
-import org.junit.Before
-import org.junit.Test
-import org.opendolphin.core.Attribute
-import org.opendolphin.core.PresentationModel
-import org.opendolphin.core.client.ClientAttribute
-import org.opendolphin.core.client.ClientDolphin
-import org.opendolphin.core.client.ClientPresentationModel
-import org.opendolphin.core.client.comm.BlindCommandBatcher
-import org.opendolphin.core.client.comm.OnFinishedHandler
-import org.opendolphin.core.client.comm.RunLaterUiThreadHandler
-import org.opendolphin.core.server.*
-import org.opendolphin.core.server.action.DolphinServerAction
-import org.opendolphin.core.server.comm.ActionRegistry
-import org.opendolphin.core.server.comm.CommandHandler
+import core.client.comm.InMemoryClientConnector;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.opendolphin.core.Attribute;
+import org.opendolphin.core.PresentationModel;
+import org.opendolphin.core.client.ClientAttribute;
+import org.opendolphin.core.client.ClientDolphin;
+import org.opendolphin.core.client.ClientPresentationModel;
+import org.opendolphin.core.client.comm.BlindCommandBatcher;
+import org.opendolphin.core.client.comm.OnFinishedHandler;
+import org.opendolphin.core.client.comm.RunLaterUiThreadHandler;
+import org.opendolphin.core.server.DTO;
+import org.opendolphin.core.server.DefaultServerDolphin;
+import org.opendolphin.core.server.ServerAttribute;
+import org.opendolphin.core.server.ServerDolphin;
+import org.opendolphin.core.server.ServerModelStore;
+import org.opendolphin.core.server.ServerPresentationModel;
+import org.opendolphin.core.server.Slot;
+import org.opendolphin.core.server.action.DolphinServerAction;
+import org.opendolphin.core.server.comm.ActionRegistry;
+import org.opendolphin.core.server.comm.CommandHandler;
 
-import java.util.concurrent.TimeUnit
-import java.util.concurrent.atomic.AtomicBoolean
-import java.util.concurrent.atomic.AtomicLong
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicLong;
+
 /**
  * Showcase for how to test an application without the GUI by
  * issuing the respective commands and model changes against the
@@ -82,8 +77,7 @@ public class FunctionalPresentationModelTests {
     private volatile TestInMemoryConfig context;
     private DefaultServerDolphin serverDolphin;
     private ClientDolphin clientDolphin;
-
-
+    
     @Before
     public void setUp() {
         context = new TestInMemoryConfig();
@@ -99,6 +93,7 @@ public class FunctionalPresentationModelTests {
             e.printStackTrace();
             Assert.fail(e.getMessage());
         }
+
     }
 
     private <T extends Command> void registerAction(ServerDolphin serverDolphin, final Class<T> commandClass, final CommandHandler<T> handler) {
@@ -145,7 +140,9 @@ public class FunctionalPresentationModelTests {
                 for (int i = 0; i < 100; i++) {
                     ServerModelStore.presentationModelCommand(response, "id_" + id.getAndIncrement(), null, new DTO(new Slot("attr_" + i, i)));
                 }
+
             }
+
         });
 
         final long start = System.nanoTime();
@@ -162,8 +159,8 @@ public class FunctionalPresentationModelTests {
         clientDolphin.getClientConnector().send(new PerformanceCommand(), new OnFinishedHandler() {
             @Override
             public void onFinished() {
-                System.out.print(new char[0]);
-                System.out.println((System.nanoTime() - start) / 1_000_000);
+                System.out.print(new Character[0]);
+                System.out.println((double) (System.nanoTime() - start) / 1_000_000);
                 context.assertionsDone();// make sure the assertions are really executed
             }
 
@@ -246,6 +243,7 @@ public class FunctionalPresentationModelTests {
                     ServerModelStore.presentationModelCommand(response, val, null, new DTO(new Slot("char", val)));
                 }
 
+
             }
 
         });
@@ -265,39 +263,40 @@ public class FunctionalPresentationModelTests {
     @Test
     public void testLoginUseCase() {
         registerAction(serverDolphin, LoginCommand.class, new CommandHandler<LoginCommand>() {
-
             @Override
             public void handleCommand(LoginCommand command, List<Command> response) {
                 PresentationModel user = serverDolphin.getModelStore().findPresentationModelById("user");
-                Attribute nameAttribute = user.getAttribute("name");
-                Attribute passwordAttribute = user.getAttribute("password");
-                if (nameAttribute.getValue() != null && nameAttribute.getValue().equals("Dierk") && passwordAttribute.getValue() != null &&passwordAttribute.getValue().equals("Koenig")) {
+                Attribute nameAttribute = ((ServerPresentationModel) user).getAttribute("name");
+                Attribute passwordAttribute = ((ServerPresentationModel) user).getAttribute("password");
+                if (((ServerAttribute) nameAttribute).getValue() != null && ((ServerAttribute) nameAttribute).getValue().equals("Dierk") && ((ServerAttribute) passwordAttribute).getValue() != null && ((ServerAttribute) passwordAttribute).getValue().equals("Koenig")) {
                     ServerModelStore.changeValueCommand(response, ((ServerPresentationModel) user).getAttribute("loggedIn"), "true");
                 }
+
             }
+
         });
 
 
         final ClientPresentationModel user = clientDolphin.getModelStore().createModel("user", null, new ClientAttribute("name", null), new ClientAttribute("password", null), new ClientAttribute("loggedIn", null));
 
         clientDolphin.getClientConnector().send(new LoginCommand(), new OnFinishedHandler() {
-
             @Override
             public void onFinished() {
                 Assert.assertNull(user.getAttribute("loggedIn").getValue());
             }
+
         });
 
         user.getAttribute("name").setValue("Dierk");
         user.getAttribute("password").setValue("Koenig");
 
         clientDolphin.getClientConnector().send(new LoginCommand(), new OnFinishedHandler() {
-
             @Override
             public void onFinished() {
                 Assert.assertNotNull(user.getAttribute("loggedIn").getValue());
                 context.assertionsDone();
             }
+
         });
     }
 
