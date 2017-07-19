@@ -77,7 +77,7 @@ public class FunctionalPresentationModelTests {
     private volatile TestInMemoryConfig context;
     private DefaultServerDolphin serverDolphin;
     private ClientDolphin clientDolphin;
-    
+
     @Before
     public void setUp() {
         context = new TestInMemoryConfig();
