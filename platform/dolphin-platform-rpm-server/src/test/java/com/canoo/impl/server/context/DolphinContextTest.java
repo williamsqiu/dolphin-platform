@@ -24,6 +24,7 @@ import com.canoo.impl.server.config.RemotingConfiguration;
 import com.canoo.impl.server.controller.ControllerRepository;
 import com.canoo.impl.server.controller.ControllerValidationException;
 import com.canoo.impl.server.scanner.DefaultClasspathScanner;
+import com.canoo.impl.server.util.HttpSessionMock;
 import com.canoo.platform.core.functional.Callback;
 import com.canoo.platform.server.client.ClientSession;
 import org.opendolphin.core.comm.Command;
@@ -145,7 +146,7 @@ public class DolphinContextTest {
     private final DefaultClasspathScanner classpathScanner = new DefaultClasspathScanner("com.canoo.dolphin");
 
     private DolphinContext createContext() throws ControllerValidationException {
-        final ClientSession session = new HttpClientSessionImpl();
+        final ClientSession session = new HttpClientSessionImpl(new HttpSessionMock());
         return new DolphinContext(new RemotingConfiguration(), session, new ClientSessionProvider() {
             @Override
             public ClientSession getCurrentClientSession() {

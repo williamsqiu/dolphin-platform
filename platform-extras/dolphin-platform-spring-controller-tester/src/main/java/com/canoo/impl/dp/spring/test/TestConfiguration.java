@@ -33,6 +33,7 @@ import org.opendolphin.core.comm.Command;
 import org.opendolphin.util.Function;
 import org.springframework.web.context.WebApplicationContext;
 
+import javax.servlet.http.HttpSession;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
@@ -46,8 +47,9 @@ public class TestConfiguration {
 
     private final ClientContextImpl clientContext;
 
-    public TestConfiguration(final WebApplicationContext context) throws ControllerValidationException, MalformedURLException, ExecutionException, InterruptedException {
+    public TestConfiguration(final WebApplicationContext context, final HttpSession httpSession) throws ControllerValidationException, MalformedURLException, ExecutionException, InterruptedException {
         Assert.requireNonNull(context, "context");
+        Assert.requireNonNull(httpSession, "httpSession");
 
         //Client
         final ExecutorService clientExecutor = Executors.newSingleThreadExecutor();
@@ -73,7 +75,7 @@ public class TestConfiguration {
         final TestSpringManagedBeanFactory containerManager = new TestSpringManagedBeanFactory(context);
         containerManager.init(context.getServletContext());
         final DolphinContextProviderMock dolphinContextProviderMock = new DolphinContextProviderMock();
-        dolphinTestContext = new DolphinTestContext(new RemotingConfiguration(ConfigurationFileLoader.loadConfiguration()), dolphinContextProviderMock, containerManager, controllerRepository);
+        dolphinTestContext = new DolphinTestContext(new RemotingConfiguration(ConfigurationFileLoader.loadConfiguration()), dolphinContextProviderMock, containerManager, controllerRepository, httpSession);
         dolphinContextProviderMock.setCurrentContext(dolphinTestContext);
     }
 

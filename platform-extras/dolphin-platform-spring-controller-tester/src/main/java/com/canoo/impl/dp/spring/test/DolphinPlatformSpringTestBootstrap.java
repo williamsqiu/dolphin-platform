@@ -34,15 +34,17 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 import org.springframework.web.context.WebApplicationContext;
 
+import javax.servlet.http.HttpSession;
+
 @Configuration
 public class DolphinPlatformSpringTestBootstrap {
 
     @Bean
     @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
-    protected TestConfiguration createTestConfiguration(final WebApplicationContext context) {
+    protected TestConfiguration createTestConfiguration(final WebApplicationContext context, final HttpSession httpSession) {
         Assert.requireNonNull(context, "context");
         try {
-            return new TestConfiguration(context);
+            return new TestConfiguration(context, httpSession);
         } catch (Exception e) {
             throw new RuntimeException("Can not create test configuration", e);
         }
