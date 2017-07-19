@@ -50,7 +50,7 @@ public class ClientSessionManager {
             throw new MaxSessionCountReachedException();
         }
 
-        final ClientSession clientSession = new HttpClientSessionImpl(httpSession.getId());
+        final ClientSession clientSession = new HttpClientSessionImpl(httpSession);
         add(httpSession, clientSession);
 
         lifecycleHandler.onSessionCreated(clientSession);

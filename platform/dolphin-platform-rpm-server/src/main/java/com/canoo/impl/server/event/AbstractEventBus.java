@@ -122,7 +122,7 @@ public abstract class AbstractEventBus implements DolphinEventBus {
                     throw new RuntimeException("Internal Error! No session id defined for event bus listener!");
                 }
                 if (sessionId.equals(event.getSenderSessionId())) {
-                    //This listener was already called at the publish call
+                    // This listener was already called at the publish call
                     // since the event was called from the same session
                     LOG.trace("Event listener for topic {} was already called in Dolphin Platform context {}", topic.getName(), sessionId);
                 } else {
