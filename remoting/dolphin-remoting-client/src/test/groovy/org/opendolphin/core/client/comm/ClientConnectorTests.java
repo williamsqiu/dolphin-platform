@@ -1,71 +1,64 @@
-/*
- * Copyright 2015-2017 Canoo Engineering AG.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-package org.opendolphin.core.client.comm
+package org.opendolphin.core.client.comm;
 
-import com.canoo.dolphin.impl.commands.InterruptLongPollCommand
-import com.canoo.dolphin.impl.commands.StartLongPollCommand
-import org.junit.Assert
-import org.opendolphin.core.Attribute
-import org.opendolphin.core.client.*
-import org.opendolphin.core.comm.*
-import org.opendolphin.util.DirectExecutor
-import org.opendolphin.util.Provider
+import com.canoo.dolphin.impl.commands.InterruptLongPollCommand;
+import com.canoo.dolphin.impl.commands.StartLongPollCommand;
+import groovy.lang.Closure;
+import org.codehaus.groovy.runtime.DefaultGroovyMethods;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.opendolphin.core.Attribute;
+import org.opendolphin.core.client.ClientAttribute;
+import org.opendolphin.core.client.ClientDolphin;
+import org.opendolphin.core.client.ClientModelStore;
+import org.opendolphin.core.client.ClientPresentationModel;
+import org.opendolphin.core.client.DefaultModelSynchronizer;
+import org.opendolphin.core.client.ModelSynchronizer;
+import org.opendolphin.core.comm.AttributeMetadataChangedCommand;
+import org.opendolphin.core.comm.ChangeAttributeMetadataCommand;
+import org.opendolphin.core.comm.Command;
+import org.opendolphin.core.comm.CreatePresentationModelCommand;
+import org.opendolphin.core.comm.DeletePresentationModelCommand;
+import org.opendolphin.core.comm.DeletedPresentationModelNotification;
+import org.opendolphin.core.comm.EmptyNotification;
+import org.opendolphin.core.comm.ValueChangedCommand;
+import org.opendolphin.util.DirectExecutor;
+import org.opendolphin.util.Provider;
 
-import java.beans.PropertyChangeEvent
-import java.util.concurrent.CountDownLatch
-import java.util.concurrent.Executor
-import java.util.concurrent.Executors
-import java.util.concurrent.TimeUnit
+import java.beans.PropertyChangeEvent;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
-public class ClientConnectorTests extends GroovyTestCase {
+public class ClientConnectorTests {
 
-    private TestClientConnector clientConnector;
-    private ClientDolphin dolphin;
-    private AttributeChangeListener attributeChangeListener;
-
-    /**
-     * Since command transmission is done in parallel to test execution thread the test method might finish
-     * before the command processing is complete. Therefore {@link #tearDown()} waits for this CountDownLatch
-     * (which btw. is initialized in {@link #setUp()} and decremented in the handler of a {@code dolphin.sync ( )} call).
-     * Also putting asserts in the callback handler of a {@code dolphin.sync ( )} call seems not to be reliable since JUnit
-     * seems not to be informed (reliably) of failing assertions.
-     *
-     * Therefore the following approach for the test methods has been taken to:
-     * - initialize the CountDownLatch in {@code testBaseValueChange # setup ( )}
-     * - after the "act" section of a test method: call {@code syncAndWaitUntilDone ( )} which releases the latch inside a dolphin.sync handler and then (in the main thread) waits for the latch
-     * - performs all assertions
-     */
-    private CountDownLatch syncDone;
-
-
-    @Override
-    protected void setUp() {
+    @Before
+    public void setUp() {
         dolphin = new ClientDolphin();
         ModelSynchronizer defaultModelSynchronizer = new DefaultModelSynchronizer(new Provider<AbstractClientConnector>() {
             @Override
-            AbstractClientConnector get() {
-                return dolphin.clientConnector;
+            public AbstractClientConnector get() {
+                return dolphin.getClientConnector();
             }
+
         });
         ClientModelStore clientModelStore = new ClientModelStore(defaultModelSynchronizer);
         dolphin.setClientModelStore(clientModelStore);
         clientConnector = new TestClientConnector(clientModelStore, DirectExecutor.getInstance());
         dolphin.setClientConnector(clientConnector);
 
-        attributeChangeListener = dolphin.getModelStore().@attributeChangeListener
+        try {
+            attributeChangeListener = dolphin.getModelStore().getAttributeChangeListener();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
         clientConnector.connect(false);
 
@@ -77,13 +70,24 @@ public class ClientConnectorTests extends GroovyTestCase {
     }
 
     private boolean waitForLatch() {
-        return syncDone.await(2, TimeUnit.SECONDS);
+        try {
+            return syncDone.await(2, TimeUnit.SECONDS);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private void syncAndWaitUntilDone() {
-        dolphin.sync {
-            syncDone.countDown();
-        }
+        dolphin.sync(new Closure<Object>(this, this) {
+            public void doCall(Object it) {
+                syncDone.countDown();
+            }
+
+            public void doCall() {
+                doCall(null);
+            }
+
+        });
         Assert.assertTrue(waitForLatch());
     }
 
@@ -92,18 +96,20 @@ public class ClientConnectorTests extends GroovyTestCase {
     }
 
     private void assertOnlySyncCommandWasTransmitted() {
-        assertCommandsTransmitted(1)
+        assertCommandsTransmitted(1);
         // 1 command was sent because of the sent sync (resulting in a EMPTY command):
         Assert.assertFalse(clientConnector.getTransmittedCommands().isEmpty());
-        Assert.assertEquals(EmptyNotification.class, clientConnector.getTransmittedCommands().get(0).class);
+        Assert.assertEquals(EmptyNotification.class, clientConnector.getTransmittedCommands().get(0).getClass());
     }
 
+    @Test
     public void testSevereLogWhenCommandNotFound() {
         clientConnector.dispatchHandle(new EmptyNotification());
         syncAndWaitUntilDone();
         assertOnlySyncCommandWasTransmitted();
     }
 
+    @Test
     public void testHandleSimpleCreatePresentationModelCommand() {
         final String myPmId = "myPmId";
         Assert.assertEquals(null, dolphin.getModelStore().findPresentationModelById(myPmId));
@@ -115,25 +121,18 @@ public class ClientConnectorTests extends GroovyTestCase {
         assertCommandsTransmitted(2);
     }
 
-    //void testDefaultOnExceptionHandler() {
-    //	clientConnector.uiThreadHandler = { it() } as UiThreadHandler
-    //	String exceptionMessage = "TestException thrown on purpose"
-    //	def msg = shouldFail(RuntimeException) {
-    //		clientConnector.getOnException().handle(new RuntimeException(exceptionMessage))
-    //	}
-    //	assert msg == exceptionMessage
-    //}
-
+    @Test
     public void testValueChange_OldAndNewValueSame() {
         attributeChangeListener.propertyChange(new PropertyChangeEvent("dummy", Attribute.VALUE_NAME, "sameValue", "sameValue"));
         syncAndWaitUntilDone();
         assertOnlySyncCommandWasTransmitted();
     }
 
-    void testValueChange_noQualifier() {
+    @Test
+    public void testValueChange_noQualifier() {
         ClientAttribute attribute = new ClientAttribute("attr", "initialValue");
         dolphin.getModelStore().registerAttribute(attribute);
-        attributeChangeListener.propertyChange(new PropertyChangeEvent(attribute, Attribute.VALUE_NAME, attribute.value, "newValue"));
+        attributeChangeListener.propertyChange(new PropertyChangeEvent(attribute, Attribute.VALUE_NAME, attribute.getValue(), "newValue"));
         syncAndWaitUntilDone();
         assertCommandsTransmitted(2);
         Assert.assertEquals("initialValue", attribute.getValue());
@@ -142,16 +141,19 @@ public class ClientConnectorTests extends GroovyTestCase {
         for (Command c : clientConnector.getTransmittedCommands()) {
             if (c instanceof ValueChangedCommand) {
             }
+
             valueChangedCommandFound = true;
         }
+
         Assert.assertTrue(valueChangedCommandFound);
     }
 
-    void testValueChange_withQualifier() {
+    @Test
+    public void testValueChange_withQualifier() {
         syncDone = new CountDownLatch(1);
         ClientAttribute attribute = new ClientAttribute("attr", "initialValue", "qualifier");
         dolphin.getModelStore().registerAttribute(attribute);
-        attributeChangeListener.propertyChange(new PropertyChangeEvent(attribute, Attribute.VALUE_NAME, attribute.value, "newValue"));
+        attributeChangeListener.propertyChange(new PropertyChangeEvent(attribute, Attribute.VALUE_NAME, attribute.getValue(), "newValue"));
         syncAndWaitUntilDone();
         assertCommandsTransmitted(3);
         Assert.assertEquals("newValue", attribute.getValue());
@@ -160,70 +162,67 @@ public class ClientConnectorTests extends GroovyTestCase {
         for (Command c : clientConnector.getTransmittedCommands()) {
             if (c instanceof ValueChangedCommand) {
             }
+
             valueChangedCommandFound = true;
         }
+
         Assert.assertTrue(valueChangedCommandFound);
     }
 
-    void testAddTwoAttributesInConstructorWithSameQualifierToSamePMIsNotAllowed() {
-        shouldFail(IllegalStateException.class, {
-            dolphin.getModelStore().createModel("1", null, new ClientAttribute("a", "0", "QUAL"), new ClientAttribute("b", "0", "QUAL"));
-        });
+    @Test(expected = IllegalStateException.class)
+    public void testAddTwoAttributesInConstructorWithSameQualifierToSamePMIsNotAllowed() {
+        dolphin.getModelStore().createModel("1", null, new ClientAttribute("a", "0", "QUAL"), new ClientAttribute("b", "0", "QUAL"));
     }
 
-    void testMetaDataChange_UnregisteredAttribute() {
+    @Test
+    public void testMetaDataChange_UnregisteredAttribute() {
         ClientAttribute attribute = new ExtendedAttribute("attr", "initialValue", "qualifier");
-        attribute.setAdditionalParam("oldValue");
+        ((ExtendedAttribute) attribute).setAdditionalParam("oldValue");
         attributeChangeListener.propertyChange(new PropertyChangeEvent(attribute, "additionalParam", null, "newTag"));
         syncAndWaitUntilDone();
         assertCommandsTransmitted(2);
         Assert.assertFalse(clientConnector.getTransmittedCommands().isEmpty());
         Assert.assertEquals(ChangeAttributeMetadataCommand.class, clientConnector.getTransmittedCommands().get(0).getClass());
-        Assert.assertEquals("oldValue", attribute.getAdditionalParam());
+        Assert.assertEquals("oldValue", ((ExtendedAttribute) attribute).getAdditionalParam());
     }
 
-    void testHandle_ValueChanged_AttrNotExists() {
-        //TODO: How to convert this to Java?
-        assert !clientConnector.dispatchHandle(new ValueChangedCommand("0", "newValue"));
-    }
-
-    void testHandle_ValueChangedWithBadBaseValueIgnoredInNonStrictMode() {
+    @Test
+    public void testHandle_ValueChangedWithBadBaseValueIgnoredInNonStrictMode() {
         ClientAttribute attribute = new ClientAttribute("attr", "initialValue");
         dolphin.getModelStore().registerAttribute(attribute);
         clientConnector.dispatchHandle(new ValueChangedCommand(attribute.getId(), "newValue"));
         Assert.assertEquals("newValue", attribute.getValue());
     }
 
-    void testHandle_ValueChanged() {
+    @Test
+    public void testHandle_ValueChanged() {
         ClientAttribute attribute = new ClientAttribute("attr", "initialValue");
         dolphin.getModelStore().registerAttribute(attribute);
 
-        clientConnector.dispatchHandle(new ValueChangedCommand(attribute.id, "newValue"));
+        clientConnector.dispatchHandle(new ValueChangedCommand(attribute.getId(), "newValue"));
         Assert.assertEquals("newValue", attribute.getValue());
     }
 
-    void testHandle_CreatePresentationModelTwiceFails() {
-        List<Map<String, Object>> attributes = new ArrayList<>();
-        Map<String, Objects> map = new HashMap<String, Objects>();
+    @Test(expected = Exception.class)
+    public void testHandle_CreatePresentationModelTwiceFails() {
+        List<Map<String, Object>> attributes = new ArrayList<Map<String, Object>>();
+        Map<String, Object> map = new HashMap<String, Object>();
         map.put("propertyName", "attr");
         map.put("value", "initialValue");
         map.put("qualifier", "qualifier");
-        attributes.add(map);
+        ((ArrayList<Map<String, Object>>) attributes).add(map);
         clientConnector.dispatchHandle(new CreatePresentationModelCommand("p1", "type", attributes));
-
-        String msg = shouldFail {
-            clientConnector.dispatchHandle(new CreatePresentationModelCommand("p1", "type", attributes));
-        }
-        Assert.assertEquals("There already is a presentation model with id 'p1' known to the client.", msg);
+        clientConnector.dispatchHandle(new CreatePresentationModelCommand("p1", "type", attributes));
     }
 
-    void testHandle_CreatePresentationModel() {
-        List<Map<String, Object>> attributes = new ArrayList<>();
-        Map<String, Objects> map = new HashMap<String, Objects>();
+    @Test
+    public void testHandle_CreatePresentationModel() {
+        List<Map<String, Object>> attributes = new ArrayList<Map<String, Object>>();
+        Map<String, Object> map = new HashMap<>();
         map.put("propertyName", "attr");
         map.put("value", "initialValue");
         map.put("qualifier", "qualifier");
-        attributes.add(map);
+        ((ArrayList<Map<String, Object>>) attributes).add(map);
 
         clientConnector.dispatchHandle(new CreatePresentationModelCommand("p1", "type", attributes));
         Assert.assertNotNull(dolphin.getModelStore().findPresentationModelById("p1"));
@@ -236,13 +235,14 @@ public class ClientConnectorTests extends GroovyTestCase {
         Assert.assertEquals(CreatePresentationModelCommand.class, clientConnector.getTransmittedCommands().get(0).getClass());
     }
 
-    void testHandle_CreatePresentationModel_ClientSideOnly() {
-        List<Map<String, Object>> attributes = new ArrayList<>();
+    @Test
+    public void testHandle_CreatePresentationModel_ClientSideOnly() {
+        List<Map<String, Object>> attributes = new ArrayList<Map<String, Object>>();
         Map map = new HashMap();
         map.put("propertyName", "attr");
         map.put("value", "initialValue");
         map.put("qualifier", "qualifier");
-        attributes.add(map);
+        ((ArrayList<Map<String, Object>>) attributes).add(map);
         clientConnector.dispatchHandle(new CreatePresentationModelCommand("p1", "type", attributes, true));
         Assert.assertNotNull(dolphin.getModelStore().findPresentationModelById("p1"));
         Assert.assertNotNull(dolphin.getModelStore().findPresentationModelById("p1").getAttribute("attr"));
@@ -252,24 +252,24 @@ public class ClientConnectorTests extends GroovyTestCase {
         assertOnlySyncCommandWasTransmitted();
     }
 
-    void testHandle_CreatePresentationModel_MergeAttributesToExistingModel() {
+    @Test(expected = IllegalStateException.class)
+    public void testHandle_CreatePresentationModel_MergeAttributesToExistingModel() {
         dolphin.getModelStore().createModel("p1", null);
-        shouldFail(IllegalStateException) {
-            clientConnector.dispatchHandle(new CreatePresentationModelCommand("p1", "type", Collections.emptyList()));
-        }
+        clientConnector.dispatchHandle(new CreatePresentationModelCommand("p1", "type", Collections.emptyList()));
     }
 
-    void testHandle_DeletePresentationModel() {
+    @Test
+    public void testHandle_DeletePresentationModel() {
         ClientPresentationModel p1 = dolphin.getModelStore().createModel("p1", null);
         p1.setClientSideOnly(true);
         ClientPresentationModel p2 = dolphin.getModelStore().createModel("p2", null);
         clientConnector.dispatchHandle(new DeletePresentationModelCommand(null));
         ClientPresentationModel model = new ClientPresentationModel("p3", Collections.emptyList());
-        clientConnector.dispatchHandle(new DeletePresentationModelCommand(model.id));
-        clientConnector.dispatchHandle(new DeletePresentationModelCommand(p1.id));
-        clientConnector.dispatchHandle(new DeletePresentationModelCommand(p2.id));
-        Assert.assertNull(dolphin.getModelStore().findPresentationModelById(p1.id));
-        Assert.assertNull(dolphin.getModelStore().findPresentationModelById(p2.id));
+        clientConnector.dispatchHandle(new DeletePresentationModelCommand(model.getId()));
+        clientConnector.dispatchHandle(new DeletePresentationModelCommand(p1.getId()));
+        clientConnector.dispatchHandle(new DeletePresentationModelCommand(p2.getId()));
+        Assert.assertNull(dolphin.getModelStore().findPresentationModelById(p1.getId()));
+        Assert.assertNull(dolphin.getModelStore().findPresentationModelById(p2.getId()));
         syncAndWaitUntilDone();
         // 3 commands will have been transferred:
         // 1: delete of p1 (causes no DeletedPresentationModelNotification since client side only)
@@ -278,19 +278,33 @@ public class ClientConnectorTests extends GroovyTestCase {
         assertCommandsTransmitted(4);
 
         int deletedPresentationModelNotificationCount = 0;
-        for(Command c : clientConnector.getTransmittedCommands()) {
-            if(c instanceof DeletedPresentationModelNotification) {
+        for (Command c : clientConnector.getTransmittedCommands()) {
+            if (c instanceof DeletedPresentationModelNotification) {
                 deletedPresentationModelNotificationCount = deletedPresentationModelNotificationCount + 1;
             }
-        }
 
-        assertEquals(1, deletedPresentationModelNotificationCount);
+        }
+        Assert.assertEquals(1, deletedPresentationModelNotificationCount);
     }
 
-    class TestClientConnector extends AbstractClientConnector {
+    private TestClientConnector clientConnector;
+    private ClientDolphin dolphin;
+    private AttributeChangeListener attributeChangeListener;
+    /**
+     * Since command transmission is done in parallel to test execution thread the test method might finish
+     * before the command processing is complete. Therefore tearDown() waits for this CountDownLatch
+     * (which btw. is initialized in {@link #setUp()} and decremented in the handler of a {@code dolphin.sync ( )} call).
+     * Also putting asserts in the callback handler of a {@code dolphin.sync ( )} call seems not to be reliable since JUnit
+     * seems not to be informed (reliably) of failing assertions.
+     * <p>
+     * Therefore the following approach for the test methods has been taken to:
+     * - initialize the CountDownLatch in {@code testBaseValueChange # setup ( )}
+     * - after the "act" section of a test method: call {@code syncAndWaitUntilDone ( )} which releases the latch inside a dolphin.sync handler and then (in the main thread) waits for the latch
+     * - performs all assertions
+     */
+    private CountDownLatch syncDone;
 
-        private List<Command> transmittedCommands = new ArrayList<>();
-
+    public class TestClientConnector extends AbstractClientConnector {
         public TestClientConnector(ClientModelStore modelStore, Executor uiExecutor) {
             super(modelStore, uiExecutor, new CommandBatcher(), new SimpleExceptionHandler(), Executors.newCachedThreadPool());
         }
@@ -302,14 +316,15 @@ public class ClientConnectorTests extends GroovyTestCase {
         public List<Command> transmit(List<Command> commands) {
             System.out.print("transmit: " + commands.size());
             LinkedList result = new LinkedList<Command>();
-            for(Command cmd : commands) {
+            for (Command cmd : commands) {
                 result.addAll(transmitCommand(cmd));
             }
+
             return result;
         }
 
         @Override
-        String getClientId() {
+        public String getClientId() {
             return null;
         }
 
@@ -317,13 +332,14 @@ public class ClientConnectorTests extends GroovyTestCase {
             System.out.print("transmitCommand: " + command);
 
             if (command != null && !(command instanceof StartLongPollCommand) && !(command instanceof InterruptLongPollCommand)) {
-                transmittedCommands << command
+                DefaultGroovyMethods.leftShift(transmittedCommands, command);
             }
-            return construct(command)
+
+            return construct(command);
         }
 
         public List<Command> getTransmittedCommands() {
-            return transmittedCommands
+            return transmittedCommands;
         }
 
         public List<AttributeMetadataChangedCommand> construct(ChangeAttributeMetadataCommand command) {
@@ -334,23 +350,22 @@ public class ClientConnectorTests extends GroovyTestCase {
             return Collections.emptyList();
         }
 
+        private List<Command> transmittedCommands = new ArrayList<Command>();
     }
 
-    class ExtendedAttribute extends ClientAttribute {
-
-        private String additionalParam;
-
-        ExtendedAttribute(String propertyName, Object initialValue, String qualifier) {
+    public class ExtendedAttribute extends ClientAttribute {
+        public ExtendedAttribute(String propertyName, Object initialValue, String qualifier) {
             super(propertyName, initialValue, qualifier);
         }
 
-        String getAdditionalParam() {
+        public String getAdditionalParam() {
             return additionalParam;
         }
 
-        void setAdditionalParam(String additionalParam) {
+        public void setAdditionalParam(String additionalParam) {
             this.additionalParam = additionalParam;
         }
-    }
 
+        private String additionalParam;
+    }
 }
