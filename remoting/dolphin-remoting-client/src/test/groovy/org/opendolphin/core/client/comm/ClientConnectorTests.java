@@ -255,7 +255,7 @@ public class ClientConnectorTests {
     @Test(expected = IllegalStateException.class)
     public void testHandle_CreatePresentationModel_MergeAttributesToExistingModel() {
         dolphin.getModelStore().createModel("p1", null);
-        clientConnector.dispatchHandle(new CreatePresentationModelCommand("p1", "type", Collections.emptyList()));
+        clientConnector.dispatchHandle(new CreatePresentationModelCommand("p1", "type", Collections.<Map<String, Object>>emptyList()));
     }
 
     @Test
@@ -264,7 +264,7 @@ public class ClientConnectorTests {
         p1.setClientSideOnly(true);
         ClientPresentationModel p2 = dolphin.getModelStore().createModel("p2", null);
         clientConnector.dispatchHandle(new DeletePresentationModelCommand(null));
-        ClientPresentationModel model = new ClientPresentationModel("p3", Collections.emptyList());
+        ClientPresentationModel model = new ClientPresentationModel("p3", Collections.<ClientAttribute>emptyList());
         clientConnector.dispatchHandle(new DeletePresentationModelCommand(model.getId()));
         clientConnector.dispatchHandle(new DeletePresentationModelCommand(p1.getId()));
         clientConnector.dispatchHandle(new DeletePresentationModelCommand(p2.getId()));

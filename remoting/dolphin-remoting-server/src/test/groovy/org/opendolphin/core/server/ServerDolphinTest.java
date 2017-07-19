@@ -72,11 +72,11 @@ public class ServerDolphinTest {
         };
         dolphin.getModelStore().addModelStoreListener("person", typedListener);
         dolphin.getModelStore().addModelStoreListener(listener);
-        dolphin.getModelStore().add(new ServerPresentationModel("p1", Collections.emptyList(), dolphin.getModelStore()));
-        ServerPresentationModel modelWithType = new ServerPresentationModel("person1", Collections.emptyList(), dolphin.getModelStore());
+        dolphin.getModelStore().add(new ServerPresentationModel("p1", Collections.<ServerAttribute>emptyList(), dolphin.getModelStore()));
+        ServerPresentationModel modelWithType = new ServerPresentationModel("person1", Collections.<ServerAttribute>emptyList(), dolphin.getModelStore());
         modelWithType.setPresentationModelType("person");
         dolphin.getModelStore().add(modelWithType);
-        dolphin.getModelStore().add(new ServerPresentationModel("p2", Collections.emptyList(), dolphin.getModelStore()));
+        dolphin.getModelStore().add(new ServerPresentationModel("p2", Collections.<ServerAttribute>emptyList(), dolphin.getModelStore()));
         dolphin.getModelStore().removeModelStoreListener("person", typedListener);
         dolphin.getModelStore().removeModelStoreListener(listener);
         Assert.assertEquals(3, listenerCallCount.get());
@@ -103,11 +103,11 @@ public class ServerDolphinTest {
         };
         dolphin.getModelStore().addModelStoreListener("person", typedListener);
         dolphin.getModelStore().addModelStoreListener(listener);
-        dolphin.getModelStore().add(new ServerPresentationModel("p1", Collections.emptyList(), dolphin.getModelStore()));
-        ServerPresentationModel modelWithType = new ServerPresentationModel("person1", Collections.emptyList(), dolphin.getModelStore());
+        dolphin.getModelStore().add(new ServerPresentationModel("p1", Collections.<ServerAttribute>emptyList(), dolphin.getModelStore()));
+        ServerPresentationModel modelWithType = new ServerPresentationModel("person1", Collections.<ServerAttribute>emptyList(), dolphin.getModelStore());
         modelWithType.setPresentationModelType("person");
         dolphin.getModelStore().add(modelWithType);
-        dolphin.getModelStore().add(new ServerPresentationModel("p2", Collections.emptyList(), dolphin.getModelStore()));
+        dolphin.getModelStore().add(new ServerPresentationModel("p2", Collections.<ServerAttribute>emptyList(), dolphin.getModelStore()));
         Assert.assertEquals(3, listenerCallCount.get());
         Assert.assertEquals(1, typedListenerCallCount.get());
     }
