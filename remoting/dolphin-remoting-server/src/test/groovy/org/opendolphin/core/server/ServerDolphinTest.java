@@ -1,22 +1,8 @@
-/*
- * Copyright 2015-2017 Canoo Engineering AG.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package org.opendolphin.core.server;
 
-import groovy.util.GroovyTestCase;
 import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import org.opendolphin.core.ModelStoreEvent;
 import org.opendolphin.core.ModelStoreListener;
 import org.opendolphin.core.PresentationModel;
@@ -26,27 +12,31 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class ServerDolphinTest extends GroovyTestCase {
-    @Override
-    protected void setUp() throws Exception {
+public class ServerDolphinTest {
+
+    private DefaultServerDolphin dolphin;
+
+    @Before
+    public void setUp() throws Exception {
         dolphin = ((DefaultServerDolphin) (ServerDolphinFactory.create()));
         dolphin.getModelStore().setCurrentResponse(new ArrayList<Command>());
     }
 
+    @Test
     public void testListPresentationModels() {
         Assert.assertTrue(dolphin.getModelStore().listPresentationModelIds().isEmpty());
         Assert.assertTrue(dolphin.getModelStore().listPresentationModels().isEmpty());
         Assert.assertTrue(dolphin.getModelStore().findAllAttributesByQualifier("no-such-qualifier").isEmpty());
         Assert.assertTrue(dolphin.getModelStore().findAllPresentationModelsByType("no-such-type").isEmpty());
 
-        ServerPresentationModel pm1 = new ServerPresentationModel("first", new ArrayList<>(), dolphin.getModelStore());
+        ServerPresentationModel pm1 = new ServerPresentationModel("first", new ArrayList(), dolphin.getModelStore());
         dolphin.getModelStore().add(pm1);
 
         Assert.assertEquals(Collections.singleton("first"), dolphin.getModelStore().listPresentationModelIds());
         Assert.assertEquals(1, dolphin.getModelStore().listPresentationModelIds().size());
         Assert.assertEquals(pm1, dolphin.getModelStore().listPresentationModels().iterator().next());
 
-        ServerPresentationModel pm2 = new ServerPresentationModel("second", new ArrayList<>(), dolphin.getModelStore());
+        ServerPresentationModel pm2 = new ServerPresentationModel("second", new ArrayList(), dolphin.getModelStore());
         dolphin.getModelStore().add(pm2);
 
         Assert.assertEquals(2, dolphin.getModelStore().listPresentationModelIds().size());
@@ -59,8 +49,10 @@ public class ServerDolphinTest extends GroovyTestCase {
             Assert.assertTrue(dolphin.getModelStore().listPresentationModels().contains(model));
         }
 
+
     }
 
+    @Test
     public void testAddRemoveModelStoreListener() {
         final AtomicInteger typedListenerCallCount = new AtomicInteger(0);
         final AtomicInteger listenerCallCount = new AtomicInteger(0);
@@ -91,6 +83,7 @@ public class ServerDolphinTest extends GroovyTestCase {
         Assert.assertEquals(1, typedListenerCallCount.get());
     }
 
+    @Test
     public void testAddModelStoreListenerWithClosure() {
         final AtomicInteger typedListenerCallCount = new AtomicInteger(0);
         final AtomicInteger listenerCallCount = new AtomicInteger(0);
@@ -119,6 +112,7 @@ public class ServerDolphinTest extends GroovyTestCase {
         Assert.assertEquals(1, typedListenerCallCount.get());
     }
 
+    @Test
     public void testHasModelStoreListener() {
         ModelStoreListener listener = getListener();
         Assert.assertFalse(dolphin.getModelStore().hasModelStoreListener(null));
@@ -131,6 +125,7 @@ public class ServerDolphinTest extends GroovyTestCase {
         Assert.assertTrue(dolphin.getModelStore().hasModelStoreListener("person", listener));
     }
 
+    @Test
     public void testRegisterDefaultActions() {
         dolphin.getServerConnector().registerDefaultActions();
         int numDefaultActions = dolphin.getServerConnector().getRegistrationCount();
@@ -149,6 +144,4 @@ public class ServerDolphinTest extends GroovyTestCase {
 
         };
     }
-
-    private DefaultServerDolphin dolphin;
 }
