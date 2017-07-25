@@ -27,13 +27,13 @@ import org.springframework.beans.factory.config.InstantiationAwareBeanPostProces
  * @author Hendrik Ebbers
  * @since 0.7
  */
-public class SpringModelInjector extends InstantiationAwareBeanPostProcessorAdapter {
+public class SpringPreInjector extends InstantiationAwareBeanPostProcessorAdapter {
 
     private final ThreadLocal<PostConstructInterceptor> currentInterceptor = new ThreadLocal<>();
 
     private final ThreadLocal<Class> currentControllerClass = new ThreadLocal<>();
 
-    private static final SpringModelInjector instance = new SpringModelInjector();
+    private static final SpringPreInjector instance = new SpringPreInjector();
 
     public void prepare(final Class controllerClass, final PostConstructInterceptor interceptor) {
         Assert.requireNonNull(controllerClass, "controllerClass");
@@ -58,7 +58,7 @@ public class SpringModelInjector extends InstantiationAwareBeanPostProcessorAdap
         return true;
     }
 
-    public static SpringModelInjector getInstance() {
+    public static SpringPreInjector getInstance() {
         return instance;
     }
 }

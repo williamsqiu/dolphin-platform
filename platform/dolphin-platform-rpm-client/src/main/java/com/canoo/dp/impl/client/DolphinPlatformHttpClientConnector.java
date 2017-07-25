@@ -15,15 +15,16 @@
  */
 package com.canoo.dp.impl.client;
 
-import com.canoo.platform.client.ClientConfiguration;
-import com.canoo.platform.client.DolphinSessionException;
-import com.canoo.impl.platform.client.HttpClientCookieHandler;
-import com.canoo.impl.platform.client.HttpStatus;
-import com.canoo.platform.client.HttpURLConnectionFactory;
-import com.canoo.platform.client.HttpURLConnectionResponseHandler;
 import com.canoo.dolphin.impl.PlatformRemotingConstants;
 import com.canoo.dolphin.impl.commands.DestroyContextCommand;
+import com.canoo.dp.impl.platform.client.HttpClientCookieHandler;
+import com.canoo.dp.impl.platform.client.HttpStatus;
 import com.canoo.impl.platform.core.Assert;
+import com.canoo.platform.client.ClientConfiguration;
+import com.canoo.platform.client.ClientSessionSupport;
+import com.canoo.platform.client.DolphinSessionException;
+import com.canoo.platform.client.HttpURLConnectionHandler;
+import com.canoo.platform.core.functional.Function;
 import org.opendolphin.core.client.ClientModelStore;
 import org.opendolphin.core.client.comm.AbstractClientConnector;
 import org.opendolphin.core.client.comm.BlindCommandBatcher;
@@ -59,27 +60,26 @@ public class DolphinPlatformHttpClientConnector extends AbstractClientConnector 
 
     private final Codec codec;
 
-    private final HttpURLConnectionFactory connectionFactory;
-
-    private final HttpURLConnectionResponseHandler responseHandler;
+    private final HttpURLConnectionHandler responseHandler;
 
     private final HttpClientCookieHandler httpClientCookieHandler;
 
     private final AtomicReference<String> clientId = new AtomicReference<>();
 
+    private final ClientSessionSupport clientSessionSupport;
+
     public DolphinPlatformHttpClientConnector(final ClientConfiguration configuration, final ClientModelStore clientModelStore, final Codec codec, final RemotingExceptionHandler onException) {
         super(clientModelStore, Assert.requireNonNull(configuration, "configuration").getUiExecutor(), new BlindCommandBatcher(), onException, configuration.getBackgroundExecutor());
         this.servletUrl = configuration.getServerEndpoint();
-        this.connectionFactory = configuration.getConnectionFactory();
         this.httpClientCookieHandler = new HttpClientCookieHandler(configuration.getCookieStore());
         this.responseHandler = configuration.getResponseHandler();
         this.codec = Assert.requireNonNull(codec, "codec");
-
+        this.clientSessionSupport = new ClientSessionSupport(configuration.getConnectionFactory());
     }
 
     private final AtomicBoolean disconnecting = new AtomicBoolean(false);
 
-    public List<Command> transmit(List<Command> commands) throws DolphinRemotingException {
+    public List<Command> transmit(final List<Command> commands) throws DolphinRemotingException {
         Assert.requireNonNull(commands, "commands");
 
         if (disconnecting.get()) {
@@ -94,47 +94,45 @@ public class DolphinPlatformHttpClientConnector extends AbstractClientConnector 
             }
         }
 
-
         try {
-            //REQUEST
-            final HttpURLConnection conn = connectionFactory.create(servletUrl);
-            conn.setDoOutput(true);
-            conn.setDoInput(true);
-            conn.setRequestProperty(ACCEPT_CHARSET_HEADER, CHARSET);
-            conn.setRequestProperty(CONTENT_TYPE_HEADER, JSON_MIME_TYPE);
-            conn.setRequestProperty(ACCEPT_HEADER, JSON_MIME_TYPE);
-            conn.setRequestMethod(POST_METHOD);
+            return clientSessionSupport.doRequest(servletUrl, new Function<HttpURLConnection, List<Command>>() {
+                @Override
+                public List<Command> call(HttpURLConnection conn) {
+                    try {
+                        //REQUEST
+                        conn.setDoOutput(true);
+                        conn.setDoInput(true);
+                        conn.setRequestProperty(ACCEPT_CHARSET_HEADER, CHARSET);
+                        conn.setRequestProperty(CONTENT_TYPE_HEADER, JSON_MIME_TYPE);
+                        conn.setRequestProperty(ACCEPT_HEADER, JSON_MIME_TYPE);
+                        conn.setRequestMethod(POST_METHOD);
+                        httpClientCookieHandler.setRequestCookies(conn);
+                        String content = codec.encode(commands);
+                        OutputStream w = conn.getOutputStream();
+                        w.write(content.getBytes(CHARSET));
+                        w.close();
 
-            if (clientId.get() != null) {
-                conn.setRequestProperty(PlatformRemotingConstants.CLIENT_ID_HTTP_HEADER_NAME, clientId.get());
-            } else {
-                LOG.debug("Sending first request to server. Dolphin client id not defined.");
-            }
-            httpClientCookieHandler.setRequestCookies(conn);
-            String content = codec.encode(commands);
-            OutputStream w = conn.getOutputStream();
-            w.write(content.getBytes(CHARSET));
-            w.close();
-
-            //RESPONSE
-            int responseCode = conn.getResponseCode();
-            if (responseCode == HttpStatus.SC_REQUEST_TIMEOUT) {
-                throw new DolphinSessionException("Server can not handle Dolphin Client ID");
-            }
-            if (responseCode >= HttpStatus.SC_MULTIPLE_CHOICES) {
-                throw new DolphinHttpResponseException(responseCode, conn.getResponseMessage());
-            }
-
-            responseHandler.handle(conn);
-
-            httpClientCookieHandler.updateCookiesFromResponse(conn);
-            updateClientId(conn);
-            if (commands.size() == 1 && commands.get(0) == getReleaseCommand()) {
-                return new ArrayList<>();
-            } else {
-                String receivedContent = new String(inputStreamToByte(conn.getInputStream()), CHARSET);
-                return codec.decode(receivedContent);
-            }
+                        //RESPONSE
+                        int responseCode = conn.getResponseCode();
+                        if (responseCode == HttpStatus.SC_REQUEST_TIMEOUT) {
+                            throw new DolphinSessionException("Server can not handle Dolphin Client ID");
+                        }
+                        if (responseCode >= HttpStatus.SC_MULTIPLE_CHOICES) {
+                            throw new DolphinHttpResponseException(responseCode, conn.getResponseMessage());
+                        }
+                        responseHandler.handle(conn);
+                        httpClientCookieHandler.updateCookiesFromResponse(conn);
+                        if (commands.size() == 1 && commands.get(0) == getReleaseCommand()) {
+                            return new ArrayList<>();
+                        } else {
+                            String receivedContent = new String(inputStreamToByte(conn.getInputStream()), CHARSET);
+                            return codec.decode(receivedContent);
+                        }
+                    } catch (Exception e) {
+                        throw new RuntimeException("Error in communication", e);
+                    }
+                }
+            });
         } catch (Exception e) {
             throw new DolphinRemotingException("Error in remoting layer", e);
         }

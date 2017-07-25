@@ -13,23 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.impl.dp.spring.test;
+package com.canoo.dp.impl.platform.client;
 
-import com.canoo.dp.impl.server.spring.ClientScopeImpl;
-import com.canoo.impl.platform.core.Assert;
-import com.canoo.platform.server.client.ClientSession;
+import com.canoo.platform.client.HttpURLConnectionHandler;
 
-public class TestClientScope extends ClientScopeImpl {
+import java.net.HttpURLConnection;
 
-    private final ClientSession clientSession;
-
-
-    public TestClientScope(final ClientSession clientSession) {
-        this.clientSession = Assert.requireNonNull(clientSession, "clientSession");
-    }
+public class DefaultHttpURLConnectionResponseHandler implements HttpURLConnectionHandler {
 
     @Override
-    public ClientSession getClientSession() {
-        return clientSession;
+    public void handle(HttpURLConnection response) {
+
     }
 }

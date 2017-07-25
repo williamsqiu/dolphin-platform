@@ -20,7 +20,6 @@ import com.canoo.impl.platform.core.Assert;
 import com.canoo.impl.server.bootstrap.PlatformBootstrap;
 import com.canoo.impl.server.client.ClientSessionProvider;
 import com.canoo.platform.server.client.ClientSession;
-import com.canoo.platform.server.spring.ClientScoped;
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.config.Scope;
 
@@ -29,9 +28,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Implementation of the {@link ClientScoped} scope
+ * Implementation of the {@link com.canoo.platform.server.spring.ClientScope} scope
  */
-public class ClientScope implements Scope {
+public class ClientScopeImpl implements Scope {
 
     public final static String CLIENT_SCOPE = "client";
 
@@ -66,7 +65,7 @@ public class ClientScope implements Scope {
     private Map<String, Object> getLocalStore() {
         ClientSession session = getClientSession();
         if(session == null) {
-            throw new IllegalStateException("No dolphin request found! Looks like you try to use the " + ClientScope.class.getSimpleName() + " ouside of the dolphin context!");
+            throw new IllegalStateException("No dolphin request found! Looks like you try to use the " + ClientScopeImpl.class.getSimpleName() + " ouside of the dolphin context!");
         }
         Map<String, Object> localStore = session.getAttribute(CLIENT_STORE_ATTRIBUTE);
         if(localStore == null) {

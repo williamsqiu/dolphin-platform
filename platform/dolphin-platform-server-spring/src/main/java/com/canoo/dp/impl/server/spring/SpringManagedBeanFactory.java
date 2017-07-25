@@ -18,20 +18,12 @@ package com.canoo.dp.impl.server.spring;
 import com.canoo.impl.server.beans.ManagedBeanFactory;
 import org.springframework.context.ApplicationContext;
 
-import javax.servlet.ServletContext;
-
 /**
  * Spring specific implementation of the {@link ManagedBeanFactory} interface
  *
  * @author Hendrik Ebbers
  */
 public class SpringManagedBeanFactory extends AbstractSpringManagedBeanFactory {
-
-    @Override
-    public void init(ServletContext servletContext) {
-        init();
-
-    }
 
     /**
      * Returns the Spring {@link org.springframework.context.ApplicationContext} for the current {@link javax.servlet.ServletContext}

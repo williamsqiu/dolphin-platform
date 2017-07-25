@@ -16,7 +16,7 @@
 package com.canoo.impl.dp.spring.test;
 
 import com.canoo.dolphin.BeanManager;
-import com.canoo.dp.impl.server.spring.ClientScope;
+import com.canoo.dp.impl.server.spring.ClientScopeImpl;
 import com.canoo.impl.platform.core.Assert;
 import com.canoo.impl.server.binding.PropertyBinderImpl;
 import com.canoo.impl.server.client.ClientSessionLifecycleHandlerImpl;
@@ -125,7 +125,7 @@ public class DolphinPlatformSpringTestBootstrap {
     public static CustomScopeConfigurer createClientScope(final ClientSession clientSession) {
         Assert.requireNonNull(clientSession, "clientSession");
         CustomScopeConfigurer configurer = new CustomScopeConfigurer();
-        configurer.addScope(ClientScope.CLIENT_SCOPE, new TestClientScope(clientSession));
+        configurer.addScope(ClientScopeImpl.CLIENT_SCOPE, new TestClientScope(clientSession));
         return configurer;
     }
 }

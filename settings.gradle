@@ -13,6 +13,8 @@ include 'platform/dolphin-platform-rpm-client-javafx'
 include 'platform/dolphin-platform-rpm-server'
 include 'platform/dolphin-platform-server-javaee'
 include 'platform/dolphin-platform-server-spring'
+include 'platform/dolphin-platform-remoting-server-spring'
+
 
 include 'platform-extras/dolphin-platform-bean-validation'
 include 'platform-extras/dolphin-platform-spring-controller-tester'
