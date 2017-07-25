@@ -15,13 +15,13 @@
  */
 package com.canoo.dolphin.client;
 
-import com.canoo.dolphin.BeanManager;
+import com.canoo.platform.remoting.BeanManager;
 import com.canoo.dolphin.client.util.*;
 import com.canoo.platform.core.functional.Subscription;
-import com.canoo.dolphin.event.ValueChangeEvent;
-import com.canoo.dolphin.event.ValueChangeListener;
-import com.canoo.dolphin.internal.BeanRepository;
-import com.canoo.dolphin.internal.EventDispatcher;
+import com.canoo.platform.remoting.ValueChangeEvent;
+import com.canoo.platform.remoting.ValueChangeListener;
+import com.canoo.dp.impl.remoting.BeanRepository;
+import com.canoo.dp.impl.remoting.EventDispatcher;
 import mockit.Mocked;
 import org.opendolphin.core.client.ClientDolphin;
 import org.opendolphin.core.client.comm.AbstractClientConnector;

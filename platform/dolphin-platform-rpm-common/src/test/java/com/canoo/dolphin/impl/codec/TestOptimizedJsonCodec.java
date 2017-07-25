@@ -15,7 +15,8 @@
  */
 package com.canoo.dolphin.impl.codec;
 
-import com.canoo.dolphin.impl.commands.CallActionCommand;
+import com.canoo.dp.impl.remoting.commands.CallActionCommand;
+import com.canoo.dp.impl.remoting.codec.OptimizedJsonCodec;
 import org.hamcrest.Matchers;
 import org.opendolphin.core.comm.Command;
 import org.opendolphin.core.comm.CreatePresentationModelCommand;

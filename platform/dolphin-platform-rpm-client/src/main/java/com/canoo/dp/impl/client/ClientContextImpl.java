@@ -15,16 +15,24 @@
  */
 package com.canoo.dp.impl.client;
 
-import com.canoo.dolphin.BeanManager;
-import com.canoo.dolphin.impl.*;
-import com.canoo.dolphin.impl.collections.ListMapperImpl;
-import com.canoo.dolphin.impl.commands.CreateContextCommand;
-import com.canoo.dolphin.impl.commands.DestroyContextCommand;
-import com.canoo.dolphin.internal.BeanRepository;
-import com.canoo.dolphin.internal.ClassRepository;
-import com.canoo.dolphin.internal.EventDispatcher;
-import com.canoo.impl.platform.core.Assert;
-import com.canoo.platform.client.*;
+import com.canoo.dp.impl.remoting.BeanManagerImpl;
+import com.canoo.dp.impl.remoting.BeanRepositoryImpl;
+import com.canoo.dp.impl.remoting.ClassRepositoryImpl;
+import com.canoo.dp.impl.remoting.Converters;
+import com.canoo.dp.impl.remoting.PresentationModelBuilderFactory;
+import com.canoo.platform.remoting.BeanManager;
+import com.canoo.dp.impl.remoting.collections.ListMapperImpl;
+import com.canoo.dp.impl.remoting.commands.CreateContextCommand;
+import com.canoo.dp.impl.remoting.commands.DestroyContextCommand;
+import com.canoo.dp.impl.remoting.BeanRepository;
+import com.canoo.dp.impl.remoting.ClassRepository;
+import com.canoo.dp.impl.remoting.EventDispatcher;
+import com.canoo.dp.impl.platform.core.Assert;
+import com.canoo.platform.remoting.client.ClientConfiguration;
+import com.canoo.platform.remoting.client.ClientContext;
+import com.canoo.platform.remoting.client.ClientInitializationException;
+import com.canoo.platform.remoting.client.ControllerInitalizationException;
+import com.canoo.platform.remoting.client.ControllerProxy;
 import org.opendolphin.core.client.ClientModelStore;
 import org.opendolphin.core.client.DefaultModelSynchronizer;
 import org.opendolphin.core.client.ModelSynchronizer;

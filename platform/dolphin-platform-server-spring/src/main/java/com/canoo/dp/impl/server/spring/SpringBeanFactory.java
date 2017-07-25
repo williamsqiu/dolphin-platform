@@ -15,9 +15,9 @@
  */
 package com.canoo.dp.impl.server.spring;
 
-import com.canoo.impl.platform.core.Assert;
-import com.canoo.impl.server.bootstrap.PlatformBootstrap;
-import com.canoo.impl.server.client.ClientSessionProvider;
+import com.canoo.dp.impl.platform.core.Assert;
+import com.canoo.dp.impl.server.bootstrap.PlatformBootstrap;
+import com.canoo.dp.impl.server.client.ClientSessionProvider;
 import com.canoo.platform.server.client.ClientSession;
 import com.canoo.platform.server.spring.ClientScope;
 import org.springframework.beans.factory.config.CustomScopeConfigurer;

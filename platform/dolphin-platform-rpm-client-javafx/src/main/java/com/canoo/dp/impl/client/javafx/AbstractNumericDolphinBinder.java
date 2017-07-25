@@ -16,11 +16,10 @@
 package com.canoo.dp.impl.client.javafx;
 
 import com.canoo.platform.core.functional.Subscription;
-import com.canoo.dolphin.binding.Binding;
-import com.canoo.platform.client.javafx.binding.BidirectionalConverter;
-import com.canoo.platform.client.javafx.binding.NumericDolphinBinder;
-import com.canoo.dp.impl.client.javafx.DefaultDolphinBinder;
-import com.canoo.dolphin.mapping.Property;
+import com.canoo.platform.remoting.Binding;
+import com.canoo.platform.remoting.client.javafx.binding.BidirectionalConverter;
+import com.canoo.platform.remoting.client.javafx.binding.NumericDolphinBinder;
+import com.canoo.platform.remoting.Property;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 

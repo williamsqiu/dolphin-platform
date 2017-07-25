@@ -15,13 +15,13 @@
  */
 package com.canoo.dp.impl.client;
 
-import com.canoo.platform.client.ControllerProxy;
-import com.canoo.dolphin.impl.Converters;
-import com.canoo.dolphin.impl.InternalAttributesBean;
-import com.canoo.dolphin.impl.commands.CreateControllerCommand;
-import com.canoo.dolphin.internal.BeanRepository;
-import com.canoo.dolphin.internal.EventDispatcher;
-import com.canoo.impl.platform.core.Assert;
+import com.canoo.platform.remoting.client.ControllerProxy;
+import com.canoo.dp.impl.remoting.Converters;
+import com.canoo.dp.impl.remoting.InternalAttributesBean;
+import com.canoo.dp.impl.remoting.commands.CreateControllerCommand;
+import com.canoo.dp.impl.remoting.BeanRepository;
+import com.canoo.dp.impl.remoting.EventDispatcher;
+import com.canoo.dp.impl.platform.core.Assert;
 import org.opendolphin.core.client.ClientModelStore;
 import org.opendolphin.core.client.comm.AbstractClientConnector;
 

@@ -15,9 +15,9 @@
  */
 package com.canoo.impl.server;
 
-import com.canoo.dolphin.BeanManager;
-import com.canoo.dolphin.impl.PlatformRemotingConstants;
-import com.canoo.dolphin.impl.converters.DolphinBeanConverterFactory;
+import com.canoo.platform.remoting.BeanManager;
+import com.canoo.dp.impl.remoting.PlatformRemotingConstants;
+import com.canoo.dp.impl.remoting.converters.DolphinBeanConverterFactory;
 import com.canoo.impl.server.util.AbstractDolphinBasedTest;
 import com.canoo.impl.server.util.ListReferenceModel;
 import com.canoo.impl.server.util.SimpleTestModel;

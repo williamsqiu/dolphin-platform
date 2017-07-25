@@ -15,13 +15,13 @@
  */
 package com.canoo.dp.impl.client;
 
-import com.canoo.platform.client.Param;
-import com.canoo.dolphin.converter.ValueConverterException;
-import com.canoo.dolphin.impl.AbstractControllerActionCallBean;
-import com.canoo.dolphin.impl.Converters;
-import com.canoo.dolphin.impl.PlatformRemotingConstants;
-import com.canoo.dolphin.mapping.MappingException;
-import com.canoo.impl.platform.core.Assert;
+import com.canoo.platform.remoting.client.Param;
+import com.canoo.platform.remoting.spi.converter.ValueConverterException;
+import com.canoo.dp.impl.remoting.AbstractControllerActionCallBean;
+import com.canoo.dp.impl.remoting.Converters;
+import com.canoo.dp.impl.remoting.PlatformRemotingConstants;
+import com.canoo.dp.impl.remoting.MappingException;
+import com.canoo.dp.impl.platform.core.Assert;
 import org.opendolphin.core.client.ClientModelStore;
 import org.opendolphin.core.client.ClientPresentationModel;
 

@@ -15,7 +15,7 @@
  */
 package com.canoo.impl.server;
 
-import com.canoo.dolphin.BeanManager;
+import com.canoo.platform.remoting.BeanManager;
 import com.canoo.impl.server.util.AbstractDolphinBasedTest;
 import com.canoo.impl.server.util.ChildModel;
 import com.canoo.impl.server.util.ComplexDataTypesModel;

@@ -15,8 +15,8 @@
  */
 package com.canoo.dp.impl.client.javafx;
 
-import com.canoo.platform.client.javafx.binding.BidirectionalConverter;
-import com.canoo.dolphin.mapping.Property;
+import com.canoo.platform.remoting.client.javafx.binding.BidirectionalConverter;
+import com.canoo.platform.remoting.Property;
 
 public class LongDolphinBinder extends AbstractNumericDolphinBinder<Long> {
 

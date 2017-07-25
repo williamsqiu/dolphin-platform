@@ -15,9 +15,9 @@
  */
 package com.canoo.impl.server;
 
-import com.canoo.dolphin.BeanManager;
-import com.canoo.dolphin.internal.BeanRepository;
-import com.canoo.dolphin.internal.EventDispatcher;
+import com.canoo.platform.remoting.BeanManager;
+import com.canoo.dp.impl.remoting.BeanRepository;
+import com.canoo.dp.impl.remoting.EventDispatcher;
 import com.canoo.impl.server.util.AbstractDolphinBasedTest;
 import com.canoo.impl.server.util.SimpleAnnotatedTestModel;
 import com.canoo.impl.server.util.SimpleTestModel;

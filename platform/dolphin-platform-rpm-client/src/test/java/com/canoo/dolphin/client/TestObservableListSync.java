@@ -15,12 +15,12 @@
  */
 package com.canoo.dolphin.client;
 
-import com.canoo.dolphin.BeanManager;
+import com.canoo.platform.remoting.BeanManager;
 import com.canoo.dolphin.client.util.AbstractDolphinBasedTest;
 import com.canoo.dolphin.client.util.ListReferenceModel;
 import com.canoo.dolphin.client.util.SimpleTestModel;
-import com.canoo.dolphin.impl.PlatformRemotingConstants;
-import com.canoo.dolphin.impl.converters.DolphinBeanConverterFactory;
+import com.canoo.dp.impl.remoting.PlatformRemotingConstants;
+import com.canoo.dp.impl.remoting.converters.DolphinBeanConverterFactory;
 import mockit.Mocked;
 import org.opendolphin.RemotingConstants;
 import org.opendolphin.core.PresentationModel;

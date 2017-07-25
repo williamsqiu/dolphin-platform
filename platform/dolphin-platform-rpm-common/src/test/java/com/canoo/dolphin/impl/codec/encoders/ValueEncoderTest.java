@@ -1,5 +1,6 @@
 package com.canoo.dolphin.impl.codec.encoders;
 
+import com.canoo.dp.impl.remoting.codec.encoders.ValueEncoder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;

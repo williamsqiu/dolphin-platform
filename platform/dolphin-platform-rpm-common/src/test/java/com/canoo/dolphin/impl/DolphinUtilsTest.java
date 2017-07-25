@@ -15,7 +15,9 @@
  */
 package com.canoo.dolphin.impl;
 
-import com.canoo.dolphin.impl.collections.ObservableArrayList;
+import com.canoo.dp.impl.remoting.collections.ObservableArrayList;
+import com.canoo.dp.impl.remoting.DolphinUtils;
+import com.canoo.dp.impl.remoting.MockedProperty;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 

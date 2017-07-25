@@ -15,8 +15,9 @@
  */
 package com.canoo.dolphin.impl.collections;
 
-import com.canoo.dolphin.collections.ListChangeEvent;
-import com.canoo.dolphin.collections.ObservableList;
+import com.canoo.dp.impl.remoting.collections.ListChangeEventImpl;
+import com.canoo.platform.remoting.ListChangeEvent;
+import com.canoo.platform.remoting.ObservableList;
 import mockit.Mocked;
 import org.testng.annotations.Test;
 

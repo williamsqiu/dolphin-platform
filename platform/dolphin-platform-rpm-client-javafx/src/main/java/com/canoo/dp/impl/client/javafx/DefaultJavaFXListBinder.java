@@ -15,12 +15,12 @@
  */
 package com.canoo.dp.impl.client.javafx;
 
-import com.canoo.dolphin.binding.Binding;
-import com.canoo.platform.client.javafx.binding.JavaFXListBinder;
-import com.canoo.dolphin.collections.ListChangeEvent;
-import com.canoo.dolphin.collections.ObservableList;
+import com.canoo.platform.remoting.Binding;
+import com.canoo.platform.remoting.client.javafx.binding.JavaFXListBinder;
+import com.canoo.platform.remoting.ListChangeEvent;
+import com.canoo.platform.remoting.ObservableList;
 import com.canoo.platform.core.functional.Subscription;
-import com.canoo.impl.platform.core.Assert;
+import com.canoo.dp.impl.platform.core.Assert;
 import javafx.collections.ListChangeListener;
 
 import java.util.IdentityHashMap;
@@ -89,7 +89,7 @@ public class DefaultJavaFXListBinder<S> implements JavaFXListBinder<S> {
         };
     }
 
-    private class InternalListChangeListener<T> implements com.canoo.dolphin.collections.ListChangeListener<T> {
+    private class InternalListChangeListener<T> implements com.canoo.platform.remoting.ListChangeListener<T> {
 
         private final Function<? super T, ? extends S> converter;
 

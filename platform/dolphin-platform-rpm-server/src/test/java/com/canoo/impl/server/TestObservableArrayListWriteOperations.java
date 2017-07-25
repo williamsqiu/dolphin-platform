@@ -15,10 +15,10 @@
  */
 package com.canoo.impl.server;
 
-import com.canoo.dolphin.collections.ListChangeEvent;
-import com.canoo.dolphin.collections.ListChangeListener;
+import com.canoo.platform.remoting.ListChangeEvent;
+import com.canoo.platform.remoting.ListChangeListener;
 import com.canoo.platform.core.functional.Subscription;
-import com.canoo.dolphin.impl.collections.ObservableArrayList;
+import com.canoo.dp.impl.remoting.collections.ObservableArrayList;
 import org.hamcrest.MatcherAssert;
 import org.testng.annotations.Test;
 

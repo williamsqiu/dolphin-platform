@@ -15,6 +15,7 @@
  */
 package com.canoo.dolphin.impl.collections;
 
+import com.canoo.dp.impl.remoting.collections.ObservableArrayList;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 

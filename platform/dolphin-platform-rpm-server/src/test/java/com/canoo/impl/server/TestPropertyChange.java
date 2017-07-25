@@ -15,11 +15,11 @@
  */
 package com.canoo.impl.server;
 
-import com.canoo.dolphin.BeanManager;
+import com.canoo.platform.remoting.BeanManager;
 import com.canoo.platform.core.functional.Subscription;
-import com.canoo.dolphin.event.ValueChangeEvent;
-import com.canoo.dolphin.event.ValueChangeListener;
-import com.canoo.dolphin.mapping.Property;
+import com.canoo.platform.remoting.ValueChangeEvent;
+import com.canoo.platform.remoting.ValueChangeListener;
+import com.canoo.platform.remoting.Property;
 import com.canoo.impl.server.util.*;
 import org.opendolphin.core.server.ServerDolphin;
 import org.testng.annotations.Test;

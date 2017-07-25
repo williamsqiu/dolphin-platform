@@ -15,12 +15,12 @@
  */
 package com.canoo.dp.impl.client;
 
-import com.canoo.platform.client.Param;
-import com.canoo.dolphin.impl.Converters;
-import com.canoo.dolphin.impl.InternalAttributesBean;
-import com.canoo.dolphin.internal.BeanRepository;
-import com.canoo.dolphin.internal.DolphinEventHandler;
-import com.canoo.dolphin.internal.EventDispatcher;
+import com.canoo.platform.remoting.client.Param;
+import com.canoo.dp.impl.remoting.Converters;
+import com.canoo.dp.impl.remoting.InternalAttributesBean;
+import com.canoo.dp.impl.remoting.BeanRepository;
+import com.canoo.dp.impl.remoting.DolphinEventHandler;
+import com.canoo.dp.impl.remoting.EventDispatcher;
 import org.opendolphin.core.PresentationModel;
 import org.opendolphin.core.client.ClientModelStore;
 

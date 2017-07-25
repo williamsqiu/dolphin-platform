@@ -15,8 +15,9 @@
  */
 package com.canoo.dolphin.impl.converters;
 
-import com.canoo.dolphin.converter.Converter;
-import com.canoo.dolphin.converter.ValueConverterException;
+import com.canoo.dp.impl.remoting.converters.DateConverterFactory;
+import com.canoo.platform.remoting.spi.converter.Converter;
+import com.canoo.platform.remoting.spi.converter.ValueConverterException;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 

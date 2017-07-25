@@ -15,7 +15,7 @@
  */
 package com.canoo.impl.server;
 
-import com.canoo.impl.server.model.ServerPresentationModelBuilder;
+import com.canoo.dp.impl.server.model.ServerPresentationModelBuilder;
 import com.canoo.impl.server.util.AbstractDolphinBasedTest;
 import org.opendolphin.RemotingConstants;
 import org.opendolphin.core.server.ServerDolphin;

@@ -15,9 +15,9 @@
  */
 package com.canoo.dolphin.client.javafx.impl;
 
-import com.canoo.platform.client.javafx.FXBinder;
-import com.canoo.dolphin.collections.ObservableList;
-import com.canoo.dolphin.impl.collections.ObservableArrayList;
+import com.canoo.platform.remoting.client.javafx.FXBinder;
+import com.canoo.platform.remoting.ObservableList;
+import com.canoo.dp.impl.remoting.collections.ObservableArrayList;
 import javafx.collections.FXCollections;
 import org.testng.annotations.Test;
 

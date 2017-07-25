@@ -15,8 +15,8 @@
  */
 package com.canoo.impl.server.util;
 
-import com.canoo.dolphin.mapping.DolphinBean;
-import com.canoo.dolphin.mapping.Property;
+import com.canoo.platform.remoting.DolphinBean;
+import com.canoo.platform.remoting.Property;
 
 import java.util.Calendar;
 import java.util.Date;

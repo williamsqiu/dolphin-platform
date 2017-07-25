@@ -15,10 +15,10 @@
  */
 package com.canoo.dp.impl.client.javafx;
 
-import com.canoo.platform.client.javafx.binding.BidirectionalConverter;
-import com.canoo.dolphin.binding.Binding;
-import com.canoo.platform.client.javafx.binding.JavaFXBidirectionalBinder;
-import com.canoo.dolphin.mapping.Property;
+import com.canoo.platform.remoting.client.javafx.binding.BidirectionalConverter;
+import com.canoo.platform.remoting.Binding;
+import com.canoo.platform.remoting.client.javafx.binding.JavaFXBidirectionalBinder;
+import com.canoo.platform.remoting.Property;
 import javafx.beans.value.ChangeListener;
 
 public class DefaultJavaFXBidirectionalBinder<S> extends DefaultJavaFXBinder<S> implements JavaFXBidirectionalBinder<S> {

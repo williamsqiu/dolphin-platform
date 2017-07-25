@@ -15,11 +15,11 @@
  */
 package com.canoo.dolphin.client;
 
-import com.canoo.dolphin.BeanManager;
+import com.canoo.platform.remoting.BeanManager;
 import com.canoo.dolphin.client.util.*;
-import com.canoo.dolphin.impl.BeanDefinitionException;
-import com.canoo.dolphin.internal.BeanRepository;
-import com.canoo.dolphin.internal.EventDispatcher;
+import com.canoo.dp.impl.remoting.BeanDefinitionException;
+import com.canoo.dp.impl.remoting.BeanRepository;
+import com.canoo.dp.impl.remoting.EventDispatcher;
 import mockit.Mocked;
 import org.opendolphin.core.client.ClientDolphin;
 import org.opendolphin.core.client.ClientPresentationModel;

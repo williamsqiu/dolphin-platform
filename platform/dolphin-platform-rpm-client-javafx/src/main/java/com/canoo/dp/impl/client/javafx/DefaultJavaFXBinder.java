@@ -15,12 +15,12 @@
  */
 package com.canoo.dp.impl.client.javafx;
 
-import com.canoo.dolphin.binding.Binding;
-import com.canoo.platform.client.javafx.binding.Converter;
-import com.canoo.platform.client.javafx.binding.JavaFXBinder;
+import com.canoo.platform.remoting.Binding;
+import com.canoo.platform.remoting.client.javafx.binding.Converter;
+import com.canoo.platform.remoting.client.javafx.binding.JavaFXBinder;
 import com.canoo.platform.core.functional.Subscription;
-import com.canoo.dolphin.mapping.Property;
-import com.canoo.impl.platform.core.Assert;
+import com.canoo.platform.remoting.Property;
+import com.canoo.dp.impl.platform.core.Assert;
 import javafx.beans.value.WritableValue;
 
 public class DefaultJavaFXBinder<S> implements JavaFXBinder<S> {

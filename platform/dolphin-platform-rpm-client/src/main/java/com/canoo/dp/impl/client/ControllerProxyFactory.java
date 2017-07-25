@@ -15,7 +15,7 @@
  */
 package com.canoo.dp.impl.client;
 
-import com.canoo.platform.client.ControllerProxy;
+import com.canoo.platform.remoting.client.ControllerProxy;
 
 import java.util.concurrent.CompletableFuture;
 

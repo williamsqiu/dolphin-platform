@@ -16,11 +16,11 @@
 package com.canoo.dolphin.client.impl;
 
 import com.canoo.dp.impl.client.DolphinPlatformHttpClientConnector;
-import com.canoo.impl.platform.core.PlatformConstants;
-import com.canoo.platform.client.ClientConfiguration;
+import com.canoo.dp.impl.platform.core.PlatformConstants;
+import com.canoo.platform.remoting.client.ClientConfiguration;
 import com.canoo.dolphin.client.DummyUiThreadHandler;
 import com.canoo.platform.client.HttpURLConnectionFactory;
-import com.canoo.dolphin.impl.commands.CreateContextCommand;
+import com.canoo.dp.impl.remoting.commands.CreateContextCommand;
 import org.opendolphin.core.client.ClientDolphin;
 import org.opendolphin.core.client.ClientModelStore;
 import org.opendolphin.core.client.DefaultModelSynchronizer;

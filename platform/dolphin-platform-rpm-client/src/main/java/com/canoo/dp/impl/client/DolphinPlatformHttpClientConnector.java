@@ -15,14 +15,14 @@
  */
 package com.canoo.dp.impl.client;
 
-import com.canoo.dolphin.impl.PlatformRemotingConstants;
-import com.canoo.dolphin.impl.commands.DestroyContextCommand;
+import com.canoo.dp.impl.remoting.PlatformRemotingConstants;
+import com.canoo.dp.impl.remoting.commands.DestroyContextCommand;
 import com.canoo.dp.impl.platform.client.HttpClientCookieHandler;
 import com.canoo.dp.impl.platform.client.HttpStatus;
-import com.canoo.impl.platform.core.Assert;
-import com.canoo.platform.client.ClientConfiguration;
+import com.canoo.dp.impl.platform.core.Assert;
+import com.canoo.platform.remoting.client.ClientConfiguration;
 import com.canoo.platform.client.ClientSessionSupport;
-import com.canoo.platform.client.DolphinSessionException;
+import com.canoo.platform.remoting.client.DolphinSessionException;
 import com.canoo.platform.client.HttpURLConnectionHandler;
 import com.canoo.platform.core.functional.Function;
 import org.opendolphin.core.client.ClientModelStore;
@@ -47,7 +47,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
-import static com.canoo.impl.platform.core.PlatformConstants.*;
+import static com.canoo.dp.impl.platform.core.PlatformConstants.*;
 
 /**
  * This class is used to sync the unique client scope id of the current dolphin

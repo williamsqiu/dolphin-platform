@@ -15,17 +15,17 @@
  */
 package com.canoo.dp.impl.client;
 
-import com.canoo.dolphin.converter.ValueConverterException;
-import com.canoo.dolphin.impl.Converters;
-import com.canoo.dolphin.mapping.MappingException;
-import com.canoo.platform.client.ControllerActionException;
-import com.canoo.platform.client.ControllerInitalizationException;
-import com.canoo.platform.client.ControllerProxy;
-import com.canoo.platform.client.Param;
-import com.canoo.dolphin.impl.InternalAttributesBean;
-import com.canoo.dolphin.impl.commands.CallActionCommand;
-import com.canoo.dolphin.impl.commands.DestroyControllerCommand;
-import com.canoo.impl.platform.core.Assert;
+import com.canoo.platform.remoting.spi.converter.ValueConverterException;
+import com.canoo.dp.impl.remoting.Converters;
+import com.canoo.dp.impl.remoting.MappingException;
+import com.canoo.platform.remoting.client.ControllerActionException;
+import com.canoo.platform.remoting.client.ControllerInitalizationException;
+import com.canoo.platform.remoting.client.ControllerProxy;
+import com.canoo.platform.remoting.client.Param;
+import com.canoo.dp.impl.remoting.InternalAttributesBean;
+import com.canoo.dp.impl.remoting.commands.CallActionCommand;
+import com.canoo.dp.impl.remoting.commands.DestroyControllerCommand;
+import com.canoo.dp.impl.platform.core.Assert;
 import org.opendolphin.core.client.comm.AbstractClientConnector;
 import org.opendolphin.core.client.comm.OnFinishedHandler;
 import org.slf4j.Logger;

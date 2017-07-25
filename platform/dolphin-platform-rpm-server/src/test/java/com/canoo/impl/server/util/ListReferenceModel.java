@@ -15,8 +15,8 @@
  */
 package com.canoo.impl.server.util;
 
-import com.canoo.dolphin.collections.ObservableList;
-import com.canoo.dolphin.mapping.DolphinBean;
+import com.canoo.platform.remoting.ObservableList;
+import com.canoo.platform.remoting.DolphinBean;
 
 @DolphinBean
 public class ListReferenceModel {

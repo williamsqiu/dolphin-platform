@@ -15,18 +15,18 @@
  */
 package com.canoo.dp.impl.server.javaee;
 
-import com.canoo.dolphin.BeanManager;
-import com.canoo.impl.platform.core.Assert;
-import com.canoo.impl.server.bootstrap.PlatformBootstrap;
-import com.canoo.impl.server.client.ClientSessionProvider;
-import com.canoo.impl.server.context.DolphinContext;
-import com.canoo.impl.server.context.DolphinContextProvider;
-import com.canoo.impl.server.context.RemotingContextImpl;
-import com.canoo.impl.server.event.LazyEventBusInvocationHandler;
-import com.canoo.platform.server.RemotingContext;
-import com.canoo.platform.server.binding.PropertyBinder;
+import com.canoo.platform.remoting.BeanManager;
+import com.canoo.dp.impl.platform.core.Assert;
+import com.canoo.dp.impl.server.bootstrap.PlatformBootstrap;
+import com.canoo.dp.impl.server.client.ClientSessionProvider;
+import com.canoo.dp.impl.server.context.DolphinContext;
+import com.canoo.dp.impl.server.context.DolphinContextProvider;
+import com.canoo.dp.impl.server.context.RemotingContextImpl;
+import com.canoo.dp.impl.server.event.LazyEventBusInvocationHandler;
+import com.canoo.platform.remoting.server.RemotingContext;
+import com.canoo.platform.remoting.server.binding.PropertyBinder;
 import com.canoo.platform.server.client.ClientSession;
-import com.canoo.platform.server.event.DolphinEventBus;
+import com.canoo.platform.remoting.server.event.DolphinEventBus;
 import com.canoo.platform.server.javaee.ClientScoped;
 
 import javax.enterprise.context.ApplicationScoped;

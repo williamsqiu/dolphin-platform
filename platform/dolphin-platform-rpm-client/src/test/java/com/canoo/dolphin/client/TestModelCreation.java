@@ -15,13 +15,24 @@
  */
 package com.canoo.dolphin.client;
 
-import com.canoo.dolphin.BeanManager;
+import com.canoo.dp.impl.remoting.converters.BooleanConverterFactory;
+import com.canoo.dp.impl.remoting.converters.ByteConverterFactory;
+import com.canoo.dp.impl.remoting.converters.CalendarConverterFactory;
+import com.canoo.dp.impl.remoting.converters.DateConverterFactory;
+import com.canoo.dp.impl.remoting.converters.DolphinBeanConverterFactory;
+import com.canoo.dp.impl.remoting.converters.DoubleConverterFactory;
+import com.canoo.dp.impl.remoting.converters.EnumConverterFactory;
+import com.canoo.dp.impl.remoting.converters.FloatConverterFactory;
+import com.canoo.dp.impl.remoting.converters.IntegerConverterFactory;
+import com.canoo.dp.impl.remoting.converters.LongConverterFactory;
+import com.canoo.dp.impl.remoting.converters.ShortConverterFactory;
+import com.canoo.dp.impl.remoting.converters.StringConverterFactory;
+import com.canoo.platform.remoting.BeanManager;
 import com.canoo.dolphin.client.util.*;
-import com.canoo.dolphin.impl.BeanDefinitionException;
-import com.canoo.dolphin.impl.PlatformRemotingConstants;
-import com.canoo.dolphin.impl.converters.*;
-import com.canoo.dolphin.internal.BeanRepository;
-import com.canoo.dolphin.internal.EventDispatcher;
+import com.canoo.dp.impl.remoting.BeanDefinitionException;
+import com.canoo.dp.impl.remoting.PlatformRemotingConstants;
+import com.canoo.dp.impl.remoting.BeanRepository;
+import com.canoo.dp.impl.remoting.EventDispatcher;
 import mockit.Mocked;
 import org.hamcrest.Matchers;
 import org.opendolphin.RemotingConstants;

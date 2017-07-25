@@ -15,7 +15,7 @@
  */
 package com.canoo.dp.impl.client;
 
-import com.canoo.platform.client.ClientContext;
+import com.canoo.platform.remoting.client.ClientContext;
 
 /**
  * Defines the states of the {@link ClientContext}

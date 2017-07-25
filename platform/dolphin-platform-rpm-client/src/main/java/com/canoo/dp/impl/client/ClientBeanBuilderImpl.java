@@ -15,19 +15,19 @@
  */
 package com.canoo.dp.impl.client;
 
-import com.canoo.dolphin.collections.ListChangeEvent;
-import com.canoo.dolphin.collections.ObservableList;
-import com.canoo.dolphin.impl.AbstractBeanBuilder;
-import com.canoo.dolphin.impl.PresentationModelBuilderFactory;
-import com.canoo.dolphin.impl.PropertyImpl;
-import com.canoo.dolphin.impl.collections.ObservableArrayList;
-import com.canoo.dolphin.internal.BeanRepository;
-import com.canoo.dolphin.internal.ClassRepository;
-import com.canoo.dolphin.internal.EventDispatcher;
-import com.canoo.dolphin.internal.collections.ListMapper;
-import com.canoo.dolphin.internal.info.PropertyInfo;
-import com.canoo.dolphin.mapping.Property;
-import com.canoo.impl.platform.core.Assert;
+import com.canoo.platform.remoting.ListChangeEvent;
+import com.canoo.platform.remoting.ObservableList;
+import com.canoo.dp.impl.remoting.AbstractBeanBuilder;
+import com.canoo.dp.impl.remoting.PresentationModelBuilderFactory;
+import com.canoo.dp.impl.remoting.PropertyImpl;
+import com.canoo.dp.impl.remoting.collections.ObservableArrayList;
+import com.canoo.dp.impl.remoting.BeanRepository;
+import com.canoo.dp.impl.remoting.ClassRepository;
+import com.canoo.dp.impl.remoting.EventDispatcher;
+import com.canoo.dp.impl.remoting.ListMapper;
+import com.canoo.dp.impl.remoting.info.PropertyInfo;
+import com.canoo.platform.remoting.Property;
+import com.canoo.dp.impl.platform.core.Assert;
 import org.opendolphin.core.Attribute;
 import org.opendolphin.core.PresentationModel;
 

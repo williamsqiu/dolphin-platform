@@ -15,15 +15,15 @@
  */
 package com.canoo.dolphin.client.javafx;
 
-import com.canoo.platform.client.javafx.binding.BidirectionalConverter;
-import com.canoo.dolphin.binding.Binding;
-import com.canoo.platform.client.javafx.binding.Converter;
-import com.canoo.platform.client.javafx.binding.DefaultBidirectionalConverter;
-import com.canoo.platform.client.javafx.FXBinder;
-import com.canoo.dolphin.collections.ObservableList;
-import com.canoo.dolphin.impl.MockedProperty;
-import com.canoo.dolphin.impl.collections.ObservableArrayList;
-import com.canoo.dolphin.mapping.Property;
+import com.canoo.platform.remoting.client.javafx.binding.BidirectionalConverter;
+import com.canoo.platform.remoting.Binding;
+import com.canoo.platform.remoting.client.javafx.binding.Converter;
+import com.canoo.platform.remoting.client.javafx.binding.DefaultBidirectionalConverter;
+import com.canoo.platform.remoting.client.javafx.FXBinder;
+import com.canoo.platform.remoting.ObservableList;
+import com.canoo.dp.impl.remoting.MockedProperty;
+import com.canoo.dp.impl.remoting.collections.ObservableArrayList;
+import com.canoo.platform.remoting.Property;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;

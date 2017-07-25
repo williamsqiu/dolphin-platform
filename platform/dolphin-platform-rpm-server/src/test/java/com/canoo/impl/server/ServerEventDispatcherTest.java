@@ -15,8 +15,8 @@
  */
 package com.canoo.impl.server;
 
-import com.canoo.impl.server.context.OpenDolphinFactory;
-import com.canoo.impl.server.model.ServerEventDispatcher;
+import com.canoo.dp.impl.server.context.OpenDolphinFactory;
+import com.canoo.dp.impl.server.model.ServerEventDispatcher;
 import org.opendolphin.RemotingConstants;
 import org.testng.annotations.Test;
 
