@@ -18,6 +18,7 @@ package com.canoo.impl.server.client;
 import com.canoo.platform.server.client.ClientSession;
 import com.canoo.impl.platform.core.Assert;
 
+import javax.servlet.http.HttpSession;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
@@ -31,16 +32,12 @@ public class HttpClientSessionImpl implements ClientSession {
 
     private final Map<String, Object> store;
 
-    private final String httpSessionId;
+    private final HttpSession httpSession;
 
     private final String dolphinSessionId;
 
-    public HttpClientSessionImpl() {
-        this(UUID.randomUUID().toString());
-    }
-
-    public HttpClientSessionImpl(final String httpSessionId) {
-        this.httpSessionId = Assert.requireNonBlank(httpSessionId, "httpSessionId");
+    public HttpClientSessionImpl(final HttpSession httpSession) {
+        this.httpSession = Assert.requireNonNull(httpSession, "httpSession");
         this.dolphinSessionId = UUID.randomUUID().toString();
         this.store = new ConcurrentHashMap<>();
     }
@@ -73,6 +70,11 @@ public class HttpClientSessionImpl implements ClientSession {
     @Override
     public String getId() {
         return dolphinSessionId;
+    }
+
+    @Override
+    public HttpSession getHttpSession() {
+        return httpSession;
     }
 
 }
