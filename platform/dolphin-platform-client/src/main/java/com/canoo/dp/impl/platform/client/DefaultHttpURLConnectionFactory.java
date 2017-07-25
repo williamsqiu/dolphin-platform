@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.impl.platform.client;
+package com.canoo.dp.impl.platform.client;
 
+import com.canoo.impl.platform.core.Assert;
 import com.canoo.platform.client.HttpURLConnectionFactory;
 
 import java.io.IOException;
@@ -23,9 +24,11 @@ import java.net.URL;
 import java.net.URLConnection;
 
 public class DefaultHttpURLConnectionFactory implements HttpURLConnectionFactory {
+
     @Override
-    public HttpURLConnection create(URL url) throws IOException {
-        URLConnection connection = url.openConnection();
+    public HttpURLConnection create(final URL url) throws IOException {
+        Assert.requireNonNull(url, "url");
+        final URLConnection connection = url.openConnection();
         if(connection instanceof HttpURLConnection) {
             return (HttpURLConnection) connection;
         }

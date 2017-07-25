@@ -13,23 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.impl.dp.spring.test;
+package com.canoo.dp.impl.platform.client;
 
-import com.canoo.dp.impl.server.spring.ClientScopeImpl;
-import com.canoo.impl.platform.core.Assert;
-import com.canoo.platform.server.client.ClientSession;
+public interface HttpStatus {
 
-public class TestClientScope extends ClientScopeImpl {
+    int HTTP_OK = 200;
 
-    private final ClientSession clientSession;
+    int SC_REQUEST_TIMEOUT = 408;
 
-
-    public TestClientScope(final ClientSession clientSession) {
-        this.clientSession = Assert.requireNonNull(clientSession, "clientSession");
-    }
-
-    @Override
-    public ClientSession getClientSession() {
-        return clientSession;
-    }
+    int SC_MULTIPLE_CHOICES = 300;
 }

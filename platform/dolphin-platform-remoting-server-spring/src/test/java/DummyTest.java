@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2017 Canoo Engineering AG.
+ * Copyright 2015-2016 Canoo Engineering AG.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,16 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.impl.platform.client;
+import org.testng.annotations.Test;
 
-import com.canoo.platform.client.HttpURLConnectionResponseHandler;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 
-import java.net.HttpURLConnection;
-
-public class DefaultHttpURLConnectionResponseHandler implements HttpURLConnectionResponseHandler {
-
-    @Override
-    public void handle(HttpURLConnection response) {
-
+/**
+ * This test is needed for aggregated JaCoCo Test reports until this project adss proper tests
+ */
+public class DummyTest {
+    @Test
+    public void testDummy() {
+        assertThat(true, is(true));
     }
 }

@@ -22,12 +22,19 @@ import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.context.ApplicationContext;
 
+import javax.servlet.ServletContext;
+
 public abstract class AbstractSpringManagedBeanFactory implements ManagedBeanFactory {
+
+    @Override
+    public void init(ServletContext servletContext) {
+        init();
+    }
 
     protected void init() {
         ApplicationContext context = getContext();
         DefaultListableBeanFactory beanFactory = (DefaultListableBeanFactory) context.getAutowireCapableBeanFactory();
-        beanFactory.addBeanPostProcessor(SpringModelInjector.getInstance());
+        beanFactory.addBeanPostProcessor(SpringPreInjector.getInstance());
     }
 
     @Override
@@ -44,7 +51,7 @@ public abstract class AbstractSpringManagedBeanFactory implements ManagedBeanFac
         Assert.requireNonNull(interceptor, "interceptor");
         ApplicationContext context = getContext();
         AutowireCapableBeanFactory beanFactory = context.getAutowireCapableBeanFactory();
-        SpringModelInjector.getInstance().prepare(cls, interceptor);
+        SpringPreInjector.getInstance().prepare(cls, interceptor);
         return beanFactory.createBean(cls);
     }
 

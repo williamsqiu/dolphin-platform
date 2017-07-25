@@ -15,8 +15,8 @@
  */
 package com.canoo.platform.client;
 
-import com.canoo.impl.platform.client.DefaultHttpURLConnectionFactory;
-import com.canoo.impl.platform.client.DefaultHttpURLConnectionResponseHandler;
+import com.canoo.dp.impl.platform.client.DefaultHttpURLConnectionFactory;
+import com.canoo.dp.impl.platform.client.DefaultHttpURLConnectionResponseHandler;
 import com.canoo.impl.platform.core.Assert;
 import com.canoo.impl.platform.core.IdentitySet;
 import com.canoo.impl.platform.core.SimpleDolphinPlatformThreadFactory;
@@ -64,7 +64,7 @@ public class ClientConfiguration {
 
     private HttpURLConnectionFactory connectionFactory;
 
-    private HttpURLConnectionResponseHandler responseHandler;
+    private HttpURLConnectionHandler responseHandler;
 
     private CookieStore cookieStore;
 
@@ -145,7 +145,7 @@ public class ClientConfiguration {
         return cookieStore;
     }
 
-    public HttpURLConnectionResponseHandler getResponseHandler() {
+    public HttpURLConnectionHandler getResponseHandler() {
         return responseHandler;
     }
 
@@ -157,7 +157,7 @@ public class ClientConfiguration {
         this.cookieStore = Assert.requireNonNull(cookieStore, "cookieStore");
     }
 
-    public void setResponseHandler(HttpURLConnectionResponseHandler responseHandler) {
+    public void setResponseHandler(HttpURLConnectionHandler responseHandler) {
         this.responseHandler = Assert.requireNonNull(responseHandler, "responseHandler");
     }
 

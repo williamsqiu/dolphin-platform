@@ -16,6 +16,7 @@
 package com.canoo.dolphin.client.impl;
 
 import com.canoo.dp.impl.client.DolphinPlatformHttpClientConnector;
+import com.canoo.impl.platform.core.PlatformConstants;
 import com.canoo.platform.client.ClientConfiguration;
 import com.canoo.dolphin.client.DummyUiThreadHandler;
 import com.canoo.platform.client.HttpURLConnectionFactory;
@@ -74,6 +75,14 @@ public class TestDolphinPlatformHttpClientConnector {
                     public InputStream getInputStream() throws IOException {
                         String response = "[{\"pmId\":\"p1\",\"clientSideOnly\":false,\"id\":\"CreatePresentationModel\",\"attributes\":[],\"pmType\":null,\"className\":\"org.opendolphin.core.comm.CreatePresentationModelCommand\"}]";
                         return new ByteArrayInputStream(response.getBytes("UTF-8"));
+                    }
+
+                    @Override
+                    public String getHeaderField(String name) {
+                        if(PlatformConstants.CLIENT_ID_HTTP_HEADER_NAME.equals(name)) {
+                            return "TEST-ID";
+                        }
+                        return super.getHeaderField(name);
                     }
                 };
             }

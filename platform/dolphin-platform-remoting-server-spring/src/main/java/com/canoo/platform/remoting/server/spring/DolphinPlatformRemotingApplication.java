@@ -13,17 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.platform.server.spring;
+package com.canoo.platform.remoting.server.spring;
 
-import com.canoo.dp.impl.server.spring.DolphinPlatformSpringBootstrap;
-import com.canoo.dp.impl.server.spring.SpringBeanFactory;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.AutoConfigurationExcludeFilter;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.context.TypeExcludeFilter;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
-import org.springframework.context.annotation.Import;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Inherited;
@@ -35,7 +32,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
  * Annotation can be used to annotate a Spring based Dolphin Platform annotation.
- * This annotation does mainly the same as {@link SpringBootApplication} but adds the
+ * This annotation does mainly the same as {@link org.springframework.boot.autoconfigure.SpringBootApplication} but adds the
  * Dolphin Platform bootstrap.
  *
  * @author Hendrik Ebbers
@@ -49,6 +46,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @ComponentScan(excludeFilters = {
         @ComponentScan.Filter(type = FilterType.CUSTOM, classes = TypeExcludeFilter.class),
         @ComponentScan.Filter(type = FilterType.CUSTOM, classes = AutoConfigurationExcludeFilter.class) })
-@EnableDolphinPlatform
-public @interface DolphinPlatformApplication {
+@EnableRemoting
+public @interface DolphinPlatformRemotingApplication {
 }

@@ -15,10 +15,12 @@
  */
 package com.canoo.platform.server.spring;
 
-import com.canoo.dp.impl.server.spring.ClientScope;
-import org.springframework.beans.factory.annotation.Qualifier;
+import com.canoo.dp.impl.server.spring.ClientScopeImpl;
 import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.core.annotation.AliasFor;
 
+import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -27,10 +29,16 @@ import java.lang.annotation.Target;
 /**
  * A custom scope that is bound to the lifecycle of a {@link com.canoo.platform.server.client.ClientSession}
  */
-@Qualifier
-@Scope(ClientScope.CLIENT_SCOPE)
+@Scope(ClientScopeImpl.CLIENT_SCOPE)
+@Documented
 @Target({ ElementType.TYPE, ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ClientScoped {
+public @interface ClientScope {
 
+    /**
+     * Alias for {@link Scope#proxyMode}.
+     * <p>Defaults to {@link ScopedProxyMode#TARGET_CLASS}.
+     */
+    @AliasFor(annotation = Scope.class)
+    ScopedProxyMode proxyMode() default ScopedProxyMode.TARGET_CLASS;
 }
