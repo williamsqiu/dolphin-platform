@@ -16,5 +16,5 @@
 
 dependencies {
     compile project(':dolphin-platform-server-spring')
-    compile project(':dolphin-platform-rpm-server')
+    compile project(':dolphin-platform-remoting-server')
 }
