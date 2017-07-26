@@ -15,8 +15,12 @@
  */
 package com.canoo.dolphin.integration;
 
-import com.canoo.impl.platform.core.Assert;
-import com.canoo.platform.client.*;
+import com.canoo.dp.impl.platform.core.Assert;
+import com.canoo.platform.remoting.client.ClientConfiguration;
+import com.canoo.platform.remoting.client.ClientContext;
+import com.canoo.platform.remoting.client.ClientContextFactory;
+import com.canoo.platform.remoting.client.ControllerProxy;
+import com.canoo.platform.remoting.client.Param;
 import org.testng.annotations.DataProvider;
 
 import java.io.IOException;

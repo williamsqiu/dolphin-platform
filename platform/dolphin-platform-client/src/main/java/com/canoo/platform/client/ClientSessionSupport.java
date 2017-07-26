@@ -5,7 +5,7 @@ import com.canoo.dp.impl.platform.client.ClientSessionSupportingURLConnectionReq
 import com.canoo.dp.impl.platform.client.ClientSessionSupportingURLConnectionResponseHandler;
 import com.canoo.dp.impl.platform.client.DefaultHttpURLConnectionFactory;
 import com.canoo.dp.impl.platform.client.SimpleUrlToAppDomainConverter;
-import com.canoo.impl.platform.core.Assert;
+import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.core.functional.Callback;
 import com.canoo.platform.core.functional.Function;
 

@@ -15,18 +15,19 @@
  */
 package com.canoo.impl.dp.spring.test;
 
-import com.canoo.dolphin.BeanManager;
+import com.canoo.dp.impl.remoting.BeanManagerImpl;
+import com.canoo.platform.remoting.BeanManager;
 import com.canoo.dp.impl.server.spring.ClientScopeImpl;
-import com.canoo.impl.platform.core.Assert;
-import com.canoo.impl.server.binding.PropertyBinderImpl;
-import com.canoo.impl.server.client.ClientSessionLifecycleHandlerImpl;
-import com.canoo.impl.server.context.DolphinContext;
-import com.canoo.impl.server.context.DolphinContextProvider;
-import com.canoo.impl.server.event.DefaultDolphinEventBus;
-import com.canoo.platform.client.ClientContext;
-import com.canoo.platform.server.binding.PropertyBinder;
+import com.canoo.dp.impl.platform.core.Assert;
+import com.canoo.dp.impl.server.binding.PropertyBinderImpl;
+import com.canoo.dp.impl.server.client.ClientSessionLifecycleHandlerImpl;
+import com.canoo.dp.impl.server.context.DolphinContext;
+import com.canoo.dp.impl.server.context.DolphinContextProvider;
+import com.canoo.dp.impl.server.event.DefaultDolphinEventBus;
+import com.canoo.platform.remoting.client.ClientContext;
+import com.canoo.platform.remoting.server.binding.PropertyBinder;
 import com.canoo.platform.server.client.ClientSession;
-import com.canoo.platform.server.event.DolphinEventBus;
+import com.canoo.platform.remoting.server.event.DolphinEventBus;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.beans.factory.config.CustomScopeConfigurer;
 import org.springframework.context.annotation.Bean;
@@ -65,7 +66,7 @@ public class DolphinPlatformSpringTestBootstrap {
     }
 
     /**
-     * Method to create a spring managed {@link com.canoo.dolphin.impl.BeanManagerImpl} instance in client scope.
+     * Method to create a spring managed {@link BeanManagerImpl} instance in client scope.
      *
      * @return the instance
      */

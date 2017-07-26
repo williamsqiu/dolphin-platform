@@ -15,7 +15,7 @@
  */
 package com.canoo.dp.impl.platform.client;
 
-import com.canoo.impl.platform.core.Assert;
+import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.client.HttpURLConnectionFactory;
 
 import java.io.IOException;

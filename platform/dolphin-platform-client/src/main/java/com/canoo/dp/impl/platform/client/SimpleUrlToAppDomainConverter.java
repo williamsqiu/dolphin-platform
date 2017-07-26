@@ -1,6 +1,6 @@
 package com.canoo.dp.impl.platform.client;
 
-import com.canoo.impl.platform.core.Assert;
+import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.client.UrlToAppDomainConverter;
 
 import java.net.URL;

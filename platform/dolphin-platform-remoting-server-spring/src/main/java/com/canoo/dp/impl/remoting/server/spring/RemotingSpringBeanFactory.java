@@ -15,16 +15,17 @@
  */
 package com.canoo.dp.impl.remoting.server.spring;
 
-import com.canoo.dolphin.BeanManager;
-import com.canoo.impl.platform.core.Assert;
-import com.canoo.impl.server.bootstrap.PlatformBootstrap;
-import com.canoo.impl.server.context.DolphinContext;
-import com.canoo.impl.server.context.DolphinContextProvider;
-import com.canoo.impl.server.context.RemotingContextImpl;
-import com.canoo.impl.server.event.LazyEventBusInvocationHandler;
-import com.canoo.platform.server.RemotingContext;
-import com.canoo.platform.server.binding.PropertyBinder;
-import com.canoo.platform.server.event.DolphinEventBus;
+import com.canoo.dp.impl.remoting.BeanManagerImpl;
+import com.canoo.platform.remoting.BeanManager;
+import com.canoo.dp.impl.platform.core.Assert;
+import com.canoo.dp.impl.server.bootstrap.PlatformBootstrap;
+import com.canoo.dp.impl.server.context.DolphinContext;
+import com.canoo.dp.impl.server.context.DolphinContextProvider;
+import com.canoo.dp.impl.server.context.RemotingContextImpl;
+import com.canoo.dp.impl.server.event.LazyEventBusInvocationHandler;
+import com.canoo.platform.remoting.server.RemotingContext;
+import com.canoo.platform.remoting.server.binding.PropertyBinder;
+import com.canoo.platform.remoting.server.event.DolphinEventBus;
 import com.canoo.platform.server.spring.ClientScope;
 import com.canoo.platform.server.spring.SingletonScope;
 import org.springframework.context.annotation.Bean;
@@ -53,7 +54,7 @@ public class RemotingSpringBeanFactory {
     }
 
     /**
-     * Method to create a spring managed {@link com.canoo.dolphin.impl.BeanManagerImpl} instance in client scope.
+     * Method to create a spring managed {@link BeanManagerImpl} instance in client scope.
      *
      * @return the instance
      */
