@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2016 Canoo Engineering AG.
+ * Copyright 2015-2016 Canoo Engineering AG.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,14 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import org.testng.annotations.Test;
 
-dependencies {
-    compile project(':dolphin-platform-server')
-    compile "org.apache.deltaspike.core:deltaspike-core-api:$deltaSpikeVersion"
-    runtime "org.apache.deltaspike.core:deltaspike-core-impl:$deltaSpikeVersion"
-    compileOnly 'javax.enterprise:cdi-api:1.1'
-    compileOnly "javax.servlet:javax.servlet-api:$servletApiVersion"
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 
-    testCompile 'javax.enterprise:cdi-api:1.1'
-    testCompile "javax.servlet:javax.servlet-api:$servletApiVersion"
+/**
+ * This test is needed for aggregated JaCoCo Test reports until this project adss proper tests
+ */
+public class DummyTest {
+    @Test
+    public void testDummy() {
+        assertThat(true, is(true));
+    }
 }
