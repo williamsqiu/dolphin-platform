@@ -13,16 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.dolphin.event;
+package com.canoo.platform.remoting;
 
 import java.util.EventListener;
 
 /**
  * A change listener that supports generics.
  * Usage in the Dolphin Platform:
- * Listener instances can be registered to {@link com.canoo.dolphin.mapping.Property}
- * instances to observe the internal value of the {@link com.canoo.dolphin.mapping.Property}. Whenever
- * the internal value of the {@link com.canoo.dolphin.mapping.Property} is changed the {@link #valueChanged(ValueChangeEvent)}
+ * Listener instances can be registered to {@link Property}
+ * instances to observe the internal value of the {@link Property}. Whenever
+ * the internal value of the {@link Property} is changed the {@link #valueChanged(ValueChangeEvent)}
  * method will be called for all registered {@link ValueChangeListener} instances.
  * @param <T> type of the value that is observed by this listener
  */

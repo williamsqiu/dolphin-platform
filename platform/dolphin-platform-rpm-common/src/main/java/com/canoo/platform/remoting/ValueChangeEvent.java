@@ -13,9 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.dolphin.event;
-
-import com.canoo.dolphin.mapping.Property;
+package com.canoo.platform.remoting;
 
 /**
  * Defines a value changed event for a {@link Property}. A {@link Property} fires {@link ValueChangeEvent} to all
