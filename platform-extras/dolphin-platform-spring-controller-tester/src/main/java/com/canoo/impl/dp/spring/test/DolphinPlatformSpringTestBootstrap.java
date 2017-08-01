@@ -90,7 +90,7 @@ public class DolphinPlatformSpringTestBootstrap {
 
     @Bean(name = "remotingContext")
     @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
-    protected RemotingContext createRemotingContext(final TestConfiguration testConfiguration, final PropertyBinder propertyBinder, DolphinEventBus eventBus) {
+    protected RemotingContext createRemotingContext(final TestConfiguration testConfiguration, final PropertyBinder propertyBinder, final DolphinEventBus eventBus) {
         Assert.requireNonNull(testConfiguration, "testConfiguration");
         Assert.requireNonNull(propertyBinder, "propertyBinder");
         Assert.requireNonNull(eventBus, "eventBus");
