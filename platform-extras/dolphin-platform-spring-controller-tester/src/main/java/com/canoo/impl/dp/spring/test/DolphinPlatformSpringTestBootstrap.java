@@ -15,19 +15,22 @@
  */
 package com.canoo.impl.dp.spring.test;
 
-import com.canoo.dp.impl.remoting.BeanManagerImpl;
-import com.canoo.platform.remoting.BeanManager;
-import com.canoo.dp.impl.server.spring.ClientScopeImpl;
 import com.canoo.dp.impl.platform.core.Assert;
+import com.canoo.dp.impl.remoting.BeanManagerImpl;
 import com.canoo.dp.impl.server.binding.PropertyBinderImpl;
 import com.canoo.dp.impl.server.client.ClientSessionLifecycleHandlerImpl;
+import com.canoo.dp.impl.server.context.ClientSessionExecutorImpl;
 import com.canoo.dp.impl.server.context.DolphinContext;
 import com.canoo.dp.impl.server.context.DolphinContextProvider;
 import com.canoo.dp.impl.server.event.DefaultDolphinEventBus;
+import com.canoo.dp.impl.server.spring.ClientScopeImpl;
+import com.canoo.platform.remoting.BeanManager;
 import com.canoo.platform.remoting.client.ClientContext;
+import com.canoo.platform.remoting.server.ClientSessionExecutor;
+import com.canoo.platform.remoting.server.RemotingContext;
 import com.canoo.platform.remoting.server.binding.PropertyBinder;
-import com.canoo.platform.server.client.ClientSession;
 import com.canoo.platform.remoting.server.event.DolphinEventBus;
+import com.canoo.platform.server.client.ClientSession;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.beans.factory.config.CustomScopeConfigurer;
 import org.springframework.context.annotation.Bean;
@@ -36,6 +39,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.web.context.WebApplicationContext;
 
 import javax.servlet.http.HttpSession;
+import java.util.concurrent.Executor;
 
 @Configuration
 public class DolphinPlatformSpringTestBootstrap {
@@ -82,6 +86,50 @@ public class DolphinPlatformSpringTestBootstrap {
     protected ClientSession createDolphinSession(final TestConfiguration testConfiguration) {
         Assert.requireNonNull(testConfiguration, "testConfiguration");
         return testConfiguration.getDolphinTestContext().getDolphinSession();
+    }
+
+    @Bean(name = "remotingContext")
+    @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
+    protected RemotingContext createRemotingContext(final TestConfiguration testConfiguration, final PropertyBinder propertyBinder, final DolphinEventBus eventBus) {
+        Assert.requireNonNull(testConfiguration, "testConfiguration");
+        Assert.requireNonNull(propertyBinder, "propertyBinder");
+        Assert.requireNonNull(eventBus, "eventBus");
+        return new RemotingContext() {
+            @Override
+            public String getId() {
+                return testConfiguration.getDolphinTestContext().getDolphinSession().getId();
+            }
+
+            @Override
+            public ClientSessionExecutor createSessionExecutor() {
+                return new ClientSessionExecutorImpl(new Executor() {
+                    @Override
+                    public void execute(Runnable command) {
+                        testConfiguration.getDolphinTestContext().runLater(command);
+                    }
+                });
+            }
+
+            @Override
+            public PropertyBinder getBinder() {
+                return propertyBinder;
+            }
+
+            @Override
+            public BeanManager getBeanManager() {
+                return testConfiguration.getDolphinTestContext().getBeanManager();
+            }
+
+            @Override
+            public DolphinEventBus getEventBus() {
+                return eventBus;
+            }
+
+            @Override
+            public ClientSession getClientSession() {
+                return testConfiguration.getDolphinTestContext().getDolphinSession();
+            }
+        };
     }
 
     /**
