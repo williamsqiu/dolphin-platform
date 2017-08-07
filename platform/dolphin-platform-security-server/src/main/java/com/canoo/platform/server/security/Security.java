@@ -18,7 +18,7 @@ public interface Security {
 
     default void requireRole(final String role) {
         if (!hasRole(role)) {
-            throw new SecurityException("Access Denied");
+            accessDenied();
         }
     }
 
@@ -39,7 +39,7 @@ public interface Security {
 
     default void requireAnyRole(final String... roles) {
         if (!hasAnyRole(roles)) {
-            throw new SecurityException("Access Denied");
+            accessDenied();
         }
     }
 
@@ -66,7 +66,7 @@ public interface Security {
 
     default void requireAllRoles(final String... roles) {
         if (!hasAllRoles(roles)) {
-            throw new SecurityException("Access Denied");
+            accessDenied();
         }
     }
 
@@ -90,7 +90,7 @@ public interface Security {
 
     default void requireUser(final String user) {
         if (!isUser(user)) {
-            throw new SecurityException("Access Denied");
+           accessDenied();
         }
     }
 
@@ -105,4 +105,6 @@ public interface Security {
     }
 
     User getUser();
+
+    void accessDenied();
 }

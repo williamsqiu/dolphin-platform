@@ -1,6 +1,6 @@
 package com.canoo.platform.server.spring;
 
-import com.canoo.dp.impl.server.spring.SpringBeanFactory;
+import com.canoo.dp.impl.server.security.spring.SecurityBeanFactory;
 import org.springframework.context.annotation.Import;
 
 import java.lang.annotation.Documented;
@@ -10,7 +10,7 @@ import java.lang.annotation.Target;
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-@Import({SpringBeanFactory.class})
+@Import({SecurityBeanFactory.class})
 @Documented
 @Target({TYPE})
 @Retention(RUNTIME)

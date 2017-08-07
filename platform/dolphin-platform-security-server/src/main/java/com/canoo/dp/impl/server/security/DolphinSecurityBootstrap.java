@@ -42,12 +42,12 @@ public class DolphinSecurityBootstrap {
             keycloakSecurityFilter.setInitParameter(KEYCLOAK_CONFIG_RESOLVER_PROPERTY_NAME, DolphinKeycloakConfigResolver.class.getName());
             keycloakSecurityFilter.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, keycloakConfiguration.getSecureEndpointsArray());
             final FilterRegistration.Dynamic keycloakExtractorFilter = servletContext.addFilter(EXTRACTOR_FILTER_NAME, extractFilter);
-            keycloakExtractorFilter.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, keycloakConfiguration.getSecureEndpointsArray());
+            keycloakExtractorFilter.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/*");
         }
     }
 
     public Security getSecurityForCurrentRequest() {
-        return new SecurityKeycloakImpl(extractFilter.getContext());
+        return extractFilter.getSecurity();
     }
 
     public static DolphinSecurityBootstrap getInstance() {
