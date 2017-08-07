@@ -15,6 +15,9 @@
  */
 package com.canoo.dolphin.integration;
 
+import com.canoo.platform.server.security.Security;
+
+import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
@@ -22,8 +25,12 @@ import javax.ws.rs.core.Response;
 @Path("/health")
 public class HealthEndpoint {
 
+    @Inject
+    private Security security;
+
     @GET
     public Response check() {
+        System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& User: " +security.hasUser());
         return Response.status(200).build();
     }
 

@@ -17,6 +17,10 @@ include 'platform/dolphin-platform-remoting-server'
 include 'platform/dolphin-platform-remoting-server-javaee'
 include 'platform/dolphin-platform-remoting-server-spring'
 
+include 'platform/dolphin-platform-security-server'
+include 'platform/dolphin-platform-security-server-javaee'
+include 'platform/dolphin-platform-security-server-spring'
+
 include 'platform-extras/dolphin-platform-bean-validation'
 include 'platform-extras/dolphin-platform-spring-controller-tester'
 include 'platform-extras/dolphin-platform-reactive'
