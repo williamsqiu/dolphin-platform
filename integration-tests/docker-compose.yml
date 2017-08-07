@@ -1,18 +1,25 @@
-paraya-integration:
-  build: ./docker-base/payara-integration/
-  ports:
-    - "8081:8080"
+# paraya-integration:
+#   build: ./docker-base/payara-integration/
+#   ports:
+#     - "8081:8080"
 
-tomee-integration:
-  build: ./docker-base/tomee-integration/
-  ports:
-    - "8082:8080"
+# tomee-integration:
+#   build: ./docker-base/tomee-integration/
+#   ports:
+#     - "8082:8080"
 
-wildfly-integration:
-  build: ./docker-base/wildfly-integration/
-  ports:
-    - "8083:8080"
+# wildfly-integration:
+#   build: ./docker-base/wildfly-integration/
+#   ports:
+#     - "8083:8080"
 
+keycloak:
+  build: ./docker-base/keycloak/
+  environment:
+    - KEYCLOAK_USER=admin
+    - KEYCLOAK_PASSWORD=admin
+  ports:
+    - "8090:8080"
 # spring-boot:
 #   build: ./docker-base/spring-boot/
 #   ports:

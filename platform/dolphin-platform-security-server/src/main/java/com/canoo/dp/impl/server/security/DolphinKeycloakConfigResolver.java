@@ -2,7 +2,9 @@ package com.canoo.dp.impl.server.security;
 
 import org.keycloak.adapters.KeycloakConfigResolver;
 import org.keycloak.adapters.KeycloakDeployment;
+import org.keycloak.adapters.rotation.JWKPublicKeyLocator;
 import org.keycloak.adapters.spi.HttpFacade;
+import org.keycloak.common.enums.SslRequired;
 import org.keycloak.representations.adapters.config.AdapterConfig;
 
 public class DolphinKeycloakConfigResolver implements KeycloakConfigResolver {
@@ -14,6 +16,9 @@ public class DolphinKeycloakConfigResolver implements KeycloakConfigResolver {
         deployment.setRealm(configuration.getRealmName());
         final AdapterConfig adapterConfig = new AdapterConfig();
         adapterConfig.setAuthServerUrl(configuration.getAuthEndpoint());
+        deployment.setEnableBasicAuth(true);
+        deployment.setSslRequired(SslRequired.NONE);
+        deployment.setPublicKeyLocator(new JWKPublicKeyLocator());
         deployment.setAuthServerBaseUrl(adapterConfig);
         deployment.setResourceName(configuration.getApplicationName());
         return deployment;
