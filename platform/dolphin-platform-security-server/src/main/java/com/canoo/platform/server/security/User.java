@@ -1,9 +1,10 @@
 package com.canoo.platform.server.security;
 
+import java.security.Principal;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-public interface User {
+public interface User extends Principal {
 
     Stream<String> getRoles();
 
@@ -31,4 +32,7 @@ public interface User {
         return Optional.ofNullable(getLastName());
     }
 
+    default String getName() {
+        return getUserName();
+    }
 }

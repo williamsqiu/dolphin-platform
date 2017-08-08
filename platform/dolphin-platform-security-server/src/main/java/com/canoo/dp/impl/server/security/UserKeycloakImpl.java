@@ -38,4 +38,5 @@ public class UserKeycloakImpl implements User {
     public String getLastName() {
         return keycloakSecurityContext.getIdToken().getFamilyName();
     }
+
 }
