@@ -13,25 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.dolphin.integration;
+package com.canoo.dolphin.client.util;
 
-import com.canoo.platform.server.security.SecurityContext;
+import com.canoo.platform.remoting.ObservableList;
+import com.canoo.platform.remoting.DolphinBean;
 
-import javax.inject.Inject;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.core.Response;
+@DolphinBean
+public class ListReferenceModel {
 
-@Path("/health")
-public class HealthEndpoint {
+    public enum DataType {LIST_VALUE_1, LIST_VALUE_2}
 
-    @Inject
-    private SecurityContext security;
+    private ObservableList<SimpleTestModel> objectList;
 
-    @GET
-    public Response check() {
-        System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& User: " +security.hasUser());
-        return Response.status(200).build();
+    private ObservableList<String> primitiveList;
+
+    public ObservableList<SimpleTestModel> getObjectList() {
+        return objectList;
     }
 
+    public ObservableList<String> getPrimitiveList() {
+        return primitiveList;
+    }
 }

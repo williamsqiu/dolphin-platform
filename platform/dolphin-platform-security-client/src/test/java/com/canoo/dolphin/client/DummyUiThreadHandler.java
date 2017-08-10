@@ -13,25 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.dolphin.integration;
+package com.canoo.dolphin.client;
 
-import com.canoo.platform.server.security.SecurityContext;
+import java.util.concurrent.Executor;
 
-import javax.inject.Inject;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.core.Response;
+public class DummyUiThreadHandler implements Executor {
 
-@Path("/health")
-public class HealthEndpoint {
-
-    @Inject
-    private SecurityContext security;
-
-    @GET
-    public Response check() {
-        System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& User: " +security.hasUser());
-        return Response.status(200).build();
+    @Override
+    public void execute(Runnable command) {
+        command.run();
     }
-
 }

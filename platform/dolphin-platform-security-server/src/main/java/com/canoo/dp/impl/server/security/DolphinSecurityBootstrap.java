@@ -1,7 +1,7 @@
 package com.canoo.dp.impl.server.security;
 
 import com.canoo.dp.impl.platform.core.Assert;
-import com.canoo.platform.server.security.Security;
+import com.canoo.platform.server.security.SecurityContext;
 import com.canoo.platform.server.spi.PlatformConfiguration;
 import org.keycloak.adapters.servlet.KeycloakOIDCFilter;
 import org.slf4j.Logger;
@@ -36,7 +36,7 @@ public class DolphinSecurityBootstrap {
             this.extractFilter = new KeycloakSecurityContextExtractFilter();
             DolphinKeycloakConfigResolver.setConfiguration(keycloakConfiguration);
             if(!new DolphinKeycloakConfigResolver().resolve(null).isConfigured()) {
-                LOG.error("Security is not configured!");
+                LOG.error("SecurityContext is not configured!");
             }
             final FilterRegistration.Dynamic keycloakSecurityFilter = servletContext.addFilter(FILTER_NAME, new KeycloakOIDCFilter());
             keycloakSecurityFilter.setInitParameter(KEYCLOAK_CONFIG_RESOLVER_PROPERTY_NAME, DolphinKeycloakConfigResolver.class.getName());
@@ -46,7 +46,7 @@ public class DolphinSecurityBootstrap {
         }
     }
 
-    public Security getSecurityForCurrentRequest() {
+    public SecurityContext getSecurityForCurrentRequest() {
         return extractFilter.getSecurity();
     }
 

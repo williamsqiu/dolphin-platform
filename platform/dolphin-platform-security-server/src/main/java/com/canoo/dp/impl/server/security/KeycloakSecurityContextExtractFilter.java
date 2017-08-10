@@ -36,7 +36,7 @@ public class KeycloakSecurityContextExtractFilter implements Filter, AccessDenie
             if(!accessDenied.get()) {
                 throw e;
             } else {
-                LOG.error("Security error in request", e);
+                LOG.error("SecurityContext error in request", e);
             }
         } finally {
             contextHolder.set(null);
@@ -50,8 +50,8 @@ public class KeycloakSecurityContextExtractFilter implements Filter, AccessDenie
 
     public void destroy() {}
 
-    public SecurityKeycloakImpl getSecurity() {
-        return new SecurityKeycloakImpl(contextHolder.get(), this);
+    public SecurityContextKeycloakImpl getSecurity() {
+        return new SecurityContextKeycloakImpl(contextHolder.get(), this);
     }
 
     @Override

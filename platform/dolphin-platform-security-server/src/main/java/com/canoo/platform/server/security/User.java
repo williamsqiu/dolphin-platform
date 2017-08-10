@@ -6,18 +6,14 @@ import java.util.stream.Stream;
 
 public interface User extends Principal {
 
+    String getUserName();
+
     Stream<String> getRoles();
 
     String getEmail();
 
     default Optional<String> email() {
         return Optional.ofNullable(getEmail());
-    }
-
-    String getUserName();
-
-    default Optional<String> userName() {
-        return Optional.ofNullable(getUserName());
     }
 
     String getFirstName();

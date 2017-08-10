@@ -13,25 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.dolphin.integration;
+package com.canoo.dolphin.client.util;
 
-import com.canoo.platform.server.security.SecurityContext;
+import com.canoo.platform.remoting.DolphinBean;
+import com.canoo.platform.remoting.Property;
 
-import javax.inject.Inject;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.core.Response;
+@DolphinBean
+public class ChildModel extends ParentModel {
 
-@Path("/health")
-public class HealthEndpoint {
+    private Property<String> childProperty;
 
-    @Inject
-    private SecurityContext security;
-
-    @GET
-    public Response check() {
-        System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& User: " +security.hasUser());
-        return Response.status(200).build();
+    public Property<String> getChildProperty() {
+        return childProperty;
     }
-
 }

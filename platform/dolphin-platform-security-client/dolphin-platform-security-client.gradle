@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2017 Canoo Engineering AG.
+ * Copyright 2012-2016 Canoo Engineering AG.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,25 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.dolphin.integration;
 
-import com.canoo.platform.server.security.SecurityContext;
-
-import javax.inject.Inject;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.core.Response;
-
-@Path("/health")
-public class HealthEndpoint {
-
-    @Inject
-    private SecurityContext security;
-
-    @GET
-    public Response check() {
-        System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& User: " +security.hasUser());
-        return Response.status(200).build();
-    }
-
+dependencies {
+    compile project(':dolphin-platform-client')
+    compile 'org.keycloak:keycloak-admin-client:3.1.0.Final'
 }
