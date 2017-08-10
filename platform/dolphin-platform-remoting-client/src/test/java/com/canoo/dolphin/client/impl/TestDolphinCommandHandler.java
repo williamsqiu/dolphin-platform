@@ -33,7 +33,11 @@ import static org.testng.Assert.assertEquals;
 
 public class TestDolphinCommandHandler extends AbstractDolphinBasedTest {
 
-    private final class TestChangeCommand extends Command {}
+    private final class TestChangeCommand extends Command {
+        public TestChangeCommand() {
+            super(TestChangeCommand.class.getSimpleName());
+        }
+    }
 
     @Test
     public void testInvocation() throws Exception {
