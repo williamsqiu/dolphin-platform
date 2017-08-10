@@ -306,27 +306,51 @@ public class ServerControlledFunctionalTests {
     private DefaultServerDolphin serverDolphin;
     private ClientDolphin clientDolphin;
 
-    final private class CreatePmCommand extends Command {
+    private final class CreatePmCommand extends Command {
+        public CreatePmCommand() {
+            super(CreatePmCommand.class.getSimpleName());
+        }
     }
 
-    final private class CheckPmIsThereCommand extends Command {
+    private final class CheckPmIsThereCommand extends Command {
+        public CheckPmIsThereCommand() {
+            super(CheckPmIsThereCommand.class.getSimpleName());
+        }
     }
 
-    final private class DeleteAndRecreateCommand extends Command {
+    private final class DeleteAndRecreateCommand extends Command {
+        public DeleteAndRecreateCommand() {
+            super(DeleteAndRecreateCommand.class.getSimpleName());
+        }
     }
 
-    final private class AssertRetainedServerStateCommand extends Command {
+    private final class AssertRetainedServerStateCommand extends Command {
+        public AssertRetainedServerStateCommand() {
+            super(AssertRetainedServerStateCommand.class.getSimpleName());
+        }
     }
 
-    final private class ChangeValueMultipleTimesAndBackToBaseCommand extends Command {
+    private final class ChangeValueMultipleTimesAndBackToBaseCommand extends Command {
+        public ChangeValueMultipleTimesAndBackToBaseCommand() {
+            super(ChangeValueMultipleTimesAndBackToBaseCommand.class.getSimpleName());
+        }
     }
 
-    final private class RemoveCommand extends Command {
+    private final class RemoveCommand extends Command {
+        public RemoveCommand() {
+            super(RemoveCommand.class.getSimpleName());
+        }
     }
 
-    final private class SetAndUnsetQualifierCommand extends Command {
+    private final class SetAndUnsetQualifierCommand extends Command {
+        public SetAndUnsetQualifierCommand() {
+            super(SetAndUnsetQualifierCommand.class.getSimpleName());
+        }
     }
 
-    final private class SetQualifierCommand extends Command {
+    private final class SetQualifierCommand extends Command {
+        public SetQualifierCommand() {
+            super(SetQualifierCommand.class.getSimpleName());
+        }
     }
 }

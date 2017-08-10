@@ -19,8 +19,8 @@ import org.opendolphin.core.comm.ChangeAttributeMetadataCommand;
 import org.opendolphin.core.comm.Command;
 import org.opendolphin.core.comm.CreatePresentationModelCommand;
 import org.opendolphin.core.comm.DeletePresentationModelCommand;
-import org.opendolphin.core.comm.DeletedPresentationModelNotification;
-import org.opendolphin.core.comm.EmptyNotification;
+import org.opendolphin.core.comm.EmptyCommand;
+import org.opendolphin.core.comm.PresentationModelDeletedCommand;
 import org.opendolphin.core.comm.ValueChangedCommand;
 import org.opendolphin.util.DirectExecutor;
 import org.opendolphin.util.Provider;
@@ -99,12 +99,12 @@ public class ClientConnectorTests {
         assertCommandsTransmitted(1);
         // 1 command was sent because of the sent sync (resulting in a EMPTY command):
         Assert.assertFalse(clientConnector.getTransmittedCommands().isEmpty());
-        Assert.assertEquals(EmptyNotification.class, clientConnector.getTransmittedCommands().get(0).getClass());
+        Assert.assertEquals(EmptyCommand.class, clientConnector.getTransmittedCommands().get(0).getClass());
     }
 
     @Test
     public void testSevereLogWhenCommandNotFound() {
-        clientConnector.dispatchHandle(new EmptyNotification());
+        clientConnector.dispatchHandle(new EmptyCommand());
         syncAndWaitUntilDone();
         assertOnlySyncCommandWasTransmitted();
     }
@@ -279,7 +279,7 @@ public class ClientConnectorTests {
 
         int deletedPresentationModelNotificationCount = 0;
         for (Command c : clientConnector.getTransmittedCommands()) {
-            if (c instanceof DeletedPresentationModelNotification) {
+            if (c instanceof PresentationModelDeletedCommand) {
                 deletedPresentationModelNotificationCount = deletedPresentationModelNotificationCount + 1;
             }
 

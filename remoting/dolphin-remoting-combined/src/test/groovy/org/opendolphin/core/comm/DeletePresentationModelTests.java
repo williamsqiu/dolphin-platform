@@ -23,7 +23,10 @@ import java.util.concurrent.TimeUnit;
 
 public class DeletePresentationModelTests {
 
-    final private class TriggerDeleteCommand extends Command {
+    private final class TriggerDeleteCommand extends Command {
+        public TriggerDeleteCommand() {
+            super(TriggerDeleteCommand.class.getSimpleName());
+        }
     }
 
     private volatile TestInMemoryConfig context;
