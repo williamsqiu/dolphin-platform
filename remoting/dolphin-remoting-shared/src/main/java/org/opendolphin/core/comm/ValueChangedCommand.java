@@ -15,6 +15,8 @@
  */
 package org.opendolphin.core.comm;
 
+import static org.opendolphin.core.comm.CommandConstants.VALUE_CHANGED_COMMAND_ID;
+
 public final class ValueChangedCommand extends Command {
 
     private String attributeId;
@@ -22,9 +24,11 @@ public final class ValueChangedCommand extends Command {
     private Object newValue;
 
     public ValueChangedCommand() {
+        super(VALUE_CHANGED_COMMAND_ID);
     }
 
     public ValueChangedCommand(String attributeId, Object newValue) {
+        this();
         this.attributeId = attributeId;
         this.newValue = newValue;
     }

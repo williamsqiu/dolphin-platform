@@ -23,6 +23,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static org.opendolphin.core.comm.CommandConstants.CREATE_PRESENTATION_MODEL_COMMAND_ID;
+
 public final class CreatePresentationModelCommand extends Command {
 
     private String pmId;
@@ -34,6 +36,7 @@ public final class CreatePresentationModelCommand extends Command {
     private List<Map<String, Object>> attributes = new ArrayList<Map<String, Object>>();
 
     public CreatePresentationModelCommand(final String pmId, String pmType, final List<Map<String, Object>> attributes, final boolean clientSideOnly) {
+        this();
         this.pmId = pmId;
         this.pmType = pmType;
         this.clientSideOnly = clientSideOnly;
@@ -41,12 +44,14 @@ public final class CreatePresentationModelCommand extends Command {
     }
 
     public CreatePresentationModelCommand(final String pmId, final String pmType, final List<Map<String, Object>> attributes) {
+        this();
         this.pmId = pmId;
         this.pmType = pmType;
         this.attributes = attributes;
     }
 
     public CreatePresentationModelCommand() {
+        super(CREATE_PRESENTATION_MODEL_COMMAND_ID);
     }
 
     /**

@@ -15,14 +15,18 @@
  */
 package org.opendolphin.core.comm;
 
+import static org.opendolphin.core.comm.CommandConstants.DELETE_PRESENTATION_MODEL_COMMAND_ID;
+
 public final class DeletePresentationModelCommand extends Command {
 
     private String pmId;
 
     public DeletePresentationModelCommand() {
+        super(DELETE_PRESENTATION_MODEL_COMMAND_ID);
     }
 
     public DeletePresentationModelCommand(final String pmId) {
+        this();
         this.pmId = pmId;
     }
 
