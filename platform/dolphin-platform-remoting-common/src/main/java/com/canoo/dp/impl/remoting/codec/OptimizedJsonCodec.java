@@ -52,7 +52,7 @@ import java.util.Map;
 
 import static org.opendolphin.core.comm.CommandConstants.*;
 
-public class OptimizedJsonCodec implements Codec {
+public final class OptimizedJsonCodec implements Codec {
 
     private static final Logger LOG = LoggerFactory.getLogger(OptimizedJsonCodec.class);
 
