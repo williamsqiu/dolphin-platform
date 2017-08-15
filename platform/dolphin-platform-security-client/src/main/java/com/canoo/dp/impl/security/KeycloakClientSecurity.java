@@ -4,6 +4,11 @@ import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.client.HttpURLConnectionFactory;
 import org.keycloak.admin.client.Keycloak;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
+
 public class KeycloakClientSecurity {
 
     private final String authEndpoint;
@@ -11,6 +16,8 @@ public class KeycloakClientSecurity {
     private final String realmName;
 
     private final String appName;
+
+    private String access_token;
 
     public KeycloakClientSecurity(final String authEndpoint, final String realmName, final String appName) {
         this.appName = Assert.requireNonBlank(appName, "appName");
@@ -26,9 +33,10 @@ public class KeycloakClientSecurity {
                 password,
                 appName);
 
-        String secToken = keycloak.tokenManager().getAccessTokenString();
-        keycloak.close();
-        throw new RuntimeException("Not yet implemented");
+        //ClientsResource clients = keycloak.realm(realmName).clients();
+
+        access_token = keycloak.tokenManager().getAccessTokenString();
+        return new KeycloakAuthorizationResult();
     }
 
     public KeycloakAuthorizationResult logout() {
@@ -40,7 +48,25 @@ public class KeycloakClientSecurity {
     }
 
     public HttpURLConnectionFactory createConnectionFactory() {
-        throw new RuntimeException("Not yet implemented");
+        return new HttpURLConnectionFactory() {
+            @Override
+            public HttpURLConnection create(URL url) throws IOException {
+                Assert.requireNonNull(url, "url");
+                final URLConnection connection = url.openConnection();
+                Assert.requireNonNull(connection, "connection");
+
+                addSecurityToken(connection);
+                if(connection instanceof HttpURLConnection) {
+                    return (HttpURLConnection) connection;
+                }
+                throw new IOException("URL do not provide a HttpURLConnection!");
+            }
+        };
+    }
+
+    public void addSecurityToken(URLConnection connection) {
+        Assert.requireNonNull(connection, "connection");
+        connection.setRequestProperty("Authorization", "Bearer " + access_token);
     }
 
 }
