@@ -31,16 +31,16 @@ import com.canoo.dp.impl.remoting.ClassRepository;
 import com.canoo.dp.impl.remoting.EventDispatcher;
 import com.canoo.dp.impl.remoting.ListMapper;
 import core.comm.DefaultInMemoryConfig;
-import org.opendolphin.core.client.ClientDolphin;
-import org.opendolphin.core.client.ClientModelStore;
-import org.opendolphin.core.client.DefaultModelSynchronizer;
-import org.opendolphin.core.client.ModelSynchronizer;
-import org.opendolphin.core.client.comm.AbstractClientConnector;
-import org.opendolphin.core.comm.Command;
+import com.canoo.dp.impl.client.legacy.ClientDolphin;
+import com.canoo.dp.impl.client.legacy.ClientModelStore;
+import com.canoo.dp.impl.client.legacy.DefaultModelSynchronizer;
+import com.canoo.dp.impl.client.legacy.ModelSynchronizer;
+import com.canoo.dp.impl.client.legacy.communication.AbstractClientConnector;
+import com.canoo.dp.impl.remoting.legacy.communication.Command;
 import org.opendolphin.core.server.ServerDolphin;
 import org.opendolphin.core.server.ServerModelStore;
-import org.opendolphin.util.DirectExecutor;
-import org.opendolphin.util.Provider;
+import com.canoo.dp.impl.remoting.legacy.util.DirectExecutor;
+import com.canoo.dp.impl.remoting.legacy.util.Provider;
 
 import java.util.ArrayList;
 

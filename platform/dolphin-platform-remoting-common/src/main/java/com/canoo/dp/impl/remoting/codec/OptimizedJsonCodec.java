@@ -40,8 +40,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
-import org.opendolphin.core.comm.Codec;
-import org.opendolphin.core.comm.Command;
+import com.canoo.dp.impl.remoting.legacy.communication.Codec;
+import com.canoo.dp.impl.remoting.legacy.communication.Command;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,7 +50,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.opendolphin.core.comm.CommandConstants.*;
+import static com.canoo.dp.impl.remoting.legacy.communication.CommandConstants.*;
 
 public final class OptimizedJsonCodec implements Codec {
 

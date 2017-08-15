@@ -23,8 +23,8 @@ import com.canoo.platform.remoting.ValueChangeListener;
 import com.canoo.dp.impl.remoting.BeanRepository;
 import com.canoo.dp.impl.remoting.EventDispatcher;
 import mockit.Mocked;
-import org.opendolphin.core.client.ClientDolphin;
-import org.opendolphin.core.client.comm.AbstractClientConnector;
+import com.canoo.dp.impl.client.legacy.ClientDolphin;
+import com.canoo.dp.impl.client.legacy.communication.AbstractClientConnector;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 

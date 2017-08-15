@@ -2,10 +2,10 @@ package com.canoo.dp.impl.remoting.codec.encoders;
 
 import com.canoo.dp.impl.platform.core.Assert;
 import com.google.gson.JsonObject;
-import org.opendolphin.core.comm.EmptyCommand;
+import com.canoo.dp.impl.remoting.legacy.communication.EmptyCommand;
 
-import static org.opendolphin.core.comm.CommandConstants.EMPTY_COMMAND_ID;
-import static org.opendolphin.core.comm.CommandConstants.ID;
+import static com.canoo.dp.impl.remoting.legacy.communication.CommandConstants.EMPTY_COMMAND_ID;
+import static com.canoo.dp.impl.remoting.legacy.communication.CommandConstants.ID;
 
 @Deprecated
 public class EmptyCommandEncoder extends AbstractCommandTranscoder<EmptyCommand> {

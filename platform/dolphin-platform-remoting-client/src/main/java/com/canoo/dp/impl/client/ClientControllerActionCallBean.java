@@ -22,8 +22,8 @@ import com.canoo.dp.impl.remoting.Converters;
 import com.canoo.dp.impl.remoting.PlatformRemotingConstants;
 import com.canoo.dp.impl.remoting.MappingException;
 import com.canoo.dp.impl.platform.core.Assert;
-import org.opendolphin.core.client.ClientModelStore;
-import org.opendolphin.core.client.ClientPresentationModel;
+import com.canoo.dp.impl.client.legacy.ClientModelStore;
+import com.canoo.dp.impl.client.legacy.ClientPresentationModel;
 
 public class ClientControllerActionCallBean extends AbstractControllerActionCallBean {
 

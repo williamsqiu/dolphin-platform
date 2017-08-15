@@ -20,8 +20,8 @@ import com.canoo.dp.impl.remoting.AbstractControllerActionCallBean;
 import com.canoo.dp.impl.remoting.Converters;
 import com.canoo.dp.impl.remoting.MappingException;
 import com.canoo.dp.impl.platform.core.Assert;
-import org.opendolphin.core.Attribute;
-import org.opendolphin.core.PresentationModel;
+import com.canoo.dp.impl.remoting.legacy.core.Attribute;
+import com.canoo.dp.impl.remoting.legacy.core.PresentationModel;
 
 public class ServerControllerActionCallBean extends AbstractControllerActionCallBean {
 

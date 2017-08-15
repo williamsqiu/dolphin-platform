@@ -2,9 +2,9 @@ package com.canoo.dp.impl.remoting.codec.encoders;
 
 import com.canoo.dp.impl.platform.core.Assert;
 import com.google.gson.JsonObject;
-import org.opendolphin.core.comm.DeletePresentationModelCommand;
+import com.canoo.dp.impl.remoting.legacy.communication.DeletePresentationModelCommand;
 
-import static org.opendolphin.core.comm.CommandConstants.*;
+import static com.canoo.dp.impl.remoting.legacy.communication.CommandConstants.*;
 
 public class DeletePresentationModelCommandEncoder extends AbstractCommandTranscoder<DeletePresentationModelCommand> {
 

@@ -24,7 +24,7 @@ import com.google.gson.JsonParseException;
 
 import java.util.Map;
 
-import static org.opendolphin.core.comm.CommandConstants.*;
+import static com.canoo.dp.impl.remoting.legacy.communication.CommandConstants.*;
 
 public class CallActionCommandEncoder extends AbstractCommandTranscoder<CallActionCommand> {
 

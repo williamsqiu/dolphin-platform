@@ -19,11 +19,11 @@ import com.canoo.dp.impl.client.ClientContextImpl;
 import com.canoo.dp.impl.client.DolphinPlatformHttpClientConnector;
 import com.canoo.dp.impl.remoting.codec.OptimizedJsonCodec;
 import com.canoo.dp.impl.platform.core.Assert;
-import org.opendolphin.core.client.ClientModelStore;
-import org.opendolphin.core.client.comm.AbstractClientConnector;
-import org.opendolphin.core.client.comm.RemotingExceptionHandler;
-import org.opendolphin.util.DolphinRemotingException;
-import org.opendolphin.util.Function;
+import com.canoo.dp.impl.client.legacy.ClientModelStore;
+import com.canoo.dp.impl.client.legacy.communication.AbstractClientConnector;
+import com.canoo.dp.impl.client.legacy.communication.RemotingExceptionHandler;
+import com.canoo.dp.impl.remoting.legacy.util.DolphinRemotingException;
+import com.canoo.dp.impl.remoting.legacy.util.Function;
 
 import java.util.concurrent.CompletableFuture;
 

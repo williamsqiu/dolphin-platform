@@ -15,7 +15,7 @@
  */
 package com.canoo.dp.impl.remoting;
 
-import org.opendolphin.RemotingConstants;
+import com.canoo.dp.impl.remoting.legacy.RemotingConstants;
 
 public interface PlatformRemotingConstants {
 

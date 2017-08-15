@@ -20,7 +20,7 @@ import com.canoo.dp.impl.remoting.commands.DestroyControllerCommand;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 
-import static org.opendolphin.core.comm.CommandConstants.*;
+import static com.canoo.dp.impl.remoting.legacy.communication.CommandConstants.*;
 
 public class DestroyControllerCommandEncoder extends AbstractCommandTranscoder<DestroyControllerCommand> {
 

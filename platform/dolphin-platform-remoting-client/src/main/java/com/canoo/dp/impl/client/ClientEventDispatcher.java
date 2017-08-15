@@ -16,8 +16,8 @@
 package com.canoo.dp.impl.client;
 
 import com.canoo.dp.impl.remoting.EventDispatcherImpl;
-import org.opendolphin.RemotingConstants;
-import org.opendolphin.core.ModelStore;
+import com.canoo.dp.impl.remoting.legacy.RemotingConstants;
+import com.canoo.dp.impl.remoting.legacy.core.ModelStore;
 
 public class ClientEventDispatcher extends EventDispatcherImpl {
 

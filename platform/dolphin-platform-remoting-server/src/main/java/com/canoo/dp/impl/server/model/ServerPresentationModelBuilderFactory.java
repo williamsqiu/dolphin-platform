@@ -18,8 +18,8 @@ package com.canoo.dp.impl.server.model;
 import com.canoo.dp.impl.remoting.PresentationModelBuilderFactory;
 import com.canoo.dp.impl.remoting.PresentationModelBuilder;
 import com.canoo.dp.impl.platform.core.Assert;
-import org.opendolphin.core.server.ServerDolphin;
-import org.opendolphin.core.server.ServerPresentationModel;
+import com.canoo.dp.impl.server.legacy.ServerDolphin;
+import com.canoo.dp.impl.server.legacy.ServerPresentationModel;
 
 public class ServerPresentationModelBuilderFactory implements PresentationModelBuilderFactory<ServerPresentationModel> {
 

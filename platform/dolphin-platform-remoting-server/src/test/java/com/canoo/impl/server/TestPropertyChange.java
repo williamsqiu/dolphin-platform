@@ -21,7 +21,7 @@ import com.canoo.platform.remoting.ValueChangeEvent;
 import com.canoo.platform.remoting.ValueChangeListener;
 import com.canoo.platform.remoting.Property;
 import com.canoo.impl.server.util.*;
-import org.opendolphin.core.server.ServerDolphin;
+import com.canoo.dp.impl.server.legacy.ServerDolphin;
 import org.testng.annotations.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;

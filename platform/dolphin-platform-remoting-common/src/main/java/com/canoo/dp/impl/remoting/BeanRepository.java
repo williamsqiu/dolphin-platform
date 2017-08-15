@@ -16,7 +16,7 @@
 package com.canoo.dp.impl.remoting;
 
 import com.canoo.platform.core.functional.Subscription;
-import org.opendolphin.core.PresentationModel;
+import com.canoo.dp.impl.remoting.legacy.core.PresentationModel;
 
 import java.util.List;
 

@@ -21,8 +21,8 @@ import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.core.functional.Callback;
 import com.canoo.dp.impl.server.client.ClientSessionProvider;
 import com.canoo.platform.server.client.ClientSession;
-import org.opendolphin.core.comm.Codec;
-import org.opendolphin.core.comm.Command;
+import com.canoo.dp.impl.remoting.legacy.communication.Codec;
+import com.canoo.dp.impl.remoting.legacy.communication.Command;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -15,8 +15,7 @@
  */
 package com.canoo.dp.impl.remoting;
 
-import com.canoo.dp.impl.remoting.PresentationModelBuilder;
-import org.opendolphin.core.PresentationModel;
+import com.canoo.dp.impl.remoting.legacy.core.PresentationModel;
 
 import java.util.UUID;
 

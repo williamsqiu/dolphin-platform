@@ -15,12 +15,16 @@
  */
 package com.canoo.impl.dp.spring.test;
 
-import com.canoo.dolphin.impl.commands.StartLongPollCommand;
+import com.canoo.dp.impl.client.legacy.communication.AbstractClientConnector;
+import com.canoo.dp.impl.client.legacy.communication.CommandAndHandler;
+import com.canoo.dp.impl.client.legacy.communication.CommandBatcher;
+import com.canoo.dp.impl.client.legacy.communication.OnFinishedHandler;
+import com.canoo.dp.impl.client.legacy.communication.SimpleExceptionHandler;
+import com.canoo.dp.impl.remoting.legacy.commands.StartLongPollCommand;
 import com.canoo.dp.impl.platform.core.Assert;
-import org.opendolphin.core.client.ClientModelStore;
-import org.opendolphin.core.client.comm.*;
-import org.opendolphin.core.comm.Command;
-import org.opendolphin.util.Function;
+import com.canoo.dp.impl.client.legacy.ClientModelStore;
+import com.canoo.dp.impl.remoting.legacy.communication.Command;
+import com.canoo.dp.impl.remoting.legacy.util.Function;
 
 import java.util.ArrayList;
 import java.util.Arrays;

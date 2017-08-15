@@ -17,9 +17,9 @@ package com.canoo.dolphin.client.impl;
 
 import com.canoo.dolphin.client.util.AbstractDolphinBasedTest;
 import com.canoo.dp.impl.client.DolphinCommandHandler;
-import org.opendolphin.core.client.ClientAttribute;
-import org.opendolphin.core.client.ClientDolphin;
-import org.opendolphin.core.comm.Command;
+import com.canoo.dp.impl.client.legacy.ClientAttribute;
+import com.canoo.dp.impl.client.legacy.ClientDolphin;
+import com.canoo.dp.impl.remoting.legacy.communication.Command;
 import org.opendolphin.core.server.ServerDolphin;
 import org.opendolphin.core.server.action.DolphinServerAction;
 import org.opendolphin.core.server.comm.ActionRegistry;

@@ -18,9 +18,9 @@ package com.canoo.dp.impl.remoting.codec.encoders;
 import com.canoo.dp.impl.platform.core.Assert;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import org.opendolphin.core.comm.ValueChangedCommand;
+import com.canoo.dp.impl.remoting.legacy.communication.ValueChangedCommand;
 
-import static org.opendolphin.core.comm.CommandConstants.*;
+import static com.canoo.dp.impl.remoting.legacy.communication.CommandConstants.*;
 
 public class ValueChangedCommandEncoder extends AbstractCommandTranscoder<ValueChangedCommand> {
 

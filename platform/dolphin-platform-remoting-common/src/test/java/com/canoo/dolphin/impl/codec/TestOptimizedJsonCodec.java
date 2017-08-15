@@ -18,11 +18,11 @@ package com.canoo.dolphin.impl.codec;
 import com.canoo.dp.impl.remoting.codec.OptimizedJsonCodec;
 import com.canoo.dp.impl.remoting.commands.CallActionCommand;
 import org.hamcrest.Matchers;
-import org.opendolphin.core.Attribute;
-import org.opendolphin.core.comm.Command;
-import org.opendolphin.core.comm.CreatePresentationModelCommand;
-import org.opendolphin.core.comm.EmptyCommand;
-import org.opendolphin.core.comm.ValueChangedCommand;
+import com.canoo.dp.impl.remoting.legacy.core.Attribute;
+import com.canoo.dp.impl.remoting.legacy.communication.Command;
+import com.canoo.dp.impl.remoting.legacy.communication.CreatePresentationModelCommand;
+import com.canoo.dp.impl.remoting.legacy.communication.EmptyCommand;
+import com.canoo.dp.impl.remoting.legacy.communication.ValueChangedCommand;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
