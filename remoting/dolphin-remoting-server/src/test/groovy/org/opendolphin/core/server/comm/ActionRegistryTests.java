@@ -99,6 +99,9 @@ public class ActionRegistryTests {
 
     private ActionRegistry registry;
 
-    final private class TestDataCommand extends Command {
+    private final class TestDataCommand extends Command {
+        public TestDataCommand() {
+            super(TestDataCommand.class.getSimpleName());
+        }
     }
 }

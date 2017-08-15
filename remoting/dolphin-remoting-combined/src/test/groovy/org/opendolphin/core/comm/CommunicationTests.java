@@ -179,6 +179,9 @@ public class CommunicationTests {
     private ClientDolphin clientDolphin;
     private TestInMemoryConfig config;
 
-    final private class ButtonActionCommand extends Command {
+    private final class ButtonActionCommand extends Command {
+        public ButtonActionCommand() {
+            super(ButtonActionCommand.class.getSimpleName());
+        }
     }
 }

@@ -13,15 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.dp.impl.remoting.codec.encoders;
+package org.opendolphin.core.comm;
 
-import com.google.gson.JsonObject;
-import org.opendolphin.core.comm.Command;
+import static org.opendolphin.core.comm.CommandConstants.EMPTY_COMMAND_ID;
 
-public interface CommandEncoder<C extends Command> {
-
-    JsonObject encode(C command);
-
-    C decode(JsonObject jsonObject);
-
+/**
+ * A notification that does nothing on the server.
+ * It is only used to hook into the communication at a known point
+ * such that the onFinished handler can be executed
+ * in the expected sequence.
+ */
+@Deprecated
+public final class EmptyCommand extends Command {
+    public EmptyCommand() {
+        super(EMPTY_COMMAND_ID);
+    }
 }

@@ -13,28 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.opendolphin.core.comm;
+package com.canoo.dp.impl.remoting.codec.encoders;
 
-public final class DeletedPresentationModelNotification extends Command {
-    public DeletedPresentationModelNotification(String pmId) {
-        this.pmId = pmId;
-    }
+import com.google.gson.JsonObject;
+import org.opendolphin.core.comm.Command;
 
-    public DeletedPresentationModelNotification() {
-    }
+public interface CommandTranscoder<C extends Command> {
 
-    public String getPmId() {
-        return pmId;
-    }
+    JsonObject encode(C command);
 
-    public void setPmId(final String pmId) {
-        this.pmId = pmId;
-    }
+    C decode(JsonObject jsonObject);
 
-    @Override
-    public String toString() {
-        return super.toString() + " pmId " + pmId;
-    }
-
-    private String pmId;
 }

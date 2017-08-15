@@ -35,34 +35,64 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 public class ServerPresentationModelTests {
 
-    final private class SetValueCommand extends Command {
+    private final class SetValueCommand extends Command {
+        public SetValueCommand() {
+            super(SetValueCommand.class.getSimpleName());
+        }
     }
 
-    final private class AssertValueCommand extends Command {
+    private final class AssertValueCommand extends Command {
+        public AssertValueCommand() {
+            super(AssertValueCommand.class.getSimpleName());
+        }
     }
 
-    final private class ChangeValueCommand extends Command {
+    private final class ChangeValueCommand extends Command {
+        public ChangeValueCommand() {
+            super(ChangeValueCommand.class.getSimpleName());
+        }
     }
 
-    final private class AttachListenerCommand extends Command {
+    private final class AttachListenerCommand extends Command {
+        public AttachListenerCommand() {
+            super(AttachListenerCommand.class.getSimpleName());
+        }
     }
 
-    final private class ChangeBaseValueCommand extends Command {
+    private final class ChangeBaseValueCommand extends Command {
+        public ChangeBaseValueCommand() {
+            super(ChangeBaseValueCommand.class.getSimpleName());
+        }
     }
 
-    final private class CreateCommand extends Command {
+    private final class CreateCommand extends Command {
+        public CreateCommand() {
+            super(CreateCommand.class.getSimpleName());
+        }
     }
 
-    final private class AssertVisibleCommand extends Command {
+    private final class AssertVisibleCommand extends Command {
+        public AssertVisibleCommand() {
+            super(AssertVisibleCommand.class.getSimpleName());
+        }
     }
 
-    final private class RegisterMSLCommand extends Command {
+    private final class RegisterMSLCommand extends Command {
+        public RegisterMSLCommand(String id) {
+            super(RegisterMSLCommand.class.getSimpleName());
+        }
     }
 
-    final private class RemoveCommand extends Command {
+    private final class RemoveCommand extends Command {
+        public RemoveCommand() {
+            super(RemoveCommand.class.getSimpleName());
+        }
     }
 
-    final private class AssertValueChangeCommand extends Command {
+    private final class AssertValueChangeCommand extends Command {
+        public AssertValueChangeCommand() {
+            super(AssertValueChangeCommand.class.getSimpleName());
+        }
     }
 
     private volatile TestInMemoryConfig context;

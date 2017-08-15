@@ -24,6 +24,7 @@ import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+@Deprecated
 public class JsonCodec implements Codec {
 
     private static final Logger LOG = LoggerFactory.getLogger(JsonCodec.class);

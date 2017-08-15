@@ -15,17 +15,32 @@
  */
 package org.opendolphin.core.comm;
 
-/**
- * A command where the id can be set from the outside for general purposes.
- * Signal commands are transmitted outside the usual sequence but possibly in the same
- * session. Therefore any handler for this command must neither change nor access any unprotected shared
- * mutable state like the dolphin instance or the model store.
- */
-public class SignalCommand extends Command {
-    public SignalCommand() {
+import static org.opendolphin.core.comm.CommandConstants.PRESENTATION_MODEL_DELETED_COMMAND_ID;
+
+@Deprecated
+public final class PresentationModelDeletedCommand extends Command {
+
+    public PresentationModelDeletedCommand(String pmId) {
+        this();
+        this.pmId = pmId;
     }
 
-    public SignalCommand(String id) {
-        super(id);
+    public PresentationModelDeletedCommand() {
+        super(PRESENTATION_MODEL_DELETED_COMMAND_ID);
     }
+
+    public String getPmId() {
+        return pmId;
+    }
+
+    public void setPmId(final String pmId) {
+        this.pmId = pmId;
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + " pmId " + pmId;
+    }
+
+    private String pmId;
 }

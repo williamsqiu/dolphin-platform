@@ -38,40 +38,76 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 public class FunctionalPresentationModelTests {
 
-    final private class CreateCommand extends Command {
+    private final class CreateCommand extends Command {
+        public CreateCommand() {
+            super(CreateCommand.class.getSimpleName());
+        }
     }
 
-    final private class PerformanceCommand extends Command {
+    private final class PerformanceCommand extends Command {
+        public PerformanceCommand() {
+            super(PerformanceCommand.class.getSimpleName());
+        }
     }
 
-    final private class CheckNotificationReachedCommand extends Command {
+    private final class CheckNotificationReachedCommand extends Command {
+        public CheckNotificationReachedCommand() {
+            super(CheckNotificationReachedCommand.class.getSimpleName());
+        }
     }
 
-    final private class JavaCommand extends Command {
+    private final class JavaCommand extends Command {
+        public JavaCommand() {
+            super(JavaCommand.class.getSimpleName());
+        }
     }
 
-    final private class ArbitraryCommand extends Command {
+    private final class ArbitraryCommand extends Command {
+        public ArbitraryCommand() {
+            super(ArbitraryCommand.class.getSimpleName());
+        }
     }
 
-    final private class DeleteCommand extends Command {
+    private final class DeleteCommand extends Command {
+        public DeleteCommand() {
+            super(DeleteCommand.class.getSimpleName());
+        }
     }
 
-    final private class FetchDataCommand extends Command {
+    private final class FetchDataCommand extends Command {
+        public FetchDataCommand() {
+            super(FetchDataCommand.class.getSimpleName());
+        }
     }
 
-    final private class LoginCommand extends Command {
+    private final class LoginCommand extends Command {
+        public LoginCommand() {
+            super(LoginCommand.class.getSimpleName());
+        }
     }
 
-    final private class NoSuchActionRegisteredCommand extends Command {
+    private final class NoSuchActionRegisteredCommand extends Command {
+        public NoSuchActionRegisteredCommand() {
+            super(NoSuchActionRegisteredCommand.class.getSimpleName());
+        }
     }
 
-    final private class Set2Command extends Command {
+    private final class Set2Command extends Command {
+        public Set2Command() {
+            super(Set2Command.class.getSimpleName());
+        }
     }
 
-    final private class Assert3Command extends Command {
+    private final class Assert3Command extends Command {
+        public Assert3Command() {
+            super(Assert3Command.class.getSimpleName());
+        }
     }
 
-    final private class CheckTagIsKnownOnServerSideCommand extends Command {
+    private final class CheckTagIsKnownOnServerSideCommand extends Command {
+        public CheckTagIsKnownOnServerSideCommand() {
+            super(CheckTagIsKnownOnServerSideCommand.class.getSimpleName());
+        }
     }
 
     private volatile TestInMemoryConfig context;

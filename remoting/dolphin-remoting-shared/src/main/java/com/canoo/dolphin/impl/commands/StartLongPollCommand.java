@@ -15,13 +15,14 @@
  */
 package com.canoo.dolphin.impl.commands;
 
-import org.opendolphin.RemotingConstants;
 import org.opendolphin.core.comm.Command;
+
+import static org.opendolphin.core.comm.CommandConstants.START_LONG_POLL_COMMAND_ID;
 
 public final class StartLongPollCommand extends Command {
 
     public StartLongPollCommand() {
-        super(RemotingConstants.START_LONG_POLL_COMMAND_NAME);
+        super(START_LONG_POLL_COMMAND_ID);
     }
 }
 

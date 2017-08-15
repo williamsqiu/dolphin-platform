@@ -19,17 +19,7 @@ import org.opendolphin.RemotingConstants;
 
 public interface PlatformRemotingConstants {
 
-    String CREATE_CONTROLLER_COMMAND_NAME = RemotingConstants.DOLPHIN_PLATFORM_PREFIX + "registerController";
-
-    String DESTROY_CONTROLLER_COMMAND_NAME = RemotingConstants.DOLPHIN_PLATFORM_PREFIX + "destroyController";
-
-    String CALL_ACTION_COMMAND_NAME = RemotingConstants.DOLPHIN_PLATFORM_PREFIX + "callControllerAction";
-
-    String CREATE_CONTEXT_COMMAND_NAME = RemotingConstants.DOLPHIN_PLATFORM_PREFIX + "initClientContext";
-
     String CLIENT_ID_HTTP_HEADER_NAME = RemotingConstants.DOLPHIN_PLATFORM_PREFIX + "dolphinClientId";
-
-    String DESTROY_CONTEXT_COMMAND_NAME = RemotingConstants.DOLPHIN_PLATFORM_PREFIX + "disconnectClientContext";
 
     String DOLPHIN_BEAN = "@@@ DOLPHIN_BEAN @@@";
 
