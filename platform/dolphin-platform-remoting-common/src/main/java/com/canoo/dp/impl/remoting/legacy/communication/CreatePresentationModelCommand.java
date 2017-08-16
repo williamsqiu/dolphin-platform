@@ -93,14 +93,17 @@ public final class CreatePresentationModelCommand extends Command {
         this.pmType = pmType;
     }
 
+    @Deprecated
     public boolean getClientSideOnly() {
         return clientSideOnly;
     }
 
+    @Deprecated
     public boolean isClientSideOnly() {
         return clientSideOnly;
     }
 
+    @Deprecated
     public void setClientSideOnly(final boolean clientSideOnly) {
         this.clientSideOnly = clientSideOnly;
     }

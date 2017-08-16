@@ -65,6 +65,7 @@ public interface PresentationModel<A extends Attribute> extends Observable {
      * since it does not register all required listeners. Consider using ClientDolphin.addAttributeToModel().
      * @param attribute
      */
+    @Deprecated
     void _internal_addAttribute(A attribute);
 
 }

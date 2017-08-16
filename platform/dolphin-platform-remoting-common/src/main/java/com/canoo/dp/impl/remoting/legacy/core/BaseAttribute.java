@@ -33,10 +33,6 @@ public abstract class BaseAttribute extends AbstractObservable implements Attrib
 
     private String qualifier; // application specific semantics apply
 
-    public BaseAttribute(String propertyName) {
-        this(propertyName, null, null);
-    }
-
     public BaseAttribute(String propertyName, Object value) {
         this(propertyName, value, null);
     }

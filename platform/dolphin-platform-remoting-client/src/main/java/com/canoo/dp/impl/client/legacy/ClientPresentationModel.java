@@ -46,10 +46,12 @@ public final class ClientPresentationModel extends BasePresentationModel<ClientA
         return (id != null && id.length() > 0) ? id : "" + instanceCount++ + CLIENT_PM_AUTO_ID_SUFFIX;
     }
 
+    @Deprecated
     public boolean isClientSideOnly() {
         return clientSideOnly;
     }
 
+    @Deprecated
     public void setClientSideOnly(final boolean clientSideOnly) {
         this.clientSideOnly = clientSideOnly;
     }

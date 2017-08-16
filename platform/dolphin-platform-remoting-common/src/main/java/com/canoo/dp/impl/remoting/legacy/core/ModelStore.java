@@ -15,7 +15,7 @@
  */
 package com.canoo.dp.impl.remoting.legacy.core;
 
-import com.canoo.dp.impl.remoting.legacy.StringUtil;
+import com.canoo.dp.impl.platform.core.Assert;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -132,7 +132,7 @@ public class ModelStore<A extends Attribute, P extends PresentationModel<A>> {
             for (A attribute : model.getAttributes()) {
                 addAttributeById(attribute);
                 attribute.addPropertyChangeListener(Attribute.QUALIFIER_NAME, ATTRIBUTE_WORKER);
-                if (!StringUtil.isBlank(attribute.getQualifier())) addAttributeByQualifier(attribute);
+                if (!Assert.isBlank(attribute.getQualifier())) addAttributeByQualifier(attribute);
             }
             fireModelStoreChangedEvent(model, ModelStoreEvent.Type.ADDED);
             added = true;
@@ -176,7 +176,7 @@ public class ModelStore<A extends Attribute, P extends PresentationModel<A>> {
     protected void addAttributeByQualifier(A attribute) {
         if (null == attribute) return;
         String qualifier = attribute.getQualifier();
-        if (StringUtil.isBlank(qualifier)) return;
+        if (Assert.isBlank(qualifier)) return;
         List<A> list = attributesPerQualifier.get(qualifier);
         if (null == list) {
             list = new ArrayList<A>();
@@ -188,7 +188,7 @@ public class ModelStore<A extends Attribute, P extends PresentationModel<A>> {
     protected void removeAttributeByQualifier(A attribute) {
         if (null == attribute) return;
         String qualifier = attribute.getQualifier();
-        if (StringUtil.isBlank(qualifier)) return;
+        if (Assert.isBlank(qualifier)) return;
         List<A> list = attributesPerQualifier.get(qualifier);
         if (null != list) {
             list.remove(attribute);
@@ -198,7 +198,7 @@ public class ModelStore<A extends Attribute, P extends PresentationModel<A>> {
     protected void addPresentationModelByType(P model) {
         if (null == model) return;
         String type = model.getPresentationModelType();
-        if (StringUtil.isBlank(type)) return;
+        if (Assert.isBlank(type)) return;
         List<P> list = modelsPerType.get(type);
         if (null == list) {
             list = new ArrayList<P>();
@@ -210,7 +210,7 @@ public class ModelStore<A extends Attribute, P extends PresentationModel<A>> {
     protected void removePresentationModelByType(P model) {
         if (null == model) return;
         String type = model.getPresentationModelType();
-        if (StringUtil.isBlank(type)) return;
+        if (Assert.isBlank(type)) return;
         List<P> list = modelsPerType.get(type);
         if (null == list) return;
         list.remove(model);
@@ -220,7 +220,7 @@ public class ModelStore<A extends Attribute, P extends PresentationModel<A>> {
     }
 
     protected void removeAttributeByQualifier(A attribute, String qualifier) {
-        if (StringUtil.isBlank(qualifier)) return;
+        if (Assert.isBlank(qualifier)) return;
         List<A> list = attributesPerQualifier.get(qualifier);
         if (null == list) return;
         list.remove(attribute);
@@ -248,7 +248,7 @@ public class ModelStore<A extends Attribute, P extends PresentationModel<A>> {
      * @return a {@code List} of all presentation models with the specified type.
      */
     public List<P> findAllPresentationModelsByType(String type) {
-        if (StringUtil.isBlank(type) || !modelsPerType.containsKey(type)) return Collections.emptyList();
+        if (Assert.isBlank(type) || !modelsPerType.containsKey(type)) return Collections.emptyList();
         return Collections.unmodifiableList(modelsPerType.get(type));
     }
 
@@ -280,7 +280,7 @@ public class ModelStore<A extends Attribute, P extends PresentationModel<A>> {
      * @return a {@code List} of all attributes with the specified qualifier.
      */
     public List<A> findAllAttributesByQualifier(String qualifier) {
-        if (StringUtil.isBlank(qualifier) || !attributesPerQualifier.containsKey(qualifier)) return Collections.emptyList();
+        if (Assert.isBlank(qualifier) || !attributesPerQualifier.containsKey(qualifier)) return Collections.emptyList();
         return Collections.unmodifiableList(attributesPerQualifier.get(qualifier));
     }
 

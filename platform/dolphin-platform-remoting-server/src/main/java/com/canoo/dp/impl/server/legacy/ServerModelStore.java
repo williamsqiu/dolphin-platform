@@ -15,7 +15,7 @@
  */
 package com.canoo.dp.impl.server.legacy;
 
-import com.canoo.dp.impl.remoting.legacy.StringUtil;
+import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.remoting.legacy.communication.Command;
 import com.canoo.dp.impl.remoting.legacy.communication.CreatePresentationModelCommand;
 import com.canoo.dp.impl.remoting.legacy.communication.DeletePresentationModelCommand;
@@ -139,7 +139,7 @@ public class ServerModelStore extends ModelStore<ServerAttribute, ServerPresenta
      */
     @Deprecated
     public static void deleteCommand(final List<Command> response, final String pmId) {
-        if (response == null || StringUtil.isBlank(pmId)) {
+        if (response == null || Assert.isBlank(pmId)) {
             return;
         }
         response.add(new DeletePresentationModelCommand(pmId));

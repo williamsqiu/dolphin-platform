@@ -282,9 +282,5 @@ public abstract class AbstractClientConnector {
         return releaseCommand;
     }
 
-    public boolean isConnected() {
-        return connectedFlag.get();
-    }
-
     public abstract String getClientId();
 }

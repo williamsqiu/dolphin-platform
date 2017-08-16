@@ -16,7 +16,7 @@
 package com.canoo.dp.impl.remoting.legacy.core;
 
 
-import com.canoo.dp.impl.remoting.legacy.StringUtil;
+import com.canoo.dp.impl.platform.core.Assert;
 
 public class ModelStoreListenerWrapper<A extends Attribute, P extends PresentationModel<A>> implements ModelStoreListener<A, P> {
     private static final String ANY_PRESENTATION_MODEL_TYPE = "*";
@@ -24,7 +24,7 @@ public class ModelStoreListenerWrapper<A extends Attribute, P extends Presentati
     private final ModelStoreListener delegate;
 
     public ModelStoreListenerWrapper(String presentationModelType, ModelStoreListener<A, P> delegate) {
-        this.presentationModelType = !StringUtil.isBlank(presentationModelType) ? presentationModelType : ANY_PRESENTATION_MODEL_TYPE;
+        this.presentationModelType = !Assert.isBlank(presentationModelType) ? presentationModelType : ANY_PRESENTATION_MODEL_TYPE;
         this.delegate = delegate;
     }
 

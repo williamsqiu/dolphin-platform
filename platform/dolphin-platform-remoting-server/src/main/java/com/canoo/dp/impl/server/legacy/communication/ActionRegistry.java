@@ -38,8 +38,8 @@ public class ActionRegistry {
     }
 
     public void register(final Class commandClass, final CommandHandler serverCommand) {
-        Objects.requireNonNull("commandClass");
-        Objects.requireNonNull("serverCommand");
+        Objects.requireNonNull(commandClass);
+        Objects.requireNonNull(serverCommand);
         LOG.trace("Register handler for command type " + commandClass.getSimpleName());
         final List<CommandHandler> actions = getActionsFor(commandClass);
         if (!actions.contains(serverCommand)) {

@@ -15,13 +15,9 @@
  */
 package com.canoo.dp.impl.client.legacy.communication;
 
-import java.util.concurrent.TimeUnit;
-
 public interface DataflowQueue<T> {
 
     T getVal() throws InterruptedException;
-
-    T getVal(long value,TimeUnit timeUnit) throws InterruptedException;
 
     void add(T value);
 
