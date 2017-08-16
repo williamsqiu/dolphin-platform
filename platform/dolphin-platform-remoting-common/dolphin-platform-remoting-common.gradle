@@ -16,6 +16,6 @@
 
 dependencies {
     compile project(':dolphin-platform-core')
-    compile project(':dolphin-remoting-shared')
+    compile "com.google.code.gson:gson:$gsonVersion"
     compile "com.google.guava:guava:$guavaVersion"
 }

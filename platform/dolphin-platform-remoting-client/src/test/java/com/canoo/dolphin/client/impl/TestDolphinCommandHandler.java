@@ -20,10 +20,10 @@ import com.canoo.dp.impl.client.DolphinCommandHandler;
 import com.canoo.dp.impl.client.legacy.ClientAttribute;
 import com.canoo.dp.impl.client.legacy.ClientDolphin;
 import com.canoo.dp.impl.remoting.legacy.communication.Command;
-import org.opendolphin.core.server.ServerDolphin;
-import org.opendolphin.core.server.action.DolphinServerAction;
-import org.opendolphin.core.server.comm.ActionRegistry;
-import org.opendolphin.core.server.comm.CommandHandler;
+import com.canoo.dp.impl.server.legacy.ServerDolphin;
+import com.canoo.dp.impl.server.legacy.action.DolphinServerAction;
+import com.canoo.dp.impl.server.legacy.communication.ActionRegistry;
+import com.canoo.dp.impl.server.legacy.communication.CommandHandler;
 import org.testng.annotations.Test;
 
 import java.util.List;

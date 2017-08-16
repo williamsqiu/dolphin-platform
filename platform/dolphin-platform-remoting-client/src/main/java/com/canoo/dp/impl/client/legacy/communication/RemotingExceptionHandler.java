@@ -15,7 +15,7 @@
  */
 package com.canoo.dp.impl.client.legacy.communication;
 
-import com.canoo.dp.impl.remoting.legacy.util.DolphinRemotingException;n;
+import com.canoo.dp.impl.remoting.legacy.util.DolphinRemotingException;
 
 public interface RemotingExceptionHandler {
 

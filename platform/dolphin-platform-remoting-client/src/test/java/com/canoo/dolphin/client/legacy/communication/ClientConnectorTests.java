@@ -3,15 +3,29 @@ package com.canoo.dolphin.client.legacy.communication;
 import com.canoo.dp.impl.client.legacy.ClientAttribute;
 import com.canoo.dp.impl.client.legacy.ClientDolphin;
 import com.canoo.dp.impl.client.legacy.ClientModelStore;
+import com.canoo.dp.impl.client.legacy.ClientPresentationModel;
 import com.canoo.dp.impl.client.legacy.DefaultModelSynchronizer;
 import com.canoo.dp.impl.client.legacy.ModelSynchronizer;
 import com.canoo.dp.impl.client.legacy.communication.AbstractClientConnector;
+import com.canoo.dp.impl.client.legacy.communication.AttributeChangeListener;
+import com.canoo.dp.impl.client.legacy.communication.CommandBatcher;
+import com.canoo.dp.impl.client.legacy.communication.SimpleExceptionHandler;
+import com.canoo.dp.impl.remoting.legacy.commands.InterruptLongPollCommand;
+import com.canoo.dp.impl.remoting.legacy.commands.StartLongPollCommand;
+import com.canoo.dp.impl.remoting.legacy.communication.AttributeMetadataChangedCommand;
+import com.canoo.dp.impl.remoting.legacy.communication.ChangeAttributeMetadataCommand;
+import com.canoo.dp.impl.remoting.legacy.communication.Command;
 import com.canoo.dp.impl.remoting.legacy.communication.CreatePresentationModelCommand;
+import com.canoo.dp.impl.remoting.legacy.communication.DeletePresentationModelCommand;
 import com.canoo.dp.impl.remoting.legacy.communication.EmptyCommand;
+import com.canoo.dp.impl.remoting.legacy.communication.PresentationModelDeletedCommand;
+import com.canoo.dp.impl.remoting.legacy.communication.ValueChangedCommand;
+import com.canoo.dp.impl.remoting.legacy.core.Attribute;
 import com.canoo.dp.impl.remoting.legacy.util.DirectExecutor;
 import com.canoo.dp.impl.remoting.legacy.util.Provider;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
 import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
@@ -66,15 +80,11 @@ public class ClientConnectorTests {
     }
 
     private void syncAndWaitUntilDone() {
-        dolphin.sync(new Closure<Object>(this, this) {
-            public void doCall(Object it) {
+        dolphin.sync(new Runnable() {
+            @Override
+            public void run() {
                 syncDone.countDown();
             }
-
-            public void doCall() {
-                doCall(null);
-            }
-
         });
         Assert.assertTrue(waitForLatch());
     }
@@ -157,7 +167,7 @@ public class ClientConnectorTests {
         Assert.assertTrue(valueChangedCommandFound);
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test(expectedExceptions = IllegalStateException.class)
     public void testAddTwoAttributesInConstructorWithSameQualifierToSamePMIsNotAllowed() {
         dolphin.getModelStore().createModel("1", null, new ClientAttribute("a", "0", "QUAL"), new ClientAttribute("b", "0", "QUAL"));
     }
@@ -191,7 +201,7 @@ public class ClientConnectorTests {
         Assert.assertEquals("newValue", attribute.getValue());
     }
 
-    @Test(expected = Exception.class)
+    @Test(expectedExceptions = Exception.class)
     public void testHandle_CreatePresentationModelTwiceFails() {
         List<Map<String, Object>> attributes = new ArrayList<Map<String, Object>>();
         Map<String, Object> map = new HashMap<String, Object>();
@@ -240,7 +250,7 @@ public class ClientConnectorTests {
         assertOnlySyncCommandWasTransmitted();
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test(expectedExceptions = IllegalStateException.class)
     public void testHandle_CreatePresentationModel_MergeAttributesToExistingModel() {
         dolphin.getModelStore().createModel("p1", null);
         clientConnector.dispatchHandle(new CreatePresentationModelCommand("p1", "type", Collections.<Map<String, Object>>emptyList()));
@@ -320,7 +330,7 @@ public class ClientConnectorTests {
             System.out.print("transmitCommand: " + command);
 
             if (command != null && !(command instanceof StartLongPollCommand) && !(command instanceof InterruptLongPollCommand)) {
-                DefaultGroovyMethods.leftShift(transmittedCommands, command);
+                transmittedCommands.add(command);
             }
 
             return construct(command);

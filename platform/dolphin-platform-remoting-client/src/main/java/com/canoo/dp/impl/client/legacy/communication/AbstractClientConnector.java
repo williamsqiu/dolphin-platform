@@ -190,7 +190,7 @@ public abstract class AbstractClientConnector {
         }
     }
 
-    protected void dispatchHandle(final Command command) {
+    public void dispatchHandle(final Command command) {
         responseHandler.dispatchHandle(command);
     }
 

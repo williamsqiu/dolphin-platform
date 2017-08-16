@@ -15,16 +15,18 @@
  */
 package com.canoo.dolphin.client.legacy.communication;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import com.canoo.dp.impl.client.legacy.communication.CommandAndHandler;
+import com.canoo.dp.impl.client.legacy.communication.CommandBatcher;
+import org.testng.Assert;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 public class StandardCommandBatcherTest {
-    @Before
+    @BeforeMethod
     public void setUp() throws Exception {
         batcher = new CommandBatcher();
     }

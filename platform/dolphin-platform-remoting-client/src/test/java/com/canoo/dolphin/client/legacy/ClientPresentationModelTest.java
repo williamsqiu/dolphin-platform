@@ -15,8 +15,11 @@
  */
 package com.canoo.dolphin.client.legacy;
 
-import org.junit.Assert;
-import org.junit.Test;
+
+import com.canoo.dp.impl.client.legacy.ClientAttribute;
+import com.canoo.dp.impl.client.legacy.ClientPresentationModel;
+import org.testng.Assert;
+import org.testng.annotations.Test;
 
 import java.util.Collections;
 
@@ -35,7 +38,7 @@ public class ClientPresentationModelTest {
         Assert.assertNotEquals(model1.getId(), model2.getId());
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expectedExceptions = IllegalArgumentException.class)
     public void testBadIdCtor() {
         new ClientPresentationModel("1000-AUTO-CLT", Collections.<ClientAttribute>emptyList());
     }
