@@ -15,6 +15,7 @@
  */
 package com.canoo.platform.remoting.client;
 
+import com.canoo.platform.client.ClientSessionSupport;
 import com.canoo.platform.remoting.BeanManager;
 
 import java.util.concurrent.CompletableFuture;
@@ -56,4 +57,6 @@ public interface ClientContext {
     CompletableFuture<Void> connect();
 
     String getClientId();
+
+    ClientSessionSupport getClientSessionSupport();
 }

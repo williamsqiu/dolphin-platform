@@ -21,7 +21,7 @@ import com.canoo.dp.impl.platform.client.HttpClientCookieHandler;
 import com.canoo.dp.impl.platform.client.HttpStatus;
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.remoting.client.ClientConfiguration;
-import com.canoo.platform.client.ClientSessionSupport;
+import com.canoo.dp.impl.platform.client.ClientSessionSupportImpl;
 import com.canoo.platform.remoting.client.DolphinSessionException;
 import com.canoo.platform.client.HttpURLConnectionHandler;
 import com.canoo.platform.core.functional.Function;
@@ -66,15 +66,15 @@ public class DolphinPlatformHttpClientConnector extends AbstractClientConnector 
 
     private final AtomicReference<String> clientId = new AtomicReference<>();
 
-    private final ClientSessionSupport clientSessionSupport;
+    private final ClientSessionSupportImpl clientSessionSupport;
 
-    public DolphinPlatformHttpClientConnector(final ClientConfiguration configuration, final ClientModelStore clientModelStore, final Codec codec, final RemotingExceptionHandler onException) {
+    public DolphinPlatformHttpClientConnector(final ClientConfiguration configuration, final ClientModelStore clientModelStore, final Codec codec, final RemotingExceptionHandler onException, final ClientSessionSupportImpl clientSessionSupport) {
         super(clientModelStore, Assert.requireNonNull(configuration, "configuration").getUiExecutor(), new BlindCommandBatcher(), onException, configuration.getBackgroundExecutor());
         this.servletUrl = configuration.getServerEndpoint();
         this.httpClientCookieHandler = new HttpClientCookieHandler(configuration.getCookieStore());
         this.responseHandler = configuration.getResponseHandler();
         this.codec = Assert.requireNonNull(codec, "codec");
-        this.clientSessionSupport = new ClientSessionSupport(configuration.getConnectionFactory());
+        this.clientSessionSupport = Assert.requireNonNull(clientSessionSupport, "clientSessionSupport");
     }
 
     private final AtomicBoolean disconnecting = new AtomicBoolean(false);
@@ -95,7 +95,7 @@ public class DolphinPlatformHttpClientConnector extends AbstractClientConnector 
         }
 
         try {
-            return clientSessionSupport.doRequest(servletUrl, new Function<HttpURLConnection, List<Command>>() {
+            return clientSessionSupport.handleRequest(servletUrl, new Function<HttpURLConnection, List<Command>>() {
                 @Override
                 public List<Command> call(HttpURLConnection conn) {
                     try {
@@ -173,6 +173,10 @@ public class DolphinPlatformHttpClientConnector extends AbstractClientConnector 
     @Override
     public String getClientId() {
         return clientId.get();
+    }
+
+    public ClientSessionSupportImpl getClientSessionSupport() {
+        return clientSessionSupport;
     }
 }
 

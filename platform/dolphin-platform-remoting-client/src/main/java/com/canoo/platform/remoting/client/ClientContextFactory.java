@@ -19,6 +19,7 @@ import com.canoo.dp.impl.client.ClientContextImpl;
 import com.canoo.dp.impl.client.DolphinPlatformHttpClientConnector;
 import com.canoo.dp.impl.remoting.codec.OptimizedJsonCodec;
 import com.canoo.dp.impl.platform.core.Assert;
+import com.canoo.dp.impl.platform.client.ClientSessionSupportImpl;
 import org.opendolphin.core.client.ClientModelStore;
 import org.opendolphin.core.client.comm.AbstractClientConnector;
 import org.opendolphin.core.client.comm.RemotingExceptionHandler;
@@ -47,7 +48,7 @@ public class ClientContextFactory {
      */
     public static ClientContext create(final ClientConfiguration clientConfiguration) {
         Assert.requireNonNull(clientConfiguration, "clientConfiguration");
-        
+        final ClientSessionSupportImpl clientSessionSupport = new ClientSessionSupportImpl(clientConfiguration.getConnectionFactory());
         return new ClientContextImpl(clientConfiguration, new Function<ClientModelStore, AbstractClientConnector>() {
             @Override
             public AbstractClientConnector call(final ClientModelStore clientModelStore) {
@@ -58,9 +59,9 @@ public class ClientContextFactory {
                             handler.handle(e);
                         }
                     }
-                });
+                }, clientSessionSupport);
             }
-        });
+        }, clientSessionSupport);
     }
 
 }

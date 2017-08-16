@@ -16,6 +16,7 @@
 package com.canoo.impl.dp.spring.test;
 
 import com.canoo.dp.impl.client.ClientContextImpl;
+import com.canoo.dp.impl.platform.client.ClientSessionSupportImpl;
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.server.client.ClientSessionProvider;
 import com.canoo.dp.impl.server.config.ConfigurationFileLoader;
@@ -59,7 +60,7 @@ public class TestConfiguration {
         clientContext = new ClientContextImpl(clientConfiguration, new Function<ClientModelStore, AbstractClientConnector>() {
             @Override
             public AbstractClientConnector call(ClientModelStore clientModelStore) {
-                return new DolphinTestClientConnector(clientModelStore, clientExecutor, new Function<List<Command>, List<Command>>(){
+                return new DolphinTestClientConnector(clientModelStore, clientExecutor, new Function<List<Command>, List<Command>>() {
 
                     @Override
                     public List<Command> call(List<Command> commands) {
@@ -67,7 +68,7 @@ public class TestConfiguration {
                     }
                 });
             }
-        });
+        }, new ClientSessionSupportImpl());
 
 
         //Server

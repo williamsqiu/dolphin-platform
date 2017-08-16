@@ -15,19 +15,20 @@
  */
 package com.canoo.dp.impl.client;
 
+import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.remoting.BeanManagerImpl;
+import com.canoo.dp.impl.remoting.BeanRepository;
 import com.canoo.dp.impl.remoting.BeanRepositoryImpl;
+import com.canoo.dp.impl.remoting.ClassRepository;
 import com.canoo.dp.impl.remoting.ClassRepositoryImpl;
 import com.canoo.dp.impl.remoting.Converters;
+import com.canoo.dp.impl.remoting.EventDispatcher;
 import com.canoo.dp.impl.remoting.PresentationModelBuilderFactory;
-import com.canoo.platform.remoting.BeanManager;
 import com.canoo.dp.impl.remoting.collections.ListMapperImpl;
 import com.canoo.dp.impl.remoting.commands.CreateContextCommand;
 import com.canoo.dp.impl.remoting.commands.DestroyContextCommand;
-import com.canoo.dp.impl.remoting.BeanRepository;
-import com.canoo.dp.impl.remoting.ClassRepository;
-import com.canoo.dp.impl.remoting.EventDispatcher;
-import com.canoo.dp.impl.platform.core.Assert;
+import com.canoo.platform.client.ClientSessionSupport;
+import com.canoo.platform.remoting.BeanManager;
 import com.canoo.platform.remoting.client.ClientConfiguration;
 import com.canoo.platform.remoting.client.ClientContext;
 import com.canoo.platform.remoting.client.ClientInitializationException;
@@ -50,6 +51,8 @@ public class ClientContextImpl implements ClientContext {
 
     private final Function<ClientModelStore, AbstractClientConnector> connectorProvider;
 
+    private final ClientSessionSupport clientSessionSupport;
+
     private AbstractClientConnector clientConnector;
 
     private ClientModelStore modelStore;
@@ -61,9 +64,10 @@ public class ClientContextImpl implements ClientContext {
 
     private DolphinCommandHandler dolphinCommandHandler;
 
-    public ClientContextImpl(ClientConfiguration clientConfiguration, final Function<ClientModelStore, AbstractClientConnector> connectorProvider) {
+    public ClientContextImpl(ClientConfiguration clientConfiguration, final Function<ClientModelStore, AbstractClientConnector> connectorProvider, final ClientSessionSupport clientSessionSupport) {
         this.clientConfiguration = Assert.requireNonNull(clientConfiguration, "clientConfiguration");
         this.connectorProvider = Assert.requireNonNull(connectorProvider, "connectorProvider");
+        this.clientSessionSupport = Assert.requireNonNull(clientSessionSupport, "clientSessionSupport");
     }
 
     @Override
@@ -165,5 +169,10 @@ public class ClientContextImpl implements ClientContext {
         } else {
             return clientConnector.getClientId();
         }
+    }
+
+    @Override
+    public ClientSessionSupport getClientSessionSupport() {
+        return clientSessionSupport;
     }
 }
