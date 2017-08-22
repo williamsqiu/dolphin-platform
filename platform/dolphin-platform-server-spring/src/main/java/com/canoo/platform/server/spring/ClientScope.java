@@ -37,8 +37,7 @@ public @interface ClientScope {
 
     /**
      * Alias for {@link Scope#proxyMode}.
-     * <p>Defaults to {@link ScopedProxyMode#TARGET_CLASS}.
      */
     @AliasFor(annotation = Scope.class)
-    ScopedProxyMode proxyMode() default ScopedProxyMode.TARGET_CLASS;
+    ScopedProxyMode proxyMode() default ScopedProxyMode.DEFAULT;
 }
