@@ -100,8 +100,8 @@ public class ActionControllerTest extends AbstractIntegrationTest {
     @Test(dataProvider = ENDPOINTS_DATAPROVIDER, description = "Tests if an public action method can be called")
     public void testCallPublicMethod(String containerType, String endpoint) {
         try {
-            ClientContext context = connect(endpoint);
-            ControllerProxy<ActionTestBean> controller = createController(context, ACTION_CONTROLLER_NAME);
+            final ClientContext context = connect(endpoint);
+            final ControllerProxy<ActionTestBean> controller = createController(context, ACTION_CONTROLLER_NAME);
             invoke(controller, PUBLIC_ACTION, containerType);
             Assert.assertTrue(controller.getModel().getBooleanValue());
             destroy(controller, endpoint);
@@ -114,8 +114,8 @@ public class ActionControllerTest extends AbstractIntegrationTest {
     @Test(dataProvider = ENDPOINTS_DATAPROVIDER, description = "Tests if an public action with param method can be called")
     public void testCallPublicMethodWithParam(String containerType, String endpoint) {
         try {
-            ClientContext context = connect(endpoint);
-            ControllerProxy<ActionTestBean> controller = createController(context, ACTION_CONTROLLER_NAME);
+            final ClientContext context = connect(endpoint);
+            final ControllerProxy<ActionTestBean> controller = createController(context, ACTION_CONTROLLER_NAME);
             invoke(controller, PUBLIC_WITH_BOOLEAN_PARAM_ACTION, containerType, new Param(PARAM_NAME, true));
             Assert.assertTrue(controller.getModel().getBooleanValue());
             destroy(controller, endpoint);
@@ -128,8 +128,8 @@ public class ActionControllerTest extends AbstractIntegrationTest {
     @Test(dataProvider = ENDPOINTS_DATAPROVIDER, description = "Tests if an public action with null value for param method can be called")
     public void testCallPublicMethodWithNullParam(String containerType, String endpoint) {
         try {
-            ClientContext context = connect(endpoint);
-            ControllerProxy<ActionTestBean> controller = createController(context, ACTION_CONTROLLER_NAME);
+            final ClientContext context = connect(endpoint);
+            final ControllerProxy<ActionTestBean> controller = createController(context, ACTION_CONTROLLER_NAME);
             invoke(controller, PUBLIC_WITH_BOOLEAN_PARAM_ACTION, containerType, new Param(PARAM_NAME, null));
             Assert.assertNull(controller.getModel().getBooleanValue());
             destroy(controller, endpoint);
@@ -142,8 +142,8 @@ public class ActionControllerTest extends AbstractIntegrationTest {
     @Test(dataProvider = ENDPOINTS_DATAPROVIDER, description = "Tests if an private action method can be called")
     public void testCallPrivateMethod(String containerType, String endpoint) {
         try {
-            ClientContext context = connect(endpoint);
-            ControllerProxy<ActionTestBean> controller = createController(context, ACTION_CONTROLLER_NAME);
+            final ClientContext context = connect(endpoint);
+            final ControllerProxy<ActionTestBean> controller = createController(context, ACTION_CONTROLLER_NAME);
             invoke(controller, PRIVATE_ACTION, containerType);
             Assert.assertTrue(controller.getModel().getBooleanValue());
             destroy(controller, endpoint);
@@ -156,8 +156,8 @@ public class ActionControllerTest extends AbstractIntegrationTest {
     @Test(dataProvider = ENDPOINTS_DATAPROVIDER, description = "Tests if an private action method with one param can be called")
     public void testCallWithParam(String containerType, String endpoint) {
         try {
-            ClientContext context = connect(endpoint);
-            ControllerProxy<ActionTestBean> controller = createController(context, ACTION_CONTROLLER_NAME);
+            final ClientContext context = connect(endpoint);
+            final ControllerProxy<ActionTestBean> controller = createController(context, ACTION_CONTROLLER_NAME);
             invoke(controller, PRIVATE_WITH_STRING_PARAM_ACTION, containerType, new Param(PARAM_NAME, "Yeah!"));
             Assert.assertTrue(controller.getModel().getBooleanValue());
             Assert.assertEquals(controller.getModel().getStringValue(), "Yeah!");
@@ -171,8 +171,8 @@ public class ActionControllerTest extends AbstractIntegrationTest {
     @Test(dataProvider = ENDPOINTS_DATAPROVIDER, description = "Tests if an private action method with null value for param can be called")
     public void testCallWithNullParam(String containerType, String endpoint) {
         try {
-            ClientContext context = connect(endpoint);
-            ControllerProxy<ActionTestBean> controller = createController(context, ACTION_CONTROLLER_NAME);
+            final ClientContext context = connect(endpoint);
+            final ControllerProxy<ActionTestBean> controller = createController(context, ACTION_CONTROLLER_NAME);
             invoke(controller, PRIVATE_WITH_STRING_PARAM_ACTION, containerType, new Param(PARAM_NAME, null));
             Assert.assertTrue(controller.getModel().getBooleanValue());
             Assert.assertEquals(controller.getModel().getStringValue(), null);
@@ -186,8 +186,8 @@ public class ActionControllerTest extends AbstractIntegrationTest {
     @Test(dataProvider = ENDPOINTS_DATAPROVIDER, description = "Tests if an private action method can be called")
     public void testCallWithParams(String containerType, String endpoint) {
         try {
-            ClientContext context = connect(endpoint);
-            ControllerProxy<ActionTestBean> controller = createController(context, ACTION_CONTROLLER_NAME);
+            final ClientContext context = connect(endpoint);
+            final ControllerProxy<ActionTestBean> controller = createController(context, ACTION_CONTROLLER_NAME);
 
             final String value1 = "Hello Dolphin Platform!";
             final String value2 = "I want to test you!";
@@ -234,10 +234,10 @@ public class ActionControllerTest extends AbstractIntegrationTest {
         performActionForInteger(containerType, endpoint, PRIVATE_WITH_SEVERAL_INTEGER_PARAMS_ACTION, result, new Param(PARAM_NAME_1, value1), new Param(PARAM_NAME_2, value2));
     }
 
-    private void performActionForInteger(String containerType, String endpoint, String action, int result, Param ... params) {
+    private void performActionForInteger(final String containerType, final String endpoint, final String action, final int result, final Param ... params) {
         try {
-            ClientContext context = connect(endpoint);
-            ControllerProxy<ActionTestBean> controller = createController(context, ACTION_CONTROLLER_NAME);
+            final ClientContext context = connect(endpoint);
+            final ControllerProxy<ActionTestBean> controller = createController(context, ACTION_CONTROLLER_NAME);
             invoke(controller, action, containerType, params);
             Assert.assertEquals(controller.getModel().getIntegerValue().intValue(), result);
             destroy(controller, endpoint);
@@ -281,10 +281,10 @@ public class ActionControllerTest extends AbstractIntegrationTest {
         performActionForLong(containerType, endpoint, PRIVATE_WITH_SEVERAL_LONG_PARAMS_ACTION, result, new Param(PARAM_NAME_1, value1), new Param(PARAM_NAME_2, value2));
     }
 
-    private void performActionForLong(String containerType, String endpoint, String action, long result, Param ... params) {
+    private void performActionForLong(final String containerType, final String endpoint, final String action, final long result, final Param ... params) {
         try {
-            ClientContext context = connect(endpoint);
-            ControllerProxy<ActionTestBean> controller = createController(context, ACTION_CONTROLLER_NAME);
+            final ClientContext context = connect(endpoint);
+            final ControllerProxy<ActionTestBean> controller = createController(context, ACTION_CONTROLLER_NAME);
             invoke(controller, action, containerType, params);
             Assert.assertEquals(controller.getModel().getLongValue().longValue(), result);
             destroy(controller, endpoint);
@@ -328,10 +328,10 @@ public class ActionControllerTest extends AbstractIntegrationTest {
         performActionForFloat(containerType, endpoint, PRIVATE_WITH_SEVERAL_FLOAT_PARAMS_ACTION, result, new Param(PARAM_NAME_1, value1), new Param(PARAM_NAME_2, value2));
     }
 
-    private void performActionForFloat(String containerType, String endpoint, String action, float result, Param ... params) {
+    private void performActionForFloat(final String containerType, final String endpoint, final String action, final float result, final Param ... params) {
         try {
-            ClientContext context = connect(endpoint);
-            ControllerProxy<ActionTestBean> controller = createController(context, ACTION_CONTROLLER_NAME);
+            final ClientContext context = connect(endpoint);
+            final ControllerProxy<ActionTestBean> controller = createController(context, ACTION_CONTROLLER_NAME);
             invoke(controller, action, containerType, params);
             Assert.assertEquals(controller.getModel().getFloatValue().floatValue(), result);
             destroy(controller, endpoint);
@@ -375,10 +375,10 @@ public class ActionControllerTest extends AbstractIntegrationTest {
         performActionForDouble(containerType, endpoint, PRIVATE_WITH_SEVERAL_DOUBLE_PARAMS_ACTION, result, new Param(PARAM_NAME_1, value1), new Param(PARAM_NAME_2, value2));
     }
 
-    private void performActionForDouble(String containerType, String endpoint, String action, double result, Param ... params) {
+    private void performActionForDouble(final String containerType, final String endpoint, final String action, final double result, final Param ... params) {
         try {
-            ClientContext context = connect(endpoint);
-            ControllerProxy<ActionTestBean> controller = createController(context, ACTION_CONTROLLER_NAME);
+            final ClientContext context = connect(endpoint);
+            final ControllerProxy<ActionTestBean> controller = createController(context, ACTION_CONTROLLER_NAME);
             invoke(controller, action, containerType, params);
             Assert.assertEquals(controller.getModel().getDoubleValue().doubleValue(), result);
             destroy(controller, endpoint);
@@ -422,10 +422,10 @@ public class ActionControllerTest extends AbstractIntegrationTest {
         performActionForBigDecimal(containerType, endpoint, PRIVATE_WITH_SEVERAL_BIGDECIMAL_PARAMS_ACTION, result, new Param(PARAM_NAME_1, value1), new Param(PARAM_NAME_2, value2));
     }
 
-    private void performActionForBigDecimal(String containerType, String endpoint, String action, BigDecimal result, Param ... params) {
+    private void performActionForBigDecimal(final String containerType, final String endpoint, final String action, final BigDecimal result, final Param ... params) {
         try {
-            ClientContext context = connect(endpoint);
-            ControllerProxy<ActionTestBean> controller = createController(context, ACTION_CONTROLLER_NAME);
+            final ClientContext context = connect(endpoint);
+            final ControllerProxy<ActionTestBean> controller = createController(context, ACTION_CONTROLLER_NAME);
             invoke(controller, action, containerType, params);
             Assert.assertEquals(controller.getModel().getBigDecimalValue(), result);
             destroy(controller, endpoint);
@@ -469,10 +469,10 @@ public class ActionControllerTest extends AbstractIntegrationTest {
         performActionForBigInteger(containerType, endpoint, PRIVATE_WITH_SEVERAL_BIGINTEGER_PARAMS_ACTION, result, new Param(PARAM_NAME_1, value1), new Param(PARAM_NAME_2, value2));
     }
 
-    private void performActionForBigInteger(String containerType, String endpoint, String action, BigInteger result, Param ... params) {
+    private void performActionForBigInteger(final String containerType, final String endpoint, final String action, final BigInteger result, final Param ... params) {
         try {
-            ClientContext context = connect(endpoint);
-            ControllerProxy<ActionTestBean> controller = createController(context, ACTION_CONTROLLER_NAME);
+            final ClientContext context = connect(endpoint);
+            final ControllerProxy<ActionTestBean> controller = createController(context, ACTION_CONTROLLER_NAME);
             invoke(controller, action, containerType, params);
             Assert.assertEquals(controller.getModel().getBigIntegerValue(), result);
             destroy(controller, endpoint);
@@ -516,10 +516,10 @@ public class ActionControllerTest extends AbstractIntegrationTest {
         performActionForByte(containerType, endpoint, PRIVATE_WITH_SEVERAL_BYTE_PARAMS_ACTION, result, new Param(PARAM_NAME_1, value1), new Param(PARAM_NAME_2, value2));
     }
 
-    private void performActionForByte(String containerType, String endpoint, String action, byte result, Param ... params) {
+    private void performActionForByte(final String containerType, final String endpoint, final String action, final byte result, final Param ... params) {
         try {
-            ClientContext context = connect(endpoint);
-            ControllerProxy<ActionTestBean> controller = createController(context, ACTION_CONTROLLER_NAME);
+            final ClientContext context = connect(endpoint);
+            final ControllerProxy<ActionTestBean> controller = createController(context, ACTION_CONTROLLER_NAME);
             invoke(controller, action, containerType, params);
             Assert.assertEquals(controller.getModel().getByteValue().byteValue(), result);
             destroy(controller, endpoint);
@@ -546,10 +546,10 @@ public class ActionControllerTest extends AbstractIntegrationTest {
         performActionForCalendar(containerType, endpoint, PRIVATE_WITH_CALENDER_PARAM_ACTION, value, new Param(PARAM_NAME, value));
     }
 
-    private void performActionForCalendar(String containerType, String endpoint, String action, Calendar result, Param ... params) {
+    private void performActionForCalendar(final String containerType, final String endpoint, final String action, final Calendar result, final Param ... params) {
         try {
-            ClientContext context = connect(endpoint);
-            ControllerProxy<ActionTestBean> controller = createController(context, ACTION_CONTROLLER_NAME);
+            final ClientContext context = connect(endpoint);
+            final ControllerProxy<ActionTestBean> controller = createController(context, ACTION_CONTROLLER_NAME);
             invoke(controller, action, containerType, params);
             Assert.assertEquals(controller.getModel().getCalendarValue().getTime(), result.getTime());
             destroy(controller, endpoint);
@@ -576,10 +576,10 @@ public class ActionControllerTest extends AbstractIntegrationTest {
         performActionForDate(containerType, endpoint, PRIVATE_WITH_DATE_PARAM_ACTION, value, new Param(PARAM_NAME, value));
     }
 
-    private void performActionForDate(String containerType, String endpoint, String action, Date result, Param ... params) {
+    private void performActionForDate(final String containerType, final String endpoint, final String action, final Date result, final Param ... params) {
         try {
-            ClientContext context = connect(endpoint);
-            ControllerProxy<ActionTestBean> controller = createController(context, ACTION_CONTROLLER_NAME);
+            final ClientContext context = connect(endpoint);
+            final ControllerProxy<ActionTestBean> controller = createController(context, ACTION_CONTROLLER_NAME);
             invoke(controller, action, containerType, params);
             Assert.assertEquals(controller.getModel().getDateValue(), result);
             destroy(controller, endpoint);
@@ -623,10 +623,10 @@ public class ActionControllerTest extends AbstractIntegrationTest {
         performActionForShort(containerType, endpoint, PRIVATE_WITH_SEVERAL_SHORT_PARAMS_ACTION, result, new Param(PARAM_NAME_1, value1), new Param(PARAM_NAME_2, value2));
     }
 
-    private void performActionForShort(String containerType, String endpoint, String action, short result, Param ... params) {
+    private void performActionForShort(final String containerType, final String endpoint, final String action, final short result, final Param ... params) {
         try {
-            ClientContext context = connect(endpoint);
-            ControllerProxy<ActionTestBean> controller = createController(context, ACTION_CONTROLLER_NAME);
+            final ClientContext context = connect(endpoint);
+            final ControllerProxy<ActionTestBean> controller = createController(context, ACTION_CONTROLLER_NAME);
             invoke(controller, action, containerType, params);
             Assert.assertEquals(controller.getModel().getShortValue().shortValue(), result);
             destroy(controller, endpoint);
@@ -652,10 +652,10 @@ public class ActionControllerTest extends AbstractIntegrationTest {
         performActionForUUID(containerType, endpoint, PRIVATE_WITH_UUID_PARAM_ACTION, value, new Param(PARAM_NAME, value));
     }
 
-    private void performActionForUUID(String containerType, String endpoint, String action, UUID result, Param ... params) {
+    private void performActionForUUID(final String containerType, final String endpoint, final String action, final UUID result, final Param ... params) {
         try {
-            ClientContext context = connect(endpoint);
-            ControllerProxy<ActionTestBean> controller = createController(context, ACTION_CONTROLLER_NAME);
+            final ClientContext context = connect(endpoint);
+            final ControllerProxy<ActionTestBean> controller = createController(context, ACTION_CONTROLLER_NAME);
             invoke(controller, action, containerType, params);
             Assert.assertEquals(controller.getModel().getUuidValue(), result);
             destroy(controller, endpoint);
@@ -682,10 +682,10 @@ public class ActionControllerTest extends AbstractIntegrationTest {
         performActionForElementType(containerType, endpoint, PRIVATE_WITH_ELEMENT_TYPE_PARAM_ACTION, value, new Param(PARAM_NAME, value));
     }
 
-    private void performActionForElementType(String containerType, String endpoint, String action, ElementType result, Param ... params) {
+    private void performActionForElementType(final String containerType, final String endpoint, final String action, final ElementType result, final Param ... params) {
         try {
-            ClientContext context = connect(endpoint);
-            ControllerProxy<ActionTestBean> controller = createController(context, ACTION_CONTROLLER_NAME);
+            final ClientContext context = connect(endpoint);
+            final ControllerProxy<ActionTestBean> controller = createController(context, ACTION_CONTROLLER_NAME);
             invoke(controller, action, containerType, params);
             Assert.assertEquals(controller.getModel().getEnumValue(), result);
             destroy(controller, endpoint);
