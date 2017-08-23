@@ -95,7 +95,7 @@ public final class OptimizedJsonCodec implements Codec {
     @SuppressWarnings("unchecked")
     public String encode(final List<? extends Command> commands) {
         Assert.requireNonNull(commands, "commands");
-        LOG.trace("Encoding command list with {} commands", commands.size());
+        LOG.debug("Encoding command list with {} commands", commands.size());
         final StringBuilder builder = new StringBuilder("[");
         for (final Command command : commands) {
             if (command == null) {
@@ -143,7 +143,7 @@ public final class OptimizedJsonCodec implements Codec {
                 }
                 commands.add(encoder.decode(command));
             }
-            LOG.trace("Decoded command list with {} commands", commands.size());
+            LOG.debug("Decoded command list with {} commands", commands.size());
             return commands;
         } catch (Exception ex) {
             throw new JsonParseException("Illegal JSON detected", ex);
