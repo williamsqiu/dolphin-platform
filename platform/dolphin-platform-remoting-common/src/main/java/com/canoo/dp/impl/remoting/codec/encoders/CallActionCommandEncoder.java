@@ -24,7 +24,12 @@ import com.google.gson.JsonParseException;
 
 import java.util.Map;
 
-import static org.opendolphin.core.comm.CommandConstants.*;
+import static com.canoo.dp.impl.remoting.legacy.communication.CommandConstants.CALL_ACTION_COMMAND_ID;
+import static com.canoo.dp.impl.remoting.legacy.communication.CommandConstants.CONTROLLER_ID;
+import static com.canoo.dp.impl.remoting.legacy.communication.CommandConstants.ID;
+import static com.canoo.dp.impl.remoting.legacy.communication.CommandConstants.NAME;
+import static com.canoo.dp.impl.remoting.legacy.communication.CommandConstants.PARAMS;
+import static com.canoo.dp.impl.remoting.legacy.communication.CommandConstants.VALUE;
 
 public class CallActionCommandEncoder extends AbstractCommandTranscoder<CallActionCommand> {
 

@@ -22,9 +22,9 @@ import com.canoo.dp.impl.remoting.info.PropertyInfo;
 import com.canoo.platform.remoting.Property;
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.platform.core.ReflectionHelper;
-import org.opendolphin.core.ModelStore;
-import org.opendolphin.core.ModelStoreEvent;
-import org.opendolphin.core.ModelStoreListener;
+import com.canoo.dp.impl.remoting.legacy.core.ModelStore;
+import com.canoo.dp.impl.remoting.legacy.core.ModelStoreEvent;
+import com.canoo.dp.impl.remoting.legacy.core.ModelStoreListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

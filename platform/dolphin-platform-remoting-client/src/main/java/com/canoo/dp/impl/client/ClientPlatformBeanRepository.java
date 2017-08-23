@@ -21,8 +21,8 @@ import com.canoo.dp.impl.remoting.InternalAttributesBean;
 import com.canoo.dp.impl.remoting.BeanRepository;
 import com.canoo.dp.impl.remoting.DolphinEventHandler;
 import com.canoo.dp.impl.remoting.EventDispatcher;
-import org.opendolphin.core.PresentationModel;
-import org.opendolphin.core.client.ClientModelStore;
+import com.canoo.dp.impl.remoting.legacy.core.PresentationModel;
+import com.canoo.dp.impl.client.legacy.ClientModelStore;
 
 public class ClientPlatformBeanRepository {
 

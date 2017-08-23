@@ -17,11 +17,11 @@ package com.canoo.dp.impl.server.model;
 
 import com.canoo.dp.impl.remoting.AbstractPresentationModelBuilder;
 import com.canoo.dp.impl.platform.core.Assert;
-import org.opendolphin.RemotingConstants;
-import org.opendolphin.core.server.DTO;
-import org.opendolphin.core.server.ServerDolphin;
-import org.opendolphin.core.server.ServerPresentationModel;
-import org.opendolphin.core.server.Slot;
+import com.canoo.dp.impl.remoting.legacy.RemotingConstants;
+import com.canoo.dp.impl.server.legacy.DTO;
+import com.canoo.dp.impl.server.legacy.ServerDolphin;
+import com.canoo.dp.impl.server.legacy.ServerPresentationModel;
+import com.canoo.dp.impl.server.legacy.Slot;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -20,7 +20,7 @@ import com.canoo.platform.remoting.ValueChangeListener;
 import com.canoo.dp.impl.remoting.info.PropertyInfo;
 import com.canoo.platform.remoting.Property;
 import com.canoo.dp.impl.platform.core.Assert;
-import org.opendolphin.core.Attribute;
+import com.canoo.dp.impl.remoting.legacy.core.Attribute;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;

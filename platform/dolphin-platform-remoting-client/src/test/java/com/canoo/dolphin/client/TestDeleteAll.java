@@ -22,9 +22,9 @@ import com.canoo.dolphin.client.util.SimpleTestModel;
 import com.canoo.dp.impl.remoting.BeanRepository;
 import com.canoo.dp.impl.remoting.EventDispatcher;
 import mockit.Mocked;
-import org.opendolphin.core.client.ClientDolphin;
-import org.opendolphin.core.client.ClientPresentationModel;
-import org.opendolphin.core.client.comm.AbstractClientConnector;
+import com.canoo.dp.impl.client.legacy.ClientDolphin;
+import com.canoo.dp.impl.client.legacy.ClientPresentationModel;
+import com.canoo.dp.impl.client.legacy.communication.AbstractClientConnector;
 import org.testng.annotations.Test;
 
 import java.util.List;

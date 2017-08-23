@@ -34,7 +34,7 @@ public class AbstractIntegrationTest {
 
     private int bootTimeoutInMinutes = 3;
 
-    private int timeoutInMinutes = 1;
+    private int timeoutInMinutes = 3;
 
     public final static String ENDPOINTS_DATAPROVIDER = "endpoints";
 

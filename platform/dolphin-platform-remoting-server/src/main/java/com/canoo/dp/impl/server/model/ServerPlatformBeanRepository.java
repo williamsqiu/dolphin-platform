@@ -22,8 +22,8 @@ import com.canoo.dp.impl.remoting.BeanRepository;
 import com.canoo.dp.impl.remoting.DolphinEventHandler;
 import com.canoo.dp.impl.remoting.EventDispatcher;
 import com.canoo.dp.impl.platform.core.Assert;
-import org.opendolphin.core.PresentationModel;
-import org.opendolphin.core.server.ServerDolphin;
+import com.canoo.dp.impl.remoting.legacy.core.PresentationModel;
+import com.canoo.dp.impl.server.legacy.ServerDolphin;
 
 public class ServerPlatformBeanRepository {
 

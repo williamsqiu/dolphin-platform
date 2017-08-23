@@ -27,10 +27,10 @@ import com.canoo.dp.impl.server.scanner.DefaultClasspathScanner;
 import com.canoo.platform.remoting.client.ClientConfiguration;
 import com.canoo.platform.remoting.client.ClientContext;
 import com.canoo.platform.server.client.ClientSession;
-import org.opendolphin.core.client.ClientModelStore;
-import org.opendolphin.core.client.comm.AbstractClientConnector;
-import org.opendolphin.core.comm.Command;
-import org.opendolphin.util.Function;
+import com.canoo.dp.impl.client.legacy.ClientModelStore;
+import com.canoo.dp.impl.client.legacy.communication.AbstractClientConnector;
+import com.canoo.dp.impl.remoting.legacy.communication.Command;
+import com.canoo.dp.impl.remoting.legacy.util.Function;
 import org.springframework.web.context.WebApplicationContext;
 
 import javax.servlet.http.HttpSession;

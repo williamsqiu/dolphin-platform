@@ -21,16 +21,16 @@ import com.canoo.platform.remoting.client.ClientConfiguration;
 import com.canoo.dolphin.client.DummyUiThreadHandler;
 import com.canoo.platform.client.HttpURLConnectionFactory;
 import com.canoo.dp.impl.remoting.commands.CreateContextCommand;
-import org.opendolphin.core.client.ClientDolphin;
-import org.opendolphin.core.client.ClientModelStore;
-import org.opendolphin.core.client.DefaultModelSynchronizer;
-import org.opendolphin.core.client.comm.AbstractClientConnector;
-import org.opendolphin.core.client.comm.SimpleExceptionHandler;
-import org.opendolphin.core.comm.Command;
-import org.opendolphin.core.comm.CreatePresentationModelCommand;
-import org.opendolphin.core.comm.JsonCodec;
-import org.opendolphin.util.DolphinRemotingException;
-import org.opendolphin.util.Provider;
+import com.canoo.dp.impl.client.legacy.ClientDolphin;
+import com.canoo.dp.impl.client.legacy.ClientModelStore;
+import com.canoo.dp.impl.client.legacy.DefaultModelSynchronizer;
+import com.canoo.dp.impl.client.legacy.communication.AbstractClientConnector;
+import com.canoo.dp.impl.client.legacy.communication.SimpleExceptionHandler;
+import com.canoo.dp.impl.remoting.legacy.communication.Command;
+import com.canoo.dp.impl.remoting.legacy.communication.CreatePresentationModelCommand;
+import com.canoo.dp.impl.remoting.legacy.communication.JsonCodec;
+import com.canoo.dp.impl.remoting.legacy.util.DolphinRemotingException;
+import com.canoo.dp.impl.remoting.legacy.util.Provider;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -73,7 +73,7 @@ public class TestDolphinPlatformHttpClientConnector {
 
                     @Override
                     public InputStream getInputStream() throws IOException {
-                        String response = "[{\"pmId\":\"p1\",\"clientSideOnly\":false,\"id\":\"CreatePresentationModel\",\"attributes\":[],\"pmType\":null,\"className\":\"org.opendolphin.core.comm.CreatePresentationModelCommand\"}]";
+                        String response = "[{\"pmId\":\"p1\",\"clientSideOnly\":false,\"id\":\"CreatePresentationModel\",\"attributes\":[],\"pmType\":null,\"className\":\"com.canoo.dp.impl.remoting.legacy.communication.CreatePresentationModelCommand\"}]";
                         return new ByteArrayInputStream(response.getBytes("UTF-8"));
                     }
 

@@ -16,11 +16,14 @@
 package com.canoo.dp.impl.remoting.codec.encoders;
 
 import com.canoo.dp.impl.platform.core.Assert;
+import com.canoo.dp.impl.remoting.legacy.communication.ValueChangedCommand;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import org.opendolphin.core.comm.ValueChangedCommand;
 
-import static org.opendolphin.core.comm.CommandConstants.*;
+import static com.canoo.dp.impl.remoting.legacy.communication.CommandConstants.ATTRIBUTE_ID;
+import static com.canoo.dp.impl.remoting.legacy.communication.CommandConstants.ID;
+import static com.canoo.dp.impl.remoting.legacy.communication.CommandConstants.VALUE;
+import static com.canoo.dp.impl.remoting.legacy.communication.CommandConstants.VALUE_CHANGED_COMMAND_ID;
 
 public class ValueChangedCommandEncoder extends AbstractCommandTranscoder<ValueChangedCommand> {
 

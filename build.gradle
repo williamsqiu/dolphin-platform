@@ -77,16 +77,7 @@ subprojects { subprj ->
     apply plugin: 'org.kordamp.gradle.stats'
     apply from: rootProject.file('gradle/code-quality.gradle')
 
-    if (subprj.name.startsWith('dolphin-remoting')) {
-        apply plugin: 'groovy'
-    }
-
     subprj.tasks.withType(JavaCompile) {
-        sourceCompatibility = subprj.sourceCompatibility
-        targetCompatibility = subprj.targetCompatibility
-    }
-
-    subprj.tasks.withType(GroovyCompile) {
         sourceCompatibility = subprj.sourceCompatibility
         targetCompatibility = subprj.targetCompatibility
     }
@@ -166,26 +157,6 @@ subprojects { subprj ->
             testCompile "org.testng:testng:$testngVersion"
             testCompile 'org.hamcrest:java-hamcrest:2.0.0.0'
             testCompile "org.jmockit:jmockit:$jmockitVersion"
-        }
-
-        if (subprj.name.startsWith('dolphin-remoting')) {
-            dependencies {
-                testCompile "org.codehaus.groovy:groovy-test:$groovyVersion"
-                testCompile 'cglib:cglib-nodep:3.2.4'
-                testCompile 'org.spockframework:spock-core:1.0-groovy-2.4', {
-                    exclude group: 'org.codehaus.groovy'
-                }
-            }
-
-            test {
-                useJUnit()
-                testLogging {
-                    exceptionFormat 'full'
-                    showCauses true
-                    showExceptions true
-                    showStackTraces true
-                }
-            }
         }
     }
 

@@ -15,7 +15,7 @@
  */
 package com.canoo.dp.impl.remoting;
 
-import org.opendolphin.core.ModelStoreListener;
+import com.canoo.dp.impl.remoting.legacy.core.ModelStoreListener;
 
 public interface EventDispatcher extends ModelStoreListener {
 

@@ -22,8 +22,8 @@ import com.canoo.dp.impl.remoting.commands.CreateControllerCommand;
 import com.canoo.dp.impl.remoting.BeanRepository;
 import com.canoo.dp.impl.remoting.EventDispatcher;
 import com.canoo.dp.impl.platform.core.Assert;
-import org.opendolphin.core.client.ClientModelStore;
-import org.opendolphin.core.client.comm.AbstractClientConnector;
+import com.canoo.dp.impl.client.legacy.ClientModelStore;
+import com.canoo.dp.impl.client.legacy.communication.AbstractClientConnector;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;

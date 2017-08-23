@@ -25,8 +25,8 @@ import com.canoo.impl.server.util.ListReferenceModel;
 import com.canoo.impl.server.util.SimpleAnnotatedTestModel;
 import com.canoo.impl.server.util.SimpleTestModel;
 import com.canoo.impl.server.util.SingleReferenceModel;
-import org.opendolphin.core.server.ServerDolphin;
-import org.opendolphin.core.server.ServerPresentationModel;
+import com.canoo.dp.impl.server.legacy.ServerDolphin;
+import com.canoo.dp.impl.server.legacy.ServerPresentationModel;
 import org.testng.annotations.Test;
 
 import java.util.Collection;
