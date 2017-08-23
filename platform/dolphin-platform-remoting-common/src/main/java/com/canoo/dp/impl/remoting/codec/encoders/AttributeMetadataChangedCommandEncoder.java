@@ -1,10 +1,14 @@
 package com.canoo.dp.impl.remoting.codec.encoders;
 
 import com.canoo.dp.impl.platform.core.Assert;
-import com.google.gson.JsonObject;
 import com.canoo.dp.impl.remoting.legacy.communication.AttributeMetadataChangedCommand;
+import com.google.gson.JsonObject;
 
-import static com.canoo.dp.impl.remoting.legacy.communication.CommandConstants.*;
+import static com.canoo.dp.impl.remoting.legacy.communication.CommandConstants.ATTRIBUTE_ID;
+import static com.canoo.dp.impl.remoting.legacy.communication.CommandConstants.ATTRIBUTE_METADATA_CHANGED_COMMAND_ID;
+import static com.canoo.dp.impl.remoting.legacy.communication.CommandConstants.ID;
+import static com.canoo.dp.impl.remoting.legacy.communication.CommandConstants.NAME;
+import static com.canoo.dp.impl.remoting.legacy.communication.CommandConstants.VALUE;
 
 @Deprecated
 public class AttributeMetadataChangedCommandEncoder extends AbstractCommandTranscoder<AttributeMetadataChangedCommand> {

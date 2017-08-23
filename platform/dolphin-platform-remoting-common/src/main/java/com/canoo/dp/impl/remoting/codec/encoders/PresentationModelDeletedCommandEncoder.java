@@ -1,10 +1,12 @@
 package com.canoo.dp.impl.remoting.codec.encoders;
 
 import com.canoo.dp.impl.platform.core.Assert;
-import com.google.gson.JsonObject;
 import com.canoo.dp.impl.remoting.legacy.communication.PresentationModelDeletedCommand;
+import com.google.gson.JsonObject;
 
-import static com.canoo.dp.impl.remoting.legacy.communication.CommandConstants.*;
+import static com.canoo.dp.impl.remoting.legacy.communication.CommandConstants.ID;
+import static com.canoo.dp.impl.remoting.legacy.communication.CommandConstants.PM_ID;
+import static com.canoo.dp.impl.remoting.legacy.communication.CommandConstants.PRESENTATION_MODEL_DELETED_COMMAND_ID;
 
 @Deprecated
 public class PresentationModelDeletedCommandEncoder extends AbstractCommandTranscoder<PresentationModelDeletedCommand> {
