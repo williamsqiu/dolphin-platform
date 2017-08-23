@@ -127,8 +127,8 @@ public final class OptimizedJsonCodec implements Codec {
         Assert.requireNonNull(transmitted, "transmitted");
         LOG.trace("Decoding message: {}", transmitted);
         try {
-            final List<Command> commands = new ArrayList<>();
             final JsonArray array = (JsonArray) new JsonParser().parse(transmitted);
+            final List<Command> commands = new ArrayList<>(array.size());
             for (final JsonElement jsonElement : array) {
                 final JsonObject command = (JsonObject) jsonElement;
                 final JsonPrimitive idElement = command.getAsJsonPrimitive("id");
