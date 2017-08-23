@@ -123,6 +123,42 @@ public class TestObservableArrayList {
 //        list.clear();
     }
 
+    @Test
+    public void testRemoveAll(){
+        ObservableArrayList<String> list = new ObservableArrayList<>();
+        Assert.assertTrue(list.isEmpty());
+        Assert.assertEquals(list.size(), 0);
+
+        list.addAll("1", "2", "3", "4", "5", "6", "7" ,"8" , "9", "10");
+        Assert.assertFalse(list.isEmpty());
+        Assert.assertEquals(list.size(), 10);
+
+        list.removeAll(Arrays.asList("1", "2", "3", "4", "5"));
+        Assert.assertFalse(list.isEmpty());
+        Assert.assertEquals(list.size(), 5);
+        assertSameContent(list, Arrays.asList("6", "7" ,"8" , "9", "10"));
+        list.clear();
+
+    }
+
+    @Test
+    public void testRetainAll(){
+        ObservableArrayList<String> list = new ObservableArrayList<>();
+        Assert.assertTrue(list.isEmpty());
+        Assert.assertEquals(list.size(), 0);
+
+        list.addAll("1", "2", "3", "4", "5", "6", "7" ,"8" , "9", "10");
+        Assert.assertFalse(list.isEmpty());
+        Assert.assertEquals(list.size(), 10);
+
+        list.retainAll(Arrays.asList("1", "2", "3", "4", "5"));
+        Assert.assertFalse(list.isEmpty());
+        Assert.assertEquals(list.size(), 5);
+        assertSameContent(list, Arrays.asList("1", "2", "3", "4", "5"));
+        list.clear();
+
+    }
+
     private <T> void assertSameContent(List<T> a, List<T> b) {
         Assert.assertTrue(a.size() == b.size());
         for(T t : a) {
