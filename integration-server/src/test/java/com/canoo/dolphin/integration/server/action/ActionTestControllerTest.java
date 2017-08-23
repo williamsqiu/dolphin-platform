@@ -101,9 +101,9 @@ public class ActionTestControllerTest extends SpringTestNGControllerTest {
     @Test
     public void callPrivateMethodWithSeveralParams() {
         Assert.assertNull(controller.getModel().getBooleanValue());
-        String value1 = "Hello Dolphin Platform!";
-        String value2 = "I want to test you!";
-        int value3 = 356;
+        final String value1 = "Hello Dolphin Platform!";
+        final String value2 = "I want to test you!";
+        final int value3 = 356;
         controller.invoke(PRIVATE_WITH_SEVERAL_PARAMS_ACTION, new Param(PARAM_NAME_1, value1), new Param(PARAM_NAME_2, value2), new Param(PARAM_NAME_3, value3));
         Assert.assertTrue(controller.getModel().getBooleanValue());
         Assert.assertEquals(controller.getModel().getStringValue(), value1 + value2 + value3);
@@ -123,7 +123,7 @@ public class ActionTestControllerTest extends SpringTestNGControllerTest {
     @Test
     public void callPublicMethodWithIntegerParam() {
         Assert.assertNull(controller.getModel().getIntegerValue());
-        int value = 10;
+        final int value = 10;
         controller.invoke(PUBLIC_WITH_INTEGER_PARAM_ACTION, new Param(PARAM_NAME, value));
         Assert.assertEquals(controller.getModel().getIntegerValue().intValue(), value);
     }
@@ -131,7 +131,7 @@ public class ActionTestControllerTest extends SpringTestNGControllerTest {
     @Test
     public void callPrivateMethodWithIntegerParam() {
         Assert.assertNull(controller.getModel().getIntegerValue());
-        int value = 10;
+        final int value = 10;
         controller.invoke(PUBLIC_WITH_INTEGER_PARAM_ACTION, new Param(PARAM_NAME, value));
         Assert.assertEquals(controller.getModel().getIntegerValue().intValue(), value);
     }
@@ -139,9 +139,9 @@ public class ActionTestControllerTest extends SpringTestNGControllerTest {
     @Test
     public void callPublicMethodWithSeveralIntegerParams() {
         Assert.assertNull(controller.getModel().getIntegerValue());
-        int value1 = 1;
-        int value2 = 2;
-        int value3 = 3;
+        final int value1 = 1;
+        final int value2 = 2;
+        final int value3 = 3;
         controller.invoke(PUBLIC_WITH_SEVERAL_INTEGER_PARAMS_ACTION, new Param(PARAM_NAME_1, value1), new Param(PARAM_NAME_2, value2), new Param(PARAM_NAME_3, value3));
         Assert.assertEquals(controller.getModel().getIntegerValue().intValue(), value1 + value2 + value3);
     }
@@ -149,8 +149,8 @@ public class ActionTestControllerTest extends SpringTestNGControllerTest {
     @Test
     public void callPrivateMethodWithSeveralIntegerParams() {
         Assert.assertNull(controller.getModel().getIntegerValue());
-        int value1 = 1;
-        int value2 = 2;
+        final int value1 = 1;
+        final int value2 = 2;
         controller.invoke(PRIVATE_WITH_SEVERAL_INTEGER_PARAMS_ACTION, new Param(PARAM_NAME_1, value1), new Param(PARAM_NAME_2, value2));
         Assert.assertEquals(controller.getModel().getIntegerValue().intValue(), value1 + value2);
     }
@@ -161,7 +161,7 @@ public class ActionTestControllerTest extends SpringTestNGControllerTest {
     @Test
     public void callPublicMethodWithLongParam() {
         Assert.assertNull(controller.getModel().getLongValue());
-        long value = 10L;
+        final long value = 10L;
         controller.invoke(PUBLIC_WITH_LONG_PARAM_ACTION, new Param(PARAM_NAME, value));
         Assert.assertEquals(controller.getModel().getLongValue().longValue(), value);
     }
@@ -169,7 +169,7 @@ public class ActionTestControllerTest extends SpringTestNGControllerTest {
     @Test
     public void callPrivateMethodWithLongParam() {
         Assert.assertNull(controller.getModel().getLongValue());
-        long value = 10L;
+        final long value = 10L;
         controller.invoke(PUBLIC_WITH_LONG_PARAM_ACTION, new Param(PARAM_NAME, value));
         Assert.assertEquals(controller.getModel().getLongValue().longValue(), value);
     }
@@ -177,9 +177,9 @@ public class ActionTestControllerTest extends SpringTestNGControllerTest {
     @Test
     public void callPublicMethodWithSeveralLongParams() {
         Assert.assertNull(controller.getModel().getLongValue());
-        long value1 = 1L;
-        long value2 = 2L;
-        long value3 = 3L;
+        final long value1 = 1L;
+        final long value2 = 2L;
+        final long value3 = 3L;
         controller.invoke(PUBLIC_WITH_SEVERAL_LONG_PARAMS_ACTION, new Param(PARAM_NAME_1, value1), new Param(PARAM_NAME_2, value2), new Param(PARAM_NAME_3, value3));
         Assert.assertEquals(controller.getModel().getLongValue().longValue(), value1 + value2 + value3);
     }
@@ -187,8 +187,8 @@ public class ActionTestControllerTest extends SpringTestNGControllerTest {
     @Test
     public void callPrivateMethodWithSeveralLongParams() {
         Assert.assertNull(controller.getModel().getLongValue());
-        long value1 = 1L;
-        long value2 = 2L;
+        final long value1 = 1L;
+        final long value2 = 2L;
         controller.invoke(PRIVATE_WITH_SEVERAL_LONG_PARAMS_ACTION, new Param(PARAM_NAME_1, value1), new Param(PARAM_NAME_2, value2));
         Assert.assertEquals(controller.getModel().getLongValue().longValue(), value1 + value2);
     }
@@ -199,7 +199,7 @@ public class ActionTestControllerTest extends SpringTestNGControllerTest {
     @Test
     public void callPublicMethodWithFloatParam() {
         Assert.assertNull(controller.getModel().getFloatValue());
-        float value = 10F;
+        final float value = 10F;
         controller.invoke(PUBLIC_WITH_FLOAT_PARAM_ACTION, new Param(PARAM_NAME, value));
         Assert.assertEquals(controller.getModel().getFloatValue().floatValue(), value);
     }
@@ -207,7 +207,7 @@ public class ActionTestControllerTest extends SpringTestNGControllerTest {
     @Test
     public void callPrivateMethodWithFloatParam() {
         Assert.assertNull(controller.getModel().getFloatValue());
-        float value = 10F;
+        final float value = 10F;
         controller.invoke(PUBLIC_WITH_FLOAT_PARAM_ACTION, new Param(PARAM_NAME, value));
         Assert.assertEquals(controller.getModel().getFloatValue().floatValue(), value);
     }
@@ -215,9 +215,9 @@ public class ActionTestControllerTest extends SpringTestNGControllerTest {
     @Test
     public void callPublicMethodWithSeveralFloatParams() {
         Assert.assertNull(controller.getModel().getFloatValue());
-        float value1 = 1F;
-        float value2 = 2F;
-        float value3 = 3F;
+        final float value1 = 1F;
+        final float value2 = 2F;
+        final float value3 = 3F;
         controller.invoke(PUBLIC_WITH_SEVERAL_FLOAT_PARAMS_ACTION, new Param(PARAM_NAME_1, value1), new Param(PARAM_NAME_2, value2), new Param(PARAM_NAME_3, value3));
         Assert.assertEquals(controller.getModel().getFloatValue().floatValue(), value1 + value2 + value3);
     }
@@ -225,8 +225,8 @@ public class ActionTestControllerTest extends SpringTestNGControllerTest {
     @Test
     public void callPrivateMethodWithSeveralFloatParams() {
         Assert.assertNull(controller.getModel().getFloatValue());
-        float value1 = 1F;
-        float value2 = 2F;
+        final float value1 = 1F;
+        final float value2 = 2F;
         controller.invoke(PRIVATE_WITH_SEVERAL_FLOAT_PARAMS_ACTION, new Param(PARAM_NAME_1, value1), new Param(PARAM_NAME_2, value2));
         Assert.assertEquals(controller.getModel().getFloatValue().floatValue(), value1 + value2);
     }
@@ -237,7 +237,7 @@ public class ActionTestControllerTest extends SpringTestNGControllerTest {
     @Test
     public void callPublicMethodWithDoubleParam() {
         Assert.assertNull(controller.getModel().getDoubleValue());
-        double value = 10.0;
+        final double value = 10.0;
         controller.invoke(PUBLIC_WITH_DOUBLE_PARAM_ACTION, new Param(PARAM_NAME, value));
         Assert.assertEquals(controller.getModel().getDoubleValue().doubleValue(), value);
     }
@@ -245,7 +245,7 @@ public class ActionTestControllerTest extends SpringTestNGControllerTest {
     @Test
     public void callPrivateMethodWithDoubleParam() {
         Assert.assertNull(controller.getModel().getDoubleValue());
-        double value = 10.0;
+        final double value = 10.0;
         controller.invoke(PUBLIC_WITH_DOUBLE_PARAM_ACTION, new Param(PARAM_NAME, value));
         Assert.assertEquals(controller.getModel().getDoubleValue().doubleValue(), value);
     }
@@ -253,9 +253,9 @@ public class ActionTestControllerTest extends SpringTestNGControllerTest {
     @Test
     public void callPublicMethodWithSeveralDoubleParams() {
         Assert.assertNull(controller.getModel().getDoubleValue());
-        double value1 = 1.0;
-        double value2 = 2.0;
-        double value3 = 3.0;
+        final double value1 = 1.0;
+        final double value2 = 2.0;
+        final double value3 = 3.0;
         controller.invoke(PUBLIC_WITH_SEVERAL_DOUBLE_PARAMS_ACTION, new Param(PARAM_NAME_1, value1), new Param(PARAM_NAME_2, value2), new Param(PARAM_NAME_3, value3));
         Assert.assertEquals(controller.getModel().getDoubleValue().doubleValue(), value1 + value2 + value3);
     }
@@ -263,8 +263,8 @@ public class ActionTestControllerTest extends SpringTestNGControllerTest {
     @Test
     public void callPrivateMethodWithSeveralDoubleParams() {
         Assert.assertNull(controller.getModel().getDoubleValue());
-        double value1 = 1.0;
-        double value2 = 2.0;
+        final double value1 = 1.0;
+        final double value2 = 2.0;
         controller.invoke(PRIVATE_WITH_SEVERAL_DOUBLE_PARAMS_ACTION, new Param(PARAM_NAME_1, value1), new Param(PARAM_NAME_2, value2));
         Assert.assertEquals(controller.getModel().getDoubleValue().doubleValue(), value1 + value2);
     }
@@ -275,7 +275,7 @@ public class ActionTestControllerTest extends SpringTestNGControllerTest {
     @Test
     public void callPublicMethodWithBigDecimalParam() {
         Assert.assertNull(controller.getModel().getBigDecimalValue());
-        BigDecimal value = new BigDecimal(10);
+        final BigDecimal value = new BigDecimal(10);
         controller.invoke(PUBLIC_WITH_BIGDECIMAL_PARAM_ACTION, new Param(PARAM_NAME, value));
         Assert.assertEquals(controller.getModel().getBigDecimalValue(), value);
     }
@@ -283,7 +283,7 @@ public class ActionTestControllerTest extends SpringTestNGControllerTest {
     @Test
     public void callPrivateMethodWithBigDecimalParam() {
         Assert.assertNull(controller.getModel().getBigDecimalValue());
-        BigDecimal value = new BigDecimal(10);
+        final BigDecimal value = new BigDecimal(10);
         controller.invoke(PUBLIC_WITH_BIGDECIMAL_PARAM_ACTION, new Param(PARAM_NAME, value));
         Assert.assertEquals(controller.getModel().getBigDecimalValue(), value);
     }
@@ -291,9 +291,9 @@ public class ActionTestControllerTest extends SpringTestNGControllerTest {
     @Test
     public void callPublicMethodWithSeveralBigDecimalParams() {
         Assert.assertNull(controller.getModel().getBigDecimalValue());
-        BigDecimal value1 = new BigDecimal(10);
-        BigDecimal value2 = new BigDecimal(20);
-        BigDecimal value3 = new BigDecimal(30);
+        final BigDecimal value1 = new BigDecimal(10);
+        final BigDecimal value2 = new BigDecimal(20);
+        final BigDecimal value3 = new BigDecimal(30);
         controller.invoke(PUBLIC_WITH_SEVERAL_BIGDECIMAL_PARAMS_ACTION, new Param(PARAM_NAME_1, value1), new Param(PARAM_NAME_2, value2), new Param(PARAM_NAME_3, value3));
         Assert.assertEquals(controller.getModel().getBigDecimalValue(), value1.add(value2).add(value3));
     }
@@ -301,8 +301,8 @@ public class ActionTestControllerTest extends SpringTestNGControllerTest {
     @Test
     public void callPrivateMethodWithSeveralBigDecimalParams() {
         Assert.assertNull(controller.getModel().getBigDecimalValue());
-        BigDecimal value1 = new BigDecimal(10);
-        BigDecimal value2 = new BigDecimal(20);
+        final BigDecimal value1 = new BigDecimal(10);
+        final BigDecimal value2 = new BigDecimal(20);
         controller.invoke(PRIVATE_WITH_SEVERAL_BIGDECIMAL_PARAMS_ACTION, new Param(PARAM_NAME_1, value1), new Param(PARAM_NAME_2, value2));
         Assert.assertEquals(controller.getModel().getBigDecimalValue(), value1.add(value2));
     }
@@ -313,7 +313,7 @@ public class ActionTestControllerTest extends SpringTestNGControllerTest {
     @Test
     public void callPublicMethodWithBigIntegerParam() {
         Assert.assertNull(controller.getModel().getBigIntegerValue());
-        BigInteger value = BigInteger.TEN;
+        final BigInteger value = BigInteger.TEN;
         controller.invoke(PUBLIC_WITH_BIGINTEGER_PARAM_ACTION, new Param(PARAM_NAME, value));
         Assert.assertEquals(controller.getModel().getBigIntegerValue(), value);
     }
@@ -321,7 +321,7 @@ public class ActionTestControllerTest extends SpringTestNGControllerTest {
     @Test
     public void callPrivateMethodWithBigIntegerParam() {
         Assert.assertNull(controller.getModel().getBigIntegerValue());
-        BigInteger value = BigInteger.TEN;
+        final BigInteger value = BigInteger.TEN;
         controller.invoke(PUBLIC_WITH_BIGINTEGER_PARAM_ACTION, new Param(PARAM_NAME, value));
         Assert.assertEquals(controller.getModel().getBigIntegerValue(), value);
     }
@@ -329,9 +329,9 @@ public class ActionTestControllerTest extends SpringTestNGControllerTest {
     @Test
     public void callPublicMethodWithSeveralBigIntegerParams() {
         Assert.assertNull(controller.getModel().getBigIntegerValue());
-        BigInteger value1 = BigInteger.TEN;
-        BigInteger value2 = BigInteger.TEN;
-        BigInteger value3 = BigInteger.TEN;
+        final BigInteger value1 = BigInteger.TEN;
+        final BigInteger value2 = BigInteger.TEN;
+        final BigInteger value3 = BigInteger.TEN;
         controller.invoke(PUBLIC_WITH_SEVERAL_BIGINTEGER_PARAMS_ACTION, new Param(PARAM_NAME_1, value1), new Param(PARAM_NAME_2, value2), new Param(PARAM_NAME_3, value3));
         Assert.assertEquals(controller.getModel().getBigIntegerValue(), value1.add(value2).add(value3));
     }
@@ -339,8 +339,8 @@ public class ActionTestControllerTest extends SpringTestNGControllerTest {
     @Test
     public void callPrivateMethodWithSeveralBigIntegerParams() {
         Assert.assertNull(controller.getModel().getBigIntegerValue());
-        BigInteger value1 = BigInteger.TEN;
-        BigInteger value2 = BigInteger.TEN;
+        final BigInteger value1 = BigInteger.TEN;
+        final BigInteger value2 = BigInteger.TEN;
         controller.invoke(PRIVATE_WITH_SEVERAL_BIGINTEGER_PARAMS_ACTION, new Param(PARAM_NAME_1, value1), new Param(PARAM_NAME_2, value2));
         Assert.assertEquals(controller.getModel().getBigIntegerValue(), value1.add(value2));
     }
@@ -351,7 +351,7 @@ public class ActionTestControllerTest extends SpringTestNGControllerTest {
     @Test
     public void callPublicMethodWithByteParam() {
         Assert.assertNull(controller.getModel().getByteValue());
-        Byte value = 10;
+        final Byte value = 10;
         controller.invoke(PUBLIC_WITH_BYTE_PARAM_ACTION, new Param(PARAM_NAME, value));
         Assert.assertEquals(controller.getModel().getByteValue(), value);
     }
@@ -359,7 +359,7 @@ public class ActionTestControllerTest extends SpringTestNGControllerTest {
     @Test
     public void callPrivateMethodWithByteParam() {
         Assert.assertNull(controller.getModel().getByteValue());
-        Byte value = 10;
+        final Byte value = 10;
         controller.invoke(PUBLIC_WITH_BYTE_PARAM_ACTION, new Param(PARAM_NAME, value));
         Assert.assertEquals(controller.getModel().getByteValue(), value);
     }
@@ -367,9 +367,9 @@ public class ActionTestControllerTest extends SpringTestNGControllerTest {
     @Test
     public void callPublicMethodWithSeveralByteParams() {
         Assert.assertNull(controller.getModel().getByteValue());
-        Byte value1 = 10;
-        Byte value2 = 20;
-        Byte value3 = 30;
+        final Byte value1 = 10;
+        final Byte value2 = 20;
+        final Byte value3 = 30;
         controller.invoke(PUBLIC_WITH_SEVERAL_BYTE_PARAMS_ACTION, new Param(PARAM_NAME_1, value1), new Param(PARAM_NAME_2, value2), new Param(PARAM_NAME_3, value3));
         Assert.assertEquals(controller.getModel().getByteValue().byteValue(), (byte)(value1 + value2 + value3));
     }
@@ -377,8 +377,8 @@ public class ActionTestControllerTest extends SpringTestNGControllerTest {
     @Test
     public void callPrivateMethodWithSeveralByteParams() {
         Assert.assertNull(controller.getModel().getByteValue());
-        Byte value1 = 10;
-        Byte value2 = 20;
+        final Byte value1 = 10;
+        final Byte value2 = 20;
         controller.invoke(PRIVATE_WITH_SEVERAL_BYTE_PARAMS_ACTION, new Param(PARAM_NAME_1, value1), new Param(PARAM_NAME_2, value2));
         Assert.assertEquals(controller.getModel().getByteValue().byteValue(), (byte)(value1 + value2));
     }
@@ -388,7 +388,7 @@ public class ActionTestControllerTest extends SpringTestNGControllerTest {
     @Test
     public void callPublicMethodWithCalendarParam() {
         Assert.assertNull(controller.getModel().getCalendarValue());
-        Calendar value = Calendar.getInstance();
+        final Calendar value = Calendar.getInstance();
         controller.invoke(PUBLIC_WITH_CALENDER_PARAM_ACTION, new Param(PARAM_NAME, value));
         Assert.assertEquals(controller.getModel().getCalendarValue().getTime(), value.getTime());
     }
@@ -396,7 +396,7 @@ public class ActionTestControllerTest extends SpringTestNGControllerTest {
     @Test
     public void callPrivateMethodWithCalendarParam() {
         Assert.assertNull(controller.getModel().getCalendarValue());
-        Calendar value = Calendar.getInstance();
+        final Calendar value = Calendar.getInstance();
         controller.invoke(PUBLIC_WITH_CALENDER_PARAM_ACTION, new Param(PARAM_NAME, value));
         Assert.assertEquals(controller.getModel().getCalendarValue().getTime(), value.getTime());
     }
@@ -408,7 +408,7 @@ public class ActionTestControllerTest extends SpringTestNGControllerTest {
     @Test
     public void callPublicMethodWithDateParam() {
         Assert.assertNull(controller.getModel().getDateValue());
-        Date value = new Date();
+        final Date value = new Date();
         controller.invoke(PUBLIC_WITH_DATE_PARAM_ACTION, new Param(PARAM_NAME, value));
         Assert.assertEquals(controller.getModel().getDateValue(), value);
     }
@@ -416,7 +416,7 @@ public class ActionTestControllerTest extends SpringTestNGControllerTest {
     @Test
     public void callPrivateMethodWithDateParam() {
         Assert.assertNull(controller.getModel().getDateValue());
-        Date value = new Date();
+        final Date value = new Date();
         controller.invoke(PUBLIC_WITH_DATE_PARAM_ACTION, new Param(PARAM_NAME, value));
         Assert.assertEquals(controller.getModel().getDateValue(), value);
     }
@@ -427,7 +427,7 @@ public class ActionTestControllerTest extends SpringTestNGControllerTest {
     @Test
     public void callPublicMethodWithShortParam() {
         Assert.assertNull(controller.getModel().getShortValue());
-        short value = 10;
+        final short value = 10;
         controller.invoke(PUBLIC_WITH_SHORT_PARAM_ACTION, new Param(PARAM_NAME, value));
         Assert.assertEquals(controller.getModel().getShortValue().shortValue(), value);
     }
@@ -435,7 +435,7 @@ public class ActionTestControllerTest extends SpringTestNGControllerTest {
     @Test
     public void callPrivateMethodWithShortParam() {
         Assert.assertNull(controller.getModel().getShortValue());
-        short value = 10;
+        final short value = 10;
         controller.invoke(PUBLIC_WITH_SHORT_PARAM_ACTION, new Param(PARAM_NAME, value));
         Assert.assertEquals(controller.getModel().getShortValue().shortValue(), value);
     }
@@ -443,9 +443,9 @@ public class ActionTestControllerTest extends SpringTestNGControllerTest {
     @Test
     public void callPublicMethodWithSeveralShortParams() {
         Assert.assertNull(controller.getModel().getShortValue());
-        short value1 = 10;
-        short value2 = 10;
-        short value3 = 10;
+        final short value1 = 10;
+        final short value2 = 10;
+        final short value3 = 10;
         controller.invoke(PUBLIC_WITH_SEVERAL_SHORT_PARAMS_ACTION, new Param(PARAM_NAME_1, value1), new Param(PARAM_NAME_2, value2), new Param(PARAM_NAME_3, value3));
         Assert.assertEquals(controller.getModel().getShortValue().shortValue(), (short)(value1 + value2 + value3));
     }
@@ -453,8 +453,8 @@ public class ActionTestControllerTest extends SpringTestNGControllerTest {
     @Test
     public void callPrivateMethodWithSeveralShortParams() {
         Assert.assertNull(controller.getModel().getShortValue());
-        short value1 = 10;
-        short value2 = 10;
+        final short value1 = 10;
+        final short value2 = 10;
         controller.invoke(PRIVATE_WITH_SEVERAL_SHORT_PARAMS_ACTION, new Param(PARAM_NAME_1, value1), new Param(PARAM_NAME_2, value2));
         Assert.assertEquals(controller.getModel().getShortValue().shortValue(), (short)(value1 + value2));
     }
@@ -465,7 +465,7 @@ public class ActionTestControllerTest extends SpringTestNGControllerTest {
     @Test
     public void callPublicMethodWithUUIDParam() {
         Assert.assertNull(controller.getModel().getUuidValue());
-        UUID value = UUID.randomUUID();
+        final UUID value = UUID.randomUUID();
         controller.invoke(PUBLIC_WITH_UUID_PARAM_ACTION, new Param(PARAM_NAME, value));
         Assert.assertEquals(controller.getModel().getUuidValue(), value);
     }
@@ -473,7 +473,7 @@ public class ActionTestControllerTest extends SpringTestNGControllerTest {
     @Test
     public void callPrivateMethodWithUUIDParam() {
         Assert.assertNull(controller.getModel().getUuidValue());
-        UUID value = UUID.randomUUID();
+        final UUID value = UUID.randomUUID();
         controller.invoke(PUBLIC_WITH_UUID_PARAM_ACTION, new Param(PARAM_NAME, value));
         Assert.assertEquals(controller.getModel().getUuidValue(), value);
     }
@@ -485,7 +485,7 @@ public class ActionTestControllerTest extends SpringTestNGControllerTest {
     @Test
     public void callPublicMethodWithElementTypeParam() {
         Assert.assertNull(controller.getModel().getEnumValue());
-        ElementType value = ElementType.FIELD;
+        final ElementType value = ElementType.FIELD;
         controller.invoke(PUBLIC_WITH_ELEMENT_TYPE_PARAM_ACTION, new Param(PARAM_NAME, value));
         Assert.assertEquals(controller.getModel().getEnumValue(), value);
     }
@@ -493,7 +493,7 @@ public class ActionTestControllerTest extends SpringTestNGControllerTest {
     @Test
     public void callPrivateMethodWithElementTypeParam() {
         Assert.assertNull(controller.getModel().getEnumValue());
-        ElementType value = ElementType.METHOD;
+        final ElementType value = ElementType.METHOD;
         controller.invoke(PUBLIC_WITH_ELEMENT_TYPE_PARAM_ACTION, new Param(PARAM_NAME, value));
         Assert.assertEquals(controller.getModel().getEnumValue().compareTo(value), 0);
     }
