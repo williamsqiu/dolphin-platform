@@ -29,7 +29,7 @@ import com.canoo.dp.impl.client.legacy.communication.SimpleExceptionHandler;
 import com.canoo.dp.impl.remoting.legacy.communication.Command;
 import com.canoo.dp.impl.remoting.legacy.communication.CreatePresentationModelCommand;
 import com.canoo.dp.impl.remoting.legacy.communication.JsonCodec;
-import com.canoo.dp.impl.remoting.legacy.util.DolphinRemotingException;
+import com.canoo.platform.remoting.DolphinRemotingException;
 import com.canoo.dp.impl.remoting.legacy.util.Provider;
 import org.testng.Assert;
 import org.testng.annotations.Test;
