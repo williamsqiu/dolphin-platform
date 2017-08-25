@@ -12,7 +12,7 @@ public class ClientIdTest extends AbstractIntegrationTest {
     @Test(dataProvider = ENDPOINTS_DATAPROVIDER)
     public void testThatClientIdIsNotNull(String containerType, String endpoint) {
         ClientContext context = connect(endpoint);
-        Assert.assertNotNull(context.connect());
+        Assert.assertNotNull(context.getClientId());
     }
 
 }
