@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.dp.impl.client.legacy.communication;
+package com.canoo.platform.remoting.client;
 
-import com.canoo.dp.impl.remoting.legacy.util.DolphinRemotingException;
+import com.canoo.platform.remoting.DolphinRemotingException;
 
 public interface RemotingExceptionHandler {
 

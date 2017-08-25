@@ -19,7 +19,8 @@ import com.canoo.dp.impl.client.legacy.ClientModelStore;
 import com.canoo.dp.impl.remoting.legacy.commands.InterruptLongPollCommand;
 import com.canoo.dp.impl.remoting.legacy.commands.StartLongPollCommand;
 import com.canoo.dp.impl.remoting.legacy.communication.Command;
-import com.canoo.dp.impl.remoting.legacy.util.DolphinRemotingException;
+import com.canoo.platform.remoting.DolphinRemotingException;
+import com.canoo.platform.remoting.client.RemotingExceptionHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

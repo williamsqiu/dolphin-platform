@@ -28,10 +28,10 @@ import com.canoo.platform.core.functional.Function;
 import com.canoo.dp.impl.client.legacy.ClientModelStore;
 import com.canoo.dp.impl.client.legacy.communication.AbstractClientConnector;
 import com.canoo.dp.impl.client.legacy.communication.BlindCommandBatcher;
-import com.canoo.dp.impl.client.legacy.communication.RemotingExceptionHandler;
+import com.canoo.platform.remoting.client.RemotingExceptionHandler;
 import com.canoo.dp.impl.remoting.legacy.communication.Codec;
 import com.canoo.dp.impl.remoting.legacy.communication.Command;
-import com.canoo.dp.impl.remoting.legacy.util.DolphinRemotingException;
+import com.canoo.platform.remoting.DolphinRemotingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
