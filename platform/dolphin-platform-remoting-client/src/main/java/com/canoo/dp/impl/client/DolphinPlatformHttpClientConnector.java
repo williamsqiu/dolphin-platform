@@ -99,7 +99,7 @@ public class DolphinPlatformHttpClientConnector extends AbstractClientConnector 
         }
 
         try {
-            return clientSessionSupport.doRequest(servletUrl, new Function<HttpURLConnection, List<Command>>() {
+            List<Command> responseCommands = clientSessionSupport.doRequest(servletUrl, new Function<HttpURLConnection, List<Command>>() {
                 @Override
                 public List<Command> call(HttpURLConnection conn) {
                     try {
@@ -124,7 +124,7 @@ public class DolphinPlatformHttpClientConnector extends AbstractClientConnector 
                         if (responseCode >= HttpStatus.SC_MULTIPLE_CHOICES) {
                             throw new DolphinHttpResponseException(responseCode, conn.getResponseMessage());
                         }
-                        DolphinPlatformHttpClientConnector.this.clientId.set(clientSessionSupport.getClientIdFor(servletUrl));
+
                         responseHandler.handle(conn);
                         httpClientCookieHandler.updateCookiesFromResponse(conn);
                         if (commands.size() == 1 && commands.get(0) == getReleaseCommand()) {
@@ -138,6 +138,8 @@ public class DolphinPlatformHttpClientConnector extends AbstractClientConnector 
                     }
                 }
             });
+            this.clientId.set(clientSessionSupport.getClientIdFor(servletUrl));
+            return responseCommands;
         } catch (Exception e) {
             throw new DolphinRemotingException("Error in remoting layer", e);
         }
