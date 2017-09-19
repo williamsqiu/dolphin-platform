@@ -17,7 +17,7 @@ package com.canoo.impl.server;
 
 import com.canoo.dp.impl.server.context.OpenDolphinFactory;
 import com.canoo.dp.impl.server.model.ServerEventDispatcher;
-import org.opendolphin.RemotingConstants;
+import com.canoo.dp.impl.remoting.legacy.RemotingConstants;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertEquals;

@@ -21,7 +21,7 @@ import com.canoo.platform.remoting.server.DolphinController;
 import java.io.Serializable;
 
 /**
- * The dolphin event bus that can be used to send messages to dolphin sessions.
+ * The dolphin event bus that can be used to withContent messages to dolphin sessions.
  * The {@link DolphinEventBus} can be injected in any
  * managed bean and will automatically publish the given data in the dolphin session.
  * This means that you ca subscribe your dolphin controller (see {@link DolphinController})

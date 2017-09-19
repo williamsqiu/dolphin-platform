@@ -1,0 +1,39 @@
+[Dolphin-Platform-Background-Thread-0] DEBUG com.canoo.dp.impl.remoting.codec.OptimizedJsonCodec - Encoding command list with 1 commands
+[Dolphin-Platform-Background-Thread-0] DEBUG com.canoo.dp.impl.platform.client.session.ClientSessionStore - application domain: localhost:8081
+[Dolphin-Platform-Background-Thread-0] DEBUG com.canoo.dp.impl.platform.client.session.ClientSessionSupportingURLConnectionRequestHandler - Sending request to application at http://localhost:8081/integration-tests/dolphin without client id. Client id not defined until now.
+[Dolphin-Platform-Background-Thread-0] DEBUG com.canoo.dp.impl.platform.client.session.ClientSessionStore - application domain: localhost:8081
+[Dolphin-Platform-Background-Thread-0] DEBUG com.canoo.dp.impl.platform.client.session.ClientSessionStore - Defining client id 4b8daadf-5f2d-43dc-80b3-529dafec170c for application domain localhost:8081
+[Dolphin-Platform-Background-Thread-0] DEBUG com.canoo.dp.impl.remoting.codec.OptimizedJsonCodec - Decoded command list with 1 commands
+[Dolphin-Platform-Background-Thread-0] DEBUG com.canoo.dp.impl.remoting.codec.OptimizedJsonCodec - Encoding command list with 1 commands
+[Dolphin-Platform-Background-Thread-1] DEBUG com.canoo.dp.impl.remoting.codec.OptimizedJsonCodec - Encoding command list with 1 commands
+[Dolphin-Platform-Background-Thread-0] DEBUG com.canoo.dp.impl.platform.client.session.ClientSessionStore - application domain: localhost:8081
+[Dolphin-Platform-Background-Thread-1] DEBUG com.canoo.dp.impl.platform.client.session.ClientSessionStore - application domain: localhost:8081
+[Dolphin-Platform-Background-Thread-0] DEBUG com.canoo.dp.impl.platform.client.session.ClientSessionSupportingURLConnectionRequestHandler - Adding client id 4b8daadf-5f2d-43dc-80b3-529dafec170c to http request at http://localhost:8081/integration-tests/dolphin
+[Dolphin-Platform-Background-Thread-1] DEBUG com.canoo.dp.impl.platform.client.session.ClientSessionSupportingURLConnectionRequestHandler - Adding client id 4b8daadf-5f2d-43dc-80b3-529dafec170c to http request at http://localhost:8081/integration-tests/dolphin
+[Dolphin-Platform-Background-Thread-0] WARN com.canoo.dp.impl.client.legacy.communication.AbstractClientConnector - Remoting error based on broken connection in parallel request
+com.canoo.platform.remoting.DolphinRemotingException: Error in remoting layer
+	at com.canoo.dp.impl.client.DolphinPlatformHttpClientConnector.transmit(DolphinPlatformHttpClientConnector.java:80)
+	at com.canoo.dp.impl.client.legacy.communication.AbstractClientConnector.commandProcessing(AbstractClientConnector.java:113)
+	at com.canoo.dp.impl.client.legacy.communication.AbstractClientConnector$7.run(AbstractClientConnector.java:259)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: com.canoo.platform.core.DolphinRuntimeException
+	at com.canoo.dp.impl.platform.client.http.HttpResponseImpl.handle(HttpResponseImpl.java:88)
+	at com.canoo.dp.impl.platform.client.http.HttpResponseImpl.readBytes(HttpResponseImpl.java:48)
+	at com.canoo.dp.impl.platform.client.http.HttpResponseImpl.readString(HttpResponseImpl.java:63)
+	at com.canoo.dp.impl.client.DolphinPlatformHttpClientConnector.transmit(DolphinPlatformHttpClientConnector.java:77)
+	... 5 more
+[Dolphin-Platform-Background-Thread-1] ERROR com.canoo.dp.impl.client.legacy.communication.SimpleExceptionHandler -  Error in remoting layer: 
+com.canoo.platform.remoting.DolphinRemotingException: Error in remoting layer
+	at com.canoo.dp.impl.client.DolphinPlatformHttpClientConnector.transmit(DolphinPlatformHttpClientConnector.java:80)
+	at com.canoo.dp.impl.client.legacy.communication.AbstractClientConnector$5.run(AbstractClientConnector.java:235)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: com.canoo.platform.core.DolphinRuntimeException
+	at com.canoo.dp.impl.platform.client.http.HttpResponseImpl.handle(HttpResponseImpl.java:88)
+	at com.canoo.dp.impl.platform.client.http.HttpResponseImpl.readBytes(HttpResponseImpl.java:48)
+	at com.canoo.dp.impl.platform.client.http.HttpResponseImpl.readString(HttpResponseImpl.java:63)
+	at com.canoo.dp.impl.client.DolphinPlatformHttpClientConnector.transmit(DolphinPlatformHttpClientConnector.java:77)
+	... 4 more

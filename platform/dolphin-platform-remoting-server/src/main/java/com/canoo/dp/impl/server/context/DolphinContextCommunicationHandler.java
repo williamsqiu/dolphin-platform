@@ -21,8 +21,8 @@ import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.core.functional.Callback;
 import com.canoo.dp.impl.server.client.ClientSessionProvider;
 import com.canoo.platform.server.client.ClientSession;
-import org.opendolphin.core.comm.Codec;
-import org.opendolphin.core.comm.Command;
+import com.canoo.dp.impl.remoting.legacy.communication.Codec;
+import com.canoo.dp.impl.remoting.legacy.communication.Command;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -150,7 +150,7 @@ public class DolphinContextCommunicationHandler {
             add(clientSession, createdContext);
             return createdContext;
         }
-        throw new IllegalStateException("No dolphin context is defined and no init command is send.");
+        throw new IllegalStateException("No dolphin context is defined and no init command is withContent.");
     }
 
     private boolean containsInitCommand(final List<Command> commands) {

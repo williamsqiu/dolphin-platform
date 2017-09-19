@@ -19,8 +19,8 @@ import com.canoo.platform.core.functional.Subscription;
 import com.canoo.dp.impl.platform.core.Assert;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
-import org.opendolphin.core.ModelStore;
-import org.opendolphin.core.PresentationModel;
+import com.canoo.dp.impl.remoting.legacy.core.ModelStore;
+import com.canoo.dp.impl.remoting.legacy.core.PresentationModel;
 
 import java.util.*;
 

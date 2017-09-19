@@ -17,13 +17,13 @@ package com.canoo.dolphin.client.impl;
 
 import com.canoo.dolphin.client.util.AbstractDolphinBasedTest;
 import com.canoo.dp.impl.client.DolphinCommandHandler;
-import org.opendolphin.core.client.ClientAttribute;
-import org.opendolphin.core.client.ClientDolphin;
-import org.opendolphin.core.comm.Command;
-import org.opendolphin.core.server.ServerDolphin;
-import org.opendolphin.core.server.action.DolphinServerAction;
-import org.opendolphin.core.server.comm.ActionRegistry;
-import org.opendolphin.core.server.comm.CommandHandler;
+import com.canoo.dp.impl.client.legacy.ClientAttribute;
+import com.canoo.dp.impl.client.legacy.ClientDolphin;
+import com.canoo.dp.impl.remoting.legacy.communication.Command;
+import com.canoo.dp.impl.server.legacy.ServerDolphin;
+import com.canoo.dp.impl.server.legacy.action.DolphinServerAction;
+import com.canoo.dp.impl.server.legacy.communication.ActionRegistry;
+import com.canoo.dp.impl.server.legacy.communication.CommandHandler;
 import org.testng.annotations.Test;
 
 import java.util.List;

@@ -15,8 +15,8 @@
  */
 package com.canoo.dp.impl.remoting.commands;
 
-import org.opendolphin.core.comm.Command;
-import org.opendolphin.core.comm.CommandConstants;
+import com.canoo.dp.impl.remoting.legacy.communication.Command;
+import com.canoo.dp.impl.remoting.legacy.communication.CommandConstants;
 
 public final class DestroyContextCommand extends Command {
 

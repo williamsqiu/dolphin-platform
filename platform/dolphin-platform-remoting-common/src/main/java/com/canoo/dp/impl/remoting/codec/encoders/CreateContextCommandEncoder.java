@@ -4,8 +4,8 @@ import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.remoting.commands.CreateContextCommand;
 import com.google.gson.JsonObject;
 
-import static org.opendolphin.core.comm.CommandConstants.CREATE_CONTEXT_COMMAND_ID;
-import static org.opendolphin.core.comm.CommandConstants.ID;
+import static com.canoo.dp.impl.remoting.legacy.communication.CommandConstants.CREATE_CONTEXT_COMMAND_ID;
+import static com.canoo.dp.impl.remoting.legacy.communication.CommandConstants.ID;
 
 public class CreateContextCommandEncoder extends AbstractCommandTranscoder<CreateContextCommand> {
     @Override

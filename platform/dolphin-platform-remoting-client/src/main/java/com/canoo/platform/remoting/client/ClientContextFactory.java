@@ -17,14 +17,20 @@ package com.canoo.platform.remoting.client;
 
 import com.canoo.dp.impl.client.ClientContextImpl;
 import com.canoo.dp.impl.client.DolphinPlatformHttpClientConnector;
-import com.canoo.dp.impl.remoting.codec.OptimizedJsonCodec;
+import com.canoo.dp.impl.client.legacy.ClientModelStore;
+import com.canoo.dp.impl.client.legacy.communication.AbstractClientConnector;
+import com.canoo.dp.impl.platform.client.http.HttpClientImpl;
+import com.canoo.dp.impl.platform.client.session.ClientSessionStore;
+import com.canoo.dp.impl.platform.client.session.ClientSessionSupportingURLConnectionRequestHandler;
+import com.canoo.dp.impl.platform.client.session.ClientSessionSupportingURLConnectionResponseHandler;
+import com.canoo.dp.impl.platform.client.session.StrictClientSessionSupportingURLConnectionResponseHandler;
 import com.canoo.dp.impl.platform.core.Assert;
-import com.canoo.dp.impl.platform.client.ClientSessionSupportImpl;
-import org.opendolphin.core.client.ClientModelStore;
-import org.opendolphin.core.client.comm.AbstractClientConnector;
-import org.opendolphin.core.client.comm.RemotingExceptionHandler;
-import org.opendolphin.util.DolphinRemotingException;
-import org.opendolphin.util.Function;
+import com.canoo.dp.impl.remoting.codec.OptimizedJsonCodec;
+import com.canoo.dp.impl.remoting.legacy.util.Function;
+import com.canoo.platform.client.http.HttpURLConnectionFactory;
+import com.canoo.platform.client.http.HttpURLConnectionHandler;
+import com.canoo.platform.remoting.DolphinRemotingException;
+import com.google.gson.Gson;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -48,7 +54,20 @@ public class ClientContextFactory {
      */
     public static ClientContext create(final ClientConfiguration clientConfiguration) {
         Assert.requireNonNull(clientConfiguration, "clientConfiguration");
-        final ClientSessionSupportImpl clientSessionSupport = new ClientSessionSupportImpl(clientConfiguration.getConnectionFactory());
+
+        final HttpURLConnectionFactory connectionFactory = clientConfiguration.getConnectionFactory();
+        final ClientSessionStore clientSessionStore = new ClientSessionStore();
+        final HttpClientImpl httpClient = new HttpClientImpl(new Gson());
+        final HttpURLConnectionHandler clientSessionRequestHandler = new ClientSessionSupportingURLConnectionRequestHandler(clientSessionStore);
+        final HttpURLConnectionHandler clientSessionResponseHandler = new ClientSessionSupportingURLConnectionResponseHandler(clientSessionStore);
+        final HttpURLConnectionHandler clientSessionCheckResponseHandler = new StrictClientSessionSupportingURLConnectionResponseHandler(clientConfiguration.getServerEndpoint());
+
+
+        httpClient.setConnectionFactory(connectionFactory);
+        httpClient.addRequestHandler(clientSessionRequestHandler);
+        httpClient.addResponseHandler(clientSessionResponseHandler);
+        httpClient.addResponseHandler(clientSessionCheckResponseHandler);
+
         return new ClientContextImpl(clientConfiguration, new Function<ClientModelStore, AbstractClientConnector>() {
             @Override
             public AbstractClientConnector call(final ClientModelStore clientModelStore) {
@@ -59,9 +78,9 @@ public class ClientContextFactory {
                             handler.handle(e);
                         }
                     }
-                }, clientSessionSupport);
+                }, httpClient);
             }
-        }, clientSessionSupport);
+        }, httpClient, clientSessionStore);
     }
 
 }

@@ -15,7 +15,7 @@
  */
 package com.canoo.dp.impl.remoting;
 
-import org.opendolphin.core.PresentationModel;
+import com.canoo.dp.impl.remoting.legacy.core.PresentationModel;
 
 public interface DolphinEventHandler {
 

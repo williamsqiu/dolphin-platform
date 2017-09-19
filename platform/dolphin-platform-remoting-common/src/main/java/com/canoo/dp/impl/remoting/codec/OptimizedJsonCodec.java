@@ -40,8 +40,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
-import org.opendolphin.core.comm.Codec;
-import org.opendolphin.core.comm.Command;
+import com.canoo.dp.impl.remoting.legacy.communication.Codec;
+import com.canoo.dp.impl.remoting.legacy.communication.Command;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,7 +50,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.opendolphin.core.comm.CommandConstants.*;
+import static com.canoo.dp.impl.remoting.legacy.communication.CommandConstants.*;
 
 public final class OptimizedJsonCodec implements Codec {
 
@@ -95,7 +95,7 @@ public final class OptimizedJsonCodec implements Codec {
     @SuppressWarnings("unchecked")
     public String encode(final List<? extends Command> commands) {
         Assert.requireNonNull(commands, "commands");
-        LOG.trace("Encoding command list with {} commands", commands.size());
+        LOG.debug("Encoding command list with {} commands", commands.size());
         final StringBuilder builder = new StringBuilder("[");
         for (final Command command : commands) {
             if (command == null) {
@@ -127,8 +127,8 @@ public final class OptimizedJsonCodec implements Codec {
         Assert.requireNonNull(transmitted, "transmitted");
         LOG.trace("Decoding message: {}", transmitted);
         try {
-            final List<Command> commands = new ArrayList<>();
             final JsonArray array = (JsonArray) new JsonParser().parse(transmitted);
+            final List<Command> commands = new ArrayList<>(array.size());
             for (final JsonElement jsonElement : array) {
                 final JsonObject command = (JsonObject) jsonElement;
                 final JsonPrimitive idElement = command.getAsJsonPrimitive("id");
@@ -143,7 +143,7 @@ public final class OptimizedJsonCodec implements Codec {
                 }
                 commands.add(encoder.decode(command));
             }
-            LOG.trace("Decoded command list with {} commands", commands.size());
+            LOG.debug("Decoded command list with {} commands", commands.size());
             return commands;
         } catch (Exception ex) {
             throw new JsonParseException("Illegal JSON detected", ex);

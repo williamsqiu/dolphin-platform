@@ -20,8 +20,8 @@ import com.canoo.dp.impl.remoting.AbstractControllerActionCallBean;
 import com.canoo.dp.impl.remoting.Converters;
 import com.canoo.dp.impl.remoting.MappingException;
 import com.canoo.dp.impl.platform.core.Assert;
-import org.opendolphin.core.Attribute;
-import org.opendolphin.core.PresentationModel;
+import com.canoo.dp.impl.remoting.legacy.core.Attribute;
+import com.canoo.dp.impl.remoting.legacy.core.PresentationModel;
 
 public class ServerControllerActionCallBean extends AbstractControllerActionCallBean {
 
@@ -49,7 +49,7 @@ public class ServerControllerActionCallBean extends AbstractControllerActionCall
         final String internalName = PARAM_PREFIX + name;
         final Attribute valueAttribute = pm.getAttribute(internalName);
         if (valueAttribute == null) {
-            throw new IllegalArgumentException(String.format("Invoking DolphinAction requires parameter '%s', but it was not send", name));
+            throw new IllegalArgumentException(String.format("Invoking DolphinAction requires parameter '%s', but it was not withContent", name));
         }
         try {
             return converters.getConverter(type).convertFromDolphin(valueAttribute.getValue());

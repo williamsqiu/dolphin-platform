@@ -15,17 +15,16 @@
  */
 package com.canoo.platform.remoting.client;
 
-import com.canoo.dp.impl.platform.client.DefaultHttpURLConnectionFactory;
-import com.canoo.dp.impl.platform.client.DefaultHttpURLConnectionResponseHandler;
+import com.canoo.dp.impl.platform.client.http.DefaultHttpURLConnectionFactory;
+import com.canoo.dp.impl.platform.client.http.DefaultHttpURLConnectionResponseHandler;
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.platform.core.IdentitySet;
 import com.canoo.dp.impl.platform.core.SimpleDolphinPlatformThreadFactory;
-import com.canoo.platform.client.HttpURLConnectionFactory;
-import com.canoo.platform.client.HttpURLConnectionHandler;
+import com.canoo.platform.client.http.HttpURLConnectionFactory;
+import com.canoo.platform.client.http.HttpURLConnectionHandler;
 import com.canoo.platform.core.PlatformThreadFactory;
 import com.canoo.platform.core.functional.Subscription;
-import org.opendolphin.core.client.comm.RemotingExceptionHandler;
-import org.opendolphin.core.client.comm.SimpleExceptionHandler;
+import com.canoo.dp.impl.client.legacy.communication.SimpleExceptionHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

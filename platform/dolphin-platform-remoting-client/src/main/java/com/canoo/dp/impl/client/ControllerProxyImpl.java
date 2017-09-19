@@ -26,8 +26,8 @@ import com.canoo.dp.impl.remoting.InternalAttributesBean;
 import com.canoo.dp.impl.remoting.commands.CallActionCommand;
 import com.canoo.dp.impl.remoting.commands.DestroyControllerCommand;
 import com.canoo.dp.impl.platform.core.Assert;
-import org.opendolphin.core.client.comm.AbstractClientConnector;
-import org.opendolphin.core.client.comm.OnFinishedHandler;
+import com.canoo.dp.impl.client.legacy.communication.AbstractClientConnector;
+import com.canoo.dp.impl.client.legacy.communication.OnFinishedHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

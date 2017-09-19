@@ -15,7 +15,7 @@
  */
 package com.canoo.platform.remoting.client;
 
-import com.canoo.platform.client.ClientSessionSupport;
+import com.canoo.platform.client.http.HttpClient;
 import com.canoo.platform.remoting.BeanManager;
 
 import java.util.concurrent.CompletableFuture;
@@ -26,7 +26,7 @@ import java.util.concurrent.CompletableFuture;
  * created by using the {@link ClientContextFactory}.
  * The client context is needed to create {@link ControllerProxy} instances.
  */
-public interface ClientContext {
+public interface ClientContext extends ControllerFactory{
 
     /**
      * Creates a {@link ControllerProxy} instance for the controller with the given name.
@@ -41,7 +41,7 @@ public interface ClientContext {
     <T> CompletableFuture<ControllerProxy<T>> createController(String name);
 
     /**
-     * Returns the {@link ClientBeanManager} that is bound to the client context
+     * Returns the {@link BeanManager} that is bound to the client context
      * @return the bean manager
      */
     @Deprecated
@@ -58,5 +58,5 @@ public interface ClientContext {
 
     String getClientId();
 
-    ClientSessionSupport getClientSessionSupport();
+    HttpClient getHttpClient();
 }

@@ -16,19 +16,27 @@
 package com.canoo.dp.impl.remoting.codec.encoders;
 
 import com.canoo.dp.impl.platform.core.Assert;
+import com.canoo.dp.impl.remoting.legacy.communication.CreatePresentationModelCommand;
+import com.canoo.dp.impl.remoting.legacy.core.Attribute;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import org.opendolphin.core.Attribute;
-import org.opendolphin.core.comm.CreatePresentationModelCommand;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.opendolphin.core.comm.CommandConstants.*;
+import static com.canoo.dp.impl.remoting.legacy.communication.CommandConstants.ATTRIBUTE_ID;
+import static com.canoo.dp.impl.remoting.legacy.communication.CommandConstants.CREATE_PRESENTATION_MODEL_COMMAND_ID;
+import static com.canoo.dp.impl.remoting.legacy.communication.CommandConstants.ID;
+import static com.canoo.dp.impl.remoting.legacy.communication.CommandConstants.NAME;
+import static com.canoo.dp.impl.remoting.legacy.communication.CommandConstants.PM_ATTRIBUTES;
+import static com.canoo.dp.impl.remoting.legacy.communication.CommandConstants.PM_ID;
+import static com.canoo.dp.impl.remoting.legacy.communication.CommandConstants.PM_TYPE;
+import static com.canoo.dp.impl.remoting.legacy.communication.CommandConstants.VALUE;
+
 
 public class CreatePresentationModelCommandEncoder extends AbstractCommandTranscoder<CreatePresentationModelCommand> {
 

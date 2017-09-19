@@ -116,7 +116,8 @@ public class DolphinContextTaskQueue {
         }
 
         LOG.trace("Running {} tasks in Dolphin Platform session {}", tasks.size(), dolphinSessionId);
-        long endTime = System.currentTimeMillis() + maxExecutionTimeUnit.toMillis(maxExecutionTime);
+        final long startTime = System.currentTimeMillis();
+        final long endTime = startTime + maxExecutionTimeUnit.toMillis(maxExecutionTime);
 
         while (!communicationManager.hasResponseCommands()) {
             if (interrupted.get()) {
@@ -151,6 +152,7 @@ public class DolphinContextTaskQueue {
                 }
             }
         }
-        LOG.trace("Task executor for Dolphin Platform session {} ended after {} seconds with {} task still open", dolphinSessionId, maxExecutionTimeUnit.toSeconds(maxExecutionTime), tasks.size());
+        final long runTime = System.currentTimeMillis() - startTime;
+        LOG.trace("Task executor for Dolphin Platform session {} ended after {} seconds with {} task still open", dolphinSessionId, maxExecutionTimeUnit.toSeconds(runTime), tasks.size());
     }
 }

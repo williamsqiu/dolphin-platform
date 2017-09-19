@@ -21,8 +21,8 @@ package com.canoo.dp.impl.server.context;
 public interface CommunicationManager {
 
     /**
-     * Returns true if commands should be send back to the client
-     * @return true if commands should be send back to the client
+     * Returns true if commands should be withContent back to the client
+     * @return true if commands should be withContent back to the client
      */
     boolean hasResponseCommands();
 }

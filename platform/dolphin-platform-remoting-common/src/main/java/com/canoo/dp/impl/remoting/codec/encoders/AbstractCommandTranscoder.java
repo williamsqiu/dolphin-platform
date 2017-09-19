@@ -18,7 +18,7 @@ package com.canoo.dp.impl.remoting.codec.encoders;
 import com.canoo.dp.impl.platform.core.Assert;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import org.opendolphin.core.comm.Command;
+import com.canoo.dp.impl.remoting.legacy.communication.Command;
 
 public abstract class AbstractCommandTranscoder<C extends Command> implements CommandTranscoder<C> {
 

@@ -1,11 +1,11 @@
 package com.canoo.dp.impl.remoting.codec.encoders;
 
-import com.canoo.dolphin.impl.commands.InterruptLongPollCommand;
+import com.canoo.dp.impl.remoting.legacy.commands.InterruptLongPollCommand;
 import com.canoo.dp.impl.platform.core.Assert;
 import com.google.gson.JsonObject;
 
-import static org.opendolphin.core.comm.CommandConstants.ID;
-import static org.opendolphin.core.comm.CommandConstants.INTERRUPT_LONG_POLL_COMMAND_ID;
+import static com.canoo.dp.impl.remoting.legacy.communication.CommandConstants.ID;
+import static com.canoo.dp.impl.remoting.legacy.communication.CommandConstants.INTERRUPT_LONG_POLL_COMMAND_ID;
 
 @Deprecated
 public class InterruptLongPollCommandEncoder extends AbstractCommandTranscoder<InterruptLongPollCommand> {

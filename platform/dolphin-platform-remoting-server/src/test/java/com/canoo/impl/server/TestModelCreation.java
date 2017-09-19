@@ -41,12 +41,12 @@ import com.canoo.impl.server.util.SimpleAnnotatedTestModel;
 import com.canoo.impl.server.util.SimpleTestModel;
 import com.canoo.impl.server.util.SingleReferenceModel;
 import org.hamcrest.Matchers;
-import org.opendolphin.RemotingConstants;
-import org.opendolphin.core.Attribute;
-import org.opendolphin.core.PresentationModel;
-import org.opendolphin.core.server.ServerAttribute;
-import org.opendolphin.core.server.ServerDolphin;
-import org.opendolphin.core.server.ServerPresentationModel;
+import com.canoo.dp.impl.remoting.legacy.RemotingConstants;
+import com.canoo.dp.impl.remoting.legacy.core.Attribute;
+import com.canoo.dp.impl.remoting.legacy.core.PresentationModel;
+import com.canoo.dp.impl.server.legacy.ServerAttribute;
+import com.canoo.dp.impl.server.legacy.ServerDolphin;
+import com.canoo.dp.impl.server.legacy.ServerPresentationModel;
 import org.testng.annotations.Test;
 
 import java.util.List;

@@ -28,8 +28,8 @@ import com.canoo.dp.impl.remoting.ListMapper;
 import com.canoo.dp.impl.remoting.info.PropertyInfo;
 import com.canoo.platform.remoting.Property;
 import com.canoo.dp.impl.platform.core.Assert;
-import org.opendolphin.core.Attribute;
-import org.opendolphin.core.PresentationModel;
+import com.canoo.dp.impl.remoting.legacy.core.Attribute;
+import com.canoo.dp.impl.remoting.legacy.core.PresentationModel;
 
 public class ClientBeanBuilderImpl extends AbstractBeanBuilder {
 

@@ -34,11 +34,10 @@ import com.canoo.dp.impl.server.model.ServerPresentationModelBuilderFactory;
 import com.canoo.dp.impl.server.gc.GarbageCollectionCallback;
 import com.canoo.dp.impl.server.gc.GarbageCollector;
 import com.canoo.dp.impl.server.gc.Instance;
-import core.comm.DefaultInMemoryConfig;
-import org.opendolphin.core.comm.Command;
-import org.opendolphin.core.server.ServerDolphin;
-import org.opendolphin.core.server.ServerModelStore;
-import org.opendolphin.util.DirectExecutor;
+import com.canoo.dp.impl.remoting.legacy.communication.Command;
+import com.canoo.dp.impl.server.legacy.ServerDolphin;
+import com.canoo.dp.impl.server.legacy.ServerModelStore;
+import com.canoo.dp.impl.remoting.legacy.util.DirectExecutor;
 
 import java.util.ArrayList;
 import java.util.List;

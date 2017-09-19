@@ -17,19 +17,20 @@ package com.canoo.dolphin.client.impl;
 
 import com.canoo.dolphin.client.DummyUiThreadHandler;
 import com.canoo.dp.impl.client.DolphinPlatformHttpClientConnector;
+import com.canoo.dp.impl.client.legacy.ClientDolphin;
+import com.canoo.dp.impl.client.legacy.ClientModelStore;
+import com.canoo.dp.impl.client.legacy.DefaultModelSynchronizer;
+import com.canoo.dp.impl.client.legacy.communication.AbstractClientConnector;
+import com.canoo.dp.impl.client.legacy.communication.SimpleExceptionHandler;
+import com.canoo.dp.impl.platform.client.http.HttpClientImpl;
 import com.canoo.dp.impl.remoting.commands.CreateContextCommand;
-import com.canoo.dp.impl.platform.client.ClientSessionSupportImpl;
-import com.canoo.platform.client.HttpURLConnectionFactory;
+import com.canoo.dp.impl.remoting.legacy.communication.Command;
+import com.canoo.dp.impl.remoting.legacy.communication.JsonCodec;
+import com.canoo.platform.client.http.HttpURLConnectionFactory;
+import com.canoo.dp.impl.remoting.legacy.util.Provider;
+import com.canoo.platform.remoting.DolphinRemotingException;
 import com.canoo.platform.remoting.client.ClientConfiguration;
-import org.opendolphin.core.client.ClientDolphin;
-import org.opendolphin.core.client.ClientModelStore;
-import org.opendolphin.core.client.DefaultModelSynchronizer;
-import org.opendolphin.core.client.comm.AbstractClientConnector;
-import org.opendolphin.core.client.comm.SimpleExceptionHandler;
-import org.opendolphin.core.comm.Command;
-import org.opendolphin.core.comm.JsonCodec;
-import org.opendolphin.util.DolphinRemotingException;
-import org.opendolphin.util.Provider;
+import com.google.gson.Gson;
 import org.testng.annotations.Test;
 
 import java.io.ByteArrayOutputStream;
@@ -83,7 +84,7 @@ public class TestDolphinPlatformHttpClientConnector {
                 return null;
             }
         })));
-        DolphinPlatformHttpClientConnector connector = new DolphinPlatformHttpClientConnector(clientConfiguration, clientDolphin.getModelStore(), new JsonCodec(), new SimpleExceptionHandler(), new ClientSessionSupportImpl());
+        DolphinPlatformHttpClientConnector connector = new DolphinPlatformHttpClientConnector(clientConfiguration, clientDolphin.getModelStore(), new JsonCodec(), new SimpleExceptionHandler(), new HttpClientImpl(new Gson()));
 
         List<Command> commands = new ArrayList<>();
         commands.add(new CreateContextCommand());

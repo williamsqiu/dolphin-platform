@@ -16,9 +16,9 @@
 package com.canoo.dp.impl.server.context;
 
 import com.canoo.dp.impl.remoting.codec.OptimizedJsonCodec;
-import org.opendolphin.core.server.DefaultServerDolphin;
-import org.opendolphin.core.server.ServerConnector;
-import org.opendolphin.core.server.ServerModelStore;
+import com.canoo.dp.impl.server.legacy.DefaultServerDolphin;
+import com.canoo.dp.impl.server.legacy.ServerConnector;
+import com.canoo.dp.impl.server.legacy.ServerModelStore;
 
 /**
  *  A factory that creates an Open Dolphin {@link DefaultServerDolphin}
