@@ -18,9 +18,10 @@ package com.canoo.dolphin.client.impl;
 import com.canoo.dolphin.client.util.AbstractDolphinBasedTest;
 import com.canoo.dp.impl.client.DolphinCommandHandler;
 import com.canoo.dp.impl.client.legacy.ClientAttribute;
-import com.canoo.dp.impl.client.legacy.ClientDolphin;
+import com.canoo.dp.impl.client.legacy.ClientModelStore;
 import com.canoo.dp.impl.remoting.legacy.communication.Command;
-import com.canoo.dp.impl.server.legacy.ServerDolphin;
+import com.canoo.dp.impl.server.legacy.ServerConnector;
+import com.canoo.dp.impl.server.legacy.ServerModelStore;
 import com.canoo.dp.impl.server.legacy.action.DolphinServerAction;
 import com.canoo.dp.impl.server.legacy.communication.ActionRegistry;
 import com.canoo.dp.impl.server.legacy.communication.CommandHandler;
@@ -43,18 +44,18 @@ public class TestDolphinCommandHandler extends AbstractDolphinBasedTest {
     public void testInvocation() throws Exception {
         //Given:
         final DolphinTestConfiguration configuration = createDolphinTestConfiguration();
-        final ServerDolphin serverDolphin = configuration.getServerDolphin();
-        final ClientDolphin clientDolphin = configuration.getClientDolphin();
-        final DolphinCommandHandler dolphinCommandHandler = new DolphinCommandHandler(clientDolphin.getClientConnector());
+        final ServerModelStore serverModelStore = configuration.getServerModelStore();
+        final ClientModelStore clientModelStore = configuration.getClientModelStore();
+        final DolphinCommandHandler dolphinCommandHandler = new DolphinCommandHandler(configuration.getClientConnector());
         final String modelId = UUID.randomUUID().toString();
-        clientDolphin.getModelStore().createModel(modelId, null, new ClientAttribute("myAttribute", "UNKNOWN"));
-        serverDolphin.getServerConnector().register(new DolphinServerAction() {
+        clientModelStore.createModel(modelId, null, new ClientAttribute("myAttribute", "UNKNOWN"));
+        new ServerConnector().register(new DolphinServerAction() {
             @Override
             public void registerIn(ActionRegistry registry) {
                 registry.register(TestChangeCommand.class, new CommandHandler() {
                     @Override
                     public void handleCommand(Command command, List response) {
-                        serverDolphin.getModelStore().findPresentationModelById(modelId).getAttribute("myAttribute").setValue("Hello World");
+                        serverModelStore.findPresentationModelById(modelId).getAttribute("myAttribute").setValue("Hello World");
                     }
                 });
             }
@@ -64,7 +65,7 @@ public class TestDolphinCommandHandler extends AbstractDolphinBasedTest {
         dolphinCommandHandler.invokeDolphinCommand(new TestChangeCommand()).get();
 
         //Then:
-        assertEquals(clientDolphin.getModelStore().findPresentationModelById(modelId).getAttribute("myAttribute").getValue(), "Hello World");
+        assertEquals(clientModelStore.findPresentationModelById(modelId).getAttribute("myAttribute").getValue(), "Hello World");
     }
 
 }

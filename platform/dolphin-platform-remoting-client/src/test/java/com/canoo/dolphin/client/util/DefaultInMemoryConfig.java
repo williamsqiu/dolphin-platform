@@ -15,15 +15,14 @@
  */
 package com.canoo.dolphin.client.util;
 
-import com.canoo.dp.impl.client.legacy.ClientDolphin;
 import com.canoo.dp.impl.client.legacy.ClientModelStore;
 import com.canoo.dp.impl.client.legacy.DefaultModelSynchronizer;
 import com.canoo.dp.impl.client.legacy.ModelSynchronizer;
 import com.canoo.dp.impl.client.legacy.communication.AbstractClientConnector;
 import com.canoo.dp.impl.client.legacy.communication.CommandBatcher;
 import com.canoo.dp.impl.remoting.legacy.util.Provider;
-import com.canoo.dp.impl.server.legacy.ServerDolphin;
-import com.canoo.dp.impl.server.legacy.ServerDolphinFactory;
+import com.canoo.dp.impl.server.legacy.ServerConnector;
+import com.canoo.dp.impl.server.legacy.ServerModelStore;
 
 import java.util.concurrent.Executor;
 
@@ -35,29 +34,27 @@ import java.util.concurrent.Executor;
  */
 public class DefaultInMemoryConfig implements Provider<AbstractClientConnector> {
 
-    private final ClientDolphin clientDolphin;
+    ClientModelStore clientModelStore;
 
-    private final ServerDolphin serverDolphin;
+    ServerModelStore serverModelStore;
 
     private final InMemoryClientConnector clientConnector;
 
     public DefaultInMemoryConfig(final Executor uiExecutor) {
-        clientDolphin = new ClientDolphin();
-        serverDolphin = ServerDolphinFactory.create();
+
+        serverModelStore = new ServerModelStore();
         ModelSynchronizer defaultModelSynchronizer = new DefaultModelSynchronizer(this);
-        ClientModelStore modelStore = new ClientModelStore(defaultModelSynchronizer);
-        clientConnector = new InMemoryClientConnector(modelStore, serverDolphin.getServerConnector(), new CommandBatcher(), uiExecutor);
-        clientDolphin.setClientModelStore(modelStore);
-        clientDolphin.setClientConnector(clientConnector);
+        clientModelStore = new ClientModelStore(defaultModelSynchronizer);
+        clientConnector = new InMemoryClientConnector(clientModelStore, new ServerConnector(), new CommandBatcher(), uiExecutor);
         clientConnector.setSleepMillis(100);
     }
 
-    public ClientDolphin getClientDolphin() {
-        return clientDolphin;
+    public ClientModelStore getClientModelStore() {
+        return clientModelStore;
     }
 
-    public ServerDolphin getServerDolphin() {
-        return serverDolphin;
+    public ServerModelStore getServerModelStore() {
+        return serverModelStore;
     }
 
     public InMemoryClientConnector getClientConnector() {
