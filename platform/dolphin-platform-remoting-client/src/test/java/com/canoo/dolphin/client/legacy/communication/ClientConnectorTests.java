@@ -1,7 +1,6 @@
 package com.canoo.dolphin.client.legacy.communication;
 
 import com.canoo.dp.impl.client.legacy.ClientAttribute;
-import com.canoo.dp.impl.client.legacy.ClientDolphin;
 import com.canoo.dp.impl.client.legacy.ClientModelStore;
 import com.canoo.dp.impl.client.legacy.ClientPresentationModel;
 import com.canoo.dp.impl.client.legacy.DefaultModelSynchronizer;
