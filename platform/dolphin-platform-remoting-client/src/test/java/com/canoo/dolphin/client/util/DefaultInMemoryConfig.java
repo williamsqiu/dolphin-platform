@@ -34,18 +34,23 @@ import java.util.concurrent.Executor;
  */
 public class DefaultInMemoryConfig implements Provider<AbstractClientConnector> {
 
-    ClientModelStore clientModelStore;
+    private final ClientModelStore clientModelStore;
 
-    ServerModelStore serverModelStore;
+    private final ServerModelStore serverModelStore;
 
     private final InMemoryClientConnector clientConnector;
+
+    private final ServerConnector serverConnector;
+
 
     public DefaultInMemoryConfig(final Executor uiExecutor) {
 
         serverModelStore = new ServerModelStore();
+        serverConnector = new ServerConnector();
+        serverConnector.setServerModelStore(serverModelStore);
         ModelSynchronizer defaultModelSynchronizer = new DefaultModelSynchronizer(this);
         clientModelStore = new ClientModelStore(defaultModelSynchronizer);
-        clientConnector = new InMemoryClientConnector(clientModelStore, new ServerConnector(), new CommandBatcher(), uiExecutor);
+        clientConnector = new InMemoryClientConnector(clientModelStore, serverConnector, new CommandBatcher(), uiExecutor);
         clientConnector.setSleepMillis(100);
     }
 
@@ -59,6 +64,10 @@ public class DefaultInMemoryConfig implements Provider<AbstractClientConnector> 
 
     public InMemoryClientConnector getClientConnector() {
         return clientConnector;
+    }
+
+    public ServerConnector getServerConnector() {
+        return serverConnector;
     }
 
     @Override

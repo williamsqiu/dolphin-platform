@@ -49,7 +49,7 @@ public class TestDolphinCommandHandler extends AbstractDolphinBasedTest {
         final DolphinCommandHandler dolphinCommandHandler = new DolphinCommandHandler(configuration.getClientConnector());
         final String modelId = UUID.randomUUID().toString();
         clientModelStore.createModel(modelId, null, new ClientAttribute("myAttribute", "UNKNOWN"));
-        new ServerConnector().register(new DolphinServerAction() {
+        configuration.getServerConnector().register(new DolphinServerAction() {
             @Override
             public void registerIn(ActionRegistry registry) {
                 registry.register(TestChangeCommand.class, new CommandHandler() {

@@ -93,11 +93,11 @@ public abstract class AbstractDolphinBasedTest {
 
     protected DolphinTestConfiguration createDolphinTestConfiguration() {
         DefaultInMemoryConfig config = new DefaultInMemoryConfig(DirectExecutor.getInstance());
-        config.getClientConnector().getServerConnector().registerDefaultActions();
+        config.getServerConnector().registerDefaultActions();
         ServerModelStore store = config.getServerModelStore();
         store.setCurrentResponse(new ArrayList<Command>());
 
-        return new DolphinTestConfiguration(config.getClientModelStore(), config.getServerModelStore(), config.getClientConnector(), config.getClientConnector().getServerConnector());
+        return new DolphinTestConfiguration(config.getClientModelStore(), config.getServerModelStore(), config.getClientConnector(), config.getServerConnector());
     }
 
     protected EventDispatcher createEventDispatcher(final ClientModelStore clientModelStore) {
