@@ -68,18 +68,18 @@ public class HttpRequestImpl implements HttpRequest {
 
     @Override
     public HttpResponse withContent(final String content) throws IOException {
-        return withContent(content, "application/txt");
+        return withContent(content, "application/txt;charset=utf-8");
     }
 
     @Override
     public HttpResponse withContent(final String content, final String contentType) throws IOException {
-        connection.setRequestProperty( "charset", "utf-8");
+        connection.setRequestProperty( "charset", "UTF-8");
         return withContent(content.getBytes(PlatformConstants.CHARSET), contentType);
     }
 
     @Override
     public <I> HttpResponse withContent(final I content) throws IOException {
-        return withContent(gson.toJson(content), "application/json");
+        return withContent(gson.toJson(content), "application/json;charset=utf-8");
     }
 
     @Override
