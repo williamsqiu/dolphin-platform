@@ -22,12 +22,14 @@ import com.canoo.dp.impl.client.legacy.DefaultModelSynchronizer;
 import com.canoo.dp.impl.client.legacy.communication.AbstractClientConnector;
 import com.canoo.dp.impl.client.legacy.communication.SimpleExceptionHandler;
 import com.canoo.dp.impl.platform.client.http.HttpClientImpl;
+import com.canoo.dp.impl.platform.client.http.HttpStatus;
 import com.canoo.dp.impl.platform.core.PlatformConstants;
 import com.canoo.dp.impl.remoting.commands.CreateContextCommand;
 import com.canoo.dp.impl.remoting.legacy.communication.Command;
 import com.canoo.dp.impl.remoting.legacy.communication.CreatePresentationModelCommand;
 import com.canoo.dp.impl.remoting.legacy.communication.JsonCodec;
 import com.canoo.dp.impl.remoting.legacy.util.Provider;
+import com.canoo.platform.client.http.HttpClient;
 import com.canoo.platform.client.http.HttpURLConnectionFactory;
 import com.canoo.platform.remoting.DolphinRemotingException;
 import com.canoo.platform.remoting.client.ClientConfiguration;
@@ -72,6 +74,11 @@ public class TestDolphinPlatformHttpClientConnector {
                     }
 
                     @Override
+                    public int getResponseCode() throws IOException {
+                        return HttpStatus.HTTP_OK;
+                    }
+
+                    @Override
                     public OutputStream getOutputStream() throws IOException {
                         return new ByteArrayOutputStream();
                     }
@@ -93,13 +100,15 @@ public class TestDolphinPlatformHttpClientConnector {
             }
         });
 
+        HttpClient httpClient = new HttpClientImpl(new Gson(), clientConfiguration.getConnectionFactory());
+
         ClientModelStore clientModelStore = new ClientModelStore(new DefaultModelSynchronizer(new Provider<AbstractClientConnector>() {
             @Override
             public AbstractClientConnector get() {
                 return null;
             }
         }));
-        DolphinPlatformHttpClientConnector connector = new DolphinPlatformHttpClientConnector(clientConfiguration, clientModelStore, new JsonCodec(), new SimpleExceptionHandler(), new HttpClientImpl(new Gson()));
+        DolphinPlatformHttpClientConnector connector = new DolphinPlatformHttpClientConnector(clientConfiguration, clientModelStore, new JsonCodec(), new SimpleExceptionHandler(), httpClient);
 
         CreatePresentationModelCommand command = new CreatePresentationModelCommand();
         command.setPmId("p1");

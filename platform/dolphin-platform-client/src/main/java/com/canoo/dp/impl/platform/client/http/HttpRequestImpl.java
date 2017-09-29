@@ -51,7 +51,7 @@ public class HttpRequestImpl implements HttpRequest {
     }
 
     @Override
-    public HttpResponse withContent(byte[] content, String contentType) throws IOException {
+    public HttpResponse withContent(final byte[] content, final String contentType) throws IOException {
         connection.setRequestProperty( "Content-Type", contentType);
         connection.setRequestProperty( "Content-Length", content.length + "");
         connection.setUseCaches( false );
@@ -72,7 +72,7 @@ public class HttpRequestImpl implements HttpRequest {
     }
 
     @Override
-    public HttpResponse withContent(String content, String contentType) throws IOException {
+    public HttpResponse withContent(final String content, final String contentType) throws IOException {
         connection.setRequestProperty( "charset", "utf-8");
         return withContent(content.getBytes(PlatformConstants.CHARSET), contentType);
     }

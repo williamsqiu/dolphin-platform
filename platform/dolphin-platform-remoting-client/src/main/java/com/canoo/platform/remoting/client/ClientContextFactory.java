@@ -61,7 +61,7 @@ public class ClientContextFactory {
 
         final HttpURLConnectionFactory connectionFactory = clientConfiguration.getConnectionFactory();
         final ClientSessionStore clientSessionStore = new ClientSessionStore();
-        final HttpClientImpl httpClient = new HttpClientImpl(new Gson());
+        final HttpClientImpl httpClient = new HttpClientImpl(new Gson(), connectionFactory);
         final HttpURLConnectionHandler clientSessionRequestHandler = new ClientSessionSupportingURLConnectionRequestHandler(clientSessionStore);
         final HttpURLConnectionHandler clientSessionResponseHandler = new ClientSessionSupportingURLConnectionResponseHandler(clientSessionStore);
         final HttpURLConnectionHandler clientSessionCheckResponseHandler = new StrictClientSessionSupportingURLConnectionResponseHandler(clientConfiguration.getServerEndpoint());
@@ -71,8 +71,6 @@ public class ClientContextFactory {
         final CookieRequestHandler cookieRequestHandler = new CookieRequestHandler(clientCookieHandler);
         final CookieResponseHandler cookieResponseHandler = new CookieResponseHandler(clientCookieHandler);
 
-
-        httpClient.setConnectionFactory(connectionFactory);
         httpClient.addRequestHandler(cookieRequestHandler);
         httpClient.addRequestHandler(clientSessionRequestHandler);
         httpClient.addResponseHandler(cookieResponseHandler);

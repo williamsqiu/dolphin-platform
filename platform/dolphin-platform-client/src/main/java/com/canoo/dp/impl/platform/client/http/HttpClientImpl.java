@@ -18,22 +18,23 @@ public class HttpClientImpl implements HttpClient {
 
     private final Gson gson;
 
-    private HttpURLConnectionFactory httpURLConnectionFactory = new DefaultHttpURLConnectionFactory();
+    private final HttpURLConnectionFactory httpURLConnectionFactory;
 
     private final List<HttpURLConnectionHandler> requestHandlers = new CopyOnWriteArrayList<>();
 
     private final List<HttpURLConnectionHandler> responseHandlers = new CopyOnWriteArrayList<>();
 
-    public HttpClientImpl(Gson gson) {
-        this.gson = gson;
+    public HttpClientImpl(final Gson gson) {
+        this(gson, new DefaultHttpURLConnectionFactory());
+    }
+
+    public HttpClientImpl(Gson gson, HttpURLConnectionFactory httpURLConnectionFactory) {
+        this.gson = Assert.requireNonNull(gson, "gson");
+        this.httpURLConnectionFactory = Assert.requireNonNull(httpURLConnectionFactory, "httpURLConnectionFactory");
     }
 
     public HttpURLConnectionFactory getConnectionFactory() {
         return httpURLConnectionFactory;
-    }
-
-    public void setConnectionFactory(final HttpURLConnectionFactory connectionFactory) {
-        this.httpURLConnectionFactory = Assert.requireNonNull(connectionFactory, "connectionFactory");
     }
 
     @Override
