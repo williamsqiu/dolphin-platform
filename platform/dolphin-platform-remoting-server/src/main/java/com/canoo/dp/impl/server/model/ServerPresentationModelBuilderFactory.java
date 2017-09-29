@@ -15,23 +15,23 @@
  */
 package com.canoo.dp.impl.server.model;
 
-import com.canoo.dp.impl.remoting.PresentationModelBuilderFactory;
-import com.canoo.dp.impl.remoting.PresentationModelBuilder;
 import com.canoo.dp.impl.platform.core.Assert;
-import com.canoo.dp.impl.server.legacy.ServerDolphin;
+import com.canoo.dp.impl.remoting.PresentationModelBuilder;
+import com.canoo.dp.impl.remoting.PresentationModelBuilderFactory;
+import com.canoo.dp.impl.server.legacy.ServerModelStore;
 import com.canoo.dp.impl.server.legacy.ServerPresentationModel;
 
 public class ServerPresentationModelBuilderFactory implements PresentationModelBuilderFactory<ServerPresentationModel> {
 
-    private final ServerDolphin dolphin;
+    private final ServerModelStore serverModelStore;
 
-    public ServerPresentationModelBuilderFactory(ServerDolphin dolphin) {
-        Assert.requireNonNull(dolphin, "dolphin");
-        this.dolphin = dolphin;
+    public ServerPresentationModelBuilderFactory(ServerModelStore serverModelStore) {
+        Assert.requireNonNull(serverModelStore, "modelStore");
+        this.serverModelStore = serverModelStore;
     }
 
     @Override
     public PresentationModelBuilder<ServerPresentationModel> createBuilder() {
-        return new ServerPresentationModelBuilder(dolphin);
+        return new ServerPresentationModelBuilder(serverModelStore);
     }
 }

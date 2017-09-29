@@ -24,7 +24,7 @@ import java.util.List;
 
 /**
  * Common superclass for all actions that need access to
- * the ServerDolphin, e.g. to work with the server model store.
+ * the ServerModelStore, e.g. to work with the server model store.
  */
 public abstract class DolphinServerAction implements ServerAction {
 
