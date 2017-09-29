@@ -32,7 +32,7 @@ public class HttpResponseImpl implements HttpResponse {
 
     private final List<HttpURLConnectionHandler> responseHandlers;
 
-    public HttpResponseImpl(final HttpURLConnection connection, Gson gson, ByteArrayProvider dataProvider, List<HttpURLConnectionHandler> responseHandlers) {
+    public HttpResponseImpl(final HttpURLConnection connection, final Gson gson, final ByteArrayProvider dataProvider, final List<HttpURLConnectionHandler> responseHandlers) {
         this.connection = Assert.requireNonNull(connection, "connection");
         this.gson = Assert.requireNonNull(gson, "gson");
         this.dataProvider = Assert.requireNonNull(dataProvider, "dataProvider");
@@ -58,13 +58,25 @@ public class HttpResponseImpl implements HttpResponse {
     }
 
     @Override
+    public byte[] readBytes(final String contentType) throws IOException {
+        connection.setRequestProperty(ACCEPT_HEADER, contentType);
+        return readBytes();
+    }
+
+    @Override
     public String readString() throws IOException {
         connection.setRequestProperty(ACCEPT_CHARSET_HEADER, CHARSET);
         return new String(readBytes(), CHARSET);
     }
 
     @Override
-    public <R> R readObject(Class<R> responseType) throws IOException {
+    public String readString(final String contentType) throws IOException {
+        connection.setRequestProperty(ACCEPT_HEADER, contentType);
+        return readString();
+    }
+
+    @Override
+    public <R> R readObject(final Class<R> responseType) throws IOException {
         connection.setRequestProperty(ACCEPT_CHARSET_HEADER, CHARSET);
         connection.setRequestProperty(ACCEPT_HEADER, JSON_MIME_TYPE);
         return gson.fromJson(new String(readBytes(), CHARSET), responseType);

@@ -47,6 +47,12 @@ public class HttpRequestImpl implements HttpRequest {
 
     @Override
     public HttpResponse withContent(final byte[] content) throws IOException {
+        return withContent(content, "application/raw");
+    }
+
+    @Override
+    public HttpResponse withContent(byte[] content, String contentType) throws IOException {
+        connection.setRequestProperty( "Content-Type", contentType);
         connection.setRequestProperty( "Content-Length", content.length + "");
         connection.setUseCaches( false );
 
@@ -67,18 +73,13 @@ public class HttpRequestImpl implements HttpRequest {
 
     @Override
     public HttpResponse withContent(String content, String contentType) throws IOException {
-        connection.setRequestProperty( "Content-Type", contentType);
         connection.setRequestProperty( "charset", "utf-8");
-        if(connection.getRequestProperty("Content-Type") == null) {
-            connection.setRequestProperty( "Content-Type", "application/txt");
-        }
-        return withContent(content.getBytes(PlatformConstants.CHARSET));
+        return withContent(content.getBytes(PlatformConstants.CHARSET), contentType);
     }
 
     @Override
     public <I> HttpResponse withContent(final I content) throws IOException {
-        connection.setRequestProperty( "Content-Type", "application/json");
-        return withContent(gson.toJson(content));
+        return withContent(gson.toJson(content), "application/json");
     }
 
     @Override

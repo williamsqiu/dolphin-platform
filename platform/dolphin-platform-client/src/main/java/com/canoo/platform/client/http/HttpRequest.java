@@ -6,6 +6,8 @@ public interface HttpRequest {
 
     HttpResponse withContent(byte[] content) throws IOException;
 
+    HttpResponse withContent(byte[] content, String contentType) throws IOException;
+
     HttpResponse withContent(String content) throws IOException;
 
     HttpResponse withContent(String content, String contentType) throws IOException;
