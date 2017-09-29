@@ -15,11 +15,17 @@
  */
 package com.canoo.dp.impl.server.context;
 
+import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.remoting.BeanManagerImpl;
+import com.canoo.dp.impl.remoting.ClassRepository;
 import com.canoo.dp.impl.remoting.ClassRepositoryImpl;
 import com.canoo.dp.impl.remoting.Converters;
+import com.canoo.dp.impl.remoting.EventDispatcher;
 import com.canoo.dp.impl.remoting.InternalAttributesBean;
+import com.canoo.dp.impl.remoting.ListMapper;
 import com.canoo.dp.impl.remoting.PresentationModelBuilderFactory;
+import com.canoo.dp.impl.remoting.codec.OptimizedJsonCodec;
+import com.canoo.dp.impl.remoting.collections.ListMapperImpl;
 import com.canoo.dp.impl.remoting.commands.CallActionCommand;
 import com.canoo.dp.impl.remoting.commands.CreateContextCommand;
 import com.canoo.dp.impl.remoting.commands.CreateControllerCommand;
@@ -27,14 +33,7 @@ import com.canoo.dp.impl.remoting.commands.DestroyContextCommand;
 import com.canoo.dp.impl.remoting.commands.DestroyControllerCommand;
 import com.canoo.dp.impl.remoting.legacy.commands.InterruptLongPollCommand;
 import com.canoo.dp.impl.remoting.legacy.commands.StartLongPollCommand;
-import com.canoo.platform.remoting.BeanManager;
-import com.canoo.platform.core.functional.Subscription;
-import com.canoo.dp.impl.remoting.collections.ListMapperImpl;
-import com.canoo.dp.impl.remoting.ClassRepository;
-import com.canoo.dp.impl.remoting.EventDispatcher;
-import com.canoo.dp.impl.remoting.ListMapper;
-import com.canoo.dp.impl.platform.core.Assert;
-import com.canoo.platform.core.functional.Callback;
+import com.canoo.dp.impl.remoting.legacy.communication.Command;
 import com.canoo.dp.impl.server.beans.ManagedBeanFactory;
 import com.canoo.dp.impl.server.client.ClientSessionProvider;
 import com.canoo.dp.impl.server.config.RemotingConfiguration;
@@ -43,14 +42,24 @@ import com.canoo.dp.impl.server.controller.ControllerRepository;
 import com.canoo.dp.impl.server.gc.GarbageCollectionCallback;
 import com.canoo.dp.impl.server.gc.GarbageCollector;
 import com.canoo.dp.impl.server.gc.Instance;
-import com.canoo.dp.impl.server.mbean.DolphinContextMBeanRegistry;
-import com.canoo.dp.impl.server.model.*;
-import com.canoo.platform.server.client.ClientSession;
-import com.canoo.dp.impl.remoting.legacy.communication.Command;
-import com.canoo.dp.impl.server.legacy.DefaultServerDolphin;
+import com.canoo.dp.impl.server.legacy.ServerConnector;
+import com.canoo.dp.impl.server.legacy.ServerModelStore;
 import com.canoo.dp.impl.server.legacy.action.DolphinServerAction;
 import com.canoo.dp.impl.server.legacy.communication.ActionRegistry;
 import com.canoo.dp.impl.server.legacy.communication.CommandHandler;
+import com.canoo.dp.impl.server.mbean.DolphinContextMBeanRegistry;
+import com.canoo.dp.impl.server.model.ServerBeanBuilder;
+import com.canoo.dp.impl.server.model.ServerBeanBuilderImpl;
+import com.canoo.dp.impl.server.model.ServerBeanRepository;
+import com.canoo.dp.impl.server.model.ServerBeanRepositoryImpl;
+import com.canoo.dp.impl.server.model.ServerControllerActionCallBean;
+import com.canoo.dp.impl.server.model.ServerEventDispatcher;
+import com.canoo.dp.impl.server.model.ServerPlatformBeanRepository;
+import com.canoo.dp.impl.server.model.ServerPresentationModelBuilderFactory;
+import com.canoo.platform.core.functional.Callback;
+import com.canoo.platform.core.functional.Subscription;
+import com.canoo.platform.remoting.BeanManager;
+import com.canoo.platform.server.client.ClientSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -72,7 +81,9 @@ public class DolphinContext {
 
     private final RemotingConfiguration configuration;
 
-    private final DefaultServerDolphin dolphin;
+    private final ServerModelStore serverModelStore;
+
+    private final ServerConnector serverConnector;
 
     private final ServerBeanRepository beanRepository;
 
@@ -108,7 +119,13 @@ public class DolphinContext {
         this.clientSession = Assert.requireNonNull(clientSession, "clientSession");
 
         //Init Open Dolphin
-        dolphin = new OpenDolphinFactory().create();
+        serverModelStore = new ServerModelStore();
+
+        //Init Server Connector
+        serverConnector = new ServerConnector();
+        serverConnector.setCodec(OptimizedJsonCodec.getInstance());
+        serverConnector.setServerModelStore(serverModelStore);
+        serverConnector.registerDefaultActions();
 
         //Init Garbage Collection
         garbageCollector = new GarbageCollector(configuration, new GarbageCollectionCallback() {
@@ -123,20 +140,20 @@ public class DolphinContext {
         CommunicationManager manager = new CommunicationManager() {
             @Override
             public boolean hasResponseCommands() {
-                return hasResponseCommands || dolphin.getModelStore().hasResponseCommands();
+                return hasResponseCommands || serverModelStore.hasResponseCommands();
             }
         };
         taskQueue = new DolphinContextTaskQueue(clientSession.getId(), clientSessionProvider, manager, configuration.getMaxPollTime(), TimeUnit.MILLISECONDS);
 
         //Init BeanRepository
-        dispatcher = new ServerEventDispatcher(dolphin);
-        beanRepository = new ServerBeanRepositoryImpl(dolphin, dispatcher, garbageCollector);
+        dispatcher = new ServerEventDispatcher(serverModelStore);
+        beanRepository = new ServerBeanRepositoryImpl(serverModelStore, dispatcher, garbageCollector);
         converters = new Converters(beanRepository);
 
         //Init BeanManager
-        final PresentationModelBuilderFactory builderFactory = new ServerPresentationModelBuilderFactory(dolphin);
-        final ClassRepository classRepository = new ClassRepositoryImpl(dolphin.getModelStore(), converters, builderFactory);
-        final ListMapper listMapper = new ListMapperImpl(dolphin.getModelStore(), classRepository, beanRepository, builderFactory, dispatcher);
+        final PresentationModelBuilderFactory builderFactory = new ServerPresentationModelBuilderFactory(serverModelStore);
+        final ClassRepository classRepository = new ClassRepositoryImpl(serverModelStore, converters, builderFactory);
+        final ListMapper listMapper = new ListMapperImpl(serverModelStore, classRepository, beanRepository, builderFactory, dispatcher);
         final ServerBeanBuilder beanBuilder = new ServerBeanBuilderImpl(classRepository, beanRepository, listMapper, builderFactory, dispatcher, garbageCollector);
         beanManager = new BeanManagerImpl(beanRepository, beanBuilder);
 
@@ -165,7 +182,7 @@ public class DolphinContext {
     }
 
     private void registerDolphinPlatformDefaultCommands() {
-        dolphin.getServerConnector().register(new DolphinServerAction() {
+        serverConnector.register(new DolphinServerAction() {
             @Override
             public void registerIn(ActionRegistry registry) {
 
@@ -232,7 +249,7 @@ public class DolphinContext {
     }
 
     private void onInitContext() {
-        platformBeanRepository = new ServerPlatformBeanRepository(dolphin, beanRepository, dispatcher, converters);
+        platformBeanRepository = new ServerPlatformBeanRepository(serverModelStore, beanRepository, dispatcher, converters);
     }
 
     private void onDestroyContext() {
@@ -307,8 +324,12 @@ public class DolphinContext {
         garbageCollector.gc();
     }
 
-    public DefaultServerDolphin getDolphin() {
-        return dolphin;
+    public ServerModelStore getServerModelStore() {
+        return serverModelStore;
+    }
+
+    public ServerConnector getServerConnector() {
+        return serverConnector;
     }
 
     public BeanManager getBeanManager() {
@@ -322,7 +343,7 @@ public class DolphinContext {
     public List<Command> handle(List<Command> commands) {
         List<Command> results = new LinkedList<>();
         for (Command command : commands) {
-            results.addAll(dolphin.getServerConnector().receive(command));
+            results.addAll(serverConnector.receive(command));
             hasResponseCommands = !results.isEmpty();
         }
         return results;

@@ -15,11 +15,11 @@
  */
 package com.canoo.dp.impl.server.model;
 
-import com.canoo.dp.impl.remoting.AbstractPresentationModelBuilder;
 import com.canoo.dp.impl.platform.core.Assert;
+import com.canoo.dp.impl.remoting.AbstractPresentationModelBuilder;
 import com.canoo.dp.impl.remoting.legacy.RemotingConstants;
 import com.canoo.dp.impl.server.legacy.DTO;
-import com.canoo.dp.impl.server.legacy.ServerDolphin;
+import com.canoo.dp.impl.server.legacy.ServerModelStore;
 import com.canoo.dp.impl.server.legacy.ServerPresentationModel;
 import com.canoo.dp.impl.server.legacy.Slot;
 
@@ -29,11 +29,11 @@ import java.util.List;
 public class ServerPresentationModelBuilder extends AbstractPresentationModelBuilder<ServerPresentationModel> {
 
     private final List<Slot> slots = new ArrayList<>();
-    private final ServerDolphin dolphin;
+    private final ServerModelStore serverModelStore;
 
-    public ServerPresentationModelBuilder(ServerDolphin dolphin) {
-        Assert.requireNonNull(dolphin, "dolphin");
-        this.dolphin = dolphin;
+    public ServerPresentationModelBuilder(ServerModelStore serverModelStore) {
+        Assert.requireNonNull(serverModelStore, "modelStore");
+        this.serverModelStore = serverModelStore;
         this.slots.add(new Slot(RemotingConstants.SOURCE_SYSTEM, RemotingConstants.SOURCE_SYSTEM_SERVER));
     }
 
@@ -57,7 +57,7 @@ public class ServerPresentationModelBuilder extends AbstractPresentationModelBui
 
     @Override
     public ServerPresentationModel create() {
-        return dolphin.getModelStore().presentationModel(id, type, new DTO(slots));
+        return serverModelStore.presentationModel(id, type, new DTO(slots));
     }
 
 }

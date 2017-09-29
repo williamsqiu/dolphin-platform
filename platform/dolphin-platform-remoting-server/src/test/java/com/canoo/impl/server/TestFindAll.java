@@ -15,11 +15,11 @@
  */
 package com.canoo.impl.server;
 
-import com.canoo.platform.remoting.BeanManager;
+import com.canoo.dp.impl.server.legacy.ServerModelStore;
 import com.canoo.impl.server.util.AbstractDolphinBasedTest;
 import com.canoo.impl.server.util.SimpleAnnotatedTestModel;
 import com.canoo.impl.server.util.SimpleTestModel;
-import com.canoo.dp.impl.server.legacy.ServerDolphin;
+import com.canoo.platform.remoting.BeanManager;
 import org.testng.annotations.Test;
 
 import java.util.Arrays;
@@ -32,8 +32,8 @@ public class TestFindAll extends AbstractDolphinBasedTest {
 
     @Test
     public void testWithSimpleModel() {
-        final ServerDolphin dolphin = createServerDolphin();
-        final BeanManager manager = createBeanManager(dolphin);
+        ServerModelStore serverModelStore = createServerModelStore();
+        final BeanManager manager = createBeanManager(serverModelStore);
 
         SimpleTestModel model1 = manager.create(SimpleTestModel.class);
         SimpleTestModel model2 = manager.create(SimpleTestModel.class);
