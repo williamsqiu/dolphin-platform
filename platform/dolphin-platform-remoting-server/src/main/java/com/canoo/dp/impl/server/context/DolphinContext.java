@@ -24,6 +24,7 @@ import com.canoo.dp.impl.remoting.EventDispatcher;
 import com.canoo.dp.impl.remoting.InternalAttributesBean;
 import com.canoo.dp.impl.remoting.ListMapper;
 import com.canoo.dp.impl.remoting.PresentationModelBuilderFactory;
+import com.canoo.dp.impl.remoting.codec.OptimizedJsonCodec;
 import com.canoo.dp.impl.remoting.collections.ListMapperImpl;
 import com.canoo.dp.impl.remoting.commands.CallActionCommand;
 import com.canoo.dp.impl.remoting.commands.CreateContextCommand;
@@ -122,7 +123,9 @@ public class DolphinContext {
 
         //Init Server Connector
         serverConnector = new ServerConnector();
+        serverConnector.setCodec(OptimizedJsonCodec.getInstance());
         serverConnector.setServerModelStore(serverModelStore);
+        serverConnector.registerDefaultActions();
 
         //Init Garbage Collection
         garbageCollector = new GarbageCollector(configuration, new GarbageCollectionCallback() {
