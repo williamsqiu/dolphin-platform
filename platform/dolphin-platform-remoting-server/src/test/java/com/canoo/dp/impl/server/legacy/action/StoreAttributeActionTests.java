@@ -17,9 +17,8 @@ package com.canoo.dp.impl.server.legacy.action;
 
 import com.canoo.dp.impl.remoting.legacy.communication.ChangeAttributeMetadataCommand;
 import com.canoo.dp.impl.remoting.legacy.communication.Command;
-import com.canoo.dp.impl.server.legacy.DefaultServerDolphin;
 import com.canoo.dp.impl.server.legacy.ServerAttribute;
-import com.canoo.dp.impl.server.legacy.ServerDolphinFactory;
+import com.canoo.dp.impl.server.legacy.ServerModelStore;
 import com.canoo.dp.impl.server.legacy.ServerPresentationModel;
 import com.canoo.dp.impl.server.legacy.communication.ActionRegistry;
 import org.testng.Assert;
@@ -33,22 +32,22 @@ public class StoreAttributeActionTests {
 
     @BeforeMethod
     public void setUp() throws Exception {
-        dolphin = ((DefaultServerDolphin) (ServerDolphinFactory.create()));
-        dolphin.getModelStore().setCurrentResponse(new ArrayList<Command>());
+        serverModelStore = new ServerModelStore();
+        serverModelStore.setCurrentResponse(new ArrayList<Command>());
         registry = new ActionRegistry();
     }
 
     @Test
     public void testChangeAttributeMetadata() {
         StoreAttributeAction action = new StoreAttributeAction();
-        action.setServerModelStore(dolphin.getModelStore());
+        action.setServerModelStore(serverModelStore);
         action.registerIn(registry);
         ServerAttribute attribute = new ServerAttribute("newAttribute", "");
-        dolphin.getModelStore().add(new ServerPresentationModel("model", Collections.singletonList(attribute), dolphin.getModelStore()));
+        serverModelStore.add(new ServerPresentationModel("model", Collections.singletonList(attribute), serverModelStore));
         registry.getActionsFor(ChangeAttributeMetadataCommand.class).get(0).handleCommand(new ChangeAttributeMetadataCommand(attribute.getId(), "value", "newValue"), Collections.emptyList());
         Assert.assertEquals("newValue", attribute.getValue());
     }
 
-    private DefaultServerDolphin dolphin;
+    private ServerModelStore serverModelStore;
     private ActionRegistry registry;
 }

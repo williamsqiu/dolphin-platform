@@ -78,6 +78,7 @@ public class HttpResponseImpl implements HttpResponse {
         handled.set(true);
         final byte[] data = dataProvider.get();
         if (data != null && data.length > 0) {
+            connection.setDoOutput(true);
             final OutputStream w = connection.getOutputStream();
             w.write(data);
             w.close();

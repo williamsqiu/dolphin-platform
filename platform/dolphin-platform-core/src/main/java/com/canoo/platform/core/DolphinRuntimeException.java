@@ -29,6 +29,7 @@ public class DolphinRuntimeException extends RuntimeException {
 
 
     public DolphinRuntimeException(String s) {
+        super(s);
         this.thread = Thread.currentThread();
     }
 

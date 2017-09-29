@@ -47,6 +47,9 @@ public class HttpRequestImpl implements HttpRequest {
 
     @Override
     public HttpResponse withContent(final byte[] content) throws IOException {
+        connection.setRequestProperty( "Content-Length", content.length + "");
+        connection.setUseCaches( false );
+
         connection.setDoOutput(true);
         dataProvider = new ByteArrayProvider() {
             @Override
@@ -54,21 +57,36 @@ public class HttpRequestImpl implements HttpRequest {
                 return content;
             }
         };
-        return withoutContent();
+        return send();
     }
 
     @Override
     public HttpResponse withContent(final String content) throws IOException {
+        return withContent(content, "application/txt");
+    }
+
+    @Override
+    public HttpResponse withContent(String content, String contentType) throws IOException {
+        connection.setRequestProperty( "Content-Type", contentType);
+        connection.setRequestProperty( "charset", "utf-8");
+        if(connection.getRequestProperty("Content-Type") == null) {
+            connection.setRequestProperty( "Content-Type", "application/txt");
+        }
         return withContent(content.getBytes(PlatformConstants.CHARSET));
     }
 
     @Override
     public <I> HttpResponse withContent(final I content) throws IOException {
+        connection.setRequestProperty( "Content-Type", "application/json");
         return withContent(gson.toJson(content));
     }
 
     @Override
     public HttpResponse withoutContent() throws IOException {
+        return send();
+    }
+
+    private HttpResponse send() {
         if(sent.get()) {
             throw new DolphinRuntimeException("Request already sent");
         }

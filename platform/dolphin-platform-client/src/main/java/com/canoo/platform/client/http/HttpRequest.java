@@ -8,6 +8,8 @@ public interface HttpRequest {
 
     HttpResponse withContent(String content) throws IOException;
 
+    HttpResponse withContent(String content, String contentType) throws IOException;
+
     <I> HttpResponse withContent(I content) throws IOException;
 
     HttpResponse withoutContent() throws IOException;

@@ -15,13 +15,13 @@
  */
 package com.canoo.dolphin.client;
 
-import com.canoo.platform.remoting.BeanManager;
 import com.canoo.dolphin.client.util.AbstractDolphinBasedTest;
 import com.canoo.dolphin.client.util.SimpleAnnotatedTestModel;
 import com.canoo.dolphin.client.util.SimpleTestModel;
-import mockit.Mocked;
-import com.canoo.dp.impl.client.legacy.ClientDolphin;
+import com.canoo.dp.impl.client.legacy.ClientModelStore;
 import com.canoo.dp.impl.client.legacy.communication.AbstractClientConnector;
+import com.canoo.platform.remoting.BeanManager;
+import mockit.Mocked;
 import org.testng.annotations.Test;
 
 import java.util.Arrays;
@@ -34,8 +34,8 @@ public class TestFindAll extends AbstractDolphinBasedTest {
 
     @Test
     public void testWithSimpleModel(@Mocked AbstractClientConnector connector) {
-        final ClientDolphin dolphin = createClientDolphin(connector);
-        final BeanManager manager = createBeanManager(dolphin);
+        final ClientModelStore clientModelStore = createClientModelStore(connector);
+        final BeanManager manager = createBeanManager(clientModelStore);
 
         SimpleTestModel model1 = manager.create(SimpleTestModel.class);
         SimpleTestModel model2 = manager.create(SimpleTestModel.class);

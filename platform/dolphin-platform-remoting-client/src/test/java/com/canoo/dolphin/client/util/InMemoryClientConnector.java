@@ -45,6 +45,10 @@ public class InMemoryClientConnector extends AbstractClientConnector {
         connect(false);
     }
 
+    public ServerConnector getServerConnector() {
+        return serverConnector;
+    }
+
     @Override
     protected void release() {
     }

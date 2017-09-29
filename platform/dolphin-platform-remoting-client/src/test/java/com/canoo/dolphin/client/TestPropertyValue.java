@@ -15,16 +15,22 @@
  */
 package com.canoo.dolphin.client;
 
-import com.canoo.platform.remoting.BeanManager;
-import com.canoo.dolphin.client.util.*;
-import com.canoo.dp.impl.remoting.BeanRepository;
-import com.canoo.dp.impl.remoting.EventDispatcher;
-import mockit.Mocked;
-import com.canoo.dp.impl.remoting.legacy.core.Attribute;
-import com.canoo.dp.impl.remoting.legacy.core.PresentationModel;
-import com.canoo.dp.impl.client.legacy.ClientDolphin;
+import com.canoo.dolphin.client.util.AbstractDolphinBasedTest;
+import com.canoo.dolphin.client.util.ChildModel;
+import com.canoo.dolphin.client.util.ComplexDataTypesModel;
+import com.canoo.dolphin.client.util.PrimitiveDataTypesModel;
+import com.canoo.dolphin.client.util.SimpleAnnotatedTestModel;
+import com.canoo.dolphin.client.util.SimpleTestModel;
+import com.canoo.dolphin.client.util.SingleReferenceModel;
+import com.canoo.dp.impl.client.legacy.ClientModelStore;
 import com.canoo.dp.impl.client.legacy.ClientPresentationModel;
 import com.canoo.dp.impl.client.legacy.communication.AbstractClientConnector;
+import com.canoo.dp.impl.remoting.BeanRepository;
+import com.canoo.dp.impl.remoting.EventDispatcher;
+import com.canoo.dp.impl.remoting.legacy.core.Attribute;
+import com.canoo.dp.impl.remoting.legacy.core.PresentationModel;
+import com.canoo.platform.remoting.BeanManager;
+import mockit.Mocked;
 import org.testng.annotations.Test;
 
 import java.util.Calendar;
@@ -42,14 +48,14 @@ public class TestPropertyValue extends AbstractDolphinBasedTest {
 
     @Test
     public void testWithAnnotatedSimpleModel(@Mocked AbstractClientConnector connector) {
-        final ClientDolphin dolphin = createClientDolphin(connector);
-        final EventDispatcher dispatcher = createEventDispatcher(dolphin);
-        final BeanRepository repository = createBeanRepository(dolphin, dispatcher);
-        final BeanManager manager = createBeanManager(dolphin, repository, dispatcher);
+        final ClientModelStore clientModelStore = createClientModelStore(connector);
+        final EventDispatcher dispatcher = createEventDispatcher(clientModelStore);
+        final BeanRepository repository = createBeanRepository(clientModelStore, dispatcher);
+        final BeanManager manager = createBeanManager(clientModelStore, repository, dispatcher);
 
         SimpleAnnotatedTestModel model = manager.create(SimpleAnnotatedTestModel.class);
 
-        PresentationModel dolphinModel = dolphin.getModelStore().findAllPresentationModelsByType(SimpleAnnotatedTestModel.class.getName()).get(0);
+        PresentationModel dolphinModel = clientModelStore.findAllPresentationModelsByType(SimpleAnnotatedTestModel.class.getName()).get(0);
 
         Attribute textAttribute = dolphinModel.getAttribute("myProperty");
         assertThat(textAttribute.getValue(), nullValue());
@@ -65,14 +71,14 @@ public class TestPropertyValue extends AbstractDolphinBasedTest {
 
     @Test
     public void testWithSimpleModel(@Mocked AbstractClientConnector connector) {
-        final ClientDolphin dolphin = createClientDolphin(connector);
-        final EventDispatcher dispatcher = createEventDispatcher(dolphin);
-        final BeanRepository repository = createBeanRepository(dolphin, dispatcher);
-        final BeanManager manager = createBeanManager(dolphin, repository, dispatcher);
+        final ClientModelStore clientModelStore = createClientModelStore(connector);
+        final EventDispatcher dispatcher = createEventDispatcher(clientModelStore);
+        final BeanRepository repository = createBeanRepository(clientModelStore, dispatcher);
+        final BeanManager manager = createBeanManager(clientModelStore, repository, dispatcher);
 
         SimpleTestModel model = manager.create(SimpleTestModel.class);
 
-        PresentationModel dolphinModel = dolphin.getModelStore().findAllPresentationModelsByType(SimpleTestModel.class.getName()).get(0);
+        PresentationModel dolphinModel = clientModelStore.findAllPresentationModelsByType(SimpleTestModel.class.getName()).get(0);
 
         Attribute textAttribute = dolphinModel.getAttribute("text");
         assertThat(textAttribute.getValue(), nullValue());
@@ -88,14 +94,14 @@ public class TestPropertyValue extends AbstractDolphinBasedTest {
 
     @Test
     public void testWithAllPrimitiveDataTypesModel(@Mocked AbstractClientConnector connector) {
-        final ClientDolphin dolphin = createClientDolphin(connector);
-        final EventDispatcher dispatcher = createEventDispatcher(dolphin);
-        final BeanRepository repository = createBeanRepository(dolphin, dispatcher);
-        final BeanManager manager = createBeanManager(dolphin, repository, dispatcher);
+        final ClientModelStore clientModelStore = createClientModelStore(connector);
+        final EventDispatcher dispatcher = createEventDispatcher(clientModelStore);
+        final BeanRepository repository = createBeanRepository(clientModelStore, dispatcher);
+        final BeanManager manager = createBeanManager(clientModelStore, repository, dispatcher);
 
         PrimitiveDataTypesModel model = manager.create(PrimitiveDataTypesModel.class);
 
-        PresentationModel dolphinModel = dolphin.getModelStore().findAllPresentationModelsByType(PrimitiveDataTypesModel.class.getName()).get(0);
+        PresentationModel dolphinModel = clientModelStore.findAllPresentationModelsByType(PrimitiveDataTypesModel.class.getName()).get(0);
 
         Attribute textAttribute = dolphinModel.getAttribute("textProperty");
         assertThat(textAttribute.getValue(), nullValue());
@@ -144,14 +150,14 @@ public class TestPropertyValue extends AbstractDolphinBasedTest {
         date2.set(Calendar.MILLISECOND, 3);
         date2.setTimeZone(TimeZone.getTimeZone("UTC"));
 
-        final ClientDolphin dolphin = createClientDolphin(connector);
-        final EventDispatcher dispatcher = createEventDispatcher(dolphin);
-        final BeanRepository repository = createBeanRepository(dolphin, dispatcher);
-        final BeanManager manager = createBeanManager(dolphin, repository, dispatcher);
+        final ClientModelStore clientModelStore = createClientModelStore(connector);
+        final EventDispatcher dispatcher = createEventDispatcher(clientModelStore);
+        final BeanRepository repository = createBeanRepository(clientModelStore, dispatcher);
+        final BeanManager manager = createBeanManager(clientModelStore, repository, dispatcher);
 
         ComplexDataTypesModel model = manager.create(ComplexDataTypesModel.class);
 
-        PresentationModel dolphinModel = dolphin.getModelStore().findAllPresentationModelsByType(ComplexDataTypesModel.class.getName()).get(0);
+        PresentationModel dolphinModel = clientModelStore.findAllPresentationModelsByType(ComplexDataTypesModel.class.getName()).get(0);
 
 
         Attribute dateAttribute = dolphinModel.getAttribute("dateProperty");
@@ -193,22 +199,22 @@ public class TestPropertyValue extends AbstractDolphinBasedTest {
 
     @Test
     public void testWithSingleReferenceModel(@Mocked AbstractClientConnector connector) {
-        final ClientDolphin dolphin = createClientDolphin(connector);
-        final EventDispatcher dispatcher = createEventDispatcher(dolphin);
-        final BeanRepository repository = createBeanRepository(dolphin, dispatcher);
-        final BeanManager manager = createBeanManager(dolphin, repository, dispatcher);
+        final ClientModelStore clientModelStore = createClientModelStore(connector);
+        final EventDispatcher dispatcher = createEventDispatcher(clientModelStore);
+        final BeanRepository repository = createBeanRepository(clientModelStore, dispatcher);
+        final BeanManager manager = createBeanManager(clientModelStore, repository, dispatcher);
 
         final SimpleTestModel ref1 = manager.create(SimpleTestModel.class);
         ref1.getTextProperty().set("ref1_text");
         final SimpleTestModel ref2 = manager.create(SimpleTestModel.class);
         ref2.getTextProperty().set("ref2_text");
-        final List<ClientPresentationModel> refPMs = dolphin.getModelStore().findAllPresentationModelsByType(SimpleTestModel.class.getName());
+        final List<ClientPresentationModel> refPMs = clientModelStore.findAllPresentationModelsByType(SimpleTestModel.class.getName());
         final PresentationModel ref1PM = "ref1_text".equals(refPMs.get(0).getAttribute("text").getValue())? refPMs.get(0) : refPMs.get(1);
         final PresentationModel ref2PM = "ref2_text".equals(refPMs.get(0).getAttribute("text").getValue())? refPMs.get(0) : refPMs.get(1);
 
         final SingleReferenceModel model = manager.create(SingleReferenceModel.class);
 
-        final PresentationModel dolphinModel = dolphin.getModelStore().findAllPresentationModelsByType(SingleReferenceModel.class.getName()).get(0);
+        final PresentationModel dolphinModel = clientModelStore.findAllPresentationModelsByType(SingleReferenceModel.class.getName()).get(0);
 
         final Attribute referenceAttribute = dolphinModel.getAttribute("referenceProperty");
         assertThat(referenceAttribute.getValue(), nullValue());
@@ -224,14 +230,14 @@ public class TestPropertyValue extends AbstractDolphinBasedTest {
 
     @Test
     public void testWithInheritedModel(@Mocked AbstractClientConnector connector) {
-        final ClientDolphin dolphin = createClientDolphin(connector);
-        final EventDispatcher dispatcher = createEventDispatcher(dolphin);
-        final BeanRepository repository = createBeanRepository(dolphin, dispatcher);
-        final BeanManager manager = createBeanManager(dolphin, repository, dispatcher);
+        final ClientModelStore clientModelStore = createClientModelStore(connector);
+        final EventDispatcher dispatcher = createEventDispatcher(clientModelStore);
+        final BeanRepository repository = createBeanRepository(clientModelStore, dispatcher);
+        final BeanManager manager = createBeanManager(clientModelStore, repository, dispatcher);
 
         ChildModel model = manager.create(ChildModel.class);
 
-        PresentationModel dolphinModel = dolphin.getModelStore().findAllPresentationModelsByType(ChildModel.class.getName()).get(0);
+        PresentationModel dolphinModel = clientModelStore.findAllPresentationModelsByType(ChildModel.class.getName()).get(0);
 
         Attribute childAttribute = dolphinModel.getAttribute("childProperty");
         assertThat(childAttribute.getValue(), nullValue());

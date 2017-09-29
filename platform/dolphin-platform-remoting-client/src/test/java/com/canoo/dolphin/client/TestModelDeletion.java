@@ -15,40 +15,47 @@
  */
 package com.canoo.dolphin.client;
 
-import com.canoo.platform.remoting.BeanManager;
-import com.canoo.dolphin.client.util.*;
+import com.canoo.dolphin.client.util.AbstractDolphinBasedTest;
+import com.canoo.dolphin.client.util.ChildModel;
+import com.canoo.dolphin.client.util.ListReferenceModel;
+import com.canoo.dolphin.client.util.SimpleAnnotatedTestModel;
+import com.canoo.dolphin.client.util.SimpleTestModel;
+import com.canoo.dolphin.client.util.SingleReferenceModel;
+import com.canoo.dp.impl.client.legacy.ClientModelStore;
+import com.canoo.dp.impl.client.legacy.ClientPresentationModel;
+import com.canoo.dp.impl.client.legacy.communication.AbstractClientConnector;
 import com.canoo.dp.impl.remoting.BeanDefinitionException;
 import com.canoo.dp.impl.remoting.BeanRepository;
 import com.canoo.dp.impl.remoting.EventDispatcher;
+import com.canoo.platform.remoting.BeanManager;
 import mockit.Mocked;
-import com.canoo.dp.impl.client.legacy.ClientDolphin;
-import com.canoo.dp.impl.client.legacy.ClientPresentationModel;
-import com.canoo.dp.impl.client.legacy.communication.AbstractClientConnector;
 import org.testng.annotations.Test;
 
 import java.util.Collection;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
 
 public class TestModelDeletion extends AbstractDolphinBasedTest {
 
     @Test
     public void testWithAnnotatedSimpleModel(@Mocked AbstractClientConnector connector) {
-        final ClientDolphin dolphin = createClientDolphin(connector);
-        final EventDispatcher dispatcher = createEventDispatcher(dolphin);
-        final BeanRepository repository = createBeanRepository(dolphin, dispatcher);
-        final BeanManager manager = createBeanManager(dolphin, repository, dispatcher);
+        final ClientModelStore clientModelStore = createClientModelStore(connector);
+        final EventDispatcher dispatcher = createEventDispatcher(clientModelStore);
+        final BeanRepository repository = createBeanRepository(clientModelStore, dispatcher);
+        final BeanManager manager = createBeanManager(clientModelStore, repository, dispatcher);
 
         SimpleAnnotatedTestModel model = manager.create(SimpleAnnotatedTestModel.class);
 
         repository.delete(model);
 
-        List<ClientPresentationModel> dolphinModels = dolphin.getModelStore().findAllPresentationModelsByType("simple_test_model");
+        List<ClientPresentationModel> dolphinModels = clientModelStore.findAllPresentationModelsByType("simple_test_model");
         assertThat(dolphinModels, empty());
 
-        Collection<ClientPresentationModel> allDolphinModels = dolphin.getModelStore().listPresentationModels();
+        Collection<ClientPresentationModel> allDolphinModels = clientModelStore.listPresentationModels();
         assertThat(allDolphinModels, hasSize(1));
 
         assertThat(repository.isManaged(model), is(false));
@@ -56,19 +63,19 @@ public class TestModelDeletion extends AbstractDolphinBasedTest {
 
     @Test
     public void testWithSimpleModel(@Mocked AbstractClientConnector connector) {
-        final ClientDolphin dolphin = createClientDolphin(connector);
-        final EventDispatcher dispatcher = createEventDispatcher(dolphin);
-        final BeanRepository repository = createBeanRepository(dolphin, dispatcher);
-        final BeanManager manager = createBeanManager(dolphin, repository, dispatcher);
+        final ClientModelStore clientModelStore = createClientModelStore(connector);
+        final EventDispatcher dispatcher = createEventDispatcher(clientModelStore);
+        final BeanRepository repository = createBeanRepository(clientModelStore, dispatcher);
+        final BeanManager manager = createBeanManager(clientModelStore, repository, dispatcher);
 
         SimpleTestModel model = manager.create(SimpleTestModel.class);
 
         repository.delete(model);
 
-        List<ClientPresentationModel> dolphinModels = dolphin.getModelStore().findAllPresentationModelsByType(SimpleTestModel.class.getName());
+        List<ClientPresentationModel> dolphinModels = clientModelStore.findAllPresentationModelsByType(SimpleTestModel.class.getName());
         assertThat(dolphinModels, empty());
 
-        Collection<ClientPresentationModel> allDolphinModels = dolphin.getModelStore().listPresentationModels();
+        Collection<ClientPresentationModel> allDolphinModels = clientModelStore.listPresentationModels();
         assertThat(allDolphinModels, hasSize(1));
 
         assertThat(repository.isManaged(model), is(false));
@@ -76,39 +83,39 @@ public class TestModelDeletion extends AbstractDolphinBasedTest {
 
     @Test(expectedExceptions = BeanDefinitionException.class)
     public void testWithWrongModelType(@Mocked AbstractClientConnector connector) {
-        final ClientDolphin dolphin = createClientDolphin(connector);
-        final EventDispatcher dispatcher = createEventDispatcher(dolphin);
-        final BeanRepository repository = createBeanRepository(dolphin, dispatcher);
-        final BeanManager manager = createBeanManager(dolphin, repository, dispatcher);
+        final ClientModelStore clientModelStore = createClientModelStore(connector);
+        final EventDispatcher dispatcher = createEventDispatcher(clientModelStore);
+        final BeanRepository repository = createBeanRepository(clientModelStore, dispatcher);
+        final BeanManager manager = createBeanManager(clientModelStore, repository, dispatcher);
 
         repository.delete("I'm a String");
     }
 
     @Test(expectedExceptions = NullPointerException.class)
     public void testWithNull(@Mocked AbstractClientConnector connector) {
-        final ClientDolphin dolphin = createClientDolphin(connector);
-        final EventDispatcher dispatcher = createEventDispatcher(dolphin);
-        final BeanRepository repository = createBeanRepository(dolphin, dispatcher);
-        final BeanManager manager = createBeanManager(dolphin, repository, dispatcher);
+        final ClientModelStore clientModelStore = createClientModelStore(connector);
+        final EventDispatcher dispatcher = createEventDispatcher(clientModelStore);
+        final BeanRepository repository = createBeanRepository(clientModelStore, dispatcher);
+        final BeanManager manager = createBeanManager(clientModelStore, repository, dispatcher);
 
         repository.delete(null);
     }
 
     @Test
     public void testWithSingleReferenceModel(@Mocked AbstractClientConnector connector) {
-        final ClientDolphin dolphin = createClientDolphin(connector);
-        final EventDispatcher dispatcher = createEventDispatcher(dolphin);
-        final BeanRepository repository = createBeanRepository(dolphin, dispatcher);
-        final BeanManager manager = createBeanManager(dolphin, repository, dispatcher);
+        final ClientModelStore clientModelStore = createClientModelStore(connector);
+        final EventDispatcher dispatcher = createEventDispatcher(clientModelStore);
+        final BeanRepository repository = createBeanRepository(clientModelStore, dispatcher);
+        final BeanManager manager = createBeanManager(clientModelStore, repository, dispatcher);
 
         SingleReferenceModel model = manager.create(SingleReferenceModel.class);
 
         repository.delete(model);
 
-        List<ClientPresentationModel> dolphinModels = dolphin.getModelStore().findAllPresentationModelsByType(SingleReferenceModel.class.getName());
+        List<ClientPresentationModel> dolphinModels = clientModelStore.findAllPresentationModelsByType(SingleReferenceModel.class.getName());
         assertThat(dolphinModels, empty());
 
-        Collection<ClientPresentationModel> allDolphinModels = dolphin.getModelStore().listPresentationModels();
+        Collection<ClientPresentationModel> allDolphinModels = clientModelStore.listPresentationModels();
         assertThat(allDolphinModels, hasSize(1));
 
         assertThat(repository.isManaged(model), is(false));
@@ -116,19 +123,19 @@ public class TestModelDeletion extends AbstractDolphinBasedTest {
 
     @Test
     public void testWithListReferenceModel(@Mocked AbstractClientConnector connector) {
-        final ClientDolphin dolphin = createClientDolphin(connector);
-        final EventDispatcher dispatcher = createEventDispatcher(dolphin);
-        final BeanRepository repository = createBeanRepository(dolphin, dispatcher);
-        final BeanManager manager = createBeanManager(dolphin, repository, dispatcher);
+        final ClientModelStore clientModelStore = createClientModelStore(connector);
+        final EventDispatcher dispatcher = createEventDispatcher(clientModelStore);
+        final BeanRepository repository = createBeanRepository(clientModelStore, dispatcher);
+        final BeanManager manager = createBeanManager(clientModelStore, repository, dispatcher);
 
         ListReferenceModel model = manager.create(ListReferenceModel.class);
 
         repository.delete(model);
 
-        List<ClientPresentationModel> dolphinModels = dolphin.getModelStore().findAllPresentationModelsByType(ListReferenceModel.class.getName());
+        List<ClientPresentationModel> dolphinModels = clientModelStore.findAllPresentationModelsByType(ListReferenceModel.class.getName());
         assertThat(dolphinModels, empty());
 
-        Collection<ClientPresentationModel> allDolphinModels = dolphin.getModelStore().listPresentationModels();
+        Collection<ClientPresentationModel> allDolphinModels = clientModelStore.listPresentationModels();
         assertThat(allDolphinModels, hasSize(1));    //Dolphin Class Repository wurde bereits angelegt
 
         assertThat(repository.isManaged(model), is(false));
@@ -136,19 +143,19 @@ public class TestModelDeletion extends AbstractDolphinBasedTest {
 
     @Test
     public void testWithInheritedModel(@Mocked AbstractClientConnector connector) {
-        final ClientDolphin dolphin = createClientDolphin(connector);
-        final EventDispatcher dispatcher = createEventDispatcher(dolphin);
-        final BeanRepository repository = createBeanRepository(dolphin, dispatcher);
-        final BeanManager manager = createBeanManager(dolphin, repository, dispatcher);
+        final ClientModelStore clientModelStore = createClientModelStore(connector);
+        final EventDispatcher dispatcher = createEventDispatcher(clientModelStore);
+        final BeanRepository repository = createBeanRepository(clientModelStore, dispatcher);
+        final BeanManager manager = createBeanManager(clientModelStore, repository, dispatcher);
 
         ChildModel model = manager.create(ChildModel.class);
 
         repository.delete(model);
 
-        List<ClientPresentationModel> dolphinModels = dolphin.getModelStore().findAllPresentationModelsByType(ChildModel.class.getName());
+        List<ClientPresentationModel> dolphinModels = clientModelStore.findAllPresentationModelsByType(ChildModel.class.getName());
         assertThat(dolphinModels, empty());
 
-        Collection<ClientPresentationModel> allDolphinModels = dolphin.getModelStore().listPresentationModels();
+        Collection<ClientPresentationModel> allDolphinModels = clientModelStore.listPresentationModels();
         assertThat(allDolphinModels, hasSize(1));
 
         assertThat(repository.isManaged(model), is(false));

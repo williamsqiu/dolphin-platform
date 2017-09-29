@@ -98,7 +98,7 @@ public class DolphinContextTest {
         while (!contextList.isEmpty()) {
             DolphinContext dolphinContext = contextList.remove(0);
             for (DolphinContext toCompare : contextList) {
-                assertFalse(dolphinContext.getDolphin().equals(toCompare.getDolphin()));
+                assertFalse(dolphinContext.getServerModelStore().equals(toCompare.getServerModelStore()));
             }
         }
     }
@@ -130,7 +130,7 @@ public class DolphinContextTest {
         assertNotNull(dolphinContext.getId());
         assertNotNull(dolphinContext.getBeanManager());
         assertNotNull(dolphinContext.getDolphinSession());
-        assertNotNull(dolphinContext.getDolphin());
+        assertNotNull(dolphinContext.getServerModelStore());
     }
 
     @Test
@@ -139,7 +139,7 @@ public class DolphinContextTest {
         DolphinContext dolphinContext = createContext();
 
         //then:
-        Map<Class<? extends Command>, List<CommandHandler>> dolphinActions = dolphinContext.getDolphin().getServerConnector().getRegistry().getActions();
+        Map<Class<? extends Command>, List<CommandHandler>> dolphinActions = dolphinContext.getServerConnector().getRegistry().getActions();
         assertNotNull(dolphinActions.containsKey(CreateContextCommand.class));
         assertNotNull(dolphinActions.containsKey(DestroyContextCommand.class));
         assertNotNull(dolphinActions.containsKey(CreateControllerCommand.class));
