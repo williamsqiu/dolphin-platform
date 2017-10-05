@@ -1,3 +1,4 @@
 dependencies {
     compile project(':dolphin-platform-remoting-common')
+    compile project(':dolphin-platform-remoting-server')
 }
