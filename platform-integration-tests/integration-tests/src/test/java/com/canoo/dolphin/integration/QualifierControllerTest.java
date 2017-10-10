@@ -29,6 +29,7 @@ import static com.canoo.dolphin.integration.qualifier.QualifierTestConstants.DUM
 import static com.canoo.dolphin.integration.qualifier.QualifierTestConstants.QUALIFIER_CONTROLLER_NAME;
 import static com.canoo.dolphin.integration.qualifier.QualifierTestConstants.UNBIND_ACTION;
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNotNull;
 
 public class QualifierControllerTest extends AbstractIntegrationTest {
 
@@ -38,9 +39,16 @@ public class QualifierControllerTest extends AbstractIntegrationTest {
         try {
             final ClientContext context = connect(endpoint);
             final ControllerProxy<QualifierTestBean> controller = createController(context, QUALIFIER_CONTROLLER_NAME);
-            Assert.assertNotNull(controller);
-            Assert.assertNotNull(controller.getModel());
+            assertNotNull(controller);
+            assertNotNull(controller.getModel());
             assertEquals(controller.getModel().getClass(), QualifierTestBean.class);
+
+            assertNotNull(controller.getModel().subBeanlOneProperty().get());
+            assertEquals(controller.getModel().subBeanlOneProperty().get().getClass(), QualifierTestSubBeanOne.class);
+
+            assertNotNull(controller.getModel().subBeanTwoProperty().get());
+            assertEquals(controller.getModel().subBeanTwoProperty().get().getClass(), QualifierTestSubBeanTwo.class);
+
             destroy(controller, endpoint);
             disconnect(context, endpoint);
 

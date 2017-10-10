@@ -141,7 +141,9 @@ public final class OptimizedJsonCodec implements Codec {
                 if (encoder == null) {
                     throw new RuntimeException("Can not encode command of type " + id + ". No matching encoder found!");
                 }
-                commands.add(encoder.decode(command));
+                final Command convertedCommand = encoder.decode(command);
+                Assert.requireNonNull(convertedCommand, "convertedCommand");
+                commands.add(convertedCommand);
             }
             LOG.debug("Decoded command list with {} commands", commands.size());
             return commands;

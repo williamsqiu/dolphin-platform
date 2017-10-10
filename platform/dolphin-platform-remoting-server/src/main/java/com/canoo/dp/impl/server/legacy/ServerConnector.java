@@ -15,6 +15,7 @@
  */
 package com.canoo.dp.impl.server.legacy;
 
+import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.remoting.legacy.commands.InterruptLongPollCommand;
 import com.canoo.dp.impl.remoting.legacy.communication.Codec;
 import com.canoo.dp.impl.remoting.legacy.communication.Command;
@@ -52,6 +53,8 @@ public class ServerConnector {
      * doesn't fail on missing commands
      **/
     public List<Command> receive(final Command command) {
+
+        Assert.requireNonNull(command, "command");
         LOG.trace("Received command of type {}", command.getClass().getSimpleName());
         List<Command> response = new LinkedList();// collecting parameter pattern
 
