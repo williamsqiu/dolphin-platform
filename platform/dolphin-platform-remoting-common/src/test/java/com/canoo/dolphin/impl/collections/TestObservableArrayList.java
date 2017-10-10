@@ -16,6 +16,8 @@
 package com.canoo.dolphin.impl.collections;
 
 import com.canoo.dp.impl.remoting.collections.ObservableArrayList;
+import com.canoo.platform.remoting.ListChangeEvent;
+import com.canoo.platform.remoting.ListChangeListener;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -126,8 +128,16 @@ public class TestObservableArrayList {
     @Test
     public void testRemoveAll(){
         ObservableArrayList<String> list = new ObservableArrayList<>();
+
+        list.onChanged(new ListChangeListener<String>() {
+            @Override
+            public void listChanged(ListChangeEvent<? extends String> evt) {
+                System.out.println(evt.getChanges().get(0).);
+            }
+        });
         Assert.assertTrue(list.isEmpty());
         Assert.assertEquals(list.size(), 0);
+
 
         list.addAll("1", "2", "3", "4", "5", "6", "7" ,"8" , "9", "10");
         Assert.assertFalse(list.isEmpty());

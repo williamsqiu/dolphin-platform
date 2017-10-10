@@ -173,6 +173,11 @@ public class ObservableArrayList<E> implements ObservableList<E> {
         return batchRemove(c, true);
     }
 
+    @Override
+    public boolean retainAll(Collection<?> c) {
+        return batchRemove(c, false);
+    }
+
     private boolean batchRemove(Collection<?> c, boolean isRemove){
         if (c.isEmpty()) {
             return false;
@@ -181,7 +186,7 @@ public class ObservableArrayList<E> implements ObservableList<E> {
         List<E> listElement =  new ArrayList<>();
         for (Iterator<?> iterator = c.iterator(); iterator.hasNext();) {
             E element = (E) iterator.next();
-            if(this.contains(element)){
+            if(list.contains(element)){
                 listElement.add(element);
                 ListChangeEvent.Change<E> changed = new ListChangeEventImpl.ChangeImpl<>(list.indexOf(element), list.indexOf(element),  Collections.singletonList(element));
                 changedList.add(changed);
@@ -197,10 +202,6 @@ public class ObservableArrayList<E> implements ObservableList<E> {
             return true;
         }
         return false;
-    }
-    @Override
-    public boolean retainAll(Collection<?> c) {
-        return batchRemove(c, false);
     }
 
     @Override
