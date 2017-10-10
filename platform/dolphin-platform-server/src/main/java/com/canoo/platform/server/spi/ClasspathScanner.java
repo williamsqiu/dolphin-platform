@@ -18,7 +18,17 @@ package com.canoo.platform.server.spi;
 import java.lang.annotation.Annotation;
 import java.util.Set;
 
+/**
+ * A classpath scanner that can be used to find all classes on the classpath that are annotated by a specific annotation.
+ *
+ * @author Hendrik Ebbers
+ */
 public interface ClasspathScanner {
 
+    /**
+     * Scans all classes in the classpath for the given annotation and returns a set that contains all classes that are annotated with the given annotation.
+     * @param annotation the annotation
+     * @return set of all annotated classes
+     */
     Set<Class<?>> getTypesAnnotatedWith(final Class<? extends Annotation> annotation);
 }

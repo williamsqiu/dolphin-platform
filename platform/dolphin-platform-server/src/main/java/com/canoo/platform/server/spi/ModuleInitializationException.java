@@ -15,12 +15,28 @@
  */
 package com.canoo.platform.server.spi;
 
+/**
+ * Exception that will be thrown if a module can not be initialized.
+ *
+ * @see ServerModule
+ *
+ * @author Hendrik Ebbers
+ */
 public class ModuleInitializationException extends Exception {
 
+    /**
+     * Constructor
+     * @param message the detail message
+     */
     public ModuleInitializationException(String message) {
         super(message);
     }
 
+    /**
+     * Constructor
+     * @param message the detail message
+     * @param cause the cause
+     */
     public ModuleInitializationException(String message, Throwable cause) {
         super(message, cause);
     }

@@ -45,10 +45,10 @@ public class ConfigurationFileLoaderTest {
             DefaultPlatformConfiguration configuration = ConfigurationFileLoader.loadConfiguration();
 
             //then:
-            assertEquals(configuration.getProperty(TestConfigurationProvider.PROPERTY_1_NAME), TestConfigurationProvider.PROPERTY_1_VALUE);
-            assertEquals(configuration.getProperty(TestConfigurationProvider.PROPERTY_2_NAME), TestConfigurationProvider.PROPERTY_2_VALUE);
-            assertEquals(configuration.getProperty(TestConfigurationProvider.PROPERTY_3_NAME), TestConfigurationProvider.PROPERTY_3_VALUE);
-            assertEquals(configuration.getProperty(AdditionalTestConfigurationProvider.PROPERTY_NAME), AdditionalTestConfigurationProvider.PROPERTY_VALUE);
+            assertEquals(configuration.getProperty(TestConfigurationProvider.PROPERTY_1_NAME, null), TestConfigurationProvider.PROPERTY_1_VALUE);
+            assertEquals(configuration.getProperty(TestConfigurationProvider.PROPERTY_2_NAME, null), TestConfigurationProvider.PROPERTY_2_VALUE);
+            assertEquals(configuration.getProperty(TestConfigurationProvider.PROPERTY_3_NAME, null), TestConfigurationProvider.PROPERTY_3_VALUE);
+            assertEquals(configuration.getProperty(AdditionalTestConfigurationProvider.PROPERTY_NAME, null), AdditionalTestConfigurationProvider.PROPERTY_VALUE);
         } catch (Exception e) {
             fail("Error in test", e);
         }
@@ -62,7 +62,7 @@ public class ConfigurationFileLoaderTest {
 
             //then:
             assertEquals(DefaultModuleConfig.isUseCrossSiteOriginFilter(configuration), false);
-            assertEquals(configuration.getProperty(DefaultModuleConfig.USE_CROSS_SITE_ORIGIN_FILTER), "false");
+            assertEquals(configuration.getProperty(DefaultModuleConfig.USE_CROSS_SITE_ORIGIN_FILTER, null), "false");
         } catch (Exception e) {
             fail("Error in test", e);
         }
@@ -78,9 +78,9 @@ public class ConfigurationFileLoaderTest {
             configuration.setProperty("test-key", null);
 
             //then:
-            assertEquals(configuration.getProperty("test-key"), null);
+            assertEquals(configuration.getProperty("test-key", null), null);
             assertEquals(configuration.getProperty("test-key", "a"), "a");
-            assertEquals(configuration.getProperty(TestConfigurationProvider.PROPERTY_3_NAME), null);
+            assertEquals(configuration.getProperty(TestConfigurationProvider.PROPERTY_3_NAME, null), null);
             assertFalse(configuration.getPropertyKeys().contains("test-key"));
             assertFalse(configuration.getPropertyKeys().contains(TestConfigurationProvider.PROPERTY_3_NAME));
         } catch (Exception e) {
@@ -99,7 +99,7 @@ public class ConfigurationFileLoaderTest {
             configuration.setProperty("test-key", null);
 
             //then:
-            assertEquals(configuration.getProperty("test-key"), "a");
+            assertEquals(configuration.getProperty("test-key", null), "a");
             assertEquals(configuration.getProperty("test-key", "b"), "a");
             assertTrue(configuration.getPropertyKeys().contains("test-key"));
         } catch (Exception e) {

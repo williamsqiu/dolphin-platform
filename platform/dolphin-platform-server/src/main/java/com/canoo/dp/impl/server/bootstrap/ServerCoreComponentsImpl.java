@@ -52,10 +52,6 @@ public class ServerCoreComponentsImpl implements ServerCoreComponents {
         return getInstance(PlatformConfiguration.class);
     }
 
-    public PlatformThreadFactory getThreadFactory() {
-        return getInstance(PlatformThreadFactory.class);
-    }
-
     public ClasspathScanner getClasspathScanner() {
         return getInstance(ClasspathScanner.class);
     }

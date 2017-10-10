@@ -21,6 +21,8 @@ import java.util.Set;
 /**
  * Defines a Dolphin Platform Session. For each client (each client context instance) one {@link ClientSession}
  * will be created on the server.
+ *
+ * @author Hendrik Ebbers
  */
 public interface ClientSession {
 
@@ -63,5 +65,9 @@ public interface ClientSession {
      */
     String getId();
 
+    /**
+     * Returns the Http session to that this client session belongs to.
+     * @return the http session
+     */
     HttpSession getHttpSession();
 }

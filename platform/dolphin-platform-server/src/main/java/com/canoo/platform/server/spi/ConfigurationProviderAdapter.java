@@ -19,6 +19,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * A simple implementation of {@link ConfigurationProvider} that can be used as a base for a custom implementation. By default all methods return an empty map.
+ *
+ * @author Hendrik Ebbers
+ */
 public class ConfigurationProviderAdapter implements ConfigurationProvider {
     @Override
     public Map<String, String> getStringProperties() {

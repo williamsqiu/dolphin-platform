@@ -20,6 +20,11 @@ import com.canoo.dp.impl.platform.core.Assert;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Abstract implementation of the {@link ServerModule} interface that can be used as a base to create new server module implementations.
+ *
+ * @author Hendrik Ebbers
+ */
 public abstract class AbstractBaseModule implements ServerModule {
 
     @Override
@@ -32,5 +37,9 @@ public abstract class AbstractBaseModule implements ServerModule {
         return Assert.requireNonNull(configuration, "configuration").getBooleanProperty(getActivePropertyName(), true);
     }
 
+    /**
+     * Returns the name of the property that will be used to check if the module is active or not. By default the module will be active. The property can be defined in the Dolphin Platform configuration (see {@link PlatformConfiguration}) as <code>false</code> to deactive the module
+     * @return the name of the property
+     */
     protected abstract String getActivePropertyName();
 }
