@@ -16,15 +16,7 @@
 package com.canoo.dolphin.integration.qualifier;
 
 
-import com.canoo.platform.remoting.server.binding.Qualifier;
-
 public interface QualifierTestConstants {
-
-    Qualifier<String> STRING_QUALIFIER = Qualifier.create();
-
-    Qualifier<Boolean> BOOLEAN_QUALIFIER = Qualifier.create();
-
-    Qualifier<Integer> INTEGER_QUALIFIER = Qualifier.create();
 
     String QUALIFIER_CONTROLLER_NAME = "QualifierController";
 

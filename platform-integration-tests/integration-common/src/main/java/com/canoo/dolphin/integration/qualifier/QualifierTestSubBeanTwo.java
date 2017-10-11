@@ -28,15 +28,15 @@ public class QualifierTestSubBeanTwo {
 
     private Property<String> stringProperty;
 
-    public Property<Boolean> booleanProperty() {
+    public Property<Boolean> getBooleanProperty() {
         return booleanProperty;
     }
 
-    public Property<Integer> integerProperty() {
+    public Property<Integer> getIntegerProperty() {
         return integerProperty;
     }
 
-    public Property<String> stringProperty() {
+    public Property<String> getStringProperty() {
         return stringProperty;
     }
 }

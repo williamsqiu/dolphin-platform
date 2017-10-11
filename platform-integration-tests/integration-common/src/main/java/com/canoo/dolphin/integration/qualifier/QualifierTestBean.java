@@ -21,15 +21,15 @@ import com.canoo.platform.remoting.Property;
 @DolphinBean
 public class QualifierTestBean {
 
-    private Property<QualifierTestSubBeanOne> subBeanlOneProperty;
+    private Property<QualifierTestSubBeanOne> subBeanOneProperty;
 
     private Property<QualifierTestSubBeanTwo> subBeanTwoProperty;
 
-    public Property<QualifierTestSubBeanOne> subBeanlOneProperty() {
-        return subBeanlOneProperty;
+    public Property<QualifierTestSubBeanOne> getSubBeanOneProperty() {
+        return subBeanOneProperty;
     }
 
-    public Property<QualifierTestSubBeanTwo> subBeanTwoProperty() {
+    public Property<QualifierTestSubBeanTwo> getSubBeanTwoProperty() {
         return subBeanTwoProperty;
     }
 }

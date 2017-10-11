@@ -24,6 +24,7 @@ import com.canoo.platform.remoting.server.DolphinAction;
 import com.canoo.platform.remoting.server.DolphinController;
 import com.canoo.platform.remoting.server.DolphinModel;
 import com.canoo.platform.remoting.server.binding.PropertyBinder;
+import com.canoo.platform.remoting.server.binding.Qualifier;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -31,11 +32,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.canoo.dolphin.integration.qualifier.QualifierTestConstants.BIND_ACTION;
-import static com.canoo.dolphin.integration.qualifier.QualifierTestConstants.BOOLEAN_QUALIFIER;
 import static com.canoo.dolphin.integration.qualifier.QualifierTestConstants.DUMMY_ACTION;
-import static com.canoo.dolphin.integration.qualifier.QualifierTestConstants.INTEGER_QUALIFIER;
 import static com.canoo.dolphin.integration.qualifier.QualifierTestConstants.QUALIFIER_CONTROLLER_NAME;
-import static com.canoo.dolphin.integration.qualifier.QualifierTestConstants.STRING_QUALIFIER;
 import static com.canoo.dolphin.integration.qualifier.QualifierTestConstants.UNBIND_ACTION;
 
 @DolphinController(QUALIFIER_CONTROLLER_NAME)
@@ -50,27 +48,33 @@ public class QualifierTestController {
     @Inject
     private PropertyBinder binder;
 
-    private List<Binding> bindings = new ArrayList<>();
+    final private List<Binding> bindings = new ArrayList<>();
+
+    private final static Qualifier<String> STRING_QUALIFIER = Qualifier.create();
+
+    private final static Qualifier<Boolean> BOOLEAN_QUALIFIER = Qualifier.create();
+
+    private final static Qualifier<Integer> INTEGER_QUALIFIER = Qualifier.create();
 
     @PostConstruct
     public void init() {
         QualifierTestSubBeanOne bean1 = beanManager.create(QualifierTestSubBeanOne.class);
-        model.subBeanlOneProperty().set(bean1);
+        model.getSubBeanOneProperty().set(bean1);
 
         QualifierTestSubBeanTwo bean2 = beanManager.create(QualifierTestSubBeanTwo.class);
-        model.subBeanTwoProperty().set(bean2);
+        model.getSubBeanTwoProperty().set(bean2);
 
         bind();
     }
 
     private void bind() {
-        bindings.add(binder.bind(model.subBeanlOneProperty().get().booleanProperty(), BOOLEAN_QUALIFIER));
-        bindings.add(binder.bind(model.subBeanlOneProperty().get().stringProperty(), STRING_QUALIFIER));
-        bindings.add(binder.bind(model.subBeanlOneProperty().get().integerProperty(), INTEGER_QUALIFIER));
+        bindings.add(binder.bind(model.getSubBeanOneProperty().get().getBooleanProperty(), BOOLEAN_QUALIFIER));
+        bindings.add(binder.bind(model.getSubBeanOneProperty().get().getStringProperty(), STRING_QUALIFIER));
+        bindings.add(binder.bind(model.getSubBeanOneProperty().get().getIntegerProperty(), INTEGER_QUALIFIER));
 
-        bindings.add(binder.bind(model.subBeanTwoProperty().get().booleanProperty(), BOOLEAN_QUALIFIER));
-        bindings.add(binder.bind(model.subBeanTwoProperty().get().stringProperty(), STRING_QUALIFIER));
-        bindings.add(binder.bind(model.subBeanTwoProperty().get().integerProperty(), INTEGER_QUALIFIER));
+        bindings.add(binder.bind(model.getSubBeanTwoProperty().get().getBooleanProperty(), BOOLEAN_QUALIFIER));
+        bindings.add(binder.bind(model.getSubBeanTwoProperty().get().getStringProperty(), STRING_QUALIFIER));
+        bindings.add(binder.bind(model.getSubBeanTwoProperty().get().getIntegerProperty(), INTEGER_QUALIFIER));
     }
 
     private void unbind() {
