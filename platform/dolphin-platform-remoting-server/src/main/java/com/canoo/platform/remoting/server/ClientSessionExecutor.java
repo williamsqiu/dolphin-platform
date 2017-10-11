@@ -20,6 +20,8 @@ import java.util.concurrent.Future;
 
 /**
  * The ClientSessionExecutor can be used to execute tasks later on a specific client session (see {@link com.canoo.platform.server.client.ClientSession}).
+ *
+ * @author Hendrik Ebbers
  */
 public interface ClientSessionExecutor {
 
@@ -30,6 +32,12 @@ public interface ClientSessionExecutor {
      */
     Future<Void> runLaterInClientSession(final Runnable runnable);
 
+    /**
+     * Executes the given task later in the given client session
+     * @param callable the task
+     * @param <T> the return type of the task
+     * @return a future that can be used to check the result of the task
+     */
     <T> Future<T> callLaterInClientSession(final Callable<T> callable);
 
 }
