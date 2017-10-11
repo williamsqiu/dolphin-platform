@@ -20,6 +20,8 @@ import org.slf4j.LoggerFactory;
 
 /**
  * General runtime exception for the Dolphin Platform
+ *
+ * @author Hendrik Ebbers
  */
 public class DolphinRuntimeException extends RuntimeException {
 

@@ -22,6 +22,11 @@ import com.canoo.platform.server.ServerListener;
  * interface that is annotated by {@link ServerListener} will be created at runtime
  * and fired whenever a {@link ClientSession} has been created or before it will be destroyed.
  * As long as the underlying platform supports it (like JavaEE or Spring) CDI is supported in listener implementations.
+ *
+ * @author Hendrik Ebbers
+ *
+ * @see ServerListener
+ * @see ClientSession
  */
 public interface ClientSessionListener {
 

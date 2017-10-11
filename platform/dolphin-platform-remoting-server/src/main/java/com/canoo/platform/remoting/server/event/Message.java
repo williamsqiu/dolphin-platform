@@ -19,6 +19,7 @@ import java.io.Serializable;
 
 /**
  * An message of the dolphin platform event bus (see {@link DolphinEventBus}).
+ * @author Hendrik Ebbers
  */
 public interface Message<T extends Serializable> extends Serializable{
 

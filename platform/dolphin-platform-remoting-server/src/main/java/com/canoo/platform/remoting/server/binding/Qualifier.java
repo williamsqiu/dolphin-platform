@@ -25,23 +25,44 @@ import java.util.UUID;
  *
  * @param <T> generic type of the property that can be bound by using the qualifier
  * @see PropertyBinder
+ *
+ * @author Hendrik Ebbers
  */
 public final class Qualifier<T> {
 
     private final String identifier;
 
+    /**
+     * Constructor
+     * @param identifier the unique identifier for this qualifier.
+     */
     public Qualifier(final String identifier) {
         this.identifier = Assert.requireNonNull(identifier, "identifier");
     }
 
+    /**
+     * Returns the unique identifier for this qualifier
+     * @return the unique identifier
+     */
     public String getIdentifier() {
         return identifier;
     }
 
+    /**
+     * Factory method that creates a qualifier with a generated unique identifier.
+     * @param <T> generic type of the property that can be bound by using the created qualifier
+     * @return the qualifier
+     */
     public static <T> Qualifier<T> create() {
         return new Qualifier<>(UUID.randomUUID().toString());
     }
 
+    /**
+     * Factory method that creates a qualifier with the given unique identifier.
+     * @param identifier the unique identifier
+     * @param <T>  generic type of the property that can be bound by using the created qualifier
+     * @return the qualifier
+     */
     public static <T> Qualifier<T> create(String identifier) {
         return new Qualifier<>(identifier);
     }

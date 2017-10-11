@@ -53,10 +53,6 @@ public final class DefaultPlatformConfiguration implements PlatformConfiguration
         return internalProperties.containsKey(key);
     }
 
-    public String getProperty(final String key) {
-        return getProperty(key, null);
-    }
-
     public boolean getBooleanProperty(final String key, final boolean defaultValue) {
         return Boolean.parseBoolean(internalProperties.getProperty(key, defaultValue + ""));
     }

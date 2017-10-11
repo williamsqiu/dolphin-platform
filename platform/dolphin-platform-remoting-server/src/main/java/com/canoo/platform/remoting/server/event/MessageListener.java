@@ -20,6 +20,8 @@ import java.io.Serializable;
 /**
  * A handler that can be registered to the dolphin message bus (see {@link DolphinEventBus})
  * to receive publish messages (see {@link Message}).
+ *
+ * @author Hendrik Ebbers
  */
 public interface MessageListener<T extends Serializable> {
 

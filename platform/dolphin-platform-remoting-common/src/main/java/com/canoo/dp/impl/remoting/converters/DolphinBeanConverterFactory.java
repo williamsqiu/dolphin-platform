@@ -15,20 +15,20 @@
  */
 package com.canoo.dp.impl.remoting.converters;
 
+import com.canoo.dp.impl.remoting.DolphinUtils;
 import com.canoo.platform.remoting.spi.converter.Converter;
 import com.canoo.platform.remoting.spi.converter.ConverterFactory;
+import com.canoo.platform.remoting.spi.converter.DolphinBeanRepo;
 import com.canoo.platform.remoting.spi.converter.ValueConverterException;
-import com.canoo.dp.impl.remoting.DolphinUtils;
-import com.canoo.dp.impl.remoting.BeanRepository;
 
 public class DolphinBeanConverterFactory implements ConverterFactory {
 
     public final static int FIELD_TYPE_DOLPHIN_BEAN = 0;
 
-    private DolphinBeanConverter converter;
+    private Converter<Object, String> converter;
 
     @Override
-    public void init(BeanRepository beanRepository) {
+    public void init(DolphinBeanRepo beanRepository) {
         this.converter = new DolphinBeanConverter(beanRepository);
     }
 
@@ -49,9 +49,9 @@ public class DolphinBeanConverterFactory implements ConverterFactory {
 
     private class DolphinBeanConverter extends AbstractStringConverter<Object> {
 
-        private final BeanRepository beanRepository;
+        private final DolphinBeanRepo beanRepository;
 
-        public DolphinBeanConverter(BeanRepository beanRepository) {
+        public DolphinBeanConverter(DolphinBeanRepo beanRepository) {
             this.beanRepository = beanRepository;
         }
 

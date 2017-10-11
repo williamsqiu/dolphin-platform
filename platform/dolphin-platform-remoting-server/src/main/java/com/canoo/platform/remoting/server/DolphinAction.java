@@ -42,6 +42,9 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * </pre>
  * </blockquote>
  *</p>
+ *
+ * @author Hendrik Ebbers
+ * @see DolphinController
  */
 @Documented
 @Retention(RUNTIME)

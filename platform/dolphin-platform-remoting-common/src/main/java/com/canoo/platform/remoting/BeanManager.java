@@ -64,6 +64,8 @@ import java.util.List;
  * </p>
  * <p>To deleta a synchronized model the {@link BeanManager} provides several methods. Here a developer can
  * for example choose to delete a specific instance (see {@link #remove(Object)}) or all instances for a given type (see {@link #removeAll(Class)}).</p>
+ *
+ * @author Hendrik Ebbers
  */
 public interface BeanManager {
 
@@ -99,6 +101,5 @@ public interface BeanManager {
      */
     @Deprecated
     <T> Subscription onAdded(Class<T> beanClass, BeanAddedListener<? super T> listener);
-
 
 }

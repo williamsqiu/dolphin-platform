@@ -16,15 +16,17 @@
 package com.canoo.platform.core.functional;
 
 /**
- * A basic function interface.
+ * A basic function interface. Might be replaced in future with the Java 8 interface once all Dolphin Platform modules depend on Java8.
  *
  * @param <T> type of the input value
  * @param <R> type of the ouput value
+ * @author Hendrik Ebbers
  */
 public interface Function<T, R> {
 
     /**
      * method of the function that will return a value based on the input value
+     *
      * @param t input value
      * @return output value
      */

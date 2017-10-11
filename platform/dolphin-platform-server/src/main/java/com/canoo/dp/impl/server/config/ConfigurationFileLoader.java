@@ -97,7 +97,7 @@ public class ConfigurationFileLoader {
         LOG.debug("Configuration created with {} properties", configuration.getPropertyKeys().size());
         if(LOG.isTraceEnabled()) {
             for(String key : configuration.getPropertyKeys()) {
-                LOG.debug("Dolphin Platform configured with '{}'='{}'", key, configuration.getProperty(key));
+                LOG.debug("Dolphin Platform configured with '{}'='{}'", key, configuration.getProperty(key, null));
             }
         }
 

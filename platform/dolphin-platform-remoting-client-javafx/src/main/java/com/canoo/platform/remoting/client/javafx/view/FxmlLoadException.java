@@ -15,6 +15,10 @@
  */
 package com.canoo.platform.remoting.client.javafx.view;
 
+/**
+ * Should be changed to {@link com.canoo.platform.core.DolphinRuntimeException}
+ */
+@Deprecated
 public class FxmlLoadException extends RuntimeException {
 
     private static final long serialVersionUID = -586158083991150489L;

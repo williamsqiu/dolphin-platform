@@ -28,15 +28,15 @@ public class HazelcastConfig implements Serializable {
     }
 
     public String getServerName() {
-        return configuration.getProperty(DistributedEventBusConfigProvider.HAZELCAST_SERVER_NAME);
+        return configuration.getProperty(DistributedEventBusConfigProvider.HAZELCAST_SERVER_NAME, null);
     }
 
     public String getServerPort() {
-        return configuration.getProperty(DistributedEventBusConfigProvider.HAZELCAST_SERVER_PORT);
+        return configuration.getProperty(DistributedEventBusConfigProvider.HAZELCAST_SERVER_PORT, null);
     }
 
     public String getGroupName() {
-        return configuration.getProperty(DistributedEventBusConfigProvider.HAZELCAST_GROUP_NAME);
+        return configuration.getProperty(DistributedEventBusConfigProvider.HAZELCAST_GROUP_NAME, null);
     }
 
 }

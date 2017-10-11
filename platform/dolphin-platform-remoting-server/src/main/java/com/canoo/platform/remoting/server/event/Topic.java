@@ -21,7 +21,9 @@ import java.util.UUID;
 /**
  * This class defines a topic for the {@link DolphinEventBus}. By using the event bus data messages can be withContent to
  * a specific topic. A topic is defined by it's name that means that each topic needs a unique name.
+ *
  * @param <T> the type of data that can be withContent to this topic
+ * @author Hendrik Ebbers
  */
 public class Topic<T extends Serializable> implements Serializable {
 
@@ -38,6 +40,7 @@ public class Topic<T extends Serializable> implements Serializable {
 
     /**
      * Constructor that creates a topic based on its name. This name must be unique.
+     *
      * @param name the name
      */
     public Topic(String name) {
@@ -46,6 +49,7 @@ public class Topic<T extends Serializable> implements Serializable {
 
     /**
      * Returns the name of the topic
+     *
      * @return name of the topic
      */
     public String getName() {
@@ -54,14 +58,20 @@ public class Topic<T extends Serializable> implements Serializable {
 
     /**
      * Convenience methods that creates a new topic based on the given unique name
+     *
      * @param uniqueName the name
-     * @param <T> the type of data that can be withContent to the created topic
+     * @param <T>        the type of data that can be send to the created topic
      * @return the topic
      */
     public static <T extends Serializable> Topic<T> create(String uniqueName) {
         return new Topic<>(uniqueName);
     }
 
+    /**
+     * Convenience methods that creates a new topic based on a generated unique name
+     * @param <T> the type of data that can be send to the created topic
+     * @return the topic
+     */
     public static <T extends Serializable> Topic<T> create() {
         return new Topic<>();
     }

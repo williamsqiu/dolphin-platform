@@ -26,6 +26,7 @@ import javafx.stage.Window;
  *
  * @param <M> type of the model
  */
+@Deprecated
 public class DolphinWindow<M> extends Window {
 
     /**

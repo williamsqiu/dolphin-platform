@@ -20,17 +20,48 @@ import com.canoo.platform.remoting.server.binding.PropertyBinder;
 import com.canoo.platform.server.client.ClientSession;
 import com.canoo.platform.remoting.server.event.DolphinEventBus;
 
+/**
+ * Facade to get access to all instances of a Dolphin Platform remoting context. Each {@link ClientSession} that uses the remoting layer of Dolphin Platform will contain exactly one remoting context.
+ *
+ * This is a util interface that normally is not needed for application developers since all needed parts of the context can be injected directly in Dolphin Platform controller classes or other managed beans.
+ *
+ * @author Hendrik Ebbers
+ */
 public interface RemotingContext {
 
+    /**
+     * Return the id of the context.
+     * @return the id
+     */
     String getId();
 
+    /**
+     * Return the executor for the context
+     * @return the executor
+     */
     ClientSessionExecutor createSessionExecutor();
 
+    /**
+     * Return the binder for the context
+     * @return the binder
+     */
     PropertyBinder getBinder();
 
+    /**
+     * Returns the bean manager for the context
+     * @return the bean manager
+     */
     BeanManager getBeanManager();
 
+    /**
+     * Returns the event bus for the context
+     * @return the event bus
+     */
     DolphinEventBus getEventBus();
 
+    /**
+     * Returns the client session for the context
+     * @return the client session
+     */
     ClientSession getClientSession();
 }

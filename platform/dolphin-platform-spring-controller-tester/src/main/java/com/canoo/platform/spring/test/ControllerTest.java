@@ -20,6 +20,8 @@ import com.canoo.platform.remoting.server.DolphinController;
 /**
  * Basic interface for testing a Dolpgin Platform controller (see {@link DolphinController}).
  * The interface provides testable controllers.
+ *
+ * @author Hendrik Ebbers
  */
 public interface ControllerTest {
 

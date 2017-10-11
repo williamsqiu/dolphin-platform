@@ -33,6 +33,8 @@ package com.canoo.platform.core.functional;
  * </pre>
  * </blockquote>
  *
+ * @author Hendrik Ebbers
+ *
  */
 public interface Subscription {
 

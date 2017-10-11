@@ -22,6 +22,16 @@ import java.lang.annotation.Target;
 
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
+/**
+ * Can you used to annotate a method in a dolphin controller (see {@link DolphinController}) as an event handler that will automatically be called if a child controller of the given controller will be destroyed (see client API).
+ * The method must have exactly one parameter that is of the class or superclass / interface of the child controller.
+ *
+ * @author Hendrik Ebbers
+ *
+ * @see DolphinController
+ * @see ParentController
+ * @see PostChildCreated
+ */
 @Documented
 @Retention(RUNTIME)
 @Target(ElementType.METHOD)

@@ -30,7 +30,5 @@ public class ListEventSessionFilter implements EventSessionFilter {
     public boolean shouldHandleEvent(String s) {
         return sessionIds.contains(s);
     }
-
-
 }
 

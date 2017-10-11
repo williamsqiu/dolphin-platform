@@ -17,22 +17,40 @@ package com.canoo.platform.spring.test;
 
 /**
  * Exception that is used when testing controllers.
+ *
+ * @author Hendrik Ebbers
  */
 public class ControllerTestException extends RuntimeException {
 
     private static final long serialVersionUID = 3143922465764428023L;
 
+    /**
+     * Constructor
+     */
     public ControllerTestException() {
     }
 
+    /**
+     * Constructor
+     * @param message detailed message
+     */
     public ControllerTestException(String message) {
         super(message);
     }
 
+    /**
+     * Constructor
+     * @param message detailed message
+     * @param cause the cause
+     */
     public ControllerTestException(String message, Throwable cause) {
         super(message, cause);
     }
 
+    /**
+     * Constructor
+     * @param cause the cause
+     */
     public ControllerTestException(Throwable cause) {
         super(cause);
     }

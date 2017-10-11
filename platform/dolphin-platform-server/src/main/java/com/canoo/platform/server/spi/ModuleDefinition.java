@@ -19,14 +19,29 @@ import java.lang.annotation.*;
 
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
+/**
+ * Annotation to define a module. Each module that should be started at the server / Dolphin Platform start.
+ *
+ * @see ServerModule
+ *
+ * @author Hendrik Ebbers
+ */
 @Documented
 @Inherited
 @Retention(RUNTIME)
 @Target(ElementType.TYPE)
 public @interface ModuleDefinition {
 
+    /**
+     * The name of the module
+     * @return the name
+     */
     String value();
 
+    /**
+     * Defines the order number of the module. All modules will be started sorted by its order number.
+     * @return the order number of the module
+     */
     int order() default 100;
 
 }
