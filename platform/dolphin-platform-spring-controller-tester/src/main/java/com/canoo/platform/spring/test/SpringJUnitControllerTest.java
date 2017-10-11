@@ -29,6 +29,12 @@ import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 
 /**
  * Base class for JUnit based controller tests in Spring. This class can be extended to write custom controller tests.
+ *
+ * @see ControllerTest
+ * @see AbstractJUnit4SpringContextTests
+ * @see ControllerUnderTest
+ *
+ * @author Hendrik Ebbers
  */
 @SpringBootTest
 @ContextConfiguration(classes = DolphinPlatformSpringTestBootstrap.class)

@@ -22,18 +22,22 @@ import com.canoo.platform.remoting.server.DolphinController;
 
 /**
  * Provides acces to a controller (see {@link DolphinController}) and its model for tests
+ *
  * @param <T> type of the model
+ * @author Hendrik Ebbers
  */
 public interface ControllerUnderTest<T> {
 
     /**
      * Returns the model of the controller (see {@link DolphinBean})
+     *
      * @return the model
      */
     T getModel();
 
     /**
      * Invokes an action on the controller. See {@link DolphinAction}
+     *
      * @param actionName
      * @param params
      */

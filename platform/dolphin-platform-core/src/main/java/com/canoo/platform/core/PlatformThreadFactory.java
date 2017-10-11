@@ -19,6 +19,8 @@ import java.util.concurrent.ThreadFactory;
 
 /**
  * Thread factory for the Dolphin Platform
+ *
+ * @author Hendrik Ebbers
  */
 public interface PlatformThreadFactory extends ThreadFactory {
 

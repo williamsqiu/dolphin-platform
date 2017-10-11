@@ -15,9 +15,9 @@
  */
 package com.canoo.platform.spring.test;
 
+import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.impl.dp.spring.test.ClientTestFactory;
 import com.canoo.impl.dp.spring.test.DolphinPlatformSpringTestBootstrap;
-import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.remoting.client.ClientContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -29,6 +29,11 @@ import org.testng.annotations.BeforeMethod;
 
 /**
  * Base class for TestNG based controller tests in Spring. This class can be extended to write custom controller tests.
+ *
+ * @author Hendrik Ebbers
+ * @see ControllerTest
+ * @see AbstractTestNGSpringContextTests
+ * @see ControllerUnderTest
  */
 @SpringBootTest
 @ContextConfiguration(classes = DolphinPlatformSpringTestBootstrap.class)
@@ -38,6 +43,9 @@ public abstract class SpringTestNGControllerTest extends AbstractTestNGSpringCon
     @Autowired
     private ClientContext clientContext;
 
+    /**
+     * Methods that is called before each tests and automatically creates a connection to the server
+     */
     @BeforeMethod(alwaysRun = true)
     protected void connectClientContext() {
         try {
@@ -47,6 +55,9 @@ public abstract class SpringTestNGControllerTest extends AbstractTestNGSpringCon
         }
     }
 
+    /**
+     * Method that is called after each tests and automatically disconnects the connection to the server
+     */
     @AfterMethod(alwaysRun = true)
     protected void disconnectClientContext() {
         try {

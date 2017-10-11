@@ -16,14 +16,16 @@
 package com.canoo.platform.core.functional;
 
 /**
- * A basic provider interface.
+ * A basic provider interface. Might be replaced in future with the Java 8 interface once all Dolphin Platform modules depend on Java8.
  *
  * @param <T> type of the values that will be provided
+ * @author Hendrik Ebbers
  */
 public interface Provider<T> {
 
     /**
      * provides a value
+     *
      * @return the provided value
      */
     T get();

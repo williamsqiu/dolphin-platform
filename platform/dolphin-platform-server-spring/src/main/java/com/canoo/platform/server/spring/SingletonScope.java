@@ -11,6 +11,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * A Spring {@link Scope} annotation for the singleton scope
+ *
+ * @author Hendrik Ebbers
+ */
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Documented
 @Target({ ElementType.TYPE, ElementType.METHOD })

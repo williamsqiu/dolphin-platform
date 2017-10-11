@@ -28,6 +28,8 @@ import java.lang.annotation.Target;
 
 /**
  * A custom scope that is bound to the lifecycle of a {@link com.canoo.platform.server.client.ClientSession}
+ *
+ * @author Hendrik Ebbers
  */
 @Scope(ClientScopeImpl.CLIENT_SCOPE)
 @Documented
