@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.platform.server.spi;
+package com.canoo.platform.core;
 
 import java.io.Serializable;
 import java.util.*;
 
 /**
- * Provides access to the server configuration of the Dolphin Platform.
+ * Provides access to the configuration of the Dolphin Platform.
  */
 public interface PlatformConfiguration extends Serializable {
 

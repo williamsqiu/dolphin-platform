@@ -35,7 +35,7 @@ import com.canoo.platform.server.client.ClientSession;
 import com.canoo.platform.server.spi.ClasspathScanner;
 import com.canoo.platform.server.spi.ModuleDefinition;
 import com.canoo.platform.server.spi.ModuleInitializationException;
-import com.canoo.platform.server.spi.PlatformConfiguration;
+import com.canoo.platform.core.PlatformConfiguration;
 import com.canoo.platform.server.spi.ServerCoreComponents;
 import com.canoo.platform.server.spi.ServerModule;
 import org.slf4j.Logger;
