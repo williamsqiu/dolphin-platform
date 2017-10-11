@@ -1,19 +1,17 @@
 package com.canoo.platform.client.http;
 
-import java.io.IOException;
-
 public interface HttpRequest {
 
-    HttpResponse withContent(byte[] content) throws IOException;
+    HttpResponse withContent(byte[] content);
 
-    HttpResponse withContent(byte[] content, String contentType) throws IOException;
+    HttpResponse withContent(byte[] content, String contentType);
 
-    HttpResponse withContent(String content) throws IOException;
+    HttpResponse withContent(String content);
 
-    HttpResponse withContent(String content, String contentType) throws IOException;
+    HttpResponse withContent(String content, String contentType);
 
-    <I> HttpResponse withContent(I content) throws IOException;
+    <I> HttpResponse withContent(I content);
 
-    HttpResponse withoutContent() throws IOException;
+    HttpResponse withoutContent();
 
 }

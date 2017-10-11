@@ -72,4 +72,19 @@ public class HttpClientImpl implements HttpClient {
         connection.setRequestMethod(method.getRawName());
         return new HttpRequestImpl(connection, gson, requestHandlers, responseHandlers, configuration);
     }
+
+    @Override
+    public HttpRequest request(String url, RequestMethod method) throws IOException {
+        return request(new URL(url), method);
+    }
+
+    @Override
+    public HttpRequest request(URL url) throws IOException {
+        return request(url, RequestMethod.GET);
+    }
+
+    @Override
+    public HttpRequest request(String url) throws IOException {
+        return request(url, RequestMethod.GET);
+    }
 }

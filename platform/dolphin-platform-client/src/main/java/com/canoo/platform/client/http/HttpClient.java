@@ -1,6 +1,5 @@
 package com.canoo.platform.client.http;
 
-import java.io.IOException;
 import java.net.URL;
 
 public interface HttpClient {
@@ -9,6 +8,11 @@ public interface HttpClient {
 
     void addRequestHandler(final HttpURLConnectionHandler handler);
 
-    HttpRequest request(URL url, RequestMethod method) throws IOException;
+    HttpRequest request(URL url, RequestMethod method);
 
+    HttpRequest request(String url, RequestMethod method);
+
+    HttpRequest request(URL url);
+
+    HttpRequest request(String url);
 }
