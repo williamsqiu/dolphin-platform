@@ -21,15 +21,19 @@ import com.canoo.dp.impl.client.legacy.ClientModelStore;
 import com.canoo.dp.impl.client.legacy.DefaultModelSynchronizer;
 import com.canoo.dp.impl.client.legacy.communication.AbstractClientConnector;
 import com.canoo.dp.impl.client.legacy.communication.SimpleExceptionHandler;
+import com.canoo.dp.impl.platform.client.http.HttpClientImpl;
+import com.canoo.dp.impl.platform.client.http.HttpStatus;
 import com.canoo.dp.impl.platform.core.PlatformConstants;
 import com.canoo.dp.impl.remoting.commands.CreateContextCommand;
 import com.canoo.dp.impl.remoting.legacy.communication.Command;
 import com.canoo.dp.impl.remoting.legacy.communication.CreatePresentationModelCommand;
 import com.canoo.dp.impl.remoting.legacy.communication.JsonCodec;
 import com.canoo.dp.impl.remoting.legacy.util.Provider;
-import com.canoo.platform.client.HttpURLConnectionFactory;
+import com.canoo.platform.client.http.HttpClient;
+import com.canoo.platform.client.http.HttpURLConnectionFactory;
 import com.canoo.platform.remoting.DolphinRemotingException;
 import com.canoo.platform.remoting.client.ClientConfiguration;
+import com.google.gson.Gson;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -49,7 +53,7 @@ public class TestDolphinPlatformHttpClientConnector {
 
     @Test
     public void testSimpleCall() throws DolphinRemotingException {
-        ClientConfiguration clientConfiguration = new ClientConfiguration(getDummyURL(), new DummyUiThreadHandler());
+        final ClientConfiguration clientConfiguration = new ClientConfiguration(getDummyURL(), new DummyUiThreadHandler());
         clientConfiguration.setConnectionFactory(new HttpURLConnectionFactory() {
             @Override
             public HttpURLConnection create(URL url) throws IOException {
@@ -67,6 +71,11 @@ public class TestDolphinPlatformHttpClientConnector {
                     @Override
                     public void connect() throws IOException {
 
+                    }
+
+                    @Override
+                    public int getResponseCode() throws IOException {
+                        return HttpStatus.HTTP_OK;
                     }
 
                     @Override
@@ -82,7 +91,7 @@ public class TestDolphinPlatformHttpClientConnector {
 
                     @Override
                     public String getHeaderField(String name) {
-                        if(PlatformConstants.CLIENT_ID_HTTP_HEADER_NAME.equals(name)) {
+                        if (PlatformConstants.CLIENT_ID_HTTP_HEADER_NAME.equals(name)) {
                             return "TEST-ID";
                         }
                         return super.getHeaderField(name);
@@ -91,18 +100,20 @@ public class TestDolphinPlatformHttpClientConnector {
             }
         });
 
-        ClientModelStore clientModelStore = new ClientModelStore(new DefaultModelSynchronizer(new Provider<AbstractClientConnector>() {
+        final HttpClient httpClient = new HttpClientImpl(new Gson(), clientConfiguration.getConnectionFactory());
+
+        final ClientModelStore clientModelStore = new ClientModelStore(new DefaultModelSynchronizer(new Provider<AbstractClientConnector>() {
             @Override
             public AbstractClientConnector get() {
                 return null;
             }
         }));
-        DolphinPlatformHttpClientConnector connector = new DolphinPlatformHttpClientConnector(clientConfiguration, clientModelStore, new JsonCodec(), new SimpleExceptionHandler());
+        final DolphinPlatformHttpClientConnector connector = new DolphinPlatformHttpClientConnector(clientConfiguration, clientModelStore, new JsonCodec(), new SimpleExceptionHandler(), httpClient);
 
-        CreatePresentationModelCommand command = new CreatePresentationModelCommand();
+        final CreatePresentationModelCommand command = new CreatePresentationModelCommand();
         command.setPmId("p1");
         Command rawCommand = command;
-        List<Command> result = connector.transmit(Collections.singletonList(rawCommand));
+        final List<Command> result = connector.transmit(Collections.singletonList(rawCommand));
 
         Assert.assertEquals(result.size(), 1);
         Assert.assertTrue(result.get(0) instanceof CreatePresentationModelCommand);
@@ -112,7 +123,7 @@ public class TestDolphinPlatformHttpClientConnector {
     @Test(expectedExceptions = DolphinRemotingException.class)
     public void testBadResponse() throws DolphinRemotingException {
 
-        ClientConfiguration clientConfiguration = new ClientConfiguration(getDummyURL(), new DummyUiThreadHandler());
+        final ClientConfiguration clientConfiguration = new ClientConfiguration(getDummyURL(), new DummyUiThreadHandler());
         clientConfiguration.setConnectionFactory(new HttpURLConnectionFactory() {
             @Override
             public HttpURLConnection create(URL url) throws IOException {
@@ -141,15 +152,16 @@ public class TestDolphinPlatformHttpClientConnector {
             }
         });
 
-        ClientModelStore clientModelStore =  new ClientModelStore(new DefaultModelSynchronizer(new Provider<AbstractClientConnector>() {
+        final ClientModelStore clientModelStore = new ClientModelStore(new DefaultModelSynchronizer(new Provider<AbstractClientConnector>() {
             @Override
             public AbstractClientConnector get() {
                 return null;
             }
         }));
-        DolphinPlatformHttpClientConnector connector = new DolphinPlatformHttpClientConnector(clientConfiguration, clientModelStore, new JsonCodec(), new SimpleExceptionHandler());
 
-        List<Command> commands = new ArrayList<>();
+        final DolphinPlatformHttpClientConnector connector = new DolphinPlatformHttpClientConnector(clientConfiguration, clientModelStore, new JsonCodec(), new SimpleExceptionHandler(), new HttpClientImpl(new Gson()));
+
+        final List<Command> commands = new ArrayList<>();
         commands.add(new CreateContextCommand());
         connector.transmit(commands);
     }

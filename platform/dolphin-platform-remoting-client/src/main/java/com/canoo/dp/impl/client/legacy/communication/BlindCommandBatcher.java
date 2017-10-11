@@ -137,7 +137,7 @@ public class BlindCommandBatcher extends CommandBatcher {
             public void run() {
                 getCommandsAndHandlersLock().lock();
                 try {
-                    CommandAndHandler last = batchBlinds(getCommandsAndHandlers());// always send leading blinds first
+                    CommandAndHandler last = batchBlinds(getCommandsAndHandlers());// always withContent leading blinds first
                     if (last != null) {
                         // we do have a trailing command with handler and batch it separately
                         getWaitingBatches().add(Arrays.asList(last));

@@ -43,7 +43,7 @@ public class ClientDolphin implements Dolphin<ClientAttribute, ClientPresentatio
     }
 
     /**
-     * both java- and groovy-friendly convenience method to send an empty command, which will have no
+     * both java- and groovy-friendly convenience method to withContent an empty command, which will have no
      * presentation models nor data in the callback
      */
     @Deprecated

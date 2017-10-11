@@ -1,8 +1,8 @@
-package com.canoo.dp.impl.platform.client;
+package com.canoo.dp.impl.platform.client.session;
 
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.platform.core.PlatformConstants;
-import com.canoo.platform.client.HttpURLConnectionHandler;
+import com.canoo.platform.client.http.HttpURLConnectionHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,10 +23,10 @@ public class ClientSessionSupportingURLConnectionRequestHandler implements HttpU
         Assert.requireNonNull(request, "request");
         final String clientId = clientSessionStore.getClientIdentifierForUrl(request.getURL());
         if (clientId != null) {
-            LOG.debug("Adding client id {} to http request", clientId);
+            LOG.debug("Adding client id {} to http request at {}", clientId, request.getURL());
             request.setRequestProperty(PlatformConstants.CLIENT_ID_HTTP_HEADER_NAME, clientId);
         } else {
-            LOG.debug("Sending first request to application at {}. Dolphin client id not defined.", request.getURL());
+            LOG.debug("Sending request to application at {} without client id. Client id not defined until now.", request.getURL());
         }
     }
 }

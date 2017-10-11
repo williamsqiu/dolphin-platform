@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.platform.client;
+package com.canoo.platform.client.http;
 
 import java.net.HttpURLConnection;
 

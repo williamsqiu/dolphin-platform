@@ -26,7 +26,7 @@ import java.util.concurrent.CompletableFuture;
  * method on teh client the server side controller will be destroyed, too. Otherwiese the controller on the server will
  * automatically be destroyed when the client will be exited or the {@link ClientContext} will be disconnected (see {@link ClientContext#disconnect()}).
  */
-public interface ControllerProxy<T> {
+public interface ControllerProxy<T> extends ControllerFactory{
 
     /**
      * Returns the model aof the defined MVC group. This model will automatically be synchronized with the server. If no

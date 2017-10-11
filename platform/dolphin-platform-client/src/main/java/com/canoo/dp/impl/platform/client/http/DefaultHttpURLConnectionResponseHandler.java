@@ -13,23 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.platform.client;
+package com.canoo.dp.impl.platform.client.http;
 
-import java.io.IOException;
+import com.canoo.platform.client.http.HttpURLConnectionHandler;
+
 import java.net.HttpURLConnection;
-import java.net.URL;
 
-/**
- * Factory interface to create a url connection
- */
-public interface HttpURLConnectionFactory {
+public class DefaultHttpURLConnectionResponseHandler implements HttpURLConnectionHandler {
 
-    /**
-     * Creates a url connection for the given url
-     * @param url the url
-     * @return the connection
-     * @throws IOException if the connection can not be created
-     */
-    HttpURLConnection create(URL url) throws IOException;
+    @Override
+    public void handle(HttpURLConnection response) {
 
+    }
 }

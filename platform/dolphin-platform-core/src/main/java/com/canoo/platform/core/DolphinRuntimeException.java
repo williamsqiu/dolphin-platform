@@ -29,24 +29,33 @@ public class DolphinRuntimeException extends RuntimeException {
 
     private final transient Thread thread;
 
+
+    public DolphinRuntimeException(final String s) {
+        super(s);
+        this.thread = Thread.currentThread();
+    }
+
+
     /**
      * Constructor
+     *
      * @param message message of the exception
-     * @param cause cause of the exception
+     * @param cause   cause of the exception
      */
-    public DolphinRuntimeException(String message, Throwable cause) {
+    public DolphinRuntimeException(final String message, final Throwable cause) {
         this(Thread.currentThread(), message, cause);
     }
 
     /**
      * Constructor
-     * @param thread Thread in that the exception happend
+     *
+     * @param thread  Thread in that the exception happend
      * @param message message of the exception
-     * @param cause cause of the exception
+     * @param cause   cause of the exception
      */
-    public DolphinRuntimeException(Thread thread, String message, Throwable cause) {
+    public DolphinRuntimeException(final Thread thread, final String message, final Throwable cause) {
         super(message, cause);
-        if(thread != null) {
+        if (thread != null) {
             this.thread = thread;
         } else {
             LOG.error("Can not specify thread for Dolphin Platform runtime error!");
@@ -56,6 +65,7 @@ public class DolphinRuntimeException extends RuntimeException {
 
     /**
      * Returns the thread in that this exception was created
+     *
      * @return the thread in that this exception was created
      */
     public Thread getThread() {

@@ -36,7 +36,7 @@ public interface Message<T extends Serializable> extends Serializable{
     T getData();
 
     /**
-     * Returns the timestamp of the send date of this message
+     * Returns the timestamp of the withContent date of this message
      * @return the timestamp
      */
     long getSendTimestamp();

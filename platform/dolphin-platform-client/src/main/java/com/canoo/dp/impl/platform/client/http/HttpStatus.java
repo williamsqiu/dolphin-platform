@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.dp.impl.platform.client;
+package com.canoo.dp.impl.platform.client.http;
 
 public interface HttpStatus {
 

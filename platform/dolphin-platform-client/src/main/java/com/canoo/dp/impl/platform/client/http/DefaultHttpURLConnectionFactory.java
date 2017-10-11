@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.dp.impl.platform.client;
+package com.canoo.dp.impl.platform.client.http;
 
 import com.canoo.dp.impl.platform.core.Assert;
-import com.canoo.platform.client.HttpURLConnectionFactory;
+import com.canoo.platform.client.http.HttpURLConnectionFactory;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;

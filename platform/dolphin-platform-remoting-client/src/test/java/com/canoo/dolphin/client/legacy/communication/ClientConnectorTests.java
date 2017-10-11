@@ -317,11 +317,6 @@ public class ClientConnectorTests {
             return result;
         }
 
-        @Override
-        public String getClientId() {
-            return null;
-        }
-
         public List<Command> transmitCommand(Command command) {
             System.out.print("transmitCommand: " + command);
 

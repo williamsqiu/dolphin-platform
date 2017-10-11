@@ -193,7 +193,7 @@ public class ServerModelStore extends ModelStore<ServerAttribute, ServerPresenta
     }
 
     /**
-     * Create a presentation model on the server side, add it to the model store, and send a command to
+     * Create a presentation model on the server side, add it to the model store, and withContent a command to
      * the client, advising him to do the same.
      *
      * @throws IllegalArgumentException if a presentation model for this id already exists. No commands are sent in this case.

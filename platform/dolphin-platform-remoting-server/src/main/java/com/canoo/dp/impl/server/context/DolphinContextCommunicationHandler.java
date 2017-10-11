@@ -150,7 +150,7 @@ public class DolphinContextCommunicationHandler {
             add(clientSession, createdContext);
             return createdContext;
         }
-        throw new IllegalStateException("No dolphin context is defined and no init command is send.");
+        throw new IllegalStateException("No dolphin context is defined and no init command is withContent.");
     }
 
     private boolean containsInitCommand(final List<Command> commands) {

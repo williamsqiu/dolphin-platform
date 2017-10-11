@@ -57,11 +57,6 @@ public class DolphinTestClientConnector extends AbstractClientConnector {
     }
 
     @Override
-    public String getClientId() {
-        return null;
-    }
-
-    @Override
     public void send(Command command, OnFinishedHandler callback) {
         List<Command> answer = transmit(new ArrayList<>(Arrays.asList(command)));
         CommandAndHandler handler = new CommandAndHandler(command, callback);

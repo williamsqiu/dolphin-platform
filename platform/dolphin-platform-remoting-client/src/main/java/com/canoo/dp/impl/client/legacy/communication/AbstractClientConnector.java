@@ -140,7 +140,7 @@ public abstract class AbstractClientConnector {
     protected abstract List<Command> transmit(final List<Command> commands) throws DolphinRemotingException;
 
     public void send(final Command command, final OnFinishedHandler callback, final HandlerType handlerType) {
-        LOG.trace("Command of type {} should be send to server", command.getClass().getSimpleName());
+        LOG.trace("Command of type {} should be withContent to server", command.getClass().getSimpleName());
         if (!connectedFlag.get()) {
             //TODO: Change to DolphinRemotingException
             throw new IllegalStateException("Connection is broken");
@@ -283,5 +283,4 @@ public abstract class AbstractClientConnector {
         return releaseCommand;
     }
 
-    public abstract String getClientId();
 }
