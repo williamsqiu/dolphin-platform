@@ -17,6 +17,8 @@ package com.canoo.platform.remoting;
 
 /**
  * Defines a function interface that is used to handle an unbind of an binding.
+ *
+ * @author Hendrik Ebbers
  */
 public interface Binding {
 

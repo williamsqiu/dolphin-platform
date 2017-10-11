@@ -17,15 +17,26 @@ package com.canoo.platform.remoting;
 
 /**
  * This exception is thrown if an error occurs in the protocol (request / response body)
+ *
+ * @author Hendrik Ebbers
  */
 public class DolphinRemotingException extends Exception {
 
     private static final long serialVersionUID = 1934440187016337212L;
 
+    /**
+     * Constructor
+     * @param message the detailed message
+     */
     public DolphinRemotingException(String message) {
         super(message);
     }
 
+    /**
+     * Constructor
+     * @param message the detailed message
+     * @param cause the cause
+     */
     public DolphinRemotingException(String message, Throwable cause) {
         super(message, cause);
     }

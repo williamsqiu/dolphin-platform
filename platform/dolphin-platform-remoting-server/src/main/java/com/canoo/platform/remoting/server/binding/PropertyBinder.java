@@ -22,6 +22,8 @@ import com.canoo.platform.remoting.Property;
  * A component that can be use to create bindings between properties (see {@link Property}). All properties that are
  * bound to the same qualifier (see {@link Qualifier}) will be automatically updated once one of the properties change
  * its value.
+ *
+ * @author Hendrik Ebbers
  */
 public interface PropertyBinder {
 

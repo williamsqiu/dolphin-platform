@@ -15,16 +15,38 @@
  */
 package com.canoo.platform.remoting.spi.converter;
 
+/**
+ * Exception that is thrown if a data convertion ends in an error.
+ *
+ * @author Hendrik Ebbers
+ * @see Converter
+ */
 public class ValueConverterException extends Exception {
 
+    /**
+     * Constructor
+     *
+     * @param message detailed message
+     */
     public ValueConverterException(String message) {
         super(message);
     }
 
+    /**
+     * Constructor
+     *
+     * @param message detailed message
+     * @param cause   the cause
+     */
     public ValueConverterException(String message, Throwable cause) {
         super(message, cause);
     }
 
+    /**
+     * Constructor
+     *
+     * @param cause the cause
+     */
     public ValueConverterException(Throwable cause) {
         super(cause);
     }

@@ -15,10 +15,33 @@
  */
 package com.canoo.platform.remoting.spi.converter;
 
+/**
+ * A converter interface that convert custom data types to the internally supported data types of Dolphin Platform.
+ *
+ * @param <B> type of the custom data
+ * @param <D> type of the internal Dolphin Platform supported data types that represents the custom data. Converter will be provided by custom implementations of the {@link ConverterFactory} interface.
+ * @author Hendrik Ebbers
+ * @see com.canoo.platform.remoting.Property
+ * @see com.canoo.platform.remoting.DolphinBean
+ * @see ConverterFactory
+ */
 public interface Converter<B, D> {
 
+    /**
+     * Converts the given data in a Dolphin Platform supported data type to the custom data type
+     *
+     * @param value the data in a Dolphin Platform supported data type
+     * @return data in the custom data type
+     * @throws ValueConverterException if the data can not be converted
+     */
     B convertFromDolphin(D value) throws ValueConverterException;
 
+    /**
+     * Converts the given data to a Dolphin Platform supported data type
+     * @param value the data in the custom data type
+     * @return the data in a Dolphin Platform supported data type
+     * @throws ValueConverterException if the data can not be converted
+     */
     D convertToDolphin(B value) throws ValueConverterException;
 
 }

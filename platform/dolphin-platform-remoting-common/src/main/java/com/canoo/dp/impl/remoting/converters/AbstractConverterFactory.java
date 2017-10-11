@@ -16,12 +16,12 @@
 package com.canoo.dp.impl.remoting.converters;
 
 import com.canoo.platform.remoting.spi.converter.ConverterFactory;
-import com.canoo.dp.impl.remoting.BeanRepository;
+import com.canoo.platform.remoting.spi.converter.DolphinBeanRepo;
 
 public abstract class AbstractConverterFactory implements ConverterFactory {
 
     @Override
-    public void init(BeanRepository beanRepository) {
+    public void init(DolphinBeanRepo beanRepository) {
 
     }
 }
