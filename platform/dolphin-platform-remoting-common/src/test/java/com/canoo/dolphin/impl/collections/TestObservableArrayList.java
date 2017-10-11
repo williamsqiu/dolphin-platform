@@ -132,7 +132,7 @@ public class TestObservableArrayList {
         list.onChanged(new ListChangeListener<String>() {
             @Override
             public void listChanged(ListChangeEvent<? extends String> evt) {
-                System.out.println(evt.getChanges().get(0).);
+                System.out.println(evt.getChanges().get(0).getFrom()+" - "+evt.getChanges().get(0).getFrom());
             }
         });
         Assert.assertTrue(list.isEmpty());
