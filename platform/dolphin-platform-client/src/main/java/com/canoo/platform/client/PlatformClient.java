@@ -1,5 +1,6 @@
 package com.canoo.platform.client;
 
+import com.canoo.dp.impl.platform.client.DefaultClientConfiguration;
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.client.spi.ServiceProvider;
 import com.canoo.platform.core.DolphinRuntimeException;
@@ -9,13 +10,17 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.ServiceLoader;
 
-public class Services {
+public class PlatformClient {
 
-    private final static Services INSTANCE = new Services();
+    private static PlatformClient INSTANCE;
 
-    private final Map<Class, Object> services = new HashMap<>();
+    private final Map<Class, ServiceProvider> services = new HashMap<>();
 
-    private Services() {
+    private final ClientConfiguration clientConfiguration;
+
+    private PlatformClient() {
+        this.clientConfiguration = new DefaultClientConfiguration();
+
         final ServiceLoader<ServiceProvider> loader = ServiceLoader.load(ServiceProvider.class);
         final Iterator<ServiceProvider> iterator = loader.iterator();
         while (iterator.hasNext()) {
@@ -25,9 +30,7 @@ public class Services {
             if (services.containsKey(serviceClass)) {
                 throw new DolphinRuntimeException("Can not register more than 1 implementation for service type " + serviceClass);
             }
-            Object service = provider.getService(null);
-            Assert.requireNonNull(service, "service");
-            services.put(serviceClass, service);
+            services.put(serviceClass, provider);
         }
     }
 
@@ -38,9 +41,13 @@ public class Services {
 
     private <S> S getServiceImpl(final Class<S> serviceClass) {
         Assert.requireNonNull(serviceClass, "serviceClass");
-        S service = (S) services.get(serviceClass);
+        S service = (S) services.get(serviceClass).getService(clientConfiguration);
         Assert.requireNonNull(service, "service");
         return service;
+    }
+
+    public static ClientConfiguration getClientConfiguration() {
+        return getInstance().clientConfiguration;
     }
 
     public static <S> boolean hasService(final Class<S> serviceClass) {
@@ -51,7 +58,10 @@ public class Services {
         return getInstance().getServiceImpl(serviceClass);
     }
 
-    private static Services getInstance() {
+    private static synchronized PlatformClient getInstance() {
+        if(INSTANCE == null) {
+            INSTANCE = new PlatformClient();
+        }
         return INSTANCE;
     }
 }

@@ -19,7 +19,7 @@ import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.core.DolphinRuntimeException;
 import com.canoo.platform.remoting.client.ClientConfiguration;
 import com.canoo.platform.remoting.client.ClientContext;
-import com.canoo.platform.remoting.client.ClientContextFactory;
+import com.canoo.dp.impl.client.ClientContextFactoryImpl;
 import com.canoo.platform.remoting.client.ClientInitializationException;
 import com.canoo.platform.remoting.client.ClientShutdownException;
 import javafx.application.Application;
@@ -81,13 +81,13 @@ public abstract class DolphinPlatformApplication extends Application {
             });
             return configuration;
         } catch (MalformedURLException e) {
-            throw new ClientInitializationException("Client configuration cannot be created", e);
+            throw new ClientInitializationException("PlatformClient configuration cannot be created", e);
         }
     }
 
     private final ClientContext createClientContext(final ClientConfiguration clientConfiguration) throws Exception {
         Assert.requireNonNull(clientConfiguration, "clientConfiguration");
-        return ClientContextFactory.create(clientConfiguration);
+        return ClientContextFactoryImpl.create(clientConfiguration);
     }
 
     /**

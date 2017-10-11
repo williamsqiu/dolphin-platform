@@ -11,9 +11,9 @@ import java.net.HttpURLConnection;
  */
 public class ClientSessionSupportingURLConnectionResponseHandler implements HttpURLConnectionHandler {
 
-    private final ClientSessionStore clientSessionStore;
+    private final ClientSessionStoreImpl clientSessionStore;
 
-    public ClientSessionSupportingURLConnectionResponseHandler(final ClientSessionStore clientSessionStore) {
+    public ClientSessionSupportingURLConnectionResponseHandler(final ClientSessionStoreImpl clientSessionStore) {
         this.clientSessionStore = Assert.requireNonNull(clientSessionStore, "clientSessionStore");
     }
 

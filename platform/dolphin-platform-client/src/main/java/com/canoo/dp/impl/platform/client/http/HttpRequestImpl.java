@@ -2,6 +2,8 @@ package com.canoo.dp.impl.platform.client.http;
 
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.platform.core.PlatformConstants;
+import com.canoo.platform.client.ClientConfiguration;
+import com.canoo.platform.client.http.ByteArrayProvider;
 import com.canoo.platform.client.http.HttpRequest;
 import com.canoo.platform.client.http.HttpResponse;
 import com.canoo.platform.client.http.HttpURLConnectionHandler;
@@ -26,6 +28,8 @@ public class HttpRequestImpl implements HttpRequest {
 
     private final List<HttpURLConnectionHandler> responseHandlers;
 
+    private final ClientConfiguration configuration;
+
     private ByteArrayProvider dataProvider = new ByteArrayProvider() {
         @Override
         public byte[] get() {
@@ -33,9 +37,10 @@ public class HttpRequestImpl implements HttpRequest {
         }
     };
 
-    public HttpRequestImpl(final HttpURLConnection connection, final Gson gson, final List<HttpURLConnectionHandler> requestHandlers, final List<HttpURLConnectionHandler> responseHandlers) {
+    public HttpRequestImpl(final HttpURLConnection connection, final Gson gson, final List<HttpURLConnectionHandler> requestHandlers, final List<HttpURLConnectionHandler> responseHandlers, ClientConfiguration configuration) {
         this.connection = Assert.requireNonNull(connection, "connection");
         this.gson = Assert.requireNonNull(gson, "gson");
+        this.configuration = configuration;
 
 
         Assert.requireNonNull(requestHandlers, "requestHandlers");
@@ -95,7 +100,7 @@ public class HttpRequestImpl implements HttpRequest {
         for(HttpURLConnectionHandler handler : requestHandlers) {
             handler.handle(connection);
         }
-        return new HttpResponseImpl(connection, gson, dataProvider, responseHandlers);
+        return new HttpResponseImpl(connection, gson, dataProvider, responseHandlers, configuration);
     }
 
 }

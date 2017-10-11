@@ -1,6 +1,7 @@
 package com.canoo.dp.impl.platform.client.http;
 
 import com.canoo.dp.impl.platform.core.Assert;
+import com.canoo.platform.client.ClientConfiguration;
 import com.canoo.platform.client.http.HttpClient;
 import com.canoo.platform.client.http.HttpRequest;
 import com.canoo.platform.client.http.HttpURLConnectionFactory;
@@ -24,13 +25,16 @@ public class HttpClientImpl implements HttpClient {
 
     private final List<HttpURLConnectionHandler> responseHandlers = new CopyOnWriteArrayList<>();
 
-    public HttpClientImpl(final Gson gson) {
-        this(gson, new DefaultHttpURLConnectionFactory());
+    private final ClientConfiguration configuration;
+
+    public HttpClientImpl(final Gson gson, ClientConfiguration configuration) {
+        this(gson, new DefaultHttpURLConnectionFactory(), configuration);
     }
 
-    public HttpClientImpl(Gson gson, HttpURLConnectionFactory httpURLConnectionFactory) {
+    public HttpClientImpl(Gson gson, HttpURLConnectionFactory httpURLConnectionFactory, ClientConfiguration configuration) {
         this.gson = Assert.requireNonNull(gson, "gson");
         this.httpURLConnectionFactory = Assert.requireNonNull(httpURLConnectionFactory, "httpURLConnectionFactory");
+        this.configuration = configuration;
     }
 
     public HttpURLConnectionFactory getConnectionFactory() {
@@ -66,6 +70,6 @@ public class HttpClientImpl implements HttpClient {
         Assert.requireNonNull(connection, "connection");
 
         connection.setRequestMethod(method.getRawName());
-        return new HttpRequestImpl(connection, gson, requestHandlers, responseHandlers);
+        return new HttpRequestImpl(connection, gson, requestHandlers, responseHandlers, configuration);
     }
 }

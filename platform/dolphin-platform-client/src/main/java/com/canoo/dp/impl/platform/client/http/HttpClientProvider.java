@@ -1,39 +1,39 @@
 package com.canoo.dp.impl.platform.client.http;
 
-import com.canoo.dp.impl.platform.core.Assert;
+import com.canoo.dp.impl.platform.client.AbstractServiceProvider;
 import com.canoo.platform.client.ClientConfiguration;
-import com.canoo.platform.client.Services;
+import com.canoo.platform.client.PlatformClient;
 import com.canoo.platform.client.http.HttpClient;
 import com.canoo.platform.client.http.HttpURLConnectionFactory;
-import com.canoo.platform.client.spi.ServiceProvider;
+import com.canoo.platform.client.http.spi.RequestHandlerProvider;
+import com.canoo.platform.client.http.spi.ResponseHandlerProvider;
 import com.google.gson.Gson;
 
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
+import java.util.Iterator;
+import java.util.ServiceLoader;
 
-public class HttpClientProvider implements ServiceProvider<HttpClient> {
+public class HttpClientProvider extends AbstractServiceProvider<HttpClient> {
 
-    private final Lock creationLock = new ReentrantLock();
-
-    private HttpClient client;
-
-    @Override
-    public HttpClient getService(ClientConfiguration configuration) {
-        Assert.requireNonNull(configuration, "configuration");
-        creationLock.lock();
-        try {
-            if (client != null) {
-                final HttpURLConnectionFactory connectionFactory = configuration.getObjectProperty("httpURLConnectionFactory", new DefaultHttpURLConnectionFactory());
-                client = new HttpClientImpl(Services.getService(Gson.class), connectionFactory);
-            }
-        } finally {
-            creationLock.unlock();
-        }
-        return client;
+    public HttpClientProvider() {
+        super(HttpClient.class);
     }
 
     @Override
-    public Class<HttpClient> getServiceType() {
-        return HttpClient.class;
+    protected HttpClient createService(ClientConfiguration configuration) {
+        final HttpURLConnectionFactory connectionFactory = configuration.getObjectProperty("httpURLConnectionFactory", new DefaultHttpURLConnectionFactory());
+        final HttpClientImpl client = new HttpClientImpl(PlatformClient.getService(Gson.class), connectionFactory, configuration);
+
+        final ServiceLoader<RequestHandlerProvider> requestLoader = ServiceLoader.load(RequestHandlerProvider.class);
+        final Iterator<RequestHandlerProvider> requestIterator = requestLoader.iterator();
+        while (requestIterator.hasNext()) {
+            client.addRequestHandler(requestIterator.next().getHandler(configuration));
+        }
+
+        final ServiceLoader<ResponseHandlerProvider> responseLoader = ServiceLoader.load(ResponseHandlerProvider.class);
+        final Iterator<ResponseHandlerProvider> responseIterator = responseLoader.iterator();
+        while (responseIterator.hasNext()) {
+            client.addResponseHandler(responseIterator.next().getHandler(configuration));
+        }
+        return client;
     }
 }

@@ -1,6 +1,7 @@
 package com.canoo.dp.impl.platform.client.session;
 
 import com.canoo.dp.impl.platform.core.Assert;
+import com.canoo.platform.client.session.ClientSessionStore;
 import com.canoo.platform.client.session.UrlToAppDomainConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,9 +12,9 @@ import java.util.Map;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class ClientSessionStore {
+public class ClientSessionStoreImpl implements ClientSessionStore{
 
-    private static final Logger LOG = LoggerFactory.getLogger(ClientSessionStore.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ClientSessionStoreImpl.class);
 
     private final Lock mapLock = new ReentrantLock();
 
@@ -21,6 +22,7 @@ public class ClientSessionStore {
 
     private UrlToAppDomainConverter converter = new SimpleUrlToAppDomainConverter();
 
+    @Override
     public String getClientIdentifierForUrl(final URL url) {
         Assert.requireNonNull(url, "url");
         final String applicationDomain = converter.getApplicationDomain(url);
@@ -50,7 +52,7 @@ public class ClientSessionStore {
             if (domainToId.containsKey(applicationDomain)) {
                 final String storedId = domainToId.get(applicationDomain);
                 if (clientId != null && !storedId.equals(clientId)) {
-                    throw new IllegalStateException("Client Id for application domain " + applicationDomain + " already specified.");
+                    throw new IllegalStateException("PlatformClient Id for application domain " + applicationDomain + " already specified.");
                 }
             } else {
                 LOG.debug("Defining client id {} for application domain {}", clientId, applicationDomain);
@@ -65,6 +67,7 @@ public class ClientSessionStore {
         }
     }
 
+    @Override
     public void resetSession(final URL url) {
         setClientIdentifierForUrl(url, null);
     }

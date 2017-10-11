@@ -18,7 +18,7 @@ package com.canoo.platform.client.http;
 import java.net.HttpURLConnection;
 
 /**
- * Handler interface that can handle a url connection.
+ * Handler interface that can withoutResult a url connection.
  * An implemntation can add header values for example.
  */
 public interface HttpURLConnectionHandler {

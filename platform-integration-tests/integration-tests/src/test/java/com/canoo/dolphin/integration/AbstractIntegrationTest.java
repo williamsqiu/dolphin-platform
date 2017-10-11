@@ -18,7 +18,7 @@ package com.canoo.dolphin.integration;
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.remoting.client.ClientConfiguration;
 import com.canoo.platform.remoting.client.ClientContext;
-import com.canoo.platform.remoting.client.ClientContextFactory;
+import com.canoo.dp.impl.client.ClientContextFactoryImpl;
 import com.canoo.platform.remoting.client.ControllerProxy;
 import com.canoo.platform.remoting.client.Param;
 import org.testng.annotations.DataProvider;
@@ -85,7 +85,7 @@ public class AbstractIntegrationTest {
             waitUntilServerIsUp(endpoint, bootTimeoutInMinutes, TimeUnit.MINUTES);
             ClientConfiguration configuration = new ClientConfiguration(new URL(endpoint + "/dolphin"), r -> r.run());
             configuration.setConnectionTimeout(timeoutInMinutes * 10_000L);
-            ClientContext clientContext = ClientContextFactory.create(configuration);
+            ClientContext clientContext = ClientContextFactoryImpl.create(configuration);
             Assert.requireNonNull(clientContext, "clientContext");
 
             clientContext.connect().get(configuration.getConnectionTimeout(), TimeUnit.MILLISECONDS);
@@ -100,7 +100,7 @@ public class AbstractIntegrationTest {
         try {
             controllerProxy.invoke(actionName, params).get(timeoutInMinutes, TimeUnit.MINUTES);
         } catch (Exception e) {
-            throw new RuntimeException("Can not handle action " + actionName + " for containerType " + containerType, e);
+            throw new RuntimeException("Can not withoutResult action " + actionName + " for containerType " + containerType, e);
         }
     }
 

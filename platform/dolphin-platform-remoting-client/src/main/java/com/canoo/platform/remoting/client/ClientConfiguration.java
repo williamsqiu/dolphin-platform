@@ -15,6 +15,7 @@
  */
 package com.canoo.platform.remoting.client;
 
+import com.canoo.dp.impl.client.ClientContextFactoryImpl;
 import com.canoo.dp.impl.platform.client.http.DefaultHttpURLConnectionFactory;
 import com.canoo.dp.impl.platform.client.http.DefaultHttpURLConnectionResponseHandler;
 import com.canoo.dp.impl.platform.core.Assert;
@@ -39,7 +40,7 @@ import java.util.concurrent.Executors;
 
 /**
  * Configuration class for a Dolphin Platform client. A configuration is needed to create a {@link ClientContext} by
- * using the {@link ClientContextFactory} (see {@link ClientContextFactory#create(ClientConfiguration)}).
+ * using the {@link ClientContextFactoryImpl} (see {@link ClientContextFactoryImpl#create(ClientConfiguration)}).
  * The configuration wraps the url to the Dolphin Platform server endpoint and a specific ui thread handler.
  * Since Dolphin Platform manages UI releated concurrency for you it needs a handler to call methods directly on the
  * ui thread. For platforms like JavaFX the JavaFX client lib of Dolphin Platform contains a specific

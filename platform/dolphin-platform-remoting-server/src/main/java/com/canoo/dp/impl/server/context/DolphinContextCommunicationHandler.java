@@ -88,7 +88,7 @@ public class DolphinContextCommunicationHandler {
                 results.addAll(handle(context, commands));
             } catch (Exception e) {
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-                LOG.error("Can not handle the the received commands (DolphinContext " + context.getId() + ")", e);
+                LOG.error("Can not withoutResult the the received commands (DolphinContext " + context.getId() + ")", e);
                 return;
             }
 

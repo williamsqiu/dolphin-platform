@@ -1,6 +1,9 @@
 package com.canoo.dp.impl.platform.client.http;
 
 import com.canoo.dp.impl.platform.core.Assert;
+import com.canoo.platform.client.ClientConfiguration;
+import com.canoo.platform.client.http.ByteArrayProvider;
+import com.canoo.platform.client.http.HttpExecutor;
 import com.canoo.platform.client.http.HttpResponse;
 import com.canoo.platform.client.http.HttpURLConnectionHandler;
 import com.canoo.platform.core.DolphinRuntimeException;
@@ -32,21 +35,79 @@ public class HttpResponseImpl implements HttpResponse {
 
     private final List<HttpURLConnectionHandler> responseHandlers;
 
-    public HttpResponseImpl(final HttpURLConnection connection, final Gson gson, final ByteArrayProvider dataProvider, final List<HttpURLConnectionHandler> responseHandlers) {
+    private final ClientConfiguration configuration;
+
+    public HttpResponseImpl(final HttpURLConnection connection, final Gson gson, final ByteArrayProvider dataProvider, final List<HttpURLConnectionHandler> responseHandlers, ClientConfiguration configuration) {
         this.connection = Assert.requireNonNull(connection, "connection");
         this.gson = Assert.requireNonNull(gson, "gson");
         this.dataProvider = Assert.requireNonNull(dataProvider, "dataProvider");
+        this.configuration = configuration;
 
         Assert.requireNonNull(responseHandlers, "responseHandlers");
         this.responseHandlers = Collections.unmodifiableList(responseHandlers);
     }
 
     @Override
-    public byte[] readBytes() throws IOException {
+    public HttpExecutor<ByteArrayProvider> readBytes() {
+        return new HttpExecutorImpl<>(configuration, new HttpProvider<ByteArrayProvider>() {
+            @Override
+            public ByteArrayProvider get() throws IOException{
+                final byte[] bytes = readBytesImpl();
+                return new SimpleByteArrayProvider(bytes);
+            }
+        });
+    }
+
+    @Override
+    public HttpExecutor<ByteArrayProvider> readBytes(final String contentType) {
+        connection.setRequestProperty(ACCEPT_HEADER, contentType);
+        return readBytes();
+    }
+
+    @Override
+    public HttpExecutor<String> readString() {
+        connection.setRequestProperty(ACCEPT_CHARSET_HEADER, CHARSET);
+        return new HttpExecutorImpl<>(configuration, new HttpProvider<String>() {
+            @Override
+            public String get() throws IOException{
+                return new String(readBytesImpl(), CHARSET);
+            }
+        });
+    }
+
+    @Override
+    public HttpExecutor<String> readString(final String contentType) {
+        connection.setRequestProperty(ACCEPT_HEADER, contentType);
+        return readString();
+    }
+
+    @Override
+    public <R> HttpExecutor<R> readObject(final Class<R> responseType) {
+        connection.setRequestProperty(ACCEPT_CHARSET_HEADER, CHARSET);
+        connection.setRequestProperty(ACCEPT_HEADER, JSON_MIME_TYPE);
+
+        return new HttpExecutorImpl<>(configuration, new HttpProvider<R>() {
+            @Override
+            public R get() throws IOException{
+                return gson.fromJson(new String(readBytesImpl(), CHARSET), responseType);
+            }
+        });
+    }
+
+    @Override
+    public HttpExecutor<Void> withoutResult() {
+        return new HttpExecutorImpl<>(configuration, new HttpProvider<Void>() {
+            @Override
+            public Void get() throws IOException{
+                withoutResultImpl();
+                return null;
+            }
+        });
+    }
+
+    private byte[] readBytesImpl() throws IOException {
         connection.setDoInput(true);
-
-        handle();
-
+        withoutResultImpl();
         final InputStream is = connection.getInputStream();
         final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         int read = is.read();
@@ -57,33 +118,7 @@ public class HttpResponseImpl implements HttpResponse {
         return byteArrayOutputStream.toByteArray();
     }
 
-    @Override
-    public byte[] readBytes(final String contentType) throws IOException {
-        connection.setRequestProperty(ACCEPT_HEADER, contentType);
-        return readBytes();
-    }
-
-    @Override
-    public String readString() throws IOException {
-        connection.setRequestProperty(ACCEPT_CHARSET_HEADER, CHARSET);
-        return new String(readBytes(), CHARSET);
-    }
-
-    @Override
-    public String readString(final String contentType) throws IOException {
-        connection.setRequestProperty(ACCEPT_HEADER, contentType);
-        return readString();
-    }
-
-    @Override
-    public <R> R readObject(final Class<R> responseType) throws IOException {
-        connection.setRequestProperty(ACCEPT_CHARSET_HEADER, CHARSET);
-        connection.setRequestProperty(ACCEPT_HEADER, JSON_MIME_TYPE);
-        return gson.fromJson(new String(readBytes(), CHARSET), responseType);
-    }
-
-    @Override
-    public void handle() throws IOException {
+    private void withoutResultImpl() throws IOException {
         if(handled.get()) {
             throw new DolphinRuntimeException("Http call already handled");
         }
@@ -106,4 +141,5 @@ public class HttpResponseImpl implements HttpResponse {
         }
 
     }
+
 }

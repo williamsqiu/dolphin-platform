@@ -23,7 +23,7 @@ import java.util.Set;
 public interface GarbageCollectionCallback {
 
     /**
-     * The method is called by the GC to handle all instanced of the models that can be removed
+     * The method is called by the GC to withoutResult all instanced of the models that can be removed
      * @param rejectedInstances set of all instances that can be removed
      */
     void onReject(Set<Instance> rejectedInstances);

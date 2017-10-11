@@ -4,15 +4,15 @@ import java.io.IOException;
 
 public interface HttpResponse {
 
-    byte[] readBytes() throws IOException;
+    HttpExecutor<ByteArrayProvider> readBytes();
 
-    byte[] readBytes(String contentType) throws IOException;
+    HttpExecutor<ByteArrayProvider> readBytes(String contentType);
 
-    String readString() throws IOException;
+    HttpExecutor<String> readString();
 
-    String readString(String contentType) throws IOException;
+    HttpExecutor<String> readString(String contentType);
 
-    <R> R readObject(Class<R> responseType) throws IOException;
+    <R> HttpExecutor<R> readObject(Class<R> responseType);
 
-    void handle() throws IOException;
+    HttpExecutor<Void> withoutResult();
 }

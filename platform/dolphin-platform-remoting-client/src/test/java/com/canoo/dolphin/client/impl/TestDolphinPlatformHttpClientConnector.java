@@ -100,7 +100,7 @@ public class TestDolphinPlatformHttpClientConnector {
             }
         });
 
-        final HttpClient httpClient = new HttpClientImpl(new Gson(), clientConfiguration.getConnectionFactory());
+        final HttpClient httpClient = new HttpClientImpl(new Gson(), clientConfiguration.getConnectionFactory(), configuration);
 
         final ClientModelStore clientModelStore = new ClientModelStore(new DefaultModelSynchronizer(new Provider<AbstractClientConnector>() {
             @Override
@@ -159,7 +159,7 @@ public class TestDolphinPlatformHttpClientConnector {
             }
         }));
 
-        final DolphinPlatformHttpClientConnector connector = new DolphinPlatformHttpClientConnector(clientConfiguration, clientModelStore, new JsonCodec(), new SimpleExceptionHandler(), new HttpClientImpl(new Gson()));
+        final DolphinPlatformHttpClientConnector connector = new DolphinPlatformHttpClientConnector(clientConfiguration, clientModelStore, new JsonCodec(), new SimpleExceptionHandler(), new HttpClientImpl(new Gson(), configuration));
 
         final List<Command> commands = new ArrayList<>();
         commands.add(new CreateContextCommand());

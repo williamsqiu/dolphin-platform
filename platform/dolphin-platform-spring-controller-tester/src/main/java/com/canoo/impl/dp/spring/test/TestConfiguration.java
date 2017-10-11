@@ -19,7 +19,7 @@ import com.canoo.dp.impl.client.ClientContextImpl;
 import com.canoo.dp.impl.client.legacy.ClientModelStore;
 import com.canoo.dp.impl.client.legacy.communication.AbstractClientConnector;
 import com.canoo.dp.impl.platform.client.http.HttpClientImpl;
-import com.canoo.dp.impl.platform.client.session.ClientSessionStore;
+import com.canoo.dp.impl.platform.client.session.ClientSessionStoreImpl;
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.remoting.legacy.communication.Command;
 import com.canoo.dp.impl.remoting.legacy.util.Function;
@@ -54,13 +54,13 @@ public class TestConfiguration {
         Assert.requireNonNull(context, "context");
         Assert.requireNonNull(httpSession, "httpSession");
 
-        //Client
+        //PlatformClient
         final ExecutorService clientExecutor = Executors.newSingleThreadExecutor();
         final ClientConfiguration clientConfiguration = new ClientConfiguration(new URL("http://dummyURL"), clientExecutor);
         clientConfiguration.setConnectionTimeout(Long.MAX_VALUE);
 
-        final ClientSessionStore clientSessionStore = new ClientSessionStore();
-        final HttpClientImpl httpClient = new HttpClientImpl(new Gson());
+        final ClientSessionStoreImpl clientSessionStore = new ClientSessionStoreImpl();
+        final HttpClientImpl httpClient = new HttpClientImpl(new Gson(), configuration);
 
         clientContext = new ClientContextImpl(clientConfiguration, new Function<ClientModelStore, AbstractClientConnector>() {
             @Override
