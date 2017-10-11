@@ -30,7 +30,7 @@ public class DolphinRuntimeException extends RuntimeException {
     private final transient Thread thread;
 
 
-    public DolphinRuntimeException(String s) {
+    public DolphinRuntimeException(final String s) {
         super(s);
         this.thread = Thread.currentThread();
     }
@@ -42,7 +42,7 @@ public class DolphinRuntimeException extends RuntimeException {
      * @param message message of the exception
      * @param cause   cause of the exception
      */
-    public DolphinRuntimeException(String message, Throwable cause) {
+    public DolphinRuntimeException(final String message, final Throwable cause) {
         this(Thread.currentThread(), message, cause);
     }
 
@@ -53,7 +53,7 @@ public class DolphinRuntimeException extends RuntimeException {
      * @param message message of the exception
      * @param cause   cause of the exception
      */
-    public DolphinRuntimeException(Thread thread, String message, Throwable cause) {
+    public DolphinRuntimeException(final Thread thread, final String message, final Throwable cause) {
         super(message, cause);
         if (thread != null) {
             this.thread = thread;

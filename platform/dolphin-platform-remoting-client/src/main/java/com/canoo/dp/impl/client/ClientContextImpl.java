@@ -70,7 +70,7 @@ public class ClientContextImpl implements ClientContext {
 
     private DolphinCommandHandler dolphinCommandHandler;
 
-    public ClientContextImpl(ClientConfiguration clientConfiguration, final Function<ClientModelStore, AbstractClientConnector> connectorProvider, HttpClient httpClient, ClientSessionStore clientSessionStore) {
+    public ClientContextImpl(final ClientConfiguration clientConfiguration, final Function<ClientModelStore, AbstractClientConnector> connectorProvider, final HttpClient httpClient, final ClientSessionStore clientSessionStore) {
         this.clientConfiguration = Assert.requireNonNull(clientConfiguration, "clientConfiguration");
         this.connectorProvider = Assert.requireNonNull(connectorProvider, "connectorProvider");
         this.httpClient = Assert.requireNonNull(httpClient, "httpClient");
@@ -79,7 +79,7 @@ public class ClientContextImpl implements ClientContext {
     }
 
     @Override
-    public synchronized <T> CompletableFuture<ControllerProxy<T>> createController(String name) {
+    public synchronized <T> CompletableFuture<ControllerProxy<T>> createController(final String name) {
         Assert.requireNonBlank(name, "name");
 
         if(controllerProxyFactory == null) {

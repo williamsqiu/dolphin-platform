@@ -53,7 +53,7 @@ public class TestDolphinPlatformHttpClientConnector {
 
     @Test
     public void testSimpleCall() throws DolphinRemotingException {
-        ClientConfiguration clientConfiguration = new ClientConfiguration(getDummyURL(), new DummyUiThreadHandler());
+        final ClientConfiguration clientConfiguration = new ClientConfiguration(getDummyURL(), new DummyUiThreadHandler());
         clientConfiguration.setConnectionFactory(new HttpURLConnectionFactory() {
             @Override
             public HttpURLConnection create(URL url) throws IOException {
@@ -100,20 +100,20 @@ public class TestDolphinPlatformHttpClientConnector {
             }
         });
 
-        HttpClient httpClient = new HttpClientImpl(new Gson(), clientConfiguration.getConnectionFactory());
+        final HttpClient httpClient = new HttpClientImpl(new Gson(), clientConfiguration.getConnectionFactory());
 
-        ClientModelStore clientModelStore = new ClientModelStore(new DefaultModelSynchronizer(new Provider<AbstractClientConnector>() {
+        final ClientModelStore clientModelStore = new ClientModelStore(new DefaultModelSynchronizer(new Provider<AbstractClientConnector>() {
             @Override
             public AbstractClientConnector get() {
                 return null;
             }
         }));
-        DolphinPlatformHttpClientConnector connector = new DolphinPlatformHttpClientConnector(clientConfiguration, clientModelStore, new JsonCodec(), new SimpleExceptionHandler(), httpClient);
+        final DolphinPlatformHttpClientConnector connector = new DolphinPlatformHttpClientConnector(clientConfiguration, clientModelStore, new JsonCodec(), new SimpleExceptionHandler(), httpClient);
 
-        CreatePresentationModelCommand command = new CreatePresentationModelCommand();
+        final CreatePresentationModelCommand command = new CreatePresentationModelCommand();
         command.setPmId("p1");
         Command rawCommand = command;
-        List<Command> result = connector.transmit(Collections.singletonList(rawCommand));
+        final List<Command> result = connector.transmit(Collections.singletonList(rawCommand));
 
         Assert.assertEquals(result.size(), 1);
         Assert.assertTrue(result.get(0) instanceof CreatePresentationModelCommand);
@@ -123,7 +123,7 @@ public class TestDolphinPlatformHttpClientConnector {
     @Test(expectedExceptions = DolphinRemotingException.class)
     public void testBadResponse() throws DolphinRemotingException {
 
-        ClientConfiguration clientConfiguration = new ClientConfiguration(getDummyURL(), new DummyUiThreadHandler());
+        final ClientConfiguration clientConfiguration = new ClientConfiguration(getDummyURL(), new DummyUiThreadHandler());
         clientConfiguration.setConnectionFactory(new HttpURLConnectionFactory() {
             @Override
             public HttpURLConnection create(URL url) throws IOException {
@@ -152,16 +152,16 @@ public class TestDolphinPlatformHttpClientConnector {
             }
         });
 
-        ClientModelStore clientModelStore = new ClientModelStore(new DefaultModelSynchronizer(new Provider<AbstractClientConnector>() {
+        final ClientModelStore clientModelStore = new ClientModelStore(new DefaultModelSynchronizer(new Provider<AbstractClientConnector>() {
             @Override
             public AbstractClientConnector get() {
                 return null;
             }
         }));
 
-        DolphinPlatformHttpClientConnector connector = new DolphinPlatformHttpClientConnector(clientConfiguration, clientModelStore, new JsonCodec(), new SimpleExceptionHandler(), new HttpClientImpl(new Gson()));
+        final DolphinPlatformHttpClientConnector connector = new DolphinPlatformHttpClientConnector(clientConfiguration, clientModelStore, new JsonCodec(), new SimpleExceptionHandler(), new HttpClientImpl(new Gson()));
 
-        List<Command> commands = new ArrayList<>();
+        final List<Command> commands = new ArrayList<>();
         commands.add(new CreateContextCommand());
         connector.transmit(commands);
     }
