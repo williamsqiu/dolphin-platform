@@ -28,6 +28,10 @@ import javafx.stage.Stage;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
+/**
+ * This should not be used since it do not have i18n
+ */
+@Deprecated
 public abstract class SimpleDolphinPlatformApplication extends DolphinPlatformApplication {
 
     private void showError(Stage parent, String header, String content, Exception e) {

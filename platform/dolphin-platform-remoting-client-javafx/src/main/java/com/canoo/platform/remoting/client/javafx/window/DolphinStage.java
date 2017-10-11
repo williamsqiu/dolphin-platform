@@ -25,6 +25,7 @@ import javafx.stage.Stage;
  * {@link AbstractViewBinder#destroy()} when the stage becomes hidden.
  * @param <M> type of the model
  */
+@Deprecated
 public class DolphinStage<M> extends Stage {
 
     /**
