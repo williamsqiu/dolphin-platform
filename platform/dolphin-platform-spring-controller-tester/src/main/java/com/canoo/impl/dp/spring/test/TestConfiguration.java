@@ -60,7 +60,7 @@ public class TestConfiguration {
         clientConfiguration.setConnectionTimeout(Long.MAX_VALUE);
 
         final ClientSessionStoreImpl clientSessionStore = new ClientSessionStoreImpl();
-        final HttpClientImpl httpClient = new HttpClientImpl(new Gson(), configuration);
+        final HttpClientImpl httpClient = new HttpClientImpl(new Gson(), null);
 
         clientContext = new ClientContextImpl(clientConfiguration, new Function<ClientModelStore, AbstractClientConnector>() {
             @Override

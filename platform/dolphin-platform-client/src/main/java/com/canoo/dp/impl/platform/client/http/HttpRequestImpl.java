@@ -6,11 +6,11 @@ import com.canoo.platform.client.ClientConfiguration;
 import com.canoo.platform.client.http.ByteArrayProvider;
 import com.canoo.platform.client.http.HttpRequest;
 import com.canoo.platform.client.http.HttpResponse;
-import com.canoo.platform.client.http.HttpURLConnectionHandler;
+import com.canoo.platform.client.http.spi.HttpURLConnectionHandler;
 import com.canoo.platform.core.DolphinRuntimeException;
 import com.google.gson.Gson;
 
-import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.util.Collections;
 import java.util.List;
@@ -51,12 +51,12 @@ public class HttpRequestImpl implements HttpRequest {
     }
 
     @Override
-    public HttpResponse withContent(final byte[] content) throws IOException {
+    public HttpResponse withContent(final byte[] content) {
         return withContent(content, "application/raw");
     }
 
     @Override
-    public HttpResponse withContent(final byte[] content, final String contentType) throws IOException {
+    public HttpResponse withContent(final byte[] content, final String contentType) {
         connection.setRequestProperty( "Content-Type", contentType);
         connection.setRequestProperty( "Content-Length", content.length + "");
         connection.setUseCaches( false );
@@ -72,23 +72,27 @@ public class HttpRequestImpl implements HttpRequest {
     }
 
     @Override
-    public HttpResponse withContent(final String content) throws IOException {
+    public HttpResponse withContent(final String content) {
         return withContent(content, "application/txt;charset=utf-8");
     }
 
     @Override
-    public HttpResponse withContent(final String content, final String contentType) throws IOException {
+    public HttpResponse withContent(final String content, final String contentType) {
         connection.setRequestProperty( "charset", "UTF-8");
-        return withContent(content.getBytes(PlatformConstants.CHARSET), contentType);
+        try {
+            return withContent(content.getBytes(PlatformConstants.CHARSET), contentType);
+        } catch (UnsupportedEncodingException e) {
+           throw new DolphinRuntimeException("Encoding error", e);
+        }
     }
 
     @Override
-    public <I> HttpResponse withContent(final I content) throws IOException {
+    public <I> HttpResponse withContent(final I content) {
         return withContent(gson.toJson(content), "application/json;charset=utf-8");
     }
 
     @Override
-    public HttpResponse withoutContent() throws IOException {
+    public HttpResponse withoutContent() {
         return send();
     }
 

@@ -1,11 +1,8 @@
 package com.canoo.dp.impl.platform.client;
 
 import com.canoo.platform.client.ClientConfiguration;
-import com.canoo.platform.client.http.HttpURLConnectionFactory;
-import com.canoo.platform.client.session.UrlToAppDomainConverter;
 import com.canoo.platform.core.PlatformThreadFactory;
 
-import java.net.CookieStore;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Executor;
@@ -34,17 +31,47 @@ public class DefaultClientConfiguration implements ClientConfiguration {
     }
 
     @Override
-    public HttpURLConnectionFactory getConnectionFactory() {
-        return null;
+    public void setUiExecutor(Executor executor) {
+
     }
 
     @Override
-    public CookieStore getCookieStore() {
-        return null;
+    public void getBackgroundExecutor(ExecutorService service) {
+
     }
 
     @Override
-    public UrlToAppDomainConverter getUrlToAppDomainConverter() {
+    public void setDolphinPlatformThreadFactory(PlatformThreadFactory factory) {
+
+    }
+
+    @Override
+    public void setStringProperty(String key, String value) {
+
+    }
+
+    @Override
+    public void setBooleanProperty(String key, boolean value) {
+
+    }
+
+    @Override
+    public void setIntProperty(String key, int value) {
+
+    }
+
+    @Override
+    public void setLongProperty(String key, long value) {
+
+    }
+
+    @Override
+    public void setListProperty(String key, List<String> value) {
+
+    }
+
+    @Override
+    public <T> T getObjectProperty(String key) {
         return null;
     }
 

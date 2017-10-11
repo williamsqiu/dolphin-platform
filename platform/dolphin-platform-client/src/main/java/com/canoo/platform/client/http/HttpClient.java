@@ -1,5 +1,7 @@
 package com.canoo.platform.client.http;
 
+import com.canoo.platform.client.http.spi.HttpURLConnectionHandler;
+
 import java.net.URL;
 
 public interface HttpClient {

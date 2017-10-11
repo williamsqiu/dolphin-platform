@@ -21,8 +21,8 @@ import com.canoo.dp.impl.platform.client.http.DefaultHttpURLConnectionResponseHa
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.platform.core.IdentitySet;
 import com.canoo.dp.impl.platform.core.SimpleDolphinPlatformThreadFactory;
-import com.canoo.platform.client.http.HttpURLConnectionFactory;
-import com.canoo.platform.client.http.HttpURLConnectionHandler;
+import com.canoo.platform.client.http.spi.HttpURLConnectionFactory;
+import com.canoo.platform.client.http.spi.HttpURLConnectionHandler;
 import com.canoo.platform.core.PlatformThreadFactory;
 import com.canoo.platform.core.functional.Subscription;
 import com.canoo.dp.impl.client.legacy.communication.SimpleExceptionHandler;

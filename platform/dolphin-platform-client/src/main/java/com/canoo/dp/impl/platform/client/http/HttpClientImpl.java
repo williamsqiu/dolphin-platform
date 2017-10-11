@@ -4,13 +4,15 @@ import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.client.ClientConfiguration;
 import com.canoo.platform.client.http.HttpClient;
 import com.canoo.platform.client.http.HttpRequest;
-import com.canoo.platform.client.http.HttpURLConnectionFactory;
-import com.canoo.platform.client.http.HttpURLConnectionHandler;
+import com.canoo.platform.client.http.spi.HttpURLConnectionFactory;
+import com.canoo.platform.client.http.spi.HttpURLConnectionHandler;
 import com.canoo.platform.client.http.RequestMethod;
+import com.canoo.platform.core.DolphinRuntimeException;
 import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -62,29 +64,37 @@ public class HttpClientImpl implements HttpClient {
     }
 
     @Override
-    public HttpRequest request(final URL url, final RequestMethod method) throws IOException {
-        Assert.requireNonNull(url, "url");
-        Assert.requireNonNull(method, "method");
+    public HttpRequest request(final URL url, final RequestMethod method) {
+        try {
+            Assert.requireNonNull(url, "url");
+            Assert.requireNonNull(method, "method");
 
-        final HttpURLConnection connection = httpURLConnectionFactory.create(url);
-        Assert.requireNonNull(connection, "connection");
+            final HttpURLConnection connection = httpURLConnectionFactory.create(url);
+            Assert.requireNonNull(connection, "connection");
 
-        connection.setRequestMethod(method.getRawName());
-        return new HttpRequestImpl(connection, gson, requestHandlers, responseHandlers, configuration);
+            connection.setRequestMethod(method.getRawName());
+            return new HttpRequestImpl(connection, gson, requestHandlers, responseHandlers, configuration);
+        } catch (IOException e) {
+            throw new DolphinRuntimeException("HTTP error", e);
+        }
     }
 
     @Override
-    public HttpRequest request(String url, RequestMethod method) throws IOException {
-        return request(new URL(url), method);
+    public HttpRequest request(String url, RequestMethod method) {
+        try {
+            return request(new URL(url), method);
+        } catch (MalformedURLException e) {
+            throw new DolphinRuntimeException("HTTP error", e);
+        }
     }
 
     @Override
-    public HttpRequest request(URL url) throws IOException {
+    public HttpRequest request(URL url) {
         return request(url, RequestMethod.GET);
     }
 
     @Override
-    public HttpRequest request(String url) throws IOException {
+    public HttpRequest request(String url) {
         return request(url, RequestMethod.GET);
     }
 }

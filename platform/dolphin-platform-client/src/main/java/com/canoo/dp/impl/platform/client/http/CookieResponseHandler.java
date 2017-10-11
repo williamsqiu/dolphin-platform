@@ -1,7 +1,7 @@
 package com.canoo.dp.impl.platform.client.http;
 
 import com.canoo.dp.impl.platform.core.Assert;
-import com.canoo.platform.client.http.HttpURLConnectionHandler;
+import com.canoo.platform.client.http.spi.HttpURLConnectionHandler;
 import com.canoo.platform.core.DolphinRuntimeException;
 
 import java.net.HttpURLConnection;

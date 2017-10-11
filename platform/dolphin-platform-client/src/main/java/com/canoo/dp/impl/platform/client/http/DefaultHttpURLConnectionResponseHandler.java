@@ -15,7 +15,7 @@
  */
 package com.canoo.dp.impl.platform.client.http;
 
-import com.canoo.platform.client.http.HttpURLConnectionHandler;
+import com.canoo.platform.client.http.spi.HttpURLConnectionHandler;
 
 import java.net.HttpURLConnection;
 

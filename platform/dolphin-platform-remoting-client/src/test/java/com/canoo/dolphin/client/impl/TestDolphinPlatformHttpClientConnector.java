@@ -30,7 +30,7 @@ import com.canoo.dp.impl.remoting.legacy.communication.CreatePresentationModelCo
 import com.canoo.dp.impl.remoting.legacy.communication.JsonCodec;
 import com.canoo.dp.impl.remoting.legacy.util.Provider;
 import com.canoo.platform.client.http.HttpClient;
-import com.canoo.platform.client.http.HttpURLConnectionFactory;
+import com.canoo.platform.client.http.spi.HttpURLConnectionFactory;
 import com.canoo.platform.remoting.DolphinRemotingException;
 import com.canoo.platform.remoting.client.ClientConfiguration;
 import com.google.gson.Gson;
@@ -100,7 +100,7 @@ public class TestDolphinPlatformHttpClientConnector {
             }
         });
 
-        final HttpClient httpClient = new HttpClientImpl(new Gson(), clientConfiguration.getConnectionFactory(), configuration);
+        final HttpClient httpClient = new HttpClientImpl(new Gson(), clientConfiguration.getConnectionFactory(), null);
 
         final ClientModelStore clientModelStore = new ClientModelStore(new DefaultModelSynchronizer(new Provider<AbstractClientConnector>() {
             @Override
@@ -159,7 +159,7 @@ public class TestDolphinPlatformHttpClientConnector {
             }
         }));
 
-        final DolphinPlatformHttpClientConnector connector = new DolphinPlatformHttpClientConnector(clientConfiguration, clientModelStore, new JsonCodec(), new SimpleExceptionHandler(), new HttpClientImpl(new Gson(), configuration));
+        final DolphinPlatformHttpClientConnector connector = new DolphinPlatformHttpClientConnector(clientConfiguration, clientModelStore, new JsonCodec(), new SimpleExceptionHandler(), new HttpClientImpl(new Gson(), null));
 
         final List<Command> commands = new ArrayList<>();
         commands.add(new CreateContextCommand());

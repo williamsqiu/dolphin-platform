@@ -2,7 +2,7 @@ package com.canoo.dp.impl.platform.client.session;
 
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.platform.core.PlatformConstants;
-import com.canoo.platform.client.http.HttpURLConnectionHandler;
+import com.canoo.platform.client.http.spi.HttpURLConnectionHandler;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
