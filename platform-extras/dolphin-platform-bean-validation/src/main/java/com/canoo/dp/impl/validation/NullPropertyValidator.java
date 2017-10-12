@@ -13,26 +13,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.dolphin.validation;
+package com.canoo.dp.impl.validation;
 
+import com.canoo.platform.remoting.Property;
+
+import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
-import javax.validation.constraints.AssertTrue;
+import javax.validation.constraints.Null;
 
 /**
- * Validator that adds Dolphin Platform property support for the {@link AssertTrue} annotation.
+ * Validator that adds Dolphin Platform property support for the {@link Null} annotation.
  */
-public final class AssertTruePropertyValidator extends AbstractPropertyValidator<AssertTrue, Boolean> {
+public final class NullPropertyValidator implements ConstraintValidator<Null, Property> {
 
-    /**
-     * constructor
-     */
-    public AssertTruePropertyValidator() {
-        super(Boolean.class);
+    @Override
+    public void initialize(Null constraintAnnotation) {
     }
 
     @Override
-    protected boolean checkValid(Boolean property, ConstraintValidatorContext context) {
-        return property;
+    public boolean isValid(Property value,
+                           ConstraintValidatorContext context) {
+        if (value == null) {
+            return true;
+        }
+        if (value.get() == null) {
+            return true;
+        }
+        return false;
     }
 
 }

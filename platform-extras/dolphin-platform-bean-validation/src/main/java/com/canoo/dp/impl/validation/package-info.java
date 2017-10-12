@@ -13,27 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.dolphin.validation;
-
-import javax.validation.ConstraintValidatorContext;
-import javax.validation.constraints.AssertFalse;
-
-/**
- * Validator that adds Dolphin Platform property support for the {@link AssertFalse} annotation.
+/*
+ * This package contains several validator implementations for the JSR-303 Java Bean Validation.
+ * All the classes will be used automatically since the JSR provides a plugin structure that is implemented by this
+ * module (see META-INF/mapping/validation.xml)
  */
-public final class AssertFalsePropertyValidator extends AbstractPropertyValidator<AssertFalse, Boolean> {
-
-    /**
-     * constructor
-     */
-    public AssertFalsePropertyValidator() {
-        super(Boolean.class);
-    }
-
-    @Override
-    protected boolean checkValid(Boolean property, ConstraintValidatorContext context) {
-        return !property;
-    }
-
-}
-
+package com.canoo.dp.impl.validation;

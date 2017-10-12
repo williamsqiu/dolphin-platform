@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.dolphin.validation;
+package com.canoo.dp.impl.validation;
 
 import javax.validation.ConstraintValidatorContext;
 import javax.validation.constraints.DecimalMin;
