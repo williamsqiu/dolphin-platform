@@ -1,15 +1,9 @@
-package com.canoo.dolphin.client;
-
-import com.canoo.platform.client.Toolkit;
+package com.canoo.platform.client;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-/**
- * Created by hendrikebbers on 12.10.17.
- */
-public class TestToolkit implements Toolkit {
-
+public class HeadlessToolkit implements Toolkit {
     private final static Executor executor = Executors.newSingleThreadExecutor();
 
     @Override

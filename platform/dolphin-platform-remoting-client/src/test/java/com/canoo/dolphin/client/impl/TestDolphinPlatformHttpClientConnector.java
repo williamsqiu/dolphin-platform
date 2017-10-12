@@ -15,7 +15,6 @@
  */
 package com.canoo.dolphin.client.impl;
 
-import com.canoo.dolphin.client.TestToolkit;
 import com.canoo.dp.impl.client.DolphinPlatformHttpClientConnector;
 import com.canoo.dp.impl.client.legacy.ClientModelStore;
 import com.canoo.dp.impl.client.legacy.DefaultModelSynchronizer;
@@ -29,6 +28,7 @@ import com.canoo.dp.impl.remoting.legacy.communication.Command;
 import com.canoo.dp.impl.remoting.legacy.communication.CreatePresentationModelCommand;
 import com.canoo.dp.impl.remoting.legacy.communication.JsonCodec;
 import com.canoo.dp.impl.remoting.legacy.util.Provider;
+import com.canoo.platform.client.HeadlessToolkit;
 import com.canoo.platform.client.PlatformClient;
 import com.canoo.platform.client.http.HttpClient;
 import com.canoo.platform.client.http.HttpURLConnectionFactory;
@@ -53,7 +53,7 @@ public class TestDolphinPlatformHttpClientConnector {
 
     @Test
     public void testSimpleCall() throws DolphinRemotingException {
-        PlatformClient.init(new TestToolkit());
+        PlatformClient.init(new HeadlessToolkit());
         PlatformClient.getClientConfiguration().setHttpURLConnectionFactory(new HttpURLConnectionFactory() {
             @Override
             public HttpURLConnection create(URL url) throws IOException {
@@ -120,7 +120,7 @@ public class TestDolphinPlatformHttpClientConnector {
 
     @Test(expectedExceptions = DolphinRemotingException.class)
     public void testBadResponse() throws DolphinRemotingException {
-        PlatformClient.init(new TestToolkit());
+        PlatformClient.init(new HeadlessToolkit());
         PlatformClient.getClientConfiguration().setHttpURLConnectionFactory(new HttpURLConnectionFactory() {
             @Override
             public HttpURLConnection create(URL url) throws IOException {

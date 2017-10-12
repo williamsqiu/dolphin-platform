@@ -34,6 +34,7 @@ public class PlatformClient {
             }
             providers.put(serviceClass, provider);
         }
+        initImpl(new HeadlessToolkit());
     }
 
     private void initImpl(Toolkit toolkit) {
