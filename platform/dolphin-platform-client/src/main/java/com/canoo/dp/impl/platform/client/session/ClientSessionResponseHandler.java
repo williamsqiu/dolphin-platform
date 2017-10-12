@@ -2,18 +2,19 @@ package com.canoo.dp.impl.platform.client.session;
 
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.platform.core.PlatformConstants;
-import com.canoo.platform.client.http.spi.HttpURLConnectionHandler;
+import com.canoo.platform.client.http.HttpURLConnectionHandler;
+import com.canoo.platform.client.session.ClientSessionStore;
 
 import java.net.HttpURLConnection;
 
 /**
  * Created by hendrikebbers on 19.09.17.
  */
-public class ClientSessionSupportingURLConnectionResponseHandler implements HttpURLConnectionHandler {
+public class ClientSessionResponseHandler implements HttpURLConnectionHandler {
 
-    private final ClientSessionStoreImpl clientSessionStore;
+    private final ClientSessionStore clientSessionStore;
 
-    public ClientSessionSupportingURLConnectionResponseHandler(final ClientSessionStoreImpl clientSessionStore) {
+    public ClientSessionResponseHandler(final ClientSessionStore clientSessionStore) {
         this.clientSessionStore = Assert.requireNonNull(clientSessionStore, "clientSessionStore");
     }
 

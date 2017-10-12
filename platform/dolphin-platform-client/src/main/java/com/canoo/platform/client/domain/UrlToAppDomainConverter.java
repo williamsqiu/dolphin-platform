@@ -1,4 +1,4 @@
-package com.canoo.platform.client.session;
+package com.canoo.platform.client.domain;
 
 import java.net.URL;
 

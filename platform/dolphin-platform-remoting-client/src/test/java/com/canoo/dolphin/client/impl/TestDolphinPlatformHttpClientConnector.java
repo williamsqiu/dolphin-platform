@@ -15,7 +15,6 @@
  */
 package com.canoo.dolphin.client.impl;
 
-import com.canoo.dolphin.client.DummyUiThreadHandler;
 import com.canoo.dp.impl.client.DolphinPlatformHttpClientConnector;
 import com.canoo.dp.impl.client.legacy.ClientModelStore;
 import com.canoo.dp.impl.client.legacy.DefaultModelSynchronizer;
@@ -29,10 +28,10 @@ import com.canoo.dp.impl.remoting.legacy.communication.Command;
 import com.canoo.dp.impl.remoting.legacy.communication.CreatePresentationModelCommand;
 import com.canoo.dp.impl.remoting.legacy.communication.JsonCodec;
 import com.canoo.dp.impl.remoting.legacy.util.Provider;
+import com.canoo.platform.client.PlatformClient;
 import com.canoo.platform.client.http.HttpClient;
-import com.canoo.platform.client.http.spi.HttpURLConnectionFactory;
+import com.canoo.platform.client.http.HttpURLConnectionFactory;
 import com.canoo.platform.remoting.DolphinRemotingException;
-import com.canoo.platform.remoting.client.ClientConfiguration;
 import com.google.gson.Gson;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -53,8 +52,8 @@ public class TestDolphinPlatformHttpClientConnector {
 
     @Test
     public void testSimpleCall() throws DolphinRemotingException {
-        final ClientConfiguration clientConfiguration = new ClientConfiguration(getDummyURL(), new DummyUiThreadHandler());
-        clientConfiguration.setConnectionFactory(new HttpURLConnectionFactory() {
+
+        PlatformClient.getClientConfiguration().setHttpURLConnectionFactory(new HttpURLConnectionFactory() {
             @Override
             public HttpURLConnection create(URL url) throws IOException {
                 return new HttpURLConnection(url) {
@@ -100,15 +99,13 @@ public class TestDolphinPlatformHttpClientConnector {
             }
         });
 
-        final HttpClient httpClient = new HttpClientImpl(new Gson(), clientConfiguration.getConnectionFactory(), null);
-
         final ClientModelStore clientModelStore = new ClientModelStore(new DefaultModelSynchronizer(new Provider<AbstractClientConnector>() {
             @Override
             public AbstractClientConnector get() {
                 return null;
             }
         }));
-        final DolphinPlatformHttpClientConnector connector = new DolphinPlatformHttpClientConnector(clientConfiguration, clientModelStore, new JsonCodec(), new SimpleExceptionHandler(), httpClient);
+        final DolphinPlatformHttpClientConnector connector = new DolphinPlatformHttpClientConnector(getDummyURL(), PlatformClient.getClientConfiguration(), clientModelStore, new JsonCodec(), new SimpleExceptionHandler(), PlatformClient.getService(HttpClient.class));
 
         final CreatePresentationModelCommand command = new CreatePresentationModelCommand();
         command.setPmId("p1");
@@ -123,8 +120,7 @@ public class TestDolphinPlatformHttpClientConnector {
     @Test(expectedExceptions = DolphinRemotingException.class)
     public void testBadResponse() throws DolphinRemotingException {
 
-        final ClientConfiguration clientConfiguration = new ClientConfiguration(getDummyURL(), new DummyUiThreadHandler());
-        clientConfiguration.setConnectionFactory(new HttpURLConnectionFactory() {
+        PlatformClient.getClientConfiguration().setHttpURLConnectionFactory(new HttpURLConnectionFactory() {
             @Override
             public HttpURLConnection create(URL url) throws IOException {
                 return new HttpURLConnection(url) {
@@ -159,7 +155,7 @@ public class TestDolphinPlatformHttpClientConnector {
             }
         }));
 
-        final DolphinPlatformHttpClientConnector connector = new DolphinPlatformHttpClientConnector(clientConfiguration, clientModelStore, new JsonCodec(), new SimpleExceptionHandler(), new HttpClientImpl(new Gson(), null));
+        final DolphinPlatformHttpClientConnector connector = new DolphinPlatformHttpClientConnector(getDummyURL(), PlatformClient.getClientConfiguration(), clientModelStore, new JsonCodec(), new SimpleExceptionHandler(), new HttpClientImpl(new Gson(), PlatformClient.getClientConfiguration()));
 
         final List<Command> commands = new ArrayList<>();
         commands.add(new CreateContextCommand());

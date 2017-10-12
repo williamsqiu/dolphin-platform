@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.dp.impl.platform.client.http;
+package com.canoo.dp.impl.platform.client.http.cookie;
 
 import com.canoo.dp.impl.platform.core.PlatformConstants;
 import com.canoo.platform.core.DolphinRuntimeException;
@@ -35,7 +35,7 @@ public class HttpClientCookieHandler {
 
     private final CookieStore cookieStore;
 
-    public HttpClientCookieHandler(CookieStore cookieStore) {
+    public HttpClientCookieHandler(final CookieStore cookieStore) {
         this.cookieStore = Assert.requireNonNull(cookieStore, "cookieStore");
     }
 

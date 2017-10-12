@@ -6,7 +6,7 @@ import com.canoo.platform.client.ClientConfiguration;
 import com.canoo.platform.client.http.ByteArrayProvider;
 import com.canoo.platform.client.http.HttpRequest;
 import com.canoo.platform.client.http.HttpResponse;
-import com.canoo.platform.client.http.spi.HttpURLConnectionHandler;
+import com.canoo.platform.client.http.HttpURLConnectionHandler;
 import com.canoo.platform.core.DolphinRuntimeException;
 import com.google.gson.Gson;
 

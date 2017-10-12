@@ -6,7 +6,7 @@ import com.google.gson.Gson;
 
 public class JsonProvider extends AbstractServiceProvider<Gson> {
 
-    public JsonProvider(Class<Gson> serviceClass) {
+    public JsonProvider() {
         super(Gson.class);
     }
 

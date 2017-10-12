@@ -1,18 +1,32 @@
 package com.canoo.dp.impl.platform.client;
 
+import com.canoo.dp.impl.platform.client.http.DefaultHttpURLConnectionFactory;
+import com.canoo.dp.impl.platform.core.SimpleDolphinPlatformThreadFactory;
+import com.canoo.dp.impl.platform.core.SimpleUncaughtExceptionHandler;
 import com.canoo.platform.client.ClientConfiguration;
-import com.canoo.platform.core.PlatformThreadFactory;
+import com.canoo.platform.client.http.HttpURLConnectionFactory;
 
+import java.net.CookieManager;
 import java.net.CookieStore;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class DefaultClientConfiguration implements ClientConfiguration {
 
     private final Properties internalProperties = new Properties();
+
+    public DefaultClientConfiguration() {
+        setUncaughtExceptionHandler(new SimpleUncaughtExceptionHandler());
+        setUiUncaughtExceptionHandler(new SimpleUncaughtExceptionHandler());
+
+        setBackgroundExecutor(Executors.newCachedThreadPool(new SimpleDolphinPlatformThreadFactory()));
+        setCookieStore(new CookieManager().getCookieStore());
+        setHttpURLConnectionFactory(new DefaultHttpURLConnectionFactory());
+    }
 
     @Override
     public <T> T getObjectProperty(final String key) {
@@ -54,13 +68,23 @@ public class DefaultClientConfiguration implements ClientConfiguration {
     }
 
     @Override
-    public PlatformThreadFactory getDolphinPlatformThreadFactory() {
-        return getObjectProperty(THREAD_FACTORY);
+    public Thread.UncaughtExceptionHandler getUncaughtExceptionHandler() {
+        return getObjectProperty(UNCAUGHT_EXCEPTION_HANDLER);
+    }
+
+    @Override
+    public Thread.UncaughtExceptionHandler getUiUncaughtExceptionHandler() {
+        return getObjectProperty(UI_UNCAUGHT_EXCEPTION_HANDLER);
     }
 
     @Override
     public CookieStore getCookieStore() {
         return getObjectProperty(COOKIE_STORE);
+    }
+
+    @Override
+    public HttpURLConnectionFactory getHttpURLConnectionFactory() {
+        return getObjectProperty(CONNECTION_FACTORY);
     }
 
     @Override
@@ -74,8 +98,18 @@ public class DefaultClientConfiguration implements ClientConfiguration {
     }
 
     @Override
-    public void setDolphinPlatformThreadFactory(final PlatformThreadFactory factory) {
-        internalProperties.put(THREAD_FACTORY, factory);
+    public void setUncaughtExceptionHandler(Thread.UncaughtExceptionHandler uncaughtExceptionHandler) {
+        setObjectProperty(UNCAUGHT_EXCEPTION_HANDLER, uncaughtExceptionHandler);
+    }
+
+    @Override
+    public void setUiUncaughtExceptionHandler(Thread.UncaughtExceptionHandler uncaughtExceptionHandler) {
+        setObjectProperty(UI_UNCAUGHT_EXCEPTION_HANDLER, uncaughtExceptionHandler);
+    }
+
+    @Override
+    public void setHttpURLConnectionFactory(HttpURLConnectionFactory httpURLConnectionFactory) {
+        setObjectProperty(CONNECTION_FACTORY, httpURLConnectionFactory);
     }
 
     @Override

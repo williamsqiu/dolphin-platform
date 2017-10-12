@@ -4,7 +4,7 @@ import com.canoo.dp.impl.platform.client.AbstractServiceProvider;
 import com.canoo.platform.client.ClientConfiguration;
 import com.canoo.platform.client.PlatformClient;
 import com.canoo.platform.client.http.HttpClient;
-import com.canoo.platform.client.http.spi.HttpURLConnectionFactory;
+import com.canoo.platform.client.http.HttpURLConnectionFactory;
 import com.canoo.platform.client.http.spi.RequestHandlerProvider;
 import com.canoo.platform.client.http.spi.ResponseHandlerProvider;
 import com.google.gson.Gson;

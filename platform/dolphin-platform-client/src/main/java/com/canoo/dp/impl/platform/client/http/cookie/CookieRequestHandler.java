@@ -1,7 +1,7 @@
-package com.canoo.dp.impl.platform.client.http;
+package com.canoo.dp.impl.platform.client.http.cookie;
 
 import com.canoo.dp.impl.platform.core.Assert;
-import com.canoo.platform.client.http.spi.HttpURLConnectionHandler;
+import com.canoo.platform.client.http.HttpURLConnectionHandler;
 import com.canoo.platform.core.DolphinRuntimeException;
 
 import java.net.HttpURLConnection;
@@ -10,11 +10,11 @@ import java.net.URISyntaxException;
 /**
  * Created by hendrikebbers on 29.09.17.
  */
-public class CookieResponseHandler implements HttpURLConnectionHandler {
+public class CookieRequestHandler implements HttpURLConnectionHandler {
 
     private final HttpClientCookieHandler clientCookieHandler;
 
-    public CookieResponseHandler(final HttpClientCookieHandler clientCookieHandler) {
+    public CookieRequestHandler(final HttpClientCookieHandler clientCookieHandler) {
         this.clientCookieHandler = Assert.requireNonNull(clientCookieHandler, "clientCookieHandler");
     }
 
@@ -22,9 +22,9 @@ public class CookieResponseHandler implements HttpURLConnectionHandler {
     public void handle(final HttpURLConnection connection) {
         Assert.requireNonNull(connection, "connection");
         try {
-            clientCookieHandler.updateCookiesFromResponse(connection);
+            clientCookieHandler.setRequestCookies(connection);
         } catch (URISyntaxException e) {
-            throw new DolphinRuntimeException("Can not read cookies from response", e);
+            throw new DolphinRuntimeException("Can not set cookies", e);
         }
     }
 }

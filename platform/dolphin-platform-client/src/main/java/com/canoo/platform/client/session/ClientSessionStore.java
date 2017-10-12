@@ -7,4 +7,6 @@ public interface ClientSessionStore {
     void resetSession(final URL url);
 
     String getClientIdentifierForUrl(URL endpoint);
+
+    void setClientIdentifierForUrl(URL url, String clientIdInHeader);
 }

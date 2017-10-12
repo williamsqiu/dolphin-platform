@@ -1,7 +1,7 @@
 package com.canoo.platform.client;
 
+import com.canoo.platform.client.http.HttpURLConnectionFactory;
 import com.canoo.platform.core.PlatformConfiguration;
-import com.canoo.platform.core.PlatformThreadFactory;
 
 import java.net.CookieStore;
 import java.util.List;
@@ -10,21 +10,29 @@ import java.util.concurrent.ExecutorService;
 
 public interface ClientConfiguration extends PlatformConfiguration {
 
-    String UI_EXECUTOR = "platform.uiExecutor";
+    String BACKGROUND_EXECUTOR = "platform.background.executor";
 
-    String BACKGROUND_EXECUTOR = "platform.backgroundExecutor";
+    String UNCAUGHT_EXCEPTION_HANDLER = "platform.background.uncaughtExceptionHandler";
 
-    String THREAD_FACTORY = "platform.threadFactory";
+    String UI_EXECUTOR = "platform.ui.executor";
 
-    String COOKIE_STORE = "platform.cookieStore";
+    String UI_UNCAUGHT_EXCEPTION_HANDLER = "platform.ui.uncaughtExceptionHandler";
+
+    String COOKIE_STORE = "platform.http.cookieStore";
+
+    String CONNECTION_FACTORY = "platform.http.connectionFactory";
 
     Executor getUiExecutor();
 
     ExecutorService getBackgroundExecutor();
 
-    PlatformThreadFactory getDolphinPlatformThreadFactory();
+    Thread.UncaughtExceptionHandler getUncaughtExceptionHandler();
+
+    Thread.UncaughtExceptionHandler getUiUncaughtExceptionHandler();
 
     CookieStore getCookieStore();
+
+    HttpURLConnectionFactory getHttpURLConnectionFactory();
 
     void setCookieStore(CookieStore cookieStore);
 
@@ -32,7 +40,11 @@ public interface ClientConfiguration extends PlatformConfiguration {
 
     void setBackgroundExecutor(ExecutorService service);
 
-    void setDolphinPlatformThreadFactory(PlatformThreadFactory factory);
+    void setUncaughtExceptionHandler(Thread.UncaughtExceptionHandler uncaughtExceptionHandler);
+
+    void setUiUncaughtExceptionHandler(Thread.UncaughtExceptionHandler uncaughtExceptionHandler);
+
+    void setHttpURLConnectionFactory(HttpURLConnectionFactory httpURLConnectionFactory);
 
     void setStringProperty(final String key, final String value);
 

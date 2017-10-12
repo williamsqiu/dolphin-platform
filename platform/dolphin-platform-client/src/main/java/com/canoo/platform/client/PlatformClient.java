@@ -14,7 +14,9 @@ public class PlatformClient {
 
     private static PlatformClient INSTANCE;
 
-    private final Map<Class, ServiceProvider> services = new HashMap<>();
+    private final Map<Class, ServiceProvider> providers = new HashMap<>();
+
+    private final Map<Class, Object> services = new HashMap<>();
 
     private final ClientConfiguration clientConfiguration;
 
@@ -27,23 +29,39 @@ public class PlatformClient {
             ServiceProvider provider = iterator.next();
             Class serviceClass = provider.getServiceType();
             Assert.requireNonNull(serviceClass, "serviceClass");
-            if (services.containsKey(serviceClass)) {
+            if (providers.containsKey(serviceClass)) {
                 throw new DolphinRuntimeException("Can not register more than 1 implementation for service type " + serviceClass);
             }
-            services.put(serviceClass, provider);
+            providers.put(serviceClass, provider);
         }
+    }
+
+    private void initImpl(Toolkit toolkit) {
+        Assert.requireNonNull(toolkit, "toolkit");
+        clientConfiguration.setUiExecutor(toolkit.getUiExecutor());
     }
 
     private <S> boolean hasServiceImpl(final Class<S> serviceClass) {
         Assert.requireNonNull(serviceClass, "serviceClass");
-        return services.containsKey(serviceClass);
+        return providers.containsKey(serviceClass);
     }
 
     private <S> S getServiceImpl(final Class<S> serviceClass) {
         Assert.requireNonNull(serviceClass, "serviceClass");
-        S service = (S) services.get(serviceClass).getService(clientConfiguration);
+        if(services.containsKey(serviceClass)) {
+            final S service = (S) services.get(serviceClass);
+            return service;
+        }
+        final ServiceProvider<S> serviceProvider = providers.get(serviceClass);
+        Assert.requireNonNull(serviceProvider, "serviceProvider");
+        final S service = serviceProvider.getService(clientConfiguration);
         Assert.requireNonNull(service, "service");
+        services.put(serviceClass, service);
         return service;
+    }
+
+    public static void init(Toolkit toolkit) {
+        getInstance().initImpl(toolkit);
     }
 
     public static ClientConfiguration getClientConfiguration() {

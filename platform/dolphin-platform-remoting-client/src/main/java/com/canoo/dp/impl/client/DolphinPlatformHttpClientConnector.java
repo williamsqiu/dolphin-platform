@@ -22,10 +22,10 @@ import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.remoting.commands.DestroyContextCommand;
 import com.canoo.dp.impl.remoting.legacy.communication.Codec;
 import com.canoo.dp.impl.remoting.legacy.communication.Command;
+import com.canoo.platform.client.ClientConfiguration;
 import com.canoo.platform.client.http.HttpClient;
 import com.canoo.platform.client.http.RequestMethod;
 import com.canoo.platform.remoting.DolphinRemotingException;
-import com.canoo.platform.remoting.client.ClientConfiguration;
 import com.canoo.platform.remoting.client.RemotingExceptionHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,9 +50,9 @@ public class DolphinPlatformHttpClientConnector extends AbstractClientConnector 
 
     private final AtomicBoolean disconnecting = new AtomicBoolean(false);
 
-    public DolphinPlatformHttpClientConnector(final ClientConfiguration configuration, final ClientModelStore clientModelStore, final Codec codec, final RemotingExceptionHandler onException, final HttpClient client) {
+    public DolphinPlatformHttpClientConnector(final URL servletUrl, final ClientConfiguration configuration, final ClientModelStore clientModelStore, final Codec codec, final RemotingExceptionHandler onException, final HttpClient client) {
         super(clientModelStore, Assert.requireNonNull(configuration, "configuration").getUiExecutor(), new BlindCommandBatcher(), onException, configuration.getBackgroundExecutor());
-        this.servletUrl = configuration.getServerEndpoint();
+        this.servletUrl = Assert.requireNonNull(servletUrl, "servletUrl");
         this.codec = Assert.requireNonNull(codec, "codec");
         this.client = Assert.requireNonNull(client, "client");
     }

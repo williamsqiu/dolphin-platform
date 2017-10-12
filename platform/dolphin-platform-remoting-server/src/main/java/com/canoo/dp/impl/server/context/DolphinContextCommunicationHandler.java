@@ -104,7 +104,7 @@ public class DolphinContextCommunicationHandler {
             }
         } catch (Exception e) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            LOG.warn("Can not find or create matching dolphin context in session " + httpSession.getId());
+            LOG.error("Can not find or create matching dolphin context in session " + httpSession.getId(), e);
             return;
         }
     }
@@ -150,7 +150,7 @@ public class DolphinContextCommunicationHandler {
             add(clientSession, createdContext);
             return createdContext;
         }
-        throw new IllegalStateException("No dolphin context is defined and no init command is withContent.");
+        throw new IllegalStateException("No dolphin context is defined and no init command is send.");
     }
 
     private boolean containsInitCommand(final List<Command> commands) {

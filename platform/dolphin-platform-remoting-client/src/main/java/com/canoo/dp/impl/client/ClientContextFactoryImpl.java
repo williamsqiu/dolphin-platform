@@ -17,29 +17,30 @@ package com.canoo.dp.impl.client;
 
 import com.canoo.dp.impl.client.legacy.ClientModelStore;
 import com.canoo.dp.impl.client.legacy.communication.AbstractClientConnector;
-import com.canoo.dp.impl.platform.client.session.StrictClientSessionSupportingURLConnectionResponseHandler;
+import com.canoo.dp.impl.platform.client.session.StrictClientSessionResponseHandler;
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.remoting.codec.OptimizedJsonCodec;
 import com.canoo.dp.impl.remoting.legacy.util.Function;
+import com.canoo.platform.client.ClientConfiguration;
 import com.canoo.platform.client.PlatformClient;
 import com.canoo.platform.client.http.HttpClient;
-import com.canoo.platform.client.http.spi.HttpURLConnectionHandler;
+import com.canoo.platform.client.http.HttpURLConnectionHandler;
 import com.canoo.platform.client.session.ClientSessionStore;
 import com.canoo.platform.remoting.DolphinRemotingException;
-import com.canoo.platform.remoting.client.ClientConfiguration;
 import com.canoo.platform.remoting.client.ClientContext;
 import com.canoo.platform.remoting.client.ClientContextFactory;
 import com.canoo.platform.remoting.client.ClientInitializationException;
 import com.canoo.platform.remoting.client.RemotingExceptionHandler;
 
+import java.net.URL;
 import java.util.concurrent.CompletableFuture;
 
 /**
  * Factory to create a {@link ClientContext}. Normally you will create a {@link ClientContext} at the bootstrap of your
- * client by using the {@link #create(ClientConfiguration)} method and use this context as a singleton in your client.
+ * client by using the {@link #create(ClientConfiguration, URL)} method and use this context as a singleton in your client.
  * The {@link ClientContext} defines the connection between the client and the Dolphin Platform server endpoint.
  */
-public class ClientContextFactoryImpl implements ClientContextFactory{
+public class ClientContextFactoryImpl implements ClientContextFactory {
 
     public ClientContextFactoryImpl() {
     }
@@ -52,25 +53,27 @@ public class ClientContextFactoryImpl implements ClientContextFactory{
      * @param clientConfiguration the configuration
      * @return the future
      */
-    public ClientContext create(final ClientConfiguration clientConfiguration) {
+    public ClientContext create(final ClientConfiguration clientConfiguration, final URL endpoint) {
         Assert.requireNonNull(clientConfiguration, "clientConfiguration");
         HttpClient httpClient = PlatformClient.getService(HttpClient.class);
-        final HttpURLConnectionHandler clientSessionCheckResponseHandler = new StrictClientSessionSupportingURLConnectionResponseHandler(clientConfiguration.getServerEndpoint());
+        final HttpURLConnectionHandler clientSessionCheckResponseHandler = new StrictClientSessionResponseHandler(endpoint);
         httpClient.addResponseHandler(clientSessionCheckResponseHandler);
 
-        return new ClientContextImpl(clientConfiguration, new Function<ClientModelStore, AbstractClientConnector>() {
+        Function<ClientModelStore, AbstractClientConnector> connectionProvider = new Function<ClientModelStore, AbstractClientConnector>() {
             @Override
-            public AbstractClientConnector call(final ClientModelStore clientModelStore) {
-                return new DolphinPlatformHttpClientConnector(clientConfiguration, clientModelStore, OptimizedJsonCodec.getInstance(), new RemotingExceptionHandler() {
+            public AbstractClientConnector call(ClientModelStore clientModelStore) {
+                return new DolphinPlatformHttpClientConnector(endpoint, clientConfiguration, clientModelStore, OptimizedJsonCodec.getInstance(), new RemotingExceptionHandler() {
                     @Override
                     public void handle(DolphinRemotingException e) {
-                        for(RemotingExceptionHandler handler : clientConfiguration.getRemotingExceptionHandlers()) {
-                            handler.handle(e);
-                        }
+//                        for(RemotingExceptionHandler handler : clientConfiguration.getRemotingExceptionHandlers()) {
+//                            handler.handle(e);
+//                        }
                     }
                 }, httpClient);
             }
-        }, httpClient, PlatformClient.getService(ClientSessionStore.class));
+        };
+
+        return new ClientContextImpl(clientConfiguration, endpoint, connectionProvider, PlatformClient.getService(ClientSessionStore.class));
     }
 
 }

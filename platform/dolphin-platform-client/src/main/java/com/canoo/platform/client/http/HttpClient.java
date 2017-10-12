@@ -1,13 +1,13 @@
 package com.canoo.platform.client.http;
 
-import com.canoo.platform.client.http.spi.HttpURLConnectionHandler;
-
 import java.net.URL;
 
 public interface HttpClient {
 
+    @Deprecated
     void addResponseHandler(final HttpURLConnectionHandler handler);
 
+    @Deprecated
     void addRequestHandler(final HttpURLConnectionHandler handler);
 
     HttpRequest request(URL url, RequestMethod method);
