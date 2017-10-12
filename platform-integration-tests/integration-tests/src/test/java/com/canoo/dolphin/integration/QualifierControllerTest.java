@@ -17,8 +17,7 @@
 package com.canoo.dolphin.integration;
 
 import com.canoo.dolphin.integration.qualifier.QualifierTestBean;
-import com.canoo.dolphin.integration.qualifier.QualifierTestSubBeanOne;
-import com.canoo.dolphin.integration.qualifier.QualifierTestSubBeanTwo;
+import com.canoo.dolphin.integration.qualifier.QualifierTestSubBean;
 import com.canoo.platform.remoting.client.ClientContext;
 import com.canoo.platform.remoting.client.ControllerProxy;
 import org.testng.Assert;
@@ -32,24 +31,24 @@ import static org.testng.Assert.assertEquals;
 
 public class QualifierControllerTest extends AbstractIntegrationTest {
 
-    @Test(dataProvider = ENDPOINTS_DATAPROVIDER, description = "Test if QualifierTestSubBeanTwo is sync when updating QualifierTestSubBeanOne")
+    @Test(dataProvider = ENDPOINTS_DATAPROVIDER, description = "Test if QualifierTestSubBeanTwo is sync when updating QualifierTestSubBean")
     public void testQualifier1(String containerType, String endpoint) {
         try {
             final ClientContext context = connect(endpoint);
             final ControllerProxy<QualifierTestBean> controller = createController(context, QUALIFIER_CONTROLLER_NAME);
 
             //given:
-            final QualifierTestSubBeanOne qualifierTestSubBeanOneValue = controller.getModel().getQualifierTestSubBeanOneValue();
-            final QualifierTestSubBeanTwo qualifierTestSubBeanTwoValue = controller.getModel().getQualifierTestSubBeanTwoValue();
+            final QualifierTestSubBean qualifierTestSubBeanOne = controller.getModel().getQualifierTestSubBeanOneValue();
+            final QualifierTestSubBean qualifierTestSubBeanTwo = controller.getModel().getQualifierTestSubBeanTwoValue();
 
             //when:
-            setSubBeanOneValue(qualifierTestSubBeanOneValue, 42, true, "Test1");
+            setSubBeanValue(qualifierTestSubBeanOne, 42, true, "Test1");
 
             invoke(controller, DUMMY_ACTION, containerType);
 
             //then:
-            assertSubBeanOneValue(qualifierTestSubBeanOneValue, 42, true, "Test1");
-            assertSubBeanTwoValue(qualifierTestSubBeanTwoValue, 42, true, "Test1");
+            assertSubBeanValue(qualifierTestSubBeanOne, 42, true, "Test1");
+            assertSubBeanValue(qualifierTestSubBeanTwo, 42, true, "Test1");
 
             //Destroy and Disconnect Controller
             destroy(controller, endpoint);
@@ -60,7 +59,7 @@ public class QualifierControllerTest extends AbstractIntegrationTest {
         }
     }
 
-    @Test(dataProvider = ENDPOINTS_DATAPROVIDER, description = "Test if QualifierTestSubBeanOne is sync when updating QualifierTestSubBeanTwo")
+    @Test(dataProvider = ENDPOINTS_DATAPROVIDER, description = "Test if QualifierTestSubBean is sync when updating QualifierTestSubBeanTwo")
     public void testQualifier2(String containerType, String endpoint) {
         try {
 
@@ -68,17 +67,17 @@ public class QualifierControllerTest extends AbstractIntegrationTest {
             final ControllerProxy<QualifierTestBean> controller = createController(context, QUALIFIER_CONTROLLER_NAME);
 
             //given:
-            final QualifierTestSubBeanOne qualifierTestSubBeanOneValue = controller.getModel().getQualifierTestSubBeanOneValue();
-            final QualifierTestSubBeanTwo qualifierTestSubBeanTwoValue = controller.getModel().getQualifierTestSubBeanTwoValue();
+            final QualifierTestSubBean qualifierTestSubBeanOne = controller.getModel().getQualifierTestSubBeanOneValue();
+            final QualifierTestSubBean qualifierTestSubBeanTwo = controller.getModel().getQualifierTestSubBeanTwoValue();
 
             //when:
-            setSubBeanTwoValue(qualifierTestSubBeanTwoValue, 42, true, "Test1");
+            setSubBeanValue(qualifierTestSubBeanTwo, 44, true, "Test2");
 
             invoke(controller, DUMMY_ACTION, containerType);
 
             //then:
-            assertSubBeanOneValue(qualifierTestSubBeanOneValue, 42, true, "Test1");
-            assertSubBeanTwoValue(qualifierTestSubBeanTwoValue, 42, true, "Test1");
+            assertSubBeanValue(qualifierTestSubBeanOne, 44, true, "Test2");
+            assertSubBeanValue(qualifierTestSubBeanTwo, 44, true, "Test2");
 
             //Destroy and Disconnect Controller
             destroy(controller, endpoint);
@@ -96,17 +95,17 @@ public class QualifierControllerTest extends AbstractIntegrationTest {
             final ControllerProxy<QualifierTestBean> controller = createController(context, QUALIFIER_CONTROLLER_NAME);
 
             //given:
-            final QualifierTestSubBeanOne qualifierTestSubBeanOneValue = controller.getModel().getQualifierTestSubBeanOneValue();
-            final QualifierTestSubBeanTwo qualifierTestSubBeanTwoValue = controller.getModel().getQualifierTestSubBeanTwoValue();
+            final QualifierTestSubBean qualifierTestSubBeanOne = controller.getModel().getQualifierTestSubBeanOneValue();
+            final QualifierTestSubBean qualifierTestSubBeanTwo = controller.getModel().getQualifierTestSubBeanTwoValue();
 
             //when:
-            setSubBeanOneValue(qualifierTestSubBeanOneValue, 42, true, "Test1");
+            setSubBeanValue(qualifierTestSubBeanOne, 42, true, "Test1");
             invoke(controller, UNBIND_ACTION, containerType);
-            setSubBeanOneValue(qualifierTestSubBeanOneValue, 44, false, "Test2");
+            setSubBeanValue(qualifierTestSubBeanOne, 44, false, "Test2");
 
             //then:
-            assertSubBeanOneValue(qualifierTestSubBeanOneValue, 44, false, "Test2");
-            assertSubBeanTwoValue(qualifierTestSubBeanTwoValue, 42, true, "Test1");
+            assertSubBeanValue(qualifierTestSubBeanOne, 44, false, "Test2");
+            assertSubBeanValue(qualifierTestSubBeanTwo, 42, true, "Test1");
 
             //Destroy and Disconnect Controller
             destroy(controller, endpoint);
@@ -124,17 +123,17 @@ public class QualifierControllerTest extends AbstractIntegrationTest {
             final ControllerProxy<QualifierTestBean> controller = createController(context, QUALIFIER_CONTROLLER_NAME);
 
             //given:
-            final QualifierTestSubBeanOne qualifierTestSubBeanOneValue = controller.getModel().getQualifierTestSubBeanOneValue();
-            final QualifierTestSubBeanTwo qualifierTestSubBeanTwoValue = controller.getModel().getQualifierTestSubBeanTwoValue();
+            final QualifierTestSubBean qualifierTestSubBeanOne = controller.getModel().getQualifierTestSubBeanOneValue();
+            final QualifierTestSubBean qualifierTestSubBeanTwo = controller.getModel().getQualifierTestSubBeanTwoValue();
 
             //when:
             invoke(controller, UNBIND_ACTION, containerType);
-            setSubBeanOneValue(qualifierTestSubBeanOneValue, 42, true, "Test1");
+            setSubBeanValue(qualifierTestSubBeanOne, 42, true, "Test1");
             invoke(controller, DUMMY_ACTION, containerType);
 
             //then:
-            assertSubBeanOneValue(qualifierTestSubBeanOneValue, 42, true, "Test1");
-            assertSubBeanTwoValue(qualifierTestSubBeanTwoValue, null, null, null);
+            assertSubBeanValue(qualifierTestSubBeanOne, 42, true, "Test1");
+            assertSubBeanValue(qualifierTestSubBeanTwo, null, null, null);
 
             //Destroy and Disconnect Controller
             destroy(controller, endpoint);
@@ -152,17 +151,17 @@ public class QualifierControllerTest extends AbstractIntegrationTest {
             final ControllerProxy<QualifierTestBean> controller = createController(context, QUALIFIER_CONTROLLER_NAME);
 
             //given:
-            final QualifierTestSubBeanOne qualifierTestSubBeanOneValue = controller.getModel().getQualifierTestSubBeanOneValue();
-            final QualifierTestSubBeanTwo qualifierTestSubBeanTwoValue = controller.getModel().getQualifierTestSubBeanTwoValue();
+            final QualifierTestSubBean qualifierTestSubBeanOne = controller.getModel().getQualifierTestSubBeanOneValue();
+            final QualifierTestSubBean qualifierTestSubBeanTwo = controller.getModel().getQualifierTestSubBeanTwoValue();
 
             //when:
             invoke(controller, UNBIND_ACTION, containerType);
-            setSubBeanTwoValue(qualifierTestSubBeanTwoValue, 42, true, "Test1");
+            setSubBeanValue(qualifierTestSubBeanTwo, 42, true, "Test1");
             invoke(controller, BIND_ACTION, containerType);
 
             //then:
-            assertSubBeanOneValue(qualifierTestSubBeanOneValue, null, null, null);
-            assertSubBeanTwoValue(qualifierTestSubBeanTwoValue, 42, true, "Test1");
+            assertSubBeanValue(qualifierTestSubBeanOne, null, null, null);
+            assertSubBeanValue(qualifierTestSubBeanTwo, 42, true, "Test1");
 
             //Destroy and Disconnect Controller
             destroy(controller, endpoint);
@@ -180,18 +179,18 @@ public class QualifierControllerTest extends AbstractIntegrationTest {
             final ControllerProxy<QualifierTestBean> controller = createController(context, QUALIFIER_CONTROLLER_NAME);
 
             //given:
-            final QualifierTestSubBeanOne qualifierTestSubBeanOneValue = controller.getModel().getQualifierTestSubBeanOneValue();
-            final QualifierTestSubBeanTwo qualifierTestSubBeanTwoValue = controller.getModel().getQualifierTestSubBeanTwoValue();
+            final QualifierTestSubBean qualifierTestSubBeanOne = controller.getModel().getQualifierTestSubBeanOneValue();
+            final QualifierTestSubBean qualifierTestSubBeanTwo = controller.getModel().getQualifierTestSubBeanTwoValue();
 
             //when:
             invoke(controller, UNBIND_ACTION, containerType);
-            setSubBeanOneValue(qualifierTestSubBeanOneValue, 42, true, "Test1");
+            setSubBeanValue(qualifierTestSubBeanOne, 42, true, "Test1");
             invoke(controller, BIND_ACTION, containerType);
-            setSubBeanTwoValue(qualifierTestSubBeanTwoValue, 44, false, "Test2");
+            setSubBeanValue(qualifierTestSubBeanTwo, 44, false, "Test2");
 
             //then:
-            assertSubBeanOneValue(qualifierTestSubBeanOneValue, 44, false, "Test2");
-            assertSubBeanTwoValue(qualifierTestSubBeanTwoValue, 44, false, "Test2");
+            assertSubBeanValue(qualifierTestSubBeanOne, 44, false, "Test2");
+            assertSubBeanValue(qualifierTestSubBeanTwo, 44, false, "Test2");
 
             //Destroy and Disconnect Controller
             destroy(controller, endpoint);
@@ -202,28 +201,16 @@ public class QualifierControllerTest extends AbstractIntegrationTest {
         }
     }
 
-    private void setSubBeanOneValue(final QualifierTestSubBeanOne qualifierTestSubBeanOne, final int intValue, final boolean booleanValue, final String stringValue) {
-        qualifierTestSubBeanOne.setBooleanValue(booleanValue);
-        qualifierTestSubBeanOne.setStringValue(stringValue);
-        qualifierTestSubBeanOne.setIntegerValue(intValue);
+    private void setSubBeanValue(final QualifierTestSubBean qualifierTestSubBean, final int intValue, final boolean booleanValue, final String stringValue) {
+        qualifierTestSubBean.setBooleanValue(booleanValue);
+        qualifierTestSubBean.setStringValue(stringValue);
+        qualifierTestSubBean.setIntegerValue(intValue);
     }
 
-    private void setSubBeanTwoValue(final QualifierTestSubBeanTwo qualifierTestSubBeanTwo, final int intValue, final boolean booleanValue, final String stringValue) {
-        qualifierTestSubBeanTwo.setBooleanValue(booleanValue);
-        qualifierTestSubBeanTwo.setStringValue(stringValue);
-        qualifierTestSubBeanTwo.setIntegerValue(intValue);
-    }
-
-    private void assertSubBeanOneValue(final QualifierTestSubBeanOne qualifierTestSubBeanOne, final Integer intValue, final Boolean booleanValue, final String stringValue) {
-        assertEquals(qualifierTestSubBeanOne.getBooleanValue(), booleanValue);
-        assertEquals(qualifierTestSubBeanOne.getStringValue(), stringValue);
-        assertEquals(qualifierTestSubBeanOne.getIntegerValue(), intValue);
-    }
-
-    private void assertSubBeanTwoValue(final QualifierTestSubBeanTwo qualifierTestSubBeanTwo, final Integer intValue, final Boolean booleanValue, final String stringValue) {
-        assertEquals(qualifierTestSubBeanTwo.getBooleanValue(), booleanValue);
-        assertEquals(qualifierTestSubBeanTwo.getStringValue(), stringValue);
-        assertEquals(qualifierTestSubBeanTwo.getIntegerValue(), intValue);
+    private void assertSubBeanValue(final QualifierTestSubBean qualifierTestSubBean, final Integer intValue, final Boolean booleanValue, final String stringValue) {
+        assertEquals(qualifierTestSubBean.getBooleanValue(), booleanValue);
+        assertEquals(qualifierTestSubBean.getStringValue(), stringValue);
+        assertEquals(qualifierTestSubBean.getIntegerValue(), intValue);
     }
 
 }

@@ -21,31 +21,31 @@ import com.canoo.platform.remoting.Property;
 @DolphinBean
 public class QualifierTestBean {
 
-    private Property<QualifierTestSubBeanOne> qualifierTestSubBeanOneValue;
+    private Property<QualifierTestSubBean> qualifierTestSubBeanOneValue;
 
-    private Property<QualifierTestSubBeanTwo> qualifierTestSubBeanTwoValue;
+    private Property<QualifierTestSubBean> qualifierTestSubBeanTwoValue;
 
-    public QualifierTestSubBeanOne getQualifierTestSubBeanOneValue() {
+    public QualifierTestSubBean getQualifierTestSubBeanOneValue() {
         return qualifierTestSubBeanOneValue.get();
     }
 
-    public Property<QualifierTestSubBeanOne> qualifierTestSubBeanOneValueProperty() {
+    public Property<QualifierTestSubBean> qualifierTestSubBeanOneValueProperty() {
         return qualifierTestSubBeanOneValue;
     }
 
-    public void setQualifierTestSubBeanOneValue(QualifierTestSubBeanOne qualifierTestSubBeanOneValue) {
-        this.qualifierTestSubBeanOneValue.set(qualifierTestSubBeanOneValue);
+    public void setQualifierTestSubBeanOneValue(QualifierTestSubBean qualifierTestSubBeanValue) {
+        this.qualifierTestSubBeanOneValue.set(qualifierTestSubBeanValue);
     }
 
-    public QualifierTestSubBeanTwo getQualifierTestSubBeanTwoValue() {
+    public QualifierTestSubBean getQualifierTestSubBeanTwoValue() {
         return qualifierTestSubBeanTwoValue.get();
     }
 
-    public Property<QualifierTestSubBeanTwo> qualifierTestSubBeanTwoValueProperty() {
+    public Property<QualifierTestSubBean> qualifierTestSubBeanTwoValueProperty() {
         return qualifierTestSubBeanTwoValue;
     }
 
-    public void setQualifierTestSubBeanTwoValue(QualifierTestSubBeanTwo qualifierTestSubBeanTwoValue) {
+    public void setQualifierTestSubBeanTwoValue(QualifierTestSubBean qualifierTestSubBeanTwoValue) {
         this.qualifierTestSubBeanTwoValue.set(qualifierTestSubBeanTwoValue);
     }
 }

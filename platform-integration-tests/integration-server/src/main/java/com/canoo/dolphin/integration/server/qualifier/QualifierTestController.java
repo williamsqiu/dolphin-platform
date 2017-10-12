@@ -16,8 +16,7 @@
 package com.canoo.dolphin.integration.server.qualifier;
 
 import com.canoo.dolphin.integration.qualifier.QualifierTestBean;
-import com.canoo.dolphin.integration.qualifier.QualifierTestSubBeanOne;
-import com.canoo.dolphin.integration.qualifier.QualifierTestSubBeanTwo;
+import com.canoo.dolphin.integration.qualifier.QualifierTestSubBean;
 import com.canoo.platform.remoting.BeanManager;
 import com.canoo.platform.remoting.Binding;
 import com.canoo.platform.remoting.server.DolphinAction;
@@ -58,10 +57,10 @@ public class QualifierTestController {
 
     @PostConstruct
     public void init() {
-        QualifierTestSubBeanOne qualifierTestSubBeanOne = beanManager.create(QualifierTestSubBeanOne.class);
+        QualifierTestSubBean qualifierTestSubBeanOne = beanManager.create(QualifierTestSubBean.class);
         model.setQualifierTestSubBeanOneValue(qualifierTestSubBeanOne);
 
-        QualifierTestSubBeanTwo qualifierTestSubBeanTwo = beanManager.create(QualifierTestSubBeanTwo.class);
+        QualifierTestSubBean qualifierTestSubBeanTwo = beanManager.create(QualifierTestSubBean.class);
         model.setQualifierTestSubBeanTwoValue(qualifierTestSubBeanTwo);
 
         bind();

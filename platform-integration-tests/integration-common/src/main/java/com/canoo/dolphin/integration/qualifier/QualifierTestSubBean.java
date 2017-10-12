@@ -20,7 +20,7 @@ import com.canoo.platform.remoting.DolphinBean;
 import com.canoo.platform.remoting.Property;
 
 @DolphinBean
-public class QualifierTestSubBeanOne {
+public class QualifierTestSubBean {
 
     private Property<Boolean> booleanValue;
 
