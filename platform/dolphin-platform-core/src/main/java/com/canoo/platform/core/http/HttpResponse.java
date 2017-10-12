@@ -1,6 +1,4 @@
-package com.canoo.platform.client.http;
-
-import java.io.IOException;
+package com.canoo.platform.core.http;
 
 public interface HttpResponse {
 

@@ -16,7 +16,7 @@
 package com.canoo.dolphin.integration;
 
 import com.canoo.platform.client.PlatformClient;
-import com.canoo.platform.client.http.HttpClient;
+import com.canoo.platform.core.http.HttpClient;
 import com.canoo.platform.remoting.client.ClientContext;
 import com.canoo.platform.remoting.client.ClientContextFactory;
 import com.canoo.platform.remoting.client.ControllerProxy;

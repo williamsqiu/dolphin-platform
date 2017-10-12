@@ -4,7 +4,7 @@ import com.canoo.dp.impl.platform.client.http.DefaultHttpURLConnectionFactory;
 import com.canoo.dp.impl.platform.core.SimpleDolphinPlatformThreadFactory;
 import com.canoo.dp.impl.platform.core.SimpleUncaughtExceptionHandler;
 import com.canoo.platform.client.ClientConfiguration;
-import com.canoo.platform.client.http.HttpURLConnectionFactory;
+import com.canoo.platform.core.http.HttpURLConnectionFactory;
 
 import java.net.CookieManager;
 import java.net.CookieStore;

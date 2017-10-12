@@ -1,7 +1,7 @@
 package com.canoo.dp.impl.platform.client.session;
 
 import com.canoo.dp.impl.platform.core.Assert;
-import com.canoo.platform.client.domain.UrlToAppDomainConverter;
+import com.canoo.platform.core.domain.UrlToAppDomainConverter;
 
 import java.net.URL;
 

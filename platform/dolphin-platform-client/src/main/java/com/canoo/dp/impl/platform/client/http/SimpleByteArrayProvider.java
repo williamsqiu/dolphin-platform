@@ -1,6 +1,6 @@
 package com.canoo.dp.impl.platform.client.http;
 
-import com.canoo.platform.client.http.ByteArrayProvider;
+import com.canoo.platform.core.http.ByteArrayProvider;
 
 public class SimpleByteArrayProvider implements ByteArrayProvider {
 

@@ -1,4 +1,4 @@
-package com.canoo.platform.client.http;
+package com.canoo.platform.core.http;
 
 import java.net.URL;
 

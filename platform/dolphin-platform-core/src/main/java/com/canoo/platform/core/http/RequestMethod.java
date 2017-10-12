@@ -1,4 +1,4 @@
-package com.canoo.platform.client.http;
+package com.canoo.platform.core.http;
 
 public enum RequestMethod {
     GET("GET"), POST("POST"), PUT("PUT"), DELETE("DELETE"), HEAD("HEAD"), OPTIONS("OPTIONS"), TRACE("TRACE");

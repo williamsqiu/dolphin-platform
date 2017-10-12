@@ -2,7 +2,7 @@ package com.canoo.dp.impl.platform.client.session;
 
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.client.session.ClientSessionStore;
-import com.canoo.platform.client.domain.UrlToAppDomainConverter;
+import com.canoo.platform.core.domain.UrlToAppDomainConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -2,7 +2,7 @@ package com.canoo.dp.impl.platform.client.http;
 
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.client.ClientConfiguration;
-import com.canoo.platform.client.http.HttpExecutor;
+import com.canoo.platform.core.http.HttpExecutor;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;

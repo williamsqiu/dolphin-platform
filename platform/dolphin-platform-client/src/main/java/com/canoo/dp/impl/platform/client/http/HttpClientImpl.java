@@ -2,11 +2,11 @@ package com.canoo.dp.impl.platform.client.http;
 
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.client.ClientConfiguration;
-import com.canoo.platform.client.http.HttpClient;
-import com.canoo.platform.client.http.HttpRequest;
-import com.canoo.platform.client.http.HttpURLConnectionFactory;
-import com.canoo.platform.client.http.HttpURLConnectionHandler;
-import com.canoo.platform.client.http.RequestMethod;
+import com.canoo.platform.core.http.HttpClient;
+import com.canoo.platform.core.http.HttpRequest;
+import com.canoo.platform.core.http.HttpURLConnectionFactory;
+import com.canoo.platform.core.http.HttpURLConnectionHandler;
+import com.canoo.platform.core.http.RequestMethod;
 import com.canoo.platform.core.DolphinRuntimeException;
 import com.google.gson.Gson;
 

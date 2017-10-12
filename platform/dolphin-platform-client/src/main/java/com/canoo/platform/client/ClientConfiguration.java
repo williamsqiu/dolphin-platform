@@ -1,6 +1,6 @@
 package com.canoo.platform.client;
 
-import com.canoo.platform.client.http.HttpURLConnectionFactory;
+import com.canoo.platform.core.http.HttpURLConnectionFactory;
 import com.canoo.platform.core.PlatformConfiguration;
 
 import java.net.CookieStore;
