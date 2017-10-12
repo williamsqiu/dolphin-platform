@@ -20,7 +20,7 @@ public class HttpClientProvider extends AbstractServiceProvider<HttpClient> {
 
     @Override
     protected HttpClient createService(ClientConfiguration configuration) {
-        final HttpURLConnectionFactory connectionFactory = configuration.getObjectProperty("httpURLConnectionFactory", new DefaultHttpURLConnectionFactory());
+        final HttpURLConnectionFactory connectionFactory = configuration.getHttpURLConnectionFactory();
         final HttpClientImpl client = new HttpClientImpl(PlatformClient.getService(Gson.class), connectionFactory, configuration);
 
         final ServiceLoader<RequestHandlerProvider> requestLoader = ServiceLoader.load(RequestHandlerProvider.class);

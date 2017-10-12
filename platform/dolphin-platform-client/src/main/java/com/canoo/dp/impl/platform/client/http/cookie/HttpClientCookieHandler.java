@@ -58,6 +58,7 @@ public class HttpClientCookieHandler {
                 }
                 LOG.debug("Found {} http cookies in header", cookies.size());
                 for (HttpCookie httpCookie : cookies) {
+                    System.out.println("Found Cookie '" + httpCookie.getValue() + "' for Domain '" + httpCookie.getDomain() + "' at Ports '" + httpCookie.getPortlist() + "' with Path '" + httpCookie.getPath());
                     cookieStore.add(conn.getURL().toURI(), httpCookie);
                 }
 
@@ -70,6 +71,9 @@ public class HttpClientCookieHandler {
         if (cookieStore.getCookies().size() > 0) {
             String cookieValue = "";
             for (HttpCookie cookie : cookieStore.get(conn.getURL().toURI())) {
+
+                System.out.println("Cookie '" + cookie.getValue() + "' is for Domain '" + cookie.getDomain() + "' at Ports '" + cookie.getPortlist() + "' with Path '" + cookie.getPath());
+
                 cookieValue = cookieValue + cookie + ";";
             }
             if (!cookieValue.isEmpty()) {

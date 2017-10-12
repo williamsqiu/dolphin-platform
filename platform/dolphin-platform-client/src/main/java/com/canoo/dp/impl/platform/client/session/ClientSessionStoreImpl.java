@@ -29,11 +29,13 @@ public class ClientSessionStoreImpl implements ClientSessionStore{
         if(applicationDomain == null) {
             throw new IllegalStateException("Can not define application domain for url " + url);
         }
-        LOG.debug("application domain: {}", applicationDomain);
+        LOG.debug("searching for client id application domain: {}", applicationDomain);
 
         mapLock.lock();
         try {
-            return domainToId.get(applicationDomain);
+            final String clientId = domainToId.get(applicationDomain);
+            LOG.debug("found client id '{}' for application domain {}", clientId, applicationDomain);
+            return clientId;
         } finally {
             mapLock.unlock();
         }
@@ -45,7 +47,7 @@ public class ClientSessionStoreImpl implements ClientSessionStore{
         if(applicationDomain == null) {
             throw new IllegalStateException("Can not define application domain for url " + url);
         }
-        LOG.debug("application domain: {}", applicationDomain);
+        LOG.debug("updating client id for application domain: {}", applicationDomain);
 
         mapLock.lock();
         try {
@@ -55,8 +57,9 @@ public class ClientSessionStoreImpl implements ClientSessionStore{
                     throw new IllegalStateException("PlatformClient Id for application domain " + applicationDomain + " already specified.");
                 }
             } else {
-                LOG.debug("Defining client id {} for application domain {}", clientId, applicationDomain);
+                LOG.debug("Defining client id '{}' for application domain {}", clientId, applicationDomain);
                 if(clientId == null) {
+                    LOG.debug("Since client id for application domain {} is defined as 'null' it will be removed", applicationDomain);
                     domainToId.remove(applicationDomain);
                 } else {
                     domainToId.put(applicationDomain, clientId);
@@ -69,6 +72,7 @@ public class ClientSessionStoreImpl implements ClientSessionStore{
 
     @Override
     public void resetSession(final URL url) {
+        LOG.debug("Resetting client id for url {}", url);
         setClientIdentifierForUrl(url, null);
     }
 

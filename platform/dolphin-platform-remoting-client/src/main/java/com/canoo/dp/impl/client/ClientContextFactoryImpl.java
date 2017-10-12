@@ -55,11 +55,11 @@ public class ClientContextFactoryImpl implements ClientContextFactory {
      */
     public ClientContext create(final ClientConfiguration clientConfiguration, final URL endpoint) {
         Assert.requireNonNull(clientConfiguration, "clientConfiguration");
-        HttpClient httpClient = PlatformClient.getService(HttpClient.class);
+        final HttpClient httpClient = PlatformClient.getService(HttpClient.class);
         final HttpURLConnectionHandler clientSessionCheckResponseHandler = new StrictClientSessionResponseHandler(endpoint);
         httpClient.addResponseHandler(clientSessionCheckResponseHandler);
 
-        Function<ClientModelStore, AbstractClientConnector> connectionProvider = new Function<ClientModelStore, AbstractClientConnector>() {
+        final Function<ClientModelStore, AbstractClientConnector> connectionProvider = new Function<ClientModelStore, AbstractClientConnector>() {
             @Override
             public AbstractClientConnector call(ClientModelStore clientModelStore) {
                 return new DolphinPlatformHttpClientConnector(endpoint, clientConfiguration, clientModelStore, OptimizedJsonCodec.getInstance(), new RemotingExceptionHandler() {

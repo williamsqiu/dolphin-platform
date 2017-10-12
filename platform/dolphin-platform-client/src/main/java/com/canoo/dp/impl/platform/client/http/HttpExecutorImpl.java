@@ -42,7 +42,7 @@ public class HttpExecutorImpl<R> implements HttpExecutor<R> {
 
     @Override
     public CompletableFuture<R> execute() {
-        CompletableFuture<R> completableFuture = new CompletableFuture<R>();
+        final CompletableFuture<R> completableFuture = new CompletableFuture<R>();
         executor.submit(new Runnable() {
 
             @Override
@@ -58,7 +58,7 @@ public class HttpExecutorImpl<R> implements HttpExecutor<R> {
                         });
                     }
                     completableFuture.complete(result);
-                } catch (Throwable e) {
+                } catch (final Throwable e) {
                     if(onError != null) {
                         uiExecutor.execute(new Runnable() {
                             @Override

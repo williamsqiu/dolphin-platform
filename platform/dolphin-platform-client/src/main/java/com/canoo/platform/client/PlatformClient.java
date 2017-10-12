@@ -37,6 +37,7 @@ public class PlatformClient {
     }
 
     private void initImpl(Toolkit toolkit) {
+        services.clear();
         Assert.requireNonNull(toolkit, "toolkit");
         clientConfiguration.setUiExecutor(toolkit.getUiExecutor());
     }
