@@ -178,17 +178,17 @@ public class ObservableArrayList<E> implements ObservableList<E> {
         return batchRemove(c, false);
     }
 
-    private boolean batchRemove(Collection<?> c, boolean isRemove){
-        if (c.isEmpty()) {
+    private boolean batchRemove(final Collection<?> c, boolean isRemove){
+        if (null != c && c.isEmpty()) {
             return false;
         }
-        List<ListChangeEvent.Change<E>> changedList = new ArrayList<>();
-        List<E> listElement =  new ArrayList<>();
+        final List<ListChangeEvent.Change<E>> changedList = new ArrayList<>();
+        final List<E> listElement =  new ArrayList<>();
         for (Iterator<?> iterator = c.iterator(); iterator.hasNext();) {
-            E element = (E) iterator.next();
+            final E element = (E) iterator.next();
             if(list.contains(element)){
                 listElement.add(element);
-                ListChangeEvent.Change<E> changed = new ListChangeEventImpl.ChangeImpl<>(list.indexOf(element), list.indexOf(element),  Collections.singletonList(element));
+                final ListChangeEvent.Change<E> changed = new ListChangeEventImpl.ChangeImpl<>(list.indexOf(element), list.indexOf(element),  Collections.singletonList(element));
                 changedList.add(changed);
             }
         }

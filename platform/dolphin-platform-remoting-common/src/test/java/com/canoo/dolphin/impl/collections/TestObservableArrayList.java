@@ -47,7 +47,7 @@ public class TestObservableArrayList {
 
     @Test
     public void testSize() {
-        ObservableArrayList<String> list = new ObservableArrayList<>();
+        final ObservableArrayList<String> list = new ObservableArrayList<>();
         Assert.assertTrue(list.isEmpty());
         Assert.assertEquals(list.size(), 0);
 
@@ -66,7 +66,7 @@ public class TestObservableArrayList {
 
     @Test
     public void testAddAndRemove() {
-        ObservableArrayList<String> list = new ObservableArrayList<>();
+        final ObservableArrayList<String> list = new ObservableArrayList<>();
         Assert.assertTrue(list.isEmpty());
         Assert.assertEquals(list.size(), 0);
 
@@ -127,14 +127,8 @@ public class TestObservableArrayList {
 
     @Test
     public void testRemoveAll(){
-        ObservableArrayList<String> list = new ObservableArrayList<>();
+        final ObservableArrayList<String> list = new ObservableArrayList<>();
 
-        list.onChanged(new ListChangeListener<String>() {
-            @Override
-            public void listChanged(ListChangeEvent<? extends String> evt) {
-                System.out.println(evt.getChanges().get(0).getFrom()+" - "+evt.getChanges().get(0).getFrom());
-            }
-        });
         Assert.assertTrue(list.isEmpty());
         Assert.assertEquals(list.size(), 0);
 
