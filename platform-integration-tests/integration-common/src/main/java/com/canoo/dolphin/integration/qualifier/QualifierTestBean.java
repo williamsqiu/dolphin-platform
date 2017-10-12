@@ -21,16 +21,32 @@ import com.canoo.platform.remoting.Property;
 @DolphinBean
 public class QualifierTestBean {
 
-    private Property<QualifierTestSubBeanOne> subBeanOneProperty;
+    private Property<QualifierTestSubBeanOne> qualifierTestSubBeanOneValue;
 
-    private Property<QualifierTestSubBeanTwo> subBeanTwoProperty;
+    private Property<QualifierTestSubBeanTwo> qualifierTestSubBeanTwoValue;
 
-    public Property<QualifierTestSubBeanOne> getSubBeanOneProperty() {
-        return subBeanOneProperty;
+    public QualifierTestSubBeanOne getQualifierTestSubBeanOneValue() {
+        return qualifierTestSubBeanOneValue.get();
     }
 
-    public Property<QualifierTestSubBeanTwo> getSubBeanTwoProperty() {
-        return subBeanTwoProperty;
+    public Property<QualifierTestSubBeanOne> qualifierTestSubBeanOneValueProperty() {
+        return qualifierTestSubBeanOneValue;
+    }
+
+    public void setQualifierTestSubBeanOneValue(QualifierTestSubBeanOne qualifierTestSubBeanOneValue) {
+        this.qualifierTestSubBeanOneValue.set(qualifierTestSubBeanOneValue);
+    }
+
+    public QualifierTestSubBeanTwo getQualifierTestSubBeanTwoValue() {
+        return qualifierTestSubBeanTwoValue.get();
+    }
+
+    public Property<QualifierTestSubBeanTwo> qualifierTestSubBeanTwoValueProperty() {
+        return qualifierTestSubBeanTwoValue;
+    }
+
+    public void setQualifierTestSubBeanTwoValue(QualifierTestSubBeanTwo qualifierTestSubBeanTwoValue) {
+        this.qualifierTestSubBeanTwoValue.set(qualifierTestSubBeanTwoValue);
     }
 }
 

@@ -22,22 +22,46 @@ import com.canoo.platform.remoting.Property;
 @DolphinBean
 public class QualifierTestSubBeanTwo {
 
-    private Property<Boolean> booleanProperty;
+    private Property<Boolean> booleanValue;
 
-    private Property<Integer> integerProperty;
+    private Property<Integer> integerValue;
 
-    private Property<String> stringProperty;
+    private Property<String> stringValue;
 
-    public Property<Boolean> getBooleanProperty() {
-        return booleanProperty;
+    public Boolean getBooleanValue() {
+        return booleanValue.get();
     }
 
-    public Property<Integer> getIntegerProperty() {
-        return integerProperty;
+    public Property<Boolean> booleanValueProperty() {
+        return booleanValue;
     }
 
-    public Property<String> getStringProperty() {
-        return stringProperty;
+    public void setBooleanValue(Boolean booleanValue) {
+        this.booleanValue.set(booleanValue);
+    }
+
+    public Integer getIntegerValue() {
+        return integerValue.get();
+    }
+
+    public Property<Integer> integerValueProperty() {
+        return integerValue;
+    }
+
+    public void setIntegerValue(Integer integerValue) {
+        this.integerValue.set(integerValue);
+    }
+
+    public String getStringValue() {
+        return stringValue.get();
+    }
+
+    public Property<String> stringValueProperty() {
+        return stringValue;
+    }
+
+    public void setStringValue(String stringValue) {
+        this.stringValue.set(stringValue);
     }
 }
 
