@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.dolphin.reactive;
+package com.canoo.platform.reactive;
 
+import com.canoo.dp.impl.reactive.TransformedPropertyImpl;
 import com.canoo.platform.core.functional.Subscription;
 import com.canoo.platform.remoting.ValueChangeEvent;
 import com.canoo.platform.remoting.ValueChangeListener;
