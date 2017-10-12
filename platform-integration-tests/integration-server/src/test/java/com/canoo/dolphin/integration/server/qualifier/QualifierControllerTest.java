@@ -1,0 +1,160 @@
+/*
+ * Copyright 2015-2017 Canoo Engineering AG.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.canoo.dolphin.integration.server.qualifier;
+
+import com.canoo.dolphin.integration.qualifier.QualifierTestBean;
+import com.canoo.dolphin.integration.qualifier.QualifierTestSubBean;
+import com.canoo.dolphin.integration.server.TestConfiguration;
+import com.canoo.platform.spring.test.ControllerUnderTest;
+import com.canoo.platform.spring.test.SpringTestNGControllerTest;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
+import static com.canoo.dolphin.integration.qualifier.QualifierTestConstants.BIND_ACTION;
+import static com.canoo.dolphin.integration.qualifier.QualifierTestConstants.DUMMY_ACTION;
+import static com.canoo.dolphin.integration.qualifier.QualifierTestConstants.QUALIFIER_CONTROLLER_NAME;
+import static com.canoo.dolphin.integration.qualifier.QualifierTestConstants.UNBIND_ACTION;
+import static org.testng.Assert.assertEquals;
+
+@SpringBootTest(classes = TestConfiguration.class)
+public class QualifierControllerTest extends SpringTestNGControllerTest {
+
+    private ControllerUnderTest<QualifierTestBean> controller;
+
+    @BeforeMethod
+    public void init() {
+        controller = createController(QUALIFIER_CONTROLLER_NAME);
+    }
+
+    @AfterMethod
+    public void destroy() {
+        controller.destroy();
+    }
+
+    @Test
+    public void testQualifier1() {
+
+        //given:
+        final QualifierTestSubBean qualifierTestSubBeanOne = controller.getModel().getQualifierTestSubBeanOneValue();
+        final QualifierTestSubBean qualifierTestSubBeanTwo = controller.getModel().getQualifierTestSubBeanTwoValue();
+
+        //when:
+        setSubBeanValue(qualifierTestSubBeanOne, 42, true, "Test1");
+        controller.invoke(DUMMY_ACTION);
+
+        //then:
+        assertSubBeanValue(qualifierTestSubBeanOne, 42, true, "Test1");
+        assertSubBeanValue(qualifierTestSubBeanTwo, 42, true, "Test1");
+    }
+
+    @Test
+    public void testQualifier2() {
+        //given:
+        final QualifierTestSubBean qualifierTestSubBeanOne = controller.getModel().getQualifierTestSubBeanOneValue();
+        final QualifierTestSubBean qualifierTestSubBeanTwo = controller.getModel().getQualifierTestSubBeanTwoValue();
+
+        //when:
+        setSubBeanValue(qualifierTestSubBeanTwo, 44, true, "Test2");
+        controller.invoke(DUMMY_ACTION);
+
+        //then:
+        assertSubBeanValue(qualifierTestSubBeanOne, 44, true, "Test2");
+        assertSubBeanValue(qualifierTestSubBeanTwo, 44, true, "Test2");
+    }
+
+    @Test
+    public void testQualifierUnbind() {
+        //given:
+        final QualifierTestSubBean qualifierTestSubBeanOne = controller.getModel().getQualifierTestSubBeanOneValue();
+        final QualifierTestSubBean qualifierTestSubBeanTwo = controller.getModel().getQualifierTestSubBeanTwoValue();
+
+        //when:
+        setSubBeanValue(qualifierTestSubBeanOne, 42, true, "Test1");
+        controller.invoke(UNBIND_ACTION);
+        setSubBeanValue(qualifierTestSubBeanOne, 44, false, "Test2");
+
+        //then:
+        assertSubBeanValue(qualifierTestSubBeanOne, 44, false, "Test2");
+        assertSubBeanValue(qualifierTestSubBeanTwo, 42, true, "Test1");
+
+
+    }
+
+    @Test
+    public void testQualifierNotBound() {
+        //given:
+        final QualifierTestSubBean qualifierTestSubBeanOne = controller.getModel().getQualifierTestSubBeanOneValue();
+        final QualifierTestSubBean qualifierTestSubBeanTwo = controller.getModel().getQualifierTestSubBeanTwoValue();
+
+        //when:
+        controller.invoke(UNBIND_ACTION);
+        setSubBeanValue(qualifierTestSubBeanOne, 42, true, "Test1");
+        controller.invoke(DUMMY_ACTION);
+
+        //then:
+        assertSubBeanValue(qualifierTestSubBeanOne, 42, true, "Test1");
+        assertSubBeanValue(qualifierTestSubBeanTwo, null, null, null);
+
+    }
+
+    @Test
+    public void testQualifierRebind() {
+        //given:
+        final QualifierTestSubBean qualifierTestSubBeanOne = controller.getModel().getQualifierTestSubBeanOneValue();
+        final QualifierTestSubBean qualifierTestSubBeanTwo = controller.getModel().getQualifierTestSubBeanTwoValue();
+
+        //when:
+        controller.invoke(UNBIND_ACTION);
+        setSubBeanValue(qualifierTestSubBeanTwo, 42, true, "Test1");
+        controller.invoke(BIND_ACTION);
+
+        //then:
+        assertSubBeanValue(qualifierTestSubBeanOne, null, null, null);
+        assertSubBeanValue(qualifierTestSubBeanTwo, 42, true, "Test1");
+    }
+
+    @Test
+    public void testQualifierChangeAfterRebind() {
+        //given:
+        final QualifierTestSubBean qualifierTestSubBeanOne = controller.getModel().getQualifierTestSubBeanOneValue();
+        final QualifierTestSubBean qualifierTestSubBeanTwo = controller.getModel().getQualifierTestSubBeanTwoValue();
+
+        //when:
+        controller.invoke(UNBIND_ACTION);
+        setSubBeanValue(qualifierTestSubBeanOne, 42, true, "Test1");
+        controller.invoke(BIND_ACTION);
+        setSubBeanValue(qualifierTestSubBeanTwo, 44, false, "Test2");
+
+        //then:
+        assertSubBeanValue(qualifierTestSubBeanOne, 44, false, "Test2");
+        assertSubBeanValue(qualifierTestSubBeanTwo, 44, false, "Test2");
+    }
+
+    private void setSubBeanValue(final QualifierTestSubBean qualifierTestSubBean, final int intValue, final boolean booleanValue, final String stringValue) {
+        qualifierTestSubBean.setBooleanValue(booleanValue);
+        qualifierTestSubBean.setStringValue(stringValue);
+        qualifierTestSubBean.setIntegerValue(intValue);
+    }
+
+    private void assertSubBeanValue(final QualifierTestSubBean qualifierTestSubBean, final Integer intValue, final Boolean booleanValue, final String stringValue) {
+        assertEquals(qualifierTestSubBean.getBooleanValue(), booleanValue);
+        assertEquals(qualifierTestSubBean.getStringValue(), stringValue);
+        assertEquals(qualifierTestSubBean.getIntegerValue(), intValue);
+    }
+}

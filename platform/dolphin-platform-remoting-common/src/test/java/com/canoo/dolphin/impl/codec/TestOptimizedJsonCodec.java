@@ -332,6 +332,18 @@ public class TestOptimizedJsonCodec {
     }
 
 
+    @Test
+    public void testQualifierSupport() {
+        final  String input = "[{\"id\":\"ChangeAttributeMetadata\",\"a_id\":\"79S\",\"n\":\"qualifier\",\"v\":\"237fb6b9-32d5-4feb-9679-57f1dd7cc7a2\"},{\"id\":\"ChangeAttributeMetadata\",\"a_id\":\"81S\",\"n\":\"qualifier\",\"v\":\"0e36799a-e501-4af4-a2f0-04b98897a1de\"}]";
+        final  List<Command> commands = OptimizedJsonCodec.getInstance().decode(input);
+        Assert.assertNotNull(commands);
+
+        for (Command command : commands) {
+            Assert.assertNotNull(command);
+        }
+    }
+
+
 
     private static CreatePresentationModelCommand createCPMCommand() {
         final CreatePresentationModelCommand command = new CreatePresentationModelCommand();

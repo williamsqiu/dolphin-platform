@@ -29,6 +29,6 @@ public class ChangeAttributeMetadataCommandEncoder extends AbstractCommandTransc
         command.setAttributeId(getStringElement(jsonObject, ATTRIBUTE_ID));
         command.setMetadataName(getStringElement(jsonObject, NAME));
         command.setValue(ValueEncoder.decodeValue(jsonObject.get(VALUE)));
-        return null;
+        return command;
     }
 }
