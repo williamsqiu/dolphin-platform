@@ -38,6 +38,11 @@ include 'platform-examples/process-monitor-sample/process-monitor-client-javafx'
 include 'platform-examples/web-deployment-example/web-deployment-common'
 include 'platform-examples/web-deployment-example/web-deployment-server'
 include 'platform-examples/web-deployment-example/web-deployment-client'
+include 'platform-examples/simple-rest/simple-rest-common'
+include 'platform-examples/simple-rest/simple-rest-client'
+include 'platform-examples/simple-rest/simple-rest-client-javafx'
+include 'platform-examples/simple-rest/simple-rest-server-javaee'
+include 'platform-examples/simple-rest/simple-rest-server-spring'
 
 rootProject.children.each { project ->
     int slash = project.name.lastIndexOf('/')
