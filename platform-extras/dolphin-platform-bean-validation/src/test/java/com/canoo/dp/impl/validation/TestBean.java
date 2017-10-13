@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.dolphin.validation;
+package com.canoo.dp.impl.validation;
 
 import com.canoo.dp.impl.remoting.MockedProperty;
 import com.canoo.platform.remoting.DolphinBean;

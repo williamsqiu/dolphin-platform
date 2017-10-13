@@ -13,33 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.dolphin.validation;
+package com.canoo.dp.impl.validation;
 
 import com.canoo.platform.remoting.Property;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
-import javax.validation.constraints.Null;
+import javax.validation.constraints.NotNull;
 
 /**
- * Validator that adds Dolphin Platform property support for the {@link Null} annotation.
+ * Validator that adds Dolphin Platform property support for the {@link NotNull} annotation.
  */
-public final class NullPropertyValidator implements ConstraintValidator<Null, Property> {
+public final class NotNullPropertyValidator implements ConstraintValidator<NotNull, Property> {
 
     @Override
-    public void initialize(Null constraintAnnotation) {
+    public void initialize(NotNull constraintAnnotation) {
     }
 
     @Override
     public boolean isValid(Property value,
                            ConstraintValidatorContext context) {
-        if (value == null) {
-            return true;
+        if (value == null || value.get() == null) {
+            return false;
         }
-        if (value.get() == null) {
-            return true;
-        }
-        return false;
+        return true;
     }
 
 }

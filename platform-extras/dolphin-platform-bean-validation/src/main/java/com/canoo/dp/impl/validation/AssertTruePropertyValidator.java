@@ -13,9 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/*
- * This package contains several validator implementations for the JSR-303 Java Bean Validation.
- * All the classes will be used automatically since the JSR provides a plugin structure that is implemented by this
- * module (see META-INF/mapping/validation.xml)
+package com.canoo.dp.impl.validation;
+
+import javax.validation.ConstraintValidatorContext;
+import javax.validation.constraints.AssertTrue;
+
+/**
+ * Validator that adds Dolphin Platform property support for the {@link AssertTrue} annotation.
  */
-package com.canoo.dolphin.validation;
+public final class AssertTruePropertyValidator extends AbstractPropertyValidator<AssertTrue, Boolean> {
+
+    /**
+     * constructor
+     */
+    public AssertTruePropertyValidator() {
+        super(Boolean.class);
+    }
+
+    @Override
+    protected boolean checkValid(Boolean property, ConstraintValidatorContext context) {
+        return property;
+    }
+
+}
+
