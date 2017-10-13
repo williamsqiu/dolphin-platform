@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.dolphin.reactive;
+package com.canoo.platform.reactive;
 
-import com.canoo.platform.remoting.ValueChangeEvent;
-import com.canoo.platform.remoting.ValueChangeListener;
 import com.canoo.dp.impl.remoting.MockedProperty;
 import com.canoo.platform.remoting.Property;
+import com.canoo.platform.remoting.ValueChangeEvent;
+import com.canoo.platform.remoting.ValueChangeListener;
 import rx.functions.Func1;
 
 import java.util.concurrent.TimeUnit;
