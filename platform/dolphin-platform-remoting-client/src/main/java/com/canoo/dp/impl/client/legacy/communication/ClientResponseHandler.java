@@ -52,7 +52,7 @@ public class ClientResponseHandler {
         } else if (command instanceof AttributeMetadataChangedCommand) {
             handleAttributeMetadataChangedCommand((AttributeMetadataChangedCommand) command);
         } else {
-            LOG.error("C: cannot handle unknown command '{}'", command );
+            LOG.error("C: cannot withoutResult unknown command '{}'", command );
         }
 
     }

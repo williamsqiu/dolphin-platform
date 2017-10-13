@@ -19,7 +19,6 @@ import com.canoo.dp.impl.client.legacy.ClientModelStore;
 import com.canoo.dp.impl.client.legacy.DefaultModelSynchronizer;
 import com.canoo.dp.impl.client.legacy.ModelSynchronizer;
 import com.canoo.dp.impl.client.legacy.communication.AbstractClientConnector;
-import com.canoo.dp.impl.platform.client.session.ClientSessionStore;
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.remoting.BeanManagerImpl;
 import com.canoo.dp.impl.remoting.BeanRepository;
@@ -34,10 +33,10 @@ import com.canoo.dp.impl.remoting.commands.CreateContextCommand;
 import com.canoo.dp.impl.remoting.commands.DestroyContextCommand;
 import com.canoo.dp.impl.remoting.legacy.util.Function;
 import com.canoo.dp.impl.remoting.legacy.util.Provider;
-import com.canoo.platform.client.http.HttpClient;
+import com.canoo.platform.client.ClientConfiguration;
+import com.canoo.platform.client.session.ClientSessionStore;
 import com.canoo.platform.remoting.BeanManager;
 import com.canoo.platform.remoting.DolphinRemotingException;
-import com.canoo.platform.remoting.client.ClientConfiguration;
 import com.canoo.platform.remoting.client.ClientContext;
 import com.canoo.platform.remoting.client.ClientInitializationException;
 import com.canoo.platform.remoting.client.ControllerInitalizationException;
@@ -52,8 +51,6 @@ public class ClientContextImpl implements ClientContext {
     private final ClientConfiguration clientConfiguration;
 
     private final Function<ClientModelStore, AbstractClientConnector> connectorProvider;
-
-    private final HttpClient httpClient;
 
     private final URL endpoint;
 
@@ -70,12 +67,11 @@ public class ClientContextImpl implements ClientContext {
 
     private DolphinCommandHandler dolphinCommandHandler;
 
-    public ClientContextImpl(final ClientConfiguration clientConfiguration, final Function<ClientModelStore, AbstractClientConnector> connectorProvider, final HttpClient httpClient, final ClientSessionStore clientSessionStore) {
+    public ClientContextImpl(final ClientConfiguration clientConfiguration, final URL endpoint, final Function<ClientModelStore, AbstractClientConnector> connectorProvider, final ClientSessionStore clientSessionStore) {
         this.clientConfiguration = Assert.requireNonNull(clientConfiguration, "clientConfiguration");
         this.connectorProvider = Assert.requireNonNull(connectorProvider, "connectorProvider");
-        this.httpClient = Assert.requireNonNull(httpClient, "httpClient");
         this.clientSessionStore = Assert.requireNonNull(clientSessionStore, "clientSessionStore");
-        this.endpoint = clientConfiguration.getServerEndpoint();
+        this.endpoint = Assert.requireNonNull(endpoint, "endpoint");
     }
 
     @Override
@@ -176,8 +172,4 @@ public class ClientContextImpl implements ClientContext {
         return clientSessionStore.getClientIdentifierForUrl(endpoint);
     }
 
-    @Override
-    public HttpClient getHttpClient() {
-        return httpClient;
-    }
 }

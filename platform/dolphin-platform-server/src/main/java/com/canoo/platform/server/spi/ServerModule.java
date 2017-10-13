@@ -15,6 +15,8 @@
  */
 package com.canoo.platform.server.spi;
 
+import com.canoo.platform.core.PlatformConfiguration;
+
 import java.util.List;
 
 /**

@@ -15,18 +15,15 @@
  */
 package com.canoo.dolphin.integration;
 
-import com.canoo.dp.impl.platform.core.Assert;
-import com.canoo.platform.remoting.client.ClientConfiguration;
+import com.canoo.platform.client.PlatformClient;
+import com.canoo.platform.core.http.HttpClient;
 import com.canoo.platform.remoting.client.ClientContext;
 import com.canoo.platform.remoting.client.ClientContextFactory;
 import com.canoo.platform.remoting.client.ControllerProxy;
 import com.canoo.platform.remoting.client.Param;
 import org.testng.annotations.DataProvider;
 
-import java.io.IOException;
-import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
@@ -46,18 +43,10 @@ public class AbstractIntegrationTest {
             if(System.currentTimeMillis() > startTime + waitMillis) {
                 throw new TimeoutException("Server " + host + " is still down after " + waitMillis + " ms");
             }
+            HttpClient httpClient = PlatformClient.getService(HttpClient.class);
             try {
-                URL healthUrl = new URL(host + "/rest/health");
-                URLConnection connection = healthUrl.openConnection();
-                if(connection instanceof HttpURLConnection) {
-                    HttpURLConnection httpURLConnection = (HttpURLConnection) connection;
-                    httpURLConnection.connect();
-                    if(httpURLConnection.getResponseCode() == 200) {
-                        connected = true;
-                    }
-                } else {
-                    throw new IOException("URL " + healthUrl + " do not provide a HttpURLConnection!");
-                }
+                httpClient.request(host + "/rest/health").withoutContent().withoutResult().execute().get();
+                connected = true;
             } catch (Exception e) {
                 // do nothing since server is not up at the moment...
             }
@@ -81,14 +70,14 @@ public class AbstractIntegrationTest {
     }
 
     protected ClientContext connect(String endpoint) {
+        PlatformClient.init(new IntegrationTestToolkit());
+        PlatformClient.getClientConfiguration().getCookieStore().removeAll();
         try {
             waitUntilServerIsUp(endpoint, bootTimeoutInMinutes, TimeUnit.MINUTES);
-            ClientConfiguration configuration = new ClientConfiguration(new URL(endpoint + "/dolphin"), r -> r.run());
-            configuration.setConnectionTimeout(timeoutInMinutes * 10_000L);
-            ClientContext clientContext = ClientContextFactory.create(configuration);
-            Assert.requireNonNull(clientContext, "clientContext");
+            ClientContext clientContext = PlatformClient.getService(ClientContextFactory.class).create(PlatformClient.getClientConfiguration(), new URL(endpoint + "/dolphin"));
 
-            clientContext.connect().get(configuration.getConnectionTimeout(), TimeUnit.MILLISECONDS);
+
+            clientContext.connect().get(timeoutInMinutes, TimeUnit.SECONDS);
 
             return clientContext;
         } catch (Exception e) {
@@ -100,7 +89,7 @@ public class AbstractIntegrationTest {
         try {
             controllerProxy.invoke(actionName, params).get(timeoutInMinutes, TimeUnit.MINUTES);
         } catch (Exception e) {
-            throw new RuntimeException("Can not handle action " + actionName + " for containerType " + containerType, e);
+            throw new RuntimeException("Can not withoutResult action " + actionName + " for containerType " + containerType, e);
         }
     }
 

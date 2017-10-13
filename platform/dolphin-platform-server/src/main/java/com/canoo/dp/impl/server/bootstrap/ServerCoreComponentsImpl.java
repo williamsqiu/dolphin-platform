@@ -19,7 +19,7 @@ import com.canoo.platform.core.PlatformThreadFactory;
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.server.beans.ManagedBeanFactory;
 import com.canoo.platform.server.spi.ClasspathScanner;
-import com.canoo.platform.server.spi.PlatformConfiguration;
+import com.canoo.platform.core.PlatformConfiguration;
 import com.canoo.platform.server.spi.ServerCoreComponents;
 
 import javax.servlet.ServletContext;

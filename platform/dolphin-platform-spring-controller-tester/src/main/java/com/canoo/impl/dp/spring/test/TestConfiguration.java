@@ -18,8 +18,7 @@ package com.canoo.impl.dp.spring.test;
 import com.canoo.dp.impl.client.ClientContextImpl;
 import com.canoo.dp.impl.client.legacy.ClientModelStore;
 import com.canoo.dp.impl.client.legacy.communication.AbstractClientConnector;
-import com.canoo.dp.impl.platform.client.http.HttpClientImpl;
-import com.canoo.dp.impl.platform.client.session.ClientSessionStore;
+import com.canoo.dp.impl.platform.client.session.ClientSessionStoreImpl;
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.remoting.legacy.communication.Command;
 import com.canoo.dp.impl.remoting.legacy.util.Function;
@@ -30,10 +29,9 @@ import com.canoo.dp.impl.server.context.DolphinContext;
 import com.canoo.dp.impl.server.controller.ControllerRepository;
 import com.canoo.dp.impl.server.controller.ControllerValidationException;
 import com.canoo.dp.impl.server.scanner.DefaultClasspathScanner;
-import com.canoo.platform.remoting.client.ClientConfiguration;
+import com.canoo.platform.client.PlatformClient;
 import com.canoo.platform.remoting.client.ClientContext;
 import com.canoo.platform.server.client.ClientSession;
-import com.google.gson.Gson;
 import org.springframework.web.context.WebApplicationContext;
 
 import javax.servlet.http.HttpSession;
@@ -54,15 +52,11 @@ public class TestConfiguration {
         Assert.requireNonNull(context, "context");
         Assert.requireNonNull(httpSession, "httpSession");
 
-        //Client
+        //PlatformClient
         final ExecutorService clientExecutor = Executors.newSingleThreadExecutor();
-        final ClientConfiguration clientConfiguration = new ClientConfiguration(new URL("http://dummyURL"), clientExecutor);
-        clientConfiguration.setConnectionTimeout(Long.MAX_VALUE);
 
-        final ClientSessionStore clientSessionStore = new ClientSessionStore();
-        final HttpClientImpl httpClient = new HttpClientImpl(new Gson());
-
-        clientContext = new ClientContextImpl(clientConfiguration, new Function<ClientModelStore, AbstractClientConnector>() {
+        final ClientSessionStoreImpl clientSessionStore = new ClientSessionStoreImpl();
+        clientContext = new ClientContextImpl(PlatformClient.getClientConfiguration(), new URL("http://dummy"), new Function<ClientModelStore, AbstractClientConnector>() {
             @Override
             public AbstractClientConnector call(ClientModelStore clientModelStore) {
                 return new DolphinTestClientConnector(clientModelStore, clientExecutor, new Function<List<Command>, List<Command>>() {
@@ -73,7 +67,7 @@ public class TestConfiguration {
                     }
                 });
             }
-        }, httpClient, clientSessionStore);
+        }, clientSessionStore);
 
 
         //Server

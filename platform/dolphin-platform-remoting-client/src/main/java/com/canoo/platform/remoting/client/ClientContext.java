@@ -15,7 +15,7 @@
  */
 package com.canoo.platform.remoting.client;
 
-import com.canoo.platform.client.http.HttpClient;
+import com.canoo.dp.impl.client.ClientContextFactoryImpl;
 import com.canoo.platform.remoting.BeanManager;
 
 import java.util.concurrent.CompletableFuture;
@@ -23,10 +23,10 @@ import java.util.concurrent.CompletableFuture;
 /**
  * The client context defines a connection to the Dolphin Platform endpoint on the server.
  * For each client instance there should be one {@link ClientContext} instance that can be
- * created by using the {@link ClientContextFactory}.
+ * created by using the {@link ClientContextFactoryImpl}.
  * The client context is needed to create {@link ControllerProxy} instances.
  */
-public interface ClientContext extends ControllerFactory{
+public interface ClientContext extends ControllerFactory {
 
     /**
      * Creates a {@link ControllerProxy} instance for the controller with the given name.
@@ -57,6 +57,4 @@ public interface ClientContext extends ControllerFactory{
     CompletableFuture<Void> connect();
 
     String getClientId();
-
-    HttpClient getHttpClient();
 }

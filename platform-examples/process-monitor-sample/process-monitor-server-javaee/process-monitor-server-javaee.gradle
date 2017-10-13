@@ -18,7 +18,7 @@ apply plugin: 'war'
 
 dependencies {
     compile project(':process-monitor-server')
-    compile project(':dolphin-platform-server-javaee')
+    compile project(':dolphin-platform-remoting-server-javaee')
     compileOnly 'javax:javaee-api:6.0'
 }
 

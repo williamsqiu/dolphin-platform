@@ -18,7 +18,7 @@ package com.canoo.dp.impl.server.servlet;
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.platform.core.PlatformConstants;
 import com.canoo.dp.impl.server.config.DefaultModuleConfig;
-import com.canoo.platform.server.spi.PlatformConfiguration;
+import com.canoo.platform.core.PlatformConfiguration;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;

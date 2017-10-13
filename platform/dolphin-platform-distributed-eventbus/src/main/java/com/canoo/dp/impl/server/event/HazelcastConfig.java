@@ -15,7 +15,7 @@
  */
 package com.canoo.dp.impl.server.event;
 
-import com.canoo.platform.server.spi.PlatformConfiguration;
+import com.canoo.platform.core.PlatformConfiguration;
 
 import java.io.Serializable;
 
