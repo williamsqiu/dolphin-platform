@@ -243,7 +243,7 @@ public class ControllerHandler {
             final Object parentController = controllers.get(parentControllerId);
             Assert.requireNonNull(parentController, "parentController");
 
-            if(!parentField.getType().getClass().isAssignableFrom(parentController.getClass())) {
+            if(!parentField.getType().isAssignableFrom(parentController.getClass())) {
                 throw new RuntimeException("Parent controller in " + controller.getClass() + " defined of wrong type. Should be " + parentController.getClass());
             }
             ReflectionHelper.setPrivileged(parentField, controller, parentController);
