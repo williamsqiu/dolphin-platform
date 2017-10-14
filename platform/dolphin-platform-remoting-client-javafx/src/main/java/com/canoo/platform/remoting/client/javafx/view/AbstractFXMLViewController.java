@@ -29,11 +29,11 @@ import java.net.URL;
  * By creating new instances of classes that extend this class a JavaFX view will be automatically created by using the
  * given FXML file. In addition the {@link javafx.fxml.FXML} annotation can be used in that classes.
  *
- * For information about the Dolphin Platform based behavior of this class see {@link AbstractViewBinder}.
+ * For information about the Dolphin Platform based behavior of this class see {@link AbstractViewController}.
  *
  * @param <M> type of the model.
  */
-public abstract class AbstractFXMLViewBinder<M> extends AbstractViewBinder<M> {
+public abstract class AbstractFXMLViewController<M> extends AbstractViewController<M> {
 
     private final Node rootNode;
 
@@ -44,7 +44,7 @@ public abstract class AbstractFXMLViewBinder<M> extends AbstractViewBinder<M> {
      *                       be used with this view.
      * @param fxmlLocation the location (url) of the FXML file that defines the layout of the view.
      */
-    public AbstractFXMLViewBinder(ClientContext clientContext, String controllerName, URL fxmlLocation) {
+    public AbstractFXMLViewController(ClientContext clientContext, String controllerName, URL fxmlLocation) {
         super(clientContext, controllerName);
         Assert.requireNonNull(fxmlLocation, "fxmlLocation");
         try {

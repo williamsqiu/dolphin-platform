@@ -36,7 +36,7 @@ import java.util.concurrent.CompletableFuture;
  * a model (see {@link DolphinBean}) with the view.
  * @param <M> type of the model
  */
-public abstract class AbstractViewBinder<M> {
+public abstract class AbstractViewController<M> {
 
     private ControllerProxy<M> controllerProxy;
 
@@ -55,7 +55,7 @@ public abstract class AbstractViewBinder<M> {
      * @param clientContext the client context
      * @param controllerName name of the controller (see annotation DolphinController in the Java server lib).
      */
-    public AbstractViewBinder(ClientContext clientContext, String controllerName) {
+    public AbstractViewController(ClientContext clientContext, String controllerName) {
         Assert.requireNonBlank(controllerName, "controllerName");
         this.clientContext = Assert.requireNonNull(clientContext, "clientContext");
         clientContext.<M>createController(controllerName).whenComplete((c, e) -> {
@@ -224,7 +224,7 @@ public abstract class AbstractViewBinder<M> {
 
     /**
      * Usefull helper method that returns the root node (see {@link #getRootNode()}) as a {@link Parent} if the root node
-     * extends {@link Parent} or throws an runtime exception. This can be used to simply add a {@link AbstractFXMLViewBinder}
+     * extends {@link Parent} or throws an runtime exception. This can be used to simply add a {@link AbstractFXMLViewController}
      * based view to a scene that needs a {@link Parent} as a root node.
      * @return the root node
      */
