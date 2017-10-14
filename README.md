@@ -82,6 +82,9 @@ The following GitHub repositories provides additional sources for the Dolphin Pl
 * [Maven archetype Repository](https://github.com/canoo/dolphin-platform-spring-boot-archetype)
 * [Lazybones template Repository](https://github.com/canoo/dolphin-platform-lazybones-templates)
 
+## 🆕🐥:dog: First Timers Support
+At Canoo we :heart: open source. Based on this we develop the complete Dolphin Platform framework as an open source project. If you are new to open source development we have some specific issues for you. Just have a look at [all issues with the 'good first issue' label](https://github.com/canoo/dolphin-platform/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22). This issues are reserved for people who never contributed to Open Source before. We know that the process of creating a pull request is the biggest barrier for new contributors. This issues are for you 💝 We use such issues for example to get involved at [Hacktoberfest](https://hacktoberfest.digitalocean.com). If you want to know more about open source development and contribution in general you should have a look at [this overview](https://opensource.guide).
+
 ## License
 The project is released as open source under the [Apache License Version 2.0](http://www.apache.org/licenses/LICENSE-2.0)
 
