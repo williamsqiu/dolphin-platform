@@ -17,7 +17,7 @@ package com.canoo.dolphin.todo.client;
 
 import com.canoo.platform.remoting.client.ClientContext;
 import com.canoo.platform.remoting.client.javafx.FXBinder;
-import com.canoo.platform.remoting.client.javafx.view.AbstractFXMLViewBinder;
+import com.canoo.platform.remoting.client.javafx.view.AbstractFXMLViewController;
 import com.canoo.dolphin.todo.pm.ToDoItem;
 import com.canoo.dolphin.todo.pm.ToDoList;
 import javafx.fxml.FXML;
@@ -28,7 +28,7 @@ import javafx.scene.control.TextField;
 import static com.canoo.dolphin.todo.TodoAppConstants.ADD_ACTION;
 import static com.canoo.dolphin.todo.TodoAppConstants.TODO_CONTROLLER_NAME;
 
-public class ToDoView extends AbstractFXMLViewBinder<ToDoList> {
+public class ToDoView extends AbstractFXMLViewController<ToDoList> {
 
     @FXML
     private TextField createField;

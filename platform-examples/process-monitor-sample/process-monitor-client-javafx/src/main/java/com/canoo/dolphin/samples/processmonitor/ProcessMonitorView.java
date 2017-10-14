@@ -18,7 +18,7 @@ package com.canoo.dolphin.samples.processmonitor;
 import com.canoo.platform.remoting.client.ClientContext;
 import com.canoo.platform.remoting.client.javafx.FXBinder;
 import com.canoo.platform.remoting.client.javafx.binding.FXWrapper;
-import com.canoo.platform.remoting.client.javafx.view.AbstractViewBinder;
+import com.canoo.platform.remoting.client.javafx.view.AbstractViewController;
 import com.canoo.dolphin.samples.processmonitor.model.ProcessBean;
 import com.canoo.dolphin.samples.processmonitor.model.ProcessListBean;
 import javafx.scene.Node;
@@ -27,7 +27,7 @@ import javafx.scene.control.TableView;
 
 import static com.canoo.dolphin.samples.processmonitor.ProcessMonitorConstants.CONTROLLER_NAME;
 
-public class ProcessMonitorView extends AbstractViewBinder<ProcessListBean> {
+public class ProcessMonitorView extends AbstractViewController<ProcessListBean> {
 
     private TableView<ProcessBean> table;
 
