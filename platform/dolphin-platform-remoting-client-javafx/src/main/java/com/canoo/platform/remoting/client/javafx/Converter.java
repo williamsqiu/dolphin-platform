@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.platform.remoting.client.javafx.binding;
+package com.canoo.platform.remoting.client.javafx;
 
 /**
  * Defines a converter that can convert a data type into a different data type. This converters are normally used to bind
- * JavaFX properties unidirectional to Dolphin Platform properties of a different type. For bidiertional bindings see {@link BidirectionalConverter}
+ * JavaFX properties unidirectional to Dolphin Platform properties of a different type. For bidirectional bindings see {@link BidirectionalConverter}
  * @param <T> type of the first data type
  * @param <U> type of the second data type
  */

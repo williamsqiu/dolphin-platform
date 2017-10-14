@@ -15,7 +15,7 @@
  */
 package com.canoo.dp.impl.client.javafx;
 
-import com.canoo.platform.remoting.client.javafx.binding.BidirectionalConverter;
+import com.canoo.platform.remoting.client.javafx.BidirectionalConverter;
 import com.canoo.platform.remoting.Property;
 
 public class FloatDolphinBinder extends AbstractNumericDolphinBinder<Float> {

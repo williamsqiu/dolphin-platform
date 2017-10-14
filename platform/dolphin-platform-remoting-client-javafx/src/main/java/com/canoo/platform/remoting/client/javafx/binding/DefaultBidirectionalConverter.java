@@ -16,6 +16,8 @@
 package com.canoo.platform.remoting.client.javafx.binding;
 
 import com.canoo.dp.impl.platform.core.Assert;
+import com.canoo.platform.remoting.client.javafx.BidirectionalConverter;
+import com.canoo.platform.remoting.client.javafx.Converter;
 
 @Deprecated
 public class DefaultBidirectionalConverter<T, U> implements BidirectionalConverter<T, U> {

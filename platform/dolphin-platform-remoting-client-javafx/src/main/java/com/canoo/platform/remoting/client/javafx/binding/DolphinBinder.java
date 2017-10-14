@@ -16,6 +16,8 @@
 package com.canoo.platform.remoting.client.javafx.binding;
 
 import com.canoo.platform.remoting.Binding;
+import com.canoo.platform.remoting.client.javafx.BidirectionalConverter;
+import com.canoo.platform.remoting.client.javafx.Converter;
 import com.canoo.platform.remoting.client.javafx.FXBinder;
 import javafx.beans.value.ObservableValue;
 
