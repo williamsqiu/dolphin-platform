@@ -17,6 +17,7 @@ package com.canoo.platform.remoting.client.javafx.binding;
 
 import com.canoo.platform.remoting.Binding;
 import com.canoo.platform.remoting.Property;
+import com.canoo.platform.remoting.client.javafx.BidirectionalConverter;
 
 public interface NumericJavaFXBidirectionaBinder<S extends Number> extends JavaFXBidirectionalBinder<Number> {
 

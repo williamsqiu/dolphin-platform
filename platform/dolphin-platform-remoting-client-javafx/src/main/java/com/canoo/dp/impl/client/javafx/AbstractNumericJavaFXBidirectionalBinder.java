@@ -15,7 +15,7 @@
  */
 package com.canoo.dp.impl.client.javafx;
 
-import com.canoo.platform.remoting.client.javafx.binding.BidirectionalConverter;
+import com.canoo.platform.remoting.client.javafx.BidirectionalConverter;
 import com.canoo.platform.remoting.Binding;
 import com.canoo.platform.remoting.client.javafx.binding.NumericJavaFXBidirectionaBinder;
 import com.canoo.platform.remoting.Property;
