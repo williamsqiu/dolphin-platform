@@ -16,7 +16,7 @@
 package com.canoo.dolphin.test.qualifier;
 
 import com.canoo.platform.remoting.BeanManager;
-import com.canoo.platform.remoting.Binding;
+import com.canoo.platform.core.functional.Binding;
 import com.canoo.platform.remoting.server.DolphinAction;
 import com.canoo.platform.remoting.server.DolphinController;
 import com.canoo.platform.remoting.server.DolphinModel;

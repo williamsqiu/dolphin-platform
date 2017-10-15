@@ -15,7 +15,7 @@
  */
 package com.canoo.dp.impl.client.javafx;
 
-import com.canoo.platform.remoting.Binding;
+import com.canoo.platform.core.functional.Binding;
 import com.canoo.platform.remoting.client.javafx.Converter;
 import com.canoo.platform.remoting.client.javafx.binding.JavaFXBinder;
 import com.canoo.platform.core.functional.Subscription;

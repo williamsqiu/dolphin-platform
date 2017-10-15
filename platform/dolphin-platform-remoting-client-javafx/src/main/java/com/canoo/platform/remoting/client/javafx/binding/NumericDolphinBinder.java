@@ -15,7 +15,7 @@
  */
 package com.canoo.platform.remoting.client.javafx.binding;
 
-import com.canoo.platform.remoting.Binding;
+import com.canoo.platform.core.functional.Binding;
 import javafx.beans.value.ObservableValue;
 
 public interface NumericDolphinBinder<T extends Number> extends DolphinBinder<T> {

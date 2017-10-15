@@ -15,7 +15,7 @@
  */
 package com.canoo.platform.remoting.server.binding;
 
-import com.canoo.platform.remoting.Binding;
+import com.canoo.platform.core.functional.Binding;
 import com.canoo.platform.remoting.Property;
 
 /**
