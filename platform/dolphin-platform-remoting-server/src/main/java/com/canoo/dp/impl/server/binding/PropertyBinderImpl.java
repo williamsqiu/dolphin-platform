@@ -15,7 +15,7 @@
  */
 package com.canoo.dp.impl.server.binding;
 
-import com.canoo.platform.remoting.Binding;
+import com.canoo.platform.core.functional.Binding;
 import com.canoo.dp.impl.remoting.BindingException;
 import com.canoo.dp.impl.remoting.PropertyImpl;
 import com.canoo.platform.remoting.Property;

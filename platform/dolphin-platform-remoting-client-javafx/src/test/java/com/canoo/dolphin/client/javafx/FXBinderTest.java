@@ -16,7 +16,7 @@
 package com.canoo.dolphin.client.javafx;
 
 import com.canoo.platform.remoting.client.javafx.BidirectionalConverter;
-import com.canoo.platform.remoting.Binding;
+import com.canoo.platform.core.functional.Binding;
 import com.canoo.platform.remoting.client.javafx.Converter;
 import com.canoo.platform.remoting.client.javafx.binding.DefaultBidirectionalConverter;
 import com.canoo.platform.remoting.client.javafx.FXBinder;

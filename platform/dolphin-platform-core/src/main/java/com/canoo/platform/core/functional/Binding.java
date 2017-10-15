@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.platform.remoting;
+package com.canoo.platform.core.functional;
 
 /**
  * Defines a function interface that is used to handle an unbind of an binding.
