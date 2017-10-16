@@ -1,6 +1,7 @@
 package com.canoo.platform.remoting.server.event;
 
 import com.canoo.dp.impl.platform.core.Assert;
+import com.canoo.dp.impl.server.event.ListEventSessionFilter;
 
 /**
  * A factory that provides some common implementations for the {@link EventSessionFilter}.
