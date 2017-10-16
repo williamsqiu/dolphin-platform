@@ -1,5 +1,6 @@
 package com.canoo.platform.client;
 
+import com.canoo.platform.core.framework.Incubating;
 import com.canoo.platform.core.http.HttpURLConnectionFactory;
 import com.canoo.platform.core.PlatformConfiguration;
 
@@ -8,6 +9,7 @@ import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 
+@Incubating("0.19.0")
 public interface ClientConfiguration extends PlatformConfiguration {
 
     String BACKGROUND_EXECUTOR = "platform.background.executor";

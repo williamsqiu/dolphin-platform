@@ -4,12 +4,14 @@ import com.canoo.dp.impl.platform.client.DefaultClientConfiguration;
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.client.spi.ServiceProvider;
 import com.canoo.platform.core.DolphinRuntimeException;
+import com.canoo.platform.core.framework.Incubating;
 
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.ServiceLoader;
 
+@Incubating("0.19.0")
 public class PlatformClient {
 
     private static PlatformClient INSTANCE;
