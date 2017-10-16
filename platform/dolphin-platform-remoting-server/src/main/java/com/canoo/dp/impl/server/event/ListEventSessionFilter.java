@@ -13,7 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.platform.remoting.server.event;
+package com.canoo.dp.impl.server.event;
+
+import com.canoo.platform.remoting.server.event.EventSessionFilter;
 
 import java.util.Arrays;
 import java.util.List;
