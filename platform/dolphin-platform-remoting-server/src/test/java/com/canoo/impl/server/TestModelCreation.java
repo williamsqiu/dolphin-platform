@@ -15,8 +15,9 @@
  */
 package com.canoo.impl.server;
 
-import com.canoo.platform.remoting.BeanManager;
 import com.canoo.dp.impl.remoting.BeanDefinitionException;
+import com.canoo.dp.impl.remoting.BeanRepository;
+import com.canoo.dp.impl.remoting.EventDispatcher;
 import com.canoo.dp.impl.remoting.PlatformRemotingConstants;
 import com.canoo.dp.impl.remoting.converters.BooleanConverterFactory;
 import com.canoo.dp.impl.remoting.converters.ByteConverterFactory;
@@ -30,8 +31,12 @@ import com.canoo.dp.impl.remoting.converters.IntegerConverterFactory;
 import com.canoo.dp.impl.remoting.converters.LongConverterFactory;
 import com.canoo.dp.impl.remoting.converters.ShortConverterFactory;
 import com.canoo.dp.impl.remoting.converters.StringConverterFactory;
-import com.canoo.dp.impl.remoting.BeanRepository;
-import com.canoo.dp.impl.remoting.EventDispatcher;
+import com.canoo.dp.impl.remoting.legacy.RemotingConstants;
+import com.canoo.dp.impl.remoting.legacy.core.Attribute;
+import com.canoo.dp.impl.remoting.legacy.core.PresentationModel;
+import com.canoo.dp.impl.server.legacy.ServerAttribute;
+import com.canoo.dp.impl.server.legacy.ServerModelStore;
+import com.canoo.dp.impl.server.legacy.ServerPresentationModel;
 import com.canoo.impl.server.util.AbstractDolphinBasedTest;
 import com.canoo.impl.server.util.ChildModel;
 import com.canoo.impl.server.util.ComplexDataTypesModel;
@@ -40,13 +45,8 @@ import com.canoo.impl.server.util.PrimitiveDataTypesModel;
 import com.canoo.impl.server.util.SimpleAnnotatedTestModel;
 import com.canoo.impl.server.util.SimpleTestModel;
 import com.canoo.impl.server.util.SingleReferenceModel;
+import com.canoo.platform.remoting.BeanManager;
 import org.hamcrest.Matchers;
-import org.opendolphin.RemotingConstants;
-import org.opendolphin.core.Attribute;
-import org.opendolphin.core.PresentationModel;
-import org.opendolphin.core.server.ServerAttribute;
-import org.opendolphin.core.server.ServerDolphin;
-import org.opendolphin.core.server.ServerPresentationModel;
 import org.testng.annotations.Test;
 
 import java.util.List;
@@ -67,10 +67,10 @@ public class TestModelCreation extends AbstractDolphinBasedTest {
 
     @Test
     public void testWithAnnotatedSimpleModel() {
-        final ServerDolphin dolphin = createServerDolphin();
-        final EventDispatcher dispatcher = createEventDispatcher(dolphin);
-        final BeanRepository beanRepository = createBeanRepository(dolphin, dispatcher);
-        final BeanManager manager = createBeanManager(dolphin, beanRepository, dispatcher);
+        final ServerModelStore serverModelStore = createServerModelStore();
+        final EventDispatcher dispatcher = createEventDispatcher(serverModelStore);
+        final BeanRepository beanRepository = createBeanRepository(serverModelStore, dispatcher);
+        final BeanManager manager = createBeanManager(serverModelStore, beanRepository, dispatcher);
 
         SimpleAnnotatedTestModel model = manager.create(SimpleAnnotatedTestModel.class);
 
@@ -79,7 +79,7 @@ public class TestModelCreation extends AbstractDolphinBasedTest {
         assertThat(model.getMyProperty().get(), nullValue());
         assertThat(beanRepository.isManaged(model), is(true));
 
-        List<ServerPresentationModel> dolphinModels = dolphin.getModelStore().findAllPresentationModelsByType(SimpleAnnotatedTestModel.class.getName());
+        List<ServerPresentationModel> dolphinModels = serverModelStore.findAllPresentationModelsByType(SimpleAnnotatedTestModel.class.getName());
         assertThat(dolphinModels, hasSize(1));
 
         ServerPresentationModel dolphinModel = dolphinModels.get(0);
@@ -99,7 +99,7 @@ public class TestModelCreation extends AbstractDolphinBasedTest {
                 )
         ));
 
-        List<ServerPresentationModel> classModels = dolphin.getModelStore().findAllPresentationModelsByType(PlatformRemotingConstants.DOLPHIN_BEAN);
+        List<ServerPresentationModel> classModels = serverModelStore.findAllPresentationModelsByType(PlatformRemotingConstants.DOLPHIN_BEAN);
         assertThat(classModels, contains(
                 hasProperty("attributes", containsInAnyOrder(
                         allOf(
@@ -123,10 +123,10 @@ public class TestModelCreation extends AbstractDolphinBasedTest {
 
     @Test
     public void testWithSimpleModel() {
-        final ServerDolphin dolphin = createServerDolphin();
-        final EventDispatcher dispatcher = createEventDispatcher(dolphin);
-        final BeanRepository beanRepository = createBeanRepository(dolphin, dispatcher);
-        final BeanManager manager = createBeanManager(dolphin, beanRepository, dispatcher);
+        final ServerModelStore serverModelStore = createServerModelStore();
+        final EventDispatcher dispatcher = createEventDispatcher(serverModelStore);
+        final BeanRepository beanRepository = createBeanRepository(serverModelStore, dispatcher);
+        final BeanManager manager = createBeanManager(serverModelStore, beanRepository, dispatcher);
 
         SimpleTestModel model = manager.create(SimpleTestModel.class);
 
@@ -135,7 +135,7 @@ public class TestModelCreation extends AbstractDolphinBasedTest {
         assertThat(model.getTextProperty().get(), nullValue());
         assertThat(beanRepository.isManaged(model), is(true));
 
-        List<ServerPresentationModel> dolphinModels = dolphin.getModelStore().findAllPresentationModelsByType(SimpleTestModel.class.getName());
+        List<ServerPresentationModel> dolphinModels = serverModelStore.findAllPresentationModelsByType(SimpleTestModel.class.getName());
         assertThat(dolphinModels, hasSize(1));
 
         ServerPresentationModel dolphinModel = dolphinModels.get(0);
@@ -155,7 +155,7 @@ public class TestModelCreation extends AbstractDolphinBasedTest {
                 )
         ));
 
-        List<ServerPresentationModel> classModels = dolphin.getModelStore().findAllPresentationModelsByType(PlatformRemotingConstants.DOLPHIN_BEAN);
+        List<ServerPresentationModel> classModels = serverModelStore.findAllPresentationModelsByType(PlatformRemotingConstants.DOLPHIN_BEAN);
         assertThat(classModels, contains(
                 hasProperty("attributes", containsInAnyOrder(
                         allOf(
@@ -179,26 +179,26 @@ public class TestModelCreation extends AbstractDolphinBasedTest {
 
     @Test(expectedExceptions = BeanDefinitionException.class)
     public void testWithWrongModelType() {
-        final ServerDolphin dolphin = createServerDolphin();
-        final BeanManager manager = createBeanManager(dolphin);
+        final ServerModelStore serverModelStore = createServerModelStore();
+        final BeanManager manager = createBeanManager(serverModelStore);
 
         String model = manager.create(String.class);
     }
 
     @Test(expectedExceptions = NullPointerException.class)
     public void testWithNull() {
-        final ServerDolphin dolphin = createServerDolphin();
-        final BeanManager manager = createBeanManager(dolphin);
+        final ServerModelStore serverModelStore = createServerModelStore();
+        final BeanManager manager = createBeanManager(serverModelStore);
         String model = manager.create(null);
     }
 
 
     @Test
     public void testWithAllPrimitiveDatatypes() {
-        final ServerDolphin dolphin = createServerDolphin();
-        final EventDispatcher dispatcher = createEventDispatcher(dolphin);
-        final BeanRepository beanRepository = createBeanRepository(dolphin, dispatcher);
-        final BeanManager manager = createBeanManager(dolphin, beanRepository, dispatcher);
+        final ServerModelStore serverModelStore = createServerModelStore();
+        final EventDispatcher dispatcher = createEventDispatcher(serverModelStore);
+        final BeanRepository beanRepository = createBeanRepository(serverModelStore, dispatcher);
+        final BeanManager manager = createBeanManager(serverModelStore, beanRepository, dispatcher);
 
         PrimitiveDataTypesModel model = manager.create(PrimitiveDataTypesModel.class);
 
@@ -207,7 +207,7 @@ public class TestModelCreation extends AbstractDolphinBasedTest {
         assertThat(model.getTextProperty().get(), nullValue());
         assertThat(beanRepository.isManaged(model), is(true));
 
-        List<ServerPresentationModel> dolphinModels = dolphin.getModelStore().findAllPresentationModelsByType(PrimitiveDataTypesModel.class.getName());
+        List<ServerPresentationModel> dolphinModels = serverModelStore.findAllPresentationModelsByType(PrimitiveDataTypesModel.class.getName());
         assertThat(dolphinModels, hasSize(1));
 
         ServerPresentationModel dolphinModel = dolphinModels.get(0);
@@ -224,7 +224,7 @@ public class TestModelCreation extends AbstractDolphinBasedTest {
             assertThat(attribute.getQualifier(), nullValue());
         }
 
-        final List<ServerPresentationModel> classModels = dolphin.getModelStore().findAllPresentationModelsByType(PlatformRemotingConstants.DOLPHIN_BEAN);
+        final List<ServerPresentationModel> classModels = serverModelStore.findAllPresentationModelsByType(PlatformRemotingConstants.DOLPHIN_BEAN);
         assertThat(classModels, hasSize(1));
 
         final PresentationModel classModel = classModels.get(0);
@@ -275,10 +275,10 @@ public class TestModelCreation extends AbstractDolphinBasedTest {
 
     @Test
     public void testWithComplexDataTypesModel() {
-        final ServerDolphin dolphin = createServerDolphin();
-        final EventDispatcher dispatcher = createEventDispatcher(dolphin);
-        final BeanRepository beanRepository = createBeanRepository(dolphin, dispatcher);
-        final BeanManager manager = createBeanManager(dolphin, beanRepository, dispatcher);
+        final ServerModelStore serverModelStore = createServerModelStore();
+        final EventDispatcher dispatcher = createEventDispatcher(serverModelStore);
+        final BeanRepository beanRepository = createBeanRepository(serverModelStore, dispatcher);
+        final BeanManager manager = createBeanManager(serverModelStore, beanRepository, dispatcher);
 
         ComplexDataTypesModel model = manager.create(ComplexDataTypesModel.class);
 
@@ -291,7 +291,7 @@ public class TestModelCreation extends AbstractDolphinBasedTest {
         assertThat(model.getEnumProperty().get(), nullValue());
         assertThat(beanRepository.isManaged(model), is(true));
 
-        List<ServerPresentationModel> dolphinModels = dolphin.getModelStore().findAllPresentationModelsByType(ComplexDataTypesModel.class.getName());
+        List<ServerPresentationModel> dolphinModels = serverModelStore.findAllPresentationModelsByType(ComplexDataTypesModel.class.getName());
         assertThat(dolphinModels, hasSize(1));
 
         PresentationModel dolphinModel = dolphinModels.get(0);
@@ -321,7 +321,7 @@ public class TestModelCreation extends AbstractDolphinBasedTest {
                 )
         ));
 
-        List<ServerPresentationModel> classModels = dolphin.getModelStore().findAllPresentationModelsByType(PlatformRemotingConstants.DOLPHIN_BEAN);
+        List<ServerPresentationModel> classModels = serverModelStore.findAllPresentationModelsByType(PlatformRemotingConstants.DOLPHIN_BEAN);
         assertThat(classModels, contains(
                 hasProperty("attributes", containsInAnyOrder(
                         allOf(
@@ -356,10 +356,10 @@ public class TestModelCreation extends AbstractDolphinBasedTest {
 
     @Test
     public void testWithSingleReferenceModel() {
-        final ServerDolphin dolphin = createServerDolphin();
-        final EventDispatcher dispatcher = createEventDispatcher(dolphin);
-        final BeanRepository beanRepository = createBeanRepository(dolphin, dispatcher);
-        final BeanManager manager = createBeanManager(dolphin, beanRepository, dispatcher);
+        final ServerModelStore serverModelStore = createServerModelStore();
+        final EventDispatcher dispatcher = createEventDispatcher(serverModelStore);
+        final BeanRepository beanRepository = createBeanRepository(serverModelStore, dispatcher);
+        final BeanManager manager = createBeanManager(serverModelStore, beanRepository, dispatcher);
 
         SingleReferenceModel model = manager.create(SingleReferenceModel.class);
 
@@ -368,7 +368,7 @@ public class TestModelCreation extends AbstractDolphinBasedTest {
         assertThat(model.getReferenceProperty().get(), nullValue());
         assertThat(beanRepository.isManaged(model), is(true));
 
-        List<ServerPresentationModel> dolphinModels = dolphin.getModelStore().findAllPresentationModelsByType(SingleReferenceModel.class.getName());
+        List<ServerPresentationModel> dolphinModels = serverModelStore.findAllPresentationModelsByType(SingleReferenceModel.class.getName());
         assertThat(dolphinModels, hasSize(1));
 
         ServerPresentationModel dolphinModel = dolphinModels.get(0);
@@ -388,7 +388,7 @@ public class TestModelCreation extends AbstractDolphinBasedTest {
                 )
         ));
 
-        List<ServerPresentationModel> classModels = dolphin.getModelStore().findAllPresentationModelsByType(PlatformRemotingConstants.DOLPHIN_BEAN);
+        List<ServerPresentationModel> classModels = serverModelStore.findAllPresentationModelsByType(PlatformRemotingConstants.DOLPHIN_BEAN);
         assertThat(classModels, contains(
                 hasProperty("attributes", containsInAnyOrder(
                         allOf(
@@ -412,8 +412,8 @@ public class TestModelCreation extends AbstractDolphinBasedTest {
 
     @Test
     public void testWithListReferenceModel() {
-        final ServerDolphin dolphin = createServerDolphin();
-        final BeanManager manager = createBeanManager(dolphin);
+        final ServerModelStore serverModelStore = createServerModelStore();
+        final BeanManager manager = createBeanManager(serverModelStore);
 
         ListReferenceModel model = manager.create(ListReferenceModel.class);
 
@@ -421,7 +421,7 @@ public class TestModelCreation extends AbstractDolphinBasedTest {
         assertThat(model.getObjectList(), empty());
         assertThat(model.getPrimitiveList(), empty());
 
-        List<ServerPresentationModel> dolphinModels = dolphin.getModelStore().findAllPresentationModelsByType(ListReferenceModel.class.getName());
+        List<ServerPresentationModel> dolphinModels = serverModelStore.findAllPresentationModelsByType(ListReferenceModel.class.getName());
         assertThat(dolphinModels, hasSize(1));
 
         ServerPresentationModel dolphinModel = dolphinModels.get(0);
@@ -436,7 +436,7 @@ public class TestModelCreation extends AbstractDolphinBasedTest {
                 )
         ));
 
-        List<ServerPresentationModel> classModels = dolphin.getModelStore().findAllPresentationModelsByType(PlatformRemotingConstants.DOLPHIN_BEAN);
+        List<ServerPresentationModel> classModels = serverModelStore.findAllPresentationModelsByType(PlatformRemotingConstants.DOLPHIN_BEAN);
         assertThat(classModels, contains(
                 hasProperty("attributes", containsInAnyOrder(
                         allOf(
@@ -465,10 +465,10 @@ public class TestModelCreation extends AbstractDolphinBasedTest {
 
     @Test
     public void testWithInheritedModel() {
-        final ServerDolphin dolphin = createServerDolphin();
-        final EventDispatcher dispatcher = createEventDispatcher(dolphin);
-        final BeanRepository beanRepository = createBeanRepository(dolphin, dispatcher);
-        final BeanManager manager = createBeanManager(dolphin, beanRepository, dispatcher);
+        final ServerModelStore serverModelStore = createServerModelStore();
+        final EventDispatcher dispatcher = createEventDispatcher(serverModelStore);
+        final BeanRepository beanRepository = createBeanRepository(serverModelStore, dispatcher);
+        final BeanManager manager = createBeanManager(serverModelStore, beanRepository, dispatcher);
 
         ChildModel model = manager.create(ChildModel.class);
 
@@ -479,7 +479,7 @@ public class TestModelCreation extends AbstractDolphinBasedTest {
         assertThat(model.getChildProperty().get(), nullValue());
         assertThat(beanRepository.isManaged(model), is(true));
 
-        List<ServerPresentationModel> dolphinModels = dolphin.getModelStore().findAllPresentationModelsByType(ChildModel.class.getName());
+        List<ServerPresentationModel> dolphinModels = serverModelStore.findAllPresentationModelsByType(ChildModel.class.getName());
         assertThat(dolphinModels, hasSize(1));
 
         ServerPresentationModel dolphinModel = dolphinModels.get(0);
@@ -504,7 +504,7 @@ public class TestModelCreation extends AbstractDolphinBasedTest {
                 )
         ));
 
-        List<ServerPresentationModel> classModels = dolphin.getModelStore().findAllPresentationModelsByType(PlatformRemotingConstants.DOLPHIN_BEAN);
+        List<ServerPresentationModel> classModels = serverModelStore.findAllPresentationModelsByType(PlatformRemotingConstants.DOLPHIN_BEAN);
         assertThat(classModels, hasSize(1));
         assertThat(classModels, contains(
                 hasProperty("attributes", containsInAnyOrder(

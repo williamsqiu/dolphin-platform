@@ -21,8 +21,8 @@ package com.canoo.dp.impl.server.context;
 public interface CommunicationManager {
 
     /**
-     * Returns true if commands should be send back to the client
-     * @return true if commands should be send back to the client
+     * Returns true if commands should be send back to the client. This means that the server has some commands (see {@link com.canoo.dp.impl.remoting.legacy.communication.Command}) in the send queue.
+     * @return true if commands should be send back to the client, otherwise false
      */
     boolean hasResponseCommands();
 }

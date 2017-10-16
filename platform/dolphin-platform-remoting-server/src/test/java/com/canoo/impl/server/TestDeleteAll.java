@@ -15,14 +15,14 @@
  */
 package com.canoo.impl.server;
 
-import com.canoo.platform.remoting.BeanManager;
 import com.canoo.dp.impl.remoting.BeanRepository;
 import com.canoo.dp.impl.remoting.EventDispatcher;
+import com.canoo.dp.impl.server.legacy.ServerModelStore;
+import com.canoo.dp.impl.server.legacy.ServerPresentationModel;
 import com.canoo.impl.server.util.AbstractDolphinBasedTest;
 import com.canoo.impl.server.util.SimpleAnnotatedTestModel;
 import com.canoo.impl.server.util.SimpleTestModel;
-import org.opendolphin.core.server.ServerDolphin;
-import org.opendolphin.core.server.ServerPresentationModel;
+import com.canoo.platform.remoting.BeanManager;
 import org.testng.annotations.Test;
 
 import java.util.List;
@@ -35,10 +35,10 @@ public class TestDeleteAll extends AbstractDolphinBasedTest {
 
     @Test
     public void testWithSimpleModel() {
-        final ServerDolphin dolphin = createServerDolphin();
-        final EventDispatcher dispatcher = createEventDispatcher(dolphin);
-        final BeanRepository beanRepository = createBeanRepository(dolphin, dispatcher);
-        final BeanManager manager = createBeanManager(dolphin, beanRepository, dispatcher);
+        final ServerModelStore serverModelStore = createServerModelStore();
+        final EventDispatcher dispatcher = createEventDispatcher(serverModelStore);
+        final BeanRepository beanRepository = createBeanRepository(serverModelStore, dispatcher);
+        final BeanManager manager = createBeanManager(serverModelStore, beanRepository, dispatcher);
 
         SimpleTestModel model1 = manager.create(SimpleTestModel.class);
         SimpleTestModel model2 = manager.create(SimpleTestModel.class);
@@ -55,7 +55,7 @@ public class TestDeleteAll extends AbstractDolphinBasedTest {
         assertThat(beanRepository.isManaged(model3), is(false));
         assertThat(beanRepository.isManaged(wrongModel), is(true));
 
-        List<ServerPresentationModel> testModels = dolphin.getModelStore().findAllPresentationModelsByType("com.canoo.dolphin.server.util.SimpleTestModel");
+        List<ServerPresentationModel> testModels = serverModelStore.findAllPresentationModelsByType("com.canoo.dolphin.server.util.SimpleTestModel");
         assertThat(testModels, hasSize(0));
 
     }

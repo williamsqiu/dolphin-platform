@@ -16,8 +16,6 @@
 package com.canoo.dp.impl.platform.core;
 
 import com.canoo.platform.core.PlatformThreadFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.security.AccessController;
 import java.security.PrivilegedAction;
@@ -27,8 +25,6 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class SimpleDolphinPlatformThreadFactory implements PlatformThreadFactory {
 
-    private static final Logger LOG = LoggerFactory.getLogger(SimpleDolphinPlatformThreadFactory.class);
-
     private final AtomicInteger threadNumber = new AtomicInteger(0);
 
     private final Lock uncaughtExceptionHandlerLock = new ReentrantLock();
@@ -37,16 +33,13 @@ public class SimpleDolphinPlatformThreadFactory implements PlatformThreadFactory
 
     private Thread.UncaughtExceptionHandler uncaughtExceptionHandler;
 
-    public SimpleDolphinPlatformThreadFactory() {
-        this.uncaughtExceptionHandler = new Thread.UncaughtExceptionHandler() {
-            @Override
-            public void uncaughtException(Thread thread, Throwable exception) {
-                Assert.requireNonNull(thread, "thread");
-                Assert.requireNonNull(exception, "exception");
-                LOG.error("Unhandled error in Dolphin Platform background thread " + thread.getName(), exception);
-            }
-        };
+    public SimpleDolphinPlatformThreadFactory(final Thread.UncaughtExceptionHandler uncaughtExceptionHandler) {
+        this.uncaughtExceptionHandler = Assert.requireNonNull(uncaughtExceptionHandler, "uncaughtExceptionHandler");
         this.group = new ThreadGroup("Dolphin Platform executors");
+    }
+
+    public SimpleDolphinPlatformThreadFactory() {
+        this(new SimpleUncaughtExceptionHandler());
     }
 
     @Override

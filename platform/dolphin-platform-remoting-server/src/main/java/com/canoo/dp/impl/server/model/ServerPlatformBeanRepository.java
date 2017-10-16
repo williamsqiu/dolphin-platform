@@ -15,15 +15,15 @@
  */
 package com.canoo.dp.impl.server.model;
 
-import com.canoo.dp.impl.remoting.Converters;
-import com.canoo.dp.impl.remoting.InternalAttributesBean;
-import com.canoo.dp.impl.remoting.PlatformRemotingConstants;
+import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.remoting.BeanRepository;
+import com.canoo.dp.impl.remoting.Converters;
 import com.canoo.dp.impl.remoting.DolphinEventHandler;
 import com.canoo.dp.impl.remoting.EventDispatcher;
-import com.canoo.dp.impl.platform.core.Assert;
-import org.opendolphin.core.PresentationModel;
-import org.opendolphin.core.server.ServerDolphin;
+import com.canoo.dp.impl.remoting.InternalAttributesBean;
+import com.canoo.dp.impl.remoting.PlatformRemotingConstants;
+import com.canoo.dp.impl.remoting.legacy.core.PresentationModel;
+import com.canoo.dp.impl.server.legacy.ServerModelStore;
 
 public class ServerPlatformBeanRepository {
 
@@ -31,7 +31,7 @@ public class ServerPlatformBeanRepository {
 
     private final InternalAttributesBean internalAttributesBean;
 
-    public ServerPlatformBeanRepository(ServerDolphin dolphin, BeanRepository beanRepository, EventDispatcher dispatcher, final Converters converters) {
+    public ServerPlatformBeanRepository(ServerModelStore serverModelStore, BeanRepository beanRepository, EventDispatcher dispatcher, final Converters converters) {
         Assert.requireNonNull(dispatcher, "dispatcher");
         dispatcher.addControllerActionCallBeanAddedHandler(new DolphinEventHandler() {
             @Override
@@ -57,7 +57,7 @@ public class ServerPlatformBeanRepository {
             }
         });
 
-        internalAttributesBean = new InternalAttributesBean(beanRepository, new ServerPresentationModelBuilder(dolphin));
+        internalAttributesBean = new InternalAttributesBean(beanRepository, new ServerPresentationModelBuilder(serverModelStore));
     }
 
     public ServerControllerActionCallBean getControllerActionCallBean() {

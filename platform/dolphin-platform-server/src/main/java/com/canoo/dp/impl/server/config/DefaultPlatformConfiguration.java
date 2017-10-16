@@ -16,7 +16,7 @@
 package com.canoo.dp.impl.server.config;
 
 import com.canoo.dp.impl.platform.core.Assert;
-import com.canoo.platform.server.spi.PlatformConfiguration;
+import com.canoo.platform.core.PlatformConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,10 +51,6 @@ public final class DefaultPlatformConfiguration implements PlatformConfiguration
 
     public boolean containsProperty(final String key) {
         return internalProperties.containsKey(key);
-    }
-
-    public String getProperty(final String key) {
-        return getProperty(key, null);
     }
 
     public boolean getBooleanProperty(final String key, final boolean defaultValue) {

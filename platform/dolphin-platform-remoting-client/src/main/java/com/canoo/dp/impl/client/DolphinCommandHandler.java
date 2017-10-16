@@ -16,9 +16,9 @@
 package com.canoo.dp.impl.client;
 
 import com.canoo.dp.impl.platform.core.Assert;
-import org.opendolphin.core.client.comm.AbstractClientConnector;
-import org.opendolphin.core.client.comm.OnFinishedHandler;
-import org.opendolphin.core.comm.Command;
+import com.canoo.dp.impl.client.legacy.communication.AbstractClientConnector;
+import com.canoo.dp.impl.client.legacy.communication.OnFinishedHandler;
+import com.canoo.dp.impl.remoting.legacy.communication.Command;
 
 import java.util.concurrent.CompletableFuture;
 

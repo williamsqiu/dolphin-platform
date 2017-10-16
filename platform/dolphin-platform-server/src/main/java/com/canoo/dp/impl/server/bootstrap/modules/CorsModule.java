@@ -20,7 +20,7 @@ import com.canoo.dp.impl.server.servlet.CrossSiteOriginFilter;
 import com.canoo.platform.server.spi.AbstractBaseModule;
 import com.canoo.platform.server.spi.ModuleDefinition;
 import com.canoo.platform.server.spi.ModuleInitializationException;
-import com.canoo.platform.server.spi.PlatformConfiguration;
+import com.canoo.platform.core.PlatformConfiguration;
 import com.canoo.platform.server.spi.ServerCoreComponents;
 
 import javax.servlet.DispatcherType;

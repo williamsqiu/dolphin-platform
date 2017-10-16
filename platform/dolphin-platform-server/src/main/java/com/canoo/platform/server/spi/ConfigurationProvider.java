@@ -15,19 +15,48 @@
  */
 package com.canoo.platform.server.spi;
 
+import com.canoo.platform.core.PlatformConfiguration;
+
 import java.util.List;
 import java.util.Map;
 
+/**
+ * A provider for configuration properties. This can be used to define the default values for all the properties of a module.
+ *
+ * @author Hendrik Ebbers
+ *
+ * @see PlatformConfiguration
+ */
 public interface ConfigurationProvider {
 
+    /**
+     * Returns a map of property value pairs. All values are string based.
+     * @return a map of property value pairs
+     */
     Map<String, String> getStringProperties();
 
+    /**
+     * Returns a map of property value pairs. All values are a list of string values.
+     * @return a map of property value pairs
+     */
     Map<String, List<String>> getListProperties();
 
+    /**
+     * Returns a map of property value pairs. All values are boolean based.
+     * @return a map of property value pairs
+     */
     Map<String, Boolean> getBooleanProperties();
 
+    /**
+     * Returns a map of property value pairs. All values are int based.
+     * @return a map of property value pairs
+     */
     Map<String, Integer> getIntegerProperties();
 
+    /**
+     * Returns a map of property value pairs. All values are long based.
+     * @return a map of property value pairs
+     */
     Map<String, Long> getLongProperties();
 
 }

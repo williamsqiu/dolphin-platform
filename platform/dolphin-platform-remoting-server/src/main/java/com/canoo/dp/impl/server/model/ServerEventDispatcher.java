@@ -16,13 +16,13 @@
 package com.canoo.dp.impl.server.model;
 
 import com.canoo.dp.impl.remoting.EventDispatcherImpl;
-import org.opendolphin.RemotingConstants;
-import org.opendolphin.core.Dolphin;
+import com.canoo.dp.impl.remoting.legacy.RemotingConstants;
+import com.canoo.dp.impl.remoting.legacy.core.ModelStore;
 
 public class ServerEventDispatcher extends EventDispatcherImpl {
 
-    public ServerEventDispatcher(Dolphin dolphin) {
-        super(dolphin.getModelStore());
+    public ServerEventDispatcher(ModelStore modelStore) {
+        super(modelStore);
     }
 
     @Override

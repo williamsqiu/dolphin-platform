@@ -21,8 +21,8 @@ import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.core.functional.Callback;
 import com.canoo.dp.impl.server.client.ClientSessionProvider;
 import com.canoo.platform.server.client.ClientSession;
-import org.opendolphin.core.comm.Codec;
-import org.opendolphin.core.comm.Command;
+import com.canoo.dp.impl.remoting.legacy.communication.Codec;
+import com.canoo.dp.impl.remoting.legacy.communication.Command;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,7 +43,7 @@ public class DolphinContextCommunicationHandler {
 
     private final ClientSessionProvider sessionProvider;
 
-    private final Codec codec = new OptimizedJsonCodec();
+    private final Codec codec = OptimizedJsonCodec.getInstance();
 
     private final DolphinContextFactory contextFactory;
 
@@ -88,7 +88,7 @@ public class DolphinContextCommunicationHandler {
                 results.addAll(handle(context, commands));
             } catch (Exception e) {
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-                LOG.error("Can not handle the the received commands (DolphinContext " + context.getId() + ")", e);
+                LOG.error("Can not withoutResult the the received commands (DolphinContext " + context.getId() + ")", e);
                 return;
             }
 
@@ -104,7 +104,7 @@ public class DolphinContextCommunicationHandler {
             }
         } catch (Exception e) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            LOG.warn("Can not find or create matching dolphin context in session " + httpSession.getId());
+            LOG.error("Can not find or create matching dolphin context in session " + httpSession.getId(), e);
             return;
         }
     }

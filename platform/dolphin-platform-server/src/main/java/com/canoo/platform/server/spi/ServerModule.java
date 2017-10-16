@@ -15,13 +15,36 @@
  */
 package com.canoo.platform.server.spi;
 
+import com.canoo.platform.core.PlatformConfiguration;
+
 import java.util.List;
 
+/**
+ * This interface defines a server module that will automatically be started when the Dolphin Platform server component starts. DOlphin Platform will search for all implementations of this interface on the classpath that are annotated by {@link ModuleDefinition} and will automatically start them based on the order that is defined by the {@link ModuleDefinition} annotation.
+ *
+ * @author Hendrik Ebbers
+ * @see ModuleDefinition
+ *
+ */
 public interface ServerModule {
 
+    /**
+     * Some modules depend on other modules. This method returns a collection of the names of all modules that are needed to start this module. The name of a module is defined in the {@link ModuleDefinition} annotation.
+     * @return a set of the names of all modules that are needed to start this module
+     */
     List<String> getModuleDependencies();
 
+    /**
+     * Returns true if the module will be booted at the Dolphin Platform bootstrap, otherwise false.
+     * @param configuration the Dolphin Platform configuration
+     * @return true if the module will be booted
+     */
     boolean shouldBoot(PlatformConfiguration configuration);
 
+    /**
+     * This method will be called by the Dolphin Platform to initialize the module.
+     * @param coreComponents the core components
+     * @throws ModuleInitializationException if the module can not be initialized
+     */
     void initialize(final ServerCoreComponents coreComponents) throws ModuleInitializationException;
 }

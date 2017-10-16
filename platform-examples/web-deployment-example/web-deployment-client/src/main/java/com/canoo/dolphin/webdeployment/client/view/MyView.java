@@ -18,7 +18,7 @@ package com.canoo.dolphin.webdeployment.client.view;
 import com.canoo.platform.remoting.client.ClientContext;
 import com.canoo.platform.remoting.client.javafx.FXBinder;
 
-import com.canoo.platform.remoting.client.javafx.view.AbstractFXMLViewBinder;
+import com.canoo.platform.remoting.client.javafx.view.AbstractFXMLViewController;
 import com.canoo.dolphin.webdeployment.Constants;
 import com.canoo.dolphin.webdeployment.model.MyModel;
 import javafx.fxml.FXML;
@@ -26,7 +26,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 
 
-public class MyView extends AbstractFXMLViewBinder<MyModel> {
+public class MyView extends AbstractFXMLViewController<MyModel> {
 
     @FXML
     private TextField valueField;

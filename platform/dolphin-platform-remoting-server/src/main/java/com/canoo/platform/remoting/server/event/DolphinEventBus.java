@@ -21,7 +21,7 @@ import com.canoo.platform.remoting.server.DolphinController;
 import java.io.Serializable;
 
 /**
- * The dolphin event bus that can be used to send messages to dolphin sessions.
+ * The dolphin event bus that can be used to withContent messages to dolphin sessions.
  * The {@link DolphinEventBus} can be injected in any
  * managed bean and will automatically publish the given data in the dolphin session.
  * This means that you ca subscribe your dolphin controller (see {@link DolphinController})
@@ -29,24 +29,35 @@ import java.io.Serializable;
  * <br>
  * <center><img src="doc-files/event-bus.png" alt="Notification MVC Widget example"></center>
  *
+ * @author Hendrik Ebbers
  */
 public interface DolphinEventBus {
 
     /**
-     * Publish a message to the given address
+     * Publish a message to the given topic
      *
-     * @param data the data of the message
+     * @param topic the topic
+     * @param data  the data of the message
+     * @param <T>   type of the data
      */
     <T extends Serializable> void publish(Topic<T> topic, T data);
 
+    /**
+     * Publish a message to the given topic. For each subscription to the topic the given {@link EventSessionFilter} will be called to check if the data should be send to the subscription.
+     *
+     * @param topic  the topic
+     * @param data   the data of the message
+     * @param filter the filter
+     * @param <T>    type of the data
+     */
     <T extends Serializable> void publish(final Topic<T> topic, final T data, EventSessionFilter filter);
 
     /**
-     * Register as a handler / listener for a given address. All messages that will be published for the given address
+     * Register as a listener for a given topic. All messages that will be published for the given address
      * by any dolphin session will trigger the given handler in the correct dolphin session.
      *
-     * @param topic   the topic
-     * @param handler the handler
+     * @param topic    the topic
+     * @param listener the listener
      */
     <T extends Serializable> Subscription subscribe(Topic<T> topic, MessageListener<? super T> listener);
 }

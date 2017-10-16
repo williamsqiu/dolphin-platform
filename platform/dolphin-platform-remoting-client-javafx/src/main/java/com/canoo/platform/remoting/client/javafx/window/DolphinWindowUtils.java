@@ -15,7 +15,7 @@
  */
 package com.canoo.platform.remoting.client.javafx.window;
 
-import com.canoo.platform.remoting.client.javafx.view.AbstractViewBinder;
+import com.canoo.platform.remoting.client.javafx.view.AbstractViewController;
 import com.canoo.platform.core.functional.Subscription;
 import com.canoo.dp.impl.platform.core.Assert;
 import javafx.event.EventHandler;
@@ -28,14 +28,14 @@ import javafx.stage.WindowEvent;
 public class DolphinWindowUtils {
 
     /**
-     * The method will register an event handler to the window that will automatically call the {@link AbstractViewBinder#destroy()}
+     * The method will register an event handler to the window that will automatically call the {@link AbstractViewController#destroy()}
      * method when the windows becomes hidden.
      * @param window the window
      * @param viewBinder the view binder
      * @param <M> the model type
      * @return a subscription to unsubsribe / deregister the handler.
      */
-    public static <M> Subscription destroyOnClose(final Window window, final AbstractViewBinder<M> viewBinder) {
+    public static <M> Subscription destroyOnClose(final Window window, final AbstractViewController<M> viewBinder) {
         Assert.requireNonNull(window, "window");
         Assert.requireNonNull(viewBinder, "viewBinder");
         final EventHandler<WindowEvent> handler = e -> viewBinder.destroy();

@@ -15,12 +15,13 @@
  */
 package com.canoo.dp.impl.remoting;
 
+import com.canoo.dp.impl.remoting.legacy.core.PresentationModel;
 import com.canoo.platform.core.functional.Subscription;
-import org.opendolphin.core.PresentationModel;
+import com.canoo.platform.remoting.spi.converter.DolphinBeanRepo;
 
 import java.util.List;
 
-public interface BeanRepository {
+public interface BeanRepository extends DolphinBeanRepo {
 
     <T> Subscription addOnAddedListener(final Class<T> beanClass, final BeanAddedListener<? super T> listener);
 
@@ -35,10 +36,6 @@ public interface BeanRepository {
     <T> void delete(T bean);
 
     <T> List<T> findAll(Class<T> beanClass);
-
-    Object getBean(String sourceId);
-
-    String getDolphinId(Object bean);
 
     void registerBean(Object bean, PresentationModel model, UpdateSource source);
 }

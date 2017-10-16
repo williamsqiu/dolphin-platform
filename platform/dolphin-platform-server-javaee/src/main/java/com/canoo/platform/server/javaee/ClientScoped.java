@@ -23,6 +23,8 @@ import java.lang.annotation.Target;
 
 /**
  * A custom scope that is bound to the lifecycle of a {@link com.canoo.dolphin.server.DolphinSession}
+ *
+ * @author Hendrik Ebbers
  */
 @Scope
 @Retention(RetentionPolicy.RUNTIME)

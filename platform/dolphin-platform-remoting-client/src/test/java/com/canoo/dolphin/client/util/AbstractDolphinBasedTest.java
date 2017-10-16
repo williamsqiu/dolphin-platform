@@ -15,32 +15,30 @@
  */
 package com.canoo.dolphin.client.util;
 
-import com.canoo.dp.impl.remoting.BeanManagerImpl;
-import com.canoo.dp.impl.remoting.BeanRepositoryImpl;
-import com.canoo.dp.impl.remoting.ClassRepositoryImpl;
-import com.canoo.dp.impl.remoting.Converters;
-import com.canoo.dp.impl.remoting.PresentationModelBuilderFactory;
-import com.canoo.platform.remoting.BeanManager;
 import com.canoo.dp.impl.client.ClientBeanBuilderImpl;
 import com.canoo.dp.impl.client.ClientEventDispatcher;
 import com.canoo.dp.impl.client.ClientPresentationModelBuilderFactory;
-import com.canoo.dp.impl.remoting.collections.ListMapperImpl;
+import com.canoo.dp.impl.client.legacy.ClientModelStore;
+import com.canoo.dp.impl.client.legacy.DefaultModelSynchronizer;
+import com.canoo.dp.impl.client.legacy.ModelSynchronizer;
+import com.canoo.dp.impl.client.legacy.communication.AbstractClientConnector;
 import com.canoo.dp.impl.remoting.BeanBuilder;
+import com.canoo.dp.impl.remoting.BeanManagerImpl;
 import com.canoo.dp.impl.remoting.BeanRepository;
+import com.canoo.dp.impl.remoting.BeanRepositoryImpl;
 import com.canoo.dp.impl.remoting.ClassRepository;
+import com.canoo.dp.impl.remoting.ClassRepositoryImpl;
+import com.canoo.dp.impl.remoting.Converters;
 import com.canoo.dp.impl.remoting.EventDispatcher;
 import com.canoo.dp.impl.remoting.ListMapper;
-import core.comm.DefaultInMemoryConfig;
-import org.opendolphin.core.client.ClientDolphin;
-import org.opendolphin.core.client.ClientModelStore;
-import org.opendolphin.core.client.DefaultModelSynchronizer;
-import org.opendolphin.core.client.ModelSynchronizer;
-import org.opendolphin.core.client.comm.AbstractClientConnector;
-import org.opendolphin.core.comm.Command;
-import org.opendolphin.core.server.ServerDolphin;
-import org.opendolphin.core.server.ServerModelStore;
-import org.opendolphin.util.DirectExecutor;
-import org.opendolphin.util.Provider;
+import com.canoo.dp.impl.remoting.PresentationModelBuilderFactory;
+import com.canoo.dp.impl.remoting.collections.ListMapperImpl;
+import com.canoo.dp.impl.remoting.legacy.communication.Command;
+import com.canoo.dp.impl.remoting.legacy.util.DirectExecutor;
+import com.canoo.dp.impl.remoting.legacy.util.Provider;
+import com.canoo.dp.impl.server.legacy.ServerConnector;
+import com.canoo.dp.impl.server.legacy.ServerModelStore;
+import com.canoo.platform.remoting.BeanManager;
 
 import java.util.ArrayList;
 
@@ -48,69 +46,82 @@ public abstract class AbstractDolphinBasedTest {
 
     public class DolphinTestConfiguration {
 
-        private ClientDolphin clientDolphin;
+        private final ClientModelStore clientModelStore;
 
-        private ServerDolphin serverDolphin;
+        private final ServerModelStore serverModelStore;
 
-        public DolphinTestConfiguration(ClientDolphin clientDolphin, ServerDolphin serverDolphin) {
-            this.clientDolphin = clientDolphin;
-            this.serverDolphin = serverDolphin;
+        private final InMemoryClientConnector clientConnector;
+
+        private final ServerConnector serverConnector;
+
+
+        public ClientModelStore getClientModelStore() {
+            return clientModelStore;
         }
 
-        public ClientDolphin getClientDolphin() {
-            return clientDolphin;
+        public ServerModelStore getServerModelStore() {
+            return serverModelStore;
         }
 
-        public ServerDolphin getServerDolphin() {
-            return serverDolphin;
+        public InMemoryClientConnector getClientConnector() {
+            return clientConnector;
+        }
+
+        public ServerConnector getServerConnector() {
+            return serverConnector;
+        }
+
+        public DolphinTestConfiguration(ClientModelStore clientModelStore, ServerModelStore serverModelStore, InMemoryClientConnector clientConnector, ServerConnector serverConnector) {
+            this.clientModelStore = clientModelStore;
+            this.serverModelStore = serverModelStore;
+            this.clientConnector = clientConnector;
+            this.serverConnector = serverConnector;
         }
     }
 
-    protected ClientDolphin createClientDolphin(final AbstractClientConnector connector) {
-        final ClientDolphin dolphin = new ClientDolphin();
+    protected ClientModelStore createClientModelStore(final AbstractClientConnector connector) {
         ModelSynchronizer defaultModelSynchronizer = new DefaultModelSynchronizer(new Provider<AbstractClientConnector>() {
             @Override
             public AbstractClientConnector get() {
                 return connector;
             }
         });
-        ClientModelStore modelStore = new ClientModelStore(defaultModelSynchronizer);
-        dolphin.setClientModelStore(modelStore);
-        dolphin.setClientConnector(connector);
-        return dolphin;
+        ClientModelStore clientModelStore = new ClientModelStore(defaultModelSynchronizer);
+
+        return clientModelStore;
     }
 
     protected DolphinTestConfiguration createDolphinTestConfiguration() {
         DefaultInMemoryConfig config = new DefaultInMemoryConfig(DirectExecutor.getInstance());
-        config.getServerDolphin().getServerConnector().registerDefaultActions();
-        ServerModelStore store = config.getServerDolphin().getModelStore();
+        config.getServerConnector().registerDefaultActions();
+        ServerModelStore store = config.getServerModelStore();
         store.setCurrentResponse(new ArrayList<Command>());
 
-        return new DolphinTestConfiguration(config.getClientDolphin(), config.getServerDolphin());
+        return new DolphinTestConfiguration(config.getClientModelStore(), config.getServerModelStore(), config.getClientConnector(), config.getServerConnector());
     }
 
-    protected EventDispatcher createEventDispatcher(final ClientDolphin dolphin) {
-        final EventDispatcher dispatcher = new ClientEventDispatcher(dolphin.getModelStore());
+    protected EventDispatcher createEventDispatcher(final ClientModelStore clientModelStore) {
+        final EventDispatcher dispatcher = new ClientEventDispatcher(clientModelStore);
         return dispatcher;
     }
 
-    protected BeanRepository createBeanRepository(final ClientDolphin dolphin, final EventDispatcher dispatcher) {
-        final BeanRepositoryImpl beanRepository = new BeanRepositoryImpl(dolphin.getModelStore(), dispatcher);
+    protected BeanRepository createBeanRepository(final ClientModelStore clientModelStore, final EventDispatcher dispatcher) {
+        final BeanRepositoryImpl beanRepository = new BeanRepositoryImpl(clientModelStore, dispatcher);
         return beanRepository;
     }
 
-    protected BeanManager createBeanManager(final ClientDolphin dolphin, final BeanRepository beanRepository, final EventDispatcher dispatcher) {
+    protected BeanManager createBeanManager(final ClientModelStore clientModelStore, final BeanRepository beanRepository, final EventDispatcher dispatcher) {
         final Converters converters = new Converters(beanRepository);
-        final PresentationModelBuilderFactory builderFactory = new ClientPresentationModelBuilderFactory(dolphin.getModelStore());
-        final ClassRepository classRepository = new ClassRepositoryImpl(dolphin.getModelStore(), converters, builderFactory);
-        final ListMapper listMapper = new ListMapperImpl(dolphin.getModelStore(), classRepository, beanRepository, builderFactory, dispatcher);
+        final PresentationModelBuilderFactory builderFactory = new ClientPresentationModelBuilderFactory(clientModelStore);
+        final ClassRepository classRepository = new ClassRepositoryImpl(clientModelStore, converters, builderFactory);
+        final ListMapper listMapper = new ListMapperImpl(clientModelStore, classRepository, beanRepository, builderFactory, dispatcher);
         final BeanBuilder beanBuilder = new ClientBeanBuilderImpl(classRepository, beanRepository, listMapper, builderFactory, dispatcher);
         return new BeanManagerImpl(beanRepository, beanBuilder);
     }
 
-    protected BeanManager createBeanManager(ClientDolphin dolphin) {
-        final EventDispatcher dispatcher = createEventDispatcher(dolphin);
-        final BeanRepository repository = createBeanRepository(dolphin, dispatcher);
-        return createBeanManager(dolphin, repository, dispatcher);
+    protected BeanManager createBeanManager(final ClientModelStore clientModelStore) {
+        final EventDispatcher dispatcher = createEventDispatcher(clientModelStore);
+        final BeanRepository repository = createBeanRepository(clientModelStore, dispatcher);
+        return createBeanManager(clientModelStore, repository, dispatcher);
     }
 }

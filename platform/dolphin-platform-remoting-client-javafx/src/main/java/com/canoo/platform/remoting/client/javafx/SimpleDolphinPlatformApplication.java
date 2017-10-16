@@ -28,6 +28,10 @@ import javafx.stage.Stage;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
+/**
+ * This should not be used since it do not have i18n
+ */
+@Deprecated
 public abstract class SimpleDolphinPlatformApplication extends DolphinPlatformApplication {
 
     private void showError(Stage parent, String header, String content, Exception e) {
@@ -74,7 +78,7 @@ public abstract class SimpleDolphinPlatformApplication extends DolphinPlatformAp
 
     @Override
     protected void onInitializationError(Stage primaryStage, ClientInitializationException initializationException, Iterable<DolphinRuntimeException> possibleCauses) {
-        showError(primaryStage, "Error on initialization", "A error happened while initializing the Client and Connection", initializationException);
+        showError(primaryStage, "Error on initialization", "A error happened while initializing the PlatformClient and Connection", initializationException);
     }
 
     @Override

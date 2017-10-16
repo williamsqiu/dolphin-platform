@@ -31,8 +31,8 @@ import com.canoo.dp.impl.remoting.info.PropertyInfo;
 import com.canoo.platform.remoting.Property;
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.server.gc.GarbageCollector;
-import org.opendolphin.core.Attribute;
-import org.opendolphin.core.PresentationModel;
+import com.canoo.dp.impl.remoting.legacy.core.Attribute;
+import com.canoo.dp.impl.remoting.legacy.core.PresentationModel;
 
 public class ServerBeanBuilderImpl extends AbstractBeanBuilder implements ServerBeanBuilder {
 

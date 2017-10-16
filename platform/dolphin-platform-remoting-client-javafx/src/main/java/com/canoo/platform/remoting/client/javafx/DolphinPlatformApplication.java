@@ -16,8 +16,8 @@
 package com.canoo.platform.remoting.client.javafx;
 
 import com.canoo.dp.impl.platform.core.Assert;
+import com.canoo.platform.client.PlatformClient;
 import com.canoo.platform.core.DolphinRuntimeException;
-import com.canoo.platform.remoting.client.ClientConfiguration;
 import com.canoo.platform.remoting.client.ClientContext;
 import com.canoo.platform.remoting.client.ClientContextFactory;
 import com.canoo.platform.remoting.client.ClientInitializationException;
@@ -69,25 +69,23 @@ public abstract class DolphinPlatformApplication extends Application {
      *
      * @return The Dolphin Platform configuration for this client
      */
-    protected JavaFXConfiguration createClientConfiguration() {
-        try {
-            JavaFXConfiguration configuration = new JavaFXConfiguration(getServerEndpoint());
-            configuration.addRemotingExceptionHandler(e -> {
-                if (connectInProgress.get()) {
-                    runtimeExceptionsAtInitialization.add(new DolphinRuntimeException("Dolphin Platform remoting error", e));
-                } else {
-                    onRuntimeError(primaryStage, new DolphinRuntimeException("Dolphin Platform remoting error!", e));
-                }
-            });
-            return configuration;
-        } catch (MalformedURLException e) {
-            throw new ClientInitializationException("Client configuration cannot be created", e);
-        }
-    }
+//    protected JavaFXConfiguration createClientConfiguration() {
+//        try {
+//            configuration.addRemotingExceptionHandler(e -> {
+//                if (connectInProgress.get()) {
+//                    runtimeExceptionsAtInitialization.add(new DolphinRuntimeException("Dolphin Platform remoting error", e));
+//                } else {
+//                    onRuntimeError(primaryStage, new DolphinRuntimeException("Dolphin Platform remoting error!", e));
+//                }
+//            });
+//            return configuration;
+//        } catch (MalformedURLException e) {
+//            throw new ClientInitializationException("PlatformClient configuration cannot be created", e);
+//        }
+//    }
 
-    private final ClientContext createClientContext(final ClientConfiguration clientConfiguration) throws Exception {
-        Assert.requireNonNull(clientConfiguration, "clientConfiguration");
-        return ClientContextFactory.create(clientConfiguration);
+    private final ClientContext createClientContext() throws Exception {
+        return PlatformClient.getService(ClientContextFactory.class).create(PlatformClient.getClientConfiguration(), getServerEndpoint());
     }
 
     /**
@@ -97,9 +95,9 @@ public abstract class DolphinPlatformApplication extends Application {
      */
     @Override
     public final void init() throws Exception {
-        final ClientConfiguration clientConfiguration = createClientConfiguration();
-        clientConfiguration.getDolphinPlatformThreadFactory().setUncaughtExceptionHandler((Thread thread, Throwable exception) -> {
-            clientConfiguration.getUiExecutor().execute(() -> {
+        FxToolkit.init();
+        PlatformClient.getClientConfiguration().setUncaughtExceptionHandler((Thread thread, Throwable exception) -> {
+            PlatformClient.getClientConfiguration().getUiExecutor().execute(() -> {
                 Assert.requireNonNull(thread, "thread");
                 Assert.requireNonNull(exception, "exception");
 
@@ -112,11 +110,11 @@ public abstract class DolphinPlatformApplication extends Application {
         });
 
         try {
-            clientContext = createClientContext(clientConfiguration);
+            clientContext = createClientContext();
             Assert.requireNonNull(clientContext, "clientContext");
 
             connectInProgress.set(true);
-            clientContext.connect().get(clientConfiguration.getConnectionTimeout(), TimeUnit.MILLISECONDS);
+            clientContext.connect().get(3_000, TimeUnit.MILLISECONDS);
         } catch (ClientInitializationException e) {
             initializationException = e;
         } catch (Exception e) {
@@ -188,9 +186,7 @@ public abstract class DolphinPlatformApplication extends Application {
         Assert.requireNonNull(primaryStage, "primaryStage");
         final CompletableFuture<Void> result = new CompletableFuture<>();
 
-        final ClientConfiguration clientConfiguration = createClientConfiguration();
-
-        clientConfiguration.getBackgroundExecutor().execute(() -> {
+        PlatformClient.getClientConfiguration().getBackgroundExecutor().execute(() -> {
             try {
                 disconnect().get(1_000, TimeUnit.MILLISECONDS);
             } catch (Exception e) {
@@ -199,12 +195,12 @@ public abstract class DolphinPlatformApplication extends Application {
 
             try {
                 if (clientContext == null) {
-                    clientContext = createClientContext(clientConfiguration);
+                    clientContext = createClientContext();
                 }
                 Assert.requireNonNull(clientContext, "clientContext");
 
                 connectInProgress.set(true);
-                clientContext.connect().get(clientConfiguration.getConnectionTimeout(), TimeUnit.MILLISECONDS);
+                clientContext.connect().get(3_000, TimeUnit.MILLISECONDS);
 
                 Platform.runLater(() -> {
                     try {

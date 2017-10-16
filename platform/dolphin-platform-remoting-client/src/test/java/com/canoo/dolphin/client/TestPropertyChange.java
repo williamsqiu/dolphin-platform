@@ -15,16 +15,20 @@
  */
 package com.canoo.dolphin.client;
 
-import com.canoo.platform.remoting.BeanManager;
-import com.canoo.dolphin.client.util.*;
-import com.canoo.platform.core.functional.Subscription;
-import com.canoo.platform.remoting.ValueChangeEvent;
-import com.canoo.platform.remoting.ValueChangeListener;
+import com.canoo.dolphin.client.util.AbstractDolphinBasedTest;
+import com.canoo.dolphin.client.util.ChildModel;
+import com.canoo.dolphin.client.util.SimpleAnnotatedTestModel;
+import com.canoo.dolphin.client.util.SimpleTestModel;
+import com.canoo.dolphin.client.util.SingleReferenceModel;
+import com.canoo.dp.impl.client.legacy.ClientModelStore;
+import com.canoo.dp.impl.client.legacy.communication.AbstractClientConnector;
 import com.canoo.dp.impl.remoting.BeanRepository;
 import com.canoo.dp.impl.remoting.EventDispatcher;
+import com.canoo.platform.core.functional.Subscription;
+import com.canoo.platform.remoting.BeanManager;
+import com.canoo.platform.remoting.ValueChangeEvent;
+import com.canoo.platform.remoting.ValueChangeListener;
 import mockit.Mocked;
-import org.opendolphin.core.client.ClientDolphin;
-import org.opendolphin.core.client.comm.AbstractClientConnector;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -36,10 +40,10 @@ public class TestPropertyChange extends AbstractDolphinBasedTest {
 
     @Test
     public void testWithAnnotatedSimpleModel(@Mocked AbstractClientConnector connector) {
-        final ClientDolphin dolphin = createClientDolphin(connector);
-        final EventDispatcher dispatcher = createEventDispatcher(dolphin);
-        final BeanRepository repository = createBeanRepository(dolphin, dispatcher);
-        final BeanManager manager = createBeanManager(dolphin, repository, dispatcher);
+        final ClientModelStore clientModelStore = createClientModelStore(connector);
+        final EventDispatcher dispatcher = createEventDispatcher(clientModelStore);
+        final BeanRepository repository = createBeanRepository(clientModelStore, dispatcher);
+        final BeanManager manager = createBeanManager(clientModelStore, repository, dispatcher);
 
         final SimpleAnnotatedTestModel model = manager.create(SimpleAnnotatedTestModel.class);
 
@@ -86,10 +90,10 @@ public class TestPropertyChange extends AbstractDolphinBasedTest {
 
     @Test
     public void testWithSimpleModel(@Mocked AbstractClientConnector connector) {
-        final ClientDolphin dolphin = createClientDolphin(connector);
-        final EventDispatcher dispatcher = createEventDispatcher(dolphin);
-        final BeanRepository repository = createBeanRepository(dolphin, dispatcher);
-        final BeanManager manager = createBeanManager(dolphin, repository, dispatcher);
+        final ClientModelStore clientModelStore = createClientModelStore(connector);
+        final EventDispatcher dispatcher = createEventDispatcher(clientModelStore);
+        final BeanRepository repository = createBeanRepository(clientModelStore, dispatcher);
+        final BeanManager manager = createBeanManager(clientModelStore, repository, dispatcher);
 
         final SimpleTestModel model = manager.create(SimpleTestModel.class);
 
@@ -137,10 +141,10 @@ public class TestPropertyChange extends AbstractDolphinBasedTest {
 
     @Test
     public void testWithSingleReferenceModel(@Mocked AbstractClientConnector connector) {
-        final ClientDolphin dolphin = createClientDolphin(connector);
-        final EventDispatcher dispatcher = createEventDispatcher(dolphin);
-        final BeanRepository repository = createBeanRepository(dolphin, dispatcher);
-        final BeanManager manager = createBeanManager(dolphin, repository, dispatcher);
+        final ClientModelStore clientModelStore = createClientModelStore(connector);
+        final EventDispatcher dispatcher = createEventDispatcher(clientModelStore);
+        final BeanRepository repository = createBeanRepository(clientModelStore, dispatcher);
+        final BeanManager manager = createBeanManager(clientModelStore, repository, dispatcher);
 
         final SimpleTestModel ref1 = manager.create(SimpleTestModel.class);
         final SimpleTestModel ref2 = manager.create(SimpleTestModel.class);
@@ -191,10 +195,10 @@ public class TestPropertyChange extends AbstractDolphinBasedTest {
 
     @Test
     public void testWithInheritedModel(@Mocked AbstractClientConnector connector) {
-        final ClientDolphin dolphin = createClientDolphin(connector);
-        final EventDispatcher dispatcher = createEventDispatcher(dolphin);
-        final BeanRepository repository = createBeanRepository(dolphin, dispatcher);
-        final BeanManager manager = createBeanManager(dolphin, repository, dispatcher);
+        final ClientModelStore clientModelStore = createClientModelStore(connector);
+        final EventDispatcher dispatcher = createEventDispatcher(clientModelStore);
+        final BeanRepository repository = createBeanRepository(clientModelStore, dispatcher);
+        final BeanManager manager = createBeanManager(clientModelStore, repository, dispatcher);
 
         final ChildModel model = manager.create(ChildModel.class);
 

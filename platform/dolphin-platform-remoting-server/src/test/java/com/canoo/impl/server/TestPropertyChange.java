@@ -15,13 +15,17 @@
  */
 package com.canoo.impl.server;
 
-import com.canoo.platform.remoting.BeanManager;
+import com.canoo.dp.impl.server.legacy.ServerModelStore;
+import com.canoo.impl.server.util.AbstractDolphinBasedTest;
+import com.canoo.impl.server.util.ChildModel;
+import com.canoo.impl.server.util.SimpleAnnotatedTestModel;
+import com.canoo.impl.server.util.SimpleTestModel;
+import com.canoo.impl.server.util.SingleReferenceModel;
 import com.canoo.platform.core.functional.Subscription;
+import com.canoo.platform.remoting.BeanManager;
+import com.canoo.platform.remoting.Property;
 import com.canoo.platform.remoting.ValueChangeEvent;
 import com.canoo.platform.remoting.ValueChangeListener;
-import com.canoo.platform.remoting.Property;
-import com.canoo.impl.server.util.*;
-import org.opendolphin.core.server.ServerDolphin;
 import org.testng.annotations.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -32,8 +36,8 @@ public class TestPropertyChange extends AbstractDolphinBasedTest {
 
     @Test
     public void testWithAnnotatedSimpleModel() {
-        final ServerDolphin dolphin = createServerDolphin();
-        final BeanManager manager = createBeanManager(dolphin);
+        ServerModelStore serverModelStore = createServerModelStore();
+        final BeanManager manager = createBeanManager(serverModelStore);
 
         final SimpleAnnotatedTestModel model = manager.create(SimpleAnnotatedTestModel.class);
 
@@ -75,8 +79,8 @@ public class TestPropertyChange extends AbstractDolphinBasedTest {
 
     @Test
     public void testWithSimpleModel() {
-        final ServerDolphin dolphin = createServerDolphin();
-        final BeanManager manager = createBeanManager(dolphin);
+        ServerModelStore serverModelStore = createServerModelStore();
+        final BeanManager manager = createBeanManager(serverModelStore);
 
         final SimpleTestModel model = manager.create(SimpleTestModel.class);
 
@@ -119,8 +123,8 @@ public class TestPropertyChange extends AbstractDolphinBasedTest {
 
     @Test
     public void testWithSingleReferenceModel() {
-        final ServerDolphin dolphin = createServerDolphin();
-        final BeanManager manager = createBeanManager(dolphin);
+        ServerModelStore serverModelStore = createServerModelStore();
+        final BeanManager manager = createBeanManager(serverModelStore);
 
         final SimpleTestModel ref1 = manager.create(SimpleTestModel.class);
         final SimpleTestModel ref2 = manager.create(SimpleTestModel.class);
@@ -166,8 +170,8 @@ public class TestPropertyChange extends AbstractDolphinBasedTest {
 
     @Test
     public void testWithInheritedModel() {
-        final ServerDolphin dolphin = createServerDolphin();
-        final BeanManager manager = createBeanManager(dolphin);
+        ServerModelStore serverModelStore = createServerModelStore();
+        final BeanManager manager = createBeanManager(serverModelStore);
 
         final ChildModel model = manager.create(ChildModel.class);
 

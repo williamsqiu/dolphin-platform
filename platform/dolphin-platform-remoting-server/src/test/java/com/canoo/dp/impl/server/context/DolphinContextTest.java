@@ -15,12 +15,13 @@
  */
 package com.canoo.dp.impl.server.context;
 
-import com.canoo.dolphin.impl.commands.*;
 import com.canoo.dp.impl.remoting.commands.CallActionCommand;
 import com.canoo.dp.impl.remoting.commands.CreateContextCommand;
 import com.canoo.dp.impl.remoting.commands.CreateControllerCommand;
 import com.canoo.dp.impl.remoting.commands.DestroyContextCommand;
 import com.canoo.dp.impl.remoting.commands.DestroyControllerCommand;
+import com.canoo.dp.impl.remoting.legacy.commands.InterruptLongPollCommand;
+import com.canoo.dp.impl.remoting.legacy.commands.StartLongPollCommand;
 import com.canoo.dp.impl.server.beans.ManagedBeanFactory;
 import com.canoo.dp.impl.server.beans.PostConstructInterceptor;
 import com.canoo.dp.impl.server.client.ClientSessionProvider;
@@ -32,8 +33,8 @@ import com.canoo.dp.impl.server.scanner.DefaultClasspathScanner;
 import com.canoo.impl.server.util.HttpSessionMock;
 import com.canoo.platform.core.functional.Callback;
 import com.canoo.platform.server.client.ClientSession;
-import org.opendolphin.core.comm.Command;
-import org.opendolphin.core.server.comm.CommandHandler;
+import com.canoo.dp.impl.remoting.legacy.communication.Command;
+import com.canoo.dp.impl.server.legacy.communication.CommandHandler;
 import org.testng.annotations.Test;
 
 import javax.servlet.ServletContext;
@@ -97,7 +98,7 @@ public class DolphinContextTest {
         while (!contextList.isEmpty()) {
             DolphinContext dolphinContext = contextList.remove(0);
             for (DolphinContext toCompare : contextList) {
-                assertFalse(dolphinContext.getDolphin().equals(toCompare.getDolphin()));
+                assertFalse(dolphinContext.getServerModelStore().equals(toCompare.getServerModelStore()));
             }
         }
     }
@@ -129,7 +130,7 @@ public class DolphinContextTest {
         assertNotNull(dolphinContext.getId());
         assertNotNull(dolphinContext.getBeanManager());
         assertNotNull(dolphinContext.getDolphinSession());
-        assertNotNull(dolphinContext.getDolphin());
+        assertNotNull(dolphinContext.getServerModelStore());
     }
 
     @Test
@@ -138,7 +139,7 @@ public class DolphinContextTest {
         DolphinContext dolphinContext = createContext();
 
         //then:
-        Map<Class<? extends Command>, List<CommandHandler>> dolphinActions = dolphinContext.getDolphin().getServerConnector().getRegistry().getActions();
+        Map<Class<? extends Command>, List<CommandHandler>> dolphinActions = dolphinContext.getServerConnector().getRegistry().getActions();
         assertNotNull(dolphinActions.containsKey(CreateContextCommand.class));
         assertNotNull(dolphinActions.containsKey(DestroyContextCommand.class));
         assertNotNull(dolphinActions.containsKey(CreateControllerCommand.class));

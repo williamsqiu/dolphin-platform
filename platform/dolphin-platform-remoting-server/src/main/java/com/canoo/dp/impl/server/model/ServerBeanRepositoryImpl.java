@@ -15,18 +15,18 @@
  */
 package com.canoo.dp.impl.server.model;
 
+import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.remoting.BeanRepositoryImpl;
 import com.canoo.dp.impl.remoting.EventDispatcher;
-import com.canoo.dp.impl.platform.core.Assert;
+import com.canoo.dp.impl.remoting.legacy.core.ModelStore;
 import com.canoo.dp.impl.server.gc.GarbageCollector;
-import org.opendolphin.core.Dolphin;
 
 public class ServerBeanRepositoryImpl extends BeanRepositoryImpl implements ServerBeanRepository{
 
     final GarbageCollector garbageCollector;
 
-    public ServerBeanRepositoryImpl(final Dolphin dolphin, final EventDispatcher dispatcher, final GarbageCollector garbageCollector) {
-        super(dolphin.getModelStore(), dispatcher);
+    public ServerBeanRepositoryImpl(final ModelStore modelStore, final EventDispatcher dispatcher, final GarbageCollector garbageCollector) {
+        super(modelStore, dispatcher);
         this.garbageCollector = Assert.requireNonNull(garbageCollector, "garbageCollector");
     }
 

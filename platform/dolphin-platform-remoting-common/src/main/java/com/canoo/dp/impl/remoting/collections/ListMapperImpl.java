@@ -27,8 +27,8 @@ import com.canoo.dp.impl.remoting.ListMapper;
 import com.canoo.dp.impl.remoting.info.ClassInfo;
 import com.canoo.dp.impl.remoting.info.PropertyInfo;
 import com.canoo.dp.impl.remoting.MappingException;
-import org.opendolphin.core.ModelStore;
-import org.opendolphin.core.PresentationModel;
+import com.canoo.dp.impl.remoting.legacy.core.ModelStore;
+import com.canoo.dp.impl.remoting.legacy.core.PresentationModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

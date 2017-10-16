@@ -16,7 +16,9 @@
 package com.canoo.platform.core.functional;
 
 /**
- * A basic callback interface.
+ * A basic callback interface. Might be replaced in future with the Java 8 interface once all Dolphin Platform modules depend on Java8.
+ *
+ * @author Hendrik Ebbers
  */
 public interface Callback<T> {
 

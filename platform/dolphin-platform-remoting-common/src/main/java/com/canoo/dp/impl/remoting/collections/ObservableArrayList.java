@@ -170,14 +170,38 @@ public class ObservableArrayList<E> implements ObservableList<E> {
 
     @Override
     public boolean removeAll(Collection<?> c) {
-        // TODO Implement
-        throw new UnsupportedOperationException("Not implemented yet");
+        return batchRemove(c, true);
     }
 
     @Override
     public boolean retainAll(Collection<?> c) {
-        // TODO Implement
-        throw new UnsupportedOperationException("Not implemented yet");
+        return batchRemove(c, false);
+    }
+
+    private boolean batchRemove(final Collection<?> c, boolean isRemove){
+        if (null != c && c.isEmpty()) {
+            return false;
+        }
+        final List<ListChangeEvent.Change<E>> changedList = new ArrayList<>();
+        final List<E> listElement =  new ArrayList<>();
+        for (Iterator<?> iterator = c.iterator(); iterator.hasNext();) {
+            final E element = (E) iterator.next();
+            if(list.contains(element)){
+                listElement.add(element);
+                final ListChangeEvent.Change<E> changed = new ListChangeEventImpl.ChangeImpl<>(list.indexOf(element), list.indexOf(element),  Collections.singletonList(element));
+                changedList.add(changed);
+            }
+        }
+        if(!changedList.isEmpty()){
+            if(isRemove){
+                list.removeAll(listElement);
+            }else{
+                list.retainAll(listElement);
+            }
+            fireListChanged(new ListChangeEventImpl<>(this, changedList));
+            return true;
+        }
+        return false;
     }
 
     @Override

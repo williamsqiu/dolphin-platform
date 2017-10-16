@@ -15,9 +15,9 @@
  */
 package com.canoo.impl.server;
 
-import com.canoo.dp.impl.server.context.OpenDolphinFactory;
+import com.canoo.dp.impl.remoting.legacy.RemotingConstants;
+import com.canoo.dp.impl.server.legacy.ServerModelStore;
 import com.canoo.dp.impl.server.model.ServerEventDispatcher;
-import org.opendolphin.RemotingConstants;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertEquals;
@@ -27,8 +27,8 @@ public class ServerEventDispatcherTest {
     @Test
     public void testLocalSystemIdentifier() {
         //given:
-        OpenDolphinFactory factory = new OpenDolphinFactory();
-        ServerEventDispatcher dispatcher = new ServerEventDispatcher(factory.create());
+        ServerModelStore serverModelStore = new ServerModelStore();
+        ServerEventDispatcher dispatcher = new ServerEventDispatcher(serverModelStore);
 
         //then:
         assertEquals(dispatcher.getLocalSystemIdentifier(), RemotingConstants.SOURCE_SYSTEM_SERVER);

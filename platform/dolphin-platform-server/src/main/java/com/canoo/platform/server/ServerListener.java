@@ -28,6 +28,8 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 /**
  * Annotation for global listener. Currently only {@link ClientSessionListener}
  * is supported. Any listener that is annotated by this annotation will be created at runtime and will be triggered.
+ *
+ * @author Hendrik Ebbers
  */
 @Documented
 @Inherited

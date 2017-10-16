@@ -15,17 +15,18 @@
  */
 package com.canoo.platform.remoting.client.javafx.window;
 
-import com.canoo.platform.remoting.client.javafx.view.AbstractViewBinder;
+import com.canoo.platform.remoting.client.javafx.view.AbstractViewController;
 import com.canoo.dp.impl.platform.core.Assert;
 import javafx.scene.Scene;
 import javafx.stage.Window;
 
 /**
- * A JavaFX {@link Window} that contains the view of a {@link AbstractViewBinder} and will automatically call
- * {@link AbstractViewBinder#destroy()} when the stage becomes hidden.
+ * A JavaFX {@link Window} that contains the view of a {@link AbstractViewController} and will automatically call
+ * {@link AbstractViewController#destroy()} when the stage becomes hidden.
  *
  * @param <M> type of the model
  */
+@Deprecated
 public class DolphinWindow<M> extends Window {
 
     /**
@@ -33,7 +34,7 @@ public class DolphinWindow<M> extends Window {
      *
      * @param viewBinder the viewBinder
      */
-    public DolphinWindow(final AbstractViewBinder<M> viewBinder) {
+    public DolphinWindow(final AbstractViewController<M> viewBinder) {
         Assert.requireNonNull(viewBinder, "viewBinder");
         DolphinWindowUtils.destroyOnClose(this, viewBinder);
         setScene(new Scene(viewBinder.getParent()));

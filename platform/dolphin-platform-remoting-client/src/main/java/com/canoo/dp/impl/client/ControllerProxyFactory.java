@@ -16,12 +16,54 @@
 package com.canoo.dp.impl.client;
 
 import com.canoo.platform.remoting.client.ControllerProxy;
+import com.canoo.dp.impl.remoting.Converters;
+import com.canoo.dp.impl.remoting.InternalAttributesBean;
+import com.canoo.dp.impl.remoting.commands.CreateControllerCommand;
+import com.canoo.dp.impl.remoting.BeanRepository;
+import com.canoo.dp.impl.remoting.EventDispatcher;
+import com.canoo.dp.impl.platform.core.Assert;
+import com.canoo.dp.impl.client.legacy.ClientModelStore;
+import com.canoo.dp.impl.client.legacy.communication.AbstractClientConnector;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Function;
 
-public interface ControllerProxyFactory {
+public class ControllerProxyFactory {
 
-    <T> CompletableFuture<ControllerProxy<T>> create(String name);
+    private final ClientPlatformBeanRepository platformBeanRepository;
 
-    <T> CompletableFuture<ControllerProxy<T>> create(String name, String parentControllerId);
+    private final DolphinCommandHandler dolphinCommandHandler;
+
+    private final AbstractClientConnector clientConnector;
+
+    private final Converters converters;
+
+    public ControllerProxyFactory(final DolphinCommandHandler dolphinCommandHandler, final AbstractClientConnector clientConnector, final ClientModelStore modelStore, final BeanRepository beanRepository, final EventDispatcher dispatcher, final Converters converters) {
+        this.converters = Assert.requireNonNull(converters, "converters");
+        this.platformBeanRepository = new ClientPlatformBeanRepository(modelStore, beanRepository, dispatcher, converters);
+        this.dolphinCommandHandler = Assert.requireNonNull(dolphinCommandHandler, "dolphinCommandHandler");
+        this.clientConnector = Assert.requireNonNull(clientConnector, "clientConnector");
+    }
+
+    public <T> CompletableFuture<ControllerProxy<T>> create(String name) {
+       return create(name, null);
+    }
+
+    public <T> CompletableFuture<ControllerProxy<T>> create(String name, String parentControllerId) {
+        Assert.requireNonBlank(name, "name");
+        final InternalAttributesBean bean = platformBeanRepository.getInternalAttributesBean();
+
+        final CreateControllerCommand createControllerCommand = new CreateControllerCommand();
+        createControllerCommand.setControllerName(name);
+        if(parentControllerId != null) {
+            createControllerCommand.setParentControllerId(parentControllerId);
+        }
+
+        return dolphinCommandHandler.invokeDolphinCommand(createControllerCommand).thenApply(new Function<Void, ControllerProxy<T>>() {
+            @Override
+            public ControllerProxy<T> apply(Void aVoid) {
+                return new ControllerProxyImpl<T>(bean.getControllerId(), (T) bean.getModel(), clientConnector, platformBeanRepository, ControllerProxyFactory.this, converters);
+            }
+        });
+    }
 }

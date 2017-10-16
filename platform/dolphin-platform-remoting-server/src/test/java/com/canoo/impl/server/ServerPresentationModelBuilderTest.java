@@ -15,11 +15,11 @@
  */
 package com.canoo.impl.server;
 
+import com.canoo.dp.impl.remoting.legacy.RemotingConstants;
+import com.canoo.dp.impl.server.legacy.ServerModelStore;
+import com.canoo.dp.impl.server.legacy.ServerPresentationModel;
 import com.canoo.dp.impl.server.model.ServerPresentationModelBuilder;
 import com.canoo.impl.server.util.AbstractDolphinBasedTest;
-import org.opendolphin.RemotingConstants;
-import org.opendolphin.core.server.ServerDolphin;
-import org.opendolphin.core.server.ServerPresentationModel;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertEquals;
@@ -34,8 +34,8 @@ public class ServerPresentationModelBuilderTest extends AbstractDolphinBasedTest
 
     @Test
     public void testSimpleCreation() {
-        ServerDolphin serverDolphin = createServerDolphin();
-        ServerPresentationModelBuilder builder = new ServerPresentationModelBuilder(serverDolphin);
+        ServerModelStore serverModelStore = createServerModelStore();
+        ServerPresentationModelBuilder builder = new ServerPresentationModelBuilder(serverModelStore);
 
         ServerPresentationModel model = builder.create();
         assertNotNull(model);
@@ -46,8 +46,8 @@ public class ServerPresentationModelBuilderTest extends AbstractDolphinBasedTest
 
     @Test
     public void testWithAttributeCreation() {
-        ServerDolphin serverDolphin = createServerDolphin();
-        ServerPresentationModelBuilder builder = new ServerPresentationModelBuilder(serverDolphin);
+        ServerModelStore serverModelStore = createServerModelStore();
+        ServerPresentationModelBuilder builder = new ServerPresentationModelBuilder(serverModelStore);
         ServerPresentationModel model = builder.withAttribute("testName").create();
         assertNotNull(model);
         assertEquals(model.getAttributes().size(), 2);
@@ -57,8 +57,8 @@ public class ServerPresentationModelBuilderTest extends AbstractDolphinBasedTest
 
     @Test
     public void testWithFilledAttributeCreation() {
-        ServerDolphin serverDolphin = createServerDolphin();
-        ServerPresentationModelBuilder builder = new ServerPresentationModelBuilder(serverDolphin);
+        ServerModelStore serverModelStore = createServerModelStore();
+        ServerPresentationModelBuilder builder = new ServerPresentationModelBuilder(serverModelStore);
         ServerPresentationModel model = builder.withAttribute("testName", "testValue").create();
         assertNotNull(model);
         assertEquals(model.getAttributes().size(), 2);
@@ -69,8 +69,8 @@ public class ServerPresentationModelBuilderTest extends AbstractDolphinBasedTest
 
     @Test
     public void testWithIdCreation() {
-        ServerDolphin serverDolphin = createServerDolphin();
-        ServerPresentationModelBuilder builder = new ServerPresentationModelBuilder(serverDolphin);
+        ServerModelStore serverModelStore = createServerModelStore();
+        ServerPresentationModelBuilder builder = new ServerPresentationModelBuilder(serverModelStore);
         ServerPresentationModel model = builder.withId("testId").create();
         assertNotNull(model);
         assertEquals(model.getId(), "testId");
@@ -78,8 +78,8 @@ public class ServerPresentationModelBuilderTest extends AbstractDolphinBasedTest
 
     @Test
     public void testWithTypeCreation() {
-        ServerDolphin serverDolphin = createServerDolphin();
-        ServerPresentationModelBuilder builder = new ServerPresentationModelBuilder(serverDolphin);
+        ServerModelStore serverModelStore = createServerModelStore();
+        ServerPresentationModelBuilder builder = new ServerPresentationModelBuilder(serverModelStore);
         ServerPresentationModel model = builder.withType("testType").create();
         assertNotNull(model);
         assertEquals(model.getPresentationModelType(), "testType");

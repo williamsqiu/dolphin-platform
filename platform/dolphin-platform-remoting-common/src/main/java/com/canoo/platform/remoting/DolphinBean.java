@@ -40,6 +40,8 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  *
  * </code>
  *
+ * @author Hendrik Ebbers
+ *
  */
 @Documented
 @Inherited

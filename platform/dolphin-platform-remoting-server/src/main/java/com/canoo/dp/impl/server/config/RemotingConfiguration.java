@@ -17,7 +17,7 @@ package com.canoo.dp.impl.server.config;
 
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.server.event.DefaultEventBusProvider;
-import com.canoo.platform.server.spi.PlatformConfiguration;
+import com.canoo.platform.core.PlatformConfiguration;
 
 import java.io.Serializable;
 

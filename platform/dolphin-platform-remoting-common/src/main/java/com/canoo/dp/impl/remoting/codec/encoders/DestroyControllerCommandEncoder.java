@@ -15,14 +15,16 @@
  */
 package com.canoo.dp.impl.remoting.codec.encoders;
 
-import com.canoo.dp.impl.remoting.commands.DestroyControllerCommand;
 import com.canoo.dp.impl.platform.core.Assert;
+import com.canoo.dp.impl.remoting.commands.DestroyControllerCommand;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 
-import static com.canoo.dp.impl.remoting.codec.CommandConstants.*;
+import static com.canoo.dp.impl.remoting.legacy.communication.CommandConstants.CONTROLLER_ID;
+import static com.canoo.dp.impl.remoting.legacy.communication.CommandConstants.DESTROY_CONTROLLER_COMMAND_ID;
+import static com.canoo.dp.impl.remoting.legacy.communication.CommandConstants.ID;
 
-public class DestroyControllerCommandEncoder extends AbstractCommandEncoder<DestroyControllerCommand> {
+public class DestroyControllerCommandEncoder extends AbstractCommandTranscoder<DestroyControllerCommand> {
 
     @Override
     public JsonObject encode(final DestroyControllerCommand command) {

@@ -15,7 +15,7 @@
  */
 package com.canoo.dp.impl.client.javafx;
 
-import com.canoo.platform.remoting.Binding;
+import com.canoo.platform.core.functional.Binding;
 import com.canoo.platform.remoting.client.javafx.binding.JavaFXListBinder;
 import com.canoo.platform.remoting.ListChangeEvent;
 import com.canoo.platform.remoting.ObservableList;

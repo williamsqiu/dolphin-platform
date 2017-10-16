@@ -16,15 +16,7 @@ If you have any questions or comments about Dolphin Platform you can [join our c
 
 The Dolphin Platform is a framework that implements the presentation model pattern and provides a modern way to create enterprise applications. The Platform provides several client implementations that all can be used in combination with a general sever API.
 
-<p align="center">
-<img src="http://www.dolphin-platform.io/assets/img/features/clients.png"/>
-</p>
-
 By doing so you can create enterprise application with a single server and several desktop, web and mobile client implementations. Here the Dolphin Platforms define a mechanism to automatically snchronize models between the server and the client.
-
-<p align="center">
-<img src="http://www.dolphin-platform.io/assets/img/features/pm1.png"/>
-</p>
 
 For more information read the [documentation](https://canoo.github.io/dolphin-platform/) of the Dolphin Platform.
 
@@ -81,6 +73,9 @@ The following GitHub repositories provides additional sources for the Dolphin Pl
 * [Polymer client API Repository](https://github.com/canoo/dolphin-platform-polymer)
 * [Maven archetype Repository](https://github.com/canoo/dolphin-platform-spring-boot-archetype)
 * [Lazybones template Repository](https://github.com/canoo/dolphin-platform-lazybones-templates)
+
+## 🆕🐥:dog: First Timers Support
+At Canoo we :heart: open source. Based on this we develop the complete Dolphin Platform framework as an open source project. If you are new to open source development we have some specific issues for you. Just have a look at [all issues with the 'good first issue' label](https://github.com/canoo/dolphin-platform/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22). This issues are reserved for people who never contributed to Open Source before. We know that the process of creating a pull request is the biggest barrier for new contributors. This issues are for you 💝 We use such issues for example to get involved at [Hacktoberfest](https://hacktoberfest.digitalocean.com). If you want to know more about open source development and contribution in general you should have a look at [this overview](https://opensource.guide).
 
 ## License
 The project is released as open source under the [Apache License Version 2.0](http://www.apache.org/licenses/LICENSE-2.0)

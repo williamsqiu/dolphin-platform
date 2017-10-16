@@ -11,6 +11,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * A Spring {@link Scope} annotation for the prototype scope.
+ *
+ * @author Hendrik Ebbers
+ */
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Documented
 @Target({ ElementType.TYPE, ElementType.METHOD })
@@ -19,8 +24,7 @@ public @interface PrototypeScope {
 
     /**
      * Alias for {@link Scope#proxyMode}.
-     * <p>Defaults to {@link ScopedProxyMode#TARGET_CLASS}.
      */
     @AliasFor(annotation = Scope.class)
-    ScopedProxyMode proxyMode() default ScopedProxyMode.TARGET_CLASS;
+    ScopedProxyMode proxyMode() default ScopedProxyMode.DEFAULT;
 }

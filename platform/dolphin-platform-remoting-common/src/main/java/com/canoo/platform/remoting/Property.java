@@ -20,11 +20,11 @@ import com.canoo.platform.core.functional.Subscription;
 /**
  * Defines a property that can be part of a model (see {@link DolphinBean}). Since Java has no native property system this is needed to provide
  * listener / observer support to properties.
- *
+ * <p>
  * The public API of Dolphin Platform don't contain an implementation of this interface since the lifecycle of all
  * models must be managed by the {@link BeanManager}. By using the {@link Property} interface a small
  * Dolphin Platform model will look like this:
- *
+ * <p>
  * <blockquote>
  * <pre>
  *     {@literal @}DolphinBean
@@ -40,7 +40,7 @@ import com.canoo.platform.core.functional.Subscription;
  *     }
  * </pre>
  * </blockquote>
- *
+ * <p>
  * The value can be easily accessed and modified by calling the {@link #set(Object)} and {@link #get()} method of the
  * {@link Property} but often the model classes provide some convenience methods like shown in the following example:
  * <blockquote>
@@ -66,12 +66,12 @@ import com.canoo.platform.core.functional.Subscription;
  *     }
  * </pre>
  * </blockquote>
- *
+ * <p>
  * Currently Dolphin Platform models support only the {@link Property} and {@link ObservableList}
  * interfaces to define attributes and collections in models. But by just using this 2 interfaces it's easy to create
  * hierarchical models because a {@link Property} can contain another bean, for example. The following class shows this
  * design by a simple example:
- *
+ * <p>
  * <blockquote>
  * <pre>
  *     {@literal @}DolphinBean
@@ -87,27 +87,31 @@ import com.canoo.platform.core.functional.Subscription;
  *     }
  * </pre>
  * </blockquote>
- *
+ * <p>
  * For more information see {@link DolphinBean}
  *
  * @param <T> Type of the property must be a scalar, not a collection
+ * @author Hendrik Ebbers
  */
 public interface Property<T> {
 
     /**
      * Sets the value of the property
+     *
      * @param value the new value
      */
     void set(T value);
 
     /**
      * Returns the value of the property
+     *
      * @return the current value
      */
     T get();
 
     /**
      * Adds a change listener to the property that will be called whenever the value of the property changes
+     *
      * @param listener the change listener
      */
     Subscription onChanged(ValueChangeListener<? super T> listener);

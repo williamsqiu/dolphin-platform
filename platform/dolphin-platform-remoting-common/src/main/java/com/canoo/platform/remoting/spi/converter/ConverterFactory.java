@@ -15,16 +15,37 @@
  */
 package com.canoo.platform.remoting.spi.converter;
 
-import com.canoo.dp.impl.remoting.BeanRepository;
-
+/**
+ * Entry point of the data converter SPI. Custom implementations can be provided by the default Java SPI (see {@link java.util.ServiceLoader}) and will be used at runtime to convert custom data types that are used in Dolphin Platform beans (see {@link com.canoo.platform.remoting.DolphinBean}) to internally supported data types.
+ *
+ * @author Hendrik Ebbers
+ */
 public interface ConverterFactory {
 
-    void init(BeanRepository beanRepository);
+    /**
+     * Init method that will be automatically called after the converter factory instance has been created.
+     * @param beanRepository the internally used bean repository.
+     */
+    void init(DolphinBeanRepo beanRepository);
 
+    /**
+     * This method will be called to check if the converter supports the given custom data type
+     * @param cls class of the custom data type that should be converted
+     * @return true if this factory supports to convert the custom data type
+     */
     boolean supportsType(Class<?> cls);
 
+    /**
+     * Returns a unique identifier.
+     * @return a unique identifier
+     */
     int getTypeIdentifier();
 
+    /**
+     * Returns a converter that can be used to convert a dolphin data type to a custom data type.
+     * @param cls the dolphin data type
+     * @return the converter
+     */
     Converter getConverterForType(Class<?> cls);
 
 }

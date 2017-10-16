@@ -16,8 +16,11 @@
 package com.canoo.dp.impl.server.context;
 
 import com.canoo.dp.impl.remoting.codec.OptimizedJsonCodec;
-import org.opendolphin.core.comm.*;
-import org.opendolphin.core.server.DefaultServerDolphin;
+import com.canoo.dp.impl.remoting.legacy.communication.ChangeAttributeMetadataCommand;
+import com.canoo.dp.impl.remoting.legacy.communication.CreatePresentationModelCommand;
+import com.canoo.dp.impl.remoting.legacy.communication.PresentationModelDeletedCommand;
+import com.canoo.dp.impl.remoting.legacy.communication.ValueChangedCommand;
+import com.canoo.dp.impl.server.legacy.DefaultServerDolphin;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertEquals;
@@ -41,7 +44,7 @@ public class DefaultOpenDolphinFactoryTest {
         assertTrue(serverDolphin.getServerConnector().getRegistry().getActions().containsKey(ValueChangedCommand.class));
         assertTrue(serverDolphin.getServerConnector().getRegistry().getActions().containsKey(CreatePresentationModelCommand.class));
         assertTrue(serverDolphin.getServerConnector().getRegistry().getActions().containsKey(ChangeAttributeMetadataCommand.class));
-        assertTrue(serverDolphin.getServerConnector().getRegistry().getActions().containsKey(DeletedPresentationModelNotification.class));
+        assertTrue(serverDolphin.getServerConnector().getRegistry().getActions().containsKey(PresentationModelDeletedCommand.class));
 
         assertEquals(serverDolphin.getModelStore().listPresentationModelIds().size(), 0);
     }

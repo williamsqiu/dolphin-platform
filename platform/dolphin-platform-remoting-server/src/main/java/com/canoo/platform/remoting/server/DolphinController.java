@@ -25,7 +25,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
  * <p>Annotation to define a Dolphin controller. A Dolphin Controller is the server side controller of a MVC group / widget.
- * When using Dolphin Plaftorm your application is seperated in a hirarchie of several MVC groups. Each MVC group defines
+ * When using Dolphin Platform your application is seperated in a hirarchie of several MVC groups. Each MVC group defines
  * a client side view, a server side controller and a model that is automatically shared between the client and server.
  * <br>
  * <center><img src="doc-files/model-sync.png" alt="model is synchronized between client and server"></center>
@@ -64,6 +64,8 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * </pre>
  * </blockquote>
  * </p>
+ *
+ * @author Hendrik Ebbers
  */
 @Documented
 @Inherited
@@ -71,6 +73,10 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target(ElementType.TYPE)
 public @interface DolphinController {
 
+    /**
+     * The unique name of the controller. If this is empty the class name of the controller class will be automatically used.
+     * @return the unique name of the controller
+     */
     String value() default "";
 
 }

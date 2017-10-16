@@ -15,9 +15,8 @@
  */
 package com.canoo.dp.impl.remoting.codec.encoders;
 
-import com.canoo.dp.impl.remoting.commands.CallActionCommand;
 import com.canoo.dp.impl.platform.core.Assert;
-import com.canoo.dp.impl.remoting.codec.CommandConstants;
+import com.canoo.dp.impl.remoting.commands.CallActionCommand;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -25,25 +24,32 @@ import com.google.gson.JsonParseException;
 
 import java.util.Map;
 
-public class CallActionCommandEncoder extends AbstractCommandEncoder<CallActionCommand> {
+import static com.canoo.dp.impl.remoting.legacy.communication.CommandConstants.CALL_ACTION_COMMAND_ID;
+import static com.canoo.dp.impl.remoting.legacy.communication.CommandConstants.CONTROLLER_ID;
+import static com.canoo.dp.impl.remoting.legacy.communication.CommandConstants.ID;
+import static com.canoo.dp.impl.remoting.legacy.communication.CommandConstants.NAME;
+import static com.canoo.dp.impl.remoting.legacy.communication.CommandConstants.PARAMS;
+import static com.canoo.dp.impl.remoting.legacy.communication.CommandConstants.VALUE;
+
+public class CallActionCommandEncoder extends AbstractCommandTranscoder<CallActionCommand> {
 
     @Override
     public JsonObject encode(final CallActionCommand command) {
         Assert.requireNonNull(command, "command");
         final JsonObject jsonCommand = new JsonObject();
-        jsonCommand.addProperty(CommandConstants.CONTROLLER_ID, command.getControllerId());
-        jsonCommand.addProperty(CommandConstants.ACTION_NAME, command.getActionName());
+        jsonCommand.addProperty(CONTROLLER_ID, command.getControllerId());
+        jsonCommand.addProperty(NAME, command.getActionName());
 
         final JsonArray paramArray = new JsonArray();
         for(Map.Entry<String, Object> paramEntry : command.getParams().entrySet()) {
             final JsonObject paramObject = new JsonObject();
-            paramObject.addProperty(CommandConstants.PARAM_NAME, paramEntry.getKey());
-            paramObject.add(CommandConstants.PARAM_VALUE, ValueEncoder.encodeValue(paramEntry.getValue()));
+            paramObject.addProperty(NAME, paramEntry.getKey());
+            paramObject.add(VALUE, ValueEncoder.encodeValue(paramEntry.getValue()));
             paramArray.add(paramObject);
         }
-        jsonCommand.add(CommandConstants.PARAMS, paramArray);
+        jsonCommand.add(PARAMS, paramArray);
 
-        jsonCommand.addProperty(CommandConstants.ID, CommandConstants.CALL_ACTION_COMMAND_ID);
+        jsonCommand.addProperty(ID, CALL_ACTION_COMMAND_ID);
         return jsonCommand;
     }
 
@@ -52,14 +58,14 @@ public class CallActionCommandEncoder extends AbstractCommandEncoder<CallActionC
         Assert.requireNonNull(jsonObject, "jsonObject");
         try {
             final CallActionCommand command = new CallActionCommand();
-            command.setControllerId(getStringElement(jsonObject, CommandConstants.CONTROLLER_ID));
-            command.setActionName(getStringElement(jsonObject, CommandConstants.ACTION_NAME));
+            command.setControllerId(getStringElement(jsonObject, CONTROLLER_ID));
+            command.setActionName(getStringElement(jsonObject, NAME));
 
-            final JsonArray jsonArray = jsonObject.getAsJsonArray(CommandConstants.PARAMS);
+            final JsonArray jsonArray = jsonObject.getAsJsonArray(PARAMS);
             if(jsonArray != null) {
                 for (final JsonElement jsonElement : jsonArray) {
                     final JsonObject paramObject = jsonElement.getAsJsonObject();
-                    command.addParam(getStringElement(paramObject, CommandConstants.PARAM_NAME), ValueEncoder.decodeValue(paramObject.get(CommandConstants.PARAM_VALUE)));
+                    command.addParam(getStringElement(paramObject, NAME), ValueEncoder.decodeValue(paramObject.get(VALUE)));
                 }
             }
             return command;

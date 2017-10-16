@@ -16,7 +16,7 @@
 package com.canoo.dp.impl.server.config;
 
 import com.canoo.dp.impl.platform.core.Assert;
-import com.canoo.platform.server.spi.PlatformConfiguration;
+import com.canoo.platform.core.PlatformConfiguration;
 
 import java.util.Arrays;
 import java.util.List;

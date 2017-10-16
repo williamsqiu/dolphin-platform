@@ -15,7 +15,7 @@
  */
 package com.canoo.dp.impl.server.binding;
 
-import com.canoo.platform.remoting.Binding;
+import com.canoo.platform.core.functional.Binding;
 import com.canoo.dp.impl.remoting.BindingException;
 import com.canoo.dp.impl.remoting.PropertyImpl;
 import com.canoo.platform.remoting.Property;
@@ -23,7 +23,7 @@ import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.platform.core.ReflectionHelper;
 import com.canoo.platform.remoting.server.binding.PropertyBinder;
 import com.canoo.platform.remoting.server.binding.Qualifier;
-import org.opendolphin.core.server.ServerAttribute;
+import com.canoo.dp.impl.server.legacy.ServerAttribute;
 
 import java.lang.reflect.Field;
 

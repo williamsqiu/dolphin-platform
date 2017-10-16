@@ -43,12 +43,19 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * </pre>
  * </blockquote>
  *</p>
+ *
+ * @author Hendrik Ebbers
+ * @see DolphinAction
  */
 @Documented
 @Retention(RUNTIME)
 @Target(ElementType.PARAMETER)
 public @interface Param {
 
+    /**
+     * The name of the param
+     * @return the name
+     */
     String value() default "";
 
 }
