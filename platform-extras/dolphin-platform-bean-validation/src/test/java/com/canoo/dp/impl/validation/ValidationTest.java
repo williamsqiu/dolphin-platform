@@ -15,24 +15,62 @@
  */
 package com.canoo.dp.impl.validation;
 
+import com.canoo.dp.impl.remoting.MockedProperty;
+import com.canoo.platform.remoting.DolphinBean;
+import com.canoo.platform.remoting.Property;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import javax.validation.Configuration;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
+import javax.validation.constraints.Pattern;
 import java.util.Set;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
 
 public class ValidationTest {
+
+    private Validator validator;
+
+    @BeforeClass
+    public void setup() {
+        Configuration<?> validationConf = Validation.byDefaultProvider().configure();
+        validator = validationConf.buildValidatorFactory().getValidator();
+    }
+
+    @Test
+    public void testPatternValidator() {
+        @DolphinBean
+        class ClassWithPatternValidation {
+            @Pattern(regexp = "^a.*b$",flags = Pattern.Flag.CASE_INSENSITIVE)
+            private Property<CharSequence> value = new MockedProperty<>();
+        }
+
+        ClassWithPatternValidation bean = new ClassWithPatternValidation();
+        Set<ConstraintViolation<ClassWithPatternValidation>> violations;
+        ConstraintViolation<ClassWithPatternValidation> violation;
+
+        bean.value.set(null);
+        violations = validator.validate(bean);
+        assertTrue(violations.isEmpty(), "Null value should not trigger validation error");
+
+        bean.value.set("a_valid_B");
+        violations = validator.validate(bean);
+        assertTrue(violations.isEmpty(), "'a_valid_B' should match pattern '^a.*b$'");
+
+        bean.value.set("a_not_valid_c");
+        violations = validator.validate(bean);
+        assertEquals(violations.size(), 1, "'a_valid_c' should not match pattern '^a.*b$'");
+        violation = violations.iterator().next();
+        assertEquals(violation.getPropertyPath().iterator().next().getName(), "value");
+    }
 
     @Test
     public void testValidators() {
         TestBean bean = new TestBean();
-
-        Configuration<?> validationConf = Validation.byDefaultProvider().configure();
-        Validator validator = validationConf.buildValidatorFactory().getValidator();
 
         Set<ConstraintViolation<TestBean>> violations = validator.validate(bean);
         assertEquals(violations.size(), 1);

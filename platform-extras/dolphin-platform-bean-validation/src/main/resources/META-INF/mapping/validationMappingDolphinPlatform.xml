@@ -57,5 +57,10 @@
         </validated-by>
     </constraint-definition>
 
+    <constraint-definition annotation="javax.validation.constraints.Pattern">
+        <validated-by include-existing-validators="true">
+            <value>com.canoo.dp.impl.validation.PatternPropertyValidator</value>
+        </validated-by>
+    </constraint-definition>
 
 </constraint-mappings>
