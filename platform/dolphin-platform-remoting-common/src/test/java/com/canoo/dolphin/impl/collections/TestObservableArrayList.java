@@ -23,6 +23,8 @@ import org.testng.annotations.Test;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class TestObservableArrayList {
 
@@ -127,38 +129,73 @@ public class TestObservableArrayList {
 
     @Test
     public void testRemoveAll(){
+
+        final AtomicBoolean removed = new AtomicBoolean(false);
+        final AtomicBoolean added = new AtomicBoolean(false);
+        final AtomicInteger callCount = new AtomicInteger(0);
+
         final ObservableArrayList<String> list = new ObservableArrayList<>();
 
         Assert.assertTrue(list.isEmpty());
         Assert.assertEquals(list.size(), 0);
 
+        addOnChangeListener(removed, added, callCount, list);
+
 
         list.addAll("1", "2", "3", "4", "5", "6", "7" ,"8" , "9", "10");
         Assert.assertFalse(list.isEmpty());
         Assert.assertEquals(list.size(), 10);
+        Assert.assertTrue(added.get());
 
         list.removeAll(Arrays.asList("1", "2", "3", "4", "5"));
         Assert.assertFalse(list.isEmpty());
         Assert.assertEquals(list.size(), 5);
         assertSameContent(list, Arrays.asList("6", "7" ,"8" , "9", "10"));
+        Assert.assertTrue(removed.get());
+        Assert.assertEquals(2, callCount.get());
         list.clear();
 
     }
 
+    private void addOnChangeListener(final AtomicBoolean removed, final AtomicBoolean added, final AtomicInteger callCount, ObservableArrayList<String> list) {
+        list.onChanged(new ListChangeListener<String>() {
+            @Override
+            public void listChanged(ListChangeEvent<? extends String> evt) {
+                callCount.incrementAndGet();
+                if(evt.getChanges().iterator().next().isAdded()){
+                    added.set(true);
+                }else{
+                    removed.set(true);
+                }
+            }
+        });
+    }
+
     @Test
     public void testRetainAll(){
-        ObservableArrayList<String> list = new ObservableArrayList<>();
+
+        final AtomicBoolean removed = new AtomicBoolean(false);
+        final AtomicBoolean added = new AtomicBoolean(false);
+        final AtomicInteger callCount = new AtomicInteger(0);
+
+        final ObservableArrayList<String> list = new ObservableArrayList<>();
         Assert.assertTrue(list.isEmpty());
         Assert.assertEquals(list.size(), 0);
+
+        addOnChangeListener(removed, added, callCount, list);
 
         list.addAll("1", "2", "3", "4", "5", "6", "7" ,"8" , "9", "10");
         Assert.assertFalse(list.isEmpty());
         Assert.assertEquals(list.size(), 10);
+        Assert.assertTrue(added.get());
 
         list.retainAll(Arrays.asList("1", "2", "3", "4", "5"));
         Assert.assertFalse(list.isEmpty());
         Assert.assertEquals(list.size(), 5);
         assertSameContent(list, Arrays.asList("1", "2", "3", "4", "5"));
+        Assert.assertTrue(removed.get());
+
+        Assert.assertEquals(2, callCount.get());
         list.clear();
 
     }
