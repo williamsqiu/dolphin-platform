@@ -19,35 +19,52 @@ import com.canoo.dp.impl.platform.core.ReflectionHelper;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import java.lang.reflect.Field;
 import java.util.Date;
 import java.util.List;
 
 
 public class ReflectionHelperTest {
 
+    private Field forGetInheritedDeclaredFieldCheck;
 
     private List<String> forTypeParameterCheck1;
 
     private List forTypeParameterCheck2;
 
     @Test
-    public void testIsNumber() {
-        Assert.assertTrue(ReflectionHelper.isNumber(Integer.class));
-        Assert.assertTrue(ReflectionHelper.isNumber(Integer.TYPE));
-        Assert.assertTrue(ReflectionHelper.isNumber(Long.class));
-        Assert.assertTrue(ReflectionHelper.isNumber(Long.TYPE));
-        Assert.assertTrue(ReflectionHelper.isNumber(Double.class));
-        Assert.assertTrue(ReflectionHelper.isNumber(Double.TYPE));
-        Assert.assertTrue(ReflectionHelper.isNumber(Float.class));
-        Assert.assertTrue(ReflectionHelper.isNumber(Float.TYPE));
-        Assert.assertTrue(ReflectionHelper.isNumber(Byte.class));
-        Assert.assertTrue(ReflectionHelper.isNumber(Byte.TYPE));
-        Assert.assertTrue(ReflectionHelper.isNumber(Short.class));
-        Assert.assertTrue(ReflectionHelper.isNumber(Short.TYPE));
+    public void testGetInheritedDeclaredField() {
+        forGetInheritedDeclaredFieldCheck = ReflectionHelper.getInheritedDeclaredField(Character.class, "COMBINING_SPACING_MARK");
+        
+        Assert.assertEquals(false, forGetInheritedDeclaredFieldCheck.isEnumConstant());
+        Assert.assertTrue(forGetInheritedDeclaredFieldCheck instanceof Field);
+        Assert.assertEquals("COMBINING_SPACING_MARK", forGetInheritedDeclaredFieldCheck.getName());
+        
+        forGetInheritedDeclaredFieldCheck = ReflectionHelper.getInheritedDeclaredField(Integer.class, "MAX_VALUE");
+        
+        Assert.assertEquals(false, forGetInheritedDeclaredFieldCheck.isEnumConstant());
+        Assert.assertTrue(forGetInheritedDeclaredFieldCheck instanceof Field);
+        Assert.assertEquals("MAX_VALUE", forGetInheritedDeclaredFieldCheck.getName());
+    }
 
-        Assert.assertFalse(ReflectionHelper.isNumber(Date.class));
-        Assert.assertFalse(ReflectionHelper.isNumber(String.class));
-        Assert.assertFalse(ReflectionHelper.isNumber(Object.class));
+    @Test
+    public void testGetInheritedDeclaredFields() {
+        Assert.assertTrue(ReflectionHelper.getInheritedDeclaredFields(Date.class) instanceof List);
+        Assert.assertTrue(ReflectionHelper.getInheritedDeclaredFields(List.class) instanceof List);
+        Assert.assertTrue(ReflectionHelper.getInheritedDeclaredFields(String.class) instanceof List);
+    }
+
+    @Test
+    public void testGetInheritedDeclaredMethods() {
+        Assert.assertTrue(ReflectionHelper.getInheritedDeclaredMethods(Date.class) instanceof List);
+        Assert.assertTrue(ReflectionHelper.getInheritedDeclaredMethods(List.class) instanceof List);
+        Assert.assertTrue(ReflectionHelper.getInheritedDeclaredMethods(String.class) instanceof List);
+    }
+
+    @Test
+    public void testIsProxyInstance() {
+        Assert.assertFalse(ReflectionHelper.isProxyInstance(new Integer(0)));
+        Assert.assertFalse(ReflectionHelper.isProxyInstance(""));
     }
 
     @Test
@@ -70,6 +87,44 @@ public class ReflectionHelperTest {
         } catch (Exception e) {
 
         }
+    }
+
+    @Test
+    public void testIsNumber() {
+        Assert.assertTrue(ReflectionHelper.isNumber(Integer.class));
+        Assert.assertTrue(ReflectionHelper.isNumber(Integer.TYPE));
+        Assert.assertTrue(ReflectionHelper.isNumber(Long.class));
+        Assert.assertTrue(ReflectionHelper.isNumber(Long.TYPE));
+        Assert.assertTrue(ReflectionHelper.isNumber(Double.class));
+        Assert.assertTrue(ReflectionHelper.isNumber(Double.TYPE));
+        Assert.assertTrue(ReflectionHelper.isNumber(Float.class));
+        Assert.assertTrue(ReflectionHelper.isNumber(Float.TYPE));
+        Assert.assertTrue(ReflectionHelper.isNumber(Byte.class));
+        Assert.assertTrue(ReflectionHelper.isNumber(Byte.TYPE));
+        Assert.assertTrue(ReflectionHelper.isNumber(Short.class));
+        Assert.assertTrue(ReflectionHelper.isNumber(Short.TYPE));
+
+        Assert.assertFalse(ReflectionHelper.isNumber(Date.class));
+        Assert.assertFalse(ReflectionHelper.isNumber(String.class));
+        Assert.assertFalse(ReflectionHelper.isNumber(Object.class));
+    }
+
+    @Test
+    public void testIsPrimitiveNumber() {
+       Assert.assertTrue(ReflectionHelper.isPrimitiveNumber(Integer.TYPE));
+       Assert.assertTrue(ReflectionHelper.isPrimitiveNumber(Long.TYPE));
+       Assert.assertTrue(ReflectionHelper.isPrimitiveNumber(Double.TYPE));
+       Assert.assertTrue(ReflectionHelper.isPrimitiveNumber(Float.TYPE));
+       Assert.assertTrue(ReflectionHelper.isPrimitiveNumber(Short.TYPE));
+       Assert.assertTrue(ReflectionHelper.isPrimitiveNumber(Byte.TYPE));
+       
+       Assert.assertFalse(ReflectionHelper.isPrimitiveNumber(String.class));
+       Assert.assertFalse(ReflectionHelper.isPrimitiveNumber(Integer.class));
+       Assert.assertFalse(ReflectionHelper.isPrimitiveNumber(Long.class));
+       Assert.assertFalse(ReflectionHelper.isPrimitiveNumber(Double.class));
+       Assert.assertFalse(ReflectionHelper.isPrimitiveNumber(Float.class));
+       Assert.assertFalse(ReflectionHelper.isPrimitiveNumber(Short.class));
+       Assert.assertFalse(ReflectionHelper.isPrimitiveNumber(Byte.class));
     }
 
 }
