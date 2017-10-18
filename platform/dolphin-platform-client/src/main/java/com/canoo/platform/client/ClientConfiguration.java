@@ -1,15 +1,17 @@
 package com.canoo.platform.client;
 
-import com.canoo.platform.core.framework.Incubating;
-import com.canoo.platform.core.http.HttpURLConnectionFactory;
 import com.canoo.platform.core.PlatformConfiguration;
+import com.canoo.platform.core.http.HttpURLConnectionFactory;
+import org.apiguardian.api.API;
 
 import java.net.CookieStore;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 
-@Incubating("0.19.0")
+import static org.apiguardian.api.API.Status.EXPERIMENTAL;
+
+@API(since = "0.19.0", status = EXPERIMENTAL)
 public interface ClientConfiguration extends PlatformConfiguration {
 
     String BACKGROUND_EXECUTOR = "platform.background.executor";

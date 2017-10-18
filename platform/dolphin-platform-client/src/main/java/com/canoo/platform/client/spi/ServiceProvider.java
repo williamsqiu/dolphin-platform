@@ -1,9 +1,11 @@
 package com.canoo.platform.client.spi;
 
 import com.canoo.platform.client.ClientConfiguration;
-import com.canoo.platform.core.framework.Incubating;
+import org.apiguardian.api.API;
 
-@Incubating("0.19.0")
+import static org.apiguardian.api.API.Status.EXPERIMENTAL;
+
+@API(since = "0.19.0", status = EXPERIMENTAL)
 public interface ServiceProvider<S> {
 
     S getService(ClientConfiguration configuration);

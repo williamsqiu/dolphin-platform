@@ -1,10 +1,12 @@
 package com.canoo.platform.client;
 
-import com.canoo.platform.core.framework.Incubating;
+import org.apiguardian.api.API;
 
 import java.util.concurrent.Executor;
 
-@Incubating("0.19.0")
+import static org.apiguardian.api.API.Status.EXPERIMENTAL;
+
+@API(since = "0.19.0", status = EXPERIMENTAL)
 public interface Toolkit {
 
     Executor getUiExecutor();
