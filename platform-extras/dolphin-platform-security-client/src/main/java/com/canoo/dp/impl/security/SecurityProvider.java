@@ -19,6 +19,6 @@ public class SecurityProvider extends AbstractServiceProvider<Security> {
         final String authEndpoint = configuration.getProperty(AUTH_ENDPOINT, null);
         final String realmName = configuration.getProperty(REALM_NAME, null);
         final String appName = configuration.getProperty(APP_NAME, null);
-        return new KeycloakSecurity(authEndpoint, realmName, appName, configuration.getBackgroundExecutor());
+        return new KeycloakSecurity(authEndpoint, realmName, appName);
     }
 }
