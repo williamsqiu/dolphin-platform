@@ -15,8 +15,9 @@
  */
 package com.canoo.platform.remoting.client.javafx.view;
 
-import com.canoo.platform.remoting.client.ClientContext;
 import com.canoo.dp.impl.platform.core.Assert;
+import com.canoo.platform.core.DolphinRuntimeException;
+import com.canoo.platform.remoting.client.ClientContext;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 
