@@ -146,12 +146,14 @@ public class TestObservableArrayList {
         Assert.assertFalse(list.isEmpty());
         Assert.assertEquals(list.size(), 10);
         Assert.assertTrue(added.get());
+        Assert.assertFalse(removed.get());
 
         list.removeAll(Arrays.asList("1", "2", "3", "4", "5"));
         Assert.assertFalse(list.isEmpty());
         Assert.assertEquals(list.size(), 5);
         assertSameContent(list, Arrays.asList("6", "7" ,"8" , "9", "10"));
         Assert.assertTrue(removed.get());
+        Assert.assertFalse(added.get());
         Assert.assertEquals(2, callCount.get());
         list.clear();
 
@@ -164,8 +166,10 @@ public class TestObservableArrayList {
                 callCount.incrementAndGet();
                 if(evt.getChanges().iterator().next().isAdded()){
                     added.set(true);
+                    removed.set(false);
                 }else{
                     removed.set(true);
+                    added.set(false);
                 }
             }
         });
@@ -188,12 +192,14 @@ public class TestObservableArrayList {
         Assert.assertFalse(list.isEmpty());
         Assert.assertEquals(list.size(), 10);
         Assert.assertTrue(added.get());
+        Assert.assertFalse(removed.get());
 
         list.retainAll(Arrays.asList("1", "2", "3", "4", "5"));
         Assert.assertFalse(list.isEmpty());
         Assert.assertEquals(list.size(), 5);
         assertSameContent(list, Arrays.asList("1", "2", "3", "4", "5"));
         Assert.assertTrue(removed.get());
+        Assert.assertFalse(added.get());
 
         Assert.assertEquals(2, callCount.get());
         list.clear();
