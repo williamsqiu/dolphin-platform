@@ -12,10 +12,15 @@
     "tests"
   ],
   "dependencies": {
-    "paper-elements": "PolymerElements/paper-elements#1.0.x",
-    "dolphin-platform-polymer": "0.18.0"
+    "dolphin-platform-polymer": "canoo/dolphin-platform-polymer#polymer-2",
+    "paper-item": "PolymerElements/paper-item#^2.0.0",
+    "paper-styles": "PolymerElements/paper-styles#^2.0.0",
+    "polymer": "^2.1.1"
   },
   "resolutions": {
-    "polymer": "^1.1.0"
+    "paper-item": "^2.0.0",
+    "paper-styles": "^2.0.0",
+    "polymer": "^2.1.1",
+    "webcomponentsjs": "^v1.0.2"
   }
 }
