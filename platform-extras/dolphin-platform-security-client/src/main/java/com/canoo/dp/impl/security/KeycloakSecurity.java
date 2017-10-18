@@ -76,6 +76,9 @@ public class KeycloakSecurity implements Security {
     }
 
     public String getAccessToken() {
+        if(connectResult == null) {
+            return null;
+        }
         return connectResult.getAccess_token();
     }
 }
