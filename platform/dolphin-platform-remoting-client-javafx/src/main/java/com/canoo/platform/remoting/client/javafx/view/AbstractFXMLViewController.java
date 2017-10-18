@@ -52,7 +52,7 @@ public abstract class AbstractFXMLViewController<M> extends AbstractViewControll
             loader.setController(this);
             rootNode = loader.load();
         } catch (Exception e) {
-            throw new FxmlLoadException("Can not create view based on FXML location " + fxmlLocation, e);
+            throw new DolphinRuntimeException("Can not create view based on FXML location " + fxmlLocation, e);
         }
     }
 
