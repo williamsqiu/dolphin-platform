@@ -15,6 +15,8 @@
  */
 package com.canoo.dp.impl.validation;
 
+import com.canoo.dp.impl.platform.core.Assert;
+
 import javax.validation.ConstraintValidatorContext;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -34,9 +36,11 @@ public final class PatternPropertyValidator extends AbstractPropertyValidator<Pa
     }
 
     @Override
-    public void initialize(Pattern minValue) {
-        int flags = combineFlags(minValue.flags());
-        pattern = java.util.regex.Pattern.compile(minValue.regexp(), flags);
+    public void initialize(final Pattern annotation) {
+        Assert.requireNonNull(annotation, "annotation");
+
+        int flags = combineFlags(annotation.flags());
+        pattern = java.util.regex.Pattern.compile(annotation.regexp(), flags);
     }
 
     /**
@@ -46,7 +50,7 @@ public final class PatternPropertyValidator extends AbstractPropertyValidator<Pa
      * @param flags - list of javax.validation.constraints.Pattern.Flag instances to combine
      * @return combined bitmask for regex flags
      */
-    private int combineFlags(Pattern.Flag[] flags) {
+    private int combineFlags(final Pattern.Flag[] flags) {
         int combined = 0;
         for (Pattern.Flag f : flags) {
             combined |= f.getValue();
@@ -56,8 +60,8 @@ public final class PatternPropertyValidator extends AbstractPropertyValidator<Pa
 
     @Override
     protected boolean checkValid(
-            @NotNull CharSequence value,
-            ConstraintValidatorContext context) {
+            @NotNull final CharSequence value,
+            final ConstraintValidatorContext context) {
         return pattern.matcher(value).matches();
     }
 
