@@ -180,7 +180,7 @@ public class ObservableArrayList<E> implements ObservableList<E> {
 
     @Override
     public boolean retainAll(E... elements) {
-        return batchRemove(Arrays.asList(E), false);
+        return batchRemove(Arrays.asList(elements), false);
     }
 
     private boolean batchRemove(final Collection<?> c, boolean isRemove){
