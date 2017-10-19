@@ -8,6 +8,8 @@ import com.canoo.platform.client.security.Security;
 import com.canoo.platform.core.DolphinRuntimeException;
 import com.canoo.platform.core.http.RequestMethod;
 import com.google.gson.Gson;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -22,6 +24,9 @@ import java.util.concurrent.Future;
 public class KeycloakSecurity implements Security {
 
     //Setup for the realm / client -> "Direct Grand" must be enabled in keycloak admin
+
+    private static final Logger LOG = LoggerFactory.getLogger(KeycloakSecurity.class);
+
 
     private final String authEndpoint;
 
@@ -43,6 +48,7 @@ public class KeycloakSecurity implements Security {
     }
 
     private void receiveTokenFromKeycloak(final String content) throws IOException {
+        LOG.debug("receiving new token from keycloak server");
         final byte[] rawContent = content.getBytes(PlatformConstants.CHARSET);
         final URL url = new URL(authEndpoint + "/auth/realms/" + realmName + "/protocol/openid-connect/token");
         final HttpURLConnection connection = new DefaultHttpURLConnectionFactory().create(url);

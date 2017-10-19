@@ -25,6 +25,7 @@ public class KeycloakRequestHandler implements HttpURLConnectionHandler {
     public void handle(HttpURLConnection connection) {
         if(security.isAuthorized()) {
             long tokenLifetime = security.remainingTokenLifetime();
+            LOG.debug("security token will expire in " + tokenLifetime + " ms");
             if (tokenLifetime < MIN_TOKEN_LIFETIME) {
                 LOG.debug("Need to refresh security token");
                 try {

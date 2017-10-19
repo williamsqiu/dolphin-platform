@@ -15,8 +15,6 @@
  */
 package com.canoo.dolphin.todo.client;
 
-import com.canoo.platform.client.PlatformClient;
-import com.canoo.platform.client.security.Security;
 import com.canoo.platform.remoting.client.ClientContext;
 import com.canoo.platform.remoting.client.javafx.DolphinPlatformApplication;
 import javafx.application.Application;
@@ -27,20 +25,7 @@ import javafx.stage.Stage;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import static com.canoo.platform.client.security.SecurityConfiguration.APP_NAME;
-import static com.canoo.platform.client.security.SecurityConfiguration.AUTH_ENDPOINT;
-import static com.canoo.platform.client.security.SecurityConfiguration.REALM_NAME;
-
 public class ToDoClient extends DolphinPlatformApplication {
-
-    @Override
-    public void applicationInit() throws Exception {
-        PlatformClient.getClientConfiguration().setStringProperty(AUTH_ENDPOINT, "http://localhost:8180");
-        PlatformClient.getClientConfiguration().setStringProperty(REALM_NAME, "canoo");
-        PlatformClient.getClientConfiguration().setStringProperty(APP_NAME, "java-app");
-        Security security = PlatformClient.getService(Security.class);
-        security.login("admin", "abc123").get();
-    }
 
     @Override
     protected URL getServerEndpoint() throws MalformedURLException {

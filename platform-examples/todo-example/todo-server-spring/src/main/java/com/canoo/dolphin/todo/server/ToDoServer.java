@@ -16,11 +16,9 @@
 package com.canoo.dolphin.todo.server;
 
 import com.canoo.platform.remoting.server.spring.DolphinPlatformRemotingApplication;
-import com.canoo.platform.server.spring.EnableSecurity;
 import org.springframework.boot.SpringApplication;
 
 @DolphinPlatformRemotingApplication
-@EnableSecurity
 public class ToDoServer {
 
     public static void main(String... args) {
