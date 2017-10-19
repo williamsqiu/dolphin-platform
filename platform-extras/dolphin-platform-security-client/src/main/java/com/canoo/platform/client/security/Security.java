@@ -12,4 +12,10 @@ public interface Security {
 
     @Deprecated
     String getAccessToken();
+
+    @Deprecated
+    long remainingTokenLifetime();
+
+    @Deprecated
+    Future<Void> refreshToken();
 }

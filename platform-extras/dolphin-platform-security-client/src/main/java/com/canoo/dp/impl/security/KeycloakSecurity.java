@@ -1,32 +1,27 @@
 package com.canoo.dp.impl.security;
 
+import com.canoo.dp.impl.platform.client.http.DefaultHttpURLConnectionFactory;
 import com.canoo.dp.impl.platform.core.Assert;
+import com.canoo.dp.impl.platform.core.PlatformConstants;
 import com.canoo.platform.client.PlatformClient;
 import com.canoo.platform.client.security.Security;
-import com.canoo.platform.core.http.HttpClient;
+import com.canoo.platform.core.DolphinRuntimeException;
 import com.canoo.platform.core.http.RequestMethod;
+import com.google.gson.Gson;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
 public class KeycloakSecurity implements Security {
 
-    //Keycloak docker-compose https://github.com/aerogear/aerogear-unifiedpush-server/blob/master/docker-compose/development/development-env.yaml
-
-    //https://github.com/feedhenry/keycloak-apb/blob/master/roles/provision-keycloak-apb/tasks/main.yml
-
-    //This is the ADMIN login
-    //It would be better to just do a REST request.
-
-    //Sample: https://github.com/aerogear/aerogear-unifiedpush-server/blob/master/node.js/directgranttest.js
-
-    //Result contains refresh token and Access token.
-    //Access Token contains exprire date
-    //if this reached do call with refresh token first.
-
-    //https://github.com/keycloak/keycloak/tree/master/adapters/oidc/js/src/main/resources
-
     //Setup for the realm / client -> "Direct Grand" must be enabled in keycloak admin
-
 
     private final String authEndpoint;
 
@@ -34,49 +29,104 @@ public class KeycloakSecurity implements Security {
 
     private final String appName;
 
+    private final ExecutorService executor;
 
     private KeycloakOpenidConnectResult connectResult;
 
-    public KeycloakSecurity(final String authEndpoint, final String realmName, final String appName) {
+    private long tokenCreation;
+
+    public KeycloakSecurity(final String authEndpoint, final String realmName, final String appName, final ExecutorService executor) {
         this.appName = Assert.requireNonBlank(appName, "appName");
         this.authEndpoint = Assert.requireNonBlank(authEndpoint, "authEndpoint");
         this.realmName = Assert.requireNonBlank(realmName, "realmName");
+        this.executor = Assert.requireNonNull(executor, "executor");
+    }
+
+    private void receiveTokenFromKeycloak(final String content) throws IOException {
+        final byte[] rawContent = content.getBytes(PlatformConstants.CHARSET);
+        final URL url = new URL(authEndpoint + "/auth/realms/" + realmName + "/protocol/openid-connect/token");
+        final HttpURLConnection connection = new DefaultHttpURLConnectionFactory().create(url);
+        connection.setRequestMethod(RequestMethod.POST.getRawName());
+        connection.setRequestProperty("charset", "UTF-8");
+        connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+        connection.setRequestProperty("Content-Length", rawContent.length + "");
+        connection.setDoOutput(true);
+        connection.setDoInput(true);
+
+        final OutputStream w = connection.getOutputStream();
+        w.write(rawContent);
+        w.close();
+
+        final int responseCode = connection.getResponseCode();
+
+        final InputStream is = connection.getInputStream();
+        final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        int read = is.read();
+        while (read != -1) {
+            byteArrayOutputStream.write(read);
+            read = is.read();
+        }
+        final byte[] rawInput = byteArrayOutputStream.toByteArray();
+        final String input = new String(rawInput);
+
+        final Gson gson = PlatformClient.getService(Gson.class);
+        final KeycloakOpenidConnectResult result = gson.fromJson(input, KeycloakOpenidConnectResult.class);
+        connectResult = result;
+        tokenCreation = System.currentTimeMillis();
     }
 
     @Override
     public Future<Void> login(final String user, final String password) {
+        return (Future<Void>) executor.submit(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    receiveTokenFromKeycloak("client_id=" + appName + "&username=" + user + "&password=" + password + "&grant_type=password");
+                } catch (IOException e) {
+                    throw new DolphinRuntimeException("Error in security", e);
+                }
+            }
+        });
+    }
 
-        HttpClient httpClient = PlatformClient.getService(HttpClient.class);
-        return httpClient.
-                request(authEndpoint + "/auth/realms/" + realmName + "/protocol/openid-connect/token", RequestMethod.POST).
-                withContent("client_id=" + appName + "&username=" + user + "&password=" + password + "&grant_type=password", "application/x-www-form-urlencoded").
-                readObject(KeycloakOpenidConnectResult.class).
-                execute().
-                handle((c, e) -> {
-                    connectResult = c;
-                    return null;
-                });
+    public Future<Void> refreshToken() {
+        return (Future<Void>) executor.submit(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    receiveTokenFromKeycloak("grant_type=refresh_token&refresh_token=" + connectResult.getRefresh_token() + "&client_id=" + appName);
+                } catch (IOException e) {
+                    throw new DolphinRuntimeException("Error in security", e);
+                }
+            }
+        });
+    }
+
+    public long remainingTokenLifetime() {
+        if(connectResult == null) {
+            return -1;
+        }
+        return (tokenCreation + connectResult.getExpires_in() * 1000) - System.currentTimeMillis();
     }
 
     @Override
     public Future<Void> logout() {
-        //REST Endpoint at Keycloak site -> Call must be done manually
-        //http://www.keycloak.org/docs-api/3.3/rest-api/index.html
-        //POST /admin/realms/{realm}/users/{id}/logout
-
-        throw new RuntimeException("Not yet implemented");
+        //TODO: currently there is no perfect solution at keycloak to do such a logout
+        connectResult = null;
+        CompletableFuture<Void> resultHack = new CompletableFuture<>();
+        resultHack.complete(null);
+        return resultHack;
     }
 
     public boolean isAuthorized() {
         //REST Endpoint at Keycloak site -> Call must be done manually
         //http://www.keycloak.org/docs-api/3.3/rest-api/index.html
         //See /admin/realms/{realm}/users/{id}/sessions
-
         return connectResult != null;
     }
 
     public String getAccessToken() {
-        if(connectResult == null) {
+        if (connectResult == null) {
             return null;
         }
         return connectResult.getAccess_token();

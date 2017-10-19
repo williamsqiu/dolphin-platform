@@ -21,22 +21,26 @@ public class UserKeycloakImpl implements User {
 
     @Override
     public String getEmail() {
-        return keycloakSecurityContext.getIdToken().getEmail();
+        return keycloakSecurityContext.getToken().getEmail();
     }
 
     @Override
     public String getUserName() {
-        return keycloakSecurityContext.getIdToken().getPreferredUsername();
+        return keycloakSecurityContext.getToken().getPreferredUsername();
     }
 
     @Override
     public String getFirstName() {
-        return keycloakSecurityContext.getIdToken().getGivenName();
+        return keycloakSecurityContext.getToken().getGivenName();
     }
 
     @Override
     public String getLastName() {
-        return keycloakSecurityContext.getIdToken().getFamilyName();
+        return keycloakSecurityContext.getToken().getFamilyName();
     }
 
+    @Override
+    public String toString() {
+        return "User " + getUserName() + " [first name:" + getFirstName() + ", last name:" + getLastName() + ", mail:" + getEmail() + "] Roles:" + getRoles().reduce("", (a,b) -> a+ ", " +b);
+    }
 }

@@ -23,6 +23,7 @@ import com.canoo.platform.remoting.server.Param;
 import com.canoo.platform.remoting.server.event.DolphinEventBus;
 import com.canoo.dolphin.todo.pm.ToDoItem;
 import com.canoo.dolphin.todo.pm.ToDoList;
+import com.canoo.platform.server.security.SecurityContext;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -46,14 +47,17 @@ public class ToDoController {
 
     private final TodoItemStore todoItemStore;
 
+    private final SecurityContext securityContext;
+
     @DolphinModel
     private ToDoList toDoList;
 
     @Inject
-    public ToDoController(BeanManager beanManager, DolphinEventBus eventBus, TodoItemStore todoItemStore) {
+    public ToDoController(BeanManager beanManager, DolphinEventBus eventBus, TodoItemStore todoItemStore, SecurityContext securityContext) {
         this.beanManager = beanManager;
         this.eventBus = eventBus;
         this.todoItemStore = todoItemStore;
+        this.securityContext = securityContext;
     }
 
     @PostConstruct
@@ -66,6 +70,7 @@ public class ToDoController {
 
     @DolphinAction(ADD_ACTION)
     public void onItemAddAction() {
+        System.out.println("added by " + securityContext.getUser());
         todoItemStore.addItem(toDoList.getNewItemText().get());
         toDoList.getNewItemText().set("");
     }
