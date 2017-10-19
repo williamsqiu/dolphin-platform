@@ -1,9 +1,12 @@
 package com.canoo.platform.server.security;
 
+import org.apiguardian.api.API;
+
 import java.security.Principal;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+@API(since = "0.19.0", status = API.Status.EXPERIMENTAL)
 public interface User extends Principal {
 
     String getUserName();

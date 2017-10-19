@@ -1,9 +1,12 @@
 package com.canoo.platform.server.security;
 
+import org.apiguardian.api.API;
+
 import java.util.Collection;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@API(since = "0.19.0", status = API.Status.EXPERIMENTAL)
 public interface SecurityContext {
 
     String[] EMPTY_STRING_ARRAY = {};
