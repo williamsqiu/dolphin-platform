@@ -19,6 +19,8 @@ import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
 
 import javax.validation.*;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Set;
@@ -234,6 +236,138 @@ public class ValidationTest {
         } catch (ValidationException ve) {
             // Runtime exception must be thrown when invalid type is validated
         }
+    }
+
+    @Test
+    public void testMinValidationBasic() {
+        TestBeanMin bean = new TestBeanMin();
+
+        ConstraintViolation<TestBeanMin> violation;
+
+        Set<ConstraintViolation<TestBeanMin> > violations = null;
+
+        {   // Long
+            // Empty bean must be good
+            violations = validator.validate(bean);
+            assertEquals(violations.size(), 0);
+
+            // Basic test when number is higher than min
+            bean.longProperty().set(2L);
+            violations = validator.validate(bean);
+            assertEquals(violations.size(), 0);
+
+            // Basic test when number is equal to min
+            bean.longProperty().set(1L);
+            violations = validator.validate(bean);
+            assertEquals(violations.size(), 0);
+
+            // Basic test when number is less than min
+            bean.longProperty().set(0L);
+            violations = validator.validate(bean);
+            assertEquals(violations.size(), 1);
+            violation = violations.iterator().next();
+            assertEquals(violation.getPropertyPath().iterator().next().getName(), "longProperty");
+        }
+
+        resetMinTestBean(bean);
+
+        {   // Same with short
+            bean.byteProperty().set((byte) 2);
+            violations = validator.validate(bean);
+            assertEquals(violations.size(), 0);
+
+            bean.byteProperty().set((byte) 1);
+            violations = validator.validate(bean);
+            assertEquals(violations.size(), 0);
+
+            bean.byteProperty().set((byte) 0);
+            violations = validator.validate(bean);
+            assertEquals(violations.size(), 1);
+            violation = violations.iterator().next();
+            assertEquals(violation.getPropertyPath().iterator().next().getName(), "byteProperty");
+        }
+
+        resetMinTestBean(bean);
+
+        {   // BigInteger
+            bean.bigIntegerProperty().set(BigInteger.valueOf(2) );
+            violations = validator.validate(bean);
+            assertEquals(violations.size(), 0);
+
+            bean.bigIntegerProperty().set(BigInteger.valueOf(1) );
+            violations = validator.validate(bean);
+            assertEquals(violations.size(), 0);
+
+            bean.bigIntegerProperty().set(BigInteger.valueOf(0) );
+            violations = validator.validate(bean);
+            assertEquals(violations.size(), 1);
+            violation = violations.iterator().next();
+            assertEquals(violation.getPropertyPath().iterator().next().getName(), "bigInteger");
+        }
+
+        resetMinTestBean(bean);
+
+        {   // BigDecimal
+            bean.bigDecimalProperty().set(BigDecimal.valueOf(2) );
+            violations = validator.validate(bean);
+            assertEquals(violations.size(), 0);
+
+            bean.bigDecimalProperty().set(BigDecimal.valueOf(1) );
+            violations = validator.validate(bean);
+            assertEquals(violations.size(), 0);
+
+            bean.bigDecimalProperty().set(BigDecimal.valueOf(0) );
+            violations = validator.validate(bean);
+            assertEquals(violations.size(), 1);
+            violation = violations.iterator().next();
+            assertEquals(violation.getPropertyPath().iterator().next().getName(), "bigDecimal");
+        }
+
+        resetMinTestBean(bean);
+
+        bean.stringProperty().set("Dummy string.");
+        try {
+            violations = validator.validate(bean);
+            fail("Did not throw wrong validation data type exception.");
+        } catch (ValidationException ve) {
+            // Must catch runtime exception on wrong validation data type
+        }
+
+    }
+
+    @Test
+    public void testMinValidationExtremeValues() {
+        TestBeanMin bean = new TestBeanMin();
+
+        Set<ConstraintViolation<TestBeanMin> > violations = null;
+
+        // +
+        BigInteger extremeValue = new BigInteger(String.valueOf(Long.MAX_VALUE));
+        extremeValue = extremeValue.add(extremeValue);  // double the max long value
+        bean.bigIntegerProperty().set(extremeValue);
+
+        violations = validator.validate(bean);
+        assertEquals(violations.size(), 0);
+
+        // -
+        extremeValue = new BigInteger(String.valueOf(Long.MIN_VALUE));
+        extremeValue = extremeValue.add(extremeValue);  // double the min long value
+        bean.bigIntegerProperty().set(extremeValue);
+
+        violations = validator.validate(bean);
+        assertEquals(violations.size(), 1);
+
+        assertEquals(violations.iterator().next().getPropertyPath().iterator().next().getName(), "bigInteger");
+
+        // TODO: add more
+    }
+
+    private void resetMinTestBean(TestBeanMin bean) {
+        bean.bigDecimalProperty().set(null);
+        bean.bigIntegerProperty().set(null);
+        bean.longProperty().set(null);
+        bean.byteProperty().set(null);
+        assertEquals(validator.validate(bean).size(), 0);
     }
 
 }
