@@ -186,7 +186,7 @@ public class TestObservableArrayList {
         
         list.remove(1, 5);
         Assert.assertFalse(list.isEmpty());
-        Assert.assertEquals(list.size(), 5);
+        Assert.assertEquals(list.size(), 6);
         assertSameContent(list, Arrays.asList("1", "6", "7" ,"8" , "9", "10"));
         list.clear();
     }
