@@ -154,7 +154,80 @@ public class ValidationTest {
         // Lastly, check validations on invalid type
         TestBeanPastInvalidAnnotation invalid = new TestBeanPastInvalidAnnotation();
         invalid.dateProperty().set((short) 5);
-        Set<ConstraintViolation<TestBeanPastInvalidAnnotation>> violationsInvalid;
+        try {
+            validator.validate(invalid);
+            fail("Validator must have caught invalid type.");
+        } catch (ValidationException ve) {
+            // Runtime exception must be thrown when invalid type is validated
+        }
+    }
+
+    /*
+     * Same test as testPastValidationBasic but inverted from past to future
+     */
+    @Test
+    public void testFutureValidationBasic() {
+        TestBeanFuture bean = new TestBeanFuture();
+        ConstraintViolation<TestBeanFuture> violation;
+
+        Set<ConstraintViolation<TestBeanFuture> > violations = null;
+
+        // Empty bean must be good
+        violations = validator.validate(bean);
+        assertEquals(violations.size(), 0);
+
+        // Future date must be good
+        bean.dateProperty().set(
+                new Date(new Date().getTime() + 1000000)
+        );
+
+        violations = validator.validate(bean);
+        assertEquals(violations.size(), 0);
+
+        // Past date must be bad
+        bean.dateProperty().set(new Date(new Date().getTime() - 1000000) );
+
+        violations = validator.validate(bean);
+        assertEquals(violations.size(), 1);
+        violation = violations.iterator().next();
+        assertEquals(violation.getPropertyPath().iterator().next().getName(), "date");
+
+        // Reset back to clean
+        bean.dateProperty().set(new Date(new Date().getTime() + 1000000) );
+
+        violations = validator.validate(bean);
+        assertEquals(violations.size(), 0);
+
+        // Past calendar must be bad
+        Calendar past = Calendar.getInstance();
+        past.set(Calendar.YEAR, Calendar.getInstance().get(Calendar.YEAR) - 1);
+        bean.calendarProperty().set(past);
+
+        violations = validator.validate(bean);
+        assertEquals(violations.size(), 1);
+        violation = violations.iterator().next();
+        assertEquals(violation.getPropertyPath().iterator().next().getName(), "calendar");
+
+        // Future calendar must be good
+        Calendar future = Calendar.getInstance();
+        future.set(Calendar.YEAR, Calendar.getInstance().get(Calendar.YEAR) + 1);
+        bean.calendarProperty().set(future);
+
+        violations = validator.validate(bean);
+        assertEquals(violations.size(), 0);
+
+        // Check when both fields are invalid
+        past = Calendar.getInstance();
+        past.set(Calendar.YEAR, Calendar.getInstance().get(Calendar.YEAR) - 1);
+        bean.calendarProperty().set(past);
+        bean.dateProperty().set(new Date(new Date().getTime() - 1000000) );
+
+        violations = validator.validate(bean);
+        assertEquals(violations.size(), 2);
+
+        // Lastly, check validations on invalid type
+        TestBeanFutureInvalidAnnotation invalid = new TestBeanFutureInvalidAnnotation();
+        invalid.dateProperty().set((short) 5);
         try {
             validator.validate(invalid);
             fail("Validator must have caught invalid type.");

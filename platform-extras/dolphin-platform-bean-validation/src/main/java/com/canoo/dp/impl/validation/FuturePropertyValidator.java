@@ -2,21 +2,21 @@ package com.canoo.dp.impl.validation;
 
 import javax.validation.ConstraintValidatorContext;
 import javax.validation.ValidationException;
-import javax.validation.constraints.Past;
+import javax.validation.constraints.Future;
 import java.util.Calendar;
 import java.util.Date;
 
 /**
- * Validator that adds Dolphin Platform property support for the {@link Past} annotation.
+ * Validator that adds Dolphin Platform property support for the {@link Future} annotation.
  *
  * Note: using plain {@code Object} as data type because {@link Date} and {@link Calendar} have no common ancestor.
  */
-public final class PastPropertyValidator extends AbstractPropertyValidator<Past, Object> {
+public final class FuturePropertyValidator extends AbstractPropertyValidator<Future, Object> {
 
     /**
      * ctor
      */
-    public PastPropertyValidator() {
+    public FuturePropertyValidator() {
         super(Object.class);
     }
 
@@ -32,10 +32,10 @@ public final class PastPropertyValidator extends AbstractPropertyValidator<Past,
     }
 
     private boolean checkValidCalendar(Calendar value) {
-        return value.before(Calendar.getInstance() );
+        return value.after(Calendar.getInstance() );
     }
 
     private boolean checkValidDate(Date value) {
-        return value.before(new Date() );
+        return value.after(new Date() );
     }
 }
