@@ -97,7 +97,7 @@ public interface ObservableList<E> extends List<E> {
     boolean removeAll(E... elements);
 
     /**
-     * A convenient mrethod for var-arg usage of retain method.
+     * A var-arg convenience method for the retain method
      * @param elements the elements to be retained
      * @return <tt>true</tt> if list changed as a result of the call
      */
