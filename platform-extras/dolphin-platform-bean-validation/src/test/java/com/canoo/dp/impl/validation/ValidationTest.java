@@ -341,7 +341,7 @@ public class ValidationTest {
 
         resetMinTestBean(bean);
 
-        {   // Same with short
+        {   // Same with byte
             bean.byteProperty().set((byte) 2);
             violations = validator.validate(bean);
             assertEquals(violations.size(), 0);
