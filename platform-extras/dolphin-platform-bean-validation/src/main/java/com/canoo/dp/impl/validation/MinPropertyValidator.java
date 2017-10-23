@@ -22,14 +22,14 @@ public final class MinPropertyValidator extends AbstractPropertyValidator<Min, N
     }
 
     /**
-     * ctor
+     * Constructor
      */
     public MinPropertyValidator() {
         super(Number.class);
     }
 
     @Override
-    protected boolean checkValid(Number value, ConstraintValidatorContext context) {
+    protected boolean checkValid(final Number value, final ConstraintValidatorContext context) {
         if (value instanceof BigDecimal) {
             return checkValidBigDecimal((BigDecimal) value);
         } else if (value instanceof BigInteger) {
@@ -49,11 +49,11 @@ public final class MinPropertyValidator extends AbstractPropertyValidator<Min, N
         }
     }
 
-    private boolean checkValidBigInteger(BigInteger value) {
+    private boolean checkValidBigInteger(final BigInteger value) {
         return value.compareTo(BigInteger.valueOf(minValue) ) != -1;
     }
 
-    private boolean checkValidBigDecimal(BigDecimal value) {
+    private boolean checkValidBigDecimal(final BigDecimal value) {
         return value.compareTo(BigDecimal.valueOf(minValue) ) != -1;
     }
 }

@@ -16,18 +16,32 @@ import java.util.Date;
 public abstract class AbstractDateAndCalendarValidator<A extends Annotation> extends AbstractPropertyValidator<A, Object> {
 
     /**
-     * ctor
+     * Constructor
      */
     public AbstractDateAndCalendarValidator() {
         super(Object.class);
     }
 
+    /**
+     * A validation hook to mask type checks.
+     *
+     * @param date - the date, guaranteed non-null
+     * @param context - validation context
+     * @return true if {@code date} is valid, false otherwise
+     */
     protected abstract boolean checkValidDate(Date date, ConstraintValidatorContext context);
 
+    /**
+     * Template method to mask type checks.
+     *
+     * @param calendar - the calendar object, guaranteed non-null
+     * @param context - validation context
+     * @return true if {@code calendar} is valid, false otherwise
+     */
     protected abstract boolean checkValidCalendar(Calendar calendar, ConstraintValidatorContext context);
 
     @Override
-    protected boolean checkValid(Object value, ConstraintValidatorContext context) {
+    protected boolean checkValid(final Object value, final ConstraintValidatorContext context) {
         if (value instanceof Date) {
             return checkValidDate((Date) value, context);
         } else if (value instanceof Calendar) {

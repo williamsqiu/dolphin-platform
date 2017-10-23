@@ -12,12 +12,12 @@ import java.util.Date;
 public final class FuturePropertyValidator extends AbstractDateAndCalendarValidator<Future> {
 
     @Override
-    protected boolean checkValidDate(Date date, ConstraintValidatorContext context) {
+    protected boolean checkValidDate(final Date date, final ConstraintValidatorContext context) {
         return date.after(new Date() );
     }
 
     @Override
-    protected boolean checkValidCalendar(Calendar calendar, ConstraintValidatorContext context) {
+    protected boolean checkValidCalendar(final Calendar calendar, final ConstraintValidatorContext context) {
         return calendar.after(Calendar.getInstance() );
     }
 }
