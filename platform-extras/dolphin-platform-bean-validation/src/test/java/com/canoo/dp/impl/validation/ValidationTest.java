@@ -439,5 +439,30 @@ public class ValidationTest {
         bean.byteProperty().set(null);
         assertEquals(validator.validate(bean).size(), 0);
     }
+    
+    @Test
+    public void testDigitsValidator() {
+        @DolphinBean
+        class TestedClass {
+            @Digits(integer=4,fraction=2)
+            private Property<CharSequence> value = new MockedProperty<>();
+        }
+
+        TestedClass bean = new TestedClass();
+        Set<ConstraintViolation<TestedClass>> violations;
+        ConstraintViolation<TestedClass> violation;
+
+		// test valid state
+        bean.value.set("1234.34");
+        violations = validator.validate(bean);
+        assertEquals(violations.size(), 0);
+        
+        // test invalid numeric format
+        bean.value.set("1234.343");
+        violations = validator.validate(bean);
+        assertEquals(violations.size(), 1);
+        violation = violations.iterator().next();
+        assertEquals(violation.getPropertyPath().iterator().next().getName(), "value");
+    }
 
 }
