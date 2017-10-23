@@ -45,7 +45,7 @@ public abstract class AbstractPropertyValidator<T extends Annotation, U> impleme
 
     /**
      * Checks if the given value is valid
-     * @param value the value
+     * @param value the value, guaranteed to be a non-null
      * @param context the context
      * @return true if the value is valid
      */
