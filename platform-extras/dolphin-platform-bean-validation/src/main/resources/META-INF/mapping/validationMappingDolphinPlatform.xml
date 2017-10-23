@@ -35,13 +35,13 @@
 
     <constraint-definition annotation="javax.validation.constraints.DecimalMax">
         <validated-by include-existing-validators="true">
-            <value>com.canoo.dp.impl.validation.DecimalMaxPropertyValidatorForNumber</value>
+            <value>com.canoo.dp.impl.validation.DecimalMaxPropertyValidator</value>
         </validated-by>
     </constraint-definition>
 
     <constraint-definition annotation="javax.validation.constraints.DecimalMin">
         <validated-by include-existing-validators="true">
-            <value>com.canoo.dp.impl.validation.DecimalMinPropertyValidatorForNumber</value>
+            <value>com.canoo.dp.impl.validation.DecimalMinPropertyValidator</value>
         </validated-by>
     </constraint-definition>
 
@@ -84,6 +84,12 @@
     <constraint-definition annotation="javax.validation.constraints.Size">
         <validated-by include-existing-validators="true">
             <value>com.canoo.dp.impl.validation.SizePropertyValidator</value>
+        </validated-by>
+    </constraint-definition>
+
+    <constraint-definition annotation="javax.validation.constraints.Max">
+        <validated-by include-existing-validators="true">
+            <value>com.canoo.dp.impl.validation.MaxPropertyValidator</value>
         </validated-by>
     </constraint-definition>
 

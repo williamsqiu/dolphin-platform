@@ -63,6 +63,12 @@ public abstract class AbstractPropertyValidator<T extends Annotation, U> impleme
     @Override
     public boolean isValid(Property property,
                            ConstraintValidatorContext context) {
+        /*
+         * TODO: onNullValue should not even be considered when property type is unsupported,
+         * e.g. when we are validating Max constraint on Date we should throw runtime exception regardless
+         * whether it was null or not.
+         * Type check comes first, then onNullValue ***with*** data class as argument.
+         */
         if (property == null) {
             return onNullValue();
         }
