@@ -92,5 +92,10 @@
             <value>com.canoo.dp.impl.validation.MaxPropertyValidator</value>
         </validated-by>
     </constraint-definition>
-
+    
+    <constraint-definition annotation="javax.validation.constraints.Digits">
+        <validated-by include-existing-validators="true">
+            <value>com.canoo.dp.impl.validation.DigitsPropertyValidator</value>
+        </validated-by>
+    </constraint-definition>
 </constraint-mappings>
