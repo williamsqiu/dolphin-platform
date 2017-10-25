@@ -63,8 +63,6 @@ public class KeycloakSecurity implements Security {
         w.write(rawContent);
         w.close();
 
-        final int responseCode = connection.getResponseCode();
-
         final InputStream is = connection.getInputStream();
         final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         int read = is.read();
@@ -83,36 +81,30 @@ public class KeycloakSecurity implements Security {
 
     @Override
     public Future<Void> login(final String user, final String password) {
-        return (Future<Void>) executor.submit(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    receiveTokenFromKeycloak("client_id=" + appName + "&username=" + user + "&password=" + password + "&grant_type=password");
-                } catch (IOException e) {
-                    throw new DolphinRuntimeException("Error in security", e);
-                }
+        return (Future<Void>) executor.submit(() -> {
+            try {
+                receiveTokenFromKeycloak("client_id=" + appName + "&username=" + user + "&password=" + password + "&grant_type=password");
+            } catch (IOException e) {
+                throw new DolphinRuntimeException("Error in security", e);
             }
         });
     }
 
     public Future<Void> refreshToken() {
-        return (Future<Void>) executor.submit(new Runnable() {
-            @Override
-            public void run() {
+        return (Future<Void>) executor.submit(() -> {
                 try {
                     receiveTokenFromKeycloak("grant_type=refresh_token&refresh_token=" + connectResult.getRefresh_token() + "&client_id=" + appName);
                 } catch (IOException e) {
                     throw new DolphinRuntimeException("Error in security", e);
                 }
-            }
-        });
+            });
     }
 
-    public long remainingTokenLifetime() {
-        if(connectResult == null) {
+    public long tokenExpiresAt() {
+        if (connectResult == null) {
             return -1;
         }
-        return (tokenCreation + connectResult.getExpires_in() * 1000) - System.currentTimeMillis();
+        return tokenCreation + connectResult.getExpires_in() * 1000;
     }
 
     @Override

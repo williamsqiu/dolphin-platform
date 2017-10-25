@@ -17,7 +17,7 @@ public interface Security {
     String getAccessToken();
 
     @Deprecated
-    long remainingTokenLifetime();
+    long tokenExpiresAt();
 
     @Deprecated
     Future<Void> refreshToken();
