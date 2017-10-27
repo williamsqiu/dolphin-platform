@@ -1,5 +1,6 @@
 {
   "name": "dolphin-platform-polymer",
+  "version": "0.19.0",
   "description": "The Dolphin Platform framework implements the presentation model pattern and provides a modern way to create enterprise applications.",
   "keywords": [
     "Dolphin Platform"
@@ -27,31 +28,31 @@
     "package-lock.json"
   ],
   "dependencies": {
-    "dolphin-platform-js": "0.18.0",
-    "polymer": "2.1.1"
+    "core.js": "2.5.1",
+    "dolphin-platform-js": "0.19.0",
+    "polymer": "2.2.0"
   },
   "devDependencies": {
-    "core.js": "2.5.1",
     "lodash": "4.17.4",
     "iron-component-page": "3.0.1",
     "web-component-tester": "6.3.0",
-    "webcomponentsjs": "webcomponents/webcomponentsjs#1.0.14",
+    "webcomponentsjs": "webcomponents/webcomponentsjs#1.0.17",
     "mocha": "3.5.3",
     "chai": "4.1.2",
     "sinon": "4.0.1"
   },
   "resolutions": {
-    "polymer": "2.1.1",
+    "polymer": "2.2.0",
     "lodash": "4.17.4",
     "chai": "4.1.2"
   },
-  "_release": "4450c764ec",
+  "_release": "0.19.0",
   "_resolution": {
-    "type": "branch",
-    "branch": "polymer-2",
-    "commit": "4450c764ece5e040ee5fafddbbd5ebe34c6ff9d2"
+    "type": "version",
+    "tag": "0.19.0",
+    "commit": "2fbcd9e2aaaa89d6c32fdef25d31302977c3b4d2"
   },
-  "_source": "https://github.com/canoo/dolphin-platform-polymer.git",
-  "_target": "polymer-2",
+  "_source": "git://github.com/canoo/dolphin-platform-polymer.git",
+  "_target": "0.19.0",
   "_originalSource": "canoo/dolphin-platform-polymer"
 }
