@@ -17,10 +17,14 @@ package com.canoo.dp.impl.remoting.collections;
 
 import com.canoo.platform.remoting.ListChangeEvent;
 import com.canoo.platform.remoting.ObservableList;
+import org.apiguardian.api.API;
 
 import java.util.Collections;
 import java.util.List;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public class ListChangeEventImpl<E> implements ListChangeEvent<E> {
 
     private final ObservableList<E> source;

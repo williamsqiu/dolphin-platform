@@ -22,7 +22,11 @@ import com.canoo.platform.core.functional.Subscription;
 import com.canoo.platform.remoting.Property;
 import com.canoo.dp.impl.platform.core.Assert;
 import javafx.beans.value.WritableValue;
+import org.apiguardian.api.API;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public class DefaultJavaFXBinder<S> implements JavaFXBinder<S> {
 
     private final WritableValue<S> javaFxValue;

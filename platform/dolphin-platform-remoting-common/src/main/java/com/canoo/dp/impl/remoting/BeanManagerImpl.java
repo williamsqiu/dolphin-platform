@@ -18,9 +18,13 @@ package com.canoo.dp.impl.remoting;
 import com.canoo.platform.remoting.BeanManager;
 import com.canoo.platform.core.functional.Subscription;
 import com.canoo.dp.impl.platform.core.Assert;
+import org.apiguardian.api.API;
 
 import java.util.List;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public class BeanManagerImpl implements BeanManager {
 
     protected final BeanRepository beanRepository;

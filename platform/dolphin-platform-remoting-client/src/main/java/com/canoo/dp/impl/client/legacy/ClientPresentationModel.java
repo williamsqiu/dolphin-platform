@@ -17,11 +17,14 @@ package com.canoo.dp.impl.client.legacy;
 
 
 import com.canoo.dp.impl.remoting.legacy.core.BasePresentationModel;
+import org.apiguardian.api.API;
 
 import java.util.List;
 
 import static com.canoo.dp.impl.remoting.legacy.RemotingConstants.CLIENT_PM_AUTO_ID_SUFFIX;
+import static org.apiguardian.api.API.Status.DEPRECATED;
 
+@API(since = "0.x", status = DEPRECATED)
 public final class ClientPresentationModel extends BasePresentationModel<ClientAttribute> {
 
     private static long instanceCount = 0;

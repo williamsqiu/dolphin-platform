@@ -15,10 +15,15 @@
  */
 package com.canoo.dp.impl.remoting;
 
+import org.apiguardian.api.API;
+
+import static org.apiguardian.api.API.Status.INTERNAL;
+
 /**
  * A listener that can be used to react on the destruction of beans.
  * @param <T> Bean type
  */
+@API(since = "0.x", status = INTERNAL)
 public interface BeanRemovedListener<T> {
 
     /**

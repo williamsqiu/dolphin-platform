@@ -15,12 +15,17 @@
  */
 package com.canoo.platform.remoting.client.javafx;
 
+import org.apiguardian.api.API;
+
+import static org.apiguardian.api.API.Status.MAINTAINED;
+
 /**
  * Defines a converter for a bidirectional binding. This converter type can be used to bind a JavaFX property
  * bidirectional to a Dolphin Platform property that defines a different data type.
  * @param <T> data type of the first property
  * @param <U> data type of the second property
  */
+@API(since = "0.x", status = MAINTAINED)
 public interface BidirectionalConverter<T, U>  extends Converter<T, U> {
 
     /**

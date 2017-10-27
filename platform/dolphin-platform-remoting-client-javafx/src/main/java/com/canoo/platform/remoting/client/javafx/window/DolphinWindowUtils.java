@@ -23,10 +23,14 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import javafx.stage.WindowEvent;
+import org.apiguardian.api.API;
+
+import static org.apiguardian.api.API.Status.MAINTAINED;
 
 /**
  * Class that provides some helper methods.
  */
+@API(since = "0.x", status = MAINTAINED)
 public class DolphinWindowUtils {
 	
 	/**

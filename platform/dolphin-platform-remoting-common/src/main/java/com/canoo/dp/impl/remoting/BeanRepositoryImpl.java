@@ -21,8 +21,11 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import com.canoo.dp.impl.remoting.legacy.core.ModelStore;
 import com.canoo.dp.impl.remoting.legacy.core.PresentationModel;
+import org.apiguardian.api.API;
 
 import java.util.*;
+
+import static org.apiguardian.api.API.Status.INTERNAL;
 
 /**
  * A {@code BeanRepository} keeps a list of all registered Dolphin Beans and the mapping between OpenDolphin IDs and
@@ -32,6 +35,7 @@ import java.util.*;
  * with the {@link #delete(Object)} method.
  */
 // TODO mapDolphinToObject() does not really fit here, we should probably move it to Converters, but first we need to fix scopes
+@API(since = "0.x", status = INTERNAL)
 public class BeanRepositoryImpl implements BeanRepository{
 
     private final Map<Object, PresentationModel> objectPmToDolphinPm = new IdentityHashMap<>();

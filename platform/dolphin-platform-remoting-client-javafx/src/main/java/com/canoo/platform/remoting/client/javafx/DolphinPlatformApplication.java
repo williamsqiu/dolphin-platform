@@ -25,6 +25,7 @@ import com.canoo.platform.remoting.client.ClientShutdownException;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.stage.Stage;
+import org.apiguardian.api.API;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,10 +38,13 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import static org.apiguardian.api.API.Status.MAINTAINED;
+
 /**
  * Defines a basic application class for Dolphin Platform based applications that can be used like the {@link Application}
  * class. Next to the general {@link Application} class of JavaFX this class supports the DOlphin Platform connecttion lifecycle.
  */
+@API(since = "0.x", status = MAINTAINED)
 public abstract class DolphinPlatformApplication extends Application {
 
     private static final Logger LOG = LoggerFactory.getLogger(DolphinPlatformApplication.class);

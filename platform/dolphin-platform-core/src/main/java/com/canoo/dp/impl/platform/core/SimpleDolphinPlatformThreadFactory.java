@@ -16,6 +16,7 @@
 package com.canoo.dp.impl.platform.core;
 
 import com.canoo.platform.core.PlatformThreadFactory;
+import org.apiguardian.api.API;
 
 import java.security.AccessController;
 import java.security.PrivilegedAction;
@@ -23,6 +24,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public class SimpleDolphinPlatformThreadFactory implements PlatformThreadFactory {
 
     private final AtomicInteger threadNumber = new AtomicInteger(0);

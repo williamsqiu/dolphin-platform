@@ -18,9 +18,12 @@ package com.canoo.dp.impl.client.legacy;
 import com.canoo.dp.impl.client.legacy.communication.AttributeChangeListener;
 import com.canoo.dp.impl.remoting.legacy.core.ModelStore;
 import com.canoo.dp.impl.remoting.legacy.core.ModelStoreConfig;
+import org.apiguardian.api.API;
 
 import java.util.Arrays;
 import java.util.List;
+
+import static org.apiguardian.api.API.Status.DEPRECATED;
 
 /**
  * The ClientModelStore is a {@link ModelStore} with customized behavior appropriate to the client
@@ -28,6 +31,7 @@ import java.util.List;
  * an {@link AttributeChangeListener}.  It automatically notifies the server side when presentation models are added
  * or removed.
  */
+@API(since = "0.x", status = DEPRECATED)
 public class ClientModelStore extends ModelStore<ClientAttribute, ClientPresentationModel> {
 
     private final ModelSynchronizer modelSynchronizer;

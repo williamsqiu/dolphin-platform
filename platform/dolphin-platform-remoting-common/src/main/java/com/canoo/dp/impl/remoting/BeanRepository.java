@@ -18,9 +18,13 @@ package com.canoo.dp.impl.remoting;
 import com.canoo.dp.impl.remoting.legacy.core.PresentationModel;
 import com.canoo.platform.core.functional.Subscription;
 import com.canoo.platform.remoting.spi.converter.DolphinBeanRepo;
+import org.apiguardian.api.API;
 
 import java.util.List;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public interface BeanRepository extends DolphinBeanRepo {
 
     <T> Subscription addOnAddedListener(final Class<T> beanClass, final BeanAddedListener<? super T> listener);

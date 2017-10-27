@@ -15,12 +15,17 @@
  */
 package com.canoo.dp.impl.platform.core;
 
+import org.apiguardian.api.API;
+
 import java.util.List;
 import java.util.Objects;
+
+import static org.apiguardian.api.API.Status.INTERNAL;
 
 /**
  * A collection of utility methods that can assert the state of an instance.
  */
+@API(since = "0.x", status = INTERNAL)
 public final class Assert {
     private static final String NOT_NULL_MSG_FORMAT = "Argument '%s' may not be null";
     private static final String NOT_EMPTY_MSG_FORMAT = "Argument '%s' may not be empty";

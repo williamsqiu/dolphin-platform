@@ -15,7 +15,11 @@
  */
 package com.canoo.platform.remoting;
 
+import org.apiguardian.api.API;
+
 import java.util.List;
+
+import static org.apiguardian.api.API.Status.MAINTAINED;
 
 /**
  * An event that defines the change of an {@link ObservableList}.
@@ -23,6 +27,7 @@ import java.util.List;
  * @param <E> generic type of the list.
  * @author Hendrik Ebbers
  */
+@API(since = "0.x", status = MAINTAINED)
 public interface ListChangeEvent<E> {
 
     /**

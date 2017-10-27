@@ -16,7 +16,11 @@
 package com.canoo.dp.impl.server.event;
 
 import com.hazelcast.core.HazelcastInstance;
+import org.apiguardian.api.API;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public interface HazelcastProvider {
 
     HazelcastInstance getHazelcastInstance(HazelcastConfig configuration);

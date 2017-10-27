@@ -15,11 +15,16 @@
  */
 package com.canoo.platform.remoting.spi.converter;
 
+import org.apiguardian.api.API;
+
+import static org.apiguardian.api.API.Status.MAINTAINED;
+
 /**
  * Entry point of the data converter SPI. Custom implementations can be provided by the default Java SPI (see {@link java.util.ServiceLoader}) and will be used at runtime to convert custom data types that are used in Dolphin Platform beans (see {@link com.canoo.platform.remoting.DolphinBean}) to internally supported data types.
  *
  * @author Hendrik Ebbers
  */
+@API(since = "0.x", status = MAINTAINED)
 public interface ConverterFactory {
 
     /**

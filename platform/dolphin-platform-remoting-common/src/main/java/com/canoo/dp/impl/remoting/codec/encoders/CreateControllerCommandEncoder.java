@@ -19,12 +19,15 @@ import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.remoting.commands.CreateControllerCommand;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import org.apiguardian.api.API;
 
 import static com.canoo.dp.impl.remoting.legacy.communication.CommandConstants.CONTROLLER_ID;
 import static com.canoo.dp.impl.remoting.legacy.communication.CommandConstants.CREATE_CONTROLLER_COMMAND_ID;
 import static com.canoo.dp.impl.remoting.legacy.communication.CommandConstants.ID;
 import static com.canoo.dp.impl.remoting.legacy.communication.CommandConstants.NAME;
+import static org.apiguardian.api.API.Status.INTERNAL;
 
+@API(since = "0.x", status = INTERNAL)
 public class CreateControllerCommandEncoder extends AbstractCommandTranscoder<CreateControllerCommand> {
 
     @Override

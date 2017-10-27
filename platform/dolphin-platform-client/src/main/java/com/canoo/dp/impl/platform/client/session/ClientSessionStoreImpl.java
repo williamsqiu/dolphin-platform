@@ -3,6 +3,7 @@ package com.canoo.dp.impl.platform.client.session;
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.client.session.ClientSessionStore;
 import com.canoo.platform.core.domain.UrlToAppDomainConverter;
+import org.apiguardian.api.API;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,6 +13,9 @@ import java.util.Map;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public class ClientSessionStoreImpl implements ClientSessionStore{
 
     private static final Logger LOG = LoggerFactory.getLogger(ClientSessionStoreImpl.class);

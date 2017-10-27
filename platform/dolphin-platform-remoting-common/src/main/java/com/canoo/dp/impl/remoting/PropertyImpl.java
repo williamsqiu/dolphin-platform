@@ -21,17 +21,21 @@ import com.canoo.dp.impl.remoting.info.PropertyInfo;
 import com.canoo.platform.remoting.Property;
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.remoting.legacy.core.Attribute;
+import org.apiguardian.api.API;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
 /**
  * An implementation of {@link Property} that is used for all Dolphin Beans generated from class definitions.
  *
  * @param <T> The type of the wrapped property.
  */
+@API(since = "0.x", status = INTERNAL)
 public class PropertyImpl<T> extends AbstractProperty<T> {
 
     private final Attribute attribute;

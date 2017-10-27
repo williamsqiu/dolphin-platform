@@ -15,9 +15,14 @@
  */
 package com.canoo.dp.impl.client.legacy.communication;
 
+import org.apiguardian.api.API;
+
 import java.util.Collections;
 import java.util.List;
 
+import static org.apiguardian.api.API.Status.DEPRECATED;
+
+@API(since = "0.x", status = DEPRECATED)
 public class CommandBatcher implements ICommandBatcher {
 
     private final DataflowQueue<List<CommandAndHandler>> waitingBatches;

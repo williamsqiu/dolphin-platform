@@ -18,12 +18,16 @@ package com.canoo.dp.impl.server.event;
 import com.canoo.dp.impl.server.config.RemotingConfiguration;
 import com.canoo.platform.remoting.server.spi.EventBusProvider;
 import com.canoo.platform.remoting.server.event.DolphinEventBus;
+import org.apiguardian.api.API;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Iterator;
 import java.util.ServiceLoader;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public class DistributedEventBusProvider implements EventBusProvider {
 
     private static final Logger LOG = LoggerFactory.getLogger(DistributedEventBusProvider.class);

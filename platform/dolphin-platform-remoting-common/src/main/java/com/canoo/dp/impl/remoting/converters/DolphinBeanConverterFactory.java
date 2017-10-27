@@ -20,7 +20,11 @@ import com.canoo.platform.remoting.spi.converter.Converter;
 import com.canoo.platform.remoting.spi.converter.ConverterFactory;
 import com.canoo.platform.remoting.spi.converter.DolphinBeanRepo;
 import com.canoo.platform.remoting.spi.converter.ValueConverterException;
+import org.apiguardian.api.API;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public class DolphinBeanConverterFactory implements ConverterFactory {
 
     public final static int FIELD_TYPE_DOLPHIN_BEAN = 0;

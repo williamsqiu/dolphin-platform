@@ -23,7 +23,11 @@ import com.canoo.dp.impl.remoting.DolphinEventHandler;
 import com.canoo.dp.impl.remoting.EventDispatcher;
 import com.canoo.dp.impl.remoting.legacy.core.PresentationModel;
 import com.canoo.dp.impl.client.legacy.ClientModelStore;
+import org.apiguardian.api.API;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public class ClientPlatformBeanRepository {
 
     private final ClientModelStore modelStore;

@@ -24,7 +24,11 @@ import com.canoo.dp.impl.remoting.MappingException;
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.client.legacy.ClientModelStore;
 import com.canoo.dp.impl.client.legacy.ClientPresentationModel;
+import org.apiguardian.api.API;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public class ClientControllerActionCallBean extends AbstractControllerActionCallBean {
 
     private final ClientModelStore modelStore;

@@ -19,9 +19,13 @@ import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.client.legacy.communication.AbstractClientConnector;
 import com.canoo.dp.impl.client.legacy.communication.OnFinishedHandler;
 import com.canoo.dp.impl.remoting.legacy.communication.Command;
+import org.apiguardian.api.API;
 
 import java.util.concurrent.CompletableFuture;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public class DolphinCommandHandler {
 
     private final AbstractClientConnector clientConnector;

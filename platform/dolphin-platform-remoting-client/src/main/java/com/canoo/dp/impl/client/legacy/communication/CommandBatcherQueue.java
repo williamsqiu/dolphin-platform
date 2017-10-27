@@ -15,12 +15,17 @@
  */
 package com.canoo.dp.impl.client.legacy.communication;
 
+import org.apiguardian.api.API;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import static org.apiguardian.api.API.Status.DEPRECATED;
+
+@API(since = "0.x", status = DEPRECATED)
 public class CommandBatcherQueue implements DataflowQueue<List<CommandAndHandler>> {
 
     private final List<List<CommandAndHandler>> internalQueue = new LinkedList<>();

@@ -3,12 +3,16 @@ package com.canoo.dp.impl.platform.client.http;
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.client.ClientConfiguration;
 import com.canoo.platform.core.http.HttpExecutor;
+import org.apiguardian.api.API;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.function.Consumer;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public class HttpExecutorImpl<R> implements HttpExecutor<R> {
 
     private final ExecutorService executor;

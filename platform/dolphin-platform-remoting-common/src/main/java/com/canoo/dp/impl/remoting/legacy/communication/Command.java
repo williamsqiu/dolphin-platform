@@ -15,7 +15,11 @@
  */
 package com.canoo.dp.impl.remoting.legacy.communication;
 
+import org.apiguardian.api.API;
+
 import java.io.Serializable;
+
+import static org.apiguardian.api.API.Status.DEPRECATED;
 
 /**
  * Commands come in two flavors: *Command (active voice) and *Notification (passive voice).
@@ -27,6 +31,7 @@ import java.io.Serializable;
  * They are only "DTOs" that are sent over the wire.
  * The receiving side is responsible for finding the appropriate action.
  */
+@API(since = "0.x", status = DEPRECATED)
 public abstract class Command implements Serializable {
 
     private final String id;

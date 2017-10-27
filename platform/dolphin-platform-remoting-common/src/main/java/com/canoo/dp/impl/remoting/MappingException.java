@@ -15,10 +15,15 @@
  */
 package com.canoo.dp.impl.remoting;
 
+import org.apiguardian.api.API;
+
+import static org.apiguardian.api.API.Status.INTERNAL;
+
 /**
  * Exception that is thrown if an error happens in the Dolphin Platform model mapping. This can happen if a
  * model class definition isn't working for the Dolphin Platform.
  */
+@API(since = "0.x", status = INTERNAL)
 public class MappingException extends RuntimeException {
 
     /**

@@ -15,6 +15,11 @@
  */
 package com.canoo.dp.impl.client.legacy.communication;
 
+import org.apiguardian.api.API;
+
+import static org.apiguardian.api.API.Status.DEPRECATED;
+
+@API(since = "0.x", status = DEPRECATED)
 public enum HandlerType {
     UI, BACKGROUND;
 }

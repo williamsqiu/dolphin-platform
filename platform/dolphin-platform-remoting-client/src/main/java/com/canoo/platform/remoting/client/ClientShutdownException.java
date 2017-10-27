@@ -15,9 +15,14 @@
  */
 package com.canoo.platform.remoting.client;
 
+import org.apiguardian.api.API;
+
+import static org.apiguardian.api.API.Status.MAINTAINED;
+
 /**
  * This exception is thrown when a client can't disconnect
  */
+@API(since = "0.x", status = MAINTAINED)
 public class ClientShutdownException extends Exception {
 
     private static final long serialVersionUID = 8453749162802045073L;

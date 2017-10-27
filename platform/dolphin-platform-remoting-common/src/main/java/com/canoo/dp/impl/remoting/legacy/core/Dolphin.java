@@ -15,7 +15,12 @@
  */
 package com.canoo.dp.impl.remoting.legacy.core;
 
+import org.apiguardian.api.API;
+
+import static org.apiguardian.api.API.Status.DEPRECATED;
+
 @Deprecated
+@API(since = "0.x", status = DEPRECATED)
 public interface Dolphin<A extends Attribute, P extends PresentationModel<A>> {
 
     ModelStore<A, P> getModelStore();

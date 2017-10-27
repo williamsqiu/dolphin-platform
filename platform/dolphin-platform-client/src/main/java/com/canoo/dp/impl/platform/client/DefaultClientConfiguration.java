@@ -5,6 +5,7 @@ import com.canoo.dp.impl.platform.core.SimpleDolphinPlatformThreadFactory;
 import com.canoo.dp.impl.platform.core.SimpleUncaughtExceptionHandler;
 import com.canoo.platform.client.ClientConfiguration;
 import com.canoo.platform.core.http.HttpURLConnectionFactory;
+import org.apiguardian.api.API;
 
 import java.net.CookieManager;
 import java.net.CookieStore;
@@ -15,6 +16,9 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public class DefaultClientConfiguration implements ClientConfiguration {
 
     private final Properties internalProperties = new Properties();

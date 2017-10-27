@@ -17,12 +17,16 @@ package com.canoo.dp.impl.platform.client.http;
 
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.core.http.HttpURLConnectionFactory;
+import org.apiguardian.api.API;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public class DefaultHttpURLConnectionFactory implements HttpURLConnectionFactory {
 
     @Override

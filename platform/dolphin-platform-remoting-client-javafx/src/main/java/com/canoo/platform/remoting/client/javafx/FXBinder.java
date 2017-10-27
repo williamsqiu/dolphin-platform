@@ -44,12 +44,15 @@ import javafx.beans.value.WritableIntegerValue;
 import javafx.beans.value.WritableLongValue;
 import javafx.beans.value.WritableValue;
 import javafx.collections.ObservableList;
+import org.apiguardian.api.API;
 
 import static com.canoo.dp.impl.platform.core.Assert.requireNonNull;
+import static org.apiguardian.api.API.Status.MAINTAINED;
 
 /**
  * Utility class to create uniderctional and bidirectional bindings between JavaFX and Dolphin Platform properties.
  */
+@API(since = "0.x", status = MAINTAINED)
 public final class FXBinder {
 
     /**

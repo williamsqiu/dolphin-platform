@@ -18,9 +18,13 @@ package com.canoo.dp.impl.remoting;
 import com.canoo.platform.remoting.spi.converter.Converter;
 import com.canoo.dp.impl.platform.core.ReflectionHelper;
 import com.canoo.dp.impl.remoting.info.PropertyInfo;
+import org.apiguardian.api.API;
 
 import java.lang.reflect.Field;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public class ClassPropertyInfo extends PropertyInfo {
 
     private final Field field;

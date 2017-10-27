@@ -16,9 +16,12 @@
 package com.canoo.platform.remoting;
 
 import com.canoo.platform.core.functional.Subscription;
+import org.apiguardian.api.API;
 
 import java.util.Collection;
 import java.util.List;
+
+import static org.apiguardian.api.API.Status.MAINTAINED;
 
 /**
  * This interface extends the default {@link List} interface and adds the possibility to observe the list.
@@ -52,6 +55,7 @@ import java.util.List;
  * @param <E> type of elements in the list
  * @author Hendrik Ebbers
  */
+@API(since = "0.x", status = MAINTAINED)
 public interface ObservableList<E> extends List<E> {
 
     /**

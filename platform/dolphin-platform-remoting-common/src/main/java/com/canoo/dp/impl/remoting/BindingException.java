@@ -15,6 +15,11 @@
  */
 package com.canoo.dp.impl.remoting;
 
+import org.apiguardian.api.API;
+
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public class BindingException extends RuntimeException {
 
     private static final long serialVersionUID = 2923090454418134058L;

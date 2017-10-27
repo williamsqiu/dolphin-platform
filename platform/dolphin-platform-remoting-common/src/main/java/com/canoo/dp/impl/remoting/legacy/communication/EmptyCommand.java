@@ -15,6 +15,10 @@
  */
 package com.canoo.dp.impl.remoting.legacy.communication;
 
+import org.apiguardian.api.API;
+
+import static org.apiguardian.api.API.Status.DEPRECATED;
+
 /**
  * A notification that does nothing on the server.
  * It is only used to hook into the communication at a known point
@@ -22,6 +26,7 @@ package com.canoo.dp.impl.remoting.legacy.communication;
  * in the expected sequence.
  */
 @Deprecated
+@API(since = "0.x", status = DEPRECATED)
 public final class EmptyCommand extends Command {
     public EmptyCommand() {
         super(CommandConstants.EMPTY_COMMAND_ID);

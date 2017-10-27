@@ -15,7 +15,11 @@
  */
 package com.canoo.platform.remoting;
 
+import org.apiguardian.api.API;
+
 import java.util.EventListener;
+
+import static org.apiguardian.api.API.Status.MAINTAINED;
 
 /**
  * A change listener that supports generics.
@@ -28,6 +32,7 @@ import java.util.EventListener;
  * @param <T> type of the value that is observed by this listener
  * @author Hendrik Ebbers
  */
+@API(since = "0.x", status = MAINTAINED)
 public interface ValueChangeListener<T> extends EventListener {
 
     /**

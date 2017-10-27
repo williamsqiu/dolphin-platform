@@ -15,10 +15,14 @@
  */
 package com.canoo.dp.impl.remoting.legacy.core;
 
+import org.apiguardian.api.API;
+
+import static org.apiguardian.api.API.Status.DEPRECATED;
+
 /**
  * The value may be null as long as the BaseAttribute is used as a "placeholder".
  */
-
+@API(since = "0.x", status = DEPRECATED)
 public abstract class BaseAttribute extends AbstractObservable implements Attribute {
 
     private static long instanceCount = 0;

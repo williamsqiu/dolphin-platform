@@ -17,8 +17,11 @@ package com.canoo.platform.remoting;
 
 import com.canoo.dp.impl.remoting.BeanAddedListener;
 import com.canoo.platform.core.functional.Subscription;
+import org.apiguardian.api.API;
 
 import java.util.List;
+
+import static org.apiguardian.api.API.Status.MAINTAINED;
 
 /**
  * <p>The {@link BeanManager} defined the low level API of the Dolphin Platform to create synchronized models. A model
@@ -67,6 +70,7 @@ import java.util.List;
  *
  * @author Hendrik Ebbers
  */
+@API(since = "0.x", status = MAINTAINED)
 public interface BeanManager {
 
     /**

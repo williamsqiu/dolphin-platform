@@ -19,6 +19,9 @@ import com.canoo.dp.impl.client.legacy.communication.AbstractClientConnector;
 import com.canoo.dp.impl.client.legacy.communication.OnFinishedHandler;
 import com.canoo.dp.impl.remoting.legacy.communication.EmptyCommand;
 import com.canoo.dp.impl.remoting.legacy.core.Dolphin;
+import org.apiguardian.api.API;
+
+import static org.apiguardian.api.API.Status.DEPRECATED;
 
 /**
  * The main Dolphin facade on the client side.
@@ -27,6 +30,7 @@ import com.canoo.dp.impl.remoting.legacy.core.Dolphin;
  * Threading model: confined to the UI handling thread.
  */
 @Deprecated
+@API(since = "0.x", status = DEPRECATED)
 public class ClientDolphin implements Dolphin<ClientAttribute, ClientPresentationModel> {
 
     private ClientModelStore clientModelStore;

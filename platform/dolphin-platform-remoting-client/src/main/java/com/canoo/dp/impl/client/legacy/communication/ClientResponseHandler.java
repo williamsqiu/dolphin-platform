@@ -24,6 +24,7 @@ import com.canoo.dp.impl.remoting.legacy.communication.CreatePresentationModelCo
 import com.canoo.dp.impl.remoting.legacy.communication.DeletePresentationModelCommand;
 import com.canoo.dp.impl.remoting.legacy.communication.ValueChangedCommand;
 import com.canoo.dp.impl.remoting.legacy.core.Attribute;
+import org.apiguardian.api.API;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,6 +33,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import static org.apiguardian.api.API.Status.DEPRECATED;
+
+@API(since = "0.x", status = DEPRECATED)
 public class ClientResponseHandler {
 
     private static final Logger LOG = LoggerFactory.getLogger(ClientResponseHandler.class);

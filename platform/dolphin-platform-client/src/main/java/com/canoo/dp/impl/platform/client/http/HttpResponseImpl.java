@@ -8,6 +8,7 @@ import com.canoo.platform.core.http.HttpResponse;
 import com.canoo.platform.core.http.HttpURLConnectionHandler;
 import com.canoo.platform.core.DolphinRuntimeException;
 import com.google.gson.Gson;
+import org.apiguardian.api.API;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -22,7 +23,9 @@ import static com.canoo.dp.impl.platform.core.PlatformConstants.ACCEPT_CHARSET_H
 import static com.canoo.dp.impl.platform.core.PlatformConstants.ACCEPT_HEADER;
 import static com.canoo.dp.impl.platform.core.PlatformConstants.CHARSET;
 import static com.canoo.dp.impl.platform.core.PlatformConstants.JSON_MIME_TYPE;
+import static org.apiguardian.api.API.Status.INTERNAL;
 
+@API(since = "0.x", status = INTERNAL)
 public class HttpResponseImpl implements HttpResponse {
 
     private final HttpURLConnection connection;

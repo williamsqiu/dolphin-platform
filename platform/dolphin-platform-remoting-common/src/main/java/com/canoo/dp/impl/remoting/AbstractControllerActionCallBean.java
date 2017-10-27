@@ -15,6 +15,11 @@
  */
 package com.canoo.dp.impl.remoting;
 
+import org.apiguardian.api.API;
+
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public abstract class AbstractControllerActionCallBean {
 
     protected static final String CONTROLLER_ID = "controllerId";

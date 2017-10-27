@@ -17,7 +17,11 @@ package com.canoo.dp.impl.remoting.codec.encoders;
 
 import com.google.gson.JsonObject;
 import com.canoo.dp.impl.remoting.legacy.communication.Command;
+import org.apiguardian.api.API;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public interface CommandTranscoder<C extends Command> {
 
     JsonObject encode(C command);

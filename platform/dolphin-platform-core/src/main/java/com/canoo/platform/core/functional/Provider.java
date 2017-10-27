@@ -15,12 +15,17 @@
  */
 package com.canoo.platform.core.functional;
 
+import org.apiguardian.api.API;
+
+import static org.apiguardian.api.API.Status.MAINTAINED;
+
 /**
  * A basic provider interface. Might be replaced in future with the Java 8 interface once all Dolphin Platform modules depend on Java8.
  *
  * @param <T> type of the values that will be provided
  * @author Hendrik Ebbers
  */
+@API(since = "0.x", status = MAINTAINED)
 public interface Provider<T> {
 
     /**

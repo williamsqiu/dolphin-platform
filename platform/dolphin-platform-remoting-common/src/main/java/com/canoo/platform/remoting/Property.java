@@ -16,6 +16,9 @@
 package com.canoo.platform.remoting;
 
 import com.canoo.platform.core.functional.Subscription;
+import org.apiguardian.api.API;
+
+import static org.apiguardian.api.API.Status.MAINTAINED;
 
 /**
  * Defines a property that can be part of a model (see {@link DolphinBean}). Since Java has no native property system this is needed to provide
@@ -93,6 +96,7 @@ import com.canoo.platform.core.functional.Subscription;
  * @param <T> Type of the property must be a scalar, not a collection
  * @author Hendrik Ebbers
  */
+@API(since = "0.x", status = MAINTAINED)
 public interface Property<T> {
 
     /**

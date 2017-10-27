@@ -17,7 +17,11 @@ package com.canoo.dp.impl.remoting.info;
 
 import com.canoo.platform.remoting.spi.converter.Converter;
 import com.canoo.platform.remoting.spi.converter.ValueConverterException;
+import org.apiguardian.api.API;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public abstract class PropertyInfo {
 
     private final String attributeName;

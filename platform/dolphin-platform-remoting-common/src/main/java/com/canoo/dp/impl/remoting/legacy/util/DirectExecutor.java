@@ -15,9 +15,14 @@
  */
 package com.canoo.dp.impl.remoting.legacy.util;
 
+import org.apiguardian.api.API;
+
 import java.util.Objects;
 import java.util.concurrent.Executor;
 
+import static org.apiguardian.api.API.Status.DEPRECATED;
+
+@API(since = "0.x", status = DEPRECATED)
 public class DirectExecutor implements Executor {
 
     private final static DirectExecutor INSTANCE = new DirectExecutor();

@@ -16,6 +16,7 @@
 package com.canoo.dp.impl.remoting.legacy.core;
 
 import com.canoo.dp.impl.platform.core.Assert;
+import org.apiguardian.api.API;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -27,6 +28,8 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import static org.apiguardian.api.API.Status.DEPRECATED;
 
 /**
  * A central data structure to store presentation models and their attributes
@@ -45,6 +48,7 @@ import java.util.Set;
  * </ol>
  * In addition, the model store provides methods to listen for changes to the model store.
  */
+@API(since = "0.x", status = DEPRECATED)
 public class ModelStore<A extends Attribute, P extends PresentationModel<A>> {
 
     // We maintain four indexes in this data structure in order to efficiently access

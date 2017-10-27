@@ -15,6 +15,11 @@
  */
 package com.canoo.dp.impl.remoting;
 
+import org.apiguardian.api.API;
+
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public interface BeanBuilder {
 
     <T> T create(Class<T> beanClass);

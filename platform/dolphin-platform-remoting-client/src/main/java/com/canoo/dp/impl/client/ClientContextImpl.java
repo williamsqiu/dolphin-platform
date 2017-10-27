@@ -41,11 +41,15 @@ import com.canoo.platform.remoting.client.ClientContext;
 import com.canoo.platform.remoting.client.ClientInitializationException;
 import com.canoo.platform.remoting.client.ControllerInitalizationException;
 import com.canoo.platform.remoting.client.ControllerProxy;
+import org.apiguardian.api.API;
 
 import java.net.URL;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BiFunction;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public class ClientContextImpl implements ClientContext {
 
     private final ClientConfiguration clientConfiguration;

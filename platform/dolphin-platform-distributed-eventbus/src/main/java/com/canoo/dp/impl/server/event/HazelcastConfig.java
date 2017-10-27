@@ -16,9 +16,13 @@
 package com.canoo.dp.impl.server.event;
 
 import com.canoo.platform.core.PlatformConfiguration;
+import org.apiguardian.api.API;
 
 import java.io.Serializable;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public class HazelcastConfig implements Serializable {
 
     private final PlatformConfiguration configuration;

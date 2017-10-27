@@ -15,12 +15,17 @@
  */
 package com.canoo.platform.remoting.spi.converter;
 
+import org.apiguardian.api.API;
+
+import static org.apiguardian.api.API.Status.MAINTAINED;
+
 /**
  * Exception that is thrown if a data convertion ends in an error.
  *
  * @author Hendrik Ebbers
  * @see Converter
  */
+@API(since = "0.x", status = MAINTAINED)
 public class ValueConverterException extends Exception {
 
     /**

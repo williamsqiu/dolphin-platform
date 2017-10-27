@@ -15,6 +15,11 @@
  */
 package com.canoo.dp.impl.remoting;
 
+import org.apiguardian.api.API;
+
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public class MockedProperty<T> extends AbstractProperty<T> {
 
     private T value;

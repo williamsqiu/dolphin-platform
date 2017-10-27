@@ -18,6 +18,9 @@ package com.canoo.dp.impl.client.legacy;
 
 import com.canoo.dp.impl.remoting.legacy.RemotingConstants;
 import com.canoo.dp.impl.remoting.legacy.core.BaseAttribute;
+import org.apiguardian.api.API;
+
+import static org.apiguardian.api.API.Status.DEPRECATED;
 
 /**
  * A client side (remote) ClientAttribute is considered a remote representation of a ServerAttribute.
@@ -26,6 +29,7 @@ import com.canoo.dp.impl.remoting.legacy.core.BaseAttribute;
  * a) as a PropertyChangeListener
  * b) through the valueProperty() method for JavaFx
  */
+@API(since = "0.x", status = DEPRECATED)
 public class ClientAttribute extends BaseAttribute {
 
     public ClientAttribute(final String propertyName, final Object initialValue, final String qualifier) {

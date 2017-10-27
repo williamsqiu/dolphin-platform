@@ -20,7 +20,11 @@ import com.canoo.platform.core.functional.Binding;
 import com.canoo.platform.remoting.client.javafx.binding.NumericJavaFXBidirectionaBinder;
 import com.canoo.platform.remoting.Property;
 import javafx.beans.value.ChangeListener;
+import org.apiguardian.api.API;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public abstract class AbstractNumericJavaFXBidirectionalBinder<S extends Number> extends DefaultJavaFXBinder<Number> implements NumericJavaFXBidirectionaBinder<S> {
 
 

@@ -9,6 +9,7 @@ import com.canoo.platform.core.http.HttpURLConnectionHandler;
 import com.canoo.platform.core.http.RequestMethod;
 import com.canoo.platform.core.DolphinRuntimeException;
 import com.google.gson.Gson;
+import org.apiguardian.api.API;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -17,6 +18,9 @@ import java.net.URL;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public class HttpClientImpl implements HttpClient {
 
     private final Gson gson;

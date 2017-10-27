@@ -25,6 +25,7 @@ import com.canoo.dp.impl.platform.core.ReflectionHelper;
 import com.canoo.dp.impl.remoting.legacy.core.ModelStore;
 import com.canoo.dp.impl.remoting.legacy.core.ModelStoreEvent;
 import com.canoo.dp.impl.remoting.legacy.core.ModelStoreListener;
+import org.apiguardian.api.API;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,10 +35,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
 /**
  * A {@code ClassRepository} manages {@link ClassInfo} objects for all registered Dolphin Beans. A {@code ClassInfo}
  * object keeps information on class level about the properties and ObservableLists of a DolphinBean.
  */
+@API(since = "0.x", status = INTERNAL)
 public class ClassRepositoryImpl implements ClassRepository {
 
  private static final Logger LOG = LoggerFactory.getLogger(ClassRepositoryImpl.class);

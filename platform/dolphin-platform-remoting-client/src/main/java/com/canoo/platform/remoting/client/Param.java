@@ -16,12 +16,16 @@
 package com.canoo.platform.remoting.client;
 
 import com.canoo.dp.impl.platform.core.Assert;
+import org.apiguardian.api.API;
+
+import static org.apiguardian.api.API.Status.MAINTAINED;
 
 /**
  * The class defines a param that can be used as a action param when calling a action on the server side
  * controller. Each param is defined by a name and a value. The name must be unique for a specific action.
  * See {@link ControllerProxy#invoke(String, Param...)} for more details.
  */
+@API(since = "0.x", status = MAINTAINED)
 public class Param {
 
     private final String name;

@@ -22,12 +22,13 @@ package com.canoo.dp.impl.remoting.converters;
 
 import com.canoo.platform.remoting.spi.converter.Converter;
 import com.canoo.platform.remoting.spi.converter.ValueConverterException;
+import org.apiguardian.api.API;
+
 import java.math.BigInteger;
 
-/**
- *
- * @author onn
- */
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public class BigIntegerConverterFactory extends AbstractConverterFactory {
 
     public final static int FIELD_TYPE_BIGINTEGER = 13;

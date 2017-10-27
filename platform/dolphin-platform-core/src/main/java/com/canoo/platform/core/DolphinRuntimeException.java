@@ -15,14 +15,18 @@
  */
 package com.canoo.platform.core;
 
+import org.apiguardian.api.API;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static org.apiguardian.api.API.Status.MAINTAINED;
 
 /**
  * General runtime exception for the Dolphin Platform
  *
  * @author Hendrik Ebbers
  */
+@API(since = "0.x", status = MAINTAINED)
 public class DolphinRuntimeException extends RuntimeException {
 
     private static final Logger LOG = LoggerFactory.getLogger(DolphinRuntimeException.class);

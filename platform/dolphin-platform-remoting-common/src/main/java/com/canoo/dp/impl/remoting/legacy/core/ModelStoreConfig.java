@@ -15,8 +15,11 @@
  */
 package com.canoo.dp.impl.remoting.legacy.core;
 
+import org.apiguardian.api.API;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static org.apiguardian.api.API.Status.DEPRECATED;
 
 
 /**
@@ -27,6 +30,7 @@ import org.slf4j.LoggerFactory;
  * <li>attributeCapacity: map of attributes (key: unique attribute ID); default is 4096</li>
  * <li>qualifierCapacity: map of attributes (key: qualifier, returns a list of all attributes with that qualifier); default 1024</li></ol>
  */
+@API(since = "0.x", status = DEPRECATED)
 public class ModelStoreConfig {
 
     private static final Logger LOG  = LoggerFactory.getLogger(ModelStoreConfig.class);

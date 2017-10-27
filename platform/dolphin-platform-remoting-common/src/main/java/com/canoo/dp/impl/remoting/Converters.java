@@ -18,6 +18,7 @@ package com.canoo.dp.impl.remoting;
 import com.canoo.platform.remoting.spi.converter.Converter;
 import com.canoo.platform.remoting.spi.converter.ConverterFactory;
 import com.canoo.dp.impl.platform.core.Assert;
+import org.apiguardian.api.API;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,9 +27,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ServiceLoader;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
 /**
  * The class {@code Converters} contains all {@link Converter} that are used in the Dolphin Platform.
  */
+@API(since = "0.x", status = INTERNAL)
 public class Converters {
 
     private static final Logger LOG = LoggerFactory.getLogger(Converters.class);

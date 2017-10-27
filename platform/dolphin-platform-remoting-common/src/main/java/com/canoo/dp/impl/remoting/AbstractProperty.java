@@ -19,10 +19,14 @@ import com.canoo.platform.core.functional.Subscription;
 import com.canoo.platform.remoting.ValueChangeEvent;
 import com.canoo.platform.remoting.ValueChangeListener;
 import com.canoo.platform.remoting.Property;
+import org.apiguardian.api.API;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public abstract class AbstractProperty<T> implements Property<T> {
 
     private final List<ValueChangeListener<? super T>> listeners = new CopyOnWriteArrayList<>();

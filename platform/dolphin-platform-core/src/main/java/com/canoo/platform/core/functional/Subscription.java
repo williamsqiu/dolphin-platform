@@ -15,6 +15,10 @@
  */
 package com.canoo.platform.core.functional;
 
+import org.apiguardian.api.API;
+
+import static org.apiguardian.api.API.Status.MAINTAINED;
+
 /**
  * Defines a function interface that is used to handle a unsubscription or unregistration procedure.
  * Whenever you register for example a handler or listener in the Dolphin Platform API you will get a
@@ -36,6 +40,7 @@ package com.canoo.platform.core.functional;
  * @author Hendrik Ebbers
  *
  */
+@API(since = "0.x", status = MAINTAINED)
 public interface Subscription {
 
     /**

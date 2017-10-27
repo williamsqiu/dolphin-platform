@@ -17,8 +17,11 @@ package com.canoo.platform.remoting.client;
 
 import com.canoo.dp.impl.client.ClientContextFactoryImpl;
 import com.canoo.platform.remoting.BeanManager;
+import org.apiguardian.api.API;
 
 import java.util.concurrent.CompletableFuture;
+
+import static org.apiguardian.api.API.Status.MAINTAINED;
 
 /**
  * The client context defines a connection to the Dolphin Platform endpoint on the server.
@@ -26,6 +29,7 @@ import java.util.concurrent.CompletableFuture;
  * created by using the {@link ClientContextFactoryImpl}.
  * The client context is needed to create {@link ControllerProxy} instances.
  */
+@API(since = "0.x", status = MAINTAINED)
 public interface ClientContext extends ControllerFactory {
 
     /**

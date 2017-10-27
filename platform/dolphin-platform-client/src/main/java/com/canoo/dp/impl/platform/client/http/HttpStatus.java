@@ -15,6 +15,11 @@
  */
 package com.canoo.dp.impl.platform.client.http;
 
+import org.apiguardian.api.API;
+
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public interface HttpStatus {
 
     int HTTP_OK = 200;

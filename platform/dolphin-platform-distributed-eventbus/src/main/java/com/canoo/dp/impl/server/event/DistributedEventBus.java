@@ -21,6 +21,7 @@ import com.canoo.platform.remoting.server.event.MessageListener;
 import com.canoo.platform.remoting.server.event.Topic;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.ITopic;
+import org.apiguardian.api.API;
 
 import java.io.Serializable;
 import java.util.Map;
@@ -28,6 +29,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public class DistributedEventBus extends AbstractEventBus {
 
     private final HazelcastInstance hazelcastClient;

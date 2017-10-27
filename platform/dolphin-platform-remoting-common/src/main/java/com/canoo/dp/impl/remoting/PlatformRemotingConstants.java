@@ -16,7 +16,11 @@
 package com.canoo.dp.impl.remoting;
 
 import com.canoo.dp.impl.remoting.legacy.RemotingConstants;
+import org.apiguardian.api.API;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public interface PlatformRemotingConstants {
 
     String CLIENT_ID_HTTP_HEADER_NAME = RemotingConstants.DOLPHIN_PLATFORM_PREFIX + "dolphinClientId";

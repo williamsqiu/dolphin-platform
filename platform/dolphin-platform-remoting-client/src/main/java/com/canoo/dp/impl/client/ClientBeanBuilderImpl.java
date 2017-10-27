@@ -30,7 +30,11 @@ import com.canoo.dp.impl.remoting.legacy.core.PresentationModel;
 import com.canoo.platform.remoting.ListChangeEvent;
 import com.canoo.platform.remoting.ObservableList;
 import com.canoo.platform.remoting.Property;
+import org.apiguardian.api.API;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public class ClientBeanBuilderImpl extends AbstractBeanBuilder {
 
     public ClientBeanBuilderImpl(ClassRepository classRepository, BeanRepository beanRepository, ListMapper listMapper, PresentationModelBuilderFactory builderFactory, EventDispatcher dispatcher) {

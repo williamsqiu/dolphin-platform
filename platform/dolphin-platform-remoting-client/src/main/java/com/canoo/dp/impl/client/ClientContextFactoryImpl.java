@@ -31,15 +31,19 @@ import com.canoo.platform.remoting.client.ClientContext;
 import com.canoo.platform.remoting.client.ClientContextFactory;
 import com.canoo.platform.remoting.client.ClientInitializationException;
 import com.canoo.platform.remoting.client.RemotingExceptionHandler;
+import org.apiguardian.api.API;
 
 import java.net.URL;
 import java.util.concurrent.CompletableFuture;
+
+import static org.apiguardian.api.API.Status.INTERNAL;
 
 /**
  * Factory to create a {@link ClientContext}. Normally you will create a {@link ClientContext} at the bootstrap of your
  * client by using the {@link #create(ClientConfiguration, URL)} method and use this context as a singleton in your client.
  * The {@link ClientContext} defines the connection between the client and the Dolphin Platform server endpoint.
  */
+@API(since = "0.x", status = INTERNAL)
 public class ClientContextFactoryImpl implements ClientContextFactory {
 
     public ClientContextFactoryImpl() {

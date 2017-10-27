@@ -19,6 +19,9 @@ import com.canoo.platform.core.functional.Binding;
 import com.canoo.platform.remoting.client.javafx.BidirectionalConverter;
 import com.canoo.platform.remoting.client.javafx.FXBinder;
 import com.canoo.platform.remoting.Property;
+import org.apiguardian.api.API;
+
+import static org.apiguardian.api.API.Status.MAINTAINED;
 
 /**
  * This class can be used to create a unidirectional or bidirectional binding between a JavaFX property and a
@@ -26,6 +29,7 @@ import com.canoo.platform.remoting.Property;
  * fluent API. To create bindings see {@link FXBinder}
  * @param <S> value type for the properties
  */
+@API(since = "0.x", status = MAINTAINED)
 public interface JavaFXBidirectionalBinder<S> extends JavaFXBinder<S> {
 
     /**

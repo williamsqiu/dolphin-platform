@@ -15,11 +15,16 @@
  */
 package com.canoo.platform.remoting;
 
+import org.apiguardian.api.API;
+
+import static org.apiguardian.api.API.Status.MAINTAINED;
+
 /**
  * This exception is thrown if an error occurs in the protocol (request / response body)
  *
  * @author Hendrik Ebbers
  */
+@API(since = "0.x", status = MAINTAINED)
 public class DolphinRemotingException extends Exception {
 
     private static final long serialVersionUID = 1934440187016337212L;

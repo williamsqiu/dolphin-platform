@@ -15,8 +15,13 @@
  */
 package com.canoo.dp.impl.client.legacy;
 
+import org.apiguardian.api.API;
+
 import java.beans.PropertyChangeEvent;
 
+import static org.apiguardian.api.API.Status.DEPRECATED;
+
+@API(since = "0.x", status = DEPRECATED)
 public interface ModelSynchronizer {
 
     void onAdded(ClientPresentationModel model);

@@ -19,12 +19,15 @@ import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.remoting.legacy.communication.ValueChangedCommand;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import org.apiguardian.api.API;
 
 import static com.canoo.dp.impl.remoting.legacy.communication.CommandConstants.ATTRIBUTE_ID;
 import static com.canoo.dp.impl.remoting.legacy.communication.CommandConstants.ID;
 import static com.canoo.dp.impl.remoting.legacy.communication.CommandConstants.VALUE;
 import static com.canoo.dp.impl.remoting.legacy.communication.CommandConstants.VALUE_CHANGED_COMMAND_ID;
+import static org.apiguardian.api.API.Status.INTERNAL;
 
+@API(since = "0.x", status = INTERNAL)
 public class ValueChangedCommandEncoder extends AbstractCommandTranscoder<ValueChangedCommand> {
 
     @Override

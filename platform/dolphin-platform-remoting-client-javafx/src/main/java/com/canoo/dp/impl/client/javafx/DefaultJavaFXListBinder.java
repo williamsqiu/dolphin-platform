@@ -22,11 +22,15 @@ import com.canoo.platform.remoting.ObservableList;
 import com.canoo.platform.core.functional.Subscription;
 import com.canoo.dp.impl.platform.core.Assert;
 import javafx.collections.ListChangeListener;
+import org.apiguardian.api.API;
 
 import java.util.IdentityHashMap;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public class DefaultJavaFXListBinder<S> implements JavaFXListBinder<S> {
 
     private javafx.collections.ObservableList<S> list;

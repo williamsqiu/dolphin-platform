@@ -15,8 +15,13 @@
  */
 package com.canoo.dp.impl.remoting.legacy.communication;
 
+import org.apiguardian.api.API;
+
+import static org.apiguardian.api.API.Status.DEPRECATED;
+
 //Deprecated because the only type that can change is the qualifier. We should name it to QualifierChangedCommand or something
 @Deprecated
+@API(since = "0.x", status = DEPRECATED)
 public final class AttributeMetadataChangedCommand extends Command {
 
     private String attributeId;

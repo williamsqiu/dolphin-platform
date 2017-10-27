@@ -17,7 +17,11 @@ package com.canoo.dp.impl.client.javafx;
 
 import com.canoo.platform.remoting.client.javafx.BidirectionalConverter;
 import com.canoo.platform.remoting.Property;
+import org.apiguardian.api.API;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public class IntegerDolphinBinder extends AbstractNumericDolphinBinder<Integer> {
 
     public IntegerDolphinBinder(final Property<Integer> property) {

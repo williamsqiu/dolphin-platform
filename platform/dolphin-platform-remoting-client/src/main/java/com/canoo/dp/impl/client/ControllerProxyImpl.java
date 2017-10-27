@@ -28,12 +28,16 @@ import com.canoo.dp.impl.remoting.commands.DestroyControllerCommand;
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.client.legacy.communication.AbstractClientConnector;
 import com.canoo.dp.impl.client.legacy.communication.OnFinishedHandler;
+import org.apiguardian.api.API;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BiFunction;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public class ControllerProxyImpl<T> implements ControllerProxy<T> {
 
     private static final Logger LOG = LoggerFactory.getLogger(ControllerProxyImpl.class);

@@ -15,18 +15,34 @@
  */
 package com.canoo.platform.remoting.client.javafx;
 
-import com.canoo.platform.remoting.client.javafx.FXBinder;
+import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.remoting.ListChangeEvent;
 import com.canoo.platform.remoting.Property;
-import com.canoo.dp.impl.platform.core.Assert;
-import javafx.beans.property.*;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.FloatProperty;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.LongProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleFloatProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleLongProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import org.apiguardian.api.API;
+
+import static org.apiguardian.api.API.Status.MAINTAINED;
 
 /**
  * A util class that can be used to create JavaFX properties and lists as wrapper around Dolphin Platform properties and lists.
  */
+@API(since = "0.x", status = MAINTAINED)
 public class FXWrapper {
 
 

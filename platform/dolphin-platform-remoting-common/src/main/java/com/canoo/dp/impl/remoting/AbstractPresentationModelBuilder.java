@@ -16,9 +16,13 @@
 package com.canoo.dp.impl.remoting;
 
 import com.canoo.dp.impl.remoting.legacy.core.PresentationModel;
+import org.apiguardian.api.API;
 
 import java.util.UUID;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public abstract class AbstractPresentationModelBuilder<T extends PresentationModel> implements PresentationModelBuilder<T> {
 
     protected String type;

@@ -15,10 +15,15 @@
  */
 package com.canoo.platform.remoting.client;
 
+import org.apiguardian.api.API;
+
+import static org.apiguardian.api.API.Status.MAINTAINED;
+
 /**
  * Exception that is thrown when the invocation of a Dolphin Platform action in the server controller throwed
  * an exception. This exception will be thrown on the client.
  */
+@API(since = "0.x", status = MAINTAINED)
 public class ControllerActionException extends Exception {
 
     private static final long serialVersionUID = -7706398106144587910L;

@@ -15,12 +15,18 @@
  */
 package com.canoo.platform.core;
 
+import org.apiguardian.api.API;
+
 import java.io.Serializable;
-import java.util.*;
+import java.util.List;
+import java.util.Set;
+
+import static org.apiguardian.api.API.Status.MAINTAINED;
 
 /**
  * Provides access to the configuration of the Dolphin Platform.
  */
+@API(since = "0.x", status = MAINTAINED)
 public interface PlatformConfiguration extends Serializable {
 
     /**

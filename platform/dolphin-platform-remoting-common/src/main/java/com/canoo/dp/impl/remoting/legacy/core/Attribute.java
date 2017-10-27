@@ -15,6 +15,10 @@
  */
 package com.canoo.dp.impl.remoting.legacy.core;
 
+import org.apiguardian.api.API;
+
+import static org.apiguardian.api.API.Status.DEPRECATED;
+
 /**
  * A presentation model contains a list of Attribute objects.
  * Every Attribute object belongs to only one presentation model.
@@ -28,6 +32,7 @@ package com.canoo.dp.impl.remoting.legacy.core;
  * semantics, but is generally used to identify all attributes (regardless of the presentation model to which
  * they belong) which refer to the same domain model object.
  */
+@API(since = "0.x", status = DEPRECATED)
 public interface Attribute extends Observable {
     String QUALIFIER_NAME = "qualifier";
     String VALUE_NAME = "value";

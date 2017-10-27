@@ -18,9 +18,13 @@ package com.canoo.dp.impl.client.legacy.communication;
 
 import com.canoo.platform.remoting.DolphinRemotingException;
 import com.canoo.platform.remoting.client.RemotingExceptionHandler;
+import org.apiguardian.api.API;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static org.apiguardian.api.API.Status.DEPRECATED;
+
+@API(since = "0.x", status = DEPRECATED)
 public class SimpleExceptionHandler implements RemotingExceptionHandler {
 
     private static final Logger LOG = LoggerFactory.getLogger(SimpleExceptionHandler.class);

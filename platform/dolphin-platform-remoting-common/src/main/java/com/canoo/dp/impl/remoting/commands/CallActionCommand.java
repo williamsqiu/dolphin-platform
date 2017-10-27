@@ -18,11 +18,15 @@ package com.canoo.dp.impl.remoting.commands;
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.remoting.legacy.communication.Command;
 import com.canoo.dp.impl.remoting.legacy.communication.CommandConstants;
+import org.apiguardian.api.API;
 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public final class CallActionCommand extends Command {
 
     private String controllerId;

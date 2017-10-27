@@ -16,10 +16,14 @@
 package com.canoo.dp.impl.remoting.codec.encoders;
 
 import com.canoo.dp.impl.platform.core.Assert;
+import com.canoo.dp.impl.remoting.legacy.communication.Command;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.canoo.dp.impl.remoting.legacy.communication.Command;
+import org.apiguardian.api.API;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public abstract class AbstractCommandTranscoder<C extends Command> implements CommandTranscoder<C> {
 
     protected boolean isElementJsonNull(final JsonObject jsonObject, final String jsonElementName) {

@@ -15,9 +15,14 @@
  */
 package com.canoo.dp.impl.client.legacy.communication;
 
+import org.apiguardian.api.API;
+
+import static org.apiguardian.api.API.Status.DEPRECATED;
+
 /**
  * interface for setting handler executed after command completion
  */
+@API(since = "0.x", status = DEPRECATED)
 public interface OnFinishedHandler {
 
     void onFinished();

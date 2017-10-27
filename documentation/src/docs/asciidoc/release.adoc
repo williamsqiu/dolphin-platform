@@ -77,10 +77,17 @@ the root folder of the repository to install all the bower dependencies
 * In the root folder of the project the `npm update` command must be called to update all npm dependencies
 * In the root folder of the project the `bower update` command must be called to update all bower dependencies
 * The new version number for the release must be specified in the following
-files: `bower.json`, `package.json` and `sonar-project.properties`
-* As a next step the project must be build by using gulp. To do so call `gulp clean verify build` in the root
+files: `bower.json`, `package.json`, package-lock.json` and `sonar-project.properties` (currently
+`sonar-project.properties` is not part of the project)
+* As a next step call `polymer analyze > analysis.json` in the root
+folder of the project. This will create a documentation for webcomponents.org
+* As a next step the project must be build by using gulp. To do so call `npm run build` in the root
 folder of the project.
-* If the build is running commit all changes to master
+* As a next step the project will be checked by lint. To do so call `npm run lint` in the root
+folder of the project.
+* As a next step the project will be tested (in chrome and firefox). To do so call `npm run test` in the root
+folder of the project.
+* If all is running commit all changes to master
 * Create a new branch `release/VERSION` where `VERSION` defines the version that should be released (like `release/0.10.x`)
 * Check out the created release branch
 * Once this is done the current state must be tagged in git. The name of the tag must match the version of the new

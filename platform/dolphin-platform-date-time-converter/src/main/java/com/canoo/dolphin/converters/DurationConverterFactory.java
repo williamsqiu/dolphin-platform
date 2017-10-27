@@ -19,11 +19,14 @@ import com.canoo.platform.remoting.spi.converter.Converter;
 import com.canoo.platform.remoting.spi.converter.ValueConverterException;
 import com.canoo.dp.impl.remoting.converters.AbstractConverterFactory;
 import com.canoo.dp.impl.remoting.converters.AbstractStringConverter;
+import org.apiguardian.api.API;
 
 import java.time.Duration;
 
 import static com.canoo.dolphin.converters.ValueFieldTypes.DURATION_FIELD_TYPE;
+import static org.apiguardian.api.API.Status.INTERNAL;
 
+@API(since = "0.x", status = INTERNAL)
 public class DurationConverterFactory extends AbstractConverterFactory {
 
     private final static Converter CONVERTER = new DurationConverter();

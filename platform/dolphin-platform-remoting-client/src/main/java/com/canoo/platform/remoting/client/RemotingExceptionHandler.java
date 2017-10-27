@@ -16,7 +16,11 @@
 package com.canoo.platform.remoting.client;
 
 import com.canoo.platform.remoting.DolphinRemotingException;
+import org.apiguardian.api.API;
 
+import static org.apiguardian.api.API.Status.MAINTAINED;
+
+@API(since = "0.x", status = MAINTAINED)
 public interface RemotingExceptionHandler {
 
     void handle(DolphinRemotingException e);

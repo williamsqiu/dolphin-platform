@@ -16,7 +16,11 @@
 package com.canoo.dp.impl.client.javafx;
 
 import javafx.beans.property.LongProperty;
+import org.apiguardian.api.API;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public class LongJavaFXBidirectionalBinder extends AbstractNumericJavaFXBidirectionalBinder<Long> {
 
     public LongJavaFXBidirectionalBinder(final LongProperty javaFxProperty) {

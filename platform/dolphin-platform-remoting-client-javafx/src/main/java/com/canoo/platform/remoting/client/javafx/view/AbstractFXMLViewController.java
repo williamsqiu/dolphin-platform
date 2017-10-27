@@ -20,8 +20,11 @@ import com.canoo.platform.core.DolphinRuntimeException;
 import com.canoo.platform.remoting.client.ClientContext;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import org.apiguardian.api.API;
 
 import java.net.URL;
+
+import static org.apiguardian.api.API.Status.MAINTAINED;
 
 /**
  * Defines an abstract class that can be used to create a FXML based view that is bound to a Dolphin Platform controller
@@ -34,6 +37,7 @@ import java.net.URL;
  *
  * @param <M> type of the model.
  */
+@API(since = "0.x", status = MAINTAINED)
 public abstract class AbstractFXMLViewController<M> extends AbstractViewController<M> {
 
     private final Node rootNode;

@@ -18,8 +18,12 @@ package com.canoo.dp.impl.client.javafx;
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.remoting.client.javafx.BidirectionalConverter;
 import com.canoo.platform.remoting.client.javafx.Converter;
+import org.apiguardian.api.API;
+
+import static org.apiguardian.api.API.Status.DEPRECATED;
 
 @Deprecated
+@API(since = "0.x", status = DEPRECATED)
 public class DefaultBidirectionalConverter<T, U> implements BidirectionalConverter<T, U> {
 
     private Converter<T, U> converter;

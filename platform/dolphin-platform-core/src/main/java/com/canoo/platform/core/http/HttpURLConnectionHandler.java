@@ -15,12 +15,17 @@
  */
 package com.canoo.platform.core.http;
 
+import org.apiguardian.api.API;
+
 import java.net.HttpURLConnection;
+
+import static org.apiguardian.api.API.Status.EXPERIMENTAL;
 
 /**
  * Handler interface that can withoutResult a url connection.
  * An implemntation can add header values for example.
  */
+@API(since = "0.x", status = EXPERIMENTAL)
 public interface HttpURLConnectionHandler {
 
     void handle(HttpURLConnection connection);

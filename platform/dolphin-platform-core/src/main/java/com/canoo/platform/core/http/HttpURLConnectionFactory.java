@@ -15,13 +15,18 @@
  */
 package com.canoo.platform.core.http;
 
+import org.apiguardian.api.API;
+
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import static org.apiguardian.api.API.Status.EXPERIMENTAL;
+
 /**
  * Factory interface to create a url connection
  */
+@API(since = "0.x", status = EXPERIMENTAL)
 public interface HttpURLConnectionFactory {
 
     /**

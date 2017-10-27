@@ -8,10 +8,14 @@ import com.canoo.platform.core.http.HttpURLConnectionFactory;
 import com.canoo.platform.core.http.spi.RequestHandlerProvider;
 import com.canoo.platform.core.http.spi.ResponseHandlerProvider;
 import com.google.gson.Gson;
+import org.apiguardian.api.API;
 
 import java.util.Iterator;
 import java.util.ServiceLoader;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public class HttpClientProvider extends AbstractServiceProvider<HttpClient> {
 
     public HttpClientProvider() {

@@ -15,7 +15,12 @@
  */
 package com.canoo.dp.impl.remoting.legacy.communication;
 
+import org.apiguardian.api.API;
+
+import static org.apiguardian.api.API.Status.DEPRECATED;
+
 @Deprecated
+@API(since = "0.x", status = DEPRECATED)
 public final class PresentationModelDeletedCommand extends Command {
 
     public PresentationModelDeletedCommand(String pmId) {

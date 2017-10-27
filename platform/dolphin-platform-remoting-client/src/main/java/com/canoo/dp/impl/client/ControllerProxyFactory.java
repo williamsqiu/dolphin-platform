@@ -24,10 +24,14 @@ import com.canoo.dp.impl.remoting.EventDispatcher;
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.client.legacy.ClientModelStore;
 import com.canoo.dp.impl.client.legacy.communication.AbstractClientConnector;
+import org.apiguardian.api.API;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public class ControllerProxyFactory {
 
     private final ClientPlatformBeanRepository platformBeanRepository;

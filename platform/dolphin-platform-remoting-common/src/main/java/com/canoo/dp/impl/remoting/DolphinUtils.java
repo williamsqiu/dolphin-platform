@@ -19,13 +19,17 @@ import com.canoo.platform.remoting.ObservableList;
 import com.canoo.platform.remoting.DolphinBean;
 import com.canoo.platform.remoting.Property;
 import com.canoo.dp.impl.platform.core.Assert;
+import org.apiguardian.api.API;
 
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
 /**
  * The class {@code DolphinUtils} is a horrible class that we should get rid of asap.
  */
+@API(since = "0.x", status = INTERNAL)
 public class DolphinUtils {
 
     private DolphinUtils() {

@@ -20,10 +20,14 @@ import com.canoo.dp.impl.remoting.legacy.RemotingConstants;
 import com.canoo.dp.impl.remoting.legacy.core.ModelStore;
 import com.canoo.dp.impl.remoting.legacy.core.ModelStoreEvent;
 import com.canoo.dp.impl.remoting.legacy.core.PresentationModel;
+import org.apiguardian.api.API;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public abstract class EventDispatcherImpl implements EventDispatcher {
 
     private final List<DolphinEventHandler> modelAddedHandlers = new ArrayList<>(1);

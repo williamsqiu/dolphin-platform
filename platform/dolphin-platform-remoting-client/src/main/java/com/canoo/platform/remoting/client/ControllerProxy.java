@@ -15,7 +15,11 @@
  */
 package com.canoo.platform.remoting.client;
 
+import org.apiguardian.api.API;
+
 import java.util.concurrent.CompletableFuture;
+
+import static org.apiguardian.api.API.Status.MAINTAINED;
 
 /**
  * A proxy that can be used to interact with the server side controller. Whenever a {@link ControllerProxy} is created
@@ -26,6 +30,7 @@ import java.util.concurrent.CompletableFuture;
  * method on teh client the server side controller will be destroyed, too. Otherwiese the controller on the server will
  * automatically be destroyed when the client will be exited or the {@link ClientContext} will be disconnected (see {@link ClientContext#disconnect()}).
  */
+@API(since = "0.x", status = MAINTAINED)
 public interface ControllerProxy<T> extends ControllerFactory{
 
     /**

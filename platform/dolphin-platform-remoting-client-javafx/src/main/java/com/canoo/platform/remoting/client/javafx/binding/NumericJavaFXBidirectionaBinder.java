@@ -18,7 +18,11 @@ package com.canoo.platform.remoting.client.javafx.binding;
 import com.canoo.platform.core.functional.Binding;
 import com.canoo.platform.remoting.Property;
 import com.canoo.platform.remoting.client.javafx.BidirectionalConverter;
+import org.apiguardian.api.API;
 
+import static org.apiguardian.api.API.Status.MAINTAINED;
+
+@API(since = "0.x", status = MAINTAINED)
 public interface NumericJavaFXBidirectionaBinder<S extends Number> extends JavaFXBidirectionalBinder<Number> {
 
     default Binding bidirectionalToNumeric(Property<S> dolphinProperty) {

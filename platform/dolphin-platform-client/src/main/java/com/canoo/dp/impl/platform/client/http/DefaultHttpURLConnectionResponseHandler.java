@@ -16,9 +16,13 @@
 package com.canoo.dp.impl.platform.client.http;
 
 import com.canoo.platform.core.http.HttpURLConnectionHandler;
+import org.apiguardian.api.API;
 
 import java.net.HttpURLConnection;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public class DefaultHttpURLConnectionResponseHandler implements HttpURLConnectionHandler {
 
     @Override

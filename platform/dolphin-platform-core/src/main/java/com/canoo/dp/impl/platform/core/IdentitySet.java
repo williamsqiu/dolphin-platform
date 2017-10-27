@@ -15,11 +15,16 @@
  */
 package com.canoo.dp.impl.platform.core;
 
+import org.apiguardian.api.API;
+
 import java.util.Collection;
 import java.util.IdentityHashMap;
 import java.util.Iterator;
 import java.util.Set;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public class IdentitySet<E> implements Set<E> {
 
     private IdentityHashMap<E, E> internalMap;

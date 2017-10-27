@@ -17,7 +17,11 @@ package com.canoo.platform.remoting.client.javafx.binding;
 
 import com.canoo.platform.core.functional.Binding;
 import javafx.beans.value.ObservableValue;
+import org.apiguardian.api.API;
 
+import static org.apiguardian.api.API.Status.MAINTAINED;
+
+@API(since = "0.x", status = MAINTAINED)
 public interface NumericDolphinBinder<T extends Number> extends DolphinBinder<T> {
 
     Binding toNumeric(final ObservableValue<Number> observableValue);

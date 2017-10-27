@@ -16,10 +16,14 @@
 package com.canoo.dp.impl.client;
 
 import com.canoo.platform.remoting.client.ClientContext;
+import org.apiguardian.api.API;
+
+import static org.apiguardian.api.API.Status.INTERNAL;
 
 /**
  * Defines the states of the {@link ClientContext}
  */
+@API(since = "0.x", status = INTERNAL)
 public enum State {
     CREATED, INITIALIZED, DESTROYING, DESTROYED;
 }

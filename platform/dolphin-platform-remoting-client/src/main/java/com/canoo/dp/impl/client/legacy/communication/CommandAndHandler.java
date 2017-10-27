@@ -17,7 +17,11 @@ package com.canoo.dp.impl.client.legacy.communication;
 
 import com.canoo.dp.impl.remoting.legacy.communication.Command;
 import com.canoo.dp.impl.remoting.legacy.communication.EmptyCommand;
+import org.apiguardian.api.API;
 
+import static org.apiguardian.api.API.Status.DEPRECATED;
+
+@API(since = "0.x", status = DEPRECATED)
 public class CommandAndHandler {
 
     private final Command command;

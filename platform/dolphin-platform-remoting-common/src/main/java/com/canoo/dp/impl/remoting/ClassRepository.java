@@ -16,7 +16,11 @@
 package com.canoo.dp.impl.remoting;
 
 import com.canoo.dp.impl.remoting.info.ClassInfo;
+import org.apiguardian.api.API;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public interface ClassRepository {
 
     ClassInfo getClassInfo(String modelType);

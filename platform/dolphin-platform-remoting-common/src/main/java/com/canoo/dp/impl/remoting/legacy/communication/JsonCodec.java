@@ -16,6 +16,7 @@
 package com.canoo.dp.impl.remoting.legacy.communication;
 
 import com.google.gson.*;
+import org.apiguardian.api.API;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,7 +25,10 @@ import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import static org.apiguardian.api.API.Status.DEPRECATED;
+
 @Deprecated
+@API(since = "0.x", status = DEPRECATED)
 public class JsonCodec implements Codec {
 
     private static final Logger LOG = LoggerFactory.getLogger(JsonCodec.class);

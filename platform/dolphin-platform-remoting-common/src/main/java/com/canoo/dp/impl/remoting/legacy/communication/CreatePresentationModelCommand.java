@@ -18,12 +18,16 @@ package com.canoo.dp.impl.remoting.legacy.communication;
 
 import com.canoo.dp.impl.remoting.legacy.core.Attribute;
 import com.canoo.dp.impl.remoting.legacy.core.PresentationModel;
+import org.apiguardian.api.API;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static org.apiguardian.api.API.Status.DEPRECATED;
+
+@API(since = "0.x", status = DEPRECATED)
 public final class CreatePresentationModelCommand extends Command {
 
     private String pmId;

@@ -19,6 +19,7 @@ import com.canoo.platform.remoting.ListChangeEvent;
 import com.canoo.platform.remoting.ListChangeListener;
 import com.canoo.platform.remoting.ObservableList;
 import com.canoo.platform.core.functional.Subscription;
+import org.apiguardian.api.API;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,6 +30,9 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public class ObservableArrayList<E> implements ObservableList<E> {
 
     private final ArrayList<E> list;

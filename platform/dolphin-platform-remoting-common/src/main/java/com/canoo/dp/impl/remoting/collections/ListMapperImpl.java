@@ -29,12 +29,16 @@ import com.canoo.dp.impl.remoting.info.PropertyInfo;
 import com.canoo.dp.impl.remoting.MappingException;
 import com.canoo.dp.impl.remoting.legacy.core.ModelStore;
 import com.canoo.dp.impl.remoting.legacy.core.PresentationModel;
+import org.apiguardian.api.API;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public class ListMapperImpl implements ListMapper {
 
     private static final Logger LOG = LoggerFactory.getLogger(ListMapperImpl.class);

@@ -15,12 +15,17 @@
  */
 package com.canoo.platform.remoting;
 
+import org.apiguardian.api.API;
+
+import static org.apiguardian.api.API.Status.MAINTAINED;
+
 /**
  * Listener that can be used to observe changes of an {@link ObservableList}.
  *
  * @param <E> type of elements in the list
  * @author Hendrik Ebbers
  */
+@API(since = "0.x", status = MAINTAINED)
 public interface ListChangeListener<E> {
 
     /**

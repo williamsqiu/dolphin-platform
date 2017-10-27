@@ -18,6 +18,7 @@ package com.canoo.dp.impl.platform.client.http.cookie;
 import com.canoo.dp.impl.platform.core.PlatformConstants;
 import com.canoo.platform.core.DolphinRuntimeException;
 import com.canoo.dp.impl.platform.core.Assert;
+import org.apiguardian.api.API;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,6 +30,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public class HttpClientCookieHandler {
 
     private static final Logger LOG = LoggerFactory.getLogger(HttpClientCookieHandler.class);

@@ -15,6 +15,10 @@
  */
 package com.canoo.platform.remoting.spi.converter;
 
+import org.apiguardian.api.API;
+
+import static org.apiguardian.api.API.Status.MAINTAINED;
+
 /**
  * A converter interface that convert custom data types to the internally supported data types of Dolphin Platform.
  *
@@ -25,6 +29,7 @@ package com.canoo.platform.remoting.spi.converter;
  * @see com.canoo.platform.remoting.DolphinBean
  * @see ConverterFactory
  */
+@API(since = "0.x", status = MAINTAINED)
 public interface Converter<B, D> {
 
     /**

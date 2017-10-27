@@ -21,6 +21,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import org.apiguardian.api.API;
 
 import java.util.Map;
 
@@ -30,7 +31,9 @@ import static com.canoo.dp.impl.remoting.legacy.communication.CommandConstants.I
 import static com.canoo.dp.impl.remoting.legacy.communication.CommandConstants.NAME;
 import static com.canoo.dp.impl.remoting.legacy.communication.CommandConstants.PARAMS;
 import static com.canoo.dp.impl.remoting.legacy.communication.CommandConstants.VALUE;
+import static org.apiguardian.api.API.Status.INTERNAL;
 
+@API(since = "0.x", status = INTERNAL)
 public class CallActionCommandEncoder extends AbstractCommandTranscoder<CallActionCommand> {
 
     @Override

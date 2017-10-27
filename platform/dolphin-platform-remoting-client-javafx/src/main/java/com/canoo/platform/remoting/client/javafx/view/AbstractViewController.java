@@ -27,8 +27,11 @@ import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import org.apiguardian.api.API;
 
 import java.util.concurrent.CompletableFuture;
+
+import static org.apiguardian.api.API.Status.MAINTAINED;
 
 /**
  * A abstract JavaFX view controller that can be used as a basic for a JavaFX based view. Each instance will automatically
@@ -36,6 +39,7 @@ import java.util.concurrent.CompletableFuture;
  * a model (see {@link DolphinBean}) with the view.
  * @param <M> type of the model
  */
+@API(since = "0.x", status = MAINTAINED)
 public abstract class AbstractViewController<M> {
 
     private ControllerProxy<M> controllerProxy;

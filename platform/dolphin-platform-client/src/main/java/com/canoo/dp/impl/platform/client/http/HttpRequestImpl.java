@@ -9,6 +9,7 @@ import com.canoo.platform.core.http.HttpResponse;
 import com.canoo.platform.core.http.HttpURLConnectionHandler;
 import com.canoo.platform.core.DolphinRuntimeException;
 import com.google.gson.Gson;
+import org.apiguardian.api.API;
 
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
@@ -16,6 +17,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public class HttpRequestImpl implements HttpRequest {
 
     private final HttpURLConnection connection;

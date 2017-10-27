@@ -1,10 +1,15 @@
 package com.canoo.platform.remoting.spi.converter;
 
+import org.apiguardian.api.API;
+
+import static org.apiguardian.api.API.Status.MAINTAINED;
+
 /**
  * Interface that provides access to the internal Dolphin Platform bean repository. This is used in some converters to access needed data for the conversion.
  *
  * @author Hendrik Ebbers
  */
+@API(since = "0.x", status = MAINTAINED)
 public interface DolphinBeanRepo {
 
     /**

@@ -15,7 +15,11 @@
  */
 package com.canoo.dp.impl.remoting.legacy.core;
 
+import org.apiguardian.api.API;
+
 import java.util.List;
+
+import static org.apiguardian.api.API.Status.DEPRECATED;
 
 /**
  * A presentation model is uniquely identified by a string ID, and consists of a list of attributes.
@@ -23,6 +27,7 @@ import java.util.List;
  * @param <A>
  * @see Attribute
  */
+@API(since = "0.x", status = DEPRECATED)
 public interface PresentationModel<A extends Attribute> extends Observable {
 
     /**

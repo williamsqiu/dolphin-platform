@@ -15,6 +15,8 @@
  */
 package com.canoo.platform.remoting;
 
+import org.apiguardian.api.API;
+
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Inherited;
@@ -22,6 +24,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import static org.apiguardian.api.API.Status.MAINTAINED;
 
 /**
  * Each class that is part of a Dolphin Platform model must be annotated with {@link DolphinBean}.
@@ -47,6 +50,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Inherited
 @Retention(RUNTIME)
 @Target(ElementType.TYPE)
+@API(since = "0.x", status = MAINTAINED)
 public @interface DolphinBean {
 
 }

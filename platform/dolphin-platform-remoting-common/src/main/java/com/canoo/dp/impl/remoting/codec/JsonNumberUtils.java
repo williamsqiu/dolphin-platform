@@ -3,10 +3,14 @@ package com.canoo.dp.impl.remoting.codec;
 
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.platform.core.ReflectionHelper;
+import org.apiguardian.api.API;
+
+import static org.apiguardian.api.API.Status.INTERNAL;
 
 /**
  * Some helper classes since GSON uses {@link com.google.gson.internal.LazilyParsedNumber} internally.
  */
+@API(since = "0.x", status = INTERNAL)
 public class JsonNumberUtils {
 
     public static Number convert(final Class<?> neededType, final Object value) {

@@ -15,12 +15,17 @@
  */
 package com.canoo.platform.remoting.client.javafx;
 
+import org.apiguardian.api.API;
+
+import static org.apiguardian.api.API.Status.MAINTAINED;
+
 /**
  * Defines a converter that can convert a data type into a different data type. This converters are normally used to bind
  * JavaFX properties unidirectional to Dolphin Platform properties of a different type. For bidirectional bindings see {@link BidirectionalConverter}
  * @param <T> type of the first data type
  * @param <U> type of the second data type
  */
+@API(since = "0.x", status = MAINTAINED)
 public interface Converter<T, U> {
 
     /**

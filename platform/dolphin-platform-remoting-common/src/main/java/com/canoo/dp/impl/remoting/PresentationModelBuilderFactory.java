@@ -16,7 +16,11 @@
 package com.canoo.dp.impl.remoting;
 
 import com.canoo.dp.impl.remoting.legacy.core.PresentationModel;
+import org.apiguardian.api.API;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public interface PresentationModelBuilderFactory<T extends PresentationModel> {
 
     PresentationModelBuilder<T> createBuilder();

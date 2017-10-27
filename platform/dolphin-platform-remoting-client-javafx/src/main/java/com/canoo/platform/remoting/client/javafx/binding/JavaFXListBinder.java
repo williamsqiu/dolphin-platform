@@ -17,11 +17,14 @@ package com.canoo.platform.remoting.client.javafx.binding;
 
 import com.canoo.platform.core.functional.Binding;
 import com.canoo.platform.remoting.ObservableList;
+import org.apiguardian.api.API;
 
 import java.util.function.Function;
 
 import static com.canoo.dp.impl.platform.core.Assert.*;
+import static org.apiguardian.api.API.Status.MAINTAINED;
 
+@API(since = "0.x", status = MAINTAINED)
 public interface JavaFXListBinder<S> {
 
     default Binding to(ObservableList<? extends S> dolphinList) {

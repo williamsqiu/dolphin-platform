@@ -15,6 +15,10 @@
  */
 package com.canoo.platform.remoting;
 
+import org.apiguardian.api.API;
+
+import static org.apiguardian.api.API.Status.MAINTAINED;
+
 /**
  * Defines a value changed event for a {@link Property}. A {@link Property} fires {@link ValueChangeEvent} to all
  * registered change listeners (see {@link ValueChangeListener}) for each change of internal value.
@@ -22,6 +26,7 @@ package com.canoo.platform.remoting;
  * @param <T> Type of the {@link Property} that created this event.
  * @author Hendrik Ebbers
  */
+@API(since = "0.x", status = MAINTAINED)
 public interface ValueChangeEvent<T> {
 
     /**

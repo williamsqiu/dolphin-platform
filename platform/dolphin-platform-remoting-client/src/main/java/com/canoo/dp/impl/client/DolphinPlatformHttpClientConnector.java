@@ -27,6 +27,7 @@ import com.canoo.platform.core.http.HttpClient;
 import com.canoo.platform.core.http.RequestMethod;
 import com.canoo.platform.remoting.DolphinRemotingException;
 import com.canoo.platform.remoting.client.RemotingExceptionHandler;
+import org.apiguardian.api.API;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,9 +36,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
 /**
  * This class is used to sync the unique client scope id of the current dolphin
  */
+@API(since = "0.x", status = INTERNAL)
 public class DolphinPlatformHttpClientConnector extends AbstractClientConnector {
 
     private static final Logger LOG = LoggerFactory.getLogger(DolphinPlatformHttpClientConnector.class);

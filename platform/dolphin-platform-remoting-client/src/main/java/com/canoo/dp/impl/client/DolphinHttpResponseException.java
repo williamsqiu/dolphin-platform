@@ -15,6 +15,11 @@
  */
 package com.canoo.dp.impl.client;
 
+import org.apiguardian.api.API;
+
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public class DolphinHttpResponseException extends Exception {
 
     public DolphinHttpResponseException(int statusCode, String message) {

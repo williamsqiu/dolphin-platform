@@ -20,6 +20,9 @@ import com.canoo.platform.remoting.client.javafx.BidirectionalConverter;
 import com.canoo.platform.remoting.client.javafx.Converter;
 import com.canoo.platform.remoting.client.javafx.FXBinder;
 import javafx.beans.value.ObservableValue;
+import org.apiguardian.api.API;
+
+import static org.apiguardian.api.API.Status.MAINTAINED;
 
 /**
  * This class can be used to create a unidirectional or bidirectional binding between a JavaFX property and a
@@ -27,6 +30,7 @@ import javafx.beans.value.ObservableValue;
  * fluent API. To create bindings see {@link FXBinder}
  * @param <S> datatype of the JavaFX property
  */
+@API(since = "0.x", status = MAINTAINED)
 public interface DolphinBinder<S> {
 
     /**

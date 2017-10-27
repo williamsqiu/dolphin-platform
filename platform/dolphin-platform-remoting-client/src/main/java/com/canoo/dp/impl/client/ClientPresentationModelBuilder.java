@@ -21,10 +21,14 @@ import com.canoo.dp.impl.remoting.legacy.RemotingConstants;
 import com.canoo.dp.impl.client.legacy.ClientAttribute;
 import com.canoo.dp.impl.client.legacy.ClientModelStore;
 import com.canoo.dp.impl.client.legacy.ClientPresentationModel;
+import org.apiguardian.api.API;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public class ClientPresentationModelBuilder extends AbstractPresentationModelBuilder<ClientPresentationModel> {
 
     private final List<ClientAttribute> attributes = new ArrayList<>();

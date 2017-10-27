@@ -15,6 +15,11 @@
  */
 package com.canoo.dp.impl.remoting.legacy;
 
+import org.apiguardian.api.API;
+
+import static org.apiguardian.api.API.Status.DEPRECATED;
+
+@API(since = "0.x", status = DEPRECATED)
 public interface RemotingConstants {
 
     String DOLPHIN_PLATFORM_PREFIX = "dolphin_platform_intern_";

@@ -15,13 +15,16 @@
  */
 package com.canoo.dp.impl.remoting;
 
-import com.canoo.platform.remoting.ObservableList;
+import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.remoting.info.ClassInfo;
 import com.canoo.dp.impl.remoting.info.PropertyInfo;
-import com.canoo.platform.remoting.Property;
-import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.remoting.legacy.core.Attribute;
 import com.canoo.dp.impl.remoting.legacy.core.PresentationModel;
+import com.canoo.platform.remoting.ObservableList;
+import com.canoo.platform.remoting.Property;
+import org.apiguardian.api.API;
+
+import static org.apiguardian.api.API.Status.INTERNAL;
 
 
 /**
@@ -31,6 +34,7 @@ import com.canoo.dp.impl.remoting.legacy.core.PresentationModel;
  *
  * The generated Dolphin Bean will be registered in the {@link BeanRepositoryImpl}.
  */
+@API(since = "0.x", status = INTERNAL)
 public abstract class AbstractBeanBuilder implements BeanBuilder {
 
     private final ClassRepository classRepository;

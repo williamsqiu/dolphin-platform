@@ -24,7 +24,11 @@ import com.canoo.platform.remoting.Property;
 import com.canoo.dp.impl.platform.core.Assert;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import org.apiguardian.api.API;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public class DefaultDolphinBinder<S> implements DolphinBinder<S> {
 
     private final Property<S> property;

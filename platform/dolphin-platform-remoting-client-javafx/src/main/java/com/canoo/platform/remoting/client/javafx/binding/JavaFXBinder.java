@@ -18,7 +18,11 @@ package com.canoo.platform.remoting.client.javafx.binding;
 import com.canoo.platform.core.functional.Binding;
 import com.canoo.platform.remoting.Property;
 import com.canoo.platform.remoting.client.javafx.Converter;
+import org.apiguardian.api.API;
 
+import static org.apiguardian.api.API.Status.MAINTAINED;
+
+@API(since = "0.x", status = MAINTAINED)
 public interface JavaFXBinder<S> {
 
     default Binding to(Property<? extends S> dolphinProperty) {

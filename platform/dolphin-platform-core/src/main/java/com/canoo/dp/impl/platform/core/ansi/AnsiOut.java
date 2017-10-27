@@ -15,6 +15,11 @@
  */
 package com.canoo.dp.impl.platform.core.ansi;
 
+import org.apiguardian.api.API;
+
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public class AnsiOut {
 
     public static final String ANSI_RESET = "\u001B[0m";

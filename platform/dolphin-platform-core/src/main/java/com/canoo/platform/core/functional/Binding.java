@@ -15,11 +15,16 @@
  */
 package com.canoo.platform.core.functional;
 
+import org.apiguardian.api.API;
+
+import static org.apiguardian.api.API.Status.MAINTAINED;
+
 /**
  * Defines a function interface that is used to handle an unbind of an binding.
  *
  * @author Hendrik Ebbers
  */
+@API(since = "0.x", status = MAINTAINED)
 public interface Binding {
 
     /**

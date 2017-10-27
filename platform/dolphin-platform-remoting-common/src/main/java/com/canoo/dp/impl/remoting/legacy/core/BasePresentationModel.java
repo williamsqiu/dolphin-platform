@@ -15,16 +15,20 @@
  */
 package com.canoo.dp.impl.remoting.legacy.core;
 
+import org.apiguardian.api.API;
+
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+
+import static org.apiguardian.api.API.Status.DEPRECATED;
 
 /**
  * A BasePresentationModel is a collection of {@link BaseAttribute}s.
  * PresentationModels are not meant to be extended for the normal use, i.e. you typically don't need something like
  * a specialized "PersonPresentationModel" or so.
  */
-
+@API(since = "0.x", status = DEPRECATED)
 public class BasePresentationModel<A extends Attribute> extends AbstractObservable implements PresentationModel<A> {
 
     protected final List<A> attributes = new LinkedList<A>();

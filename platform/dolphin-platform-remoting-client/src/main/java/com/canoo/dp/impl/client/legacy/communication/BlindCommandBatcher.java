@@ -16,6 +16,7 @@
 package com.canoo.dp.impl.client.legacy.communication;
 
 import com.canoo.dp.impl.remoting.legacy.communication.ValueChangedCommand;
+import org.apiguardian.api.API;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,12 +29,15 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import static org.apiguardian.api.API.Status.DEPRECATED;
+
 /**
  * A command batcher that puts all commands in one packet that
  * have no onFinished handler attached (blind commands), which is the typical case
  * for value change and create presentation model commands
  * when synchronizing back to the server.
  */
+@API(since = "0.x", status = DEPRECATED)
 public class BlindCommandBatcher extends CommandBatcher {
 
     private static final Logger LOG = LoggerFactory.getLogger(BlindCommandBatcher.class);

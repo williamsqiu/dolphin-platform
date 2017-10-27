@@ -15,14 +15,18 @@
  */
 package com.canoo.dp.impl.client.javafx;
 
-import com.canoo.platform.core.functional.Subscription;
 import com.canoo.platform.core.functional.Binding;
+import com.canoo.platform.core.functional.Subscription;
+import com.canoo.platform.remoting.Property;
 import com.canoo.platform.remoting.client.javafx.BidirectionalConverter;
 import com.canoo.platform.remoting.client.javafx.binding.NumericDolphinBinder;
-import com.canoo.platform.remoting.Property;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import org.apiguardian.api.API;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public abstract class AbstractNumericDolphinBinder<T extends Number> extends DefaultDolphinBinder<T> implements NumericDolphinBinder<T> {
 
     private final Property<T> property;

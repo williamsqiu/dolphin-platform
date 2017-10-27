@@ -15,13 +15,18 @@
  */
 package com.canoo.platform.core;
 
+import org.apiguardian.api.API;
+
 import java.util.concurrent.ThreadFactory;
+
+import static org.apiguardian.api.API.Status.MAINTAINED;
 
 /**
  * Thread factory for the Dolphin Platform
  *
  * @author Hendrik Ebbers
  */
+@API(since = "0.x", status = MAINTAINED)
 public interface PlatformThreadFactory extends ThreadFactory {
 
     /**

@@ -15,9 +15,14 @@
  */
 package com.canoo.dp.impl.remoting.legacy.core;
 
+import org.apiguardian.api.API;
+
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
+import static org.apiguardian.api.API.Status.DEPRECATED;
+
+@API(since = "0.x", status = DEPRECATED)
 public class AbstractObservable implements Observable {
 
     private final PropertyChangeSupport pcs;

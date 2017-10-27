@@ -15,6 +15,11 @@
  */
 package com.canoo.dp.impl.remoting.legacy.communication;
 
+import org.apiguardian.api.API;
+
+import static org.apiguardian.api.API.Status.DEPRECATED;
+
+@API(since = "0.x", status = DEPRECATED)
 public interface CommandConstants {
 
     String START_LONG_POLL_COMMAND_ID = "StartLongPoll";
