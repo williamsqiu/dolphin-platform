@@ -8,6 +8,44 @@ be true most of the public API of the Dolphin Platform is stable since 0.8.5 and
 package structure or adding additional methods to public interfaces. In addition it will be best practice to not use any
 method of the API is annotated by `@Deprecated` since we plan to remove all this methods and classes for the final 1.0.0 release.
 
+== Version 0.19.0
+_Release date: Oct 29, 2017_
+
+* Provide unit tests for ClientSessionStoreImpl (https://github.com/canoo/dolphin-platform/issues/669[issue])
+* Polymer 2 client (https://github.com/canoo/dolphin-platform/issues/623[issue])
+* Add support for @Digits bean validation annotation (https://github.com/canoo/dolphin-platform/issues/654[issue])
+* Bugfix & unit tests for IdentitySet (https://github.com/canoo/dolphin-platform/issues/694[issue])
+* Remove DolphinStage & DolphinWindow and provide functionality in DolphinWindowUtils (https://github.com/canoo/dolphin-platform/issues/631[issue])
+* Provide unit tests for SimpleUrlToAppDomainConverter (https://github.com/canoo/dolphin-platform/issues/696[issue])
+* Additional methods for ObservableList to add elements (https://github.com/canoo/dolphin-platform/issues/20[issue])
+* Add support for @Max bean validation annotation (https://github.com/canoo/dolphin-platform/issues/656[issue])
+* Add support for @Size bean validation annotation (https://github.com/canoo/dolphin-platform/issues/660[issue])
+* Move Binding interface to common module (https://github.com/canoo/dolphin-platform/issues/626[issue])
+* Move FXWrapper to com.canoo.platform.remoting.client.javafx (https://github.com/canoo/dolphin-platform/issues/633[issue])
+* Add support for @Future bean validation annotation (https://github.com/canoo/dolphin-platform/issues/655[issue])
+* Add support for @Min bean validation annotation (https://github.com/canoo/dolphin-platform/issues/657[issue])
+* Add support for @Past bean validation annotation (https://github.com/canoo/dolphin-platform/issues/658[issue])
+* Provide HTTP client in Dolphin Platform client API (https://github.com/canoo/dolphin-platform/issues/550[issue])
+* Readme: Should link to the corresponding section for subprojects (https://github.com/canoo/dolphin-platform/issues/618[issue])
+* Provide unit tests for SimpleDolphinPlatformThreadFactory (https://github.com/canoo/dolphin-platform/issues/662[issue])
+* Replace FxmlLoadException with DolphinRuntimeException (https://github.com/canoo/dolphin-platform/issues/630[issue])
+* Move DefaultBidirectionalConverter to impl (https://github.com/canoo/dolphin-platform/issues/629[issue])
+* Provide additional unit tests for ReflectionHelper (https://github.com/canoo/dolphin-platform/issues/663[issue])
+* Implement ObservableList.removeAll() and retainAll() (https://github.com/canoo/dolphin-platform/issues/30[issue])
+* Use model store and connector directly (https://github.com/canoo/dolphin-platform/issues/606[issue])
+* Move modules from extras to default folder (https://github.com/canoo/dolphin-platform/issues/607[issue])
+* Create top level folder for all integration modules (https://github.com/canoo/dolphin-platform/issues/608[issue])
+* Add controller integration tests for qualifier (https://github.com/canoo/dolphin-platform/issues/604[issue])
+* Add Controller tests to Maven Archetype (https://github.com/canoo/dolphin-platform/issues/369[issue])
+* Create CODE_OF_CONDUCT.md (https://github.com/canoo/dolphin-platform/pull/651[issue])
+* Move ListEventSessionFilter to impl (https://github.com/canoo/dolphin-platform/issues/628[issue])
+* @ParentController annotation is not working (https://github.com/canoo/dolphin-platform/issues/641[issue])
+* Check if we can use new GSON version (https://github.com/canoo/dolphin-platform/issues/515[issue])
+* Rename AbstractViewBinder to AbstractViewController (https://github.com/canoo/dolphin-platform/issues/634[issue])
+* Move Converter and BidirectionalConverter of JavaFX client API to com.canoo.platform.remoting.client.javafx (https://github.com/canoo/dolphin-platform/issues/635[issue])
+* Provide service pattern for client API (https://github.com/canoo/dolphin-platform/pull/638[issue])
+* First version of security API (https://github.com/canoo/dolphin-platform/pull/584[issue])
+
 == Version 0.18.0
 _Release date: Aug 25, 2017_
 
