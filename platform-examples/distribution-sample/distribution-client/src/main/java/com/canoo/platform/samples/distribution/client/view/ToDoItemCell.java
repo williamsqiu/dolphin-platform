@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.dolphin.todo.client;
+package com.canoo.platform.samples.distribution.client.view;
 
 import com.canoo.platform.remoting.client.ControllerProxy;
 import com.canoo.platform.remoting.client.Param;
@@ -28,9 +28,9 @@ import javafx.scene.text.Text;
 
 import java.util.Optional;
 
-import static com.canoo.dolphin.todo.TodoAppConstants.CHANGE_ACTION;
-import static com.canoo.dolphin.todo.TodoAppConstants.ITEM_PARAM;
-import static com.canoo.dolphin.todo.TodoAppConstants.REMOVE_ACTION;
+import static com.canoo.platform.samples.distribution.common.DistributionAppConstants.CHANGE_ACTION;
+import static com.canoo.platform.samples.distribution.common.DistributionAppConstants.ITEM_PARAM;
+import static com.canoo.platform.samples.distribution.common.DistributionAppConstants.REMOVE_ACTION;
 import static javafx.scene.layout.Priority.ALWAYS;
 import static javafx.scene.layout.Priority.NEVER;
 

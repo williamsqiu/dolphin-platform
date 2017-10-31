@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.dolphin.todo.pm;
+package com.canoo.platform.samples.distribution.common.model;
 
 import com.canoo.platform.remoting.DolphinBean;
 import com.canoo.platform.remoting.Property;

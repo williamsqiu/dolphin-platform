@@ -21,8 +21,8 @@ import com.canoo.platform.remoting.server.DolphinController;
 import com.canoo.platform.remoting.server.DolphinModel;
 import com.canoo.platform.remoting.server.Param;
 import com.canoo.platform.remoting.server.event.DolphinEventBus;
-import com.canoo.dolphin.todo.pm.ToDoItem;
-import com.canoo.dolphin.todo.pm.ToDoList;
+import com.canoo.platform.samples.distribution.common.model.ToDoItem;
+import com.canoo.platform.samples.distribution.common.model.ToDoList;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;

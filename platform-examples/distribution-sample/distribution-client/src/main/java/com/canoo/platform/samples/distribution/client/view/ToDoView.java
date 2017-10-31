@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.dolphin.todo.client;
+package com.canoo.platform.samples.distribution.client.view;
 
 import com.canoo.platform.remoting.client.ClientContext;
 import com.canoo.platform.remoting.client.javafx.FXBinder;
@@ -25,8 +25,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 
-import static com.canoo.dolphin.todo.TodoAppConstants.ADD_ACTION;
-import static com.canoo.dolphin.todo.TodoAppConstants.TODO_CONTROLLER_NAME;
+import static com.canoo.platform.samples.distribution.common.DistributionAppConstants.ADD_ACTION;
+import static com.canoo.platform.samples.distribution.common.DistributionAppConstants.TODO_CONTROLLER_NAME;
 
 public class ToDoView extends AbstractFXMLViewController<ToDoList> {
 
@@ -46,7 +46,7 @@ public class ToDoView extends AbstractFXMLViewController<ToDoList> {
     @Override
     protected void init() {
         itemList.setCellFactory(c -> new ToDoItemCell(getControllerProxy()));
-        FXBinder.bind(createField.textProperty()).bidirectionalTo(getModel().getNewItemText());
+        FXBinder.bind(createField.textProperty()).bidirectionalTo(getModel().newItemTextProperty());
         FXBinder.bind(itemList.getItems()).bidirectionalTo(getModel().getItems());
         createButton.setOnAction(event -> invoke(ADD_ACTION));
     }

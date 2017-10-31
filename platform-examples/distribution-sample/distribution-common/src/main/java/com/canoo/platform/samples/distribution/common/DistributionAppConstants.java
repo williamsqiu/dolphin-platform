@@ -13,24 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.dolphin.todo.pm;
+package com.canoo.platform.samples.distribution.common;
 
-import com.canoo.platform.remoting.ObservableList;
-import com.canoo.platform.remoting.DolphinBean;
-import com.canoo.platform.remoting.Property;
+public interface DistributionAppConstants {
 
-@DolphinBean
-public class ToDoList {
+    String ADD_ACTION = "add";
 
-    private ObservableList<ToDoItem> items;
+    String REMOVE_ACTION = "remove";
 
-    private Property<String> newItemText;
+    String CHANGE_ACTION = "change";
 
-    public ObservableList<ToDoItem> getItems() {
-        return items;
-    }
+    String TODO_CONTROLLER_NAME = "DistributionController";
 
-    public Property<String> getNewItemText() {
-        return newItemText;
-    }
+    String ITEM_PARAM = "item";
 }
