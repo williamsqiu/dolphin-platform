@@ -17,6 +17,7 @@ package com.canoo.dp.impl.server.event;
 
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.core.functional.Subscription;
+import com.canoo.platform.remoting.server.event.EventFilter;
 import com.canoo.platform.remoting.server.event.MessageListener;
 import com.canoo.platform.remoting.server.event.Topic;
 import com.hazelcast.core.HazelcastInstance;
@@ -53,8 +54,8 @@ public class DistributedEventBus extends AbstractEventBus {
     }
 
     @Override
-    public <T extends Serializable> Subscription subscribe(final Topic<T> topic, final MessageListener<? super T> handler) {
-        final Subscription basicSubscription = super.subscribe(topic, handler);
+    public <T extends Serializable> Subscription subscribe(final Topic<T> topic, final MessageListener<? super T> handler, final EventFilter filter) {
+        final Subscription basicSubscription = super.subscribe(topic, handler, filter);
         final Subscription hazelcastSubscription = createHazelcastSubscription(topic);
         return new Subscription() {
             @Override

@@ -21,9 +21,7 @@ public interface DistributionAppConstants {
 
     String REMOVE_ACTION = "remove";
 
-    String CHANGE_ACTION = "change";
-
-    String TODO_CONTROLLER_NAME = "DistributionController";
+    String CONTROLLER_NAME = "DistributionController";
 
     String ITEM_PARAM = "item";
 }

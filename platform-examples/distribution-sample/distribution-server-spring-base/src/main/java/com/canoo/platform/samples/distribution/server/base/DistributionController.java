@@ -15,35 +15,30 @@
  */
 package com.canoo.platform.samples.distribution.server.base;
 
-import com.canoo.platform.remoting.BeanManager;
 import com.canoo.platform.remoting.server.DolphinAction;
 import com.canoo.platform.remoting.server.DolphinController;
 import com.canoo.platform.remoting.server.DolphinModel;
 import com.canoo.platform.remoting.server.Param;
 import com.canoo.platform.remoting.server.event.DolphinEventBus;
-import com.canoo.platform.samples.distribution.common.model.ToDoItem;
-import com.canoo.platform.samples.distribution.common.model.ToDoList;
+import com.canoo.platform.remoting.server.event.EventFilter;
 import com.canoo.platform.remoting.server.event.EventSessionFilterFactory;
+import com.canoo.platform.samples.distribution.common.model.ToDoList;
 import com.canoo.platform.server.client.ClientSession;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
-import java.util.Optional;
 
 import static com.canoo.platform.samples.distribution.common.DistributionAppConstants.ADD_ACTION;
-import static com.canoo.platform.samples.distribution.common.DistributionAppConstants.CHANGE_ACTION;
 import static com.canoo.platform.samples.distribution.common.DistributionAppConstants.ITEM_PARAM;
 import static com.canoo.platform.samples.distribution.common.DistributionAppConstants.REMOVE_ACTION;
-import static com.canoo.platform.samples.distribution.common.DistributionAppConstants.TODO_CONTROLLER_NAME;
+import static com.canoo.platform.samples.distribution.common.DistributionAppConstants.CONTROLLER_NAME;
+import static com.canoo.platform.samples.distribution.server.base.DistributionEventTopics.ITEM_ADDED;
+import static com.canoo.platform.samples.distribution.server.base.DistributionEventTopics.ITEM_REMOVED;
 
-@DolphinController(TODO_CONTROLLER_NAME)
+@DolphinController(CONTROLLER_NAME)
 public class DistributionController {
 
-    private final BeanManager beanManager;
-
     private final DolphinEventBus eventBus;
-
-    private final DistributionItemStore todoItemStore;
 
     private final ClientSession session;
 
@@ -51,19 +46,16 @@ public class DistributionController {
     private ToDoList toDoList;
 
     @Inject
-    public DistributionController(final BeanManager beanManager, final DolphinEventBus eventBus, final DistributionItemStore todoItemStore, final ClientSession session) {
-        this.beanManager = beanManager;
+    public DistributionController(final DolphinEventBus eventBus, final ClientSession session) {
         this.eventBus = eventBus;
-        this.todoItemStore = todoItemStore;
         this.session = session;
     }
 
     @PostConstruct
     public void onInit() {
-        eventBus.subscribe(DistributionEventTopics.ITEM_MARK_CHANGED, message -> updateItemState(message.getData()), EventSessionFilterFactory.excludeClientSessions(session.getId()));
-        eventBus.subscribe(DistributionEventTopics.ITEM_REMOVED, message -> removeItem(message.getData()), EventSessionFilterFactory.excludeClientSessions(session.getId()));
-        eventBus.subscribe(DistributionEventTopics.ITEM_ADDED, message -> addItem(message.getData()), EventSessionFilterFactory.excludeClientSessions(session.getId()));
-        todoItemStore.itemNameStream().forEach(name -> addItem(name));
+        final EventFilter excludeMe = EventSessionFilterFactory.excludeClientSessions(session.getId());
+        eventBus.subscribe(ITEM_REMOVED, message -> removeItem(message.getData()), excludeMe);
+        eventBus.subscribe(ITEM_ADDED, message -> addItem(message.getData()), excludeMe);
     }
 
     @DolphinAction(ADD_ACTION)
@@ -72,34 +64,20 @@ public class DistributionController {
         toDoList.setNewItemText("");
 
         addItem(itemName);
-        eventBus.publish(DistributionEventTopics.ITEM_ADDED, toDoList.getNewItemText());
-    }
-
-    @DolphinAction(CHANGE_ACTION)
-    public void onItemStateChangedAction(@Param(ITEM_PARAM) final String name) {
-        updateItemState(name);
-        eventBus.publish(DistributionEventTopics.ITEM_MARK_CHANGED, name);
+        eventBus.publish(ITEM_ADDED, itemName);
     }
 
     @DolphinAction(REMOVE_ACTION)
     public void onItemRemovedAction(@Param(ITEM_PARAM) final String name) {
         removeItem(name);
-        eventBus.publish(DistributionEventTopics.ITEM_REMOVED, name);
+        eventBus.publish(ITEM_REMOVED, name);
     }
 
     private void addItem(final String name) {
-        toDoList.getItems().add(beanManager.create(ToDoItem.class).withText(name).withState(todoItemStore.getState(name)));
+        toDoList.getItems().add(name);
     }
 
     private void removeItem(final String name) {
-        getItemByName(name).ifPresent(i -> toDoList.getItems().remove(i));
-    }
-
-    private void updateItemState(final String name) {
-        getItemByName(name).ifPresent(i -> i.setCompleted(todoItemStore.getState(name)));
-    }
-
-    private Optional<ToDoItem> getItemByName(final String name) {
-        return toDoList.getItems().stream().filter(i -> i.getText().equals(name)).findAny();
+        toDoList.getItems().remove(name);
     }
 }

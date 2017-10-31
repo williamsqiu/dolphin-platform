@@ -15,36 +15,71 @@
  */
 package com.canoo.platform.samples.distribution.client;
 
+import com.canoo.platform.client.PlatformClient;
 import com.canoo.platform.remoting.client.ClientContext;
-import com.canoo.platform.remoting.client.javafx.DolphinPlatformApplication;
+import com.canoo.platform.remoting.client.ClientContextFactory;
+import com.canoo.platform.remoting.client.javafx.FxToolkit;
 import com.canoo.platform.samples.distribution.client.view.ToDoView;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import java.net.MalformedURLException;
 import java.net.URL;
 
-public class DistributionClient extends DolphinPlatformApplication {
+public class DistributionClient extends Application {
 
-    @Override
-    protected URL getServerEndpoint() throws MalformedURLException {
-        return new URL("http://localhost:8080/todo-app/dolphin");
+    private void connect(final Stage primaryStage, final URL endpoint) {
+        final ClientContextFactory clientContextFactory = PlatformClient.getService(ClientContextFactory.class);
+        final ClientContext clientContext = clientContextFactory.create(PlatformClient.getClientConfiguration(), endpoint);
+        clientContext.connect().handle((v, e) -> {
+            if (e != null) {
+                e.printStackTrace();
+                System.exit(-1);
+            }
+            Platform.runLater(() -> {
+                try {
+                    ToDoView viewController = new ToDoView(clientContext);
+                    Scene scene = new Scene(viewController.getParent());
+                    scene.getStylesheets().add(DistributionClient.class.getResource("style.css").toExternalForm());
+                    primaryStage.setScene(scene);
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                    System.exit(-1);
+                }
+            });
+            return null;
+        });
     }
 
     @Override
-    protected void start(Stage primaryStage, ClientContext clientContext) throws Exception {
-        ToDoView viewController = new ToDoView(clientContext);
-        Scene scene = new Scene(viewController.getParent());
+    public void start(final Stage primaryStage) throws Exception {
+        FxToolkit.init();
+
+        final Button server1Button = new Button("Server instance 1");
+        final URL server1Url = new URL("http://localhost:8082/distribution-app/dolphin");
+        server1Button.setOnAction(e -> connect(primaryStage, server1Url));
+
+        final Button server2Button = new Button("Server instance 2");
+        final URL server2Url = new URL("http://localhost:8083/distribution-app/dolphin");
+        server2Button.setOnAction(e -> connect(primaryStage, server2Url));
+
+        final VBox selectBox = new VBox(server1Button, server2Button);
+        selectBox.setPadding(new Insets(24));
+        selectBox.setSpacing(24);
+
+        Scene scene = new Scene(selectBox);
         scene.getStylesheets().add(DistributionClient.class.getResource("style.css").toExternalForm());
         primaryStage.setScene(scene);
         primaryStage.setOnCloseRequest(e -> System.exit(0));
         primaryStage.show();
     }
 
+
     public static void main(String[] args) {
-        Platform.setImplicitExit(false);
         Application.launch(args);
     }
 }

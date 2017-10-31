@@ -111,38 +111,41 @@ public class EventStreamSerializer implements StreamSerializer<DolphinEvent<?>> 
         if (!root.getAsJsonObject().has(CONTEXT_PARAM)) {
             throw new IllegalArgumentException("Input can not be parsed! No event context found");
         }
+
+        if (!root.getAsJsonObject().has(SPEC_VERSION_PARAM) &&
+                !root.getAsJsonObject().get(SPEC_VERSION_PARAM).isJsonPrimitive() &&
+                !root.getAsJsonObject().get(SPEC_VERSION_PARAM).getAsJsonPrimitive().isString() &&
+                !root.getAsJsonObject().get(SPEC_VERSION_PARAM).getAsJsonPrimitive().getAsString().equals(SPEC_1_0)) {
+            throw new IllegalArgumentException("Input can not be parsed! Unknown Spec");
+        }
+
         final JsonElement contextElement = root.getAsJsonObject().get(CONTEXT_PARAM);
         if (!contextElement.isJsonObject()) {
             throw new IllegalArgumentException("Input can not be parsed! event context not parseable");
         }
 
-        if (!contextElement.getAsJsonObject().has(SPEC_VERSION_PARAM) &&
-                contextElement.getAsJsonObject().get(SPEC_VERSION_PARAM).isJsonPrimitive() &&
-                contextElement.getAsJsonObject().get(SPEC_VERSION_PARAM).getAsJsonPrimitive().isString() &&
-                contextElement.getAsJsonObject().get(SPEC_VERSION_PARAM).getAsJsonPrimitive().getAsString().equals(SPEC_1_0)) {
-            throw new IllegalArgumentException("Input can not be parsed! Unknown Spec");
-        }
+
 
         if (!contextElement.getAsJsonObject().has(TOPIC_PARAM) &&
-                contextElement.getAsJsonObject().get(TOPIC_PARAM).isJsonPrimitive() &&
-                contextElement.getAsJsonObject().get(TOPIC_PARAM).getAsJsonPrimitive().isString()) {
+                !contextElement.getAsJsonObject().get(TOPIC_PARAM).isJsonPrimitive() &&
+                !contextElement.getAsJsonObject().get(TOPIC_PARAM).getAsJsonPrimitive().isString()) {
             throw new IllegalArgumentException("Input can not be parsed! No topic found");
         }
         final Topic<?> topic = new Topic<>(contextElement.getAsJsonObject().getAsJsonPrimitive(TOPIC_PARAM).getAsString());
 
 
         if (!contextElement.getAsJsonObject().has(TIMESTAMP_PARAM) &&
-                contextElement.getAsJsonObject().get(TIMESTAMP_PARAM).isJsonPrimitive() &&
-                contextElement.getAsJsonObject().get(TIMESTAMP_PARAM).getAsJsonPrimitive().isNumber()) {
+                !contextElement.getAsJsonObject().get(TIMESTAMP_PARAM).isJsonPrimitive() &&
+                !contextElement.getAsJsonObject().get(TIMESTAMP_PARAM).getAsJsonPrimitive().isNumber()) {
             throw new IllegalArgumentException("Input can not be parsed! No timestamp found");
         }
         final long timestamp = contextElement.getAsJsonObject().getAsJsonPrimitive(TIMESTAMP_PARAM).getAsLong();
 
 
-        if (!contextElement.getAsJsonObject().has(DATA_PARAM)) {
+        if (!root.getAsJsonObject().has(DATA_PARAM)) {
             throw new IllegalArgumentException("Input can not be parsed! No data found");
         }
-        final JsonElement dataElement = contextElement.getAsJsonObject().get(DATA_PARAM);
+        final JsonElement dataElement = root.getAsJsonObject().get(DATA_PARAM);
         Serializable data;
         if (dataElement.isJsonNull()) {
             data = null;
@@ -182,8 +185,8 @@ public class EventStreamSerializer implements StreamSerializer<DolphinEvent<?>> 
 
 
             if (!metadataElement.getAsJsonObject().has(METADATA_VALUE_PARAM) &&
-                    (!metadataElement.getAsJsonObject().get(METADATA_VALUE_PARAM).isJsonPrimitive() &&
-                            !metadataElement.getAsJsonObject().get(METADATA_VALUE_PARAM).getAsJsonPrimitive().isString()) || !metadataElement.getAsJsonObject().get(METADATA_VALUE_PARAM).isJsonNull()) {
+                    ((metadataElement.getAsJsonObject().get(METADATA_VALUE_PARAM).isJsonPrimitive() &&
+                            metadataElement.getAsJsonObject().get(METADATA_VALUE_PARAM).getAsJsonPrimitive().isString()) || metadataElement.getAsJsonObject().get(METADATA_VALUE_PARAM).isJsonNull())) {
                 throw new IllegalArgumentException("Input can not be parsed! metadata for key '" + metadataKey + "' can not be parsed");
             }
             if (metadataElement.getAsJsonObject().get(METADATA_VALUE_PARAM).isJsonNull()) {

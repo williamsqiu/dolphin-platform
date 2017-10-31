@@ -22,11 +22,11 @@ import com.canoo.platform.remoting.Property;
 @DolphinBean
 public class ToDoList {
 
-    private ObservableList<ToDoItem> items;
+    private ObservableList<String> items;
 
     private Property<String> newItemText;
 
-    public ObservableList<ToDoItem> getItems() {
+    public ObservableList<String> getItems() {
         return items;
     }
 

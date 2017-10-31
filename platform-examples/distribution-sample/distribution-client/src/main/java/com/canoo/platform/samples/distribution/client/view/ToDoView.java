@@ -16,17 +16,20 @@
 package com.canoo.platform.samples.distribution.client.view;
 
 import com.canoo.platform.remoting.client.ClientContext;
+import com.canoo.platform.remoting.client.Param;
 import com.canoo.platform.remoting.client.javafx.FXBinder;
 import com.canoo.platform.remoting.client.javafx.view.AbstractFXMLViewController;
-import com.canoo.platform.samples.distribution.common.model.ToDoItem;
 import com.canoo.platform.samples.distribution.common.model.ToDoList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 
 import static com.canoo.platform.samples.distribution.common.DistributionAppConstants.ADD_ACTION;
-import static com.canoo.platform.samples.distribution.common.DistributionAppConstants.TODO_CONTROLLER_NAME;
+import static com.canoo.platform.samples.distribution.common.DistributionAppConstants.CONTROLLER_NAME;
+import static com.canoo.platform.samples.distribution.common.DistributionAppConstants.ITEM_PARAM;
+import static com.canoo.platform.samples.distribution.common.DistributionAppConstants.REMOVE_ACTION;
 
 public class ToDoView extends AbstractFXMLViewController<ToDoList> {
 
@@ -37,15 +40,20 @@ public class ToDoView extends AbstractFXMLViewController<ToDoList> {
     private Button createButton;
 
     @FXML
-    private ListView<ToDoItem> itemList;
+    private ListView<String> itemList;
 
     public ToDoView(ClientContext clientContext) {
-        super(clientContext, TODO_CONTROLLER_NAME, ToDoView.class.getResource("view.fxml"));
+        super(clientContext, CONTROLLER_NAME, ToDoView.class.getResource("view.fxml"));
     }
 
     @Override
     protected void init() {
-        itemList.setCellFactory(c -> new ToDoItemCell(getControllerProxy()));
+        itemList.setCellFactory(c -> {
+            final ListCell<String> cell = new ListCell<>();
+            cell.itemProperty().addListener(e -> cell.setText(cell.getItem()));
+            cell.setOnMouseClicked(e -> invoke(REMOVE_ACTION, new Param(ITEM_PARAM, cell.getItem())));
+            return cell;
+        });
         FXBinder.bind(createField.textProperty()).bidirectionalTo(getModel().newItemTextProperty());
         FXBinder.bind(itemList.getItems()).bidirectionalTo(getModel().getItems());
         createButton.setOnAction(event -> invoke(ADD_ACTION));

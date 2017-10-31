@@ -16,8 +16,9 @@
 
 apply plugin: 'application'
 
-mainClassName = 'com.canoo.dolphin.todo.server.ToDoServer'
+mainClassName = 'com.canoo.platform.samples.distribution.server.hazelcast.HazelcastServer'
 
 dependencies {
-  compile project(':distribution-server-spring-base')
+  compile "org.springframework.boot:spring-boot-starter-web:$springBootVersion"
+  compile 'com.hazelcast:hazelcast:3.6.2'
 }

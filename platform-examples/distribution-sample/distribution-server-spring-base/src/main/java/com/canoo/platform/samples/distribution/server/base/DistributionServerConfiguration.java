@@ -15,24 +15,10 @@
  */
 package com.canoo.platform.samples.distribution.server.base;
 
-import com.canoo.platform.remoting.server.event.DolphinEventBus;
 import com.canoo.platform.remoting.server.spring.EnableRemoting;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Scope;
 
 @Configuration
 @EnableRemoting
 public class DistributionServerConfiguration {
-
-    @Bean
-    @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
-    public DistributionItemStore createStore(final DolphinEventBus eventBus) {
-        DistributionItemStore store = new DistributionItemStore();
-        eventBus.subscribe(DistributionEventTopics.ITEM_ADDED, e -> store.addItem(e.getData()));
-        eventBus.subscribe(DistributionEventTopics.ITEM_REMOVED, e -> store.removeItem(e.getData()));
-        eventBus.subscribe(DistributionEventTopics.ITEM_MARK_CHANGED, e -> store.changeItemState(e.getData()));
-        return store;
-    }
 }
