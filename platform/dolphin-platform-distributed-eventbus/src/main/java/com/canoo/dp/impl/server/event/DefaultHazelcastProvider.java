@@ -17,6 +17,7 @@ package com.canoo.dp.impl.server.event;
 
 import com.canoo.platform.remoting.server.event.MessageEvent;
 import com.google.gson.Gson;
+import com.hazelcast.client.HazelcastClient;
 import com.hazelcast.client.config.ClientConfig;
 import com.hazelcast.config.SerializerConfig;
 import com.hazelcast.core.HazelcastInstance;
@@ -52,6 +53,7 @@ public class DefaultHazelcastProvider implements HazelcastProvider {
             dolphinEventSerializerConfig.setTypeClass(MessageEvent.class);
             dolphinEventSerializerConfig.setTypeClassName(MessageEvent.class.getName());
             clientConfig.getSerializationConfig().getSerializerConfigs().add(dolphinEventSerializerConfig);
+            hazelcastInstance = HazelcastClient.newHazelcastClient(clientConfig);
         }
         return hazelcastInstance;
     }
