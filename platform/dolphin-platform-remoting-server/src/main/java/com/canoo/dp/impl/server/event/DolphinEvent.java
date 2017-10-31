@@ -43,6 +43,6 @@ public class DolphinEvent<T extends Serializable> implements MessageEvent<T> {
 
     @Override
     public MessageEventContext<T> getMessageEventContext() {
-        return null;
+        return eventContext;
     }
 }

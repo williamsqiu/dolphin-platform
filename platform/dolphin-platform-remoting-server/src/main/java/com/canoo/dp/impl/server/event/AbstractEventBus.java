@@ -151,7 +151,7 @@ public abstract class AbstractEventBus implements DolphinEventBus {
                 if (sessionId == null) {
                     throw new RuntimeException("Internal Error! No session id defined for event bus listener!");
                 }
-                if (sendInCurrentClientSession(event)) {
+                if (sendInSameClientSession(event, (MessageListener<T>) listenerAndFilter.getListener())) {
                     // This listener was already called at the publish call
                     // since the event was called from the same session
                     LOG.trace("Event listener for topic {} was already called in Dolphin Platform context {}", topic.getName(), sessionId);
@@ -174,7 +174,7 @@ public abstract class AbstractEventBus implements DolphinEventBus {
         }
     }
 
-    private <T extends Serializable> boolean sendInCurrentClientSession(final DolphinEvent<T> event) {
+    private <T extends Serializable> boolean sendInSameClientSession(final DolphinEvent<T> event, final MessageListener<T> listener) {
         Assert.requireNonNull(event, "event");
 
         final DolphinContext currentContext = getCurrentContext();
@@ -183,7 +183,7 @@ public abstract class AbstractEventBus implements DolphinEventBus {
             if(clientSession != null) {
                 final MessageEventContext<T> eventContext = event.getMessageEventContext();
                 if(eventContext != null) {
-                    return EventSessionFilterFactory.allowSessions(clientSession).shouldHandleEvent(eventContext);
+                    return EventSessionFilterFactory.allowClientSessions(listenerToSessionMap.get(listener)).shouldHandleEvent(eventContext);
                 }
             }
         }
@@ -209,7 +209,7 @@ public abstract class AbstractEventBus implements DolphinEventBus {
 
         final List<ListenerWithFilter<T>> ret = new ArrayList<>();
         for (ListenerWithFilter<?> listener : handlers) {
-            if (sessionId.equals(listenerToSessionMap.get(listener))) {
+            if (sessionId.equals(listenerToSessionMap.get(listener.getListener()))) {
                 ret.add((ListenerWithFilter<T>) listener);
             }
         }
