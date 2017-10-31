@@ -26,11 +26,6 @@ public class HttpSessionEventFilter implements EventFilter {
             return false;
         }
 
-        final Object typeValue = metadata.get(EventConstants.TYPE_PARAM);
-        if(typeValue == null || !typeValue.equals(EventConstants.TYPE_PLATFORM)) {
-            return false;
-        }
-
         final Object httpSessionIdValue = metadata.get(EventConstants.HTTP_SESSION_PARAM);
         if(httpSessionIdValue == null || !sessionIds.contains(httpSessionIdValue)) {
             return false;

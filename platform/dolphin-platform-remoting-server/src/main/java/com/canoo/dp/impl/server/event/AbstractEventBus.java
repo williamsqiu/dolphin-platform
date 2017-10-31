@@ -99,7 +99,8 @@ public abstract class AbstractEventBus implements DolphinEventBus {
         publishForOtherSessions(event);
     }
 
-    public <T extends Serializable> Subscription subscribe(final Topic<T> topic, final MessageListener<? super T> listener) {
+    @Override
+    public <T extends Serializable> Subscription subscribe(final Topic<T> topic, final MessageListener<? super T> listener, final EventFilter filter) {
         checkInitialization();
         Assert.requireNonNull(topic, "topic");
         Assert.requireNonNull(listener, "listener");
@@ -115,7 +116,7 @@ public abstract class AbstractEventBus implements DolphinEventBus {
             listeners = new CopyOnWriteArrayList<>();
             topicToListenerMap.put(topic, listeners);
         }
-        final ListenerWithFilter<? super T> listenerWithFilter = new ListenerWithFilter<>(listener);
+        final ListenerWithFilter<? super T> listenerWithFilter = new ListenerWithFilter<>(listener, filter);
         listeners.add(listenerWithFilter);
         listenerToSessionMap.put(listener, subscriptionSessionId);
         final Subscription subscription = new Subscription() {
@@ -132,6 +133,10 @@ public abstract class AbstractEventBus implements DolphinEventBus {
         };
         addSubscriptionForSession(subscription, subscriptionSessionId);
         return subscription;
+    }
+
+    public <T extends Serializable> Subscription subscribe(final Topic<T> topic, final MessageListener<? super T> listener) {
+        return subscribe(topic, listener, null);
     }
 
     protected <T extends Serializable> void triggerEventHandling(final DolphinEvent<T> event) {
