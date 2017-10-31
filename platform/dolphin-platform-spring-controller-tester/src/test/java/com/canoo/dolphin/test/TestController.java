@@ -20,7 +20,7 @@ import com.canoo.platform.remoting.server.DolphinAction;
 import com.canoo.platform.remoting.server.DolphinController;
 import com.canoo.platform.remoting.server.DolphinModel;
 import com.canoo.platform.remoting.server.event.DolphinEventBus;
-import com.canoo.platform.remoting.server.event.Message;
+import com.canoo.platform.remoting.server.event.MessageEvent;
 import com.canoo.platform.remoting.server.event.MessageListener;
 import com.canoo.platform.remoting.server.event.Topic;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +45,7 @@ public class TestController {
     public void init() {
         eventBus.subscribe(TEST_TOPIC, new MessageListener<String>() {
             @Override
-            public void onMessage(Message<String> message) {
+            public void onMessage(MessageEvent<String> message) {
                 model.setValue(message.getData());
             }
         });

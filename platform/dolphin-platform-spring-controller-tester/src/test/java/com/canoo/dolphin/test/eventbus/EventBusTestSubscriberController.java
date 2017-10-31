@@ -18,7 +18,7 @@ package com.canoo.dolphin.test.eventbus;
 import com.canoo.platform.remoting.server.DolphinController;
 import com.canoo.platform.remoting.server.DolphinModel;
 import com.canoo.platform.remoting.server.event.DolphinEventBus;
-import com.canoo.platform.remoting.server.event.Message;
+import com.canoo.platform.remoting.server.event.MessageEvent;
 import com.canoo.platform.remoting.server.event.MessageListener;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -37,7 +37,7 @@ public class EventBusTestSubscriberController {
     public void init() {
         eventBus.subscribe(EventBusTestConstants.TEST_TOPIC, new MessageListener<String>() {
             @Override
-            public void onMessage(Message<String> message) {
+            public void onMessage(MessageEvent<String> message) {
                 model.valueProperty().set(message.getData());
             }
         });
