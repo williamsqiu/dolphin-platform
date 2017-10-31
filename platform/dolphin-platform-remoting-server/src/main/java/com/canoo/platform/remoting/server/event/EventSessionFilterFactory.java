@@ -1,31 +1,60 @@
 package com.canoo.platform.remoting.server.event;
 
 import com.canoo.dp.impl.platform.core.Assert;
-import com.canoo.dp.impl.server.event.ListEventSessionFilter;
+import com.canoo.dp.impl.server.event.ClientSessionEventFilter;
+import com.canoo.dp.impl.server.event.HttpSessionEventFilter;
+import com.canoo.platform.server.client.ClientSession;
+
+import javax.servlet.http.HttpSession;
+import java.io.Serializable;
 
 /**
- * A factory that provides some common implementations for the {@link EventSessionFilter}.
+ * A factory that provides some common implementations for the {@link EventFilter}.
  *
  * @author Hendrik Ebbers
  */
 public class EventSessionFilterFactory {
 
-    /**
-     * Creates a {@link EventSessionFilter} that allows subscriptions for all client sessions (see {@link com.canoo.platform.server.client.ClientSession}) of the given session ids
-     * @param clientSessionIds the ids for all allowed client sessions
-     * @return the filter
-     */
-    public static EventSessionFilter allowClientSessions(final String... clientSessionIds) {
-        return new ListEventSessionFilter(clientSessionIds);
+    public static EventFilter allowSessions(final ClientSession clientSession) {
+        Assert.requireNonNull(clientSession, "clientSession");
+        return allowClientSessions(clientSession.getId());
+    }
+
+    public static EventFilter allowHttpSessions(final ClientSession clientSession) {
+        Assert.requireNonNull(clientSession, "clientSession");
+        Assert.requireNonNull(clientSession.getHttpSession(), "httpSession");
+        return allowHttpSessions(clientSession.getHttpSession().getId());
+    }
+
+    public static EventFilter allowSessions(final HttpSession httpSession) {
+        Assert.requireNonNull(httpSession, "httpSession");
+        return allowHttpSessions(httpSession.getId());
     }
 
     /**
-     * Creates a {@link EventSessionFilter} that blocks subscriptions for all client sessions (see {@link com.canoo.platform.server.client.ClientSession}) of the given session ids
+     * Creates a {@link EventFilter} that allows subscriptions for all client sessions (see {@link com.canoo.platform.server.client.ClientSession}) of the given session ids
+     * @param clientSessionIds the ids for all allowed client sessions
+     * @return the filter
+     */
+    public static EventFilter allowClientSessions(final String... clientSessionIds) {
+        return new ClientSessionEventFilter(clientSessionIds);
+    }
+
+    public static EventFilter allowHttpSessions(final String... httpSessionIds) {
+        return new HttpSessionEventFilter(httpSessionIds);
+    }
+
+    /**
+     * Creates a {@link EventFilter} that blocks subscriptions for all client sessions (see {@link com.canoo.platform.server.client.ClientSession}) of the given session ids
      * @param clientSessionIds the ids for all blocked client sessions
      * @return the filter
      */
-    public static EventSessionFilter excludeClientSessions(final String... clientSessionIds) {
+    public static EventFilter excludeClientSessions(final String... clientSessionIds) {
         return not(allowClientSessions(clientSessionIds));
+    }
+
+    public static EventFilter excludeHttpSessions(final String... httpSessionIds) {
+        return not(allowHttpSessions(httpSessionIds));
     }
 
     /**
@@ -33,13 +62,13 @@ public class EventSessionFilterFactory {
      * @param filter the given filter
      * @return the filter
      */
-    public static EventSessionFilter not(final EventSessionFilter filter) {
+    public static <T extends Serializable> EventFilter<T> not(final EventFilter<T> filter) {
         Assert.requireNonNull(filter, "filter");
-        return new EventSessionFilter() {
+        return new EventFilter<T>() {
 
             @Override
-            public boolean shouldHandleEvent(final String sessionId) {
-                return !filter.shouldHandleEvent(sessionId);
+            public boolean shouldHandleEvent(final MessageEventContext<T> context) {
+                return !filter.shouldHandleEvent(context);
             }
         };
     }
@@ -49,12 +78,12 @@ public class EventSessionFilterFactory {
      * @param filters given filters
      * @return the filter
      */
-    public static EventSessionFilter and(final EventSessionFilter... filters) {
-        return new EventSessionFilter() {
+    public static <T extends Serializable> EventFilter<T> and(final EventFilter<T>... filters) {
+        return new EventFilter<T>() {
             @Override
-            public boolean shouldHandleEvent(String sessionId) {
-                for(EventSessionFilter filter : filters) {
-                    if(!filter.shouldHandleEvent(sessionId)) {
+            public boolean shouldHandleEvent(final MessageEventContext<T> context) {
+                for(EventFilter filter : filters) {
+                    if(!filter.shouldHandleEvent(context)) {
                         return false;
                     }
                 }
@@ -68,12 +97,12 @@ public class EventSessionFilterFactory {
      * @param filters given filters
      * @return the filter
      */
-    public static EventSessionFilter or(final EventSessionFilter... filters) {
-        return new EventSessionFilter() {
+    public static <T extends Serializable> EventFilter<T> or(final EventFilter<T>... filters) {
+        return new EventFilter<T>() {
             @Override
-            public boolean shouldHandleEvent(String sessionId) {
-                for(EventSessionFilter filter : filters) {
-                    if(filter.shouldHandleEvent(sessionId)) {
+            public boolean shouldHandleEvent(final MessageEventContext<T> context) {
+                for(EventFilter filter : filters) {
+                    if(filter.shouldHandleEvent(context)) {
                         return true;
                     }
                 }

@@ -29,5 +29,5 @@ public interface MessageListener<T extends Serializable> {
      * Method will be called whenever a message is received
      * @param message the new message
      */
-    void onMessage(Message<T> message);
+    void onMessage(MessageEvent<T> message);
 }

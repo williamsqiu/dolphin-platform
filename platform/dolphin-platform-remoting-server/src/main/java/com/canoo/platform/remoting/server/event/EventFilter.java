@@ -13,24 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.dp.impl.server.event;
+package com.canoo.platform.remoting.server.event;
 
-import com.canoo.platform.remoting.server.event.EventSessionFilter;
+import java.io.Serializable;
 
-import java.util.Arrays;
-import java.util.List;
+public interface EventFilter<T extends Serializable> extends Serializable {
 
-public class ListEventSessionFilter implements EventSessionFilter {
+    boolean shouldHandleEvent(MessageEventContext<T> context);
 
-    private final List<String> sessionIds;
-
-    public ListEventSessionFilter(String... sessionIds) {
-        this.sessionIds = Arrays.asList(sessionIds);
-    }
-
-    @Override
-    public boolean shouldHandleEvent(String s) {
-        return sessionIds.contains(s);
-    }
 }
-

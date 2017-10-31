@@ -21,14 +21,17 @@ import com.canoo.dp.impl.server.context.DolphinContext;
 import com.canoo.dp.impl.server.context.DolphinContextProvider;
 import com.canoo.platform.core.functional.Callback;
 import com.canoo.platform.core.functional.Subscription;
+import com.canoo.platform.remoting.server.event.EventSessionFilterFactory;
+import com.canoo.platform.remoting.server.event.MessageEventContext;
 import com.canoo.platform.server.client.ClientSession;
 import com.canoo.platform.remoting.server.event.DolphinEventBus;
-import com.canoo.platform.remoting.server.event.EventSessionFilter;
+import com.canoo.platform.remoting.server.event.EventFilter;
 import com.canoo.platform.remoting.server.event.MessageListener;
 import com.canoo.platform.remoting.server.event.Topic;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.servlet.http.HttpSession;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -44,7 +47,7 @@ public abstract class AbstractEventBus implements DolphinEventBus {
 
     private DolphinContextProvider contextProvider;
 
-    private final Map<Topic<?>, List<MessageListener<?>>> topicToListenerMap = new ConcurrentHashMap<>();
+    private final Map<Topic<?>, List<ListenerWithFilter<?>>> topicToListenerMap = new ConcurrentHashMap<>();
 
     private final Map<MessageListener<?>, String> listenerToSessionMap = new ConcurrentHashMap<>();
 
@@ -66,13 +69,34 @@ public abstract class AbstractEventBus implements DolphinEventBus {
     @Override
     public <T extends Serializable> void publish(final Topic<T> topic, final T data) {
         checkInitialization();
-        publish(topic, data, DefaultEventSessionFilter.getInstance());
-    }
 
-    @Override
-    public <T extends Serializable> void publish(final Topic<T> topic, final T data, final EventSessionFilter filter) {
-        checkInitialization();
-        publishData(topic, data, filter);
+        final DolphinEvent event = new DolphinEvent(topic, System.currentTimeMillis(), data);
+
+        event.addMetadata(EventConstants.TYPE_PARAM, EventConstants.TYPE_PLATFORM);
+
+        final DolphinContext currentContext = getCurrentContext();
+        if (currentContext != null) {
+            final ClientSession clientSession = currentContext.getDolphinSession();
+            if (clientSession != null) {
+                event.addMetadata(EventConstants.CLIENT_SESSION_PARAM, clientSession.getId());
+                final HttpSession httpSession = clientSession.getHttpSession();
+                if (httpSession != null) {
+                    event.addMetadata(EventConstants.HTTP_SESSION_PARAM, httpSession.getId());
+                }
+            }
+        }
+        //Handle listener in same session
+        if (currentContext != null) {
+            final List<ListenerWithFilter<T>> listenersInCurrentSession = getListenersForSessionAndTopic(currentContext.getId(), topic);
+            for (ListenerWithFilter<T> listenerAndFilter : listenersInCurrentSession) {
+                final EventFilter<T> filter = listenerAndFilter.getFilter();
+                final MessageListener<T> listener = listenerAndFilter.getListener();
+                if(filter == null || filter.shouldHandleEvent(event.getMessageEventContext())) {
+                    listener.onMessage(event);
+                }
+            }
+        }
+        publishForOtherSessions(event);
     }
 
     public <T extends Serializable> Subscription subscribe(final Topic<T> topic, final MessageListener<? super T> listener) {
@@ -86,20 +110,21 @@ public abstract class AbstractEventBus implements DolphinEventBus {
         }
         final String subscriptionSessionId = subscriptionContext.getId();
         LOG.trace("Adding subscription for topic {} in Dolphin Platform context {}", topic.getName(), subscriptionSessionId);
-        List<MessageListener<?>> listeners = topicToListenerMap.get(topic);
+        List<ListenerWithFilter<?>> listeners = topicToListenerMap.get(topic);
         if (listeners == null) {
             listeners = new CopyOnWriteArrayList<>();
             topicToListenerMap.put(topic, listeners);
         }
-        listeners.add(listener);
+        final ListenerWithFilter<? super T> listenerWithFilter = new ListenerWithFilter<>(listener);
+        listeners.add(listenerWithFilter);
         listenerToSessionMap.put(listener, subscriptionSessionId);
         final Subscription subscription = new Subscription() {
             @Override
             public void unsubscribe() {
                 LOG.trace("Removing subscription for topic {} in Dolphin Platform context {}", topic.getName(), subscriptionSessionId);
-                final List<MessageListener<?>> listeners = topicToListenerMap.get(topic);
+                final List<ListenerWithFilter<?>> listeners = topicToListenerMap.get(topic);
                 if (listeners != null) {
-                    listeners.remove(listener);
+                    listeners.remove(listenerWithFilter);
                 }
                 listenerToSessionMap.remove(listener);
                 removeSubscriptionForSession(this, subscriptionSessionId);
@@ -112,16 +137,16 @@ public abstract class AbstractEventBus implements DolphinEventBus {
     protected <T extends Serializable> void triggerEventHandling(final DolphinEvent<T> event) {
         Assert.requireNonNull(event, "event");
 
-        final Topic<T> topic = event.getTopic();
+        final Topic<T> topic = event.getMessageEventContext().getTopic();
         LOG.trace("Handling data for topic {}", topic.getName());
-        final List<MessageListener<?>> listeners = topicToListenerMap.get(topic);
+        final List<ListenerWithFilter<?>> listeners = topicToListenerMap.get(topic);
         if (listeners != null) {
-            for (final MessageListener<?> listener : listeners) {
-                final String sessionId = listenerToSessionMap.get(listener);
+            for (final ListenerWithFilter<?> listenerAndFilter : listeners) {
+                final String sessionId = listenerToSessionMap.get(listenerAndFilter.getListener());
                 if (sessionId == null) {
                     throw new RuntimeException("Internal Error! No session id defined for event bus listener!");
                 }
-                if (sessionId.equals(event.getSenderSessionId())) {
+                if (sendInCurrentClientSession(event)) {
                     // This listener was already called at the publish call
                     // since the event was called from the same session
                     LOG.trace("Event listener for topic {} was already called in Dolphin Platform context {}", topic.getName(), sessionId);
@@ -132,9 +157,10 @@ public abstract class AbstractEventBus implements DolphinEventBus {
                         @Override
                         public void run() {
                             LOG.trace("Calling event listener for topic {} in Dolphin Platform context {}", topic.getName(), sessionId);
-                            final EventSessionFilter sessionFilter = event.getSessionFilter();
-                            if(sessionFilter == null || sessionFilter.shouldHandleEvent(sessionId)) {
-                                ((MessageListener<T>) listener).onMessage(event.getMessage());
+                            final EventFilter<T> sessionFilter = (EventFilter<T>) listenerAndFilter.getFilter();
+                            final MessageListener<T> listener = (MessageListener<T>) listenerAndFilter.getListener();
+                            if (sessionFilter == null || sessionFilter.shouldHandleEvent(event.getMessageEventContext())) {
+                                listener.onMessage(event);
                             }
                         }
                     });
@@ -143,47 +169,46 @@ public abstract class AbstractEventBus implements DolphinEventBus {
         }
     }
 
+    private <T extends Serializable> boolean sendInCurrentClientSession(final DolphinEvent<T> event) {
+        Assert.requireNonNull(event, "event");
+
+        final DolphinContext currentContext = getCurrentContext();
+        if(currentContext != null) {
+            final ClientSession clientSession = currentContext.getDolphinSession();
+            if(clientSession != null) {
+                final MessageEventContext<T> eventContext = event.getMessageEventContext();
+                if(eventContext != null) {
+                    return EventSessionFilterFactory.allowSessions(clientSession).shouldHandleEvent(eventContext);
+                }
+            }
+        }
+        return false;
+    }
+
     protected abstract <T extends Serializable> void publishForOtherSessions(final DolphinEvent<T> event);
 
     private void checkInitialization() {
-        if(!initialized.get()) {
+        if (!initialized.get()) {
             throw new RuntimeException("EventBus not initialized");
         }
     }
 
-    private <T extends Serializable> List<MessageListener<T>> getListenersForSessionAndTopic(final String sessionId, final Topic<T> topic) {
+    private <T extends Serializable> List<ListenerWithFilter<T>> getListenersForSessionAndTopic(final String sessionId, final Topic<T> topic) {
         Assert.requireNonBlank(sessionId, "sessionId");
         Assert.requireNonNull(topic, "topic");
 
-        final List<MessageListener<?>> handlers = topicToListenerMap.get(topic);
+        final List<ListenerWithFilter<?>> handlers = topicToListenerMap.get(topic);
         if (handlers == null) {
             return Collections.emptyList();
         }
 
-        final List<MessageListener<T>> ret = new ArrayList<>();
-        for (MessageListener<?> listener : handlers) {
+        final List<ListenerWithFilter<T>> ret = new ArrayList<>();
+        for (ListenerWithFilter<?> listener : handlers) {
             if (sessionId.equals(listenerToSessionMap.get(listener))) {
-                ret.add((MessageListener<T>) listener);
+                ret.add((ListenerWithFilter<T>) listener);
             }
         }
         return ret;
-    }
-
-    private <T extends Serializable> void publishData(final Topic<T> topic, final T data, final EventSessionFilter filter) {
-        final DolphinContext currentContext = getCurrentContext();
-        final DolphinEvent event = new DolphinEvent(currentContext != null ? currentContext.getId() : null, new DefaultMessage(topic, data, System.currentTimeMillis()), filter);
-
-        //Handle listener in same session
-        if (currentContext != null) {
-            if (filter == null || filter.shouldHandleEvent(currentContext.getId())) {
-                final List<MessageListener<T>> listenersInCurrentSession = getListenersForSessionAndTopic(currentContext.getId(), topic);
-                for (MessageListener<T> listener : listenersInCurrentSession) {
-                    listener.onMessage(event.getMessage());
-                }
-            }
-        }
-
-        publishForOtherSessions(event);
     }
 
     private void addSubscriptionForSession(final Subscription subscription, final String dolphinSessionId) {
