@@ -116,7 +116,7 @@ public class DolphinContextTest {
         while (!contextList.isEmpty()) {
             DolphinContext dolphinContext = contextList.remove(0);
             for (DolphinContext toCompare : contextList) {
-                assertFalse(dolphinContext.getDolphinSession().equals(toCompare.getDolphinSession()));
+                assertFalse(dolphinContext.getClientSession().equals(toCompare.getClientSession()));
             }
         }
     }
@@ -129,7 +129,7 @@ public class DolphinContextTest {
         //then:
         assertNotNull(dolphinContext.getId());
         assertNotNull(dolphinContext.getBeanManager());
-        assertNotNull(dolphinContext.getDolphinSession());
+        assertNotNull(dolphinContext.getClientSession());
         assertNotNull(dolphinContext.getServerModelStore());
     }
 

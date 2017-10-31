@@ -85,7 +85,7 @@ public class DolphinPlatformSpringTestBootstrap {
     @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
     protected ClientSession createDolphinSession(final TestConfiguration testConfiguration) {
         Assert.requireNonNull(testConfiguration, "testConfiguration");
-        return testConfiguration.getDolphinTestContext().getDolphinSession();
+        return testConfiguration.getDolphinTestContext().getClientSession();
     }
 
     @Bean(name = "remotingContext")
@@ -97,7 +97,7 @@ public class DolphinPlatformSpringTestBootstrap {
         return new RemotingContext() {
             @Override
             public String getId() {
-                return testConfiguration.getDolphinTestContext().getDolphinSession().getId();
+                return testConfiguration.getDolphinTestContext().getClientSession().getId();
             }
 
             @Override
@@ -127,7 +127,7 @@ public class DolphinPlatformSpringTestBootstrap {
 
             @Override
             public ClientSession getClientSession() {
-                return testConfiguration.getDolphinTestContext().getDolphinSession();
+                return testConfiguration.getDolphinTestContext().getClientSession();
             }
         };
     }

@@ -76,7 +76,7 @@ public abstract class AbstractEventBus implements DolphinEventBus {
 
         final DolphinContext currentContext = getCurrentContext();
         if (currentContext != null) {
-            final ClientSession clientSession = currentContext.getDolphinSession();
+            final ClientSession clientSession = currentContext.getClientSession();
             if (clientSession != null) {
                 event.addMetadata(EventConstants.CLIENT_SESSION_PARAM, clientSession.getId());
                 final HttpSession httpSession = clientSession.getHttpSession();
@@ -179,7 +179,7 @@ public abstract class AbstractEventBus implements DolphinEventBus {
 
         final DolphinContext currentContext = getCurrentContext();
         if(currentContext != null) {
-            final ClientSession clientSession = currentContext.getDolphinSession();
+            final ClientSession clientSession = currentContext.getClientSession();
             if(clientSession != null) {
                 final MessageEventContext<T> eventContext = event.getMessageEventContext();
                 if(eventContext != null) {

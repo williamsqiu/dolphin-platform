@@ -349,7 +349,7 @@ public class DolphinContext {
         return results;
     }
 
-    public ClientSession getDolphinSession() {
+    public ClientSession getClientSession() {
         return clientSession;
     }
 

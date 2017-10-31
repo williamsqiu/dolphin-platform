@@ -74,6 +74,6 @@ public class RemotingContextImpl implements RemotingContext {
 
     @Override
     public ClientSession getClientSession() {
-        return dolphinContext.getDolphinSession();
+        return dolphinContext.getClientSession();
     }
 }
