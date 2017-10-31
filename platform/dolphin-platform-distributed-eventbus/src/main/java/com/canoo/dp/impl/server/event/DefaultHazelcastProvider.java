@@ -47,12 +47,16 @@ public class DefaultHazelcastProvider implements HazelcastProvider {
             final ClientConfig clientConfig = new ClientConfig();
             clientConfig.getNetworkConfig().addAddress(serverName + ":" + serverPort);
             clientConfig.getGroupConfig().setName(groupName);
+
+
             final SerializerConfig dolphinEventSerializerConfig = new SerializerConfig();
             dolphinEventSerializerConfig.setImplementation(new EventStreamSerializer(new Gson()));
             dolphinEventSerializerConfig.setClass(EventStreamSerializer.class);
             dolphinEventSerializerConfig.setTypeClass(MessageEvent.class);
             dolphinEventSerializerConfig.setTypeClassName(MessageEvent.class.getName());
             clientConfig.getSerializationConfig().getSerializerConfigs().add(dolphinEventSerializerConfig);
+
+
             hazelcastInstance = HazelcastClient.newHazelcastClient(clientConfig);
         }
         return hazelcastInstance;

@@ -24,7 +24,7 @@ import com.canoo.dp.impl.server.event.LazyEventBusInvocationHandler;
 import com.canoo.platform.remoting.BeanManager;
 import com.canoo.platform.remoting.server.RemotingContext;
 import com.canoo.platform.remoting.server.binding.PropertyBinder;
-import com.canoo.platform.remoting.server.event.DolphinEventBus;
+import com.canoo.platform.remoting.server.event.RemotingEventBus;
 import com.canoo.platform.server.javaee.ClientScoped;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -48,7 +48,7 @@ public class RemotingCdiBeanFactory {
 
     @Produces
     @ClientScoped
-    public RemotingContext createRemotingContext(DolphinEventBus eventBus) {
+    public RemotingContext createRemotingContext(RemotingEventBus eventBus) {
         Assert.requireNonNull(eventBus, "eventBus");
 
         final DolphinContextProvider contextProvider = PlatformBootstrap.getServerCoreComponents().getInstance(DolphinContextProvider.class);
@@ -62,8 +62,8 @@ public class RemotingCdiBeanFactory {
 
     @Produces
     @ApplicationScoped
-    public DolphinEventBus createEventBus() {
-        return (DolphinEventBus) Proxy.newProxyInstance(getClass().getClassLoader(), new Class[]{DolphinEventBus.class}, new LazyEventBusInvocationHandler());
+    public RemotingEventBus createEventBus() {
+        return (RemotingEventBus) Proxy.newProxyInstance(getClass().getClassLoader(), new Class[]{RemotingEventBus.class}, new LazyEventBusInvocationHandler());
     }
 
     @Produces

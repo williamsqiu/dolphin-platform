@@ -18,7 +18,7 @@ package com.canoo.platform.remoting.server;
 import com.canoo.platform.remoting.BeanManager;
 import com.canoo.platform.remoting.server.binding.PropertyBinder;
 import com.canoo.platform.server.client.ClientSession;
-import com.canoo.platform.remoting.server.event.DolphinEventBus;
+import com.canoo.platform.remoting.server.event.RemotingEventBus;
 
 /**
  * Facade to get access to all instances of a Dolphin Platform remoting context. Each {@link ClientSession} that uses the remoting layer of Dolphin Platform will contain exactly one remoting context.
@@ -57,7 +57,7 @@ public interface RemotingContext {
      * Returns the event bus for the context
      * @return the event bus
      */
-    DolphinEventBus getEventBus();
+    RemotingEventBus getEventBus();
 
     /**
      * Returns the client session for the context

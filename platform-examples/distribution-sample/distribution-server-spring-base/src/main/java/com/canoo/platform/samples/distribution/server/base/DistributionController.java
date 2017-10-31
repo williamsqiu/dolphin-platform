@@ -19,9 +19,9 @@ import com.canoo.platform.remoting.server.DolphinAction;
 import com.canoo.platform.remoting.server.DolphinController;
 import com.canoo.platform.remoting.server.DolphinModel;
 import com.canoo.platform.remoting.server.Param;
-import com.canoo.platform.remoting.server.event.DolphinEventBus;
+import com.canoo.platform.remoting.server.event.RemotingEventBus;
 import com.canoo.platform.remoting.server.event.EventFilter;
-import com.canoo.platform.remoting.server.event.EventSessionFilterFactory;
+import com.canoo.platform.remoting.server.event.EventFilterFactory;
 import com.canoo.platform.samples.distribution.common.model.ToDoList;
 import com.canoo.platform.server.client.ClientSession;
 
@@ -38,7 +38,7 @@ import static com.canoo.platform.samples.distribution.server.base.DistributionEv
 @DolphinController(CONTROLLER_NAME)
 public class DistributionController {
 
-    private final DolphinEventBus eventBus;
+    private final RemotingEventBus eventBus;
 
     private final ClientSession session;
 
@@ -46,14 +46,14 @@ public class DistributionController {
     private ToDoList toDoList;
 
     @Inject
-    public DistributionController(final DolphinEventBus eventBus, final ClientSession session) {
+    public DistributionController(final RemotingEventBus eventBus, final ClientSession session) {
         this.eventBus = eventBus;
         this.session = session;
     }
 
     @PostConstruct
     public void onInit() {
-        final EventFilter excludeMe = EventSessionFilterFactory.excludeClientSessions(session.getId());
+        final EventFilter excludeMe = EventFilterFactory.excludeClientSessions(session.getId());
         eventBus.subscribe(ITEM_REMOVED, message -> removeItem(message.getData()), excludeMe);
         eventBus.subscribe(ITEM_ADDED, message -> addItem(message.getData()), excludeMe);
     }

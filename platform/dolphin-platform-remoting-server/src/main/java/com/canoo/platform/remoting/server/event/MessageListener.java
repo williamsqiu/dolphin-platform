@@ -15,14 +15,19 @@
  */
 package com.canoo.platform.remoting.server.event;
 
+import org.apiguardian.api.API;
+
 import java.io.Serializable;
 
+import static org.apiguardian.api.API.Status.MAINTAINED;
+
 /**
- * A handler that can be registered to the dolphin message bus (see {@link DolphinEventBus})
+ * A handler that can be registered to the dolphin message bus (see {@link RemotingEventBus})
  * to receive publish messages (see {@link Message}).
  *
  * @author Hendrik Ebbers
  */
+@API(since = "0.x", status = MAINTAINED)
 public interface MessageListener<T extends Serializable> {
 
     /**

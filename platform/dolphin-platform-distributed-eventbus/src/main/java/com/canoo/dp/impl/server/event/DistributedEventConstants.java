@@ -1,5 +1,10 @@
 package com.canoo.dp.impl.server.event;
 
+import org.apiguardian.api.API;
+
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "1.0.0.RC1", status = INTERNAL)
 public interface DistributedEventConstants {
 
     String SPEC_VERSION_PARAM = "shared-event-spec-version";

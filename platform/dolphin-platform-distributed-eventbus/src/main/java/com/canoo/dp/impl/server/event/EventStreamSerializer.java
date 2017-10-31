@@ -12,6 +12,7 @@ import com.google.gson.JsonParser;
 import com.hazelcast.nio.ObjectDataInput;
 import com.hazelcast.nio.ObjectDataOutput;
 import com.hazelcast.nio.serialization.StreamSerializer;
+import org.apiguardian.api.API;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -33,7 +34,9 @@ import static com.canoo.dp.impl.server.event.DistributedEventConstants.SPEC_VERS
 import static com.canoo.dp.impl.server.event.DistributedEventConstants.TIMESTAMP_PARAM;
 import static com.canoo.dp.impl.server.event.DistributedEventConstants.TOPIC_PARAM;
 import static com.canoo.dp.impl.server.event.DistributedEventConstants.TYPE_ID;
+import static org.apiguardian.api.API.Status.INTERNAL;
 
+@API(since = "1.0.0.RC1", status = INTERNAL)
 public class EventStreamSerializer implements StreamSerializer<DolphinEvent<?>> {
 
     private final Gson gson;

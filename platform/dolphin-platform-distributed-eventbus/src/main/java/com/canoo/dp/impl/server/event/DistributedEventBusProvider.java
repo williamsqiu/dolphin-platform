@@ -17,7 +17,7 @@ package com.canoo.dp.impl.server.event;
 
 import com.canoo.dp.impl.server.config.RemotingConfiguration;
 import com.canoo.platform.remoting.server.spi.EventBusProvider;
-import com.canoo.platform.remoting.server.event.DolphinEventBus;
+import com.canoo.platform.remoting.server.event.RemotingEventBus;
 import org.apiguardian.api.API;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,7 +39,7 @@ public class DistributedEventBusProvider implements EventBusProvider {
         return DISTRIBUTED_EVENTBUS_NAME;
     }
 
-    public DolphinEventBus create(final RemotingConfiguration configuration) {
+    public RemotingEventBus create(final RemotingConfiguration configuration) {
         LOG.debug("creating distributed event bus");
 
         HazelcastProvider hazelcastProvider = null;

@@ -17,12 +17,15 @@ package com.canoo.platform.remoting.server.event;
 
 import com.canoo.platform.core.functional.Subscription;
 import com.canoo.platform.remoting.server.DolphinController;
+import org.apiguardian.api.API;
 
 import java.io.Serializable;
 
+import static org.apiguardian.api.API.Status.EXPERIMENTAL;
+
 /**
  * The dolphin event bus that can be used to withContent messages to dolphin sessions.
- * The {@link DolphinEventBus} can be injected in any
+ * The {@link RemotingEventBus} can be injected in any
  * managed bean and will automatically publish the given data in the dolphin session.
  * This means that you ca subscribe your dolphin controller (see {@link DolphinController})
  * to the event bus and publish messages from any other bean like an REST endpoint.
@@ -31,7 +34,8 @@ import java.io.Serializable;
  *
  * @author Hendrik Ebbers
  */
-public interface DolphinEventBus {
+@API(since = "1.0.0.RC1", status = EXPERIMENTAL)
+public interface RemotingEventBus {
 
     /**
      * Publish a message to the given topic
@@ -57,7 +61,7 @@ public interface DolphinEventBus {
      *
      * @param topic    the topic
      * @param listener the listener
-     * @param filter   todo
+     * @param filter   the filter
      */
     <T extends Serializable> Subscription subscribe(Topic<T> topic, MessageListener<? super T> listener, EventFilter filter);
 }

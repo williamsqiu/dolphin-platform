@@ -4,16 +4,20 @@ import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.server.event.ClientSessionEventFilter;
 import com.canoo.dp.impl.server.event.HttpSessionEventFilter;
 import com.canoo.platform.server.client.ClientSession;
+import org.apiguardian.api.API;
 
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
+
+import static org.apiguardian.api.API.Status.EXPERIMENTAL;
 
 /**
  * A factory that provides some common implementations for the {@link EventFilter}.
  *
  * @author Hendrik Ebbers
  */
-public class EventSessionFilterFactory {
+@API(since = "1.0.0.RC1", status = EXPERIMENTAL)
+public class EventFilterFactory {
 
     public static EventFilter allowSessions(final ClientSession clientSession) {
         Assert.requireNonNull(clientSession, "clientSession");

@@ -21,10 +21,10 @@ import com.canoo.dp.impl.server.context.DolphinContext;
 import com.canoo.dp.impl.server.context.DolphinContextProvider;
 import com.canoo.platform.core.functional.Callback;
 import com.canoo.platform.core.functional.Subscription;
-import com.canoo.platform.remoting.server.event.EventSessionFilterFactory;
+import com.canoo.platform.remoting.server.event.EventFilterFactory;
 import com.canoo.platform.remoting.server.event.MessageEventContext;
+import com.canoo.platform.remoting.server.event.RemotingEventBus;
 import com.canoo.platform.server.client.ClientSession;
-import com.canoo.platform.remoting.server.event.DolphinEventBus;
 import com.canoo.platform.remoting.server.event.EventFilter;
 import com.canoo.platform.remoting.server.event.MessageListener;
 import com.canoo.platform.remoting.server.event.Topic;
@@ -41,7 +41,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public abstract class AbstractEventBus implements DolphinEventBus {
+public abstract class AbstractEventBus implements RemotingEventBus {
 
     private static final Logger LOG = LoggerFactory.getLogger(AbstractEventBus.class);
 
@@ -183,7 +183,7 @@ public abstract class AbstractEventBus implements DolphinEventBus {
             if(clientSession != null) {
                 final MessageEventContext<T> eventContext = event.getMessageEventContext();
                 if(eventContext != null) {
-                    return EventSessionFilterFactory.allowClientSessions(listenerToSessionMap.get(listener)).shouldHandleEvent(eventContext);
+                    return EventFilterFactory.allowClientSessions(listenerToSessionMap.get(listener)).shouldHandleEvent(eventContext);
                 }
             }
         }
