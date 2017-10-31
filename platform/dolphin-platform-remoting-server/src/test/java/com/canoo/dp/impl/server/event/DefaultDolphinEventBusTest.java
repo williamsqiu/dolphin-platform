@@ -15,7 +15,7 @@ import com.canoo.platform.core.functional.Callback;
 import com.canoo.platform.core.functional.Subscription;
 import com.canoo.platform.server.client.ClientSession;
 import com.canoo.platform.remoting.server.event.DolphinEventBus;
-import com.canoo.platform.remoting.server.event.Message;
+import com.canoo.platform.remoting.server.event.MessageEvent;
 import com.canoo.platform.remoting.server.event.MessageListener;
 import com.canoo.platform.remoting.server.event.Topic;
 import org.testng.Assert;
@@ -39,7 +39,7 @@ public class DefaultDolphinEventBusTest {
         DolphinEventBus eventBus = create(null);
         eventBus.subscribe(TEST_TOPIC, new MessageListener<String>() {
             @Override
-            public void onMessage(Message<String> message) {
+            public void onMessage(MessageEvent<String> message) {
             }
         });
         Assert.fail();
@@ -59,7 +59,7 @@ public class DefaultDolphinEventBusTest {
         DolphinEventBus eventBus = create(createContext());
         eventBus.subscribe(TEST_TOPIC, new MessageListener<String>() {
             @Override
-            public void onMessage(Message<String> message) {
+            public void onMessage(MessageEvent<String> message) {
                 calledCheck.set(true);
             }
         });
@@ -78,7 +78,7 @@ public class DefaultDolphinEventBusTest {
         DolphinEventBus eventBus = create(createContext());
         Subscription subscription = eventBus.subscribe(TEST_TOPIC, new MessageListener<String>() {
             @Override
-            public void onMessage(Message<String> message) {
+            public void onMessage(MessageEvent<String> message) {
                 calledCheck.set(true);
             }
         });
