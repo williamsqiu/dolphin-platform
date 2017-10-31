@@ -2,7 +2,7 @@ package com.canoo.dp.impl.server.event;
 
 public interface DistributedEventConstants {
 
-    String SPEC_VERSION_PARAM = "spec";
+    String SPEC_VERSION_PARAM = "shared-event-spec-version";
 
     String SPEC_1_0 = "1.0";
 
@@ -10,7 +10,7 @@ public interface DistributedEventConstants {
 
     String DATA_PARAM = "data";
 
-    String CONTEXT_PARAM = "data";
+    String CONTEXT_PARAM = "context";
 
     String TOPIC_PARAM = "topic";
 

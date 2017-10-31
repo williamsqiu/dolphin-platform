@@ -102,7 +102,6 @@ public class EventStreamSerializer implements StreamSerializer<DolphinEvent<?>> 
         return root;
     }
 
-
     @Override
     public DolphinEvent<?> read(ObjectDataInput in) throws IOException {
         final JsonElement root = new JsonParser().parse(in.readUTF());
