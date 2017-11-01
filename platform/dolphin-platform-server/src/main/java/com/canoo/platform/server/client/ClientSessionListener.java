@@ -16,6 +16,9 @@
 package com.canoo.platform.server.client;
 
 import com.canoo.platform.server.ServerListener;
+import org.apiguardian.api.API;
+
+import static org.apiguardian.api.API.Status.MAINTAINED;
 
 /**
  * A listener interface to observe the lifecycle of a {@link ClientSession}. Each implemenetation of this
@@ -28,6 +31,7 @@ import com.canoo.platform.server.ServerListener;
  * @see ServerListener
  * @see ClientSession
  */
+@API(since = "0.x", status = MAINTAINED)
 public interface ClientSessionListener {
 
     /**

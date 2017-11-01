@@ -17,8 +17,12 @@ package com.canoo.impl.dp.spring.test;
 
 import com.canoo.dp.impl.server.spring.AbstractSpringManagedBeanFactory;
 import com.canoo.dp.impl.platform.core.Assert;
+import org.apiguardian.api.API;
 import org.springframework.context.ApplicationContext;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public class TestSpringManagedBeanFactory extends AbstractSpringManagedBeanFactory {
 
     private final ApplicationContext webApplicationContext;

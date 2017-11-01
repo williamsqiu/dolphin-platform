@@ -17,10 +17,14 @@ package com.canoo.dp.impl.server.config;
 
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.core.PlatformConfiguration;
+import org.apiguardian.api.API;
 
 import java.util.Arrays;
 import java.util.List;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public class DefaultModuleConfig {
 
     public static final String USE_CROSS_SITE_ORIGIN_FILTER = "useCrossSiteOriginFilter";

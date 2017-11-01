@@ -15,15 +15,20 @@
  */
 package com.canoo.platform.server.spi;
 
+import org.apiguardian.api.API;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+
+import static org.apiguardian.api.API.Status.EXPERIMENTAL;
 
 /**
  * A simple implementation of {@link ConfigurationProvider} that can be used as a base for a custom implementation. By default all methods return an empty map.
  *
  * @author Hendrik Ebbers
  */
+@API(since = "0.x", status = EXPERIMENTAL)
 public class ConfigurationProviderAdapter implements ConfigurationProvider {
     @Override
     public Map<String, String> getStringProperties() {

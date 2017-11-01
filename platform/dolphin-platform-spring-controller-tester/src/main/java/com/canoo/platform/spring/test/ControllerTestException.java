@@ -15,11 +15,16 @@
  */
 package com.canoo.platform.spring.test;
 
+import org.apiguardian.api.API;
+
+import static org.apiguardian.api.API.Status.MAINTAINED;
+
 /**
  * Exception that is used when testing controllers.
  *
  * @author Hendrik Ebbers
  */
+@API(since = "0.x", status = MAINTAINED)
 public class ControllerTestException extends RuntimeException {
 
     private static final long serialVersionUID = 3143922465764428023L;

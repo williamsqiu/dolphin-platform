@@ -16,10 +16,14 @@
 package com.canoo.dp.impl.server.servlet;
 
 import com.canoo.dp.impl.platform.core.Assert;
+import org.apiguardian.api.API;
 
 import java.io.Serializable;
 import java.util.concurrent.Callable;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public class Mutex implements Serializable {
 
     public <T> T sync(final Callable<T> callable) throws Exception {

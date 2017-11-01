@@ -18,7 +18,11 @@ package com.canoo.impl.dp.spring.test;
 import com.canoo.dp.impl.server.spring.ClientScopeImpl;
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.server.client.ClientSession;
+import org.apiguardian.api.API;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public class TestClientScope extends ClientScopeImpl {
 
     private final ClientSession clientSession;

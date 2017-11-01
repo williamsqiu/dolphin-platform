@@ -15,6 +15,10 @@
  */
 package com.canoo.platform.server.spi;
 
+import org.apiguardian.api.API;
+
+import static org.apiguardian.api.API.Status.EXPERIMENTAL;
+
 /**
  * Exception that will be thrown if a module can not be initialized.
  *
@@ -22,6 +26,7 @@ package com.canoo.platform.server.spi;
  *
  * @author Hendrik Ebbers
  */
+@API(since = "0.x", status = EXPERIMENTAL)
 public class ModuleInitializationException extends Exception {
 
     /**

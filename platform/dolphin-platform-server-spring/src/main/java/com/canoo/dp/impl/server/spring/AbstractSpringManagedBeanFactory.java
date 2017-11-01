@@ -18,12 +18,16 @@ package com.canoo.dp.impl.server.spring;
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.server.beans.ManagedBeanFactory;
 import com.canoo.dp.impl.server.beans.PostConstructInterceptor;
+import org.apiguardian.api.API;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.context.ApplicationContext;
 
 import javax.servlet.ServletContext;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public abstract class AbstractSpringManagedBeanFactory implements ManagedBeanFactory {
 
     @Override

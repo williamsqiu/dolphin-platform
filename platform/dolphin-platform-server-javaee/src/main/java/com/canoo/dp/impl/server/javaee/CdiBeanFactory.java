@@ -20,9 +20,12 @@ import com.canoo.dp.impl.server.bootstrap.PlatformBootstrap;
 import com.canoo.dp.impl.server.client.ClientSessionProvider;
 import com.canoo.platform.server.client.ClientSession;
 import com.canoo.platform.server.javaee.ClientScoped;
+import org.apiguardian.api.API;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
+
+import static org.apiguardian.api.API.Status.INTERNAL;
 
 /**
  * Factory that provides all needed Dolphin Platform extensions as CDI beans.
@@ -30,6 +33,7 @@ import javax.enterprise.inject.Produces;
  * @author Hendrik Ebbers
  */
 @ApplicationScoped
+@API(since = "0.x", status = INTERNAL)
 public class CdiBeanFactory {
 
     @Produces

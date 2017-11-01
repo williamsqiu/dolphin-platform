@@ -16,6 +16,9 @@
 package com.canoo.platform.spring.test;
 
 import com.canoo.platform.remoting.server.DolphinController;
+import org.apiguardian.api.API;
+
+import static org.apiguardian.api.API.Status.MAINTAINED;
 
 /**
  * Basic interface for testing a Dolpgin Platform controller (see {@link DolphinController}).
@@ -23,6 +26,7 @@ import com.canoo.platform.remoting.server.DolphinController;
  *
  * @author Hendrik Ebbers
  */
+@API(since = "0.x", status = MAINTAINED)
 public interface ControllerTest {
 
     /**

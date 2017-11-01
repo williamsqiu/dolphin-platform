@@ -18,10 +18,13 @@ package com.canoo.dp.impl.server.javaee;
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.server.beans.PostConstructInterceptor;
 import org.apache.deltaspike.core.util.metadata.builder.ContextualLifecycle;
+import org.apiguardian.api.API;
 
 import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.InjectionTarget;
+
+import static org.apiguardian.api.API.Status.INTERNAL;
 
 /**
  * Implements a CDI Lifecylce for Dolphin Platform Controllers
@@ -30,6 +33,7 @@ import javax.enterprise.inject.spi.InjectionTarget;
  *
  * @author Hendrik Ebbers
  */
+@API(since = "0.x", status = INTERNAL)
 public class DolphinPlatformContextualLifecycle<T> implements ContextualLifecycle<T> {
 
     private final InjectionTarget<T> injectionTarget;

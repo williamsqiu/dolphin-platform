@@ -17,6 +17,7 @@ package com.canoo.dp.impl.server.config;
 
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.server.spi.ConfigurationProvider;
+import org.apiguardian.api.API;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,6 +27,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.ServiceLoader;
+
+import static org.apiguardian.api.API.Status.INTERNAL;
 
 /**
  * This class loads a Dolphin Platform configuration (see {@link DefaultPlatformConfiguration}) based on a property file.
@@ -40,6 +43,7 @@ import java.util.ServiceLoader;
  * <p>
  * All properties that are not specified in the property file will be defined by default values.
  */
+@API(since = "0.x", status = INTERNAL)
 public class ConfigurationFileLoader {
 
     private static final Logger LOG = LoggerFactory.getLogger(ConfigurationFileLoader.class);

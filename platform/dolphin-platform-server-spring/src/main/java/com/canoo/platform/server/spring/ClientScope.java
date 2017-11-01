@@ -16,6 +16,7 @@
 package com.canoo.platform.server.spring;
 
 import com.canoo.dp.impl.server.spring.ClientScopeImpl;
+import org.apiguardian.api.API;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.core.annotation.AliasFor;
@@ -26,6 +27,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import static org.apiguardian.api.API.Status.MAINTAINED;
+
 /**
  * A custom scope that is bound to the lifecycle of a {@link com.canoo.platform.server.client.ClientSession}
  *
@@ -35,6 +38,7 @@ import java.lang.annotation.Target;
 @Documented
 @Target({ ElementType.TYPE, ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
+@API(since = "0.x", status = MAINTAINED)
 public @interface ClientScope {
 
     /**

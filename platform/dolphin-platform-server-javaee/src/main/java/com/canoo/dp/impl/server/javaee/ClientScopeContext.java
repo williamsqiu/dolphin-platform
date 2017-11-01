@@ -22,12 +22,16 @@ import com.canoo.platform.server.client.ClientSession;
 import com.canoo.platform.server.javaee.ClientScoped;
 import org.apache.deltaspike.core.util.context.AbstractContext;
 import org.apache.deltaspike.core.util.context.ContextualStorage;
+import org.apiguardian.api.API;
 
 import javax.enterprise.context.ContextException;
 import javax.enterprise.context.spi.Contextual;
 import javax.enterprise.inject.spi.BeanManager;
 import java.lang.annotation.Annotation;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public class ClientScopeContext extends AbstractContext {
 
     private final static String CLIENT_STORAGE_ATTRIBUTE = "DolphinPlatformCdiContextualStorage";

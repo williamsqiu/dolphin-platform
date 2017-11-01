@@ -17,11 +17,15 @@ package com.canoo.dp.impl.server.config;
 
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.core.PlatformConfiguration;
+import org.apiguardian.api.API;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public final class DefaultPlatformConfiguration implements PlatformConfiguration {
 
     private static final Logger LOG = LoggerFactory.getLogger(DefaultPlatformConfiguration.class);

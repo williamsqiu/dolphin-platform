@@ -16,15 +16,19 @@
 package com.canoo.dp.impl.server.client;
 
 import com.canoo.dp.impl.platform.core.Assert;
+import org.apiguardian.api.API;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
 /**
  * A {@link HttpSessionListener} that destroys all {@link DolphinContext} instances for a session
  */
+@API(since = "0.x", status = INTERNAL)
 public class HttpSessionCleanerListener implements HttpSessionListener {
 
     private static final Logger LOG = LoggerFactory.getLogger(HttpSessionCleanerListener.class);

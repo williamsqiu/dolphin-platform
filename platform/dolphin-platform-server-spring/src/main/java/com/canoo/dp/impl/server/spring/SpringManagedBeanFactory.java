@@ -16,13 +16,17 @@
 package com.canoo.dp.impl.server.spring;
 
 import com.canoo.dp.impl.server.beans.ManagedBeanFactory;
+import org.apiguardian.api.API;
 import org.springframework.context.ApplicationContext;
+
+import static org.apiguardian.api.API.Status.INTERNAL;
 
 /**
  * Spring specific implementation of the {@link ManagedBeanFactory} interface
  *
  * @author Hendrik Ebbers
  */
+@API(since = "0.x", status = INTERNAL)
 public class SpringManagedBeanFactory extends AbstractSpringManagedBeanFactory {
 
     /**

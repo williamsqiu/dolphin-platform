@@ -1,5 +1,6 @@
 package com.canoo.platform.server.spring;
 
+import org.apiguardian.api.API;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
@@ -11,6 +12,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import static org.apiguardian.api.API.Status.MAINTAINED;
+
 /**
  * A Spring {@link Scope} annotation for the prototype scope.
  *
@@ -20,6 +23,7 @@ import java.lang.annotation.Target;
 @Documented
 @Target({ ElementType.TYPE, ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
+@API(since = "0.x", status = MAINTAINED)
 public @interface PrototypeScope {
 
     /**

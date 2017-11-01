@@ -17,6 +17,7 @@ package com.canoo.dp.impl.server.client;
 
 import com.canoo.platform.server.client.ClientSession;
 import com.canoo.dp.impl.platform.core.Assert;
+import org.apiguardian.api.API;
 
 import javax.servlet.http.HttpSession;
 import java.util.Collections;
@@ -25,9 +26,12 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
 /**
  * Default implementation of {@link ClientSession} that uses a map internally to store all attributes
  */
+@API(since = "0.x", status = INTERNAL)
 public class HttpClientSessionImpl implements ClientSession {
 
     private final Map<String, Object> store;

@@ -18,12 +18,16 @@ package com.canoo.dp.impl.server.servlet;
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.server.config.DefaultModuleConfig;
 import com.canoo.platform.core.PlatformConfiguration;
+import org.apiguardian.api.API;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public class HttpSessionTimeoutListener implements HttpSessionListener {
 
     private static final Logger LOG = LoggerFactory.getLogger(HttpSessionTimeoutListener.class);

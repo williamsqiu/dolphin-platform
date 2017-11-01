@@ -15,11 +15,16 @@
  */
 package com.canoo.platform.server.javaee;
 
+import org.apiguardian.api.API;
+
 import javax.inject.Scope;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+
+import static org.apiguardian.api.API.Status.INTERNAL;
+import static org.apiguardian.api.API.Status.MAINTAINED;
 
 /**
  * A custom scope that is bound to the lifecycle of a {@link com.canoo.dolphin.server.DolphinSession}
@@ -29,5 +34,6 @@ import java.lang.annotation.Target;
 @Scope
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE, ElementType.METHOD,ElementType.FIELD})
+@API(since = "0.x", status = MAINTAINED)
 public @interface ClientScoped {
 }

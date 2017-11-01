@@ -16,9 +16,12 @@
 package com.canoo.platform.server.spi;
 
 import com.canoo.platform.core.PlatformConfiguration;
+import org.apiguardian.api.API;
 
 import java.util.List;
 import java.util.Map;
+
+import static org.apiguardian.api.API.Status.EXPERIMENTAL;
 
 /**
  * A provider for configuration properties. This can be used to define the default values for all the properties of a module.
@@ -27,6 +30,7 @@ import java.util.Map;
  *
  * @see PlatformConfiguration
  */
+@API(since = "0.x", status = EXPERIMENTAL)
 public interface ConfigurationProvider {
 
     /**
