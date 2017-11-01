@@ -4,6 +4,7 @@ import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.remoting.server.event.MessageEventContext;
 import com.canoo.platform.remoting.server.event.Topic;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
@@ -14,13 +15,8 @@ import com.hazelcast.nio.ObjectDataOutput;
 import com.hazelcast.nio.serialization.StreamSerializer;
 import org.apiguardian.api.API;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.util.Base64;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -41,29 +37,17 @@ public class EventStreamSerializer implements StreamSerializer<DolphinEvent<?>> 
 
     private final Gson gson;
 
-    public EventStreamSerializer(final Gson gson) {
+    private EventStreamSerializer(final Gson gson) {
         this.gson = Assert.requireNonNull(gson, "gson");
+    }
+
+    public EventStreamSerializer() {
+        this(new GsonBuilder().serializeNulls().create());
     }
 
     @Override
     public void write(ObjectDataOutput out, DolphinEvent<?> event) throws IOException {
         out.writeUTF(gson.toJson(convertToJson(event)));
-    }
-
-    private String toBase64(Serializable data) throws IOException {
-        final ByteArrayOutputStream rawOutputStream = new ByteArrayOutputStream();
-        final ObjectOutputStream dataOutputStream = new ObjectOutputStream(rawOutputStream);
-        dataOutputStream.writeObject(data);
-        Base64.Encoder encoder = Base64.getEncoder();
-        return encoder.encodeToString(rawOutputStream.toByteArray());
-    }
-
-    private Serializable fromBase64(String data) throws IOException, ClassNotFoundException {
-        final Base64.Decoder decoder = Base64.getDecoder();
-        final byte[] raw = decoder.decode(data);
-        final ByteArrayInputStream rawInputStream = new ByteArrayInputStream(raw);
-        final ObjectInputStream dataInputStream = new ObjectInputStream(rawInputStream);
-        return (Serializable) dataInputStream.readObject();
     }
 
     private JsonObject convertToJson(final DolphinEvent<?> event) throws IOException {
@@ -73,7 +57,7 @@ public class EventStreamSerializer implements StreamSerializer<DolphinEvent<?>> 
 
         final Serializable data = event.getData();
         if (data != null) {
-            root.addProperty(DATA_PARAM, toBase64(data));
+            root.addProperty(DATA_PARAM, Base64Utils.toBase64(data));
         } else {
             root.add(DATA_PARAM, JsonNull.INSTANCE);
         }
@@ -95,7 +79,7 @@ public class EventStreamSerializer implements StreamSerializer<DolphinEvent<?>> 
             final JsonObject metadataEntry = new JsonObject();
             metadataEntry.addProperty(METADATA_KEY_PARAM, key);
             if (data != null) {
-                metadataEntry.addProperty(METADATA_VALUE_PARAM, toBase64(data));
+                metadataEntry.addProperty(METADATA_VALUE_PARAM, Base64Utils.toBase64(data));
             } else {
                 metadataEntry.add(METADATA_VALUE_PARAM, JsonNull.INSTANCE);
             }
@@ -154,7 +138,7 @@ public class EventStreamSerializer implements StreamSerializer<DolphinEvent<?>> 
             data = null;
         } else if (dataElement.isJsonPrimitive() && dataElement.getAsJsonPrimitive().isString()) {
             try {
-                data = fromBase64(dataElement.getAsJsonPrimitive().getAsString());
+                data = Base64Utils.fromBase64(dataElement.getAsJsonPrimitive().getAsString());
             } catch (ClassNotFoundException e) {
                 throw new IllegalArgumentException("Input can not be parsed! Data can not be parsed");
             }
@@ -196,7 +180,7 @@ public class EventStreamSerializer implements StreamSerializer<DolphinEvent<?>> 
                 event.addMetadata(metadataKey, null);
             } else {
                 try {
-                    event.addMetadata(metadataKey, fromBase64(metadataElement.getAsJsonObject().get(METADATA_VALUE_PARAM).getAsJsonPrimitive().getAsString()));
+                    event.addMetadata(metadataKey, Base64Utils.fromBase64(metadataElement.getAsJsonObject().get(METADATA_VALUE_PARAM).getAsJsonPrimitive().getAsString()));
                 } catch (ClassNotFoundException e) {
                     throw new IllegalArgumentException("Input can not be parsed! metadata for key '" + metadataKey + "' can not be parsed");
                 }

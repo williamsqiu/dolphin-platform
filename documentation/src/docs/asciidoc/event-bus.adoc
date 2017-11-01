@@ -259,7 +259,7 @@ addtion a already defined Hazelcast client that is provided by Spring or JavaEE 
 
 === Specification of the distributed event bus protocol
 
-The distributed event bus communications over hazelcast by sending and receiving events in JSON. To provide
+The distributed event bus communicates over hazelcast by sending and receiving events in JSON. To provide
 communication with other Canoo and 3rd Party frameworks we specified the JSON that defines an event of the
 distributed event bus. Both Canoo frameworks Dolphin Platform and ULC provide an implementation of an
 distributed event bus that is based on version 1.0 of this spec.
