@@ -1,9 +1,10 @@
 package com.canoo.dp.impl.server.event;
 
 import com.canoo.platform.remoting.server.event.Topic;
-import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.hazelcast.nio.ObjectDataInput;
@@ -39,7 +40,7 @@ public class EventStreamSerializerTests {
         final DolphinEvent<String> dolphinEvent = new DolphinEvent<>(topic, timestamp, data);
 
         //when
-        final JsonElement root = convert(dolphinEvent);
+        final JsonElement root = convertToJson(dolphinEvent);
 
         //then
         checkJsonSchema(root);
@@ -59,7 +60,7 @@ public class EventStreamSerializerTests {
         final DolphinEvent<String> dolphinEvent = new DolphinEvent<>(topic, timestamp, data);
 
         //when
-        final JsonElement root = convert(dolphinEvent);
+        final JsonElement root = convertToJson(dolphinEvent);
 
         //then
         checkJsonSchema(root);
@@ -75,7 +76,7 @@ public class EventStreamSerializerTests {
         final DolphinEvent<LocalDateTime> dolphinEvent = new DolphinEvent<>(topic, timestamp, data);
 
         //when
-        final JsonElement root = convert(dolphinEvent);
+        final JsonElement root = convertToJson(dolphinEvent);
 
         //then
         checkJsonSchema(root);
@@ -104,7 +105,7 @@ public class EventStreamSerializerTests {
         dolphinEvent.addMetadata(key3, value3);
 
         //when
-        final JsonElement root = convert(dolphinEvent);
+        final JsonElement root = convertToJson(dolphinEvent);
 
         //then
         checkJsonSchema(root);
@@ -144,6 +145,29 @@ public class EventStreamSerializerTests {
         Assert.assertTrue(event.getMessageEventContext().getMetadata().isEmpty());
     }
 
+    @Test
+    public void testEventWithNullDataFromJson() throws IOException, ClassNotFoundException {
+        //given
+        final Topic<String> topic = Topic.create("test-topic");
+        final long timestamp = System.currentTimeMillis();
+
+        final JsonObject root = new JsonObject();
+        root.addProperty(SPEC_VERSION_PARAM, SPEC_1_0);
+        root.add(DATA_PARAM, JsonNull.INSTANCE);
+        final JsonObject context = new JsonObject();
+        context.addProperty(TIMESTAMP_PARAM, timestamp);
+        context.addProperty(TOPIC_PARAM, topic.getName());
+        context.add(METADATA_PARAM, new JsonArray());
+        root.add(CONTEXT_PARAM, context);
+        checkJsonSchema(root);
+
+        //when
+        final DolphinEvent<?> event = convertToEvent(root);
+
+        //then
+        Assert.assertEquals(event.getData(), null);
+    }
+
     private Serializable getMetadataValueForKey(final JsonArray metadataArray, final String key) throws IOException, ClassNotFoundException {
         final Iterator<JsonElement> elementIterator = metadataArray.iterator();
         while (elementIterator.hasNext()) {
@@ -160,7 +184,7 @@ public class EventStreamSerializerTests {
         throw new IllegalStateException("metadata do not contain key '" + key + "'");
     }
 
-    private <T extends Serializable> JsonElement convert(DolphinEvent<T> event) throws IOException {
+    private <T extends Serializable> JsonElement convertToJson(DolphinEvent<T> event) throws IOException {
         final EventStreamSerializer streamSerializer = new EventStreamSerializer();
         final ObjectDataOutput output = new ByteObjectDataOutput();
         streamSerializer.write(output, event);
@@ -371,7 +395,7 @@ public class EventStreamSerializerTests {
 
         @Override
         public String readUTF() throws IOException {
-            return new Gson().toJson(jsonElement);
+            return new GsonBuilder().serializeNulls().create().toJson(jsonElement);
         }
     }
 
