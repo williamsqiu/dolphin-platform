@@ -17,7 +17,11 @@ package com.canoo.dp.impl.server.context;
 
 import com.canoo.platform.core.functional.Callback;
 import com.canoo.platform.server.client.ClientSession;
+import org.apiguardian.api.API;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public interface DolphinContextFactory {
 
     DolphinContext create(final ClientSession clientSession, Callback<DolphinContext> onDestroyCallback );

@@ -15,8 +15,13 @@
  */
 package com.canoo.dp.impl.server.event;
 
+import org.apiguardian.api.API;
+
 import java.io.Serializable;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public class DefaultDolphinEventBus extends AbstractEventBus {
 
     @Override

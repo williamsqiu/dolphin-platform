@@ -17,11 +17,15 @@ package com.canoo.dp.impl.server.legacy;
 
 import com.canoo.dp.impl.remoting.legacy.RemotingConstants;
 import com.canoo.dp.impl.remoting.legacy.core.BasePresentationModel;
+import org.apiguardian.api.API;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public class ServerPresentationModel extends BasePresentationModel<ServerAttribute> {
 
     private static final Logger LOG = LoggerFactory.getLogger(ServerPresentationModel.class);

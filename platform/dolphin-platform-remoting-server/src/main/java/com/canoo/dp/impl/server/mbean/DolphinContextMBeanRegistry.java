@@ -20,10 +20,14 @@ import com.canoo.dp.impl.server.gc.GarbageCollector;
 import com.canoo.dp.impl.server.mbean.beans.*;
 import com.canoo.platform.core.functional.Subscription;
 import com.canoo.platform.server.client.ClientSession;
+import org.apiguardian.api.API;
+
+import static org.apiguardian.api.API.Status.INTERNAL;
 
 /**
  * Helper method to register MBeans for Dolphin Platform
  */
+@API(since = "0.x", status = INTERNAL)
 public class DolphinContextMBeanRegistry {
 
     private final String dolphinContextId;

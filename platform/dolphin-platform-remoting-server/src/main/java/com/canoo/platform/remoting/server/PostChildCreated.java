@@ -15,12 +15,15 @@
  */
 package com.canoo.platform.remoting.server;
 
+import org.apiguardian.api.API;
+
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import static org.apiguardian.api.API.Status.MAINTAINED;
 
 /**
  * Can you used to annotate a method in a dolphin controller (see {@link DolphinController}) as an event handler that will automatically be called if a child controller was created for the given controller (see client API).
@@ -35,5 +38,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Documented
 @Retention(RUNTIME)
 @Target(ElementType.METHOD)
+@API(since = "0.x", status = MAINTAINED)
 public @interface PostChildCreated {
 }

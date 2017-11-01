@@ -24,9 +24,13 @@ import com.canoo.dp.impl.platform.core.ReflectionHelper;
 import com.canoo.platform.remoting.server.binding.PropertyBinder;
 import com.canoo.platform.remoting.server.binding.Qualifier;
 import com.canoo.dp.impl.server.legacy.ServerAttribute;
+import org.apiguardian.api.API;
 
 import java.lang.reflect.Field;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public class PropertyBinderImpl implements PropertyBinder {
 
     public <T> Binding bind(final Property<T> property, final Qualifier<T> qualifier) {

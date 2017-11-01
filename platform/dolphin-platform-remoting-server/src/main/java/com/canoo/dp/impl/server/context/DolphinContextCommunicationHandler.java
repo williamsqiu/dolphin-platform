@@ -23,6 +23,7 @@ import com.canoo.dp.impl.server.client.ClientSessionProvider;
 import com.canoo.platform.server.client.ClientSession;
 import com.canoo.dp.impl.remoting.legacy.communication.Codec;
 import com.canoo.dp.impl.remoting.legacy.communication.Command;
+import org.apiguardian.api.API;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,6 +36,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public class DolphinContextCommunicationHandler {
 
     private static final Logger LOG = LoggerFactory.getLogger(DolphinContextCommunicationHandler.class);

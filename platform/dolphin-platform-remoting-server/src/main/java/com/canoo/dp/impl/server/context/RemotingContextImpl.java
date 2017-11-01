@@ -23,9 +23,13 @@ import com.canoo.platform.remoting.server.RemotingContext;
 import com.canoo.platform.remoting.server.binding.PropertyBinder;
 import com.canoo.platform.server.client.ClientSession;
 import com.canoo.platform.remoting.server.event.DolphinEventBus;
+import org.apiguardian.api.API;
 
 import java.util.concurrent.Executor;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public class RemotingContextImpl implements RemotingContext {
 
     private final DolphinContext dolphinContext;

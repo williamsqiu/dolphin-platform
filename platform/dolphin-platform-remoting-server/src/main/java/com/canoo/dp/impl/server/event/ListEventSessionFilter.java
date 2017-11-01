@@ -16,10 +16,14 @@
 package com.canoo.dp.impl.server.event;
 
 import com.canoo.platform.remoting.server.event.EventSessionFilter;
+import org.apiguardian.api.API;
 
 import java.util.Arrays;
 import java.util.List;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public class ListEventSessionFilter implements EventSessionFilter {
 
     private final List<String> sessionIds;

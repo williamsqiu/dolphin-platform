@@ -38,6 +38,7 @@ import com.canoo.platform.server.spi.ModuleInitializationException;
 import com.canoo.platform.core.PlatformConfiguration;
 import com.canoo.platform.server.spi.ServerCoreComponents;
 import com.canoo.platform.server.spi.ServerModule;
+import org.apiguardian.api.API;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,8 +50,10 @@ import java.util.ServiceLoader;
 
 import static com.canoo.dp.impl.server.servlet.ServletConstants.DOLPHIN_SERVLET_NAME;
 import static com.canoo.dp.impl.server.servlet.ServletConstants.INTERRUPT_SERVLET_NAME;
+import static org.apiguardian.api.API.Status.INTERNAL;
 
 @ModuleDefinition(value = "RPM", order = 101)
+@API(since = "0.x", status = INTERNAL)
 public class RemotingModule implements ServerModule {
 
     private static final Logger LOG = LoggerFactory.getLogger(RemotingModule.class);

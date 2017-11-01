@@ -3,10 +3,14 @@ package com.canoo.dp.impl.server.event;
 import com.canoo.dp.impl.server.bootstrap.PlatformBootstrap;
 import com.canoo.platform.remoting.server.event.DolphinEventBus;
 import com.canoo.platform.server.spi.ServerCoreComponents;
+import org.apiguardian.api.API;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public class LazyEventBusInvocationHandler implements InvocationHandler {
 
     private final static String DUMMY_OBJECT = "";

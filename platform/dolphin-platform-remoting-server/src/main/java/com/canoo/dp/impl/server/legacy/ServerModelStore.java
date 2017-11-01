@@ -22,6 +22,7 @@ import com.canoo.dp.impl.remoting.legacy.communication.DeletePresentationModelCo
 import com.canoo.dp.impl.remoting.legacy.communication.ValueChangedCommand;
 import com.canoo.dp.impl.remoting.legacy.core.ModelStore;
 import com.canoo.dp.impl.remoting.legacy.core.ModelStoreConfig;
+import org.apiguardian.api.API;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,11 +32,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
 /**
  * The ServerModelStore is a {@link ModelStore} with customized behavior appropriate to the
  * server side of a Dolphin connection.  There is one ServerModelSore for each user session.
  * The ServerModelStore self-assigns a unique ID which identifies each user session.
  */
+@API(since = "0.x", status = INTERNAL)
 public class ServerModelStore extends ModelStore<ServerAttribute, ServerPresentationModel> {
 
     private static final Logger LOG = LoggerFactory.getLogger(ServerModelStore.class);

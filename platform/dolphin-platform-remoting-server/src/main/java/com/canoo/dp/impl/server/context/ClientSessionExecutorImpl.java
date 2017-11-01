@@ -18,11 +18,15 @@ package com.canoo.dp.impl.server.context;
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.remoting.server.ClientSessionExecutor;
 import com.google.common.util.concurrent.SettableFuture;
+import org.apiguardian.api.API;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Future;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public class ClientSessionExecutorImpl implements ClientSessionExecutor {
 
     private final Executor runLaterExecutor;

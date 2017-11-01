@@ -18,9 +18,13 @@ package com.canoo.dp.impl.server.event;
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.remoting.server.event.Message;
 import com.canoo.platform.remoting.server.event.Topic;
+import org.apiguardian.api.API;
 
 import java.io.Serializable;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public class DefaultMessage<T extends Serializable> implements Message<T> {
 
     private final Topic<T> topic;

@@ -20,9 +20,13 @@ import com.canoo.dp.impl.remoting.legacy.RemotingConstants;
 import com.canoo.dp.impl.remoting.legacy.communication.AttributeMetadataChangedCommand;
 import com.canoo.dp.impl.remoting.legacy.core.Attribute;
 import com.canoo.dp.impl.remoting.legacy.core.BaseAttribute;
+import org.apiguardian.api.API;
 
 import java.util.List;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public class ServerAttribute extends BaseAttribute {
 
     private boolean notifyClient = true;

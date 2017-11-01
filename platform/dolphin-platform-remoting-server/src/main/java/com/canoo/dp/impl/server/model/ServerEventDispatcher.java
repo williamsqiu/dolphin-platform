@@ -18,7 +18,11 @@ package com.canoo.dp.impl.server.model;
 import com.canoo.dp.impl.remoting.EventDispatcherImpl;
 import com.canoo.dp.impl.remoting.legacy.RemotingConstants;
 import com.canoo.dp.impl.remoting.legacy.core.ModelStore;
+import org.apiguardian.api.API;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public class ServerEventDispatcher extends EventDispatcherImpl {
 
     public ServerEventDispatcher(ModelStore modelStore) {

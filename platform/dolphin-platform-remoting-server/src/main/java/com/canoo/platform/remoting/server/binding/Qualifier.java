@@ -17,8 +17,11 @@ package com.canoo.platform.remoting.server.binding;
 
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.remoting.Property;
+import org.apiguardian.api.API;
 
 import java.util.UUID;
+
+import static org.apiguardian.api.API.Status.EXPERIMENTAL;
 
 /**
  * A qualifier to define a server site binding of properties (see {@link Property}).
@@ -28,6 +31,7 @@ import java.util.UUID;
  *
  * @author Hendrik Ebbers
  */
+@API(since = "0.x", status = EXPERIMENTAL)
 public final class Qualifier<T> {
 
     private final String identifier;

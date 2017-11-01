@@ -15,9 +15,14 @@
  */
 package com.canoo.dp.impl.server.controller;
 
+import org.apiguardian.api.API;
+
+import static org.apiguardian.api.API.Status.INTERNAL;
+
 /**
  *  Exception to be thrown in case of bad controller
  */
+@API(since = "0.x", status = INTERNAL)
 public class ControllerValidationException extends Exception {
 
     /**

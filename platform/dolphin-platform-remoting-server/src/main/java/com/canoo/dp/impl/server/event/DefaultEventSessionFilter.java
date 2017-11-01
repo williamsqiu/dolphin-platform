@@ -16,7 +16,11 @@
 package com.canoo.dp.impl.server.event;
 
 import com.canoo.platform.remoting.server.event.EventSessionFilter;
+import org.apiguardian.api.API;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public class DefaultEventSessionFilter implements EventSessionFilter {
 
     public static final EventSessionFilter INSTANCE = new DefaultEventSessionFilter();

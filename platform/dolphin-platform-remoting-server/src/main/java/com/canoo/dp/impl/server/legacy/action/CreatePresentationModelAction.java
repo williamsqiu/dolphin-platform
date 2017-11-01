@@ -22,6 +22,7 @@ import com.canoo.dp.impl.server.legacy.ServerModelStore;
 import com.canoo.dp.impl.server.legacy.ServerPresentationModel;
 import com.canoo.dp.impl.server.legacy.communication.ActionRegistry;
 import com.canoo.dp.impl.server.legacy.communication.CommandHandler;
+import org.apiguardian.api.API;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,6 +30,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public class CreatePresentationModelAction extends DolphinServerAction {
 
     private static final Logger LOG = LoggerFactory.getLogger(CreatePresentationModelAction.class);

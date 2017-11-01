@@ -19,9 +19,13 @@ import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.remoting.server.event.EventSessionFilter;
 import com.canoo.platform.remoting.server.event.Message;
 import com.canoo.platform.remoting.server.event.Topic;
+import org.apiguardian.api.API;
 
 import java.io.Serializable;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public class DolphinEvent<T extends Serializable> implements Serializable {
 
     private final Message<T> message;

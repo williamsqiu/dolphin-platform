@@ -19,6 +19,9 @@ import com.canoo.platform.remoting.BeanManager;
 import com.canoo.platform.remoting.server.binding.PropertyBinder;
 import com.canoo.platform.server.client.ClientSession;
 import com.canoo.platform.remoting.server.event.DolphinEventBus;
+import org.apiguardian.api.API;
+
+import static org.apiguardian.api.API.Status.MAINTAINED;
 
 /**
  * Facade to get access to all instances of a Dolphin Platform remoting context. Each {@link ClientSession} that uses the remoting layer of Dolphin Platform will contain exactly one remoting context.
@@ -27,6 +30,7 @@ import com.canoo.platform.remoting.server.event.DolphinEventBus;
  *
  * @author Hendrik Ebbers
  */
+@API(since = "0.x", status = MAINTAINED)
 public interface RemotingContext {
 
     /**

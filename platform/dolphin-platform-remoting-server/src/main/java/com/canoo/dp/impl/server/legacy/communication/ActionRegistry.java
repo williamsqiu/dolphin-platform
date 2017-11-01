@@ -16,6 +16,7 @@
 package com.canoo.dp.impl.server.legacy.communication;
 
 import com.canoo.dp.impl.remoting.legacy.communication.Command;
+import org.apiguardian.api.API;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,6 +27,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public class ActionRegistry {
 
     private static final Logger LOG = LoggerFactory.getLogger(ActionRegistry.class);

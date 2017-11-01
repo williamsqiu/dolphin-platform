@@ -15,9 +15,14 @@
  */
 package com.canoo.dp.impl.server.gc;
 
+import org.apiguardian.api.API;
+
+import static org.apiguardian.api.API.Status.INTERNAL;
+
 /**
  * Exception that is thrown by {@link GarbageCollector} if a cycle in the model has been defined
  */
+@API(since = "0.x", status = INTERNAL)
 public class CircularDependencyException extends RuntimeException {
 
     /**

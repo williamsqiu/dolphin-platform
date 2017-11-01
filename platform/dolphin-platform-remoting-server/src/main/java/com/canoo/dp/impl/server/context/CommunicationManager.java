@@ -15,9 +15,14 @@
  */
 package com.canoo.dp.impl.server.context;
 
+import org.apiguardian.api.API;
+
+import static org.apiguardian.api.API.Status.INTERNAL;
+
 /**
  * Functional interface that defines the state of a response from the server.
  */
+@API(since = "0.x", status = INTERNAL)
 public interface CommunicationManager {
 
     /**

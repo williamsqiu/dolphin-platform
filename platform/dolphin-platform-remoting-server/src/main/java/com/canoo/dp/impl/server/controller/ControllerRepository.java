@@ -18,15 +18,19 @@ package com.canoo.dp.impl.server.controller;
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.remoting.server.DolphinController;
 import com.canoo.platform.server.spi.ClasspathScanner;
+import org.apiguardian.api.API;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
 /**
  * This repository manages all Dolphin Platform controller classes (see {@link DolphinController}).
  * Internally the class uses the {@link DefaultClasspathScanner} to find all controller classes.
  */
+@API(since = "0.x", status = INTERNAL)
 public class ControllerRepository {
 
     private Map<String, Class> controllersClasses;

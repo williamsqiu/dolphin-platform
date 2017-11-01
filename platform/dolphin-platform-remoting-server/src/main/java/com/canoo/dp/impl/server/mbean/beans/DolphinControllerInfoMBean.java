@@ -16,10 +16,14 @@
 package com.canoo.dp.impl.server.mbean.beans;
 
 import com.canoo.platform.remoting.server.DolphinController;
+import org.apiguardian.api.API;
+
+import static org.apiguardian.api.API.Status.INTERNAL;
 
 /**
  * Interface for a MBean that defines a Dolphin Platform controller (see {@link DolphinController})
  */
+@API(since = "0.x", status = INTERNAL)
 public interface DolphinControllerInfoMBean {
 
     String getDolphinSessionId();

@@ -15,11 +15,16 @@
  */
 package com.canoo.dp.impl.server.mbean.beans;
 
+import org.apiguardian.api.API;
+
 import java.lang.ref.WeakReference;
+
+import static org.apiguardian.api.API.Status.INTERNAL;
 
 /**
  * MBean implementation for the {@link DolphinControllerInfoMBean} MBean interface
  */
+@API(since = "0.x", status = INTERNAL)
 public class DolphinControllerInfo implements DolphinControllerInfoMBean {
 
     private String controllerClass;

@@ -20,14 +20,18 @@ import com.canoo.dp.impl.platform.core.IdentitySet;
 import com.canoo.platform.remoting.DolphinBean;
 import com.canoo.platform.remoting.Property;
 import com.canoo.platform.remoting.server.DolphinModel;
+import org.apiguardian.api.API;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.apiguardian.api.API.Status.INTERNAL;
 
 /**
  * This class holds an instance of a dolphin bean (see {@link DolphinBean}) for the internal
  * garbage collection (see {@link GarbageCollector}).
  */
+@API(since = "0.x", status = INTERNAL)
 public class Instance {
 
     private Object bean;

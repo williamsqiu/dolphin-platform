@@ -24,7 +24,11 @@ import com.canoo.dp.impl.server.controller.ControllerValidationException;
 import com.canoo.platform.core.functional.Callback;
 import com.canoo.platform.server.client.ClientSession;
 import com.canoo.platform.server.spi.ClasspathScanner;
+import org.apiguardian.api.API;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public class DefaultDolphinContextFactory implements DolphinContextFactory {
 
     private final RemotingConfiguration configuration;

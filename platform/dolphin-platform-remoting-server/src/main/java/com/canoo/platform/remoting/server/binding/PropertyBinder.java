@@ -17,6 +17,9 @@ package com.canoo.platform.remoting.server.binding;
 
 import com.canoo.platform.core.functional.Binding;
 import com.canoo.platform.remoting.Property;
+import org.apiguardian.api.API;
+
+import static org.apiguardian.api.API.Status.EXPERIMENTAL;
 
 /**
  * A component that can be use to create bindings between properties (see {@link Property}). All properties that are
@@ -25,6 +28,7 @@ import com.canoo.platform.remoting.Property;
  *
  * @author Hendrik Ebbers
  */
+@API(since = "0.x", status = EXPERIMENTAL)
 public interface PropertyBinder {
 
     /**

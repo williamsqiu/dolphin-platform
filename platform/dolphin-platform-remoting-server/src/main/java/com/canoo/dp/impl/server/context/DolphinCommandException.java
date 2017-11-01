@@ -15,9 +15,14 @@
  */
 package com.canoo.dp.impl.server.context;
 
+import org.apiguardian.api.API;
+
+import static org.apiguardian.api.API.Status.INTERNAL;
+
 /**
  * This exception defines an error in the handling of dolphin commands
  */
+@API(since = "0.x", status = INTERNAL)
 public class DolphinCommandException extends RuntimeException {
 
     private static final long serialVersionUID = -1936119062569456362L;

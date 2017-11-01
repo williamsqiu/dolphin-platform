@@ -19,9 +19,13 @@ import com.canoo.dp.impl.remoting.legacy.communication.PresentationModelDeletedC
 import com.canoo.dp.impl.server.legacy.ServerPresentationModel;
 import com.canoo.dp.impl.server.legacy.communication.ActionRegistry;
 import com.canoo.dp.impl.server.legacy.communication.CommandHandler;
+import org.apiguardian.api.API;
 
 import java.util.List;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public class DeletePresentationModelAction extends DolphinServerAction {
 
     public void registerIn(final ActionRegistry registry) {

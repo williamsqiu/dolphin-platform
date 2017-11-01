@@ -20,11 +20,15 @@ import com.canoo.dp.impl.remoting.legacy.core.Attribute;
 import com.canoo.dp.impl.server.legacy.ServerAttribute;
 import com.canoo.dp.impl.server.legacy.communication.ActionRegistry;
 import com.canoo.dp.impl.server.legacy.communication.CommandHandler;
+import org.apiguardian.api.API;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public class StoreAttributeAction extends DolphinServerAction {
 
     private static final Logger LOG = LoggerFactory.getLogger(StoreAttributeAction.class);
