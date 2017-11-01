@@ -1,10 +1,12 @@
 package com.canoo.dp.impl.server.event;
 
 import com.canoo.platform.remoting.server.event.Topic;
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.hazelcast.nio.ObjectDataInput;
 import com.hazelcast.nio.ObjectDataOutput;
 import com.hazelcast.nio.serialization.Data;
 import org.testng.Assert;
@@ -113,6 +115,35 @@ public class EventStreamSerializerTests {
         Assert.assertEquals(getMetadataValueForKey(metadata, key3), value3);
     }
 
+    @Test
+    public void testSimpleEventFromJson() throws IOException, ClassNotFoundException {
+        //given
+        final Topic<String> topic = Topic.create("test-topic");
+        final long timestamp = System.currentTimeMillis();
+        final String data = "test-data";
+
+        final JsonObject root = new JsonObject();
+        root.addProperty(SPEC_VERSION_PARAM, SPEC_1_0);
+        root.addProperty(DATA_PARAM, Base64Utils.toBase64(data));
+        final JsonObject context = new JsonObject();
+        context.addProperty(TIMESTAMP_PARAM, timestamp);
+        context.addProperty(TOPIC_PARAM, topic.getName());
+        context.add(METADATA_PARAM, new JsonArray());
+        root.add(CONTEXT_PARAM, context);
+
+        checkJsonSchema(root);
+
+        //when
+        final DolphinEvent<?> event = convertToEvent(root);
+
+        //then
+        Assert.assertNotNull(event);
+        Assert.assertEquals(event.getData(), data);
+        Assert.assertEquals(event.getMessageEventContext().getTimestamp(), timestamp);
+        Assert.assertEquals(event.getMessageEventContext().getTopic(), topic);
+        Assert.assertTrue(event.getMessageEventContext().getMetadata().isEmpty());
+    }
+
     private Serializable getMetadataValueForKey(final JsonArray metadataArray, final String key) throws IOException, ClassNotFoundException {
         final Iterator<JsonElement> elementIterator = metadataArray.iterator();
         while (elementIterator.hasNext()) {
@@ -136,6 +167,12 @@ public class EventStreamSerializerTests {
         final byte[] rawOutputData = output.toByteArray();
         final String outputData = new String(rawOutputData);
         return new JsonParser().parse(outputData);
+    }
+
+    private <T extends Serializable> DolphinEvent<T> convertToEvent(final JsonElement jsonElement) throws IOException {
+        final EventStreamSerializer streamSerializer = new EventStreamSerializer();
+        final ObjectDataInput input = new JsonBasedObjectDataInput(jsonElement);
+        return (DolphinEvent<T>) streamSerializer.read(input);
     }
 
     private void checkJsonSchema(final JsonElement root) {
@@ -186,6 +223,155 @@ public class EventStreamSerializerTests {
                     Assert.assertTrue(metadata.getAsJsonPrimitive(METADATA_VALUE_PARAM).isString());
                 }
             }
+        }
+    }
+
+    private class JsonBasedObjectDataInput implements ObjectDataInput {
+
+        private final JsonElement jsonElement;
+
+        public JsonBasedObjectDataInput(final JsonElement jsonElement) {
+            this.jsonElement = jsonElement;
+        }
+
+        @Override
+        public byte[] readByteArray() throws IOException {
+            throw new RuntimeException("Not needed for test");
+        }
+
+        @Override
+        public boolean[] readBooleanArray() throws IOException {
+            throw new RuntimeException("Not needed for test");
+        }
+
+        @Override
+        public char[] readCharArray() throws IOException {
+            throw new RuntimeException("Not needed for test");
+        }
+
+        @Override
+        public int[] readIntArray() throws IOException {
+            throw new RuntimeException("Not needed for test");
+        }
+
+        @Override
+        public long[] readLongArray() throws IOException {
+            throw new RuntimeException("Not needed for test");
+        }
+
+        @Override
+        public double[] readDoubleArray() throws IOException {
+            throw new RuntimeException("Not needed for test");
+        }
+
+        @Override
+        public float[] readFloatArray() throws IOException {
+            throw new RuntimeException("Not needed for test");
+        }
+
+        @Override
+        public short[] readShortArray() throws IOException {
+            throw new RuntimeException("Not needed for test");
+        }
+
+        @Override
+        public String[] readUTFArray() throws IOException {
+            throw new RuntimeException("Not needed for test");
+        }
+
+        @Override
+        public <T> T readObject() throws IOException {
+            throw new RuntimeException("Not needed for test");
+        }
+
+        @Override
+        public Data readData() throws IOException {
+            throw new RuntimeException("Not needed for test");
+        }
+
+        @Override
+        public ClassLoader getClassLoader() {
+            throw new RuntimeException("Not needed for test");
+        }
+
+        @Override
+        public ByteOrder getByteOrder() {
+            throw new RuntimeException("Not needed for test");
+        }
+
+        @Override
+        public void readFully(byte[] b) throws IOException {
+            throw new RuntimeException("Not needed for test");
+        }
+
+        @Override
+        public void readFully(byte[] b, int off, int len) throws IOException {
+            throw new RuntimeException("Not needed for test");
+        }
+
+        @Override
+        public int skipBytes(int n) throws IOException {
+            throw new RuntimeException("Not needed for test");
+        }
+
+        @Override
+        public boolean readBoolean() throws IOException {
+            throw new RuntimeException("Not needed for test");
+        }
+
+        @Override
+        public byte readByte() throws IOException {
+            throw new RuntimeException("Not needed for test");
+        }
+
+        @Override
+        public int readUnsignedByte() throws IOException {
+            throw new RuntimeException("Not needed for test");
+        }
+
+        @Override
+        public short readShort() throws IOException {
+            throw new RuntimeException("Not needed for test");
+        }
+
+        @Override
+        public int readUnsignedShort() throws IOException {
+            throw new RuntimeException("Not needed for test");
+        }
+
+        @Override
+        public char readChar() throws IOException {
+            throw new RuntimeException("Not needed for test");
+        }
+
+        @Override
+        public int readInt() throws IOException {
+            throw new RuntimeException("Not needed for test");
+        }
+
+        @Override
+        public long readLong() throws IOException {
+            throw new RuntimeException("Not needed for test");
+        }
+
+        @Override
+        public float readFloat() throws IOException {
+            throw new RuntimeException("Not needed for test");
+        }
+
+        @Override
+        public double readDouble() throws IOException {
+            throw new RuntimeException("Not needed for test");
+        }
+
+        @Override
+        public String readLine() throws IOException {
+            throw new RuntimeException("Not needed for test");
+        }
+
+        @Override
+        public String readUTF() throws IOException {
+            return new Gson().toJson(jsonElement);
         }
     }
 
