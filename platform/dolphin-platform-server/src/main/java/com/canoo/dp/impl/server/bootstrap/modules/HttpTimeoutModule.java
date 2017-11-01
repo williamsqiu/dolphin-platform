@@ -42,7 +42,7 @@ public class HttpTimeoutModule extends AbstractBaseModule {
 
     @Override
     public void initialize(ServerCoreComponents coreComponents) throws ModuleInitializationException {
-        final ServletContext servletContext = coreComponents.getServletContext();
+        final ServletContext servletContext = coreComponents.getInstance(ServletContext.class);
         final PlatformConfiguration configuration = coreComponents.getConfiguration();
 
         HttpSessionTimeoutListener sessionCleaner = new HttpSessionTimeoutListener(configuration);

@@ -36,13 +36,13 @@ public interface ClientSessionListener {
 
     /**
      * This method will be called whenever a new {@link ClientSession} has been created.
-     * @param dolphinSession the dolphin session
+     * @param clientSession the dolphin session
      */
     void sessionCreated(ClientSession clientSession);
 
     /**
      * This method will be called whenever a {@link ClientSession} will be destroyed.
-     * @param dolphinSession the dolphin session
+     * @param clientSession the dolphin session
      */
     void sessionDestroyed(ClientSession clientSession);
 

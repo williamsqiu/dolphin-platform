@@ -17,7 +17,7 @@ package com.canoo.dp.impl.server.controller;
 
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.remoting.server.DolphinController;
-import com.canoo.platform.server.spi.ClasspathScanner;
+import com.canoo.platform.server.spi.components.ClasspathScanner;
 import org.apiguardian.api.API;
 
 import java.util.HashMap;

@@ -15,7 +15,7 @@
  */
 package com.canoo.dp.impl.server.spring;
 
-import com.canoo.dp.impl.server.beans.ManagedBeanFactory;
+import com.canoo.platform.server.spi.components.ManagedBeanFactory;
 import org.apiguardian.api.API;
 import org.springframework.context.ApplicationContext;
 

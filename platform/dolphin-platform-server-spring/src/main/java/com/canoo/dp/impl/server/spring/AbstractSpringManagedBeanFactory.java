@@ -16,7 +16,7 @@
 package com.canoo.dp.impl.server.spring;
 
 import com.canoo.dp.impl.platform.core.Assert;
-import com.canoo.dp.impl.server.beans.ManagedBeanFactory;
+import com.canoo.platform.server.spi.components.ManagedBeanFactory;
 import com.canoo.dp.impl.server.beans.PostConstructInterceptor;
 import org.apiguardian.api.API;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
@@ -42,7 +42,7 @@ public abstract class AbstractSpringManagedBeanFactory implements ManagedBeanFac
     }
 
     @Override
-    public <T> T createDependendInstance(Class<T> cls) {
+    public <T> T createDependentInstance(Class<T> cls) {
         Assert.requireNonNull(cls, "cls");
         ApplicationContext context = getContext();
         AutowireCapableBeanFactory beanFactory = context.getAutowireCapableBeanFactory();
@@ -50,7 +50,7 @@ public abstract class AbstractSpringManagedBeanFactory implements ManagedBeanFac
     }
 
     @Override
-    public <T> T createDependendInstance(Class<T> cls, PostConstructInterceptor<T> interceptor) {
+    public <T> T createDependentInstance(Class<T> cls, PostConstructInterceptor<T> interceptor) {
         Assert.requireNonNull(cls, "cls");
         Assert.requireNonNull(interceptor, "interceptor");
         ApplicationContext context = getContext();
@@ -60,7 +60,7 @@ public abstract class AbstractSpringManagedBeanFactory implements ManagedBeanFac
     }
 
     @Override
-    public <T> void destroyDependendInstance(T instance, Class<T> cls) {
+    public <T> void destroyDependentInstance(T instance, Class<T> cls) {
         Assert.requireNonNull(instance, "instance");
         Assert.requireNonNull(cls, "cls");
         ApplicationContext context = getContext();

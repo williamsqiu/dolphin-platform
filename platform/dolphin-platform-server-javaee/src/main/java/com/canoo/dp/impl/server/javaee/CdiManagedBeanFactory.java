@@ -16,7 +16,7 @@
 package com.canoo.dp.impl.server.javaee;
 
 import com.canoo.dp.impl.platform.core.Assert;
-import com.canoo.dp.impl.server.beans.ManagedBeanFactory;
+import com.canoo.platform.server.spi.components.ManagedBeanFactory;
 import com.canoo.dp.impl.server.beans.PostConstructInterceptor;
 import org.apache.deltaspike.core.api.provider.BeanManagerProvider;
 import org.apache.deltaspike.core.util.bean.BeanBuilder;
@@ -52,7 +52,7 @@ public class CdiManagedBeanFactory implements ManagedBeanFactory {
     public void init(ServletContext servletContext) {}
 
     @Override
-    public <T> T createDependendInstance(Class<T> cls) {
+    public <T> T createDependentInstance(Class<T> cls) {
         Assert.requireNonNull(cls, "cls");
         BeanManager bm = BeanManagerProvider.getInstance().getBeanManager();
         AnnotatedType annotatedType = bm.createAnnotatedType(cls);
@@ -72,7 +72,7 @@ public class CdiManagedBeanFactory implements ManagedBeanFactory {
     }
 
     @Override
-    public <T> T createDependendInstance(Class<T> cls, PostConstructInterceptor<T> interceptor) {
+    public <T> T createDependentInstance(Class<T> cls, PostConstructInterceptor<T> interceptor) {
         Assert.requireNonNull(cls, "cls");
         Assert.requireNonNull(interceptor, "interceptor");
         BeanManager bm = BeanManagerProvider.getInstance().getBeanManager();
@@ -93,7 +93,7 @@ public class CdiManagedBeanFactory implements ManagedBeanFactory {
     }
 
     @Override
-    public <T> void destroyDependendInstance(T instance, Class<T> cls) {
+    public <T> void destroyDependentInstance(T instance, Class<T> cls) {
         Assert.requireNonNull(instance, "instance");
         Bean bean = beanMap.remove(instance);
         CreationalContext context = contextMap.remove(instance);

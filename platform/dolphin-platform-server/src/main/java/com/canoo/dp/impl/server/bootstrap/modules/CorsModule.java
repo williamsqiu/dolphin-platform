@@ -49,7 +49,7 @@ public class CorsModule extends AbstractBaseModule {
 
     @Override
     public void initialize(ServerCoreComponents coreComponents) throws ModuleInitializationException {
-        final ServletContext servletContext = coreComponents.getServletContext();
+        final ServletContext servletContext = coreComponents.getInstance(ServletContext.class);
         final PlatformConfiguration configuration = coreComponents.getConfiguration();
         final List<String> endpointList = DefaultModuleConfig.getCorsEndpoints(configuration);
 

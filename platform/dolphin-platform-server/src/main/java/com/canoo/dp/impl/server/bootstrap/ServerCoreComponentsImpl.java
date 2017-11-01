@@ -17,8 +17,8 @@ package com.canoo.dp.impl.server.bootstrap;
 
 import com.canoo.platform.core.PlatformThreadFactory;
 import com.canoo.dp.impl.platform.core.Assert;
-import com.canoo.dp.impl.server.beans.ManagedBeanFactory;
-import com.canoo.platform.server.spi.ClasspathScanner;
+import com.canoo.platform.server.spi.components.ManagedBeanFactory;
+import com.canoo.platform.server.spi.components.ClasspathScanner;
 import com.canoo.platform.core.PlatformConfiguration;
 import com.canoo.platform.server.spi.ServerCoreComponents;
 import org.apiguardian.api.API;
@@ -54,14 +54,6 @@ public class ServerCoreComponentsImpl implements ServerCoreComponents {
 
     public PlatformConfiguration getConfiguration() {
         return getInstance(PlatformConfiguration.class);
-    }
-
-    public ClasspathScanner getClasspathScanner() {
-        return getInstance(ClasspathScanner.class);
-    }
-
-    public ManagedBeanFactory getManagedBeanFactory() {
-        return getInstance(ManagedBeanFactory.class);
     }
 
     public <T> void provideInstance(Class<T> cls, T instance) {

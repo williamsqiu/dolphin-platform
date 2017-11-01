@@ -15,7 +15,7 @@
  */
 package com.canoo.dp.impl.server;
 
-import com.canoo.dp.impl.server.beans.ManagedBeanFactory;
+import com.canoo.platform.server.spi.components.ManagedBeanFactory;
 import com.canoo.dp.impl.server.bootstrap.modules.ClientSessionModule;
 import com.canoo.dp.impl.server.client.ClientSessionLifecycleHandler;
 import com.canoo.dp.impl.server.client.ClientSessionProvider;
@@ -32,7 +32,7 @@ import com.canoo.dp.impl.server.servlet.InterruptServlet;
 import com.canoo.platform.remoting.server.event.DolphinEventBus;
 import com.canoo.platform.remoting.server.spi.EventBusProvider;
 import com.canoo.platform.server.client.ClientSession;
-import com.canoo.platform.server.spi.ClasspathScanner;
+import com.canoo.platform.server.spi.components.ClasspathScanner;
 import com.canoo.platform.server.spi.ModuleDefinition;
 import com.canoo.platform.server.spi.ModuleInitializationException;
 import com.canoo.platform.core.PlatformConfiguration;
@@ -73,9 +73,9 @@ public class RemotingModule implements ServerModule {
     public void initialize(ServerCoreComponents coreComponents) throws ModuleInitializationException {
         LOG.info("Starting Dolphin Platform");
         try{
-            final ServletContext servletContext = coreComponents.getServletContext();
-            final ClasspathScanner classpathScanner = coreComponents.getClasspathScanner();
-            final ManagedBeanFactory beanFactory = coreComponents.getManagedBeanFactory();
+            final ServletContext servletContext = coreComponents.getInstance(ServletContext.class);
+            final ClasspathScanner classpathScanner = coreComponents.getInstance(ClasspathScanner.class);
+            final ManagedBeanFactory beanFactory = coreComponents.getInstance(ManagedBeanFactory.class);
             final RemotingConfiguration configuration = new RemotingConfiguration(coreComponents.getConfiguration());
             final ClientSessionProvider sessionProvider = coreComponents.getInstance(ClientSessionProvider.class);
             final DolphinContextFactory dolphinContextFactory = new DefaultDolphinContextFactory(configuration, sessionProvider, beanFactory, classpathScanner);

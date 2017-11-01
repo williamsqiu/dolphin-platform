@@ -15,7 +15,7 @@
  */
 package com.canoo.impl.dp.spring.test;
 
-import com.canoo.dp.impl.server.beans.ManagedBeanFactory;
+import com.canoo.platform.server.spi.components.ManagedBeanFactory;
 import com.canoo.dp.impl.server.client.ClientSessionProvider;
 import com.canoo.dp.impl.server.client.HttpClientSessionImpl;
 import com.canoo.dp.impl.server.config.RemotingConfiguration;
