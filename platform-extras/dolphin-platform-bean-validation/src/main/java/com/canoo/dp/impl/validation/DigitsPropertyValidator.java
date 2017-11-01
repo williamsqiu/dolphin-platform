@@ -15,14 +15,18 @@
  */
 package com.canoo.dp.impl.validation;
 
-import java.math.BigDecimal;
+import org.apiguardian.api.API;
 
 import javax.validation.ConstraintValidatorContext;
 import javax.validation.constraints.Digits;
+import java.math.BigDecimal;
+
+import static org.apiguardian.api.API.Status.INTERNAL;
 
 /**
  * Validator that adds Dolphin Platform property support for the {@link Digits} annotation.
  */
+@API(since = "0.19.0", status = INTERNAL)
 public class DigitsPropertyValidator extends AbstractPropertyValidator<Digits, CharSequence> {
 
 	private int maxIntegerLength;

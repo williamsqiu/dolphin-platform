@@ -1,16 +1,19 @@
 package com.canoo.dp.impl.validation;
 
-import com.canoo.dp.impl.platform.core.Assert;
+import org.apiguardian.api.API;
 
 import javax.validation.ConstraintValidatorContext;
 import javax.validation.constraints.Past;
 import java.util.Calendar;
 import java.util.Date;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
 /**
  * Validator that adds Dolphin Platform property support for the {@link Past} annotation.
  *
  */
+@API(since = "0.19.0", status = INTERNAL)
 public final class PastPropertyValidator extends AbstractDateAndCalendarValidator<Past> {
 
     @Override

@@ -15,13 +15,18 @@
  */
 package com.canoo.dp.impl.validation;
 
+import org.apiguardian.api.API;
+
 import javax.validation.constraints.DecimalMin;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
 /**
  * Validator that adds Dolphin Platform property support for the {@link DecimalMin} annotation.
  */
+@API(since = "0.19.0", status = INTERNAL)
 public final class DecimalMinPropertyValidator extends AbstractNumberValidator<DecimalMin> {
 
     private BigDecimal minValue;

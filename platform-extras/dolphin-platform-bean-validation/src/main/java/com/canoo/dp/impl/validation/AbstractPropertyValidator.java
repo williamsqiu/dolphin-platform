@@ -16,17 +16,21 @@
 package com.canoo.dp.impl.validation;
 
 import com.canoo.platform.remoting.Property;
+import org.apiguardian.api.API;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import javax.validation.ValidationException;
 import java.lang.annotation.Annotation;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
 /**
  * Abstract class for valdition of Dolphin Platform properties
  * @param <T> defines the annotation of the constraints
  * @param <U> the data type that can be validated by this class
  */
+@API(since = "0.19.0", status = INTERNAL)
 public abstract class AbstractPropertyValidator<T extends Annotation, U> implements ConstraintValidator<T, Property> {
 
     private Class<U> supportedValueClass;

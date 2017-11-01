@@ -1,7 +1,12 @@
 package com.canoo.dp.impl.security;
 
+import org.apiguardian.api.API;
+
 import java.io.Serializable;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.19.0", status = INTERNAL)
 public class KeycloakOpenidConnectResult implements Serializable{
 
     private String access_token;

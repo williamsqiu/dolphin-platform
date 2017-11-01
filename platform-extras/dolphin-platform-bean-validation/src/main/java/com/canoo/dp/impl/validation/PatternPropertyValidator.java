@@ -16,14 +16,18 @@
 package com.canoo.dp.impl.validation;
 
 import com.canoo.dp.impl.platform.core.Assert;
+import org.apiguardian.api.API;
 
 import javax.validation.ConstraintValidatorContext;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
 /**
  * Validator that adds Dolphin Platform property support for the {@link Pattern} annotation.
  */
+@API(since = "0.19.0", status = INTERNAL)
 public final class PatternPropertyValidator extends AbstractPropertyValidator<Pattern, CharSequence> {
 
     private java.util.regex.Pattern pattern;

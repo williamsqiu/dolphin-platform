@@ -3,11 +3,14 @@ package com.canoo.dp.impl.security;
 import com.canoo.dp.impl.platform.client.AbstractServiceProvider;
 import com.canoo.platform.client.ClientConfiguration;
 import com.canoo.platform.client.security.Security;
+import org.apiguardian.api.API;
 
 import static com.canoo.platform.client.security.SecurityConfiguration.APP_NAME;
 import static com.canoo.platform.client.security.SecurityConfiguration.AUTH_ENDPOINT;
 import static com.canoo.platform.client.security.SecurityConfiguration.REALM_NAME;
+import static org.apiguardian.api.API.Status.INTERNAL;
 
+@API(since = "0.19.0", status = INTERNAL)
 public class SecurityProvider extends AbstractServiceProvider<Security> {
 
     public SecurityProvider() {
