@@ -6,10 +6,12 @@ import com.canoo.platform.client.spi.ServiceProvider;
 import com.canoo.platform.core.DolphinRuntimeException;
 import org.apiguardian.api.API;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.ServiceLoader;
+import java.util.Set;
 
 import static org.apiguardian.api.API.Status.EXPERIMENTAL;
 
@@ -31,12 +33,14 @@ public class PlatformClient {
         final Iterator<ServiceProvider> iterator = loader.iterator();
         while (iterator.hasNext()) {
             ServiceProvider provider = iterator.next();
-            Class serviceClass = provider.getServiceType();
-            Assert.requireNonNull(serviceClass, "serviceClass");
-            if (providers.containsKey(serviceClass)) {
-                throw new DolphinRuntimeException("Can not register more than 1 implementation for service type " + serviceClass);
+            if(provider.isActive(clientConfiguration)) {
+                Class serviceClass = provider.getServiceType();
+                Assert.requireNonNull(serviceClass, "serviceClass");
+                if (providers.containsKey(serviceClass)) {
+                    throw new DolphinRuntimeException("Can not register more than 1 implementation for service type " + serviceClass);
+                }
+                providers.put(serviceClass, provider);
             }
-            providers.put(serviceClass, provider);
         }
         initImpl(new HeadlessToolkit());
     }
@@ -45,6 +49,10 @@ public class PlatformClient {
         services.clear();
         Assert.requireNonNull(toolkit, "toolkit");
         clientConfiguration.setUiExecutor(toolkit.getUiExecutor());
+    }
+
+    private Set<Class<?>> implGetAllServiceTypes() {
+        return Collections.unmodifiableSet(providers.keySet());
     }
 
     private <S> boolean hasServiceImpl(final Class<S> serviceClass) {
@@ -80,6 +88,10 @@ public class PlatformClient {
 
     public static <S> S getService(final Class<S> serviceClass) {
         return getInstance().getServiceImpl(serviceClass);
+    }
+
+    private static Set<Class<?>> getAllServiceTypes() {
+        return getInstance().implGetAllServiceTypes();
     }
 
     private static synchronized PlatformClient getInstance() {
