@@ -15,7 +15,6 @@
  */
 package com.canoo.dp.impl.server.event;
 
-import com.canoo.platform.remoting.server.event.MessageEvent;
 import com.hazelcast.client.HazelcastClient;
 import com.hazelcast.client.config.ClientConfig;
 import com.hazelcast.config.SerializerConfig;
@@ -48,11 +47,9 @@ public class DefaultHazelcastProvider implements HazelcastProvider {
             clientConfig.getGroupConfig().setName(groupName);
 
 
-            final SerializerConfig dolphinEventSerializerConfig = new SerializerConfig();
-            dolphinEventSerializerConfig.setImplementation(new EventStreamSerializer());
-            dolphinEventSerializerConfig.setClass(EventStreamSerializer.class);
-            dolphinEventSerializerConfig.setTypeClass(MessageEvent.class);
-            dolphinEventSerializerConfig.setTypeClassName(MessageEvent.class.getName());
+            final SerializerConfig dolphinEventSerializerConfig = new SerializerConfig().
+                    setImplementation(new EventStreamSerializer()).setTypeClass(DolphinEvent.class);
+
             clientConfig.getSerializationConfig().getSerializerConfigs().add(dolphinEventSerializerConfig);
 
 
