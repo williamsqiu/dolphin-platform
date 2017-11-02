@@ -21,12 +21,16 @@ import com.canoo.platform.server.client.ClientSession;
 import com.canoo.platform.server.client.ClientSessionListener;
 import com.canoo.platform.server.javaee.ClientScoped;
 import org.apache.deltaspike.core.api.provider.BeanManagerProvider;
+import org.apiguardian.api.API;
 
 import javax.enterprise.inject.spi.BeanManager;
+
+import static org.apiguardian.api.API.Status.INTERNAL;
 
 /**
  * This listener destroyes the {@link ClientScoped} CDI scope whenever a {@link ClientSession} will be destroyed
  */
+@API(since = "0.x", status = INTERNAL)
 @ServerListener
 public class DolphinContextListenerCdi implements ClientSessionListener {
 

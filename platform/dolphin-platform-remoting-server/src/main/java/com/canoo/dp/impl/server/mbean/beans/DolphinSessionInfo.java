@@ -18,13 +18,17 @@ package com.canoo.dp.impl.server.mbean.beans;
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.server.gc.GarbageCollector;
 import com.canoo.platform.server.client.ClientSession;
+import org.apiguardian.api.API;
 
 import java.lang.ref.WeakReference;
 import java.util.Set;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
 /**
  *  MBean implementation for the {@link DolphinSessionInfoMBean} MBean interface
  */
+@API(since = "0.x", status = INTERNAL)
 public class DolphinSessionInfo implements DolphinSessionInfoMBean {
 
     private final WeakReference<ClientSession> dolphinSessionRef;

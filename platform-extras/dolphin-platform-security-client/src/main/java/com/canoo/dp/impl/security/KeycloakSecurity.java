@@ -8,6 +8,7 @@ import com.canoo.platform.client.security.Security;
 import com.canoo.platform.core.DolphinRuntimeException;
 import com.canoo.platform.core.http.RequestMethod;
 import com.google.gson.Gson;
+import org.apiguardian.api.API;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,6 +22,9 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.19.0", status = INTERNAL)
 public class KeycloakSecurity implements Security {
 
     //Setup for the realm / client -> "Direct Grand" must be enabled in keycloak admin

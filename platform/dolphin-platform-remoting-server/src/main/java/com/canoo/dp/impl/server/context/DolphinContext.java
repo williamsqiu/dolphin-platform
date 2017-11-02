@@ -60,6 +60,7 @@ import com.canoo.platform.core.functional.Callback;
 import com.canoo.platform.core.functional.Subscription;
 import com.canoo.platform.remoting.BeanManager;
 import com.canoo.platform.server.client.ClientSession;
+import org.apiguardian.api.API;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -71,10 +72,13 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
 /**
  * This class defines the central entry point for a Dolphin Platform session on the server.
  * Each Dolphin Platform client context on the client side is connected with one {@link DolphinContext}.
  */
+@API(since = "0.x", status = INTERNAL)
 public class DolphinContext {
 
     private static final Logger LOG = LoggerFactory.getLogger(DolphinContext.class);

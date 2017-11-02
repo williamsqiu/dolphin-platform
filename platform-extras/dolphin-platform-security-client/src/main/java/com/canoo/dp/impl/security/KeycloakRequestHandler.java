@@ -4,11 +4,15 @@ import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.client.security.Security;
 import com.canoo.platform.core.DolphinRuntimeException;
 import com.canoo.platform.core.http.HttpURLConnectionHandler;
+import org.apiguardian.api.API;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.HttpURLConnection;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.19.0", status = INTERNAL)
 public class KeycloakRequestHandler implements HttpURLConnectionHandler {
 
     private static final Logger LOG = LoggerFactory.getLogger(KeycloakRequestHandler.class);

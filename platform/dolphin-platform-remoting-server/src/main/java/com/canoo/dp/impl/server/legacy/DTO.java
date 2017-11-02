@@ -15,8 +15,12 @@
  */
 package com.canoo.dp.impl.server.legacy;
 
+import org.apiguardian.api.API;
+
 import java.util.Arrays;
 import java.util.List;
+
+import static org.apiguardian.api.API.Status.INTERNAL;
 
 /**
  * A DTO is a <a href="http://en.wikipedia.org/wiki/Data_transfer_object">data transfer object</a>, used to
@@ -27,6 +31,7 @@ import java.util.List;
  *
  * @see Slot
  */
+@API(since = "0.x", status = INTERNAL)
 public final class DTO {
 
     private List<Slot> slots;

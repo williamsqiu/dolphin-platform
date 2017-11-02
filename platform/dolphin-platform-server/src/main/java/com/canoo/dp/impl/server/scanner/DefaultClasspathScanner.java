@@ -17,6 +17,7 @@ package com.canoo.dp.impl.server.scanner;
 
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.server.spi.ClasspathScanner;
+import org.apiguardian.api.API;
 import org.reflections.Reflections;
 import org.reflections.util.ClasspathHelper;
 import org.reflections.util.ConfigurationBuilder;
@@ -31,10 +32,13 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Set;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
 /**
  * This class can be used to search for a set of classes in the classpath. Currently all classes that are annotated
  * with a specific annotation can be found.
  */
+@API(since = "0.x", status = INTERNAL)
 public class DefaultClasspathScanner implements ClasspathScanner {
 
     private final Reflections reflections;

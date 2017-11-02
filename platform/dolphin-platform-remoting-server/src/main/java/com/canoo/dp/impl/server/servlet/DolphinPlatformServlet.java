@@ -16,6 +16,7 @@
 package com.canoo.dp.impl.server.servlet;
 
 import com.canoo.dp.impl.server.context.DolphinContextCommunicationHandler;
+import org.apiguardian.api.API;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -23,9 +24,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
 /**
  * The default servlet of the dolphin platform. All communication is based on this servlet.
  */
+@API(since = "0.x", status = INTERNAL)
 public class DolphinPlatformServlet extends HttpServlet {
 
     private final DolphinContextCommunicationHandler communicationHandler;

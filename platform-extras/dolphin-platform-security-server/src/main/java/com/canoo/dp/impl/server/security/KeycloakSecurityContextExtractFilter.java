@@ -1,6 +1,7 @@
 package com.canoo.dp.impl.server.security;
 
 import com.canoo.dp.impl.platform.core.Assert;
+import org.apiguardian.api.API;
 import org.keycloak.KeycloakSecurityContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +15,9 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.19.0", status = INTERNAL)
 public class KeycloakSecurityContextExtractFilter implements Filter, AccessDeniedCallback {
 
     private final static Logger LOG = LoggerFactory.getLogger(KeycloakSecurityContextExtractFilter.class);

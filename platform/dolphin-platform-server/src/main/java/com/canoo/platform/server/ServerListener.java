@@ -16,6 +16,7 @@
 package com.canoo.platform.server;
 
 import com.canoo.platform.server.client.ClientSessionListener;
+import org.apiguardian.api.API;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -24,6 +25,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import static org.apiguardian.api.API.Status.MAINTAINED;
 
 /**
  * Annotation for global listener. Currently only {@link ClientSessionListener}
@@ -35,5 +37,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Inherited
 @Retention(RUNTIME)
 @Target(ElementType.TYPE)
+@API(since = "0.x", status = MAINTAINED)
 public @interface ServerListener {
 }

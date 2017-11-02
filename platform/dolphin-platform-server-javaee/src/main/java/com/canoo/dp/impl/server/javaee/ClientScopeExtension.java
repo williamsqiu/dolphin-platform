@@ -17,6 +17,7 @@ package com.canoo.dp.impl.server.javaee;
 
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.server.javaee.ClientScoped;
+import org.apiguardian.api.API;
 
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.spi.AfterBeanDiscovery;
@@ -25,6 +26,9 @@ import javax.enterprise.inject.spi.BeforeBeanDiscovery;
 import javax.enterprise.inject.spi.Extension;
 import java.io.Serializable;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public class ClientScopeExtension implements Extension, Serializable {
 
     public void addScope(@Observes final BeforeBeanDiscovery event) {

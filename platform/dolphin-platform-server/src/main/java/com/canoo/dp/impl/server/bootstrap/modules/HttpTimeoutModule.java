@@ -21,9 +21,13 @@ import com.canoo.platform.server.spi.ModuleDefinition;
 import com.canoo.platform.server.spi.ModuleInitializationException;
 import com.canoo.platform.core.PlatformConfiguration;
 import com.canoo.platform.server.spi.ServerCoreComponents;
+import org.apiguardian.api.API;
 
 import javax.servlet.ServletContext;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 @ModuleDefinition(HttpTimeoutModule.HTTP_TIMEOUT_MODULE)
 public class HttpTimeoutModule extends AbstractBaseModule {
 

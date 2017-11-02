@@ -17,14 +17,18 @@ package com.canoo.platform.server.spi;
 
 import com.canoo.dp.impl.server.beans.ManagedBeanFactory;
 import com.canoo.platform.core.PlatformConfiguration;
+import org.apiguardian.api.API;
 
 import javax.servlet.ServletContext;
+
+import static org.apiguardian.api.API.Status.EXPERIMENTAL;
 
 /**
  * Facade to all global server components that are provided by the Dolphin Platform
  *
  * @author Hendrik Ebbers
  */
+@API(since = "0.x", status = EXPERIMENTAL)
 public interface ServerCoreComponents {
 
     /**

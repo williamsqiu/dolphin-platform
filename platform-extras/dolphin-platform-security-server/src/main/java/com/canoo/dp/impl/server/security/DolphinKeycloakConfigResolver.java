@@ -1,11 +1,15 @@
 package com.canoo.dp.impl.server.security;
 
+import org.apiguardian.api.API;
 import org.keycloak.adapters.KeycloakConfigResolver;
 import org.keycloak.adapters.KeycloakDeployment;
 import org.keycloak.adapters.KeycloakDeploymentBuilder;
 import org.keycloak.adapters.spi.HttpFacade;
 import org.keycloak.representations.adapters.config.AdapterConfig;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.19.0", status = INTERNAL)
 public class DolphinKeycloakConfigResolver implements KeycloakConfigResolver {
 
     private static KeycloakConfiguration configuration;

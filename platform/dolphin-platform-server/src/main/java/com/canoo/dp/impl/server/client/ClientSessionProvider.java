@@ -16,10 +16,14 @@
 package com.canoo.dp.impl.server.client;
 
 import com.canoo.platform.server.client.ClientSession;
+import org.apiguardian.api.API;
+
+import static org.apiguardian.api.API.Status.INTERNAL;
 
 /**
  * Interface that provides the current Dolphin session
  */
+@API(since = "0.x", status = INTERNAL)
 public interface ClientSessionProvider {
 
     /**

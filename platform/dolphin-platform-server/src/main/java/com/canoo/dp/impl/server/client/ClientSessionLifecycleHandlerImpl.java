@@ -18,10 +18,14 @@ package com.canoo.dp.impl.server.client;
 import com.canoo.platform.core.functional.Subscription;
 import com.canoo.platform.server.client.ClientSession;
 import com.canoo.platform.core.functional.Callback;
+import org.apiguardian.api.API;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public final class ClientSessionLifecycleHandlerImpl implements ClientSessionLifecycleHandler {
 
     private final List<Callback<ClientSession>> onCreateCallbacks = new CopyOnWriteArrayList<>();

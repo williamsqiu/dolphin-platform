@@ -3,12 +3,16 @@ package com.canoo.dp.impl.server.event;
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.remoting.server.event.MessageEventContext;
 import com.canoo.platform.remoting.server.event.Topic;
+import org.apiguardian.api.API;
 
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public class DolphinEventContext<T extends Serializable> implements MessageEventContext<T> {
 
     private final Topic<T> topic;

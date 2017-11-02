@@ -15,14 +15,19 @@
  */
 package com.canoo.platform.server.spi;
 
+import org.apiguardian.api.API;
+
 import java.lang.annotation.Annotation;
 import java.util.Set;
+
+import static org.apiguardian.api.API.Status.EXPERIMENTAL;
 
 /**
  * A classpath scanner that can be used to find all classes on the classpath that are annotated by a specific annotation.
  *
  * @author Hendrik Ebbers
  */
+@API(since = "0.x", status = EXPERIMENTAL)
 public interface ClasspathScanner {
 
     /**

@@ -1,10 +1,14 @@
 package com.canoo.dp.impl.validation;
 
+import org.apiguardian.api.API;
+
 import javax.validation.ConstraintValidatorContext;
 import javax.validation.ValidationException;
 import java.lang.annotation.Annotation;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+
+import static org.apiguardian.api.API.Status.INTERNAL;
 
 /**
  * Utility abstract class to minimize {@link Number} type checking. Provides template methods for its implementations.
@@ -13,6 +17,7 @@ import java.math.BigInteger;
  *
  * @param <A> defines the annotation of the constraints
  */
+@API(since = "0.19.0", status = INTERNAL)
 public abstract class AbstractNumberValidator<A extends Annotation> extends AbstractPropertyValidator<A, Number> {
 
     public AbstractNumberValidator() {

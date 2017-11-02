@@ -19,6 +19,7 @@ import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.server.config.DefaultModuleConfig;
 import com.canoo.platform.server.client.ClientSession;
 import com.canoo.platform.core.PlatformConfiguration;
+import org.apiguardian.api.API;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,6 +29,9 @@ import java.util.Map;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public class ClientSessionManager {
 
     private static final Logger LOG = LoggerFactory.getLogger(ClientSessionManager.class);

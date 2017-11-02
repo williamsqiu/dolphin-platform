@@ -31,6 +31,7 @@ import com.canoo.platform.remoting.server.RemotingContext;
 import com.canoo.platform.remoting.server.binding.PropertyBinder;
 import com.canoo.platform.remoting.server.event.RemotingEventBus;
 import com.canoo.platform.server.client.ClientSession;
+import org.apiguardian.api.API;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.beans.factory.config.CustomScopeConfigurer;
 import org.springframework.context.annotation.Bean;
@@ -41,7 +42,10 @@ import org.springframework.web.context.WebApplicationContext;
 import javax.servlet.http.HttpSession;
 import java.util.concurrent.Executor;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
 @Configuration
+@API(since = "0.x", status = INTERNAL)
 public class DolphinPlatformSpringTestBootstrap {
 
     @Bean

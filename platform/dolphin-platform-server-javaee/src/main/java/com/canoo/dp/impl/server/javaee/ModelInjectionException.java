@@ -15,9 +15,14 @@
  */
 package com.canoo.dp.impl.server.javaee;
 
+import org.apiguardian.api.API;
+
+import static org.apiguardian.api.API.Status.INTERNAL;
+
 /**
  * This exception will be thrown if a MVC model can't be created or injected in teh controller
  */
+@API(since = "0.x", status = INTERNAL)
 public class ModelInjectionException extends RuntimeException {
 
     private static final long serialVersionUID = -4241723730436067531L;

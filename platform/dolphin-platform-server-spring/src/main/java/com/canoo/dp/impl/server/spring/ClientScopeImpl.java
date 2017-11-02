@@ -20,6 +20,7 @@ import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.server.bootstrap.PlatformBootstrap;
 import com.canoo.dp.impl.server.client.ClientSessionProvider;
 import com.canoo.platform.server.client.ClientSession;
+import org.apiguardian.api.API;
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.config.Scope;
 
@@ -27,9 +28,12 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
 /**
  * Implementation of the {@link com.canoo.platform.server.spring.ClientScope} scope
  */
+@API(since = "0.x", status = INTERNAL)
 public class ClientScopeImpl implements Scope {
 
     public final static String CLIENT_SCOPE = "client";

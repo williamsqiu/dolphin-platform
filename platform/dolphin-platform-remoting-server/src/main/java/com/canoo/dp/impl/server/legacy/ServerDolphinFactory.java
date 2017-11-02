@@ -15,9 +15,14 @@
  */
 package com.canoo.dp.impl.server.legacy;
 
+import org.apiguardian.api.API;
+
+import static org.apiguardian.api.API.Status.INTERNAL;
+
 /**
  * A factory class to create a ServerDolphin object.
  */
+@API(since = "0.x", status = INTERNAL)
 public class ServerDolphinFactory {
 
     private ServerDolphinFactory() {}

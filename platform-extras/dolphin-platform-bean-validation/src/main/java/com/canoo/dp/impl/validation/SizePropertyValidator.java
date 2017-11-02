@@ -1,8 +1,13 @@
 package com.canoo.dp.impl.validation;
 
+import org.apiguardian.api.API;
+
 import javax.validation.ConstraintValidatorContext;
 import javax.validation.constraints.Size;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.19.0", status = INTERNAL)
 public class SizePropertyValidator extends AbstractPropertyValidator<Size, String> {
 
     private int maxSizeValue;

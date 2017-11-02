@@ -2,12 +2,16 @@ package com.canoo.dp.impl.server.security;
 
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.core.PlatformConfiguration;
+import org.apiguardian.api.API;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.19.0", status = INTERNAL)
 public class KeycloakConfiguration implements Serializable {
 
     public final static String SECURITY_ACTIVE_PROPERTY_NAME = "security.active";

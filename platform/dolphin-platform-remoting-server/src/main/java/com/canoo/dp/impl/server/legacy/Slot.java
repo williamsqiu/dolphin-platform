@@ -15,6 +15,10 @@
  */
 package com.canoo.dp.impl.server.legacy;
 
+import org.apiguardian.api.API;
+
+import static org.apiguardian.api.API.Status.INTERNAL;
+
 /**
  * A Slot corresponds to an attribute in the presentation model.
  * A slot consists of a propertyName (String), a value, a baseValue, a qualifier, and a tag.
@@ -22,6 +26,7 @@ package com.canoo.dp.impl.server.legacy;
  *
  * @see DTO
  */
+@API(since = "0.x", status = INTERNAL)
 public final class Slot {
 
     private final String propertyName;

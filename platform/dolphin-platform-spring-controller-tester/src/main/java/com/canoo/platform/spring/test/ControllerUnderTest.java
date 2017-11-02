@@ -19,6 +19,9 @@ import com.canoo.platform.remoting.client.Param;
 import com.canoo.platform.remoting.DolphinBean;
 import com.canoo.platform.remoting.server.DolphinAction;
 import com.canoo.platform.remoting.server.DolphinController;
+import org.apiguardian.api.API;
+
+import static org.apiguardian.api.API.Status.MAINTAINED;
 
 /**
  * Provides acces to a controller (see {@link DolphinController}) and its model for tests
@@ -26,6 +29,7 @@ import com.canoo.platform.remoting.server.DolphinController;
  * @param <T> type of the model
  * @author Hendrik Ebbers
  */
+@API(since = "0.x", status = MAINTAINED)
 public interface ControllerUnderTest<T> {
 
     /**

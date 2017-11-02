@@ -19,11 +19,15 @@ import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.server.servlet.Mutex;
 import com.canoo.platform.server.client.ClientSession;
 import com.canoo.platform.server.client.ClientSessionListener;
+import org.apiguardian.api.API;
 
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public class ClientSessionMutextHolder implements ClientSessionListener {
 
     private final Map<String, WeakReference<Mutex>> sessionMutexMap = new HashMap<>();

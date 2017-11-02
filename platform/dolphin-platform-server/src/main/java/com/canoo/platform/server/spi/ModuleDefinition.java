@@ -15,9 +15,12 @@
  */
 package com.canoo.platform.server.spi;
 
+import org.apiguardian.api.API;
+
 import java.lang.annotation.*;
 
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import static org.apiguardian.api.API.Status.EXPERIMENTAL;
 
 /**
  * Annotation to define a module. Each module that should be started at the server / Dolphin Platform start.
@@ -30,6 +33,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Inherited
 @Retention(RUNTIME)
 @Target(ElementType.TYPE)
+@API(since = "0.x", status = EXPERIMENTAL)
 public @interface ModuleDefinition {
 
     /**

@@ -24,7 +24,11 @@ import com.canoo.dp.impl.remoting.InternalAttributesBean;
 import com.canoo.dp.impl.remoting.PlatformRemotingConstants;
 import com.canoo.dp.impl.remoting.legacy.core.PresentationModel;
 import com.canoo.dp.impl.server.legacy.ServerModelStore;
+import org.apiguardian.api.API;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public class ServerPlatformBeanRepository {
 
     private ServerControllerActionCallBean controllerActionCallBean;

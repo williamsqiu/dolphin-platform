@@ -15,9 +15,14 @@
  */
 package com.canoo.dp.impl.server.context;
 
+import org.apiguardian.api.API;
+
+import static org.apiguardian.api.API.Status.INTERNAL;
+
 /**
  * This exception defines an error in the context handling like when creating or deleting a context
  */
+@API(since = "0.x", status = INTERNAL)
 public class DolphinContextException extends RuntimeException {
 
     private static final long serialVersionUID = 6012443743549799211L;

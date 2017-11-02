@@ -16,6 +16,7 @@
 package com.canoo.dp.impl.server.mbean;
 
 import com.canoo.platform.core.functional.Subscription;
+import org.apiguardian.api.API;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,9 +27,12 @@ import java.lang.management.ManagementFactory;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
 /**
  * A general MBean registry
  */
+@API(since = "0.x", status = INTERNAL)
 public class MBeanRegistry {
 
     private static final Logger LOG = LoggerFactory.getLogger(MBeanRegistry.class);

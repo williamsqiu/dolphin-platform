@@ -15,9 +15,14 @@
  */
 package com.canoo.dp.impl.server.mbean.beans;
 
+import org.apiguardian.api.API;
+
+import static org.apiguardian.api.API.Status.INTERNAL;
+
 /**
  * A functional interface that provides a Dolphin Platform model
  */
+@API(since = "0.x", status = INTERNAL)
 public interface ModelProvider {
 
     /**

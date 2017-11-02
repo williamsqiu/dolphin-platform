@@ -22,7 +22,11 @@ import com.canoo.dp.impl.remoting.MappingException;
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.remoting.legacy.core.Attribute;
 import com.canoo.dp.impl.remoting.legacy.core.PresentationModel;
+import org.apiguardian.api.API;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public class ServerControllerActionCallBean extends AbstractControllerActionCallBean {
 
     private final Converters converters;

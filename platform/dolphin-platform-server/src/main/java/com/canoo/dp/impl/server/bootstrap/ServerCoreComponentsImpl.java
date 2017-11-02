@@ -21,11 +21,15 @@ import com.canoo.dp.impl.server.beans.ManagedBeanFactory;
 import com.canoo.platform.server.spi.ClasspathScanner;
 import com.canoo.platform.core.PlatformConfiguration;
 import com.canoo.platform.server.spi.ServerCoreComponents;
+import org.apiguardian.api.API;
 
 import javax.servlet.ServletContext;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public class ServerCoreComponentsImpl implements ServerCoreComponents {
 
     private final Map<Class<?>, Object> instances = new HashMap<>();

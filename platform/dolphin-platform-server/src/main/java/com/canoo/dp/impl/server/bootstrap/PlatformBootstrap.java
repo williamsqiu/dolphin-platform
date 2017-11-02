@@ -28,12 +28,16 @@ import com.canoo.platform.server.spi.ModuleDefinition;
 import com.canoo.platform.server.spi.ModuleInitializationException;
 import com.canoo.platform.server.spi.ServerCoreComponents;
 import com.canoo.platform.server.spi.ServerModule;
+import org.apiguardian.api.API;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletContext;
 import java.util.*;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public class PlatformBootstrap {
 
     private static final Logger LOG = LoggerFactory.getLogger(PlatformBootstrap.class);

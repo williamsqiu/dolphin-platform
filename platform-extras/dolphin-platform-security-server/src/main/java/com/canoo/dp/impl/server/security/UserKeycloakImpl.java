@@ -2,10 +2,14 @@ package com.canoo.dp.impl.server.security;
 
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.server.security.User;
+import org.apiguardian.api.API;
 import org.keycloak.KeycloakSecurityContext;
 
 import java.util.stream.Stream;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.19.0", status = INTERNAL)
 public class UserKeycloakImpl implements User {
 
     private final KeycloakSecurityContext keycloakSecurityContext;

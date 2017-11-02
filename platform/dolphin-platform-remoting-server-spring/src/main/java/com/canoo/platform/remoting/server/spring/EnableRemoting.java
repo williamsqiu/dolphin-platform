@@ -17,6 +17,7 @@ package com.canoo.platform.remoting.server.spring;
 
 import com.canoo.dp.impl.remoting.server.spring.RemotingSpringBeanFactory;
 import com.canoo.platform.server.spring.EnableDolphinPlatform;
+import org.apiguardian.api.API;
 import org.springframework.context.annotation.Import;
 
 import java.lang.annotation.Documented;
@@ -25,12 +26,14 @@ import java.lang.annotation.Target;
 
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import static org.apiguardian.api.API.Status.MAINTAINED;
 
 @Import({RemotingSpringBeanFactory.class})
 @Documented
 @Target({TYPE})
 @Retention(RUNTIME)
 @EnableDolphinPlatform
+@API(since = "0.x", status = MAINTAINED)
 public @interface EnableRemoting {
 
 }

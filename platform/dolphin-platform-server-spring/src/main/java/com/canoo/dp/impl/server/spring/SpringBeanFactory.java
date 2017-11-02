@@ -20,14 +20,18 @@ import com.canoo.dp.impl.server.bootstrap.PlatformBootstrap;
 import com.canoo.dp.impl.server.client.ClientSessionProvider;
 import com.canoo.platform.server.client.ClientSession;
 import com.canoo.platform.server.spring.ClientScope;
+import org.apiguardian.api.API;
 import org.springframework.beans.factory.config.CustomScopeConfigurer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import static org.apiguardian.api.API.Status.INTERNAL;
 
 /**
  * Provides all Dolphin Platform Beans and Scopes for CDI
  */
 @Configuration
+@API(since = "0.x", status = INTERNAL)
 public class SpringBeanFactory {
 
     @Bean(name = "clientSession")

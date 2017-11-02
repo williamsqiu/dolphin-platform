@@ -17,15 +17,19 @@ package com.canoo.platform.server.spi;
 
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.core.PlatformConfiguration;
+import org.apiguardian.api.API;
 
 import java.util.Collections;
 import java.util.List;
+
+import static org.apiguardian.api.API.Status.EXPERIMENTAL;
 
 /**
  * Abstract implementation of the {@link ServerModule} interface that can be used as a base to create new server module implementations.
  *
  * @author Hendrik Ebbers
  */
+@API(since = "0.x", status = EXPERIMENTAL)
 public abstract class AbstractBaseModule implements ServerModule {
 
     @Override

@@ -18,13 +18,17 @@ package com.canoo.dp.impl.server.config;
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.server.event.DefaultEventBusProvider;
 import com.canoo.platform.core.PlatformConfiguration;
+import org.apiguardian.api.API;
 
 import java.io.Serializable;
+
+import static org.apiguardian.api.API.Status.INTERNAL;
 
 /**
  * This class defines the configuration of the Dolphin Platform. Normally the configuration is created based
  * on defaults and a property file (see {@link com.canoo.dp.impl.server.config.ConfigurationFileLoader}).
  */
+@API(since = "0.x", status = INTERNAL)
 public class RemotingConfiguration implements Serializable {
 
     public static final String ACTIVE = "remoting.active";

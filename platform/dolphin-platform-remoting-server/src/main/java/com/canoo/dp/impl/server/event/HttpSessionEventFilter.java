@@ -3,12 +3,16 @@ package com.canoo.dp.impl.server.event;
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.remoting.server.event.EventFilter;
 import com.canoo.platform.remoting.server.event.MessageEventContext;
+import org.apiguardian.api.API;
 
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public class HttpSessionEventFilter implements EventFilter {
 
     private final List<String> sessionIds;

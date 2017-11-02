@@ -16,7 +16,11 @@
 package com.canoo.dp.impl.server.context;
 
 import com.canoo.platform.server.client.ClientSession;
+import org.apiguardian.api.API;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public interface DolphinContextProvider {
 
     DolphinContext getContext(final ClientSession clientSession);

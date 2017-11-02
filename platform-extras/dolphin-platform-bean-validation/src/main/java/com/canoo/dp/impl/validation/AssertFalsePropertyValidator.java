@@ -15,12 +15,17 @@
  */
 package com.canoo.dp.impl.validation;
 
+import org.apiguardian.api.API;
+
 import javax.validation.ConstraintValidatorContext;
 import javax.validation.constraints.AssertFalse;
+
+import static org.apiguardian.api.API.Status.INTERNAL;
 
 /**
  * Validator that adds Dolphin Platform property support for the {@link AssertFalse} annotation.
  */
+@API(since = "0.19.0", status = INTERNAL)
 public final class AssertFalsePropertyValidator extends AbstractPropertyValidator<AssertFalse, Boolean> {
 
     /**

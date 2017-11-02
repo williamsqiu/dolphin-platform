@@ -16,10 +16,14 @@
 package com.canoo.dp.impl.server.model;
 
 import com.canoo.dp.impl.remoting.BeanBuilder;
+import org.apiguardian.api.API;
+
+import static org.apiguardian.api.API.Status.INTERNAL;
 
 /**
  * Interface that defines the {@link BeanBuilder} for the server
  */
+@API(since = "0.x", status = INTERNAL)
 public interface ServerBeanBuilder extends BeanBuilder {
 
    /**

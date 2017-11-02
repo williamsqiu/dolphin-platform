@@ -17,8 +17,12 @@ package com.canoo.dp.impl.server.legacy;
 
 
 import com.canoo.dp.impl.remoting.legacy.core.Dolphin;
+import org.apiguardian.api.API;
+
+import static org.apiguardian.api.API.Status.INTERNAL;
 
 @Deprecated
+@API(since = "0.x", status = INTERNAL)
 public interface ServerDolphin extends Dolphin<ServerAttribute, ServerPresentationModel> {
 
     ServerConnector getServerConnector();

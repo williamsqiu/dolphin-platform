@@ -1,10 +1,14 @@
 package com.canoo.dp.impl.validation;
 
+import org.apiguardian.api.API;
+
 import javax.validation.ConstraintValidatorContext;
 import javax.validation.ValidationException;
 import java.lang.annotation.Annotation;
 import java.util.Calendar;
 import java.util.Date;
+
+import static org.apiguardian.api.API.Status.INTERNAL;
 
 /**
  * Utility abstract class to minimize {@link Date}-{@link Calendar} type checking.
@@ -13,6 +17,7 @@ import java.util.Date;
  *
  * @param <A> defines the annotation of the constraints
  */
+@API(since = "0.19.0", status = INTERNAL)
 public abstract class AbstractDateAndCalendarValidator<A extends Annotation> extends AbstractPropertyValidator<A, Object> {
 
     /**

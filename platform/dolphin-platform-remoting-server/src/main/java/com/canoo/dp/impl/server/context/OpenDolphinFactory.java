@@ -19,10 +19,14 @@ import com.canoo.dp.impl.remoting.codec.OptimizedJsonCodec;
 import com.canoo.dp.impl.server.legacy.DefaultServerDolphin;
 import com.canoo.dp.impl.server.legacy.ServerConnector;
 import com.canoo.dp.impl.server.legacy.ServerModelStore;
+import org.apiguardian.api.API;
+
+import static org.apiguardian.api.API.Status.INTERNAL;
 
 /**
  *  A factory that creates an Open Dolphin {@link DefaultServerDolphin}
  */
+@API(since = "0.x", status = INTERNAL)
 public class OpenDolphinFactory {
 
     /**

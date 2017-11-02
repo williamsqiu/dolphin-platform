@@ -32,6 +32,7 @@ import com.canoo.platform.remoting.server.Param;
 import com.canoo.platform.remoting.server.ParentController;
 import com.canoo.platform.remoting.server.PostChildCreated;
 import com.canoo.platform.remoting.server.PreChildDestroyed;
+import org.apiguardian.api.API;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,10 +47,13 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
 /**
  * This class wrapps the complete Dolphin Platform controller handling.
  * It defines the methods to create or destroy controllers and to interact with them.
  */
+@API(since = "0.x", status = INTERNAL)
 public class ControllerHandler {
 
     private static final Logger LOG = LoggerFactory.getLogger(ControllerHandler.class);

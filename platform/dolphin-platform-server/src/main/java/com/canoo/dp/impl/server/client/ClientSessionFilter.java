@@ -17,6 +17,7 @@ package com.canoo.dp.impl.server.client;
 
 import com.canoo.dp.impl.platform.core.PlatformConstants;
 import com.canoo.dp.impl.platform.core.Assert;
+import org.apiguardian.api.API;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,6 +27,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public class ClientSessionFilter implements Filter {
 
     private static final Logger LOG = LoggerFactory.getLogger(ClientSessionFilter.class);

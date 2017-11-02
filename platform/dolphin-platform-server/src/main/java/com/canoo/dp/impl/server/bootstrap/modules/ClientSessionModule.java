@@ -29,6 +29,7 @@ import com.canoo.platform.server.spi.ModuleDefinition;
 import com.canoo.platform.server.spi.ModuleInitializationException;
 import com.canoo.platform.core.PlatformConfiguration;
 import com.canoo.platform.server.spi.ServerCoreComponents;
+import org.apiguardian.api.API;
 
 import javax.servlet.DispatcherType;
 import javax.servlet.FilterRegistration;
@@ -37,6 +38,9 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 @ModuleDefinition(ClientSessionModule.CLIENT_SESSION_MODULE)
 public class ClientSessionModule extends AbstractBaseModule {
 

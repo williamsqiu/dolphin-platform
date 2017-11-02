@@ -1,8 +1,10 @@
 package com.canoo.dp.impl.server.event;
 
-/**
- * Created by hendrikebbers on 31.10.17.
- */
+import org.apiguardian.api.API;
+
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public interface EventConstants {
 
     String TYPE_PARAM = "sender.type";

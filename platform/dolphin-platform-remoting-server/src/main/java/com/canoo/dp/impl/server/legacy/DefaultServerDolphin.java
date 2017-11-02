@@ -15,6 +15,10 @@
  */
 package com.canoo.dp.impl.server.legacy;
 
+import org.apiguardian.api.API;
+
+import static org.apiguardian.api.API.Status.INTERNAL;
+
 /**
  * The default implementation of the Dolphin facade on the server side.
  * Responsibility: single access point for dolphin capabilities.
@@ -22,6 +26,7 @@ package com.canoo.dp.impl.server.legacy;
  * Threading model: confined to a single controller thread.
  */
 @Deprecated
+@API(since = "0.x", status = INTERNAL)
 public class DefaultServerDolphin implements ServerDolphin {
 
     /**

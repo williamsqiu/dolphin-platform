@@ -23,12 +23,16 @@ import com.canoo.platform.remoting.Property;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
+import org.apiguardian.api.API;
 
 import java.lang.reflect.Field;
+
+import static org.apiguardian.api.API.Status.INTERNAL;
 
 /**
  * Helper class that exports the current state of a dolphin bean (see {@link DolphinBean}) to JSON
  */
+@API(since = "0.x", status = INTERNAL)
 public class ModelJsonSerializer {
 
     public static JsonObject toJson(Object dolphinModel) {

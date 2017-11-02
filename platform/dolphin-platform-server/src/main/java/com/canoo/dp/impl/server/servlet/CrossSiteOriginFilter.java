@@ -19,6 +19,7 @@ import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.platform.core.PlatformConstants;
 import com.canoo.dp.impl.server.config.DefaultModuleConfig;
 import com.canoo.platform.core.PlatformConfiguration;
+import org.apiguardian.api.API;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -26,6 +27,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public class CrossSiteOriginFilter implements Filter {
 
     private final PlatformConfiguration configuration;

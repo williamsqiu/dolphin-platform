@@ -33,7 +33,11 @@ import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.server.gc.GarbageCollector;
 import com.canoo.dp.impl.remoting.legacy.core.Attribute;
 import com.canoo.dp.impl.remoting.legacy.core.PresentationModel;
+import org.apiguardian.api.API;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public class ServerBeanBuilderImpl extends AbstractBeanBuilder implements ServerBeanBuilder {
 
     private final GarbageCollector garbageCollector;

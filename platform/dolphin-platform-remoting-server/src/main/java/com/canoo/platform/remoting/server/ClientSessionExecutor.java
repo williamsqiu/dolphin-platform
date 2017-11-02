@@ -15,14 +15,20 @@
  */
 package com.canoo.platform.remoting.server;
 
+import org.apiguardian.api.API;
+
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
+
+import static org.apiguardian.api.API.Status.EXPERIMENTAL;
+import static org.apiguardian.api.API.Status.MAINTAINED;
 
 /**
  * The ClientSessionExecutor can be used to execute tasks later on a specific client session (see {@link com.canoo.platform.server.client.ClientSession}).
  *
  * @author Hendrik Ebbers
  */
+@API(since = "0.x", status = MAINTAINED)
 public interface ClientSessionExecutor {
 
     /**

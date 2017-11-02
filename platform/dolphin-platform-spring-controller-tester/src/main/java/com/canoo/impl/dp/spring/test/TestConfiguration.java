@@ -32,6 +32,7 @@ import com.canoo.dp.impl.server.scanner.DefaultClasspathScanner;
 import com.canoo.platform.client.PlatformClient;
 import com.canoo.platform.remoting.client.ClientContext;
 import com.canoo.platform.server.client.ClientSession;
+import org.apiguardian.api.API;
 import org.springframework.web.context.WebApplicationContext;
 
 import javax.servlet.http.HttpSession;
@@ -42,6 +43,9 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public class TestConfiguration {
 
     private final DolphinTestContext dolphinTestContext;

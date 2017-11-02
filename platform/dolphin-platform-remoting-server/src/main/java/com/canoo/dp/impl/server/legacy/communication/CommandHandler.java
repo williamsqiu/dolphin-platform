@@ -17,9 +17,15 @@ package com.canoo.dp.impl.server.legacy.communication;
 
 
 import com.canoo.dp.impl.remoting.legacy.communication.Command;
+import org.apiguardian.api.API;
 
 import java.util.List;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public interface CommandHandler<T extends Command> {
+
     void handleCommand(T command, List<Command> response);
+
 }

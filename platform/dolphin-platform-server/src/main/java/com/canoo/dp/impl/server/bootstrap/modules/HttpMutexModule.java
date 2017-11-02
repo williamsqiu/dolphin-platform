@@ -21,9 +21,13 @@ import com.canoo.platform.server.spi.AbstractBaseModule;
 import com.canoo.platform.server.spi.ModuleDefinition;
 import com.canoo.platform.server.spi.ModuleInitializationException;
 import com.canoo.platform.server.spi.ServerCoreComponents;
+import org.apiguardian.api.API;
 
 import javax.servlet.ServletContext;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 @ModuleDefinition(HttpMutexModule.HTTP_MUTEX_MODULE)
 public class HttpMutexModule extends AbstractBaseModule {
 

@@ -15,8 +15,13 @@
  */
 package com.canoo.dp.impl.server.beans;
 
+import org.apiguardian.api.API;
+
 import javax.servlet.ServletContext;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public interface ManagedBeanFactory {
 
     void init(ServletContext servletContext);

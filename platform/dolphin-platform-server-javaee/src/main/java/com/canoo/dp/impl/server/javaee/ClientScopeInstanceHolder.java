@@ -16,10 +16,14 @@
 package com.canoo.dp.impl.server.javaee;
 
 import com.canoo.dp.impl.platform.core.Assert;
+import org.apiguardian.api.API;
 
 import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.inject.spi.Bean;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public class ClientScopeInstanceHolder<T> {
 
     private Bean<T> bean;

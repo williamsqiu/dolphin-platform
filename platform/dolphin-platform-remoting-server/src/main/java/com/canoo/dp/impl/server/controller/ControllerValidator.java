@@ -20,6 +20,7 @@ import com.canoo.dp.impl.platform.core.ReflectionHelper;
 import com.canoo.platform.remoting.server.DolphinAction;
 import com.canoo.platform.remoting.server.DolphinModel;
 import com.canoo.platform.remoting.server.Param;
+import org.apiguardian.api.API;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -29,9 +30,12 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.List;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
 /**
  * This class validates the DolphinController
  */
+@API(since = "0.x", status = INTERNAL)
 public class ControllerValidator {
 
     public void validate(Class<?> clazz) throws ControllerValidationException {

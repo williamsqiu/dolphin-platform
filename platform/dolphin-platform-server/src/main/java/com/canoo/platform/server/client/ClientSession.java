@@ -15,8 +15,12 @@
  */
 package com.canoo.platform.server.client;
 
+import org.apiguardian.api.API;
+
 import javax.servlet.http.HttpSession;
 import java.util.Set;
+
+import static org.apiguardian.api.API.Status.MAINTAINED;
 
 /**
  * Defines a Dolphin Platform Session. For each client (each client context instance) one {@link ClientSession}
@@ -24,6 +28,7 @@ import java.util.Set;
  *
  * @author Hendrik Ebbers
  */
+@API(since = "0.x", status = MAINTAINED)
 public interface ClientSession {
 
     /**

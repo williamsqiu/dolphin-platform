@@ -15,9 +15,14 @@
  */
 package com.canoo.dp.impl.server.mbean;
 
+import org.apiguardian.api.API;
+
+import static org.apiguardian.api.API.Status.INTERNAL;
+
 /**
  * A general description that can be used to define how a MBean will be registered
  */
+@API(since = "0.x", status = INTERNAL)
 public class MBeanDescription {
 
     private String domainName;

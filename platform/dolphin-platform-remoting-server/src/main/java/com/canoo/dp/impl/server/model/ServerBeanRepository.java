@@ -17,10 +17,14 @@ package com.canoo.dp.impl.server.model;
 
 import com.canoo.dp.impl.remoting.BeanRepository;
 import com.canoo.dp.impl.server.gc.GarbageCollector;
+import org.apiguardian.api.API;
+
+import static org.apiguardian.api.API.Status.INTERNAL;
 
 /**
  * Interface that defines the {@link BeanRepository} for the server.
  */
+@API(since = "0.x", status = INTERNAL)
 public interface ServerBeanRepository extends BeanRepository {
 
     /**

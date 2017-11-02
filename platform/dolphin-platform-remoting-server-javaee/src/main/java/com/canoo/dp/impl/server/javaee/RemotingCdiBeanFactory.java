@@ -26,10 +26,13 @@ import com.canoo.platform.remoting.server.RemotingContext;
 import com.canoo.platform.remoting.server.binding.PropertyBinder;
 import com.canoo.platform.remoting.server.event.RemotingEventBus;
 import com.canoo.platform.server.javaee.ClientScoped;
+import org.apiguardian.api.API;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
 import java.lang.reflect.Proxy;
+
+import static org.apiguardian.api.API.Status.INTERNAL;
 
 /**
  * Factory that provides all needed Dolphin Platform extensions as CDI beans.
@@ -37,6 +40,7 @@ import java.lang.reflect.Proxy;
  * @author Hendrik Ebbers
  */
 @ApplicationScoped
+@API(since = "0.x", status = INTERNAL)
 public class RemotingCdiBeanFactory {
 
     @Produces

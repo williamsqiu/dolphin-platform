@@ -17,8 +17,11 @@ package com.canoo.dp.impl.server.spring;
 
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.server.beans.PostConstructInterceptor;
+import org.apiguardian.api.API;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.InstantiationAwareBeanPostProcessorAdapter;
+
+import static org.apiguardian.api.API.Status.INTERNAL;
 
 /**
  * A Dolphin Platform specific implementation of {@link InstantiationAwareBeanPostProcessorAdapter} that injects
@@ -27,6 +30,7 @@ import org.springframework.beans.factory.config.InstantiationAwareBeanPostProces
  * @author Hendrik Ebbers
  * @since 0.7
  */
+@API(since = "0.7", status = INTERNAL)
 public class SpringPreInjector extends InstantiationAwareBeanPostProcessorAdapter {
 
     private final ThreadLocal<PostConstructInterceptor> currentInterceptor = new ThreadLocal<>();

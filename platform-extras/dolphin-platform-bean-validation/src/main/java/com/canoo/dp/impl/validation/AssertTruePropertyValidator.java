@@ -15,12 +15,17 @@
  */
 package com.canoo.dp.impl.validation;
 
+import org.apiguardian.api.API;
+
 import javax.validation.ConstraintValidatorContext;
 import javax.validation.constraints.AssertTrue;
+
+import static org.apiguardian.api.API.Status.INTERNAL;
 
 /**
  * Validator that adds Dolphin Platform property support for the {@link AssertTrue} annotation.
  */
+@API(since = "0.19.0", status = INTERNAL)
 public final class AssertTruePropertyValidator extends AbstractPropertyValidator<AssertTrue, Boolean> {
 
     /**

@@ -20,7 +20,11 @@ import com.canoo.dp.impl.remoting.BeanRepositoryImpl;
 import com.canoo.dp.impl.remoting.EventDispatcher;
 import com.canoo.dp.impl.remoting.legacy.core.ModelStore;
 import com.canoo.dp.impl.server.gc.GarbageCollector;
+import org.apiguardian.api.API;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public class ServerBeanRepositoryImpl extends BeanRepositoryImpl implements ServerBeanRepository{
 
     final GarbageCollector garbageCollector;

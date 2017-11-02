@@ -18,17 +18,21 @@ package com.canoo.dp.impl.server.javaee;
 import com.canoo.dp.impl.server.bootstrap.PlatformBootstrap;
 import com.canoo.dp.impl.server.config.ConfigurationFileLoader;
 import com.canoo.dp.impl.server.config.DefaultPlatformConfiguration;
+import org.apiguardian.api.API;
 
 import javax.servlet.ServletContainerInitializer;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import java.util.Set;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
 /**
  * The Dolphin Platform Boostrap for a JavaEE based application.
  *
  * @author Hendrik Ebbers
  */
+@API(since = "0.x", status = INTERNAL)
 public class DolphinPlatformJavaeeBootstrap implements ServletContainerInitializer {
 
     @Override

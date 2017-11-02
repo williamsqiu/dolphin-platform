@@ -15,6 +15,7 @@
  */
 package com.canoo.platform.remoting.server.spring;
 
+import org.apiguardian.api.API;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.AutoConfigurationExcludeFilter;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -29,6 +30,7 @@ import java.lang.annotation.Target;
 
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import static org.apiguardian.api.API.Status.MAINTAINED;
 
 /**
  * Annotation can be used to annotate a Spring based Dolphin Platform annotation.
@@ -47,5 +49,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
         @ComponentScan.Filter(type = FilterType.CUSTOM, classes = TypeExcludeFilter.class),
         @ComponentScan.Filter(type = FilterType.CUSTOM, classes = AutoConfigurationExcludeFilter.class) })
 @EnableRemoting
+@API(since = "0.x", status = MAINTAINED)
 public @interface DolphinPlatformRemotingApplication {
 }

@@ -16,12 +16,16 @@
 package com.canoo.dp.impl.server.gc;
 
 import com.canoo.platform.remoting.DolphinBean;
+import org.apiguardian.api.API;
+
+import static org.apiguardian.api.API.Status.INTERNAL;
 
 /**
  * Describes a direct reference between 2 dolphin beans (see {@link DolphinBean}). In each
  * reference one dolphin bean must be the parent that holds the reference to the other dolphin bean that is defined as child.
  * Internally the dolphin beans are defined by {@link Instance} instances that hold additional informationen next to the bean instance.
  */
+@API(since = "0.x", status = INTERNAL)
 public abstract class Reference {
 
     private Instance parent;

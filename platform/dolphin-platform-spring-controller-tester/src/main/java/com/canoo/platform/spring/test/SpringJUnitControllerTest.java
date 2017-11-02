@@ -19,6 +19,7 @@ import com.canoo.impl.dp.spring.test.ClientTestFactory;
 import com.canoo.impl.dp.spring.test.DolphinPlatformSpringTestBootstrap;
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.remoting.client.ClientContext;
+import org.apiguardian.api.API;
 import org.junit.Rule;
 import org.junit.rules.ExternalResource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
+
+import static org.apiguardian.api.API.Status.MAINTAINED;
 
 /**
  * Base class for JUnit based controller tests in Spring. This class can be extended to write custom controller tests.
@@ -39,6 +42,7 @@ import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 @SpringBootTest
 @ContextConfiguration(classes = DolphinPlatformSpringTestBootstrap.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
+@API(since = "0.x", status = MAINTAINED)
 public abstract class SpringJUnitControllerTest extends AbstractJUnit4SpringContextTests implements ControllerTest {
 
     @Autowired

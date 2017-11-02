@@ -16,14 +16,18 @@
 package com.canoo.dp.impl.validation;
 
 import com.canoo.platform.remoting.Property;
+import org.apiguardian.api.API;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import javax.validation.constraints.Null;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
 /**
  * Validator that adds Dolphin Platform property support for the {@link Null} annotation.
  */
+@API(since = "0.19.0", status = INTERNAL)
 public final class NullPropertyValidator implements ConstraintValidator<Null, Property> {
 
     @Override

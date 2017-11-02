@@ -15,6 +15,11 @@
  */
 package com.canoo.dp.impl.server.servlet;
 
+import org.apiguardian.api.API;
+
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public interface ServletConstants {
     String DOLPHIN_SERVLET_NAME = "dolphin-platform-servlet";
 

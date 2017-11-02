@@ -19,13 +19,17 @@ import com.canoo.dp.impl.remoting.legacy.communication.Command;
 import com.canoo.dp.impl.server.legacy.DTO;
 import com.canoo.dp.impl.server.legacy.ServerAttribute;
 import com.canoo.dp.impl.server.legacy.ServerModelStore;
+import org.apiguardian.api.API;
 
 import java.util.List;
+
+import static org.apiguardian.api.API.Status.INTERNAL;
 
 /**
  * Common superclass for all actions that need access to
  * the ServerModelStore, e.g. to work with the server model store.
  */
+@API(since = "0.x", status = INTERNAL)
 public abstract class DolphinServerAction implements ServerAction {
 
     private ServerModelStore serverModelStore;

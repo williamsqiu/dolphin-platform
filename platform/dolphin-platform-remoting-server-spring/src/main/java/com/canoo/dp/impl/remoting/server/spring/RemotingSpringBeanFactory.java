@@ -28,15 +28,19 @@ import com.canoo.platform.remoting.server.binding.PropertyBinder;
 import com.canoo.platform.remoting.server.event.RemotingEventBus;
 import com.canoo.platform.server.spring.ClientScope;
 import com.canoo.platform.server.spring.SingletonScope;
+import org.apiguardian.api.API;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.lang.reflect.Proxy;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
 /**
  * Provides all Dolphin Platform Beans and Scopes for CDI
  */
 @Configuration
+@API(since = "0.x", status = INTERNAL)
 public class RemotingSpringBeanFactory {
 
     @Bean(name = "remotingContext")

@@ -18,7 +18,11 @@ package com.canoo.dp.impl.server.event;
 import com.canoo.dp.impl.server.config.RemotingConfiguration;
 import com.canoo.platform.remoting.server.event.RemotingEventBus;
 import com.canoo.platform.remoting.server.spi.EventBusProvider;
+import org.apiguardian.api.API;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public class DefaultEventBusProvider implements EventBusProvider {
 
     public static final String DEFAULT_EVENTBUS_NAME = "default";

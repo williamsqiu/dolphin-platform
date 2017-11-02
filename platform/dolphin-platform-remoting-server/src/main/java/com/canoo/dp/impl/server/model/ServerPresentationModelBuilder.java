@@ -22,10 +22,14 @@ import com.canoo.dp.impl.server.legacy.DTO;
 import com.canoo.dp.impl.server.legacy.ServerModelStore;
 import com.canoo.dp.impl.server.legacy.ServerPresentationModel;
 import com.canoo.dp.impl.server.legacy.Slot;
+import org.apiguardian.api.API;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public class ServerPresentationModelBuilder extends AbstractPresentationModelBuilder<ServerPresentationModel> {
 
     private final List<Slot> slots = new ArrayList<>();

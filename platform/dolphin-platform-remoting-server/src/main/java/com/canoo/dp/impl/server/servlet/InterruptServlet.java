@@ -18,6 +18,7 @@ package com.canoo.dp.impl.server.servlet;
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.server.context.DolphinContext;
 import com.canoo.dp.impl.server.context.DolphinContextProvider;
+import org.apiguardian.api.API;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -25,6 +26,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
 public class InterruptServlet extends HttpServlet {
 
     private final DolphinContextProvider dolphinContextProvider;

@@ -21,6 +21,7 @@ import com.canoo.dp.impl.server.beans.PostConstructInterceptor;
 import org.apache.deltaspike.core.api.provider.BeanManagerProvider;
 import org.apache.deltaspike.core.util.bean.BeanBuilder;
 import org.apache.deltaspike.core.util.metadata.builder.DelegatingContextualLifecycle;
+import org.apiguardian.api.API;
 
 import javax.enterprise.context.Dependent;
 import javax.enterprise.context.spi.CreationalContext;
@@ -33,11 +34,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
 /**
  * JavaEE / CDI based implementation of the {@link ManagedBeanFactory}
  *
  * @author Hendrik Ebbers
  */
+@API(since = "0.x", status = INTERNAL)
 public class CdiManagedBeanFactory implements ManagedBeanFactory {
 
     private Map<Object, CreationalContext> contextMap = new HashMap<>();

@@ -18,6 +18,7 @@ package com.canoo.dp.impl.server.spring;
 import com.canoo.dp.impl.server.bootstrap.PlatformBootstrap;
 import com.canoo.dp.impl.server.config.ConfigurationFileLoader;
 import com.canoo.dp.impl.server.config.DefaultPlatformConfiguration;
+import org.apiguardian.api.API;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -31,12 +32,15 @@ import org.springframework.core.env.Environment;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
 /**
  * Basic Bootstrap for Spring based application. The bootstrap automatically starts the dolphin platform bootstrap.
  *
  * @author Hendrik Ebbers
  */
 @Configuration
+@API(since = "0.x", status = INTERNAL)
 public class DolphinPlatformSpringBootstrap implements ServletContextInitializer, ApplicationContextAware {
 
     private static final Logger LOG = LoggerFactory.getLogger(DolphinPlatformSpringBootstrap.class);

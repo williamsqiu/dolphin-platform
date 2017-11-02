@@ -15,11 +15,16 @@
  */
 package com.canoo.dp.impl.server.gc;
 
+import org.apiguardian.api.API;
+
 import java.util.Set;
+
+import static org.apiguardian.api.API.Status.INTERNAL;
 
 /**
  * A callback that is called by the {@link GarbageCollector} after each garbage collection.
  */
+@API(since = "0.x", status = INTERNAL)
 public interface GarbageCollectionCallback {
 
     /**

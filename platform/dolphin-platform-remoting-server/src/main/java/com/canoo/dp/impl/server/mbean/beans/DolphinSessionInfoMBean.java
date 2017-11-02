@@ -15,11 +15,16 @@
  */
 package com.canoo.dp.impl.server.mbean.beans;
 
+import org.apiguardian.api.API;
+
 import java.util.Set;
+
+import static org.apiguardian.api.API.Status.INTERNAL;
 
 /**
  * Interface for a MBean that defines a Dolphin Platform session (see {@link com.canoo.dolphin.server.DolphinSession})
  */
+@API(since = "0.x", status = INTERNAL)
 public interface DolphinSessionInfoMBean {
 
     String getDolphinSessionId();

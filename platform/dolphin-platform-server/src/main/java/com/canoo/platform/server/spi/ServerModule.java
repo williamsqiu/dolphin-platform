@@ -16,8 +16,11 @@
 package com.canoo.platform.server.spi;
 
 import com.canoo.platform.core.PlatformConfiguration;
+import org.apiguardian.api.API;
 
 import java.util.List;
+
+import static org.apiguardian.api.API.Status.EXPERIMENTAL;
 
 /**
  * This interface defines a server module that will automatically be started when the Dolphin Platform server component starts. DOlphin Platform will search for all implementations of this interface on the classpath that are annotated by {@link ModuleDefinition} and will automatically start them based on the order that is defined by the {@link ModuleDefinition} annotation.
@@ -26,6 +29,7 @@ import java.util.List;
  * @see ModuleDefinition
  *
  */
+@API(since = "0.x", status = EXPERIMENTAL)
 public interface ServerModule {
 
     /**

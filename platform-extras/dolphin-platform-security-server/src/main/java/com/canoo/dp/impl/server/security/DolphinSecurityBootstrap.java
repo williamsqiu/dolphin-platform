@@ -3,6 +3,7 @@ package com.canoo.dp.impl.server.security;
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.core.PlatformConfiguration;
 import com.canoo.platform.server.security.SecurityContext;
+import org.apiguardian.api.API;
 import org.keycloak.adapters.servlet.KeycloakOIDCFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +13,9 @@ import javax.servlet.FilterRegistration;
 import javax.servlet.ServletContext;
 import java.util.EnumSet;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.19.0", status = INTERNAL)
 public class DolphinSecurityBootstrap {
 
     private final static Logger LOG = LoggerFactory.getLogger(DolphinSecurityBootstrap.class);

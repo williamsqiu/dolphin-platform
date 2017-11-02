@@ -16,10 +16,14 @@
 package com.canoo.dp.impl.server.controller;
 
 import com.canoo.platform.remoting.server.DolphinAction;
+import org.apiguardian.api.API;
+
+import static org.apiguardian.api.API.Status.INTERNAL;
 
 /**
  * This exception is thrown if a an dolphin action (see {@link DolphinAction}) throws an exception
  */
+@API(since = "0.x", status = INTERNAL)
 public class InvokeActionException extends Exception {
 
     /**
