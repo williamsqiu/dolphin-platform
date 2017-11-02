@@ -3,7 +3,7 @@ package com.canoo.dolphin.integration.server.listener;
 import com.canoo.platform.server.ServerListener;
 import com.canoo.platform.server.client.ClientSession;
 import com.canoo.platform.server.client.ClientSessionListener;
-import com.canoo.platform.remoting.server.event.DolphinEventBus;
+import com.canoo.platform.remoting.server.event.RemotingEventBus;
 
 import javax.inject.Inject;
 
@@ -11,7 +11,7 @@ import javax.inject.Inject;
 public class TestClientSessionListener implements ClientSessionListener {
 
     @Inject
-    private DolphinEventBus eventBus;
+    private RemotingEventBus eventBus;
 
     public static boolean eventBusInjected = false;
 

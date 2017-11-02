@@ -15,16 +15,21 @@
  */
 package com.canoo.platform.remoting.server.event;
 
+import org.apiguardian.api.API;
+
 import java.io.Serializable;
 import java.util.UUID;
 
+import static org.apiguardian.api.API.Status.MAINTAINED;
+
 /**
- * This class defines a topic for the {@link DolphinEventBus}. By using the event bus data messages can be withContent to
+ * This class defines a topic for the {@link RemotingEventBus}. By using the event bus data messages can be withContent to
  * a specific topic. A topic is defined by it's name that means that each topic needs a unique name.
  *
  * @param <T> the type of data that can be withContent to this topic
  * @author Hendrik Ebbers
  */
+@API(since = "0.x", status = MAINTAINED)
 public class Topic<T extends Serializable> implements Serializable {
 
     private static final long serialVersionUID = -875992657685501660L;

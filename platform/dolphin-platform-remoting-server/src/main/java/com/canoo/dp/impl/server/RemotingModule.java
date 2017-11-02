@@ -29,7 +29,7 @@ import com.canoo.dp.impl.server.controller.ControllerValidationException;
 import com.canoo.dp.impl.server.event.AbstractEventBus;
 import com.canoo.dp.impl.server.servlet.DolphinPlatformServlet;
 import com.canoo.dp.impl.server.servlet.InterruptServlet;
-import com.canoo.platform.remoting.server.event.DolphinEventBus;
+import com.canoo.platform.remoting.server.event.RemotingEventBus;
 import com.canoo.platform.remoting.server.spi.EventBusProvider;
 import com.canoo.platform.server.client.ClientSession;
 import com.canoo.platform.server.spi.ClasspathScanner;
@@ -117,11 +117,11 @@ public class RemotingModule implements ServerModule {
                     }
                     LOG.debug("Using event bus of type {} with provider class {}", provider.getType(), provider.getClass());
                     providerFound = true;
-                    DolphinEventBus eventBus = provider.create(configuration);
+                    RemotingEventBus eventBus = provider.create(configuration);
                     if(eventBus instanceof AbstractEventBus) {
                         ((AbstractEventBus) eventBus).init(contextProvider, lifecycleHandler);
                     }
-                    coreComponents.provideInstance(DolphinEventBus.class, eventBus);
+                    coreComponents.provideInstance(RemotingEventBus.class, eventBus);
                 }
             }
         }catch (ControllerValidationException cve){

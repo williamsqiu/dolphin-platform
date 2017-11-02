@@ -17,6 +17,7 @@ package com.canoo.dp.impl.server.event;
 
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.core.functional.Subscription;
+import com.canoo.platform.remoting.server.event.EventFilter;
 import com.canoo.platform.remoting.server.event.MessageListener;
 import com.canoo.platform.remoting.server.event.Topic;
 import com.hazelcast.core.HazelcastInstance;
@@ -48,13 +49,13 @@ public class DistributedEventBus extends AbstractEventBus {
 
     protected <T extends Serializable> void publishForOtherSessions(final DolphinEvent<T> event) {
         Assert.requireNonNull(event, "event");
-        final ITopic<DolphinEvent<T>> topic = toHazelcastTopic(event.getTopic());
+        final ITopic<DolphinEvent<T>> topic = toHazelcastTopic(event.getMessageEventContext().getTopic());
         topic.publish(event);
     }
 
     @Override
-    public <T extends Serializable> Subscription subscribe(final Topic<T> topic, final MessageListener<? super T> handler) {
-        final Subscription basicSubscription = super.subscribe(topic, handler);
+    public <T extends Serializable> Subscription subscribe(final Topic<T> topic, final MessageListener<? super T> handler, final EventFilter filter) {
+        final Subscription basicSubscription = super.subscribe(topic, handler, filter);
         final Subscription hazelcastSubscription = createHazelcastSubscription(topic);
         return new Subscription() {
             @Override
@@ -73,7 +74,7 @@ public class DistributedEventBus extends AbstractEventBus {
 
             final Integer currentCount = iTopicCount.get(topic.getName());
             if (currentCount == null || currentCount == 0) {
-                registerHazelcastEventPipe(topic);
+                registerHazelcastEventPipe(hazelcastTopic);
             } else {
                 iTopicCount.put(topic.getName(), currentCount + 1);
             }
@@ -85,7 +86,7 @@ public class DistributedEventBus extends AbstractEventBus {
                     if (currentCount > 1) {
                         iTopicCount.put(topic.getName(), currentCount - 1);
                     } else {
-                        unregisterHazelcastEventPipe(topic);
+                        unregisterHazelcastEventPipe(hazelcastTopic);
                     }
                 }
             };
@@ -94,13 +95,12 @@ public class DistributedEventBus extends AbstractEventBus {
         }
     }
 
-    private <T extends Serializable> void registerHazelcastEventPipe(final Topic<T> topic) {
+    private <T extends Serializable> void registerHazelcastEventPipe(final ITopic<DolphinEvent<T>> topic) {
         hazelcastEventPipeLock.lock();
         try {
-            final ITopic<DolphinEvent<T>> hazelcastTopic = toHazelcastTopic(topic);
-            Assert.requireNonNull(hazelcastTopic, "hazelcastTopic");
+            Assert.requireNonNull(topic, "hazelcastTopic");
 
-            final String registrationId = hazelcastTopic.addMessageListener(new com.hazelcast.core.MessageListener<DolphinEvent<T>>() {
+            final String registrationId = topic.addMessageListener(new com.hazelcast.core.MessageListener<DolphinEvent<T>>() {
                 @Override
                 public void onMessage(com.hazelcast.core.Message<DolphinEvent<T>> message) {
                     final DolphinEvent<T> event = message.getMessageObject();
@@ -109,31 +109,30 @@ public class DistributedEventBus extends AbstractEventBus {
             });
             Assert.requireNonBlank(registrationId, "registrationId");
 
-            iTopicRegistrations.put(hazelcastTopic.getName(), registrationId);
-            iTopicCount.put(hazelcastTopic.getName(), 1);
+            iTopicRegistrations.put(topic.getName(), registrationId);
+            iTopicCount.put(topic.getName(), 1);
         } finally {
             hazelcastEventPipeLock.unlock();
         }
     }
 
-    private <T extends Serializable> void unregisterHazelcastEventPipe(final Topic<T> topic) {
+    private <T extends Serializable> void unregisterHazelcastEventPipe(final ITopic<DolphinEvent<T>> topic) {
         hazelcastEventPipeLock.lock();
         try {
-            final ITopic<DolphinEvent<T>> hazelcastTopic = toHazelcastTopic(topic);
-            Assert.requireNonNull(hazelcastTopic, "hazelcastTopic");
+            Assert.requireNonNull(topic, "hazelcastTopic");
 
-            final Integer count = iTopicCount.get(hazelcastTopic.getName());
+            final Integer count = iTopicCount.get(topic.getName());
             if (count == null || count != 1) {
                 throw new IllegalStateException("Count for topic " + topic.getName() + " is wrong: " + count);
             }
 
-            final String registrationId = iTopicRegistrations.get(hazelcastTopic.getName());
+            final String registrationId = iTopicRegistrations.get(topic.getName());
             Assert.requireNonBlank(registrationId, "registrationId");
 
-            hazelcastTopic.removeMessageListener(registrationId);
+            topic.removeMessageListener(registrationId);
 
-            iTopicRegistrations.remove(hazelcastTopic.getName());
-            iTopicCount.remove(hazelcastTopic.getName());
+            iTopicRegistrations.remove(topic.getName());
+            iTopicCount.remove(topic.getName());
         } finally {
             hazelcastEventPipeLock.unlock();
         }

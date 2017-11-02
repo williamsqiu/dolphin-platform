@@ -255,3 +255,52 @@ integration in Spring configuration to configure the common properties of the Do
 possible for the Hazelcast integration (see https://github.com/canoo/dolphin-platform/issues/377[this issue]). In
 addtion a already defined Hazelcast client that is provided by Spring or JavaEE as a managed bean can not be used
 (see https://github.com/canoo/dolphin-platform/issues/378[this issue]).
+
+
+=== Specification of the distributed event bus protocol
+
+The distributed event bus communicates over hazelcast by sending and receiving events in JSON. To provide
+communication with other Canoo and 3rd Party frameworks we specified the JSON that defines an event of the
+distributed event bus. Both Canoo frameworks Dolphin Platform and ULC provide an implementation of an
+distributed event bus that is based on version 1.0 of this spec.
+
+==== Shared events specification 1.0
+
+Currently the spec defines 2 parts:
+- Hazelcast must be configured to understand the type of events
+- A specific JSON schema is defined that specifies the structure of an event
+
+To send an event that should be interpreted by Dolphin Platform or ULC the type of the event mus be defined as `com.canoo.platform.remoting.server.event.MessageEvent`. This can easily be done in the hazelcast config. Dolphin Platform automatically uses this type for all events.
+
+Next to the type all messages that are send to hazelcast must be defined as a JSON string. To do so the spec defines the JSON schema:
+
+[source,json]
+----
+{
+	"type" : "object",
+	"properties" : {
+		"shared-event-spec-version" : {"type" : "string"},
+		"data" : {"type" : "string"},
+		"context" : {"$ref" : "#/definitions/context"},
+	},
+	"definitions" : {
+		"metadata" : {
+			"properties" : {
+                "key" : {"type" : "string"},
+                "value" : {"type" : "string"}
+            }
+		},
+		"context" : {
+			"type" : "object",
+			"properties" : {
+				"topic" : {"type" : "string"},
+				"timestamp" : {"type" : "number"},
+				"metadata" : {"type": "array", "items": {"$ref" : "#/definitions/metadata"}}
+			}
+		}
+	}
+}
+----
+
+
+For version 1.0 of the specification the `shared-event-spec-version` property of the root object must contain exactly `1.0`. Next to this the `data` property of the root element and the `value` property of the metadata object are specified as base64 encoded. By doing so any serializable data can be defined in this properties.

@@ -17,6 +17,7 @@ package com.canoo.dp.impl.server.event;
 
 import com.hazelcast.client.HazelcastClient;
 import com.hazelcast.client.config.ClientConfig;
+import com.hazelcast.config.SerializerConfig;
 import com.hazelcast.core.HazelcastInstance;
 import org.apiguardian.api.API;
 import org.slf4j.Logger;
@@ -32,18 +33,26 @@ public class DefaultHazelcastProvider implements HazelcastProvider {
     private HazelcastInstance hazelcastInstance;
 
     public synchronized HazelcastInstance getHazelcastInstance(HazelcastConfig configuration) {
-        if(hazelcastInstance == null) {
-            String serverName = configuration.getServerName();
-            String serverPort = configuration.getServerPort();
-            String groupName = configuration.getGroupName();
+        if (hazelcastInstance == null) {
+            final String serverName = configuration.getServerName();
+            final String serverPort = configuration.getServerPort();
+            final String groupName = configuration.getGroupName();
 
             LOG.debug("Hazelcast server name: {}", serverName);
             LOG.debug("Hazelcast server port: {}", serverPort);
             LOG.debug("Hazelcast group name: {}", groupName);
 
-            ClientConfig clientConfig = new ClientConfig();
+            final ClientConfig clientConfig = new ClientConfig();
             clientConfig.getNetworkConfig().addAddress(serverName + ":" + serverPort);
             clientConfig.getGroupConfig().setName(groupName);
+
+
+            final SerializerConfig dolphinEventSerializerConfig = new SerializerConfig().
+                    setImplementation(new EventStreamSerializer()).setTypeClass(DolphinEvent.class);
+
+            clientConfig.getSerializationConfig().getSerializerConfigs().add(dolphinEventSerializerConfig);
+
+
             hazelcastInstance = HazelcastClient.newHazelcastClient(clientConfig);
         }
         return hazelcastInstance;

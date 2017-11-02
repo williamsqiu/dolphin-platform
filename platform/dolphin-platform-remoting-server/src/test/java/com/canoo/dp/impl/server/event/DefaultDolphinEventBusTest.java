@@ -13,9 +13,9 @@ import com.canoo.dp.impl.server.scanner.DefaultClasspathScanner;
 import com.canoo.impl.server.util.HttpSessionMock;
 import com.canoo.platform.core.functional.Callback;
 import com.canoo.platform.core.functional.Subscription;
+import com.canoo.platform.remoting.server.event.RemotingEventBus;
 import com.canoo.platform.server.client.ClientSession;
-import com.canoo.platform.remoting.server.event.DolphinEventBus;
-import com.canoo.platform.remoting.server.event.Message;
+import com.canoo.platform.remoting.server.event.MessageEvent;
 import com.canoo.platform.remoting.server.event.MessageListener;
 import com.canoo.platform.remoting.server.event.Topic;
 import org.testng.Assert;
@@ -30,16 +30,16 @@ public class DefaultDolphinEventBusTest {
 
     @Test
     public void TestPublishOutsideSession() {
-        DolphinEventBus eventBus = create(null);
+        RemotingEventBus eventBus = create(null);
         eventBus.publish(TEST_TOPIC, "huhu");
     }
 
     @Test(expectedExceptions = IllegalStateException.class)
     public void TestCanNotSubscribeOutsideSession() {
-        DolphinEventBus eventBus = create(null);
+        RemotingEventBus eventBus = create(null);
         eventBus.subscribe(TEST_TOPIC, new MessageListener<String>() {
             @Override
-            public void onMessage(Message<String> message) {
+            public void onMessage(MessageEvent<String> message) {
             }
         });
         Assert.fail();
@@ -48,7 +48,7 @@ public class DefaultDolphinEventBusTest {
 
     @Test
     public void TestPublishInsideSession() {
-        DolphinEventBus eventBus = create(createContext());
+        RemotingEventBus eventBus = create(createContext());
         eventBus.publish(TEST_TOPIC, "huhu");
     }
 
@@ -56,10 +56,10 @@ public class DefaultDolphinEventBusTest {
     public void TestPublishInsideSessionCallsSubscriptionsDirectly() {
         //given
         final AtomicBoolean calledCheck = new AtomicBoolean(false);
-        DolphinEventBus eventBus = create(createContext());
+        RemotingEventBus eventBus = create(createContext());
         eventBus.subscribe(TEST_TOPIC, new MessageListener<String>() {
             @Override
-            public void onMessage(Message<String> message) {
+            public void onMessage(MessageEvent<String> message) {
                 calledCheck.set(true);
             }
         });
@@ -75,10 +75,10 @@ public class DefaultDolphinEventBusTest {
     public void TestRemoveSubscription() {
         //given
         final AtomicBoolean calledCheck = new AtomicBoolean(false);
-        DolphinEventBus eventBus = create(createContext());
+        RemotingEventBus eventBus = create(createContext());
         Subscription subscription = eventBus.subscribe(TEST_TOPIC, new MessageListener<String>() {
             @Override
-            public void onMessage(Message<String> message) {
+            public void onMessage(MessageEvent<String> message) {
                 calledCheck.set(true);
             }
         });
