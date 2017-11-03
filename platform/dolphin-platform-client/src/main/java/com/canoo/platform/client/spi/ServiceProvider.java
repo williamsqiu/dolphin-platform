@@ -8,6 +8,8 @@ import static org.apiguardian.api.API.Status.EXPERIMENTAL;
 @API(since = "0.19.0", status = EXPERIMENTAL)
 public interface ServiceProvider<S> {
 
+    boolean isActive(ClientConfiguration configuration);
+
     S getService(ClientConfiguration configuration);
 
     Class<S> getServiceType();

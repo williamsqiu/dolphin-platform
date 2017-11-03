@@ -4,10 +4,10 @@ import com.canoo.platform.client.Toolkit;
 
 import java.util.concurrent.Executor;
 
-/**
- * Created by hendrikebbers on 12.10.17.
- */
 public class IntegrationTestToolkit implements Toolkit {
+
+    private final static String NAME = "integration test toolkit";
+
 
     @Override
     public Executor getUiExecutor() {
@@ -17,5 +17,10 @@ public class IntegrationTestToolkit implements Toolkit {
                 command.run();
             }
         };
+    }
+
+    @Override
+    public String getName() {
+        return NAME;
     }
 }

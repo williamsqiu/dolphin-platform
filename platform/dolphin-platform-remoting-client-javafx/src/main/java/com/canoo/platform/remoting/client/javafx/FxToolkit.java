@@ -12,6 +12,9 @@ import static org.apiguardian.api.API.Status.MAINTAINED;
 @API(since = "0.x", status = MAINTAINED)
 public class FxToolkit implements Toolkit {
 
+    private final static String NAME = "JavaFX toolkit";
+
+
     @Override
     public Executor getUiExecutor() {
         return new Executor() {
@@ -20,6 +23,11 @@ public class FxToolkit implements Toolkit {
                 Platform.runLater(command);
             }
         };
+    }
+
+    @Override
+    public String getName() {
+        return NAME;
     }
 
     public static void init() {

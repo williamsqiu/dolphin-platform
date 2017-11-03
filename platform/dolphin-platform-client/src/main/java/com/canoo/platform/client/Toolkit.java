@@ -11,4 +11,6 @@ public interface Toolkit {
 
     Executor getUiExecutor();
 
+    String getName();
+
 }
