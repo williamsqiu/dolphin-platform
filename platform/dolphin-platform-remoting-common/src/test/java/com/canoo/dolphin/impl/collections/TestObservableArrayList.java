@@ -16,8 +16,6 @@
 package com.canoo.dolphin.impl.collections;
 
 import com.canoo.dp.impl.remoting.collections.ObservableArrayList;
-import com.canoo.platform.remoting.ListChangeEvent;
-import com.canoo.platform.remoting.ListChangeListener;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -233,6 +231,292 @@ public class TestObservableArrayList {
         assertSameContent(list, Arrays.asList("1", "6", "7" ,"8" , "9", "10"));
         list.clear();
     }
+
+    /** Start of SubList Unit Test*/
+
+    @Test
+    public void testSubListGet() {
+        //given
+        final ObservableArrayList<String> list  = new ObservableArrayList<>();
+        list.addAll("1", "2", "3", "4", "5", "6", "7" ,"8" , "9", "10");
+
+        //when
+        final List<String> subList = list.subList(1, 3);
+
+        //then
+        Assert.assertEquals(subList.size(), 2);
+        Assert.assertEquals(subList.get(0), "2");
+        Assert.assertEquals(subList.get(1), "3");
+    }
+
+    @Test
+    public void testSubListContains() {
+        //given
+        final ObservableArrayList<String> list  = new ObservableArrayList<>();
+        list.addAll("1", "2", "3", "4", "5", "6", "7" ,"8" , "9", "10");
+
+        //when
+        final List<String> subList = list.subList(1, 3);
+
+        //then
+        Assert.assertEquals(subList.size(), 2);
+        Assert.assertTrue(subList.contains("2"));
+        Assert.assertTrue(subList.contains("3"));
+        Assert.assertFalse(subList.contains("4"));
+
+    }
+
+    @Test
+    public void testSubListContainsAll() {
+        //given
+        final ObservableArrayList<String> list  = new ObservableArrayList<>();
+        list.addAll("1", "2", "3", "4", "5", "6", "7" ,"8" , "9", "10");
+
+        //when
+        final List<String> subList = list.subList(1, 3);
+
+        //then
+        Assert.assertEquals(subList.size(), 2);
+        Assert.assertTrue(subList.containsAll(Arrays.asList("2", "3")));
+        Assert.assertFalse(subList.containsAll(Arrays.asList("2", "3", "4")));
+
+    }
+
+    @Test
+    public void testSubListClear() {
+        //given
+        final ObservableArrayList<String> list  = new ObservableArrayList<>();
+        list.addAll("1", "2", "3", "4", "5", "6", "7" ,"8" , "9", "10");
+
+        //when
+        final List<String> subList = list.subList(1, 5);
+        subList.clear();
+
+        //then
+        Assert.assertEquals(subList.size(), 0);
+        Assert.assertTrue(subList.isEmpty());
+
+        Assert.assertEquals(list.size(), 6);
+        Assert.assertEquals(list.get(0), "1");
+        Assert.assertEquals(list.get(1), "6");
+        Assert.assertEquals(list.get(2), "7");
+        Assert.assertEquals(list.get(3), "8");
+        Assert.assertEquals(list.get(4), "9");
+        Assert.assertEquals(list.get(5), "10");
+
+    }
+
+    @Test
+    public void testSubListClearFromBaseList() {
+        //given
+        final ObservableArrayList<String> list  = new ObservableArrayList<>();
+        list.addAll("1", "2", "3", "4", "5", "6", "7" ,"8" , "9", "10");
+
+        //when
+        final List<String> subList = list.subList(1, 5);
+        list.clear();
+
+        //then
+        Assert.assertEquals(subList.size(), 0);
+        Assert.assertEquals(list.size(), 0);
+    }
+
+    @Test
+    public void testSubListAdd() {
+        //given
+        final ObservableArrayList<String> list = new ObservableArrayList<>();
+        list.addAll("1", "2", "3", "4", "5", "6", "7", "8", "9", "10");
+
+        //when
+        final List<String> subList = list.subList(3, 8);
+        subList.add("11");
+
+        //then
+        Assert.assertEquals(subList.size(), 6);
+        Assert.assertEquals(list.size(), 11);
+        Assert.assertEquals(list.get(8), "11");
+        Assert.assertEquals(list.get(8), "11");
+    }
+
+    @Test
+    public void testSubListSet() {
+        //given
+        final ObservableArrayList<String> list = new ObservableArrayList<>();
+        list.addAll("1", "2", "3", "4", "5", "6", "7", "8", "9", "10");
+
+        //when
+        final List<String> subList = list.subList(3, 8);
+        subList.set(0,"11");
+
+        //then
+        Assert.assertEquals(subList.size(), 5);
+        Assert.assertEquals(subList.get(0), "11");
+
+        Assert.assertEquals(list.size(), 10);
+        Assert.assertEquals(list.get(3), "11");
+    }
+
+    @Test
+    public void testSubListSetFromBaseList() {
+        //given
+        final ObservableArrayList<String> list = new ObservableArrayList<>();
+        list.addAll("1", "2", "3", "4", "5", "6", "7", "8", "9", "10");
+
+        //when
+        final List<String> subList = list.subList(3, 8);
+        list.set(0,"11");
+        list.set(3,"12");
+
+        //then
+        Assert.assertEquals(subList.size(), 5);
+        Assert.assertEquals(subList.get(0), "12");
+
+        Assert.assertEquals(list.size(), 10);
+        Assert.assertEquals(list.get(0), "11");
+        Assert.assertEquals(list.get(3), "12");
+    }
+
+    @Test
+    public void testSubListRemove() {
+        //given
+        final ObservableArrayList<String> list = new ObservableArrayList<>();
+        list.addAll("1", "2", "3", "4", "5", "6", "7", "8", "9", "10");
+
+        //when
+        final List<String> subList = list.subList(3, 8);
+        subList.remove("6");
+
+        //then
+        Assert.assertEquals(subList.size(), 4);
+        Assert.assertEquals(list.size(), 9);
+        Assert.assertFalse(list.contains("6"));
+        Assert.assertFalse(subList.contains("6"));
+        Assert.assertEquals(list.get(4), "5");
+        Assert.assertEquals(list.get(5), "7");
+    }
+
+    @Test
+    public void testSubListRemoveFromBaseList() {
+        //given
+        final ObservableArrayList<String> list = new ObservableArrayList<>();
+        list.addAll("1", "2", "3", "4", "5", "6", "7", "8", "9", "10");
+
+        //when
+        final List<String> subList = list.subList(3, 8);
+        list.remove("6");
+        list.remove("9");
+
+        //then
+        Assert.assertEquals(subList.size(), 4);
+        Assert.assertEquals(list.size(), 8);
+        Assert.assertFalse(list.contains("6"));
+        Assert.assertFalse(list.contains("9"));
+        Assert.assertFalse(subList.contains("6"));
+    }
+
+    @Test
+    public void testSubListAddAll() {
+        //given
+        final ObservableArrayList<String> list = new ObservableArrayList<>();
+        list.addAll("1", "2", "3", "4", "5", "6", "7", "8", "9", "10");
+
+        //when
+        final List<String> subList = list.subList(0, 5);
+        subList.addAll(Arrays.asList("11", "12", "13"));
+
+        //then
+        Assert.assertEquals(subList.size(), 8);
+        Assert.assertEquals(list.size(), 13);
+
+        Assert.assertEquals(subList.get(5), "11");
+        Assert.assertEquals(subList.get(6), "12");
+        Assert.assertEquals(subList.get(7), "13");
+
+        Assert.assertEquals(list.get(5), "11");
+        Assert.assertEquals(list.get(6), "12");
+        Assert.assertEquals(list.get(7), "13");
+    }
+
+    @Test
+    public void testSubListRemoveAll() {
+        //given
+        final ObservableArrayList<String> list = new ObservableArrayList<>();
+        list.addAll("1", "2", "3", "4", "5", "6", "7", "8", "9", "10");
+
+        //when
+        final List<String> subList = list.subList(1, 5);
+        subList.removeAll(Arrays.asList("2", "3"));
+
+        //then
+        Assert.assertEquals(subList.size(), 2);
+        Assert.assertEquals(list.size(), 8);
+        Assert.assertFalse(list.contains("2"));
+        Assert.assertFalse(list.contains("3"));
+
+        Assert.assertFalse(subList.contains("2"));
+        Assert.assertFalse(subList.contains("3"));
+    }
+
+    @Test
+    public void testSubListRemoveAllFromBaseList() {
+        //given
+        final ObservableArrayList<String> list = new ObservableArrayList<>();
+        list.addAll("1", "2", "3", "4", "5", "6", "7", "8", "9", "10");
+
+        //when
+        final List<String> subList = list.subList(1, 5);
+        list.removeAll(Arrays.asList("2", "3", "8", "9"));
+
+        //then
+        Assert.assertEquals(subList.size(), 2);
+        Assert.assertFalse(subList.contains("2"));
+        Assert.assertFalse(subList.contains("3"));
+
+        Assert.assertEquals(list.size(), 6);
+        Assert.assertFalse(list.contains("2"));
+        Assert.assertFalse(list.contains("3"));
+        Assert.assertFalse(list.contains("8"));
+        Assert.assertFalse(list.contains("9"));
+
+    }
+
+
+    @Test(enabled = false)
+    public void testSubListRetainAll() {
+        //given
+        final ObservableArrayList<String> list = new ObservableArrayList<>();
+        list.addAll("1", "2", "3", "4", "5", "6", "7", "8", "9", "10");
+
+        //when
+        final List<String> subList = list.subList(0, 5);
+        subList.retainAll(Arrays.asList("2", "3"));
+
+        //then
+        Assert.assertEquals(subList.size(), 2);
+        Assert.assertEquals(list.size(), 7);
+
+        Assert.assertTrue(subList.contains(2));
+        Assert.assertTrue(subList.contains(3));
+        Assert.assertFalse(subList.contains(1));
+        Assert.assertFalse(subList.contains(4));
+        Assert.assertFalse(subList.contains(5));
+        Assert.assertEquals(subList.get(0), "2");
+        Assert.assertEquals(subList.get(1), "3");
+
+        Assert.assertTrue(list.contains(2));
+        Assert.assertTrue(list.contains(3));
+        Assert.assertFalse(list.contains(1));
+        Assert.assertFalse(list.contains(4));
+        Assert.assertFalse(list.contains(5));
+
+        Assert.assertEquals(list.get(0), "2");
+        Assert.assertEquals(list.get(1), "3");
+        Assert.assertEquals(list.get(2), "6");
+    }
+
+
+
+    /** End of SubList Unit Test*/
 
     private <T> void assertSameContent(List<T> a, List<T> b) {
         Assert.assertTrue(a.size() == b.size());

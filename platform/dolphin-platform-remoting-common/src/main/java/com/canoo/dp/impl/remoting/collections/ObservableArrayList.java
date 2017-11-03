@@ -15,6 +15,7 @@
  */
 package com.canoo.dp.impl.remoting.collections;
 
+import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.remoting.ListChangeEvent;
 import com.canoo.platform.remoting.ListChangeListener;
 import com.canoo.platform.remoting.ObservableList;
@@ -279,8 +280,46 @@ public class ObservableArrayList<E> implements ObservableList<E> {
 
     @Override
     public List<E> subList(int fromIndex, int toIndex) {
-        // TODO Implement wrapper to send events if sublist is modified
-        return Collections.unmodifiableList(list.subList(fromIndex, toIndex));
+        final ObservableArrayList subList = new ObservableArrayList(list.subList(fromIndex, toIndex));
+        subList.onChanged(new ListChangeListener() {
+            @Override
+            public void listChanged(ListChangeEvent evt) {
+                final List<ListChangeEvent.Change<E>> changes = Assert.requireNonNull(evt, "evt").getChanges();
+                for (final ListChangeEvent.Change<E> change : changes) {
+                    if (change.isAdded()) {
+                        final int fromIndex = list.indexOf(evt.getSource().get(change.getFrom() - 1)) + 1;
+                        list.addAll(fromIndex, subList.subList(change.getFrom(), change.getTo()));
+                    } else if (change.isReplaced()) {
+                        if (list.contains(change.getRemovedElements().get(0))) {
+                            final int index = list.indexOf(change.getRemovedElements().get(0));
+                            list.set(index, (E) subList.get(change.getFrom()));
+                        }
+                    } else if (change.isRemoved()) {
+                        list.removeAll(change.getRemovedElements());
+                    }
+                }
+            }
+        });
+
+        onChanged(new ListChangeListener<E>() {
+            @Override
+            public void listChanged(ListChangeEvent<? extends E> evt) {
+                final List<? extends ListChangeEvent.Change<? extends E>> changes = Assert.requireNonNull(evt, "evt").getChanges();
+                for (final ListChangeEvent.Change<? extends E> change : changes) {
+                    if (change.isAdded()) {
+                        //TODO Add the element to sublist when adding element in base list
+                    } else if (change.isReplaced()) {
+                        if (subList.contains(change.getRemovedElements().get(0))) {
+                            final int index = subList.indexOf(change.getRemovedElements().get(0));
+                            subList.set(index, (E) list.get(change.getFrom()));
+                        }
+                    } else if (change.isRemoved()) {
+                        subList.removeAll(change.getRemovedElements());
+                    }
+                }
+            }
+        });
+        return subList;
     }
 
     private class ListIteratorWrapper implements ListIterator<E> {
