@@ -287,11 +287,11 @@ public class ObservableArrayList<E> implements ObservableList<E> {
                 final List<ListChangeEvent.Change<E>> changes = Assert.requireNonNull(evt, "evt").getChanges();
                 for (final ListChangeEvent.Change<E> change : changes) {
                     if (change.isAdded()) {
-                        int fromIndex = list.indexOf(evt.getSource().get(change.getFrom() - 1)) + 1;
+                        final int fromIndex = list.indexOf(evt.getSource().get(change.getFrom() - 1)) + 1;
                         list.addAll(fromIndex, subList.subList(change.getFrom(), change.getTo()));
                     } else if (change.isReplaced()) {
                         if (list.contains(change.getRemovedElements().get(0))) {
-                            int index = list.indexOf(change.getRemovedElements().get(0));
+                            final int index = list.indexOf(change.getRemovedElements().get(0));
                             list.set(index, (E) subList.get(change.getFrom()));
                         }
                     } else if (change.isRemoved()) {
