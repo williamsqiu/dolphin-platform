@@ -16,8 +16,6 @@
 package com.canoo.dolphin.impl.collections;
 
 import com.canoo.dp.impl.remoting.collections.ObservableArrayList;
-import com.canoo.platform.remoting.ListChangeEvent;
-import com.canoo.platform.remoting.ListChangeListener;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
