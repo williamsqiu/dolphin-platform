@@ -101,7 +101,7 @@ public class TestConfiguration {
 
         @Override
         public ClientSession getCurrentClientSession() {
-            return currentContext.getDolphinSession();
+            return currentContext.getClientSession();
         }
     }
 

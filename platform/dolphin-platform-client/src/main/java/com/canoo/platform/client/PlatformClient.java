@@ -7,11 +7,11 @@ import com.canoo.platform.core.DolphinRuntimeException;
 import org.apiguardian.api.API;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.ServiceLoader;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static org.apiguardian.api.API.Status.EXPERIMENTAL;
 
@@ -20,9 +20,9 @@ public class PlatformClient {
 
     private static PlatformClient INSTANCE;
 
-    private final Map<Class, ServiceProvider> providers = new HashMap<>();
+    private final Map<Class, ServiceProvider> providers = new ConcurrentHashMap<>();
 
-    private final Map<Class, Object> services = new HashMap<>();
+    private final Map<Class, Object> services = new ConcurrentHashMap<>();
 
     private final ClientConfiguration clientConfiguration;
 
@@ -60,7 +60,7 @@ public class PlatformClient {
         return providers.containsKey(serviceClass);
     }
 
-    private <S> S getServiceImpl(final Class<S> serviceClass) {
+    private synchronized <S> S getServiceImpl(final Class<S> serviceClass) {
         Assert.requireNonNull(serviceClass, "serviceClass");
         if(services.containsKey(serviceClass)) {
             final S service = (S) services.get(serviceClass);

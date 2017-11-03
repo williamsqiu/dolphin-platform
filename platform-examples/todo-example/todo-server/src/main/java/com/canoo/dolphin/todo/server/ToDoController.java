@@ -20,9 +20,9 @@ import com.canoo.platform.remoting.server.DolphinAction;
 import com.canoo.platform.remoting.server.DolphinController;
 import com.canoo.platform.remoting.server.DolphinModel;
 import com.canoo.platform.remoting.server.Param;
-import com.canoo.platform.remoting.server.event.DolphinEventBus;
-import com.canoo.dolphin.todo.pm.ToDoItem;
-import com.canoo.dolphin.todo.pm.ToDoList;
+import com.canoo.platform.remoting.server.event.RemotingEventBus;
+import com.canoo.platform.samples.distribution.common.model.ToDoItem;
+import com.canoo.platform.samples.distribution.common.model.ToDoList;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -42,7 +42,7 @@ public class ToDoController {
 
     private final BeanManager beanManager;
 
-    private final DolphinEventBus eventBus;
+    private final RemotingEventBus eventBus;
 
     private final TodoItemStore todoItemStore;
 
@@ -50,7 +50,7 @@ public class ToDoController {
     private ToDoList toDoList;
 
     @Inject
-    public ToDoController(BeanManager beanManager, DolphinEventBus eventBus, TodoItemStore todoItemStore) {
+    public ToDoController(BeanManager beanManager, RemotingEventBus eventBus, TodoItemStore todoItemStore) {
         this.beanManager = beanManager;
         this.eventBus = eventBus;
         this.todoItemStore = todoItemStore;

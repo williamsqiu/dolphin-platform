@@ -29,7 +29,7 @@ import com.canoo.platform.remoting.client.ClientContext;
 import com.canoo.platform.remoting.server.ClientSessionExecutor;
 import com.canoo.platform.remoting.server.RemotingContext;
 import com.canoo.platform.remoting.server.binding.PropertyBinder;
-import com.canoo.platform.remoting.server.event.DolphinEventBus;
+import com.canoo.platform.remoting.server.event.RemotingEventBus;
 import com.canoo.platform.server.client.ClientSession;
 import org.apiguardian.api.API;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -89,19 +89,19 @@ public class DolphinPlatformSpringTestBootstrap {
     @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
     protected ClientSession createDolphinSession(final TestConfiguration testConfiguration) {
         Assert.requireNonNull(testConfiguration, "testConfiguration");
-        return testConfiguration.getDolphinTestContext().getDolphinSession();
+        return testConfiguration.getDolphinTestContext().getClientSession();
     }
 
     @Bean(name = "remotingContext")
     @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
-    protected RemotingContext createRemotingContext(final TestConfiguration testConfiguration, final PropertyBinder propertyBinder, final DolphinEventBus eventBus) {
+    protected RemotingContext createRemotingContext(final TestConfiguration testConfiguration, final PropertyBinder propertyBinder, final RemotingEventBus eventBus) {
         Assert.requireNonNull(testConfiguration, "testConfiguration");
         Assert.requireNonNull(propertyBinder, "propertyBinder");
         Assert.requireNonNull(eventBus, "eventBus");
         return new RemotingContext() {
             @Override
             public String getId() {
-                return testConfiguration.getDolphinTestContext().getDolphinSession().getId();
+                return testConfiguration.getDolphinTestContext().getClientSession().getId();
             }
 
             @Override
@@ -125,25 +125,25 @@ public class DolphinPlatformSpringTestBootstrap {
             }
 
             @Override
-            public DolphinEventBus getEventBus() {
+            public RemotingEventBus getEventBus() {
                 return eventBus;
             }
 
             @Override
             public ClientSession getClientSession() {
-                return testConfiguration.getDolphinTestContext().getDolphinSession();
+                return testConfiguration.getDolphinTestContext().getClientSession();
             }
         };
     }
 
     /**
-     * Method to create a spring managed {@link DolphinEventBus} instance in singleton scope.
+     * Method to create a spring managed {@link RemotingEventBus} instance in singleton scope.
      *
      * @return the instance
      */
     @Bean(name = "dolphinEventBus")
     @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
-    protected DolphinEventBus createEventBus(final TestConfiguration testConfiguration) {
+    protected RemotingEventBus createEventBus(final TestConfiguration testConfiguration) {
         Assert.requireNonNull(testConfiguration, "testConfiguration");
 
         final DolphinContextProvider contextProvider = new DolphinContextProvider() {

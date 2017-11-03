@@ -15,9 +15,8 @@
  */
 package com.canoo.dp.impl.server.event;
 
-import com.canoo.dp.impl.platform.core.Assert;
-import com.canoo.platform.remoting.server.event.EventSessionFilter;
-import com.canoo.platform.remoting.server.event.Message;
+import com.canoo.platform.remoting.server.event.MessageEvent;
+import com.canoo.platform.remoting.server.event.MessageEventContext;
 import com.canoo.platform.remoting.server.event.Topic;
 import org.apiguardian.api.API;
 
@@ -26,33 +25,28 @@ import java.io.Serializable;
 import static org.apiguardian.api.API.Status.INTERNAL;
 
 @API(since = "0.x", status = INTERNAL)
-public class DolphinEvent<T extends Serializable> implements Serializable {
+public class DolphinEvent<T extends Serializable> implements MessageEvent<T> {
 
-    private final Message<T> message;
+    private final T data;
 
-    private final String senderSessionId;
+    private final DolphinEventContext<T> eventContext;
 
-    private final EventSessionFilter sessionFilter;
-
-    public DolphinEvent(final String senderSessionId, final Message<T> message, final EventSessionFilter sessionFilter) {
-        this.senderSessionId = senderSessionId;
-        this.message = Assert.requireNonNull(message, "message");
-        this.sessionFilter = Assert.requireNonNull(sessionFilter, "sessionFilter");
+    public DolphinEvent(final Topic<T> topic, final long timestamp, final T data) {
+        this.eventContext = new DolphinEventContext<T>(topic, timestamp);
+        this.data = data;
     }
 
-    public Message<T> getMessage() {
-        return message;
+    public void addMetadata(final String key, final Serializable value) {
+        eventContext.addMetadata(key, value);
     }
 
-    public Topic<T> getTopic() {
-        return getMessage().getTopic();
+    @Override
+    public T getData() {
+        return data;
     }
 
-    public String getSenderSessionId() {
-        return senderSessionId;
-    }
-
-    public EventSessionFilter getSessionFilter() {
-        return sessionFilter;
+    @Override
+    public MessageEventContext<T> getMessageEventContext() {
+        return eventContext;
     }
 }
