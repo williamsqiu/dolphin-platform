@@ -21,7 +21,7 @@ import org.apiguardian.api.API;
 import static org.apiguardian.api.API.Status.MAINTAINED;
 
 /**
- * A listener interface to observe the lifecycle of a {@link ClientSession}. Each implemenetation of this
+ * A listener interface to observe the lifecycle of a {@link ClientSession}. Each implementation of this
  * interface that is annotated by {@link ServerListener} will be created at runtime
  * and fired whenever a {@link ClientSession} has been created or before it will be destroyed.
  * As long as the underlying platform supports it (like JavaEE or Spring) CDI is supported in listener implementations.
@@ -36,13 +36,13 @@ public interface ClientSessionListener {
 
     /**
      * This method will be called whenever a new {@link ClientSession} has been created.
-     * @param dolphinSession the dolphin session
+     * @param clientSession the dolphin session
      */
     void sessionCreated(ClientSession clientSession);
 
     /**
      * This method will be called whenever a {@link ClientSession} will be destroyed.
-     * @param dolphinSession the dolphin session
+     * @param clientSession the dolphin session
      */
     void sessionDestroyed(ClientSession clientSession);
 
