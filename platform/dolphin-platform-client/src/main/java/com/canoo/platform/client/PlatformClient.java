@@ -20,9 +20,9 @@ public class PlatformClient {
 
     private static PlatformClient INSTANCE;
 
-    private final Map<Class, ServiceProvider> providers = new ConcurrentHashMap<>();
+    private final Map<Class<?>, ServiceProvider> providers = new ConcurrentHashMap<>();
 
-    private final Map<Class, Object> services = new ConcurrentHashMap<>();
+    private final Map<Class<?>, Object> services = new ConcurrentHashMap<>();
 
     private final ClientConfiguration clientConfiguration;
 
