@@ -7,6 +7,8 @@ import com.canoo.platform.server.spi.ModuleInitializationException;
 import com.canoo.platform.server.spi.ServerCoreComponents;
 import org.apiguardian.api.API;
 
+import javax.servlet.ServletContext;
+
 import static org.apiguardian.api.API.Status.INTERNAL;
 
 @API(since = "0.19.0", status = INTERNAL)
@@ -22,7 +24,7 @@ public class SecurityModule extends AbstractBaseModule {
         Assert.requireNonNull(coreComponents, "coreComponents");
         final KeycloakConfiguration configuration = new KeycloakConfiguration(coreComponents.getConfiguration());
         final DolphinSecurityBootstrap bootstrap = DolphinSecurityBootstrap.getInstance();
-        bootstrap.init(coreComponents.getServletContext(), coreComponents.getConfiguration());
+        bootstrap.init(coreComponents.getInstance(ServletContext.class), coreComponents.getConfiguration());
     }
 
     @Override

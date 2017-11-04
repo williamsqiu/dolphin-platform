@@ -19,7 +19,7 @@ import com.canoo.dp.impl.platform.core.ansi.AnsiOut;
 import com.canoo.platform.core.PlatformThreadFactory;
 import com.canoo.dp.impl.platform.core.SimpleDolphinPlatformThreadFactory;
 import com.canoo.dp.impl.platform.core.Assert;
-import com.canoo.dp.impl.server.beans.ManagedBeanFactory;
+import com.canoo.platform.server.spi.components.ManagedBeanFactory;
 import com.canoo.dp.impl.server.config.DefaultModuleConfig;
 import com.canoo.dp.impl.server.config.DefaultPlatformConfiguration;
 import com.canoo.dp.impl.server.mbean.MBeanRegistry;

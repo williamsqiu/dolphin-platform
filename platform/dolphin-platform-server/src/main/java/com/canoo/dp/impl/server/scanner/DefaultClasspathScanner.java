@@ -16,7 +16,7 @@
 package com.canoo.dp.impl.server.scanner;
 
 import com.canoo.dp.impl.platform.core.Assert;
-import com.canoo.platform.server.spi.ClasspathScanner;
+import com.canoo.platform.server.spi.components.ClasspathScanner;
 import org.apiguardian.api.API;
 import org.reflections.Reflections;
 import org.reflections.util.ClasspathHelper;

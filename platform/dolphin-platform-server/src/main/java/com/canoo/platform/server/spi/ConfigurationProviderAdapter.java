@@ -30,6 +30,7 @@ import static org.apiguardian.api.API.Status.EXPERIMENTAL;
  */
 @API(since = "0.x", status = EXPERIMENTAL)
 public class ConfigurationProviderAdapter implements ConfigurationProvider {
+
     @Override
     public Map<String, String> getStringProperties() {
         return Collections.emptyMap();

@@ -22,7 +22,7 @@ import com.canoo.dp.impl.remoting.commands.DestroyContextCommand;
 import com.canoo.dp.impl.remoting.commands.DestroyControllerCommand;
 import com.canoo.dp.impl.remoting.legacy.commands.InterruptLongPollCommand;
 import com.canoo.dp.impl.remoting.legacy.commands.StartLongPollCommand;
-import com.canoo.dp.impl.server.beans.ManagedBeanFactory;
+import com.canoo.platform.server.spi.components.ManagedBeanFactory;
 import com.canoo.dp.impl.server.beans.PostConstructInterceptor;
 import com.canoo.dp.impl.server.client.ClientSessionProvider;
 import com.canoo.dp.impl.server.client.HttpClientSessionImpl;
@@ -177,17 +177,17 @@ public class DolphinContextTest {
         }
 
         @Override
-        public <T> T createDependendInstance(Class<T> cls) {
+        public <T> T createDependentInstance(Class<T> cls) {
             return null;
         }
 
         @Override
-        public <T> T createDependendInstance(Class<T> cls, PostConstructInterceptor<T> interceptor) {
+        public <T> T createDependentInstance(Class<T> cls, PostConstructInterceptor<T> interceptor) {
             return null;
         }
 
         @Override
-        public <T> void destroyDependendInstance(T instance, Class<T> cls) {
+        public <T> void destroyDependentInstance(T instance, Class<T> cls) {
 
         }
 

@@ -43,7 +43,7 @@ public class HttpMutexModule extends AbstractBaseModule {
     @Override
     public void initialize(final ServerCoreComponents coreComponents) throws ModuleInitializationException {
         Assert.requireNonNull(coreComponents, "coreComponents");
-        final ServletContext servletContext = coreComponents.getServletContext();
+        final ServletContext servletContext = coreComponents.getInstance(ServletContext.class);
         Assert.requireNonNull(servletContext, "servletContext");
 
         final HttpSessionMutexHolder mutexHolder = new HttpSessionMutexHolder();

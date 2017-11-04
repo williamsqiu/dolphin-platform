@@ -16,14 +16,14 @@
 package com.canoo.dp.impl.server.context;
 
 import com.canoo.dp.impl.platform.core.Assert;
-import com.canoo.dp.impl.server.beans.ManagedBeanFactory;
+import com.canoo.platform.server.spi.components.ManagedBeanFactory;
 import com.canoo.dp.impl.server.client.ClientSessionProvider;
 import com.canoo.dp.impl.server.config.RemotingConfiguration;
 import com.canoo.dp.impl.server.controller.ControllerRepository;
 import com.canoo.dp.impl.server.controller.ControllerValidationException;
 import com.canoo.platform.core.functional.Callback;
 import com.canoo.platform.server.client.ClientSession;
-import com.canoo.platform.server.spi.ClasspathScanner;
+import com.canoo.platform.server.spi.components.ClasspathScanner;
 import org.apiguardian.api.API;
 
 import static org.apiguardian.api.API.Status.INTERNAL;

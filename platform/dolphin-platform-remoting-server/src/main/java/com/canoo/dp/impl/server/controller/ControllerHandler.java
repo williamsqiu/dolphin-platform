@@ -20,7 +20,7 @@ import com.canoo.dp.impl.remoting.Converters;
 import com.canoo.dp.impl.remoting.BeanRepository;
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.platform.core.ReflectionHelper;
-import com.canoo.dp.impl.server.beans.ManagedBeanFactory;
+import com.canoo.platform.server.spi.components.ManagedBeanFactory;
 import com.canoo.dp.impl.server.beans.PostConstructInterceptor;
 import com.canoo.dp.impl.server.mbean.DolphinContextMBeanRegistry;
 import com.canoo.dp.impl.server.mbean.beans.ModelProvider;
@@ -104,7 +104,7 @@ public class ControllerHandler {
         }
 
         final String id = UUID.randomUUID().toString();
-        final Object instance = beanFactory.createDependendInstance(controllerClass, new PostConstructInterceptor() {
+        final Object instance = beanFactory.createDependentInstance(controllerClass, new PostConstructInterceptor() {
             @Override
             public void intercept(Object controller) {
                 attachModel(id, controller);
@@ -155,7 +155,7 @@ public class ControllerHandler {
         }
 
         final Class controllerClass = controllerClassMapping.remove(id);
-        beanFactory.destroyDependendInstance(controller, controllerClass);
+        beanFactory.destroyDependentInstance(controller, controllerClass);
 
         final Object model = models.remove(id);
         if (model != null) {

@@ -17,14 +17,14 @@ package com.canoo.dp.impl.server.bootstrap.modules;
 
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.core.functional.Callback;
-import com.canoo.dp.impl.server.beans.ManagedBeanFactory;
+import com.canoo.platform.server.spi.components.ManagedBeanFactory;
 import com.canoo.dp.impl.server.client.*;
 import com.canoo.dp.impl.server.config.DefaultModuleConfig;
 import com.canoo.platform.server.ServerListener;
 import com.canoo.platform.server.client.ClientSession;
 import com.canoo.platform.server.client.ClientSessionListener;
 import com.canoo.platform.server.spi.AbstractBaseModule;
-import com.canoo.platform.server.spi.ClasspathScanner;
+import com.canoo.platform.server.spi.components.ClasspathScanner;
 import com.canoo.platform.server.spi.ModuleDefinition;
 import com.canoo.platform.server.spi.ModuleInitializationException;
 import com.canoo.platform.core.PlatformConfiguration;
@@ -59,10 +59,10 @@ public class ClientSessionModule extends AbstractBaseModule {
     public void initialize(final ServerCoreComponents coreComponents) throws ModuleInitializationException {
         Assert.requireNonNull(coreComponents, "coreComponents");
 
-        final ServletContext servletContext = coreComponents.getServletContext();
+        final ServletContext servletContext = coreComponents.getInstance(ServletContext.class);
         final PlatformConfiguration configuration = coreComponents.getConfiguration();
-        final ClasspathScanner classpathScanner = coreComponents.getClasspathScanner();
-        final ManagedBeanFactory beanFactory = coreComponents.getManagedBeanFactory();
+        final ClasspathScanner classpathScanner = coreComponents.getInstance(ClasspathScanner.class);
+        final ManagedBeanFactory beanFactory = coreComponents.getInstance(ManagedBeanFactory.class);
 
         final ClientSessionLifecycleHandlerImpl lifecycleHandler = new ClientSessionLifecycleHandlerImpl();
         coreComponents.provideInstance(ClientSessionLifecycleHandler.class, lifecycleHandler);
@@ -88,7 +88,7 @@ public class ClientSessionModule extends AbstractBaseModule {
         final Set<Class<?>> listeners = classpathScanner.getTypesAnnotatedWith(ServerListener.class);
         for (final Class<?> listenerClass : listeners) {
             if (ClientSessionListener.class.isAssignableFrom(listenerClass)) {
-                final ClientSessionListener listener = (ClientSessionListener) beanFactory.createDependendInstance(listenerClass);
+                final ClientSessionListener listener = (ClientSessionListener) beanFactory.createDependentInstance(listenerClass);
 
                 lifecycleHandler.addSessionDestroyedListener(new Callback<ClientSession>() {
                     @Override

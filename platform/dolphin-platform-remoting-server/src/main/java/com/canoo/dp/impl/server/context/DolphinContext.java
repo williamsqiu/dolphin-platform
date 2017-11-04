@@ -34,7 +34,7 @@ import com.canoo.dp.impl.remoting.commands.DestroyControllerCommand;
 import com.canoo.dp.impl.remoting.legacy.commands.InterruptLongPollCommand;
 import com.canoo.dp.impl.remoting.legacy.commands.StartLongPollCommand;
 import com.canoo.dp.impl.remoting.legacy.communication.Command;
-import com.canoo.dp.impl.server.beans.ManagedBeanFactory;
+import com.canoo.platform.server.spi.components.ManagedBeanFactory;
 import com.canoo.dp.impl.server.client.ClientSessionProvider;
 import com.canoo.dp.impl.server.config.RemotingConfiguration;
 import com.canoo.dp.impl.server.controller.ControllerHandler;

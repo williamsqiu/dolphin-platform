@@ -1,6 +1,6 @@
 package com.canoo.dp.impl.server.event;
 
-import com.canoo.dp.impl.server.beans.ManagedBeanFactory;
+import com.canoo.platform.server.spi.components.ManagedBeanFactory;
 import com.canoo.dp.impl.server.beans.PostConstructInterceptor;
 import com.canoo.dp.impl.server.client.ClientSessionLifecycleHandlerImpl;
 import com.canoo.dp.impl.server.client.ClientSessionProvider;
@@ -147,17 +147,17 @@ public class DefaultDolphinEventBusTest {
         }
 
         @Override
-        public <T> T createDependendInstance(Class<T> cls) {
+        public <T> T createDependentInstance(Class<T> cls) {
             return null;
         }
 
         @Override
-        public <T> T createDependendInstance(Class<T> cls, PostConstructInterceptor<T> interceptor) {
+        public <T> T createDependentInstance(Class<T> cls, PostConstructInterceptor<T> interceptor) {
             return null;
         }
 
         @Override
-        public <T> void destroyDependendInstance(T instance, Class<T> cls) {
+        public <T> void destroyDependentInstance(T instance, Class<T> cls) {
 
         }
 

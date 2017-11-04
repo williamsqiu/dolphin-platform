@@ -13,22 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.dp.impl.server.beans;
+package com.canoo.platform.server.spi.components;
 
+import com.canoo.dp.impl.server.beans.PostConstructInterceptor;
 import org.apiguardian.api.API;
 
 import javax.servlet.ServletContext;
 
-import static org.apiguardian.api.API.Status.INTERNAL;
+import static org.apiguardian.api.API.Status.EXPERIMENTAL;
 
-@API(since = "0.x", status = INTERNAL)
+@API(since = "0.x", status = EXPERIMENTAL)
 public interface ManagedBeanFactory {
 
     void init(ServletContext servletContext);
 
-    <T> T createDependendInstance(Class<T> cls);
+    <T> T createDependentInstance(Class<T> cls);
 
-    <T> T createDependendInstance(Class<T> cls, PostConstructInterceptor<T> interceptor);
+    <T> T createDependentInstance(Class<T> cls, PostConstructInterceptor<T> interceptor);
 
-    <T> void destroyDependendInstance(T instance, Class<T> cls);
+    <T> void destroyDependentInstance(T instance, Class<T> cls);
 }
