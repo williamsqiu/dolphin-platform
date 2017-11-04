@@ -1,0 +1,2 @@
+com.canoo.dolphin.logger.bridges.RemoteLoggerFactory
+com.canoo.dolphin.logger.bridges.SimpleDolphinLoggerFactory
