@@ -43,9 +43,11 @@ public class DefaultHazelcastProvider implements HazelcastProvider {
             LOG.debug("Hazelcast group name: {}", groupName);
 
             final ClientConfig clientConfig = new ClientConfig();
+            clientConfig.getNetworkConfig().setConnectionAttemptLimit(configuration.getConnectionAttemptLimit());
+            clientConfig.getNetworkConfig().setConnectionAttemptPeriod(configuration.getConnectionAttemptPeriod());
+            clientConfig.getNetworkConfig().setConnectionTimeout(configuration.getConnectionTimeout());
             clientConfig.getNetworkConfig().addAddress(serverName + ":" + serverPort);
             clientConfig.getGroupConfig().setName(groupName);
-
 
             final SerializerConfig dolphinEventSerializerConfig = new SerializerConfig().
                     setImplementation(new EventStreamSerializer()).setTypeClass(DolphinEvent.class);

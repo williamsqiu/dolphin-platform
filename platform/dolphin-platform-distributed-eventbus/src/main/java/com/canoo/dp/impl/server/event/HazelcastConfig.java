@@ -20,6 +20,18 @@ import org.apiguardian.api.API;
 
 import java.io.Serializable;
 
+import static com.canoo.dp.impl.server.event.DistributedEventBusConfigProvider.DEFAULT_HAZELCAST_CONNECTION_ATTEMPT_COUNT;
+import static com.canoo.dp.impl.server.event.DistributedEventBusConfigProvider.DEFAULT_HAZELCAST_CONNECTION_ATTEMPT_PERIOD;
+import static com.canoo.dp.impl.server.event.DistributedEventBusConfigProvider.DEFAULT_HAZELCAST_CONNECTION_TIMEOUT;
+import static com.canoo.dp.impl.server.event.DistributedEventBusConfigProvider.DEFAULT_HAZELCAST_GROUP_NAME;
+import static com.canoo.dp.impl.server.event.DistributedEventBusConfigProvider.DEFAULT_HAZELCAST_PORT;
+import static com.canoo.dp.impl.server.event.DistributedEventBusConfigProvider.DEFAULT_HAZELCAST_SERVER;
+import static com.canoo.dp.impl.server.event.DistributedEventBusConfigProvider.HAZELCAST_CONNECTION_ATTEMPT_COUNT;
+import static com.canoo.dp.impl.server.event.DistributedEventBusConfigProvider.HAZELCAST_CONNECTION_ATTEMPT_PERIOD;
+import static com.canoo.dp.impl.server.event.DistributedEventBusConfigProvider.HAZELCAST_CONNECTION_TIMEOUT;
+import static com.canoo.dp.impl.server.event.DistributedEventBusConfigProvider.HAZELCAST_GROUP_NAME;
+import static com.canoo.dp.impl.server.event.DistributedEventBusConfigProvider.HAZELCAST_SERVER_NAME;
+import static com.canoo.dp.impl.server.event.DistributedEventBusConfigProvider.HAZELCAST_SERVER_PORT;
 import static org.apiguardian.api.API.Status.INTERNAL;
 
 @API(since = "0.x", status = INTERNAL)
@@ -32,15 +44,27 @@ public class HazelcastConfig implements Serializable {
     }
 
     public String getServerName() {
-        return configuration.getProperty(DistributedEventBusConfigProvider.HAZELCAST_SERVER_NAME, null);
+        return configuration.getProperty(HAZELCAST_SERVER_NAME, DEFAULT_HAZELCAST_SERVER);
     }
 
     public String getServerPort() {
-        return configuration.getProperty(DistributedEventBusConfigProvider.HAZELCAST_SERVER_PORT, null);
+        return configuration.getProperty(HAZELCAST_SERVER_PORT, DEFAULT_HAZELCAST_PORT);
     }
 
     public String getGroupName() {
-        return configuration.getProperty(DistributedEventBusConfigProvider.HAZELCAST_GROUP_NAME, null);
+        return configuration.getProperty(HAZELCAST_GROUP_NAME, DEFAULT_HAZELCAST_GROUP_NAME);
+    }
+
+    public int getConnectionAttemptLimit() {
+        return configuration.getIntProperty(HAZELCAST_CONNECTION_ATTEMPT_COUNT, DEFAULT_HAZELCAST_CONNECTION_ATTEMPT_COUNT);
+    }
+
+    public int getConnectionAttemptPeriod() {
+        return configuration.getIntProperty(HAZELCAST_CONNECTION_ATTEMPT_PERIOD, DEFAULT_HAZELCAST_CONNECTION_ATTEMPT_PERIOD);
+    }
+
+    public int getConnectionTimeout() {
+        return configuration.getIntProperty(HAZELCAST_CONNECTION_TIMEOUT, DEFAULT_HAZELCAST_CONNECTION_TIMEOUT);
     }
 
 }
