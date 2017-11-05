@@ -1,6 +1,6 @@
 package com.canoo.platform.client;
 
-import com.canoo.dp.impl.platform.client.DefaultClientConfiguration;
+import com.canoo.dp.impl.platform.client.config.ConfigurationFileLoader;
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.client.spi.ServiceProvider;
 import com.canoo.platform.core.DolphinRuntimeException;
@@ -27,7 +27,7 @@ public class PlatformClient {
     private final ClientConfiguration clientConfiguration;
 
     private PlatformClient() {
-        this.clientConfiguration = new DefaultClientConfiguration();
+        this.clientConfiguration = ConfigurationFileLoader.loadConfiguration();
 
         final ServiceLoader<ServiceProvider> loader = ServiceLoader.load(ServiceProvider.class);
         final Iterator<ServiceProvider> iterator = loader.iterator();

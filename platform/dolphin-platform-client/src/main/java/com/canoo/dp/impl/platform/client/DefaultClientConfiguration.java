@@ -1,6 +1,7 @@
 package com.canoo.dp.impl.platform.client;
 
 import com.canoo.dp.impl.platform.client.http.DefaultHttpURLConnectionFactory;
+import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.platform.core.SimpleDolphinPlatformThreadFactory;
 import com.canoo.dp.impl.platform.core.SimpleUncaughtExceptionHandler;
 import com.canoo.platform.client.ClientConfiguration;
@@ -30,6 +31,14 @@ public class DefaultClientConfiguration implements ClientConfiguration {
         setBackgroundExecutor(Executors.newCachedThreadPool(new SimpleDolphinPlatformThreadFactory()));
         setCookieStore(new CookieManager().getCookieStore());
         setHttpURLConnectionFactory(new DefaultHttpURLConnectionFactory());
+    }
+
+    public DefaultClientConfiguration(Properties prop) {
+        this();
+        Assert.requireNonNull(prop, "prop");
+        for(String key : prop.stringPropertyNames()) {
+            setStringProperty(key, prop.getProperty(key));
+        }
     }
 
     @Override
