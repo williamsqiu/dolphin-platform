@@ -32,19 +32,40 @@ public class DistributedEventBusConfigProvider extends ConfigurationProviderAdap
 
     public static final String HAZELCAST_GROUP_NAME = "hazelcast.group.name";
 
+    public static final String HAZELCAST_CONNECTION_ATTEMPT_COUNT = "hazelcast.connection.attempt.count";
+
+    public static final String HAZELCAST_CONNECTION_ATTEMPT_PERIOD = "hazelcast.connection.attempt.period";
+
+    public static final String HAZELCAST_CONNECTION_TIMEOUT = "hazelcast.connection.timeout";
+
+
     public static final String DEFAULT_HAZELCAST_SERVER = "localhost";
 
     public static final String DEFAULT_HAZELCAST_PORT = "5701";
 
     public static final String DEFAULT_HAZELCAST_GROUP_NAME = "micro-landscape";
 
+    public static final int DEFAULT_HAZELCAST_CONNECTION_ATTEMPT_COUNT = 2;
+
+    public static final int DEFAULT_HAZELCAST_CONNECTION_ATTEMPT_PERIOD = 3000;
+
+    public static final int DEFAULT_HAZELCAST_CONNECTION_TIMEOUT = 5000;
+
     @Override
     public Map<String, String> getStringProperties() {
         Map<String, String> properties = new HashMap<>();
-
         properties.put(HAZELCAST_SERVER_NAME, DEFAULT_HAZELCAST_SERVER);
         properties.put(HAZELCAST_SERVER_PORT, DEFAULT_HAZELCAST_PORT);
         properties.put(HAZELCAST_GROUP_NAME, DEFAULT_HAZELCAST_GROUP_NAME);
+        return properties;
+    }
+
+    @Override
+    public Map<String, Integer> getIntegerProperties() {
+        Map<String, Integer> properties = new HashMap<>();
+        properties.put(HAZELCAST_CONNECTION_ATTEMPT_COUNT, DEFAULT_HAZELCAST_CONNECTION_ATTEMPT_COUNT);
+        properties.put(HAZELCAST_CONNECTION_ATTEMPT_PERIOD, DEFAULT_HAZELCAST_CONNECTION_ATTEMPT_PERIOD);
+        properties.put(HAZELCAST_CONNECTION_TIMEOUT, DEFAULT_HAZELCAST_CONNECTION_TIMEOUT);
         return properties;
     }
 }
