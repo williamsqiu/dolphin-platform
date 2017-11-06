@@ -16,7 +16,6 @@
 
 dependencies {
     compile project(':dolphin-platform-core')
-    compile 'org.reflections:reflections:$reflectionsVersion'
-    compileOnly "javax.servlet:javax.servlet-api:$servletApiVersion"
-    testCompile "javax.servlet:javax.servlet-api:$servletApiVersion"
+    compile "com.google.code.gson:gson:$gsonVersion"
+    compile "org.reflections:reflections:$reflectionsVersion"
 }
