@@ -19,7 +19,7 @@ import java.util.concurrent.Executors;
 
 import static org.apiguardian.api.API.Status.INTERNAL;
 
-@API(since = "0.x", status = INTERNAL)
+@API(since = "0.20", status = INTERNAL)
 public class DefaultClientConfiguration implements ClientConfiguration {
 
     private final Properties internalProperties = new Properties();
@@ -36,9 +36,7 @@ public class DefaultClientConfiguration implements ClientConfiguration {
     public DefaultClientConfiguration(Properties prop) {
         this();
         Assert.requireNonNull(prop, "prop");
-        for(String key : prop.stringPropertyNames()) {
-            setStringProperty(key, prop.getProperty(key));
-        }
+        internalProperties.putAll(prop);
     }
 
     @Override
