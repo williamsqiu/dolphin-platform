@@ -9,6 +9,17 @@ package structure or adding additional methods to public interfaces. In addition
 method of the API is annotated by `@Deprecated` since we plan to remove all this methods and classes for the final 1.0.0 release.
 In addition we are adding the @Api annotation to all classes. Based on this we define if a public API is already maintained or is currently in an incubation state. The annotations defines rhe split between provate and public API, too.
 
+== Version 1.0.0.RC1
+_Release date: Nov, 7 2017_
+
+* Implement ObservableList modifications via sublist(https://github.com/canoo/dolphin-platform/issues/61[issue])
+* Refactor the Eventbus public / private API to have a standardized version for DP & other frameworks (https://github.com/canoo/dolphin-platform/issues/636[issue])
+* Make client configuration configurable in a file (https://github.com/canoo/dolphin-platform/issues/730[issue])
+* Create Default API for logging (https://github.com/canoo/dolphin-platform/issues/731[issue])
+* Add "getName()" method to Toolkit interface (https://github.com/canoo/dolphin-platform/issues/693[issue])
+* PlatformClient.getServices method to get list of all service types (https://github.com/canoo/dolphin-platform/issues/716[issue])
+* It must be able to deactivate a ServiceProvider (https://github.com/canoo/dolphin-platform/issues/715[issue])
+
 == Version 0.19.0
 _Release date: Oct 29, 2017_
 

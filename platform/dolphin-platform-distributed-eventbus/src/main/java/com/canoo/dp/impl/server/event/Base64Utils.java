@@ -8,9 +8,6 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.Base64;
 
-/**
- * Created by hendrikebbers on 01.11.17.
- */
 public class Base64Utils {
 
     public static String toBase64(final Serializable data) throws IOException {

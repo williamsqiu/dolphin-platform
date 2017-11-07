@@ -28,7 +28,7 @@ For example:
       // In Polymer 1.0, you would use `<input is="iron-input" slot="input">` instead of the above.
     </paper-input-container>
 
-You can style the nested <input> however you want; if you want it to look like a
+You can style the nested `<input>` however you want; if you want it to look like a
 Material Design input, you can style it with the --paper-input-container-shared-input-style mixin.
 
 Do not wrap `<paper-input-container>` around elements that already include it, such as `<paper-input>`.
@@ -99,6 +99,7 @@ Custom property | Description | Default
 `--paper-input-container-label-focus` | Mixin applied to the label when the input is focused | `{}`
 `--paper-input-container-label-floating` | Mixin applied to the label when floating | `{}`
 `--paper-input-container-input` | Mixin applied to the input | `{}`
+`--paper-input-container-input-disabled` | Mixin applied to the input when the component is disabled | `{}`
 `--paper-input-container-input-focus` | Mixin applied to the input when focused | `{}`
 `--paper-input-container-input-invalid` | Mixin applied to the input when invalid | `{}`
 `--paper-input-container-input-webkit-spinner` | Mixin applied to the webkit spinner | `{}`
@@ -237,6 +238,8 @@ This element is `display:block` by default, but you can set the `inline` attribu
         transition: transform 0.25s, width 0.25s;
         -webkit-transform-origin: left top;
         transform-origin: left top;
+        /* Fix for safari not focusing 0-height date/time inputs with -webkit-apperance: none; */
+        min-height: 1px;
 
         @apply --paper-font-common-nowrap;
         @apply --paper-font-subhead;

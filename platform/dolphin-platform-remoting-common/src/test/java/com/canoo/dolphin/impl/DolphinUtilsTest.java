@@ -33,9 +33,6 @@ import java.util.UUID;
 import static org.testng.AssertJUnit.assertFalse;
 import static org.testng.AssertJUnit.assertTrue;
 
-/**
- * Created by hendrikebbers on 19.05.17.
- */
 public class DolphinUtilsTest {
 
     @Test

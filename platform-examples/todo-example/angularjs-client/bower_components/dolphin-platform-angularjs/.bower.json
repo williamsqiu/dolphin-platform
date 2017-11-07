@@ -1,6 +1,6 @@
 {
   "name": "dolphin-platform-angularjs",
-  "version": "0.19.0",
+  "version": "1.0.0-CR.1",
   "main": "./dist/dolphin-platform-angular.js",
   "homepage": "https://github.com/canoo/dolphin-platform",
   "authors": [
@@ -33,16 +33,16 @@
   ],
   "dependencies": {
     "angular": "^1.6.0",
-    "dolphin-platform-js": "^0.19.0",
+    "dolphin-platform-js": "1.0.0-CR.1",
     "core.js": "^2.4.1"
   },
-  "_release": "0.19.0",
+  "_release": "1.0.0-CR.1",
   "_resolution": {
     "type": "version",
-    "tag": "0.19.0",
-    "commit": "60dc4838a297c45a922045aacbd87b19202f637e"
+    "tag": "1.0.0-CR.1",
+    "commit": "c8f97d9a45db333e59f018ea7f5d524ea87979e3"
   },
   "_source": "https://github.com/canoo/dolphin-platform-angularjs.git",
-  "_target": "0.19.0",
+  "_target": "1.0.0-CR.1",
   "_originalSource": "dolphin-platform-angularjs"
 }
