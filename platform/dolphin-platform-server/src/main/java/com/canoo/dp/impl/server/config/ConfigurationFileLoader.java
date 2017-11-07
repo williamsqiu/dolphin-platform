@@ -48,6 +48,8 @@ public class ConfigurationFileLoader {
 
     private static final Logger LOG = LoggerFactory.getLogger(ConfigurationFileLoader.class);
 
+    private static final String DEFAULT_LOCATION = "dolphin.properties";
+
     private static final String JAR_LOCATION = "META-INF/dolphin.properties";
 
     private static final String WAR_LOCATION = "WEB-INF/classes/" + JAR_LOCATION;
@@ -111,6 +113,13 @@ public class ConfigurationFileLoader {
     private static DefaultPlatformConfiguration createConfiguration() {
         try {
             final ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+
+            try (final InputStream inputStream = classLoader.getResourceAsStream(DEFAULT_LOCATION)) {
+                if (inputStream != null) {
+                    return readConfig(inputStream);
+                }
+            }
+
 
             try (final InputStream inputStream = classLoader.getResourceAsStream(JAR_LOCATION)) {
                 if (inputStream != null) {
