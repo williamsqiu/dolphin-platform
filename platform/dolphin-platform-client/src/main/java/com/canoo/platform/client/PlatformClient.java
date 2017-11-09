@@ -90,7 +90,7 @@ public class PlatformClient {
         return getInstance().getServiceImpl(serviceClass);
     }
 
-    private static Set<Class<?>> getAllServiceTypes() {
+    public static Set<Class<?>> getAllServiceTypes() {
         return getInstance().implGetAllServiceTypes();
     }
 
