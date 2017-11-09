@@ -28,7 +28,7 @@ public class LazyEventBusInvocationHandler implements InvocationHandler {
             return method.invoke(DUMMY_OBJECT, args);
         }
         if (method.getName().equals("subscribe")) {
-            throw new IllegalStateException("Subscription can only be done from Dolphin Context!");
+            throw new IllegalStateException("Subscription can only be done from Dolphin Context! Current thread: " + Thread.currentThread().getName());
         } else {
             return null;
         }
