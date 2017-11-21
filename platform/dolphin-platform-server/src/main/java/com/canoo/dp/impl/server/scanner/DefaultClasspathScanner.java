@@ -48,7 +48,9 @@ public class DefaultClasspathScanner implements ClasspathScanner {
     }
 
     public DefaultClasspathScanner(final String rootPackage) {
+
         ConfigurationBuilder configuration = ConfigurationBuilder.build(DefaultClasspathScanner.class.getClassLoader());
+        configuration = configuration.setExpandSuperTypes(false);
 
         if(rootPackage != null && !rootPackage.trim().isEmpty()) {
             configuration = configuration.forPackages(rootPackage);
