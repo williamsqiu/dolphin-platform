@@ -112,19 +112,19 @@ public class TestObservableArrayList {
         list.clear();
 
         //Implementation still missing
-//        list.addAll(Arrays.asList("1", "2", "3"));
-//        list.removeAll("1", "2");
-//        Assert.assertFalse(list.isEmpty());
-//        Assert.assertEquals(list.size(), 1);
-//        assertSameContent(list, Arrays.asList("3"));
-//        list.clear();
-//
-//        list.addAll(Arrays.asList("1", "2", "3"));
-//        list.removeAll(Arrays.asList("1", "3"));
-//        Assert.assertFalse(list.isEmpty());
-//        Assert.assertEquals(list.size(), 1);
-//        assertSameContent(list, Arrays.asList("2"));
-//        list.clear();
+        list.addAll(Arrays.asList("1", "2", "3"));
+        list.removeAll("1", "2");
+        Assert.assertFalse(list.isEmpty());
+        Assert.assertEquals(list.size(), 1);
+        assertSameContent(list, Arrays.asList("3"));
+        list.clear();
+
+        list.addAll(Arrays.asList("1", "2", "3"));
+        list.removeAll(Arrays.asList("1", "3"));
+        Assert.assertFalse(list.isEmpty());
+        Assert.assertEquals(list.size(), 1);
+        assertSameContent(list, Arrays.asList("2"));
+        list.clear();
     }
 
     @Test
@@ -154,7 +154,7 @@ public class TestObservableArrayList {
         assertSameContent(list, Arrays.asList("6", "7" ,"8" , "9", "10"));
         Assert.assertTrue(removed.get());
         Assert.assertFalse(added.get());
-        Assert.assertEquals(2, callCount.get());
+        Assert.assertEquals(6, callCount.get());
         list.clear();
 
     }
@@ -201,7 +201,7 @@ public class TestObservableArrayList {
         Assert.assertTrue(removed.get());
         Assert.assertFalse(added.get());
 
-        Assert.assertEquals(2, callCount.get());
+        Assert.assertEquals(callCount.get(), 6);
         list.clear();
 
         list.addAll("1", "2", "3", "4", "5", "6", "7" ,"8" , "9", "10");
@@ -483,7 +483,7 @@ public class TestObservableArrayList {
     }
 
 
-    @Test(enabled = false)
+    @Test
     public void testSubListRetainAll() {
         //given
         final ObservableArrayList<String> list = new ObservableArrayList<>();
@@ -497,19 +497,19 @@ public class TestObservableArrayList {
         Assert.assertEquals(subList.size(), 2);
         Assert.assertEquals(list.size(), 7);
 
-        Assert.assertTrue(subList.contains(2));
-        Assert.assertTrue(subList.contains(3));
-        Assert.assertFalse(subList.contains(1));
-        Assert.assertFalse(subList.contains(4));
-        Assert.assertFalse(subList.contains(5));
+        Assert.assertTrue(subList.contains("2"));
+        Assert.assertTrue(subList.contains("3"));
+        Assert.assertFalse(subList.contains("1"));
+        Assert.assertFalse(subList.contains("4"));
+        Assert.assertFalse(subList.contains("5"));
         Assert.assertEquals(subList.get(0), "2");
         Assert.assertEquals(subList.get(1), "3");
 
-        Assert.assertTrue(list.contains(2));
-        Assert.assertTrue(list.contains(3));
-        Assert.assertFalse(list.contains(1));
-        Assert.assertFalse(list.contains(4));
-        Assert.assertFalse(list.contains(5));
+        Assert.assertTrue(list.contains("2"));
+        Assert.assertTrue(list.contains("3"));
+        Assert.assertFalse(list.contains("1"));
+        Assert.assertFalse(list.contains("4"));
+        Assert.assertFalse(list.contains("5"));
 
         Assert.assertEquals(list.get(0), "2");
         Assert.assertEquals(list.get(1), "3");
