@@ -192,23 +192,23 @@ public class ObservableArrayList<E> implements ObservableList<E> {
         if (null != c && c.isEmpty()) {
             return false;
         }
-        final List<ListChangeEvent.Change<E>> changedList = new ArrayList<>();
         final List<E> listElement =  new ArrayList<>();
-        for (Iterator<?> iterator = c.iterator(); iterator.hasNext();) {
-            final E element = (E) iterator.next();
-            if(list.contains(element)){
+
+        for (int i = 0; i < list.size(); i++) {
+            E element;
+            if (c.contains(list.get(i)) && isRemove) {
+                element = list.get(i);
                 listElement.add(element);
-                final ListChangeEvent.Change<E> changed = new ListChangeEventImpl.ChangeImpl<>(list.indexOf(element), list.indexOf(element),  Collections.singletonList(element));
-                changedList.add(changed);
+            }
+            if (!c.contains(list.get(i)) && !isRemove) {
+                element = list.get(i);
+                listElement.add(element);
             }
         }
-        if(!changedList.isEmpty()){
-            if(isRemove){
-                list.removeAll(listElement);
-            }else{
-                list.retainAll(listElement);
+        if(!listElement.isEmpty()){
+            for(E e:listElement){
+                remove(e);
             }
-            fireListChanged(new ListChangeEventImpl<>(this, changedList));
             return true;
         }
         return false;
