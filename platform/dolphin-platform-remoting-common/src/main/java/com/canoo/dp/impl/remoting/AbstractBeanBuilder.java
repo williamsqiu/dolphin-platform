@@ -20,6 +20,7 @@ import com.canoo.dp.impl.remoting.info.ClassInfo;
 import com.canoo.dp.impl.remoting.info.PropertyInfo;
 import com.canoo.dp.impl.remoting.legacy.core.Attribute;
 import com.canoo.dp.impl.remoting.legacy.core.PresentationModel;
+import com.canoo.platform.core.DolphinRuntimeException;
 import com.canoo.platform.remoting.ObservableList;
 import com.canoo.platform.remoting.Property;
 import org.apiguardian.api.API;
@@ -31,7 +32,7 @@ import static org.apiguardian.api.API.Status.INTERNAL;
  * A {@code BeanBuilder} is responsible for building a Dolphin Bean that is specified as a class. The main
  * (and only public) method is {@link #create(Class)}, which expects the {@code Class} of the Dolphin Bean and
  * returns the generated Bean.
- *
+ * <p>
  * The generated Dolphin Bean will be registered in the {@link BeanRepositoryImpl}.
  */
 @API(since = "0.x", status = INTERNAL)
@@ -46,7 +47,7 @@ public abstract class AbstractBeanBuilder implements BeanBuilder {
         this.classRepository = Assert.requireNonNull(classRepository, "classRepository");
         this.beanRepository = Assert.requireNonNull(beanRepository, "beanRepository");
         this.listMapper = listMapper;
-        this.builderFactory = Assert.requireNonNull(builderFactory, "builderFactory");;
+        this.builderFactory = Assert.requireNonNull(builderFactory, "builderFactory");
 
         dispatcher.addAddedHandler(new DolphinEventHandler() {
             @Override
@@ -80,25 +81,27 @@ public abstract class AbstractBeanBuilder implements BeanBuilder {
             beanRepository.registerBean(bean, model, source);
             return bean;
 
-        } catch (InstantiationException | IllegalAccessException e) {
-            throw new RuntimeException("Cannot create bean", e);
+        } catch (Exception e) {
+            throw new DolphinRuntimeException("Cannot create bean of type " + beanClass, e);
         }
     }
 
     private PresentationModel buildPresentationModel(final ClassInfo classInfo) {
-        Assert.requireNonNull(classInfo, "classInfo");
-        final PresentationModelBuilder builder = builderFactory.createBuilder()
-                .withType(classInfo.getModelType());
-
-        classInfo.forEachProperty(new ClassInfo.PropertyIterator() {
-            @Override
-            public void call(final PropertyInfo propertyInfo) {
-                Assert.requireNonNull(propertyInfo, "propertyInfo");
-                builder.withAttribute(propertyInfo.getAttributeName());
-            }
-        });
-
-        return builder.create();
+        try {
+            Assert.requireNonNull(classInfo, "classInfo");
+            final PresentationModelBuilder builder = builderFactory.createBuilder()
+                    .withType(classInfo.getModelType());
+            classInfo.forEachProperty(new ClassInfo.PropertyIterator() {
+                @Override
+                public void call(final PropertyInfo propertyInfo) {
+                    Assert.requireNonNull(propertyInfo, "propertyInfo");
+                    builder.withAttribute(propertyInfo.getAttributeName());
+                }
+            });
+            return builder.create();
+        } catch (Exception e) {
+            throw new DolphinRuntimeException("Cannot create presentation model for type " + classInfo.getBeanClass(), e);
+        }
     }
 
     private void setupProperties(final ClassInfo classInfo, final Object bean, final PresentationModel model) {
@@ -107,10 +110,14 @@ public abstract class AbstractBeanBuilder implements BeanBuilder {
         classInfo.forEachProperty(new ClassInfo.PropertyIterator() {
             @Override
             public void call(final PropertyInfo propertyInfo) {
-                Assert.requireNonNull(propertyInfo, "propertyInfo");
-                final Attribute attribute = model.getAttribute(propertyInfo.getAttributeName());
-                final Property property = create(attribute, propertyInfo);
-                propertyInfo.setPriviliged(bean, property);
+                try {
+                    Assert.requireNonNull(propertyInfo, "propertyInfo");
+                    final Attribute attribute = model.getAttribute(propertyInfo.getAttributeName());
+                    final Property property = create(attribute, propertyInfo);
+                    propertyInfo.setPriviliged(bean, property);
+                } catch (Exception e) {
+                    throw new DolphinRuntimeException("Can not create property " + propertyInfo.getAttributeName(), e);
+                }
             }
         });
     }
@@ -120,9 +127,13 @@ public abstract class AbstractBeanBuilder implements BeanBuilder {
         classInfo.forEachObservableList(new ClassInfo.PropertyIterator() {
             @Override
             public void call(final PropertyInfo observableListInfo) {
-                Assert.requireNonNull(observableListInfo, "observableListInfo");
-                final ObservableList observableList = create(observableListInfo, model, listMapper);
-                observableListInfo.setPriviliged(bean, observableList);
+                try {
+                    Assert.requireNonNull(observableListInfo, "observableListInfo");
+                    final ObservableList observableList = create(observableListInfo, model, listMapper);
+                    observableListInfo.setPriviliged(bean, observableList);
+                } catch (Exception e) {
+                    throw new DolphinRuntimeException("Can not create observable list " + observableListInfo.getAttributeName(), e);
+                }
             }
         });
     }
