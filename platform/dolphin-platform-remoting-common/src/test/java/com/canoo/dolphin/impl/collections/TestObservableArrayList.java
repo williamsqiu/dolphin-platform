@@ -258,7 +258,7 @@ public class TestObservableArrayList {
         Assert.assertTrue(iterator.nextIndex() == 1);
 
 
-        //Add using iterator
+        //Remove using iterator
         iterator.remove();
         Assert.assertFalse(added.get());
         Assert.assertTrue(removed.get());
@@ -286,7 +286,7 @@ public class TestObservableArrayList {
         iterator.add("Test");
         Assert.assertEquals(list.size(), 6);
 
-        // you can't remove after add
+        // you can't remove after add...call next or previous
         iterator.remove();
     }
 

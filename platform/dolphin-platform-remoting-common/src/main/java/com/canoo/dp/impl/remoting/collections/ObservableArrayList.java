@@ -338,7 +338,7 @@ public class ObservableArrayList<E> implements ObservableList<E> {
 
         @Override
         public E next() {
-            E e = iterator.next();
+            final E e = iterator.next();
             lastRet = ObservableArrayList.this.list.indexOf(e);
             return e;
         }
@@ -350,7 +350,7 @@ public class ObservableArrayList<E> implements ObservableList<E> {
 
         @Override
         public E previous() {
-            E e = iterator.previous();
+            final E e = iterator.previous();
             lastRet = ObservableArrayList.this.list.indexOf(e);
             return e;
         }
@@ -380,7 +380,7 @@ public class ObservableArrayList<E> implements ObservableList<E> {
         @Override
         public void set(E e) {
             int replacedIndex = iterator.nextIndex();
-            E oldElement = ObservableArrayList.this.get(replacedIndex);
+            final E oldElement = ObservableArrayList.this.get(replacedIndex);
             iterator.set(e);
             fireListChanged(new ListChangeEventImpl<>(ObservableArrayList.this, replacedIndex, replacedIndex, Collections.singletonList(oldElement)));
         }
