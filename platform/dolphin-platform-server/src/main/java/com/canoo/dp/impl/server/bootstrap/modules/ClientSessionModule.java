@@ -19,7 +19,6 @@ import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.core.functional.Callback;
 import com.canoo.platform.server.spi.components.ManagedBeanFactory;
 import com.canoo.dp.impl.server.client.*;
-import com.canoo.dp.impl.server.config.DefaultModuleConfig;
 import com.canoo.platform.server.ServerListener;
 import com.canoo.platform.server.client.ClientSession;
 import com.canoo.platform.server.client.ClientSessionListener;
@@ -39,6 +38,8 @@ import java.util.List;
 import java.util.Set;
 
 import static org.apiguardian.api.API.Status.INTERNAL;
+import static com.canoo.dp.impl.server.config.DefaultPlatformConfiguration.ID_FILTER_URL_MAPPINGS;
+import static com.canoo.dp.impl.server.config.DefaultPlatformConfiguration.ID_FILTER_URL_MAPPINGS_DEFAULT_VALUE;
 
 @API(since = "0.x", status = INTERNAL)
 @ModuleDefinition(ClientSessionModule.CLIENT_SESSION_MODULE)
@@ -76,7 +77,7 @@ public class ClientSessionModule extends AbstractBaseModule {
 
         final ClientSessionManager clientSessionManager = new ClientSessionManager(configuration, lifecycleHandler);
 
-        final List<String> endpointList = DefaultModuleConfig.getIdFilterUrlMappings(configuration);
+        final List<String> endpointList = configuration.getListProperty(ID_FILTER_URL_MAPPINGS, ID_FILTER_URL_MAPPINGS_DEFAULT_VALUE);
         final String[] endpoints = endpointList.toArray(new String[endpointList.size()]);
         final ClientSessionFilter filter = new ClientSessionFilter(clientSessionManager);
         final FilterRegistration.Dynamic createdFilter = servletContext.addFilter(DOLPHIN_CLIENT_ID_FILTER_NAME, filter);

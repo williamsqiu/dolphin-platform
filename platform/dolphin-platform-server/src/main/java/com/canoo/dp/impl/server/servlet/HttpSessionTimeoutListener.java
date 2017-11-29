@@ -16,7 +16,7 @@
 package com.canoo.dp.impl.server.servlet;
 
 import com.canoo.dp.impl.platform.core.Assert;
-import com.canoo.dp.impl.server.config.DefaultModuleConfig;
+
 import com.canoo.platform.core.PlatformConfiguration;
 import org.apiguardian.api.API;
 import org.slf4j.Logger;
@@ -26,6 +26,8 @@ import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 
 import static org.apiguardian.api.API.Status.INTERNAL;
+import static com.canoo.dp.impl.server.config.DefaultPlatformConfiguration.SESSION_TIMEOUT;
+import static com.canoo.dp.impl.server.config.DefaultPlatformConfiguration.SESSION_TIMEOUT_DEFAULT_VALUE;
 
 @API(since = "0.x", status = INTERNAL)
 public class HttpSessionTimeoutListener implements HttpSessionListener {
@@ -35,7 +37,7 @@ public class HttpSessionTimeoutListener implements HttpSessionListener {
     private final int sessionTimeoutInSeconds;
 
     public HttpSessionTimeoutListener(final PlatformConfiguration configuration) {
-        this.sessionTimeoutInSeconds = DefaultModuleConfig.getSessionTimeout(configuration);
+        this.sessionTimeoutInSeconds = configuration.getIntProperty(SESSION_TIMEOUT, SESSION_TIMEOUT_DEFAULT_VALUE);
     }
 
     @Override

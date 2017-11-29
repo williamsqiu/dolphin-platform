@@ -17,7 +17,6 @@ package com.canoo.dp.impl.server.servlet;
 
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.platform.core.PlatformConstants;
-import com.canoo.dp.impl.server.config.DefaultModuleConfig;
 import com.canoo.platform.core.PlatformConfiguration;
 import org.apiguardian.api.API;
 
@@ -28,6 +27,14 @@ import java.io.IOException;
 import java.util.List;
 
 import static org.apiguardian.api.API.Status.INTERNAL;
+import static com.canoo.dp.impl.server.config.DefaultPlatformConfiguration.ACCESS_CONTROL_ALLOW_HEADERS;
+import static com.canoo.dp.impl.server.config.DefaultPlatformConfiguration.ACCESS_CONTROL_ALLOW_HEADERS_DEFAULT_VALUE;
+import static com.canoo.dp.impl.server.config.DefaultPlatformConfiguration.ACCESS_CONTROL_ALLOW_METHODS;
+import static com.canoo.dp.impl.server.config.DefaultPlatformConfiguration.ACCESS_CONTROL_ALLOW_METHODS_DEFAULT_VALUE;
+import static com.canoo.dp.impl.server.config.DefaultPlatformConfiguration.ACCESS_CONTROL_ALLOW_CREDENTIALS;
+import static com.canoo.dp.impl.server.config.DefaultPlatformConfiguration.ACCESS_CONTROL_ALLOW_CREDENTIALS_DEFAULT_VALUE;
+import static com.canoo.dp.impl.server.config.DefaultPlatformConfiguration.ACCESS_CONTROL_MAXAGE;
+import static com.canoo.dp.impl.server.config.DefaultPlatformConfiguration.ACCESS_CONTROL_MAX_AGE_DEFAULT_VALUE;
 
 @API(since = "0.x", status = INTERNAL)
 public class CrossSiteOriginFilter implements Filter {
@@ -50,13 +57,13 @@ public class CrossSiteOriginFilter implements Filter {
 
         //Access-Control-Allow-Headers
         String accessControlAllowHeaders = PlatformConstants.CLIENT_ID_HTTP_HEADER_NAME;
-        String headerValues = getAsCommaSeparatedList(DefaultModuleConfig.getAccessControlAllowHeaders(configuration));
+        String headerValues = getAsCommaSeparatedList(configuration.getListProperty(ACCESS_CONTROL_ALLOW_HEADERS, ACCESS_CONTROL_ALLOW_HEADERS_DEFAULT_VALUE));
         if(!headerValues.isEmpty()){
             accessControlAllowHeaders = accessControlAllowHeaders + ", " + headerValues;
         }
 
         //Access-Control-Allow-Methods
-        String allowedMethods = getAsCommaSeparatedList(DefaultModuleConfig.getAccessControlAllowMethods(configuration));
+        String allowedMethods = getAsCommaSeparatedList(configuration.getListProperty(ACCESS_CONTROL_ALLOW_METHODS, ACCESS_CONTROL_ALLOW_METHODS_DEFAULT_VALUE));
 
 
         String clientOrigin = req.getHeader("origin");
@@ -66,8 +73,8 @@ public class CrossSiteOriginFilter implements Filter {
         }
         resp.setHeader("Access-Control-Allow-Headers", accessControlAllowHeaders);
         resp.setHeader("Access-Control-Expose-Headers", PlatformConstants.CLIENT_ID_HTTP_HEADER_NAME);
-        resp.setHeader("Access-Control-Allow-Credentials", "" + DefaultModuleConfig.isAccessControlAllowCredentials(configuration));
-        resp.setHeader("Access-Control-Max-Age", "" + DefaultModuleConfig.getAccessControlMaxAge(configuration));
+        resp.setHeader("Access-Control-Allow-Credentials", "" + configuration.getBooleanProperty(ACCESS_CONTROL_ALLOW_CREDENTIALS, ACCESS_CONTROL_ALLOW_CREDENTIALS_DEFAULT_VALUE));
+        resp.setHeader("Access-Control-Max-Age", "" + configuration.getLongProperty(ACCESS_CONTROL_MAXAGE, ACCESS_CONTROL_MAX_AGE_DEFAULT_VALUE));
 
         chain.doFilter(request, response);
     }

@@ -20,7 +20,6 @@ import com.canoo.platform.core.PlatformThreadFactory;
 import com.canoo.dp.impl.platform.core.SimpleDolphinPlatformThreadFactory;
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.server.spi.components.ManagedBeanFactory;
-import com.canoo.dp.impl.server.config.DefaultModuleConfig;
 import com.canoo.dp.impl.server.config.DefaultPlatformConfiguration;
 import com.canoo.dp.impl.server.mbean.MBeanRegistry;
 import com.canoo.dp.impl.server.scanner.DefaultClasspathScanner;
@@ -36,6 +35,12 @@ import javax.servlet.ServletContext;
 import java.util.*;
 
 import static org.apiguardian.api.API.Status.INTERNAL;
+import static com.canoo.dp.impl.server.config.DefaultPlatformConfiguration.PLATFORM_ACTIVE;
+import static com.canoo.dp.impl.server.config.DefaultPlatformConfiguration.ACTIVE_DEFAULT_VALUE;
+import static com.canoo.dp.impl.server.config.DefaultPlatformConfiguration.MBEAN_REGISTRATION;
+import static com.canoo.dp.impl.server.config.DefaultPlatformConfiguration.M_BEAN_REGISTRATION_DEFAULT_VALUE;
+import static com.canoo.dp.impl.server.config.DefaultPlatformConfiguration.ROOT_PACKAGE_FOR_CLASSPATH_SCAN;
+import static com.canoo.dp.impl.server.config.DefaultPlatformConfiguration.ROOT_PACKAGE_FOR_CLASSPATH_SCAN_DEFAULT_VALUE;
 
 @API(since = "0.x", status = INTERNAL)
 public class PlatformBootstrap {
@@ -50,7 +55,7 @@ public class PlatformBootstrap {
         Assert.requireNonNull(servletContext, "servletContext");
         Assert.requireNonNull(configuration, "configuration");
 
-        if(DefaultModuleConfig.isActive(configuration)) {
+        if(configuration.getBooleanProperty(PLATFORM_ACTIVE, ACTIVE_DEFAULT_VALUE)) {
             printLogo();
             try {
                 LOG.info("Will boot Dolphin Plaform now");
@@ -58,14 +63,14 @@ public class PlatformBootstrap {
                 servletContext.setAttribute(CONFIGURATION_ATTRIBUTE_NAME, configuration);
                 configuration.log();
 
-                MBeanRegistry.getInstance().setMbeanSupport(DefaultModuleConfig.isMBeanRegistration(configuration));
+                MBeanRegistry.getInstance().setMbeanSupport(configuration.getBooleanProperty(MBEAN_REGISTRATION, M_BEAN_REGISTRATION_DEFAULT_VALUE));
 
 
                 //TODO: We need to provide a container specific thread factory that contains managed threads
                 //See https://github.com/canoo/dolphin-platform/issues/498
                 final PlatformThreadFactory threadFactory = new SimpleDolphinPlatformThreadFactory();
                 final ManagedBeanFactory beanFactory = getBeanFactory(servletContext);
-                final DefaultClasspathScanner classpathScanner = new DefaultClasspathScanner(DefaultModuleConfig.getRootPackageForClasspathScan(configuration));
+                final DefaultClasspathScanner classpathScanner = new DefaultClasspathScanner(configuration.getProperty(ROOT_PACKAGE_FOR_CLASSPATH_SCAN, ROOT_PACKAGE_FOR_CLASSPATH_SCAN_DEFAULT_VALUE));
                 serverCoreComponents = new ServerCoreComponentsImpl(servletContext, configuration, threadFactory, classpathScanner, beanFactory);
 
                 final Set<Class<?>> moduleClasses = classpathScanner.getTypesAnnotatedWith(ModuleDefinition.class);
