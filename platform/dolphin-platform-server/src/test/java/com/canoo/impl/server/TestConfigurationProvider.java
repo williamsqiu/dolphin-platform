@@ -15,11 +15,11 @@
  */
 package com.canoo.impl.server;
 
-import com.canoo.dp.impl.server.config.DefaultModuleConfig;
-import com.canoo.platform.server.spi.ConfigurationProviderAdapter;
 
+import com.canoo.platform.server.spi.ConfigurationProviderAdapter;
 import java.util.HashMap;
 import java.util.Map;
+import static com.canoo.dp.impl.server.config.DefaultPlatformConfiguration.USE_CROSS_SITE_ORIGIN_FILTER;
 
 public class TestConfigurationProvider extends ConfigurationProviderAdapter {
 
@@ -43,7 +43,7 @@ public class TestConfigurationProvider extends ConfigurationProviderAdapter {
         ret.put(PROPERTY_3_NAME, PROPERTY_3_VALUE);
 
         //This should not be overwritten from dolphin.properties
-        ret.put(DefaultModuleConfig.USE_CROSS_SITE_ORIGIN_FILTER, "true");
+        ret.put(USE_CROSS_SITE_ORIGIN_FILTER, "true");
         return ret;
     }
 }

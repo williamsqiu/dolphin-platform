@@ -15,7 +15,6 @@
  */
 package com.canoo.dp.impl.server.bootstrap.modules;
 
-import com.canoo.dp.impl.server.config.DefaultModuleConfig;
 import com.canoo.dp.impl.server.servlet.CrossSiteOriginFilter;
 import com.canoo.platform.server.spi.AbstractBaseModule;
 import com.canoo.platform.server.spi.ModuleDefinition;
@@ -31,6 +30,8 @@ import java.util.EnumSet;
 import java.util.List;
 
 import static org.apiguardian.api.API.Status.INTERNAL;
+import static com.canoo.dp.impl.server.config.DefaultPlatformConfiguration.CORS_ENDPOINTS_URL_MAPPINGS;
+import static com.canoo.dp.impl.server.config.DefaultPlatformConfiguration.CORS_ENDPOINTS_URL_MAPPINGS_DEFAULT_VALUE;
 
 @API(since = "0.x", status = INTERNAL)
 @ModuleDefinition(CorsModule.CORS_MODULE)
@@ -51,7 +52,7 @@ public class CorsModule extends AbstractBaseModule {
     public void initialize(ServerCoreComponents coreComponents) throws ModuleInitializationException {
         final ServletContext servletContext = coreComponents.getInstance(ServletContext.class);
         final PlatformConfiguration configuration = coreComponents.getConfiguration();
-        final List<String> endpointList = DefaultModuleConfig.getCorsEndpoints(configuration);
+        final List<String> endpointList = configuration.getListProperty(CORS_ENDPOINTS_URL_MAPPINGS, CORS_ENDPOINTS_URL_MAPPINGS_DEFAULT_VALUE);
 
         final String[] endpoints = endpointList.toArray(new String[endpointList.size()]);
         final CrossSiteOriginFilter filter = new CrossSiteOriginFilter(configuration);

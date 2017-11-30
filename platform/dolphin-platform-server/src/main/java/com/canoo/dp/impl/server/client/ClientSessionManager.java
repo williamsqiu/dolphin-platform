@@ -16,7 +16,6 @@
 package com.canoo.dp.impl.server.client;
 
 import com.canoo.dp.impl.platform.core.Assert;
-import com.canoo.dp.impl.server.config.DefaultModuleConfig;
 import com.canoo.platform.server.client.ClientSession;
 import com.canoo.platform.core.PlatformConfiguration;
 import org.apiguardian.api.API;
@@ -30,6 +29,8 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import static org.apiguardian.api.API.Status.INTERNAL;
+import static com.canoo.dp.impl.server.config.DefaultPlatformConfiguration.MAX_CLIENTS_PER_SESSION;
+import static com.canoo.dp.impl.server.config.DefaultPlatformConfiguration.MAX_CLIENTS_PER_SESSION_DEFAULT_VALUE;
 
 @API(since = "0.x", status = INTERNAL)
 public class ClientSessionManager {
@@ -114,7 +115,7 @@ public class ClientSessionManager {
         Lock lock = getOrCreateClientSessionLockForHttpSession(httpSession);
         lock.lock();
         try {
-            return getOrCreateClientSessionMapInHttpSession(httpSession).size() < DefaultModuleConfig.getMaxClientsPerSession(configuration);
+            return getOrCreateClientSessionMapInHttpSession(httpSession).size() < configuration.getIntProperty(MAX_CLIENTS_PER_SESSION, MAX_CLIENTS_PER_SESSION_DEFAULT_VALUE);
         } finally {
             lock.unlock();
         }

@@ -16,11 +16,15 @@
 package com.canoo.impl.server;
 
 import com.canoo.dp.impl.server.config.ConfigurationFileLoader;
-import com.canoo.dp.impl.server.config.DefaultModuleConfig;
 import com.canoo.dp.impl.server.config.DefaultPlatformConfiguration;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.*;
+import static com.canoo.dp.impl.server.config.DefaultPlatformConfiguration.USE_CROSS_SITE_ORIGIN_FILTER;
+import static com.canoo.dp.impl.server.config.DefaultPlatformConfiguration.ROOT_PACKAGE_FOR_CLASSPATH_SCAN;
+import static com.canoo.dp.impl.server.config.DefaultPlatformConfiguration.ROOT_PACKAGE_FOR_CLASSPATH_SCAN_DEFAULT_VALUE;
+import static com.canoo.dp.impl.server.config.DefaultPlatformConfiguration.USE_CROSS_SITE_ORIGIN_FILTER_DEFAULT_VALUE;
+
 
 public class ConfigurationFileLoaderTest {
 
@@ -31,8 +35,8 @@ public class ConfigurationFileLoaderTest {
             DefaultPlatformConfiguration configuration = ConfigurationFileLoader.loadConfiguration();
 
             //then:
-            assertEquals(DefaultModuleConfig.isUseCrossSiteOriginFilter(configuration), false);
-            assertEquals(DefaultModuleConfig.getRootPackageForClasspathScan(configuration), null);
+            assertEquals(configuration.getBooleanProperty(USE_CROSS_SITE_ORIGIN_FILTER), false);
+            assertEquals(configuration.getProperty(ROOT_PACKAGE_FOR_CLASSPATH_SCAN, ROOT_PACKAGE_FOR_CLASSPATH_SCAN_DEFAULT_VALUE), null);
         } catch (Exception e) {
             fail("Error in test", e);
         }
@@ -61,8 +65,8 @@ public class ConfigurationFileLoaderTest {
             DefaultPlatformConfiguration configuration = ConfigurationFileLoader.loadConfiguration();
 
             //then:
-            assertEquals(DefaultModuleConfig.isUseCrossSiteOriginFilter(configuration), false);
-            assertEquals(configuration.getProperty(DefaultModuleConfig.USE_CROSS_SITE_ORIGIN_FILTER, null), "false");
+            assertEquals(configuration.getBooleanProperty(USE_CROSS_SITE_ORIGIN_FILTER, USE_CROSS_SITE_ORIGIN_FILTER_DEFAULT_VALUE), false);
+            assertEquals(configuration.getProperty(USE_CROSS_SITE_ORIGIN_FILTER, null), "false");
         } catch (Exception e) {
             fail("Error in test", e);
         }

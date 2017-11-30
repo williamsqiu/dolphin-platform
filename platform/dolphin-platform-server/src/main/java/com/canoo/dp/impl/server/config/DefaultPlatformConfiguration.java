@@ -30,22 +30,70 @@ public final class DefaultPlatformConfiguration implements PlatformConfiguration
 
     private static final Logger LOG = LoggerFactory.getLogger(DefaultPlatformConfiguration.class);
 
+    public static final String USE_CROSS_SITE_ORIGIN_FILTER = "useCrossSiteOriginFilter";
+
+    public static final String ACCESS_CONTROL_ALLOW_HEADERS = "accessControlAllowHeaders";
+
+    public static final String ACCESS_CONTROL_ALLOW_METHODS = "accessControlAllowMethods";
+
+    public static final String ACCESS_CONTROL_ALLOW_CREDENTIALS = "accessControlAllowCredentials";
+
+    public static final String ACCESS_CONTROL_MAXAGE = "accessControlMaxAge";
+
+    public static final String SESSION_TIMEOUT = "sessionTimeout";
+
+    public static final String ROOT_PACKAGE_FOR_CLASSPATH_SCAN = "rootPackageForClasspathScan";
+
+    public static final String MBEAN_REGISTRATION = "mBeanRegistration";
+
+    public static final String PLATFORM_ACTIVE = "active";
+
+    public static final String MAX_CLIENTS_PER_SESSION = "maxClientsPerSession";
+
+    public static final String ID_FILTER_URL_MAPPINGS = "idFilterUrlMappings";
+
+    public static final String CORS_ENDPOINTS_URL_MAPPINGS = "corsUrlMappings";
+
+    public final static int SESSION_TIMEOUT_DEFAULT_VALUE = 900;
+
+    public final static boolean USE_CROSS_SITE_ORIGIN_FILTER_DEFAULT_VALUE = true;
+
+    public final static boolean M_BEAN_REGISTRATION_DEFAULT_VALUE = false;
+
+    public final static String ROOT_PACKAGE_FOR_CLASSPATH_SCAN_DEFAULT_VALUE = null;
+
+    public final static boolean ACTIVE_DEFAULT_VALUE = true;
+
+    public final static List<String> ACCESS_CONTROL_ALLOW_HEADERS_DEFAULT_VALUE = Arrays.asList("Content-Type", "x-requested-with", "origin", "authorization", "accept", "client-security-token");
+
+    public final static List<String> ACCESS_CONTROL_ALLOW_METHODS_DEFAULT_VALUE = Arrays.asList("*");
+
+    public final static boolean ACCESS_CONTROL_ALLOW_CREDENTIALS_DEFAULT_VALUE = true;
+
+    public final static long ACCESS_CONTROL_MAX_AGE_DEFAULT_VALUE = 86400;
+
+    public final static int MAX_CLIENTS_PER_SESSION_DEFAULT_VALUE = 10;
+
+    public final static List<String> ID_FILTER_URL_MAPPINGS_DEFAULT_VALUE = Arrays.asList("/dolphin");
+
+    public final static List<String> CORS_ENDPOINTS_URL_MAPPINGS_DEFAULT_VALUE = Arrays.asList("/*");
+
     private final Properties internalProperties;
 
     public DefaultPlatformConfiguration() {
         this(new Properties());
-        setIntProperty(DefaultModuleConfig.SESSION_TIMEOUT, DefaultModuleConfig.SESSION_TIMEOUT_DEFAULT_VALUE);
-        setBooleanProperty(DefaultModuleConfig.USE_CROSS_SITE_ORIGIN_FILTER, DefaultModuleConfig.USE_CROSS_SITE_ORIGIN_FILTER_DEFAULT_VALUE);
-        setBooleanProperty(DefaultModuleConfig.MBEAN_REGISTRATION, DefaultModuleConfig.M_BEAN_REGISTRATION_DEFAULT_VALUE);
-        setProperty(DefaultModuleConfig.ROOT_PACKAGE_FOR_CLASSPATH_SCAN, DefaultModuleConfig.ROOT_PACKAGE_FOR_CLASSPATH_SCAN_DEFAULT_VALUE);
-        setBooleanProperty(DefaultModuleConfig.PLATFORM_ACTIVE, DefaultModuleConfig.ACTIVE_DEFAULT_VALUE);
-        setListProperty(DefaultModuleConfig.ACCESS_CONTROL_ALLOW_HEADERS, DefaultModuleConfig.ACCESS_CONTROL_ALLOW_HEADERS_DEFAULT_VALUE);
-        setListProperty(DefaultModuleConfig.ACCESS_CONTROL_ALLOW_METHODS, DefaultModuleConfig.ACCESS_CONTROL_ALLOW_METHODS_DEFAULT_VALUE);
-        setBooleanProperty(DefaultModuleConfig.ACCESS_CONTROL_ALLOW_CREDENTIALS, DefaultModuleConfig.ACCESS_CONTROL_ALLOW_CREDENTIALS_DEFAULT_VALUE);
-        setLongProperty(DefaultModuleConfig.ACCESS_CONTROL_MAXAGE, DefaultModuleConfig.ACCESS_CONTROL_MAX_AGE_DEFAULT_VALUE);
-        setIntProperty(DefaultModuleConfig.MAX_CLIENTS_PER_SESSION, DefaultModuleConfig.MAX_CLIENTS_PER_SESSION_DEFAULT_VALUE);
-        setListProperty(DefaultModuleConfig.ID_FILTER_URL_MAPPINGS, DefaultModuleConfig.ID_FILTER_URL_MAPPINGS_DEFAULT_VALUE);
-        setListProperty(DefaultModuleConfig.CORS_ENDPOINTS_URL_MAPPINGS, DefaultModuleConfig.CORS_ENDPOINTS_URL_MAPPINGS_DEFAULT_VALUE);
+        setIntProperty(SESSION_TIMEOUT, SESSION_TIMEOUT_DEFAULT_VALUE);
+        setBooleanProperty(USE_CROSS_SITE_ORIGIN_FILTER, USE_CROSS_SITE_ORIGIN_FILTER_DEFAULT_VALUE);
+        setBooleanProperty(MBEAN_REGISTRATION, M_BEAN_REGISTRATION_DEFAULT_VALUE);
+        setProperty(ROOT_PACKAGE_FOR_CLASSPATH_SCAN, ROOT_PACKAGE_FOR_CLASSPATH_SCAN_DEFAULT_VALUE);
+        setBooleanProperty(PLATFORM_ACTIVE, ACTIVE_DEFAULT_VALUE);
+        setListProperty(ACCESS_CONTROL_ALLOW_HEADERS, ACCESS_CONTROL_ALLOW_HEADERS_DEFAULT_VALUE);
+        setListProperty(ACCESS_CONTROL_ALLOW_METHODS, ACCESS_CONTROL_ALLOW_METHODS_DEFAULT_VALUE);
+        setBooleanProperty(ACCESS_CONTROL_ALLOW_CREDENTIALS, ACCESS_CONTROL_ALLOW_CREDENTIALS_DEFAULT_VALUE);
+        setLongProperty(ACCESS_CONTROL_MAXAGE, ACCESS_CONTROL_MAX_AGE_DEFAULT_VALUE);
+        setIntProperty(MAX_CLIENTS_PER_SESSION, MAX_CLIENTS_PER_SESSION_DEFAULT_VALUE);
+        setListProperty(ID_FILTER_URL_MAPPINGS, ID_FILTER_URL_MAPPINGS_DEFAULT_VALUE);
+        setListProperty(CORS_ENDPOINTS_URL_MAPPINGS, CORS_ENDPOINTS_URL_MAPPINGS_DEFAULT_VALUE);
     }
 
     public DefaultPlatformConfiguration(final Properties internalProperties) {
