@@ -23,6 +23,7 @@ import org.testng.annotations.Test;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -31,6 +32,7 @@ public class TestObservableArrayList {
     @Test
     public void testCreation() {
         ObservableArrayList<String> list = new ObservableArrayList<>();
+
         Assert.assertTrue(list.isEmpty());
         Assert.assertEquals(list.size(), 0);
 
@@ -215,6 +217,79 @@ public class TestObservableArrayList {
         list.clear();
 
     }
+
+    @Test
+    public void testListIterator(){
+        final AtomicBoolean removed = new AtomicBoolean(false);
+        final AtomicBoolean added = new AtomicBoolean(false);
+        final AtomicInteger callCount = new AtomicInteger(0);
+
+        final ObservableArrayList<String> list = new ObservableArrayList<>();
+        Assert.assertTrue(list.isEmpty());
+        Assert.assertEquals(list.size(), 0);
+
+        addOnChangeListener(removed, added, callCount, list);
+
+        list.addAll("1", "2", "3", "4", "5");
+
+        ListIterator<String> iterator = list.listIterator();
+        Assert.assertTrue(iterator.nextIndex() == 0);
+
+        String current = iterator.next();
+        Assert.assertTrue(current.equals("1"));
+        Assert.assertTrue(iterator.nextIndex() == 1);
+
+
+        current = iterator.next();
+        Assert.assertTrue(current.equals("2"));
+        Assert.assertTrue(iterator.nextIndex() == 2);
+
+        current = iterator.previous();
+        Assert.assertTrue(current.equals("2"));
+        Assert.assertTrue(iterator.previousIndex() == 0);
+
+        //Add using iterator
+        iterator.add("Test");
+        Assert.assertTrue(added.get());
+        Assert.assertFalse(removed.get());
+        Assert.assertEquals(list.size(), 6);
+        current = iterator.previous();
+        Assert.assertTrue(current.equals("Test"));
+        Assert.assertTrue(iterator.nextIndex() == 1);
+
+
+        //Remove using iterator
+        iterator.remove();
+        Assert.assertFalse(added.get());
+        Assert.assertTrue(removed.get());
+        Assert.assertEquals(list.size(), 5);
+        current = iterator.next();
+        Assert.assertTrue(current.equals("2"));
+        Assert.assertTrue(iterator.nextIndex() == 2);
+    }
+
+    @Test(expectedExceptions = {IllegalStateException.class})
+    public void testListIteratorWrongStateRemoveAfterAdd(){
+        final ObservableArrayList<String> list = new ObservableArrayList<>();
+        Assert.assertTrue(list.isEmpty());
+        Assert.assertEquals(list.size(), 0);
+
+        list.addAll("1", "2", "3", "4", "5");
+
+        ListIterator<String> iterator = list.listIterator();
+        Assert.assertTrue(iterator.nextIndex() == 0);
+
+        iterator.next();
+        iterator.next();
+
+        //Add using iterator
+        iterator.add("Test");
+        Assert.assertEquals(list.size(), 6);
+
+        // you can't remove after add...call next or previous
+        iterator.remove();
+    }
+
 
     @Test
     public void testRemoveRange() {

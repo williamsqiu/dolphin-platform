@@ -325,6 +325,7 @@ public class ObservableArrayList<E> implements ObservableList<E> {
     private class ListIteratorWrapper implements ListIterator<E> {
 
         private final ListIterator<E> iterator;
+        int lastRet = -1; // index of last element returned;
 
         private ListIteratorWrapper (ListIterator<E> iterator) {
             this.iterator = iterator;
@@ -337,7 +338,9 @@ public class ObservableArrayList<E> implements ObservableList<E> {
 
         @Override
         public E next() {
-            return iterator.next();
+            final E e = iterator.next();
+            lastRet = ObservableArrayList.this.list.indexOf(e);
+            return e;
         }
 
         @Override
@@ -347,7 +350,9 @@ public class ObservableArrayList<E> implements ObservableList<E> {
 
         @Override
         public E previous() {
-            return iterator.previous();
+            final E e = iterator.previous();
+            lastRet = ObservableArrayList.this.list.indexOf(e);
+            return e;
         }
 
         @Override
@@ -362,20 +367,30 @@ public class ObservableArrayList<E> implements ObservableList<E> {
 
         @Override
         public void remove() {
-            // TODO Implement
-            throw new UnsupportedOperationException("Not implemented yet");
+            E oldElement = null;
+            if(lastRet >=0){
+                oldElement = ObservableArrayList.this.get(lastRet);
+            }// do not throw any exception...it will be thrown by next line
+            iterator.remove();
+            int removedIndex = iterator.nextIndex();
+            fireListChanged(new ListChangeEventImpl<>(ObservableArrayList.this, removedIndex, removedIndex, Collections.singletonList(oldElement)));
+            lastRet = -1;
         }
 
         @Override
         public void set(E e) {
-            // TODO Implement
-            throw new UnsupportedOperationException("Not implemented yet");
+            int replacedIndex = iterator.nextIndex();
+            final E oldElement = ObservableArrayList.this.get(replacedIndex);
+            iterator.set(e);
+            fireListChanged(new ListChangeEventImpl<>(ObservableArrayList.this, replacedIndex, replacedIndex, Collections.singletonList(oldElement)));
         }
 
         @Override
         public void add(E e) {
-            // TODO Implement
-            throw new UnsupportedOperationException("Not implemented yet");
+            int addedIndex = iterator.nextIndex();
+            iterator.add(e);
+            lastRet = -1;
+            fireListChanged(new ListChangeEventImpl<>(ObservableArrayList.this, addedIndex, addedIndex + 1, Collections.<E>emptyList()));
         }
     }
 
