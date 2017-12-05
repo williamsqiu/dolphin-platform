@@ -52,6 +52,10 @@ include 'platform-examples/simple-rest/simple-rest-client-javafx'
 include 'platform-examples/simple-rest/simple-rest-server-javaee'
 include 'platform-examples/simple-rest/simple-rest-server-spring'
 
+include 'platform-examples/lazy-loading-sample/lazy-loading-common'
+include 'platform-examples/lazy-loading-sample/lazy-loading-client-javafx'
+include 'platform-examples/lazy-loading-sample/lazy-loading-server-spring'
+
 include 'platform-examples/distribution-sample/distribution-server-hazelcast'
 include 'platform-examples/distribution-sample/distribution-common'
 include 'platform-examples/distribution-sample/distribution-client'
