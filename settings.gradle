@@ -42,6 +42,12 @@ include 'platform-examples/process-monitor-sample/process-monitor-server-spring'
 include 'platform-examples/process-monitor-sample/process-monitor-server-javaee'
 include 'platform-examples/process-monitor-sample/process-monitor-client-javafx'
 
+include 'platform-examples/microservices-sample/microservice-user-common'
+include 'platform-examples/microservices-sample/microservice-user-server'
+include 'platform-examples/microservices-sample/microservice-product-common'
+include 'platform-examples/microservices-sample/microservice-product-server'
+include 'platform-examples/microservices-sample/microservice-client'
+
 include 'platform-examples/web-deployment-example/web-deployment-common'
 include 'platform-examples/web-deployment-example/web-deployment-server'
 include 'platform-examples/web-deployment-example/web-deployment-client'
