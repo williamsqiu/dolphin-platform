@@ -60,22 +60,46 @@ public class ClientContextImpl implements ClientContext {
 
     private final ClientSessionStore clientSessionStore;
 
-    private AbstractClientConnector clientConnector;
+    private final AbstractClientConnector clientConnector;
 
-    private ClientModelStore modelStore;
+    private final ClientModelStore modelStore;
 
     @Deprecated
-    private  BeanManager clientBeanManager;
+    private  final BeanManager clientBeanManager;
 
-    private ControllerProxyFactory controllerProxyFactory;
+    private final ControllerProxyFactory controllerProxyFactory;
 
-    private DolphinCommandHandler dolphinCommandHandler;
+    private final DolphinCommandHandler dolphinCommandHandler;
 
     public ClientContextImpl(final ClientConfiguration clientConfiguration, final URL endpoint, final Function<ClientModelStore, AbstractClientConnector> connectorProvider, final ClientSessionStore clientSessionStore) {
         this.clientConfiguration = Assert.requireNonNull(clientConfiguration, "clientConfiguration");
         this.connectorProvider = Assert.requireNonNull(connectorProvider, "connectorProvider");
         this.clientSessionStore = Assert.requireNonNull(clientSessionStore, "clientSessionStore");
         this.endpoint = Assert.requireNonNull(endpoint, "endpoint");
+
+        final ModelSynchronizer defaultModelSynchronizer = new DefaultModelSynchronizer(new Provider<AbstractClientConnector>() {
+            @Override
+            public AbstractClientConnector get() {
+                return clientConnector;
+            }
+        });
+
+        this.modelStore = new ClientModelStore(defaultModelSynchronizer);
+        this.clientConnector = connectorProvider.call(modelStore);
+
+        final EventDispatcher dispatcher = new ClientEventDispatcher(modelStore);
+        final BeanRepository beanRepository = new BeanRepositoryImpl(modelStore, dispatcher);
+        final Converters converters = new Converters(beanRepository);
+        final PresentationModelBuilderFactory builderFactory = new ClientPresentationModelBuilderFactory(modelStore);
+        final ClassRepository classRepository = new ClassRepositoryImpl(modelStore, converters, builderFactory);
+
+        this.dolphinCommandHandler = new DolphinCommandHandler(clientConnector);
+        this.controllerProxyFactory = new ControllerProxyFactory(dolphinCommandHandler, clientConnector, modelStore, beanRepository, dispatcher, converters);
+        this.clientBeanManager = new BeanManagerImpl(beanRepository, new ClientBeanBuilderImpl(classRepository, beanRepository, new ListMapperImpl(modelStore, classRepository, beanRepository, builderFactory, dispatcher), builderFactory, dispatcher));
+    }
+
+    protected DolphinCommandHandler getDolphinCommandHandler() {
+        return dolphinCommandHandler;
     }
 
     @Override
@@ -129,25 +153,7 @@ public class ClientContextImpl implements ClientContext {
 
     @Override
     public CompletableFuture<Void> connect() {
-        final ModelSynchronizer defaultModelSynchronizer = new DefaultModelSynchronizer(new Provider<AbstractClientConnector>() {
-            @Override
-            public AbstractClientConnector get() {
-                return clientConnector;
-            }
-        });
 
-        this.modelStore = new ClientModelStore(defaultModelSynchronizer);
-        this.clientConnector = connectorProvider.call(modelStore);
-
-        final EventDispatcher dispatcher = new ClientEventDispatcher(modelStore);
-        final BeanRepository beanRepository = new BeanRepositoryImpl(modelStore, dispatcher);
-        final Converters converters = new Converters(beanRepository);
-        final PresentationModelBuilderFactory builderFactory = new ClientPresentationModelBuilderFactory(modelStore);
-        final ClassRepository classRepository = new ClassRepositoryImpl(modelStore, converters, builderFactory);
-
-        this.dolphinCommandHandler = new DolphinCommandHandler(clientConnector);
-        this.controllerProxyFactory = new ControllerProxyFactory(dolphinCommandHandler, clientConnector, modelStore, beanRepository, dispatcher, converters);
-        this.clientBeanManager = new BeanManagerImpl(beanRepository, new ClientBeanBuilderImpl(classRepository, beanRepository, new ListMapperImpl(modelStore, classRepository, beanRepository, builderFactory, dispatcher), builderFactory, dispatcher));
 
         final CompletableFuture<Void> result = new CompletableFuture<>();
         clientConnector.connect();

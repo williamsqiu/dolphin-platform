@@ -25,7 +25,6 @@ import com.canoo.dp.impl.server.context.DolphinContextProvider;
 import com.canoo.dp.impl.server.event.DefaultDolphinEventBus;
 import com.canoo.dp.impl.server.spring.ClientScopeImpl;
 import com.canoo.platform.remoting.BeanManager;
-import com.canoo.platform.remoting.client.ClientContext;
 import com.canoo.platform.remoting.server.ClientSessionExecutor;
 import com.canoo.platform.remoting.server.RemotingContext;
 import com.canoo.platform.remoting.server.binding.PropertyBinder;
@@ -61,14 +60,14 @@ public class DolphinPlatformSpringTestBootstrap {
 
     @Bean
     @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
-    protected ClientContext createClientContext(final TestConfiguration testConfiguration) {
+    protected TestClientContext createClientContext(final TestConfiguration testConfiguration) {
         Assert.requireNonNull(testConfiguration, "testConfiguration");
         return testConfiguration.getClientContext();
     }
 
     @Bean
     @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
-    protected DolphinTestContext createServerContext(final TestConfiguration testConfiguration) {
+    protected DolphinContext createServerContext(final TestConfiguration testConfiguration) {
         Assert.requireNonNull(testConfiguration, "testConfiguration");
         return testConfiguration.getDolphinTestContext();
     }
@@ -163,7 +162,7 @@ public class DolphinPlatformSpringTestBootstrap {
             }
         };
 
-        DefaultDolphinEventBus eventBus = new DefaultDolphinEventBus();
+        final DefaultDolphinEventBus eventBus = new DefaultDolphinEventBus();
         eventBus.init(contextProvider, new ClientSessionLifecycleHandlerImpl());
         return eventBus;
     }

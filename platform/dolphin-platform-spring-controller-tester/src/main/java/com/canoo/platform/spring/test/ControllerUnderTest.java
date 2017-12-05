@@ -47,8 +47,11 @@ public interface ControllerUnderTest<T> {
      */
     void invoke(String actionName, Param... params);
 
+    AsyncCondition createAsyncCondition();
+
     /**
      * Destroys the controller
      */
     void destroy();
+
 }

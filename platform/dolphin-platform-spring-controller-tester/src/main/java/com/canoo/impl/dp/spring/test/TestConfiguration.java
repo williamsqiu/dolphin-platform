@@ -15,7 +15,6 @@
  */
 package com.canoo.impl.dp.spring.test;
 
-import com.canoo.dp.impl.client.ClientContextImpl;
 import com.canoo.dp.impl.client.legacy.ClientModelStore;
 import com.canoo.dp.impl.client.legacy.communication.AbstractClientConnector;
 import com.canoo.dp.impl.platform.client.session.ClientSessionStoreImpl;
@@ -23,23 +22,22 @@ import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.remoting.legacy.communication.Command;
 import com.canoo.dp.impl.remoting.legacy.util.Function;
 import com.canoo.dp.impl.server.client.ClientSessionProvider;
+import com.canoo.dp.impl.server.client.HttpClientSessionImpl;
 import com.canoo.dp.impl.server.config.ConfigurationFileLoader;
 import com.canoo.dp.impl.server.config.RemotingConfiguration;
 import com.canoo.dp.impl.server.context.DolphinContext;
 import com.canoo.dp.impl.server.controller.ControllerRepository;
-import com.canoo.dp.impl.server.controller.ControllerValidationException;
 import com.canoo.dp.impl.server.scanner.DefaultClasspathScanner;
 import com.canoo.platform.client.PlatformClient;
-import com.canoo.platform.remoting.client.ClientContext;
+import com.canoo.platform.core.functional.Callback;
 import com.canoo.platform.server.client.ClientSession;
 import org.apiguardian.api.API;
 import org.springframework.web.context.WebApplicationContext;
 
 import javax.servlet.http.HttpSession;
-import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -48,11 +46,11 @@ import static org.apiguardian.api.API.Status.INTERNAL;
 @API(since = "0.x", status = INTERNAL)
 public class TestConfiguration {
 
-    private final DolphinTestContext dolphinTestContext;
+    private final DolphinContext dolphinTestContext;
 
-    private final ClientContextImpl clientContext;
+    private final TestClientContext clientContext;
 
-    public TestConfiguration(final WebApplicationContext context, final HttpSession httpSession) throws ControllerValidationException, MalformedURLException, ExecutionException, InterruptedException {
+    public TestConfiguration(final WebApplicationContext context, final HttpSession httpSession) throws Exception {
         Assert.requireNonNull(context, "context");
         Assert.requireNonNull(httpSession, "httpSession");
 
@@ -60,7 +58,7 @@ public class TestConfiguration {
         final ExecutorService clientExecutor = Executors.newSingleThreadExecutor();
 
         final ClientSessionStoreImpl clientSessionStore = new ClientSessionStoreImpl();
-        clientContext = new ClientContextImpl(PlatformClient.getClientConfiguration(), new URL("http://dummy"), new Function<ClientModelStore, AbstractClientConnector>() {
+        clientContext = new TestClientContextImpl(PlatformClient.getClientConfiguration(), new URL("http://dummy"), new Function<ClientModelStore, AbstractClientConnector>() {
             @Override
             public AbstractClientConnector call(ClientModelStore clientModelStore) {
                 return new DolphinTestClientConnector(clientModelStore, clientExecutor, new Function<List<Command>, List<Command>>() {
@@ -79,23 +77,36 @@ public class TestConfiguration {
         final TestSpringManagedBeanFactory containerManager = new TestSpringManagedBeanFactory(context);
         containerManager.init(context.getServletContext());
         final DolphinContextProviderMock dolphinContextProviderMock = new DolphinContextProviderMock();
-        dolphinTestContext = new DolphinTestContext(new RemotingConfiguration(ConfigurationFileLoader.loadConfiguration()), dolphinContextProviderMock, containerManager, controllerRepository, httpSession);
+
+
+        dolphinTestContext = new TestDolphinContext(new RemotingConfiguration(ConfigurationFileLoader.loadConfiguration()), new HttpClientSessionImpl(httpSession), dolphinContextProviderMock, containerManager, controllerRepository, createEmptyCallback());
+
         dolphinContextProviderMock.setCurrentContext(dolphinTestContext);
     }
 
+    private Callback<DolphinContext> createEmptyCallback() {
+        return new Callback<DolphinContext>() {
+            @Override
+            public void call(DolphinContext context) {
+
+            }
+        };
+    }
+
     private List<Command> sendToServer(final List<Command> commandList) {
+        final List<Command> commandsWithStartLong = new ArrayList<>(commandList);
         return dolphinTestContext.handle(commandList);
     }
 
-    public DolphinTestContext getDolphinTestContext() {
+    public DolphinContext getDolphinTestContext() {
         return dolphinTestContext;
     }
 
     private class DolphinContextProviderMock implements ClientSessionProvider {
 
-        DolphinContext currentContext;
+        private DolphinContext currentContext;
 
-        public void setCurrentContext(DolphinContext currentContext) {
+        public void setCurrentContext(final DolphinContext currentContext) {
             this.currentContext = currentContext;
         }
 
@@ -105,7 +116,7 @@ public class TestConfiguration {
         }
     }
 
-    public ClientContext getClientContext() {
+    public TestClientContext getClientContext() {
         return clientContext;
     }
 }
