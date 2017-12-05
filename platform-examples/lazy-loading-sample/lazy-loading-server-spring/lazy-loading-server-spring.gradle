@@ -1,0 +1,5 @@
+dependencies {
+  compile project(':lazy-loading-common')
+  compile project(':dolphin-platform-remoting-server-spring')
+  compile 'javax.inject:javax.inject:1'
+}
