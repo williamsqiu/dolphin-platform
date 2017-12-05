@@ -10,12 +10,14 @@ import static com.canoo.platform.samples.microservices.product.ProductConstants.
 @DolphinController(PRODUCT_CONTROLLER_NAME)
 public class ProductController {
 
+    private static int counter;
+
     @DolphinModel
     private ProductBean model;
 
     @DolphinAction(PRODUCT_REFRESH_ACTION)
     public void refresh() {
-        model.setName("Banana");
+        model.setName("Banana " + ++counter);
         model.setPrice(12.50);
     }
 }

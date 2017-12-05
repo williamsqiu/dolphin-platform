@@ -9,12 +9,13 @@ import static com.canoo.platform.samples.microservices.user.UserConstants.USER_R
 
 @DolphinController(USER_CONTROLLER_NAME)
 public class UserController {
+    private static int counter;
 
     @DolphinModel
     private UserBean model;
 
     @DolphinAction(USER_REFRESH_ACTION)
     public void refresh() {
-        model.setName("john0815");
+        model.setName("john0815 " + ++counter);
     }
 }
