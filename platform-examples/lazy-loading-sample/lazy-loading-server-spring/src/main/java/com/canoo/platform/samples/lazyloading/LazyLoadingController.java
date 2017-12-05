@@ -7,6 +7,7 @@ import com.canoo.platform.remoting.server.DolphinController;
 import com.canoo.platform.remoting.server.DolphinModel;
 import com.canoo.platform.remoting.server.RemotingContext;
 
+import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -39,6 +40,11 @@ public class LazyLoadingController {
     public LazyLoadingController(final RemotingContext remotingContext, final BeanManager beanManager) {
         this.sessionExecutor = remotingContext.createSessionExecutor();
         this.beanManager = beanManager;
+    }
+
+    @PostConstruct
+    public void init() {
+        refresh();
     }
 
     @DolphinAction(REFRESH_ACTION)
