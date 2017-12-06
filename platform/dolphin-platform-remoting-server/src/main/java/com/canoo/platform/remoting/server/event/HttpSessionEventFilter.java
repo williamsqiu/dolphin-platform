@@ -1,19 +1,19 @@
-package com.canoo.dp.impl.server.event;
+package com.canoo.platform.remoting.server.event;
 
 import com.canoo.dp.impl.platform.core.Assert;
-import com.canoo.platform.remoting.server.event.EventFilter;
-import com.canoo.platform.remoting.server.event.MessageEventContext;
+import com.canoo.dp.impl.server.event.EventConstants;
 import org.apiguardian.api.API;
 
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 
 import static org.apiguardian.api.API.Status.INTERNAL;
 
 @API(since = "0.x", status = INTERNAL)
-public class HttpSessionEventFilter implements EventFilter {
+public class HttpSessionEventFilter<T extends Serializable> implements Predicate<MessageEventContext<T>> {
 
     private final List<String> sessionIds;
 
@@ -22,7 +22,7 @@ public class HttpSessionEventFilter implements EventFilter {
     }
 
     @Override
-    public boolean shouldHandleEvent(final MessageEventContext context) {
+    public boolean test(final MessageEventContext<T> context) {
         Assert.requireNonNull(context, "context");
 
         final Map<String, Serializable> metadata = context.getMetadata();

@@ -21,11 +21,10 @@ import com.canoo.dp.impl.server.context.DolphinContext;
 import com.canoo.dp.impl.server.context.DolphinContextProvider;
 import com.canoo.platform.core.functional.Callback;
 import com.canoo.platform.core.functional.Subscription;
-import com.canoo.platform.remoting.server.event.EventFilterFactory;
+import com.canoo.platform.remoting.server.event.ClientSessionEventFilter;
 import com.canoo.platform.remoting.server.event.MessageEventContext;
 import com.canoo.platform.remoting.server.event.RemotingEventBus;
 import com.canoo.platform.server.client.ClientSession;
-import com.canoo.platform.remoting.server.event.EventFilter;
 import com.canoo.platform.remoting.server.event.MessageListener;
 import com.canoo.platform.remoting.server.event.Topic;
 import org.apiguardian.api.API;
@@ -41,6 +40,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Predicate;
 
 import static org.apiguardian.api.API.Status.INTERNAL;
 
@@ -93,9 +93,9 @@ public abstract class AbstractEventBus implements RemotingEventBus {
         if (currentContext != null) {
             final List<ListenerWithFilter<T>> listenersInCurrentSession = getListenersForSessionAndTopic(currentContext.getId(), topic);
             for (ListenerWithFilter<T> listenerAndFilter : listenersInCurrentSession) {
-                final EventFilter<T> filter = listenerAndFilter.getFilter();
+                final Predicate<MessageEventContext<T>> filter = listenerAndFilter.getFilter();
                 final MessageListener<T> listener = listenerAndFilter.getListener();
-                if(filter == null || filter.shouldHandleEvent(event.getMessageEventContext())) {
+                if(filter == null || filter.test(event.getMessageEventContext())) {
                     listener.onMessage(event);
                 }
             }
@@ -104,7 +104,7 @@ public abstract class AbstractEventBus implements RemotingEventBus {
     }
 
     @Override
-    public <T extends Serializable> Subscription subscribe(final Topic<T> topic, final MessageListener<? super T> listener, final EventFilter filter) {
+    public <T extends Serializable> Subscription subscribe(final Topic<T> topic, final MessageListener<? super T> listener, final Predicate<MessageEventContext<T>> filter) {
         checkInitialization();
         Assert.requireNonNull(topic, "topic");
         Assert.requireNonNull(listener, "listener");
@@ -120,7 +120,7 @@ public abstract class AbstractEventBus implements RemotingEventBus {
             listeners = new CopyOnWriteArrayList<>();
             topicToListenerMap.put(topic, listeners);
         }
-        final ListenerWithFilter<? super T> listenerWithFilter = new ListenerWithFilter<>(listener, filter);
+        final ListenerWithFilter listenerWithFilter = new ListenerWithFilter(listener, filter);
         listeners.add(listenerWithFilter);
         listenerToSessionMap.put(listener, subscriptionSessionId);
         final Subscription subscription = new Subscription() {
@@ -166,9 +166,9 @@ public abstract class AbstractEventBus implements RemotingEventBus {
                         @Override
                         public void run() {
                             LOG.trace("Calling event listener for topic {} in Dolphin Platform context {}", topic.getName(), sessionId);
-                            final EventFilter<T> sessionFilter = (EventFilter<T>) listenerAndFilter.getFilter();
+                            final Predicate<MessageEventContext<T>> sessionFilter = ((ListenerWithFilter<T>)listenerAndFilter).getFilter();
                             final MessageListener<T> listener = (MessageListener<T>) listenerAndFilter.getListener();
-                            if (sessionFilter == null || sessionFilter.shouldHandleEvent(event.getMessageEventContext())) {
+                            if (sessionFilter == null || sessionFilter.test(event.getMessageEventContext())) {
                                 listener.onMessage(event);
                             }
                         }
@@ -187,7 +187,7 @@ public abstract class AbstractEventBus implements RemotingEventBus {
             if(clientSession != null) {
                 final MessageEventContext<T> eventContext = event.getMessageEventContext();
                 if(eventContext != null) {
-                    return EventFilterFactory.allowClientSessions(listenerToSessionMap.get(listener)).shouldHandleEvent(eventContext);
+                    return new ClientSessionEventFilter().test(eventContext);
                 }
             }
         }
