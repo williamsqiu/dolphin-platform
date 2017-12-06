@@ -44,12 +44,4 @@ public class ClientInitializationException extends RuntimeException {
         super(message, cause);
     }
 
-    /**
-     * constructor
-     * @param cause the cause
-     */
-    public ClientInitializationException(Throwable cause) {
-        super(cause);
-    }
-
 }

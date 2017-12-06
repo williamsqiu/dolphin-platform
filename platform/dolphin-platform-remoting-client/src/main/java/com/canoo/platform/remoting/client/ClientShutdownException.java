@@ -44,11 +44,4 @@ public class ClientShutdownException extends Exception {
         super(message, cause);
     }
 
-    /**
-     * constructor
-     * @param cause the cause
-     */
-    public ClientShutdownException(Throwable cause) {
-        super(cause);
-    }
 }

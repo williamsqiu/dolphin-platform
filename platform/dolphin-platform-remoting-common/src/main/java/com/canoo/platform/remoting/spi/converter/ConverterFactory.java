@@ -20,7 +20,10 @@ import org.apiguardian.api.API;
 import static org.apiguardian.api.API.Status.MAINTAINED;
 
 /**
- * Entry point of the data converter SPI. Custom implementations can be provided by the default Java SPI (see {@link java.util.ServiceLoader}) and will be used at runtime to convert custom data types that are used in Dolphin Platform beans (see {@link com.canoo.platform.remoting.DolphinBean}) to internally supported data types.
+ * Entry point of the data converter SPI. Custom implementations can be provided by the default Java SPI
+ * (see {@link java.util.ServiceLoader}) and will be used at runtime to convert custom data types that
+ * are used in Dolphin Platform beans (see {@link com.canoo.platform.remoting.DolphinBean}) to
+ * internally supported data types.
  *
  * @author Hendrik Ebbers
  */
@@ -29,6 +32,9 @@ public interface ConverterFactory {
 
     /**
      * Init method that will be automatically called after the converter factory instance has been created.
+     * This method may be changed in future since the {@link DolphinBeanRepo} param is not needed for
+     * custom extensions and should not be part of the public API.
+     * not
      * @param beanRepository the internally used bean repository.
      */
     void init(DolphinBeanRepo beanRepository);

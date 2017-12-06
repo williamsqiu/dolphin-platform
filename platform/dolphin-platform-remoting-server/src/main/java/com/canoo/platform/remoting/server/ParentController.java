@@ -27,7 +27,8 @@ import static org.apiguardian.api.API.Status.MAINTAINED;
 
 /**
  * Can be used in a dolphin controller (see {@link DolphinController}) to
- * define and inject the parent controller. This can only be done if the controller was created as a child of another controller (see client site API).
+ * define and inject the parent controller. This can only be done if the controller
+ * was created as a child of another controller (see client site API).
  *
  *  @author Hendrik Ebbers
  *

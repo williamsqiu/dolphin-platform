@@ -20,19 +20,13 @@ import org.apiguardian.api.API;
 import static org.apiguardian.api.API.Status.MAINTAINED;
 
 /**
- * Exception that is thrown when the invocation of a Dolphin Platform action in the server controller throwed
- * an exception. This exception will be thrown on the client.
+ * Exception that is thrown when the invocation of a Dolphin Platform action in the server controller
+ * throwed an exception. This exception will be thrown on the client.
  */
 @API(since = "0.x", status = MAINTAINED)
 public class ControllerActionException extends Exception {
 
     private static final long serialVersionUID = -7706398106144587910L;
-
-    /**
-     * constructor
-     */
-    public ControllerActionException() {
-    }
 
     /**
      * constructor
@@ -44,17 +38,9 @@ public class ControllerActionException extends Exception {
 
     /**
      * constructor
-     * @param message error message
      * @param cause the cause
      */
-    public ControllerActionException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    /**
-     * constructor
-     * @param cause the cause
-     */
+    @Deprecated
     public ControllerActionException(Throwable cause) {
         super(cause);
     }

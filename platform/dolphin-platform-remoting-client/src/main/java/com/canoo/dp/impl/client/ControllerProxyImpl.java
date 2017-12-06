@@ -15,25 +15,28 @@
  */
 package com.canoo.dp.impl.client;
 
-import com.canoo.platform.remoting.spi.converter.ValueConverterException;
+import com.canoo.dp.impl.client.legacy.communication.AbstractClientConnector;
+import com.canoo.dp.impl.client.legacy.communication.OnFinishedHandler;
+import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.remoting.Converters;
+import com.canoo.dp.impl.remoting.InternalAttributesBean;
 import com.canoo.dp.impl.remoting.MappingException;
+import com.canoo.dp.impl.remoting.commands.CallActionCommand;
+import com.canoo.dp.impl.remoting.commands.DestroyControllerCommand;
 import com.canoo.platform.remoting.client.ControllerActionException;
 import com.canoo.platform.remoting.client.ControllerInitalizationException;
 import com.canoo.platform.remoting.client.ControllerProxy;
 import com.canoo.platform.remoting.client.Param;
-import com.canoo.dp.impl.remoting.InternalAttributesBean;
-import com.canoo.dp.impl.remoting.commands.CallActionCommand;
-import com.canoo.dp.impl.remoting.commands.DestroyControllerCommand;
-import com.canoo.dp.impl.platform.core.Assert;
-import com.canoo.dp.impl.client.legacy.communication.AbstractClientConnector;
-import com.canoo.dp.impl.client.legacy.communication.OnFinishedHandler;
+import com.canoo.platform.remoting.spi.converter.ValueConverterException;
 import org.apiguardian.api.API;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BiFunction;
+import java.util.stream.Collectors;
 
 import static org.apiguardian.api.API.Status.INTERNAL;
 
@@ -68,6 +71,14 @@ public class ControllerProxyImpl<T> implements ControllerProxy<T> {
     @Override
     public T getModel() {
         return model;
+    }
+
+    @Override
+    public CompletableFuture<Void> invoke(String actionName, Map<String, ?> params) {
+        final List<Param> paramList = params.entrySet().stream().
+                map(e -> new Param(e.getKey(), e.getValue())).
+                collect(Collectors.toList());
+        return invoke(actionName, paramList.toArray(new Param[paramList.size()]));
     }
 
     @Override

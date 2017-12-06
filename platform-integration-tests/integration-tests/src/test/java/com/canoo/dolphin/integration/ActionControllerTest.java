@@ -22,63 +22,18 @@ import com.canoo.platform.remoting.client.Param;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import java.io.Serializable;
 import java.lang.annotation.ElementType;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
-import static com.canoo.dolphin.integration.action.ActionTestConstants.ACTION_CONTROLLER_NAME;
-import static com.canoo.dolphin.integration.action.ActionTestConstants.PARAM_NAME;
-import static com.canoo.dolphin.integration.action.ActionTestConstants.PARAM_NAME_1;
-import static com.canoo.dolphin.integration.action.ActionTestConstants.PARAM_NAME_2;
-import static com.canoo.dolphin.integration.action.ActionTestConstants.PARAM_NAME_3;
-import static com.canoo.dolphin.integration.action.ActionTestConstants.PRIVATE_ACTION;
-import static com.canoo.dolphin.integration.action.ActionTestConstants.PRIVATE_WITH_BIGDECIMAL_PARAM_ACTION;
-import static com.canoo.dolphin.integration.action.ActionTestConstants.PRIVATE_WITH_BIGINTEGER_PARAM_ACTION;
-import static com.canoo.dolphin.integration.action.ActionTestConstants.PRIVATE_WITH_BYTE_PARAM_ACTION;
-import static com.canoo.dolphin.integration.action.ActionTestConstants.PRIVATE_WITH_CALENDER_PARAM_ACTION;
-import static com.canoo.dolphin.integration.action.ActionTestConstants.PRIVATE_WITH_DATE_PARAM_ACTION;
-import static com.canoo.dolphin.integration.action.ActionTestConstants.PRIVATE_WITH_DOUBLE_PARAM_ACTION;
-import static com.canoo.dolphin.integration.action.ActionTestConstants.PRIVATE_WITH_ELEMENT_TYPE_PARAM_ACTION;
-import static com.canoo.dolphin.integration.action.ActionTestConstants.PRIVATE_WITH_FLOAT_PARAM_ACTION;
-import static com.canoo.dolphin.integration.action.ActionTestConstants.PRIVATE_WITH_INTEGER_PARAM_ACTION;
-import static com.canoo.dolphin.integration.action.ActionTestConstants.PRIVATE_WITH_LONG_PARAM_ACTION;
-import static com.canoo.dolphin.integration.action.ActionTestConstants.PRIVATE_WITH_SEVERAL_BIGDECIMAL_PARAMS_ACTION;
-import static com.canoo.dolphin.integration.action.ActionTestConstants.PRIVATE_WITH_SEVERAL_BIGINTEGER_PARAMS_ACTION;
-import static com.canoo.dolphin.integration.action.ActionTestConstants.PRIVATE_WITH_SEVERAL_BYTE_PARAMS_ACTION;
-import static com.canoo.dolphin.integration.action.ActionTestConstants.PRIVATE_WITH_SEVERAL_DOUBLE_PARAMS_ACTION;
-import static com.canoo.dolphin.integration.action.ActionTestConstants.PRIVATE_WITH_SEVERAL_FLOAT_PARAMS_ACTION;
-import static com.canoo.dolphin.integration.action.ActionTestConstants.PRIVATE_WITH_SEVERAL_INTEGER_PARAMS_ACTION;
-import static com.canoo.dolphin.integration.action.ActionTestConstants.PRIVATE_WITH_SEVERAL_LONG_PARAMS_ACTION;
-import static com.canoo.dolphin.integration.action.ActionTestConstants.PRIVATE_WITH_SEVERAL_PARAMS_ACTION;
-import static com.canoo.dolphin.integration.action.ActionTestConstants.PRIVATE_WITH_SEVERAL_SHORT_PARAMS_ACTION;
-import static com.canoo.dolphin.integration.action.ActionTestConstants.PRIVATE_WITH_SHORT_PARAM_ACTION;
-import static com.canoo.dolphin.integration.action.ActionTestConstants.PRIVATE_WITH_STRING_PARAM_ACTION;
-import static com.canoo.dolphin.integration.action.ActionTestConstants.PRIVATE_WITH_UUID_PARAM_ACTION;
-import static com.canoo.dolphin.integration.action.ActionTestConstants.PUBLIC_ACTION;
-import static com.canoo.dolphin.integration.action.ActionTestConstants.PUBLIC_WITH_BIGDECIMAL_PARAM_ACTION;
-import static com.canoo.dolphin.integration.action.ActionTestConstants.PUBLIC_WITH_BIGINTEGER_PARAM_ACTION;
-import static com.canoo.dolphin.integration.action.ActionTestConstants.PUBLIC_WITH_BOOLEAN_PARAM_ACTION;
-import static com.canoo.dolphin.integration.action.ActionTestConstants.PUBLIC_WITH_BYTE_PARAM_ACTION;
-import static com.canoo.dolphin.integration.action.ActionTestConstants.PUBLIC_WITH_CALENDER_PARAM_ACTION;
-import static com.canoo.dolphin.integration.action.ActionTestConstants.PUBLIC_WITH_DATE_PARAM_ACTION;
-import static com.canoo.dolphin.integration.action.ActionTestConstants.PUBLIC_WITH_DOUBLE_PARAM_ACTION;
-import static com.canoo.dolphin.integration.action.ActionTestConstants.PUBLIC_WITH_ELEMENT_TYPE_PARAM_ACTION;
-import static com.canoo.dolphin.integration.action.ActionTestConstants.PUBLIC_WITH_FLOAT_PARAM_ACTION;
-import static com.canoo.dolphin.integration.action.ActionTestConstants.PUBLIC_WITH_INTEGER_PARAM_ACTION;
-import static com.canoo.dolphin.integration.action.ActionTestConstants.PUBLIC_WITH_LONG_PARAM_ACTION;
-import static com.canoo.dolphin.integration.action.ActionTestConstants.PUBLIC_WITH_SEVERAL_BIGDECIMAL_PARAMS_ACTION;
-import static com.canoo.dolphin.integration.action.ActionTestConstants.PUBLIC_WITH_SEVERAL_BIGINTEGER_PARAMS_ACTION;
-import static com.canoo.dolphin.integration.action.ActionTestConstants.PUBLIC_WITH_SEVERAL_BYTE_PARAMS_ACTION;
-import static com.canoo.dolphin.integration.action.ActionTestConstants.PUBLIC_WITH_SEVERAL_DOUBLE_PARAMS_ACTION;
-import static com.canoo.dolphin.integration.action.ActionTestConstants.PUBLIC_WITH_SEVERAL_FLOAT_PARAMS_ACTION;
-import static com.canoo.dolphin.integration.action.ActionTestConstants.PUBLIC_WITH_SEVERAL_INTEGER_PARAMS_ACTION;
-import static com.canoo.dolphin.integration.action.ActionTestConstants.PUBLIC_WITH_SEVERAL_LONG_PARAMS_ACTION;
-import static com.canoo.dolphin.integration.action.ActionTestConstants.PUBLIC_WITH_SEVERAL_SHORT_PARAMS_ACTION;
-import static com.canoo.dolphin.integration.action.ActionTestConstants.PUBLIC_WITH_SHORT_PARAM_ACTION;
-import static com.canoo.dolphin.integration.action.ActionTestConstants.PUBLIC_WITH_UUID_PARAM_ACTION;
+import static com.canoo.dolphin.integration.action.ActionTestConstants.*;
 
 public class ActionControllerTest extends AbstractIntegrationTest {
 
@@ -125,12 +80,40 @@ public class ActionControllerTest extends AbstractIntegrationTest {
         }
     }
 
+    @Test(dataProvider = ENDPOINTS_DATAPROVIDER, description = "Tests if an public action with param method can be called")
+    public void testCallPublicMethodWithParamAsMap(String containerType, String endpoint) {
+        try {
+            final ClientContext context = connect(endpoint);
+            final ControllerProxy<ActionTestBean> controller = createController(context, ACTION_CONTROLLER_NAME);
+            invoke(controller, PUBLIC_WITH_BOOLEAN_PARAM_ACTION, containerType, Collections.singletonMap(PARAM_NAME, true));
+            Assert.assertTrue(controller.getModel().getBooleanValue());
+            destroy(controller, endpoint);
+            disconnect(context, endpoint);
+        } catch (Exception e) {
+            Assert.fail("Can not create controller for " + containerType, e);
+        }
+    }
+
     @Test(dataProvider = ENDPOINTS_DATAPROVIDER, description = "Tests if an public action with null value for param method can be called")
     public void testCallPublicMethodWithNullParam(String containerType, String endpoint) {
         try {
             final ClientContext context = connect(endpoint);
             final ControllerProxy<ActionTestBean> controller = createController(context, ACTION_CONTROLLER_NAME);
             invoke(controller, PUBLIC_WITH_BOOLEAN_PARAM_ACTION, containerType, new Param(PARAM_NAME, null));
+            Assert.assertNull(controller.getModel().getBooleanValue());
+            destroy(controller, endpoint);
+            disconnect(context, endpoint);
+        } catch (Exception e) {
+            Assert.fail("Can not create controller for " + containerType, e);
+        }
+    }
+
+    @Test(dataProvider = ENDPOINTS_DATAPROVIDER, description = "Tests if an public action with null value for param method can be called")
+    public void testCallPublicMethodWithNullParamAsMap(String containerType, String endpoint) {
+        try {
+            final ClientContext context = connect(endpoint);
+            final ControllerProxy<ActionTestBean> controller = createController(context, ACTION_CONTROLLER_NAME);
+            invoke(controller, PUBLIC_WITH_BOOLEAN_PARAM_ACTION, containerType, Collections.singletonMap(PARAM_NAME, null));
             Assert.assertNull(controller.getModel().getBooleanValue());
             destroy(controller, endpoint);
             disconnect(context, endpoint);
@@ -194,6 +177,31 @@ public class ActionControllerTest extends AbstractIntegrationTest {
             final int value3 = 356;
 
             invoke(controller, PRIVATE_WITH_SEVERAL_PARAMS_ACTION, containerType, new Param(PARAM_NAME_1, value1), new Param(PARAM_NAME_2, value2), new Param(PARAM_NAME_3, value3));
+            Assert.assertTrue(controller.getModel().getBooleanValue());
+            Assert.assertEquals(controller.getModel().getStringValue(), value1 + value2 + value3);
+            destroy(controller, endpoint);
+            disconnect(context, endpoint);
+        } catch (Exception e) {
+            Assert.fail("Can not create controller for " + containerType, e);
+        }
+    }
+
+    @Test(dataProvider = ENDPOINTS_DATAPROVIDER, description = "Tests if an private action method can be called")
+    public void testCallWithParamsAsMap(String containerType, String endpoint) {
+        try {
+            final ClientContext context = connect(endpoint);
+            final ControllerProxy<ActionTestBean> controller = createController(context, ACTION_CONTROLLER_NAME);
+
+            final String value1 = "Hello Dolphin Platform!";
+            final String value2 = "I want to test you!";
+            final int value3 = 356;
+
+            final Map<String, Object> params = new HashMap<>();
+            params.put(PARAM_NAME_1, value1);
+            params.put(PARAM_NAME_1, value2);
+            params.put(PARAM_NAME_1, value3);
+
+            invoke(controller, PRIVATE_WITH_SEVERAL_PARAMS_ACTION, containerType, params);
             Assert.assertTrue(controller.getModel().getBooleanValue());
             Assert.assertEquals(controller.getModel().getStringValue(), value1 + value2 + value3);
             destroy(controller, endpoint);
