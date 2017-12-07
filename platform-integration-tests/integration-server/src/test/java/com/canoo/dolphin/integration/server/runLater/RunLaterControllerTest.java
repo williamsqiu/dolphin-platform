@@ -65,14 +65,14 @@ public class RunLaterControllerTest extends SpringTestNGControllerTest {
         //given:
         final ControllerUnderTest<RunLaterTestBean> controller = createController(RUN_LATER_CONTROLLER_NAME);
         final RunLaterTestBean model = controller.getModel();
-        final CommunicationMonitor condition = controller.createMonitor();
+        final CommunicationMonitor monitor = controller.createMonitor();
         model.actionRunLaterAsyncCallIndexProperty().onChanged(e -> {
-            condition.signal();
+            monitor.signal();
         });
 
         //when:
         controller.invoke(RUN_LATER_ASYNC_ACTION_NAME);
-        condition.await(10, TimeUnit.SECONDS);
+        monitor.await(10, TimeUnit.SECONDS);
 
         //then:
         Assert.assertNotNull(model.getActionPreRunLaterAsyncCallIndex());
