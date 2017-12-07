@@ -22,7 +22,6 @@ import com.canoo.platform.remoting.client.Param;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import java.io.Serializable;
 import java.lang.annotation.ElementType;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -36,21 +35,6 @@ import java.util.UUID;
 import static com.canoo.dolphin.integration.action.ActionTestConstants.*;
 
 public class ActionControllerTest extends AbstractIntegrationTest {
-
-    @Test(dataProvider = ENDPOINTS_DATAPROVIDER, description = "Test if controller and model can be created")
-    public void testCreateController(String containerType, String endpoint) {
-        try {
-            ClientContext context = connect(endpoint);
-            ControllerProxy<ActionTestBean> controller = createController(context, ACTION_CONTROLLER_NAME);
-            Assert.assertNotNull(controller);
-            Assert.assertNotNull(controller.getModel());
-            Assert.assertEquals(controller.getModel().getClass(), ActionTestBean.class);
-            destroy(controller, endpoint);
-            disconnect(context, endpoint);
-        } catch (Exception e) {
-            Assert.fail("Can not create controller for " + containerType, e);
-        }
-    }
 
     @Test(dataProvider = ENDPOINTS_DATAPROVIDER, description = "Tests if an public action method can be called")
     public void testCallPublicMethod(String containerType, String endpoint) {
@@ -198,8 +182,8 @@ public class ActionControllerTest extends AbstractIntegrationTest {
 
             final Map<String, Object> params = new HashMap<>();
             params.put(PARAM_NAME_1, value1);
-            params.put(PARAM_NAME_1, value2);
-            params.put(PARAM_NAME_1, value3);
+            params.put(PARAM_NAME_2, value2);
+            params.put(PARAM_NAME_3, value3);
 
             invoke(controller, PRIVATE_WITH_SEVERAL_PARAMS_ACTION, containerType, params);
             Assert.assertTrue(controller.getModel().getBooleanValue());
