@@ -29,13 +29,13 @@ task copyWar(dependsOn: [':integration-tests-jee:war']) {
 }
 
 task dockerComposeDown(type: Exec) {
-    commandLine "docker-compose", "down"
+    commandLine "docker-compose", "rm", "-f", "-s"
 }
 
 task dockerComposeUp(type: Exec) {
-    commandLine "docker-compose", "up", "-d"
+    commandLine "docker-compose", "up", "-d", "--build"
 
 }
 dockerComposeUp.dependsOn(copyWar)
 test.dependsOn dockerComposeUp
-
+test.finalizedBy(dockerComposeDown)

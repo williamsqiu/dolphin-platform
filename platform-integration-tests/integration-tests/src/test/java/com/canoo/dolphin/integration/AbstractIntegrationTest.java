@@ -112,7 +112,7 @@ public class AbstractIntegrationTest {
 
     protected void disconnect(ClientContext clientContext, String endpoint) {
         try {
-            clientContext.disconnect().get(timeoutInMinutes, TimeUnit.MINUTES);
+            clientContext.disconnect().get(10, TimeUnit.SECONDS);
         } catch (Exception e) {
             //do nothing
         }
@@ -120,7 +120,8 @@ public class AbstractIntegrationTest {
 
     @DataProvider(name = ENDPOINTS_DATAPROVIDER, parallel = false)
     public Object[][] getEndpoints() {
-        return new String[][]{{"Payara", "http://localhost:8081/integration-tests"},
+        return new String[][]{
+                //{"Payara", "http://localhost:8081/integration-tests"},
                 {"TomEE", "http://localhost:8082/integration-tests"},
                 {"Wildfly", "http://localhost:8083/integration-tests"}//,
                 //{"Spring-Boot", "http://localhost:8084/integration-tests"}
