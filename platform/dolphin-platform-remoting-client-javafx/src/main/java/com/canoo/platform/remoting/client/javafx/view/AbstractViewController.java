@@ -15,12 +15,11 @@
  */
 package com.canoo.platform.remoting.client.javafx.view;
 
-import com.canoo.platform.remoting.client.ClientContext;
-import com.canoo.platform.remoting.client.ControllerActionException;
-import com.canoo.platform.remoting.client.ControllerProxy;
-import com.canoo.platform.remoting.client.Param;
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.remoting.DolphinBean;
+import com.canoo.platform.remoting.client.ClientContext;
+import com.canoo.platform.remoting.client.ControllerProxy;
+import com.canoo.platform.remoting.client.Param;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.beans.property.ReadOnlyObjectProperty;
@@ -37,6 +36,7 @@ import static org.apiguardian.api.API.Status.MAINTAINED;
  * A abstract JavaFX view controller that can be used as a basic for a JavaFX based view. Each instance will automatically
  * trigger Dolphin Platform to create a controller instance on the server that is bound to the view instance and shares
  * a model (see {@link DolphinBean}) with the view.
+ *
  * @param <M> type of the model
  */
 @API(since = "0.x", status = MAINTAINED)
@@ -48,15 +48,12 @@ public abstract class AbstractViewController<M> {
 
     private final ReadOnlyObjectWrapper<M> model = new ReadOnlyObjectWrapper<>();
 
-    private final ReadOnlyObjectWrapper<Throwable> initializationException = new ReadOnlyObjectWrapper<>();
-
-    private final ReadOnlyObjectWrapper<ControllerActionException> invocationException = new ReadOnlyObjectWrapper<>();
-
     private final ClientContext clientContext;
 
     /**
      * Constructor that internally starts the Dolphin Platform workflow and triggers the controller creation on the server.
-     * @param clientContext the client context
+     *
+     * @param clientContext  the client context
      * @param controllerName name of the controller (see annotation DolphinController in the Java server lib).
      */
     public AbstractViewController(ClientContext clientContext, String controllerName) {
@@ -64,7 +61,6 @@ public abstract class AbstractViewController<M> {
         this.clientContext = Assert.requireNonNull(clientContext, "clientContext");
         clientContext.<M>createController(controllerName).whenComplete((c, e) -> {
             if (e != null) {
-                initializationException.set(e);
                 onInitializationException(e);
             } else {
                 try {
@@ -90,6 +86,7 @@ public abstract class AbstractViewController<M> {
      * be removed and the model that is managed and synchronized between client and server will be detached. After this method
      * is called the view should not be used anymore. It's important to call this method to removePresentationModel all the unneeded references on
      * the server.
+     *
      * @return a future can be used to react on the destroy
      */
     public CompletableFuture<Void> destroy() {
@@ -108,8 +105,9 @@ public abstract class AbstractViewController<M> {
      * This invokes a action on the server side controller. For more information how an action can be defined in the
      * controller have a look at the DolphinAction annotation in the server module.
      * This method don't block and can be called from the Platform thread. To check if an server
+     *
      * @param actionName name of the action
-     * @param params any parameters that should be passed to the action
+     * @param params     any parameters that should be passed to the action
      * @return a future can be used to check if the action invocation is still running
      */
     protected CompletableFuture<Void> invoke(String actionName, Param... params) {
@@ -118,8 +116,7 @@ public abstract class AbstractViewController<M> {
         return controllerProxy.invoke(actionName, params).whenComplete((v, e) -> {
             try {
                 if (e != null) {
-                    invocationException.set(new ControllerActionException(e));
-                    onInvocationException(new ControllerActionException(e));
+                    onInvocationException(e);
                 }
             } finally {
                 actionInProcess.set(false);
@@ -129,6 +126,7 @@ public abstract class AbstractViewController<M> {
 
     /**
      * Returns true if an action invocation is running (see {@link #invoke(String, Param...)})
+     *
      * @return true if an action invocation is running
      */
     public boolean isActionInProcess() {
@@ -137,6 +135,7 @@ public abstract class AbstractViewController<M> {
 
     /**
      * Returns a read only property that can be used to check if an action invocation is running (see {@link #invoke(String, Param...)})
+     *
      * @return read only property
      */
     public ReadOnlyBooleanProperty actionInProcessProperty() {
@@ -145,6 +144,7 @@ public abstract class AbstractViewController<M> {
 
     /**
      * Returns the model that is synchronized between client and server. For more information see {@link DolphinBean}
+     *
      * @return the model
      */
     public M getModel() {
@@ -154,6 +154,7 @@ public abstract class AbstractViewController<M> {
     /**
      * Returns a read only property that contains the model that is synchronized between client and server.
      * For more information see {@link DolphinBean}
+     *
      * @return read only property
      */
     public ReadOnlyObjectProperty<M> modelProperty() {
@@ -161,43 +162,8 @@ public abstract class AbstractViewController<M> {
     }
 
     /**
-     * This method is deprected and will be removed in a future version. Use {@link #onInvocationException(ControllerActionException)} instead.
-     * @return
-     */
-    @Deprecated
-    public ControllerActionException getInvocationException() {
-        return invocationException.get();
-    }
-
-    /**
-     * This method is deprected and will be removed in a future version. Use {@link #onInvocationException(ControllerActionException)} instead.
-     * @return
-     */
-    @Deprecated
-    public ReadOnlyObjectProperty<ControllerActionException> invocationExceptionProperty() {
-        return invocationException.getReadOnlyProperty();
-    }
-
-    /**
-     * This method is deprected and will be removed in a future version. Use {@link #onInitializationException(Throwable)} instead.
-     * @return
-     */
-    @Deprecated
-    public Throwable getInitializationException() {
-        return initializationException.get();
-    }
-
-    /**
-     * This method is deprected and will be removed in a future version. Use {@link #onInitializationException(Throwable)} instead.
-     * @return
-     */
-    @Deprecated
-    public ReadOnlyObjectProperty<Throwable> initializationExceptionProperty() {
-        return initializationException.getReadOnlyProperty();
-    }
-
-    /**
      * This method will be called if an exception is thrown in the initialization of this view.
+     *
      * @param t the exception
      */
     protected void onInitializationException(Throwable t) {
@@ -206,14 +172,16 @@ public abstract class AbstractViewController<M> {
 
     /**
      * This method will be called if an exception is thrown in an action invocation.
+     *
      * @param e the exception
      */
-    protected void onInvocationException(ControllerActionException e) {
+    protected void onInvocationException(Throwable e) {
 
     }
 
     /**
      * Returns the client context
+     *
      * @return the client context
      */
     public ClientContext getClientContext() {
@@ -222,6 +190,7 @@ public abstract class AbstractViewController<M> {
 
     /**
      * Returns the root node of the view.
+     *
      * @return the root node.
      */
     public abstract Node getRootNode();
@@ -230,11 +199,12 @@ public abstract class AbstractViewController<M> {
      * Usefull helper method that returns the root node (see {@link #getRootNode()}) as a {@link Parent} if the root node
      * extends {@link Parent} or throws an runtime exception. This can be used to simply add a {@link AbstractFXMLViewController}
      * based view to a scene that needs a {@link Parent} as a root node.
+     *
      * @return the root node
      */
     public Parent getParent() {
         Node rootNode = getRootNode();
-        if(rootNode == null) {
+        if (rootNode == null) {
             throw new NullPointerException("The root node is null");
         }
         if (!(rootNode instanceof Parent)) {
