@@ -23,7 +23,7 @@ import static org.apiguardian.api.API.Status.MAINTAINED;
 
 /**
  * A handler that can be registered to the dolphin message bus (see {@link RemotingEventBus})
- * to receive publish messages (see {@link Message}).
+ * to receive publish messages (see {@link MessageEvent}).
  *
  * @author Hendrik Ebbers
  */
