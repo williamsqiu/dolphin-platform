@@ -24,6 +24,7 @@ import com.canoo.platform.remoting.client.Param;
 import org.testng.annotations.DataProvider;
 
 import java.net.URL;
+import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
@@ -75,9 +76,17 @@ public class AbstractIntegrationTest {
         try {
             waitUntilServerIsUp(endpoint, bootTimeoutInMinutes, TimeUnit.MINUTES);
             ClientContext clientContext = PlatformClient.getService(ClientContextFactory.class).create(PlatformClient.getClientConfiguration(), new URL(endpoint + "/dolphin"));
-
-
-            clientContext.connect().get(timeoutInMinutes, TimeUnit.SECONDS);
+            long timeOutTime = System.currentTimeMillis() + Duration.ofMinutes(timeoutInMinutes).toMillis();
+            while(System.currentTimeMillis() < timeOutTime && clientContext.getClientId() ==  null){
+                try{
+                    clientContext.connect().get(10, TimeUnit.SECONDS);
+                }catch(Exception ex){
+                    // do nothing since server is not up at the moment...
+                }
+            }
+            if(clientContext.getClientId() == null){
+                throw new Exception("Client context not created....");
+            }
 
             return clientContext;
         } catch (Exception e) {
@@ -105,7 +114,7 @@ public class AbstractIntegrationTest {
         try {
             clientContext.disconnect().get(timeoutInMinutes, TimeUnit.MINUTES);
         } catch (Exception e) {
-            throw new RuntimeException("Can not disconnect client context for endpoint " + endpoint, e);
+            //do nothing
         }
     }
 
