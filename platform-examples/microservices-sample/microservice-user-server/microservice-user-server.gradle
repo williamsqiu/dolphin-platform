@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-apply plugin: 'application'
-
 dependencies {
   compile project(':microservice-user-common')
   compile 'javax.inject:javax.inject:1'

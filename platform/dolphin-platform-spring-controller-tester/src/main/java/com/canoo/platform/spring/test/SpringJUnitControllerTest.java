@@ -15,10 +15,10 @@
  */
 package com.canoo.platform.spring.test;
 
+import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.impl.dp.spring.test.ClientTestFactory;
 import com.canoo.impl.dp.spring.test.DolphinPlatformSpringTestBootstrap;
-import com.canoo.dp.impl.platform.core.Assert;
-import com.canoo.platform.remoting.client.ClientContext;
+import com.canoo.impl.dp.spring.test.TestClientContext;
 import org.apiguardian.api.API;
 import org.junit.Rule;
 import org.junit.rules.ExternalResource;
@@ -46,7 +46,7 @@ import static org.apiguardian.api.API.Status.MAINTAINED;
 public abstract class SpringJUnitControllerTest extends AbstractJUnit4SpringContextTests implements ControllerTest {
 
     @Autowired
-    private ClientContext clientContext;
+    private TestClientContext clientContext;
 
     @Rule
     public ExternalResource clientConnector = new ExternalResource() {

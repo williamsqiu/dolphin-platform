@@ -26,6 +26,8 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import static com.canoo.dolphin.integration.property.PropertyTestConstants.*;
 
 @SpringBootTest(classes = TestConfiguration.class)
@@ -298,7 +300,30 @@ public class PropertyTestControllerTest extends SpringTestNGControllerTest {
         Assert.assertFalse(controller.getModel().getUuidValueChanged());
     }
 
+     @Test
+    public void testPropertyChangeListener() {
+        controller.getModel().setStringValue(null);
+        final AtomicBoolean changed = new AtomicBoolean(false);
+        controller.getModel().stringValueProperty().onChanged(e -> {
+            changed.set(true);
+        });
+        controller.invoke(SET_TO_DEFAULTS_ACTION);
+        Assert.assertTrue(changed.get());
+    }
+
     @Test
+    public void testPropertyChangeInternalListener() {
+        controller.invoke(ADD_CHANGE_LISTENER);
+        controller.getModel().setStringValue(null);
+        final AtomicBoolean changed = new AtomicBoolean(false);
+        controller.getModel().stringValueChangedProperty().onChanged(e -> {
+            changed.set(true);
+        });
+        controller.getModel().setStringValue("Another value");
+        Assert.assertTrue(changed.get());
+    }
+
+@Test
     public void testNoChangeForSameValueOnServer() {
         controller.invoke(SET_TO_DEFAULTS_ACTION);
         controller.invoke(ADD_CHANGE_LISTENER);
@@ -321,4 +346,5 @@ public class PropertyTestControllerTest extends SpringTestNGControllerTest {
         Assert.assertFalse(controller.getModel().getStringValueChanged());
         Assert.assertFalse(controller.getModel().getUuidValueChanged());
     }
+
 }

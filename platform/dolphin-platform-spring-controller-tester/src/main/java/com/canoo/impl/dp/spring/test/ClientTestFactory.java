@@ -16,9 +16,9 @@
 package com.canoo.impl.dp.spring.test;
 
 import com.canoo.dp.impl.platform.core.Assert;
-import com.canoo.platform.remoting.client.ClientContext;
 import com.canoo.platform.remoting.client.ControllerProxy;
 import com.canoo.platform.remoting.client.Param;
+import com.canoo.platform.spring.test.CommunicationMonitor;
 import com.canoo.platform.spring.test.ControllerTestException;
 import com.canoo.platform.spring.test.ControllerUnderTest;
 import org.apiguardian.api.API;
@@ -28,7 +28,7 @@ import static org.apiguardian.api.API.Status.INTERNAL;
 @API(since = "0.x", status = INTERNAL)
 public class ClientTestFactory {
 
-    public static <T> ControllerUnderTest<T> createController(ClientContext clientContext, String controllerName) {
+    public static <T> ControllerUnderTest<T> createController(final TestClientContext clientContext, final String controllerName) {
         Assert.requireNonNull(clientContext, "clientContext");
         Assert.requireNonBlank(controllerName, "controllerName");
         try {
@@ -46,6 +46,11 @@ public class ClientTestFactory {
                     } catch (Exception e) {
                         throw new ControllerTestException("Error in action invocation", e);
                     }
+                }
+
+                @Override
+                public CommunicationMonitor createMonitor() {
+                    return new CommunicationMonitorImpl(clientContext);
                 }
 
                 @Override

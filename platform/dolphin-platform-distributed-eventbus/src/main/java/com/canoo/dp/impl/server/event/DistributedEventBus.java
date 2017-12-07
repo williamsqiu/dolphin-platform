@@ -17,7 +17,7 @@ package com.canoo.dp.impl.server.event;
 
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.core.functional.Subscription;
-import com.canoo.platform.remoting.server.event.EventFilter;
+import com.canoo.platform.remoting.server.event.MessageEventContext;
 import com.canoo.platform.remoting.server.event.MessageListener;
 import com.canoo.platform.remoting.server.event.Topic;
 import com.hazelcast.core.HazelcastInstance;
@@ -29,6 +29,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.function.Predicate;
 
 import static org.apiguardian.api.API.Status.INTERNAL;
 
@@ -54,7 +55,7 @@ public class DistributedEventBus extends AbstractEventBus {
     }
 
     @Override
-    public <T extends Serializable> Subscription subscribe(final Topic<T> topic, final MessageListener<? super T> handler, final EventFilter filter) {
+    public <T extends Serializable> Subscription subscribe(final Topic<T> topic, final MessageListener<? super T> handler, final Predicate<MessageEventContext<T>> filter) {
         final Subscription basicSubscription = super.subscribe(topic, handler, filter);
         final Subscription hazelcastSubscription = createHazelcastSubscription(topic);
         return new Subscription() {

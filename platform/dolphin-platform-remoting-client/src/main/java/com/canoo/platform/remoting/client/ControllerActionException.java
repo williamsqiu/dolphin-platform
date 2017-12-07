@@ -20,8 +20,8 @@ import org.apiguardian.api.API;
 import static org.apiguardian.api.API.Status.MAINTAINED;
 
 /**
- * Exception that is thrown when the invocation of a Dolphin Platform action in the server controller
- * throwed an exception. This exception will be thrown on the client.
+ * Exception that is thrown when the invocation of a Dolphin Platform action in the server controller thrown
+ * an exception. This exception will be thrown on the client.
  */
 @API(since = "0.x", status = MAINTAINED)
 public class ControllerActionException extends Exception {
@@ -36,12 +36,4 @@ public class ControllerActionException extends Exception {
         super(message);
     }
 
-    /**
-     * constructor
-     * @param cause the cause
-     */
-    @Deprecated
-    public ControllerActionException(Throwable cause) {
-        super(cause);
-    }
 }

@@ -20,6 +20,7 @@ import com.canoo.platform.remoting.server.DolphinController;
 import org.apiguardian.api.API;
 
 import java.io.Serializable;
+import java.util.function.Predicate;
 
 import static org.apiguardian.api.API.Status.EXPERIMENTAL;
 
@@ -63,5 +64,5 @@ public interface RemotingEventBus {
      * @param listener the listener
      * @param filter   the filter
      */
-    <T extends Serializable> Subscription subscribe(Topic<T> topic, MessageListener<? super T> listener, EventFilter filter);
+    <T extends Serializable> Subscription subscribe(Topic<T> topic, MessageListener<? super T> listener, Predicate<MessageEventContext<T>> filter);
 }
