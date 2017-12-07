@@ -20,7 +20,7 @@ import static com.canoo.dolphin.integration.runlater.RunLaterTestConstants.RUN_L
 @DolphinController(RUN_LATER_CONTROLLER_NAME)
 public class RunLaterTestController {
 
-    private AtomicInteger callIndex = new AtomicInteger();
+    private final AtomicInteger callIndex = new AtomicInteger();
 
     private final ClientSessionExecutor sessionExecutor;
 

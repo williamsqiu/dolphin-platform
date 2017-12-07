@@ -47,7 +47,7 @@ public interface ControllerUnderTest<T> {
      */
     void invoke(String actionName, Param... params);
 
-    AsyncCondition createAsyncCondition();
+    CommunicationMonitor createMonitor();
 
     /**
      * Destroys the controller

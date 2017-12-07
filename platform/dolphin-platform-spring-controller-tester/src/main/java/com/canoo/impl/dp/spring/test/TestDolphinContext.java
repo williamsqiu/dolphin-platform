@@ -25,9 +25,9 @@ import java.util.concurrent.LinkedBlockingQueue;
  */
 public class TestDolphinContext extends DolphinContext {
 
-    private BlockingQueue<Runnable> callLaterTasks = new LinkedBlockingQueue<>();
+    private final BlockingQueue<Runnable> callLaterTasks = new LinkedBlockingQueue<>();
 
-    public TestDolphinContext(RemotingConfiguration configuration, ClientSession clientSession, ClientSessionProvider clientSessionProvider, ManagedBeanFactory beanFactory, ControllerRepository controllerRepository, Callback<DolphinContext> onDestroyCallback) {
+    public TestDolphinContext(final RemotingConfiguration configuration, final ClientSession clientSession, final ClientSessionProvider clientSessionProvider, final ManagedBeanFactory beanFactory, final ControllerRepository controllerRepository, final Callback<DolphinContext> onDestroyCallback) {
         super(configuration, clientSession, clientSessionProvider, beanFactory, controllerRepository, onDestroyCallback);
 
         getServerConnector().getRegistry().register(PingCommand.class, new CommandHandler() {
@@ -39,7 +39,7 @@ public class TestDolphinContext extends DolphinContext {
     }
 
     @Override
-    public List<Command> handle(List<Command> commands) {
+    public List<Command> handle(final List<Command> commands) {
         final List<Command> commandsWithFackedLongPool = new ArrayList<>(commands);
         commandsWithFackedLongPool.add(new StartLongPollCommand());
 

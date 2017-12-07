@@ -2,7 +2,7 @@ package com.canoo.dolphin.integration.server.runLater;
 
 import com.canoo.dolphin.integration.runlater.RunLaterTestBean;
 import com.canoo.dolphin.integration.server.TestConfiguration;
-import com.canoo.platform.spring.test.AsyncCondition;
+import com.canoo.platform.spring.test.CommunicationMonitor;
 import com.canoo.platform.spring.test.ControllerUnderTest;
 import com.canoo.platform.spring.test.SpringTestNGControllerTest;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -65,7 +65,7 @@ public class RunLaterControllerTest extends SpringTestNGControllerTest {
         //given:
         final ControllerUnderTest<RunLaterTestBean> controller = createController(RUN_LATER_CONTROLLER_NAME);
         final RunLaterTestBean model = controller.getModel();
-        final AsyncCondition condition = controller.createAsyncCondition();
+        final CommunicationMonitor condition = controller.createMonitor();
         model.actionRunLaterAsyncCallIndexProperty().onChanged(e -> {
             condition.signal();
         });

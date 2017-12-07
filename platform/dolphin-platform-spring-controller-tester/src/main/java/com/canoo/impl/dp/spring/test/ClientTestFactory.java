@@ -18,14 +18,10 @@ package com.canoo.impl.dp.spring.test;
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.remoting.client.ControllerProxy;
 import com.canoo.platform.remoting.client.Param;
-import com.canoo.platform.spring.test.AsyncCondition;
+import com.canoo.platform.spring.test.CommunicationMonitor;
 import com.canoo.platform.spring.test.ControllerTestException;
 import com.canoo.platform.spring.test.ControllerUnderTest;
 import org.apiguardian.api.API;
-
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.apiguardian.api.API.Status.INTERNAL;
 
@@ -53,44 +49,8 @@ public class ClientTestFactory {
                 }
 
                 @Override
-                public AsyncCondition createAsyncCondition() {
-                    return new AsyncCondition() {
-
-                        private final AtomicBoolean ping = new AtomicBoolean();
-
-                        private void sendPing() {
-                            clientContext.sendPing();
-                        }
-
-                        @Override
-                        public void await() throws InterruptedException {
-                            ping.set(true);
-                            while (ping.get()) {
-                                sendPing();
-
-                                Thread.sleep(100);
-                            }
-                        }
-
-                        @Override
-                        public void await(long time, TimeUnit unit) throws InterruptedException, TimeoutException {
-                            long endTime = System.currentTimeMillis() + unit.toMillis(time);
-                            ping.set(true);
-                            while (ping.get() && System.currentTimeMillis() < endTime) {
-                                sendPing();
-
-                                Thread.sleep(100);
-                            }
-                            if(ping.get()) {
-                                throw new TimeoutException("Timeout!");
-                            }
-                        }
-
-                        @Override
-                        public void signal() {
-                            ping.set(false);
-                        }
-                    };
+                public CommunicationMonitor createMonitor() {
+                    return new CommunicationMonitorImpl(clientContext);
                 }
 
                 @Override
