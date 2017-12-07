@@ -6,6 +6,8 @@ services:
   - docker
 
 before_install:
+  - docker-compose --version
+  - touch platform-integration-tests/integration-tests-jee/build/libs/integration-tests.war
   - cd platform-integration-tests/integration-tests;
     docker-compose up --build
 
