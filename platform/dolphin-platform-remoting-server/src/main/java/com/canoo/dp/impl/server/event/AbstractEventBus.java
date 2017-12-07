@@ -187,7 +187,7 @@ public abstract class AbstractEventBus implements RemotingEventBus {
             if(clientSession != null) {
                 final MessageEventContext<T> eventContext = event.getMessageEventContext();
                 if(eventContext != null) {
-                    return new ClientSessionEventFilter().test(eventContext);
+                    return new ClientSessionEventFilter(clientSession.getId()).test(eventContext);
                 }
             }
         }
