@@ -7,8 +7,9 @@ services:
 
 before_install:
   - docker-compose --version
-  - mkdir -p platform-integration-tests/integration-tests-jee/build/libs/
-  - touch platform-integration-tests/integration-tests-jee/build/libs/integration-tests.war
+  - touch platform-integration-tests/integration-tests/docker-base/tomee-integration/integration-tests.war
+  - touch platform-integration-tests/integration-tests/docker-base/payara-integration/integration-tests.war
+  - touch platform-integration-tests/integration-tests/docker-base/wildfly-integration/integration-tests.war
   - cd platform-integration-tests/integration-tests;
     docker-compose up --build
 
