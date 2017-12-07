@@ -172,7 +172,7 @@ public class DolphinContext {
         mBeanSubscription = mBeanRegistry.registerDolphinContext(clientSession, garbageCollector);
     }
 
-    private <T extends Command> void registerCommand(final ActionRegistry registry, final Class<T> commandClass, final Callback<T> handler) {
+    protected  <T extends Command> void registerCommand(final ActionRegistry registry, final Class<T> commandClass, final Callback<T> handler) {
         Assert.requireNonNull(registry, "registry");
         Assert.requireNonNull(commandClass, "commandClass");
         Assert.requireNonNull(handler, "handler");
@@ -320,7 +320,7 @@ public class DolphinContext {
         taskQueue.interrupt();
     }
 
-    private void onPollEventBus() {
+    protected void onPollEventBus() {
         taskQueue.executeTasks();
     }
 
@@ -373,7 +373,14 @@ public class DolphinContext {
     }
 
     public Future<Void> runLater(final Runnable runnable) {
-        return taskQueue.addTask(runnable);
+        Assert.requireNonNull(runnable, "runnable");
+        return callLater(new Callable<Void>() {
+            @Override
+            public Void call() throws Exception {
+                runnable.run();
+                return null;
+            }
+        });
     }
 
     public <T> Future<T> callLater(final Callable<T> callable) {

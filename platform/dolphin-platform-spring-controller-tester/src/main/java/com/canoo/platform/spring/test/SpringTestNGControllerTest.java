@@ -18,7 +18,7 @@ package com.canoo.platform.spring.test;
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.impl.dp.spring.test.ClientTestFactory;
 import com.canoo.impl.dp.spring.test.DolphinPlatformSpringTestBootstrap;
-import com.canoo.platform.remoting.client.ClientContext;
+import com.canoo.impl.dp.spring.test.TestClientContext;
 import org.apiguardian.api.API;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -45,7 +45,7 @@ import static org.apiguardian.api.API.Status.MAINTAINED;
 public abstract class SpringTestNGControllerTest extends AbstractTestNGSpringContextTests implements ControllerTest {
 
     @Autowired
-    private ClientContext clientContext;
+    private TestClientContext clientContext;
 
     /**
      * Methods that is called before each tests and automatically creates a connection to the server
