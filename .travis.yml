@@ -7,10 +7,9 @@ services:
 
 script:
   - if [ "$TRAVIS_BRANCH" == "master" ];
-    then ./gradlew clean javadoc sonarqube jacocoTestReport jacocoRootMergeReport -S -Dsonar.login=${SONAR_TOKEN};
+    then ./gradlew clean build javadoc sonarqube jacocoTestReport jacocoRootMergeReport -S -Dsonar.login=${SONAR_TOKEN};
     else ./gradlew clean build jacocoTestReport jacocoRootMergeReport -S;
     fi
-
 
 after_success:
   - ./gradlew coveralls
