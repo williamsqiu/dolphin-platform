@@ -5,20 +5,11 @@ jdk: oraclejdk8
 services:
   - docker
 
-before_install:
-  - docker-compose --version
-  - touch platform-integration-tests/integration-tests/docker-base/tomee-integration/integration-tests.war
-  - touch platform-integration-tests/integration-tests/docker-base/payara-integration/integration-tests.war
-  - touch platform-integration-tests/integration-tests/docker-base/wildfly-integration/integration-tests.war
-  - cd platform-integration-tests/integration-tests;
-    docker-compose up --build
-
 script:
   - if [ "$TRAVIS_BRANCH" == "master" ];
     then ./gradlew clean javadoc sonarqube jacocoTestReport jacocoRootMergeReport -S -Dsonar.login=${SONAR_TOKEN};
     else ./gradlew clean build jacocoTestReport jacocoRootMergeReport -S;
     fi
-
 
 after_success:
   - ./gradlew coveralls
