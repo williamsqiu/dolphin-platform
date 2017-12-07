@@ -36,7 +36,6 @@ import org.springframework.web.context.WebApplicationContext;
 
 import javax.servlet.http.HttpSession;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -94,7 +93,6 @@ public class TestConfiguration {
     }
 
     private List<Command> sendToServer(final List<Command> commandList) {
-        final List<Command> commandsWithStartLong = new ArrayList<>(commandList);
         return dolphinTestContext.handle(commandList);
     }
 
