@@ -18,12 +18,16 @@ package com.canoo.dp.impl.server.context;
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.server.client.ClientSessionProvider;
 import com.canoo.platform.server.client.ClientSession;
-import com.google.common.util.concurrent.SettableFuture;
 import org.apiguardian.api.API;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.concurrent.*;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.Callable;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Future;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
@@ -69,15 +73,15 @@ public class DolphinContextTaskQueue {
 
     public <T> Future<T> addTask(final Callable<T> task) {
         Assert.requireNonNull(task, "task");
-        final SettableFuture<T> future = SettableFuture.<T>create();
+        final CompletableFuture<T> future = new CompletableFuture<>();
         tasks.offer(new Runnable() {
             @Override
             public void run() {
                 try {
                     final T result = task.call();
-                    future.set(result);
+                    future.complete(result);
                 } catch (Exception e) {
-                    future.setException(e);
+                    future.completeExceptionally(e);
                 }
             }
         });
