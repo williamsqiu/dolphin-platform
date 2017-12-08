@@ -30,6 +30,11 @@ public class DefaultHazelcastProvider implements HazelcastProvider {
 
     private static final Logger LOG = LoggerFactory.getLogger(DefaultHazelcastProvider.class);
 
+    private static final String LOGGER_PROPERTY_NAME = "hazelcast.logging.type";
+
+    private static final String LOGGER_PROPERTY_SLF4J_TYPE = "slf4j";
+
+
     private HazelcastInstance hazelcastInstance;
 
     public synchronized HazelcastInstance getHazelcastInstance(HazelcastConfig configuration) {
@@ -48,6 +53,7 @@ public class DefaultHazelcastProvider implements HazelcastProvider {
             clientConfig.getNetworkConfig().setConnectionTimeout(configuration.getConnectionTimeout());
             clientConfig.getNetworkConfig().addAddress(serverName + ":" + serverPort);
             clientConfig.getGroupConfig().setName(groupName);
+            clientConfig.setProperty(LOGGER_PROPERTY_NAME, LOGGER_PROPERTY_SLF4J_TYPE);
 
             final SerializerConfig dolphinEventSerializerConfig = new SerializerConfig().
                     setImplementation(new EventStreamSerializer()).setTypeClass(DolphinEvent.class);
