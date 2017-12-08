@@ -23,7 +23,7 @@ import java.util.List;
 import static org.apiguardian.api.API.Status.EXPERIMENTAL;
 
 /**
- * This interface defines a server module that will automatically be started when the Dolphin Platform server component starts. DOlphin Platform will search for all implementations of this interface on the classpath that are annotated by {@link ModuleDefinition} and will automatically start them based on the order that is defined by the {@link ModuleDefinition} annotation.
+ * This interface defines a server module that will automatically be started when the Dolphin Platform server component starts. Dolphin Platform will search for all implementations of this interface on the classpath that are annotated by {@link ModuleDefinition} and will automatically start them based on the order that is defined by the {@link ModuleDefinition} annotation.
  *
  * @author Hendrik Ebbers
  * @see ModuleDefinition
@@ -37,6 +37,12 @@ public interface ServerModule {
      * @return a set of the names of all modules that are needed to start this module
      */
     List<String> getModuleDependencies();
+
+    /**
+     * Returns the unique name of the module.
+     * @return the unique name of the module
+     */
+    String getName();
 
     /**
      * Returns true if the module will be booted at the Dolphin Platform bootstrap, otherwise false.

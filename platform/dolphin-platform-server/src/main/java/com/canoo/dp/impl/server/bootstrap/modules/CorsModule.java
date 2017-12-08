@@ -34,7 +34,7 @@ import static com.canoo.dp.impl.server.config.DefaultPlatformConfiguration.CORS_
 import static com.canoo.dp.impl.server.config.DefaultPlatformConfiguration.CORS_ENDPOINTS_URL_MAPPINGS_DEFAULT_VALUE;
 
 @API(since = "0.x", status = INTERNAL)
-@ModuleDefinition(CorsModule.CORS_MODULE)
+@ModuleDefinition
 public class CorsModule extends AbstractBaseModule {
 
     public static final String CORS_MODULE = "CorsModule";
@@ -46,6 +46,11 @@ public class CorsModule extends AbstractBaseModule {
     @Override
     protected String getActivePropertyName() {
         return CORS_MODULE_ACTIVE;
+    }
+
+    @Override
+    public String getName() {
+        return CORS_MODULE;
     }
 
     @Override

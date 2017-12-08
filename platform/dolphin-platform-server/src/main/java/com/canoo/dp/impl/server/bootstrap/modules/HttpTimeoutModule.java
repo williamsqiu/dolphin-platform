@@ -28,7 +28,7 @@ import javax.servlet.ServletContext;
 import static org.apiguardian.api.API.Status.INTERNAL;
 
 @API(since = "0.x", status = INTERNAL)
-@ModuleDefinition(HttpTimeoutModule.HTTP_TIMEOUT_MODULE)
+@ModuleDefinition
 public class HttpTimeoutModule extends AbstractBaseModule {
 
     public static final String HTTP_TIMEOUT_MODULE = "HttpTimeoutModule";
@@ -38,6 +38,11 @@ public class HttpTimeoutModule extends AbstractBaseModule {
     @Override
     protected String getActivePropertyName() {
         return HTTP_TIMEOUT_ACTIVE;
+    }
+
+    @Override
+    public String getName() {
+        return HTTP_TIMEOUT_MODULE;
     }
 
     @Override

@@ -28,7 +28,7 @@ import javax.servlet.ServletContext;
 import static org.apiguardian.api.API.Status.INTERNAL;
 
 @API(since = "0.x", status = INTERNAL)
-@ModuleDefinition(HttpMutexModule.HTTP_MUTEX_MODULE)
+@ModuleDefinition
 public class HttpMutexModule extends AbstractBaseModule {
 
     public static final String HTTP_MUTEX_MODULE = "HttpMutexModule";
@@ -38,6 +38,11 @@ public class HttpMutexModule extends AbstractBaseModule {
     @Override
     protected String getActivePropertyName() {
         return HTTP_MUTEX_MODULE_ACTIVE;
+    }
+
+    @Override
+    public String getName() {
+        return HTTP_MUTEX_MODULE;
     }
 
     @Override

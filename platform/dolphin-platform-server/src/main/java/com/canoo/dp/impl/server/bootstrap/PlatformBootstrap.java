@@ -16,6 +16,7 @@
 package com.canoo.dp.impl.server.bootstrap;
 
 import com.canoo.dp.impl.platform.core.ansi.AnsiOut;
+import com.canoo.platform.core.DolphinRuntimeException;
 import com.canoo.platform.core.PlatformThreadFactory;
 import com.canoo.dp.impl.platform.core.SimpleDolphinPlatformThreadFactory;
 import com.canoo.dp.impl.platform.core.Assert;
@@ -77,9 +78,12 @@ public class PlatformBootstrap {
 
                 final Map<String, ServerModule> modules = new HashMap<>();
                 for (final Class<?> moduleClass : moduleClasses) {
+                    if(!ServerModule.class.isAssignableFrom(moduleClass)) {
+                        throw new DolphinRuntimeException("Class " + moduleClass + " is annoated with " + ModuleDefinition.class.getSimpleName() + " but do not implement " + ServerModule.class.getSimpleName());
+                    }
                     ModuleDefinition moduleDefinition = moduleClass.getAnnotation(ModuleDefinition.class);
                     ServerModule instance = (ServerModule) moduleClass.newInstance();
-                    modules.put(moduleDefinition.value(), (ServerModule) instance);
+                    modules.put(instance.getName(), instance);
                 }
 
                 LOG.info("Found {} Dolphin Plaform modules", modules.size());

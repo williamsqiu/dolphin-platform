@@ -42,7 +42,7 @@ import static com.canoo.dp.impl.server.config.DefaultPlatformConfiguration.ID_FI
 import static com.canoo.dp.impl.server.config.DefaultPlatformConfiguration.ID_FILTER_URL_MAPPINGS_DEFAULT_VALUE;
 
 @API(since = "0.x", status = INTERNAL)
-@ModuleDefinition(ClientSessionModule.CLIENT_SESSION_MODULE)
+@ModuleDefinition
 public class ClientSessionModule extends AbstractBaseModule {
 
     public static final String CLIENT_SESSION_MODULE = "ClientSessionModule";
@@ -54,6 +54,11 @@ public class ClientSessionModule extends AbstractBaseModule {
     @Override
     protected String getActivePropertyName() {
         return CLIENT_SESSION_MODULE_ACTIVE;
+    }
+
+    @Override
+    public String getName() {
+        return CLIENT_SESSION_MODULE;
     }
 
     @Override

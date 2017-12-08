@@ -52,15 +52,23 @@ import static com.canoo.dp.impl.server.servlet.ServletConstants.DOLPHIN_SERVLET_
 import static com.canoo.dp.impl.server.servlet.ServletConstants.INTERRUPT_SERVLET_NAME;
 import static org.apiguardian.api.API.Status.INTERNAL;
 
-@ModuleDefinition(value = "RPM", order = 101)
+@ModuleDefinition(order = 101)
 @API(since = "0.x", status = INTERNAL)
 public class RemotingModule implements ServerModule {
 
     private static final Logger LOG = LoggerFactory.getLogger(RemotingModule.class);
 
+    public static final String REMOTING_MODULE = "RemotingModule";
+
+
     @Override
     public List<String> getModuleDependencies() {
         return Collections.singletonList(ClientSessionModule.CLIENT_SESSION_MODULE);
+    }
+
+    @Override
+    public String getName() {
+        return REMOTING_MODULE;
     }
 
     @Override
