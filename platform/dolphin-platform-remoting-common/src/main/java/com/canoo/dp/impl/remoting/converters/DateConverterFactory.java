@@ -63,7 +63,7 @@ public class DateConverterFactory extends AbstractConverterFactory {
         }
 
         @Override
-        public Date convertFromDolphin(String value) throws ValueConverterException{
+        public Date convertFromDolphin(final String value) throws ValueConverterException{
             if (value == null) {
                 return null;
             }
@@ -75,7 +75,7 @@ public class DateConverterFactory extends AbstractConverterFactory {
         }
 
         @Override
-        public String convertToDolphin(Date value) throws ValueConverterException{
+        public String convertToDolphin(final Date value) throws ValueConverterException{
             if (value == null) {
                 return null;
             }

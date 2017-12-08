@@ -112,7 +112,7 @@ public interface ObservableList<E> extends List<E> {
      * Essentially a convenience method for sublist(from, to).clear()
      * @param from the start of the range to remove (inclusive)
      * @param to the end of the range to remove (exclusive)
-     * @throws IndexOutofBoundsException if an illegal range is provided
+     * @throws IndexOutOfBoundsException if an illegal range is provided
      */
     void remove(int from, int to);
 }

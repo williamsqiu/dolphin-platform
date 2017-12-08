@@ -78,7 +78,8 @@ import static org.apiguardian.api.API.Status.MAINTAINED;
 public @interface DolphinController {
 
     /**
-     * The unique name of the controller. If this is empty the class name of the controller class will be automatically used.
+     * The unique name of the controller. If this is empty the fully qualified class name of the controller class
+     * will be automatically used.
      * @return the unique name of the controller
      */
     String value() default "";

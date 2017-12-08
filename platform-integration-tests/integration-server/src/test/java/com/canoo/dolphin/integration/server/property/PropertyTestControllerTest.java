@@ -300,7 +300,7 @@ public class PropertyTestControllerTest extends SpringTestNGControllerTest {
         Assert.assertFalse(controller.getModel().getUuidValueChanged());
     }
 
-    @Test
+     @Test
     public void testPropertyChangeListener() {
         controller.getModel().setStringValue(null);
         final AtomicBoolean changed = new AtomicBoolean(false);
@@ -322,4 +322,29 @@ public class PropertyTestControllerTest extends SpringTestNGControllerTest {
         controller.getModel().setStringValue("Another value");
         Assert.assertTrue(changed.get());
     }
+
+@Test
+    public void testNoChangeForSameValueOnServer() {
+        controller.invoke(SET_TO_DEFAULTS_ACTION);
+        controller.invoke(ADD_CHANGE_LISTENER);
+        controller.invoke(SET_TO_DEFAULTS_ACTION);
+
+        controller.invoke(PING);
+
+        Assert.assertFalse(controller.getModel().getBigDecimalValueChanged());
+        Assert.assertFalse(controller.getModel().getBigIntegerValueChanged());
+        Assert.assertFalse(controller.getModel().getBooleanValueChanged());
+        Assert.assertFalse(controller.getModel().getByteValueChanged());
+        Assert.assertFalse(controller.getModel().getCalenderValueChanged());
+        Assert.assertFalse(controller.getModel().getDateValueChanged());
+        Assert.assertFalse(controller.getModel().getDoubleValueChanged());
+        Assert.assertFalse(controller.getModel().getEnumValueChanged());
+        Assert.assertFalse(controller.getModel().getFloatValueChanged());
+        Assert.assertFalse(controller.getModel().getIntegerValueChanged());
+        Assert.assertFalse(controller.getModel().getLongValueChanged());
+        Assert.assertFalse(controller.getModel().getShortValueChanged());
+        Assert.assertFalse(controller.getModel().getStringValueChanged());
+        Assert.assertFalse(controller.getModel().getUuidValueChanged());
+    }
+
 }

@@ -25,7 +25,8 @@ import static org.apiguardian.api.API.Status.EXPERIMENTAL;
 import static org.apiguardian.api.API.Status.MAINTAINED;
 
 /**
- * The ClientSessionExecutor can be used to execute tasks later on a specific client session (see {@link com.canoo.platform.server.client.ClientSession}).
+ * The ClientSessionExecutor can be used to execute tasks later on a specific client
+ * session (see {@link com.canoo.platform.server.client.ClientSession}).
  *
  * @author Hendrik Ebbers
  */

@@ -28,6 +28,8 @@ import static org.apiguardian.api.API.Status.MAINTAINED;
 
 /**
  * Each class that is part of a Dolphin Platform model must be annotated with {@link DolphinBean}.
+ * All fields of the a dolphin bean must be defined as {@link Property} or {@link ObservableList}.
+ * Methods in the classes will be ignored.
  *
  * Example:
  * <code>

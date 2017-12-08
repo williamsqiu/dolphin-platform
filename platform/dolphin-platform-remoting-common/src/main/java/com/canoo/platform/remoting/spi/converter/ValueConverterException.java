@@ -20,7 +20,7 @@ import org.apiguardian.api.API;
 import static org.apiguardian.api.API.Status.MAINTAINED;
 
 /**
- * Exception that is thrown if a data convertion ends in an error.
+ * Exception that is thrown if a data conversion ends in an error.
  *
  * @author Hendrik Ebbers
  * @see Converter
@@ -47,12 +47,4 @@ public class ValueConverterException extends Exception {
         super(message, cause);
     }
 
-    /**
-     * Constructor
-     *
-     * @param cause the cause
-     */
-    public ValueConverterException(Throwable cause) {
-        super(cause);
-    }
 }

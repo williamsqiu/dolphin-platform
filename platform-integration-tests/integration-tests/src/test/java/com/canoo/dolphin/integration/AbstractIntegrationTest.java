@@ -25,6 +25,7 @@ import org.testng.annotations.DataProvider;
 
 import java.net.URL;
 import java.time.Duration;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
@@ -95,6 +96,14 @@ public class AbstractIntegrationTest {
     }
 
     protected void invoke(ControllerProxy<?> controllerProxy, String actionName, String containerType, Param... params) {
+        try {
+            controllerProxy.invoke(actionName, params).get(timeoutInMinutes, TimeUnit.MINUTES);
+        } catch (Exception e) {
+            throw new RuntimeException("Can not withoutResult action " + actionName + " for containerType " + containerType, e);
+        }
+    }
+
+    protected void invoke(ControllerProxy<?> controllerProxy, String actionName, String containerType, Map<String, ?> params) {
         try {
             controllerProxy.invoke(actionName, params).get(timeoutInMinutes, TimeUnit.MINUTES);
         } catch (Exception e) {

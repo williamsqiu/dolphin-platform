@@ -65,8 +65,6 @@ import static org.apiguardian.api.API.Status.MAINTAINED;
  * implement an approach by using the Subscription Pattern: Each hander registration returns a {@link Subscription}
  * instance that provides the {@link Subscription#unsubscribe()} method to removePresentationModel the handler.
  * </p>
- * <p>To deleta a synchronized model the {@link BeanManager} provides several methods. Here a developer can
- * for example choose to delete a specific instance (see {@link #remove(Object)}) or all instances for a given type (see {@link #removeAll(Class)}).</p>
  *
  * @author Hendrik Ebbers
  */

@@ -17,6 +17,7 @@ package com.canoo.platform.remoting.client;
 
 import org.apiguardian.api.API;
 
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 import static org.apiguardian.api.API.Status.MAINTAINED;
@@ -31,7 +32,7 @@ import static org.apiguardian.api.API.Status.MAINTAINED;
  * automatically be destroyed when the client will be exited or the {@link ClientContext} will be disconnected (see {@link ClientContext#disconnect()}).
  */
 @API(since = "0.x", status = MAINTAINED)
-public interface ControllerProxy<T> extends ControllerFactory{
+public interface ControllerProxy<T> extends ControllerFactory {
 
     /**
      * Returns the model aof the defined MVC group. This model will automatically be synchronized with the server. If no
@@ -53,6 +54,9 @@ public interface ControllerProxy<T> extends ControllerFactory{
      */
     CompletableFuture<Void> invoke(String actionName, Param... params);
 
+    CompletableFuture<Void> invoke(String actionName, Map<String, ?> params);
+
+
     /**
      * Destroys this proxy and the controller on the server side.
      * @return A future that is completed when the destruction was handled on the server. If an exception was thrown on the
@@ -64,13 +68,6 @@ public interface ControllerProxy<T> extends ControllerFactory{
      * Returns the unique ID for the controller.
      * @return the unique ID for the controller
      */
+    @Deprecated
     String getId();
-
-    /**
-     * Creates a {@link ControllerProxy} instance for the controller with the given name as a child controller.
-     * @param name the unique name of the controller type
-     * @param <T> the type of the model that is bound to the controller and view
-     * @return a {@link CompletableFuture} that defines the creation of the controller.
-     */
-    <T> CompletableFuture<ControllerProxy<T>> createController(String name);
 }
