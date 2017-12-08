@@ -27,6 +27,7 @@ import static org.apiguardian.api.API.Status.MAINTAINED;
  * @author Hendrik Ebbers
  */
 @API(since = "0.x", status = MAINTAINED)
+@FunctionalInterface
 public interface ControllerTest {
 
     /**
