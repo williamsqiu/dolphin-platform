@@ -37,12 +37,6 @@ import static org.apiguardian.api.API.Status.EXPERIMENTAL;
 public @interface ModuleDefinition {
 
     /**
-     * The name of the module
-     * @return the name
-     */
-    String value();
-
-    /**
      * Defines the order number of the module. All modules will be started sorted by its order number.
      * @return the order number of the module
      */
