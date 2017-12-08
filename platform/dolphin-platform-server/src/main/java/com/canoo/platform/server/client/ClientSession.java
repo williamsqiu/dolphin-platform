@@ -18,6 +18,7 @@ package com.canoo.platform.server.client;
 import org.apiguardian.api.API;
 
 import javax.servlet.http.HttpSession;
+import java.util.Optional;
 import java.util.Set;
 
 import static org.apiguardian.api.API.Status.MAINTAINED;
@@ -45,6 +46,10 @@ public interface ClientSession {
      * @return the object or null
      */
     <T> T getAttribute(String name);
+
+    default <T> Optional<T> attribute(final String name) {
+        return Optional.ofNullable(getAttribute(name));
+    }
 
     /**
      * Removes the object bound with the given name from

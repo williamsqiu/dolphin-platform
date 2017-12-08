@@ -22,19 +22,18 @@ import com.canoo.dp.impl.remoting.commands.DestroyContextCommand;
 import com.canoo.dp.impl.remoting.commands.DestroyControllerCommand;
 import com.canoo.dp.impl.remoting.legacy.commands.InterruptLongPollCommand;
 import com.canoo.dp.impl.remoting.legacy.commands.StartLongPollCommand;
-import com.canoo.platform.server.spi.components.ManagedBeanFactory;
+import com.canoo.dp.impl.remoting.legacy.communication.Command;
 import com.canoo.dp.impl.server.beans.PostConstructInterceptor;
 import com.canoo.dp.impl.server.client.ClientSessionProvider;
 import com.canoo.dp.impl.server.client.HttpClientSessionImpl;
 import com.canoo.dp.impl.server.config.RemotingConfiguration;
 import com.canoo.dp.impl.server.controller.ControllerRepository;
 import com.canoo.dp.impl.server.controller.ControllerValidationException;
+import com.canoo.dp.impl.server.legacy.communication.CommandHandler;
 import com.canoo.dp.impl.server.scanner.DefaultClasspathScanner;
 import com.canoo.impl.server.util.HttpSessionMock;
-import com.canoo.platform.core.functional.Callback;
 import com.canoo.platform.server.client.ClientSession;
-import com.canoo.dp.impl.remoting.legacy.communication.Command;
-import com.canoo.dp.impl.server.legacy.communication.CommandHandler;
+import com.canoo.platform.server.spi.components.ManagedBeanFactory;
 import org.testng.annotations.Test;
 
 import javax.servlet.ServletContext;
@@ -42,7 +41,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static org.testng.Assert.*;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertTrue;
 
 public class DolphinContextTest {
 
@@ -158,15 +160,7 @@ public class DolphinContextTest {
             public ClientSession getCurrentClientSession() {
                 return session;
             }
-        }, new ManagedBeanFactoryMock(), new ControllerRepository(classpathScanner), new DestroyCallbackMock());
-    }
-
-    private class DestroyCallbackMock implements Callback<DolphinContext> {
-
-        @Override
-        public void call(DolphinContext dolphinContext) {
-
-        }
+        }, new ManagedBeanFactoryMock(), new ControllerRepository(classpathScanner), v -> {});
     }
 
     private class ManagedBeanFactoryMock implements ManagedBeanFactory {

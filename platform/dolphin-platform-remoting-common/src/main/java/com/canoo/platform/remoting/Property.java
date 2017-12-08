@@ -18,6 +18,8 @@ package com.canoo.platform.remoting;
 import com.canoo.platform.core.functional.Subscription;
 import org.apiguardian.api.API;
 
+import java.util.Optional;
+
 import static org.apiguardian.api.API.Status.MAINTAINED;
 
 /**
@@ -112,6 +114,10 @@ public interface Property<T> {
      * @return the current value
      */
     T get();
+
+    default Optional<T> value() {
+        return Optional.ofNullable(get());
+    }
 
     /**
      * Adds a change listener to the property that will be called whenever the value of the property changes

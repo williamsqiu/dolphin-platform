@@ -1,6 +1,5 @@
 package com.canoo.dp.impl.server.event;
 
-import com.canoo.platform.server.spi.components.ManagedBeanFactory;
 import com.canoo.dp.impl.server.beans.PostConstructInterceptor;
 import com.canoo.dp.impl.server.client.ClientSessionLifecycleHandlerImpl;
 import com.canoo.dp.impl.server.client.ClientSessionProvider;
@@ -11,13 +10,13 @@ import com.canoo.dp.impl.server.context.DolphinContextProvider;
 import com.canoo.dp.impl.server.controller.ControllerRepository;
 import com.canoo.dp.impl.server.scanner.DefaultClasspathScanner;
 import com.canoo.impl.server.util.HttpSessionMock;
-import com.canoo.platform.core.functional.Callback;
 import com.canoo.platform.core.functional.Subscription;
-import com.canoo.platform.remoting.server.event.RemotingEventBus;
-import com.canoo.platform.server.client.ClientSession;
 import com.canoo.platform.remoting.server.event.MessageEvent;
 import com.canoo.platform.remoting.server.event.MessageListener;
+import com.canoo.platform.remoting.server.event.RemotingEventBus;
 import com.canoo.platform.remoting.server.event.Topic;
+import com.canoo.platform.server.client.ClientSession;
+import com.canoo.platform.server.spi.components.ManagedBeanFactory;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -125,20 +124,11 @@ public class DefaultDolphinEventBusTest {
                 public ClientSession getCurrentClientSession() {
                     return session;
                 }
-            }, new ManagedBeanFactoryMock(), new ControllerRepository(classpathScanner), new DestroyCallbackMock());
+            }, new ManagedBeanFactoryMock(), new ControllerRepository(classpathScanner), v -> {});
         } catch (Exception e) {
             throw new RuntimeException("FAIL", e);
         }
     }
-
-    private class DestroyCallbackMock implements Callback<DolphinContext> {
-
-        @Override
-        public void call(DolphinContext dolphinContext) {
-
-        }
-    }
-
     private class ManagedBeanFactoryMock implements ManagedBeanFactory {
 
         @Override

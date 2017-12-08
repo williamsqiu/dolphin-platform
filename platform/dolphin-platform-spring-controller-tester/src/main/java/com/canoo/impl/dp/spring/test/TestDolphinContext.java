@@ -8,7 +8,6 @@ import com.canoo.dp.impl.server.config.RemotingConfiguration;
 import com.canoo.dp.impl.server.context.DolphinContext;
 import com.canoo.dp.impl.server.controller.ControllerRepository;
 import com.canoo.dp.impl.server.legacy.communication.CommandHandler;
-import com.canoo.platform.core.functional.Callback;
 import com.canoo.platform.server.client.ClientSession;
 import com.canoo.platform.server.spi.components.ManagedBeanFactory;
 
@@ -19,6 +18,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.function.Consumer;
 
 /**
  * Created by hendrikebbers on 05.12.17.
@@ -27,7 +27,7 @@ public class TestDolphinContext extends DolphinContext {
 
     private final BlockingQueue<Runnable> callLaterTasks = new LinkedBlockingQueue<>();
 
-    public TestDolphinContext(final RemotingConfiguration configuration, final ClientSession clientSession, final ClientSessionProvider clientSessionProvider, final ManagedBeanFactory beanFactory, final ControllerRepository controllerRepository, final Callback<DolphinContext> onDestroyCallback) {
+    public TestDolphinContext(final RemotingConfiguration configuration, final ClientSession clientSession, final ClientSessionProvider clientSessionProvider, final ManagedBeanFactory beanFactory, final ControllerRepository controllerRepository, final Consumer<DolphinContext> onDestroyCallback) {
         super(configuration, clientSession, clientSessionProvider, beanFactory, controllerRepository, onDestroyCallback);
 
         getServerConnector().getRegistry().register(PingCommand.class, new CommandHandler() {
@@ -47,7 +47,7 @@ public class TestDolphinContext extends DolphinContext {
     }
 
     @Override
-    protected void onPollEventBus() {
+    protected void onLongPoll() {
         while (!callLaterTasks.isEmpty()) {
             callLaterTasks.poll().run();
         }

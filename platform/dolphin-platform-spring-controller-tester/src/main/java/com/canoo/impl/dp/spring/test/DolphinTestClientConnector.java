@@ -15,16 +15,15 @@
  */
 package com.canoo.impl.dp.spring.test;
 
+import com.canoo.dp.impl.client.legacy.ClientModelStore;
 import com.canoo.dp.impl.client.legacy.communication.AbstractClientConnector;
 import com.canoo.dp.impl.client.legacy.communication.CommandAndHandler;
 import com.canoo.dp.impl.client.legacy.communication.CommandBatcher;
 import com.canoo.dp.impl.client.legacy.communication.OnFinishedHandler;
 import com.canoo.dp.impl.client.legacy.communication.SimpleExceptionHandler;
-import com.canoo.dp.impl.remoting.legacy.commands.StartLongPollCommand;
 import com.canoo.dp.impl.platform.core.Assert;
-import com.canoo.dp.impl.client.legacy.ClientModelStore;
+import com.canoo.dp.impl.remoting.legacy.commands.StartLongPollCommand;
 import com.canoo.dp.impl.remoting.legacy.communication.Command;
-import com.canoo.dp.impl.remoting.legacy.util.Function;
 import org.apiguardian.api.API;
 
 import java.util.ArrayList;
@@ -32,6 +31,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+import java.util.function.Function;
 
 import static org.apiguardian.api.API.Status.INTERNAL;
 
@@ -81,7 +81,7 @@ public class DolphinTestClientConnector extends AbstractClientConnector {
     protected List<Command> transmit(List<Command> commands) {
         ArrayList<Command> realCommands = new ArrayList<>(commands);
         realCommands.add(new StartLongPollCommand());
-        return communicationFunction.call(commands);
+        return communicationFunction.apply(commands);
     }
 
 }

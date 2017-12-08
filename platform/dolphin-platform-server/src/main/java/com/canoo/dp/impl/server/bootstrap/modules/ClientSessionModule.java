@@ -16,18 +16,23 @@
 package com.canoo.dp.impl.server.bootstrap.modules;
 
 import com.canoo.dp.impl.platform.core.Assert;
-import com.canoo.platform.core.functional.Callback;
-import com.canoo.platform.server.spi.components.ManagedBeanFactory;
-import com.canoo.dp.impl.server.client.*;
+import com.canoo.dp.impl.server.client.ClientSessionFilter;
+import com.canoo.dp.impl.server.client.ClientSessionLifecycleHandler;
+import com.canoo.dp.impl.server.client.ClientSessionLifecycleHandlerImpl;
+import com.canoo.dp.impl.server.client.ClientSessionManager;
+import com.canoo.dp.impl.server.client.ClientSessionMutextHolder;
+import com.canoo.dp.impl.server.client.ClientSessionProvider;
+import com.canoo.dp.impl.server.client.HttpSessionCleanerListener;
+import com.canoo.platform.core.PlatformConfiguration;
 import com.canoo.platform.server.ServerListener;
 import com.canoo.platform.server.client.ClientSession;
 import com.canoo.platform.server.client.ClientSessionListener;
 import com.canoo.platform.server.spi.AbstractBaseModule;
-import com.canoo.platform.server.spi.components.ClasspathScanner;
 import com.canoo.platform.server.spi.ModuleDefinition;
 import com.canoo.platform.server.spi.ModuleInitializationException;
-import com.canoo.platform.core.PlatformConfiguration;
 import com.canoo.platform.server.spi.ServerCoreComponents;
+import com.canoo.platform.server.spi.components.ClasspathScanner;
+import com.canoo.platform.server.spi.components.ManagedBeanFactory;
 import org.apiguardian.api.API;
 
 import javax.servlet.DispatcherType;
@@ -37,9 +42,9 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 
-import static org.apiguardian.api.API.Status.INTERNAL;
 import static com.canoo.dp.impl.server.config.DefaultPlatformConfiguration.ID_FILTER_URL_MAPPINGS;
 import static com.canoo.dp.impl.server.config.DefaultPlatformConfiguration.ID_FILTER_URL_MAPPINGS_DEFAULT_VALUE;
+import static org.apiguardian.api.API.Status.INTERNAL;
 
 @API(since = "0.x", status = INTERNAL)
 @ModuleDefinition(ClientSessionModule.CLIENT_SESSION_MODULE)
@@ -91,34 +96,14 @@ public class ClientSessionModule extends AbstractBaseModule {
             if (ClientSessionListener.class.isAssignableFrom(listenerClass)) {
                 final ClientSessionListener listener = (ClientSessionListener) beanFactory.createDependentInstance(listenerClass);
 
-                lifecycleHandler.addSessionDestroyedListener(new Callback<ClientSession>() {
-                    @Override
-                    public void call(ClientSession clientSession) {
-                        listener.sessionDestroyed(clientSession);
-                    }
-                });
-                lifecycleHandler.addSessionCreatedListener(new Callback<ClientSession>() {
-                    @Override
-                    public void call(ClientSession clientSession) {
-                        listener.sessionCreated(clientSession);
-                    }
-                });
+                lifecycleHandler.addSessionDestroyedListener(s -> listener.sessionDestroyed(s));
+                lifecycleHandler.addSessionCreatedListener(s -> listener.sessionCreated(s));
             }
         }
 
         final ClientSessionMutextHolder mutextHolder = new ClientSessionMutextHolder();
-        lifecycleHandler.addSessionDestroyedListener(new Callback<ClientSession>() {
-            @Override
-            public void call(ClientSession clientSession) {
-                mutextHolder.sessionDestroyed(clientSession);
-            }
-        });
-        lifecycleHandler.addSessionCreatedListener(new Callback<ClientSession>() {
-            @Override
-            public void call(ClientSession clientSession) {
-                mutextHolder.sessionCreated(clientSession);
-            }
-        });
+        lifecycleHandler.addSessionDestroyedListener(s -> mutextHolder.sessionDestroyed(s));
+        lifecycleHandler.addSessionCreatedListener(s -> mutextHolder.sessionCreated(s));
 
     }
 }
