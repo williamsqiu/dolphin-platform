@@ -25,9 +25,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.TimeZone;
+import java.util.*;
 
 import static com.canoo.dp.impl.platform.core.PlatformConstants.REMOTING_DATE_FORMAT_PATTERN;
 import static com.canoo.dp.impl.platform.core.PlatformConstants.TIMEZONE_UTC;
@@ -42,6 +40,11 @@ public class ZonedDateTimeConverterFactory extends AbstractConverterFactory {
     @Override
     public boolean supportsType(Class<?> cls) {
         return ZonedDateTime.class.isAssignableFrom(cls);
+    }
+
+    @Override
+    public List<Class> getSupportedTypes() {
+        return new ArrayList<>(Arrays.asList(ZonedDateTime.class));
     }
 
     @Override

@@ -22,6 +22,9 @@ import com.canoo.dp.impl.remoting.converters.AbstractStringConverter;
 import org.apiguardian.api.API;
 
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import static com.canoo.dolphin.converters.ValueFieldTypes.DURATION_FIELD_TYPE;
 import static org.apiguardian.api.API.Status.INTERNAL;
@@ -34,6 +37,11 @@ public class DurationConverterFactory extends AbstractConverterFactory {
     @Override
     public boolean supportsType(Class<?> cls) {
         return Duration.class.isAssignableFrom(cls);
+    }
+
+    @Override
+    public List<Class> getSupportedTypes() {
+        return new ArrayList<>(Arrays.asList(Duration.class));
     }
 
     @Override
