@@ -47,9 +47,30 @@ public class Converters {
         while (iterator.hasNext()) {
             ConverterFactory factory = iterator.next();
             LOG.trace("Found converter factory {} with type identifier {}", factory.getClass(), factory.getTypeIdentifier());
-            factory.init(beanRepository);
-            converterFactories.add(factory);
+            if(!isTypeAlreadyAdded(factory) && !isClassAlreadyAdded(factory)) {
+                factory.init(beanRepository);
+                converterFactories.add(factory);
+            }
         }
+    }
+
+    private boolean isTypeAlreadyAdded(ConverterFactory converterFactory) {
+        for(ConverterFactory factory : converterFactories){
+            if(factory.getTypeIdentifier() == converterFactory.getTypeIdentifier()){
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    private boolean isClassAlreadyAdded(ConverterFactory converterFactory) {
+        for(ConverterFactory factory : converterFactories){
+            if(factory.getClass() == converterFactory.getClass()){
+                return true;
+            }
+        }
+        return false;
     }
 
     public int getFieldType(Class<?> clazz) {
