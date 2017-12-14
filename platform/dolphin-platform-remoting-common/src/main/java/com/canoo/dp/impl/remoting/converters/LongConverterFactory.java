@@ -18,6 +18,10 @@ package com.canoo.dp.impl.remoting.converters;
 import com.canoo.platform.remoting.spi.converter.Converter;
 import org.apiguardian.api.API;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import static org.apiguardian.api.API.Status.INTERNAL;
 
 @API(since = "0.x", status = INTERNAL)
@@ -42,6 +46,11 @@ public class LongConverterFactory extends AbstractConverterFactory {
     @Override
     public boolean supportsType(Class<?> cls) {
         return long.class.equals(cls) || Long.class.equals(cls);
+    }
+
+    @Override
+    public List<Class> getSupportedTypes() {
+        return new ArrayList<>(Arrays.asList(long.class, Long.class));
     }
 
     @Override
