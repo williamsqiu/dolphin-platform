@@ -51,30 +51,23 @@ public class ControllerValidator {
         if (isFinal(clazz)) {
             throw new ControllerValidationException("Dolphin Controller " + clazz.getName() + " can't be final.");
         }
-        if (postConstructContainsParameter(clazz)) {
-            throw new ControllerValidationException("PostConstruct method should not contain parameter in Controller " + clazz.getName());
-        }
         if (isMoreThanOnePostConstruct(clazz)) {
             throw new ControllerValidationException("Only one PostConstruct method is allowed in Controller " + clazz.getName());
-        }
-        if (preDestroyContainsParameter(clazz)) {
-            throw new ControllerValidationException("PreDestroy method should not contain parameter in Controller " + clazz.getName());
         }
         if (isMoreThanOnePreDestroy(clazz)) {
             throw new ControllerValidationException("Only one PreDestroy method is allowed in Controller " + clazz.getName());
         }
-        if (!isDolphinActionVoid(clazz)) {
-            throw new ControllerValidationException("DolphinAction must be void in Controller " + clazz.getName());
-        }
-        if (!isAnnotatedWithParam(clazz)) {
-            throw new ControllerValidationException("DolphinAction parameters must be annotated with @param in Controller " + clazz.getName());
-        }
+
         if (!isDolphinModelPresent(clazz)) {
             throw new ControllerValidationException("Controller " + clazz.getName() + " must have a DolphinModel.");
         }
         if (isMoreThanOneDolphinModel(clazz)) {
             throw new ControllerValidationException("Controller " + clazz.getName() + " should not contain more than one DolphinModel.");
         }
+        preDestroyContainsParameter(clazz);
+        postConstructContainsParameter(clazz);
+        checkDolphinActionVoid(clazz);
+        checkDolphinActionAnnotatedWithParam(clazz);
     }
 
     private boolean isInterface(Class<?> clazz) {
@@ -89,45 +82,42 @@ public class ControllerValidator {
         return Modifier.isFinal(clazz.getModifiers());
     }
 
-    private boolean postConstructContainsParameter(Class<?> clazz) {
+    private void postConstructContainsParameter(Class<?> clazz) throws ControllerValidationException {
         List<Method> methods = ReflectionHelper.getInheritedDeclaredMethods(clazz);
         for (Method method : methods) {
             if (method.isAnnotationPresent(PostConstruct.class)) {
-                return checkParameterLength(method);
+                checkParameterLength(method, clazz);
             }
         }
-        return false;
     }
 
-    private boolean preDestroyContainsParameter(Class<?> clazz) {
+    private void preDestroyContainsParameter(Class<?> clazz)  throws ControllerValidationException {
         List<Method> methods = ReflectionHelper.getInheritedDeclaredMethods(clazz);
         for (Method method : methods) {
             if (method.isAnnotationPresent(PreDestroy.class)) {
-                return checkParameterLength(method);
+                checkParameterLength(method, clazz);
             }
         }
-        return false;
     }
 
-    private boolean checkParameterLength(Method method) {
+    private void checkParameterLength(Method method, Class<?> clazz) throws ControllerValidationException {
         if (method.getParameterTypes().length > 0) {
-            return true;
-        } else {
-            return false;
+            throw new ControllerValidationException("PostConstruct method "+ method.getName() +" should not contain parameter in Controller " + clazz.getName());
         }
     }
 
-    private boolean isDolphinActionVoid(Class<?> clazz) {
+    private void checkDolphinActionVoid(Class<?> clazz) throws ControllerValidationException {
         List<Method> methods = ReflectionHelper.getInheritedDeclaredMethods(clazz);
         for (Method method : methods) {
             if (method.isAnnotationPresent(DolphinAction.class)) {
-                return method.getReturnType().equals(Void.TYPE);
+                if(!method.getReturnType().equals(Void.TYPE)){
+                    throw new ControllerValidationException("DolphinAction "+ method.getName() + "must be void in Controller " + clazz.getName());
+                }
             }
         }
-        return true;
     }
 
-    private boolean isAnnotatedWithParam(Class<?> clazz) {
+    private void checkDolphinActionAnnotatedWithParam(Class<?> clazz)  throws ControllerValidationException {
         List<Method> methods = ReflectionHelper.getInheritedDeclaredMethods(clazz);
         for (Method method : methods) {
             if (method.isAnnotationPresent(DolphinAction.class)) {
@@ -141,12 +131,11 @@ public class ControllerValidator {
                         }
                     }
                     if(!paramAnnotationFound) {
-                        return false;
+                        throw new ControllerValidationException("DolphinAction "+ method.getName() +" parameters must be annotated with @param in Controller " + clazz.getName());
                     }
                 }
             }
         }
-        return true;
     }
 
     private boolean isDolphinModelPresent(Class<?> clazz) {
