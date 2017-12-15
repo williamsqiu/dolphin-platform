@@ -25,8 +25,7 @@ import com.canoo.platform.remoting.spi.converter.ValueConverterException;
 import org.apiguardian.api.API;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.apiguardian.api.API.Status.INTERNAL;
@@ -59,7 +58,7 @@ public class BigDecimalConverterFactory extends AbstractConverterFactory {
 
     @Override
     public List<Class> getSupportedTypes() {
-        return new ArrayList<>(Arrays.asList(BigDecimal.class));
+        return Collections.singletonList(BigDecimal.class);
     }
 
     @Override

@@ -49,7 +49,7 @@ public interface ConverterFactory {
     boolean supportsType(Class<?> cls);
 
     /**
-     * This method will be called to get all the supported converter types
+     * This method will be called to get all supported types for conversion
      * @return List of supported converter class types
      */
     List<Class> getSupportedTypes();

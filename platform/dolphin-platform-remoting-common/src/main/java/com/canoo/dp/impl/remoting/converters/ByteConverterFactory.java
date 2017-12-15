@@ -18,7 +18,6 @@ package com.canoo.dp.impl.remoting.converters;
 import com.canoo.platform.remoting.spi.converter.Converter;
 import org.apiguardian.api.API;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -50,7 +49,7 @@ public class ByteConverterFactory extends AbstractConverterFactory {
 
     @Override
     public List<Class> getSupportedTypes() {
-        return new ArrayList<>(Arrays.asList(byte.class, Byte.class));
+        return Arrays.asList(byte.class, Byte.class);
     }
 
     @Override

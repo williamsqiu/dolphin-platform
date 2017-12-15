@@ -18,7 +18,6 @@ package com.canoo.dp.impl.remoting.converters;
 import com.canoo.platform.remoting.spi.converter.Converter;
 import org.apiguardian.api.API;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -50,7 +49,7 @@ public class DoubleConverterFactory extends AbstractConverterFactory {
 
     @Override
     public List<Class> getSupportedTypes() {
-        return new ArrayList<>(Arrays.asList(double.class, Double.class));
+        return Arrays.asList(double.class, Double.class);
     }
 
     @Override

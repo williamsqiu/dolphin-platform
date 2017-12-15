@@ -22,8 +22,7 @@ import com.canoo.dp.impl.remoting.converters.AbstractStringConverter;
 import org.apiguardian.api.API;
 
 import java.time.Period;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static com.canoo.dolphin.converters.ValueFieldTypes.PERIODE_FIELD_TYPE;
@@ -41,7 +40,7 @@ public class PeriodConverterFactory extends AbstractConverterFactory {
 
     @Override
     public List<Class> getSupportedTypes() {
-        return new ArrayList<>(Arrays.asList(Period.class));
+        return Collections.singletonList(Period.class);
     }
 
     @Override

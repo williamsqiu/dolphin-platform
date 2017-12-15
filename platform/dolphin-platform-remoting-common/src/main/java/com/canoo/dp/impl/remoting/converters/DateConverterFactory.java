@@ -42,7 +42,7 @@ public class DateConverterFactory extends AbstractConverterFactory {
 
     @Override
     public List<Class> getSupportedTypes() {
-        return new ArrayList<>(Arrays.asList(Date.class));
+        return Collections.singletonList(Date.class);
     }
 
     @Override

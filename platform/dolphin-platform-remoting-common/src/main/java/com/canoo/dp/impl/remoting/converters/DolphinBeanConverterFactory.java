@@ -23,8 +23,7 @@ import com.canoo.platform.remoting.spi.converter.DolphinBeanRepo;
 import com.canoo.platform.remoting.spi.converter.ValueConverterException;
 import org.apiguardian.api.API;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.apiguardian.api.API.Status.INTERNAL;
@@ -48,7 +47,7 @@ public class DolphinBeanConverterFactory implements ConverterFactory {
 
     @Override
     public List<Class> getSupportedTypes() {
-        return new ArrayList<>(Arrays.asList(DolphinBean.class));
+        return Collections.singletonList(DolphinBean.class);
     }
 
     @Override

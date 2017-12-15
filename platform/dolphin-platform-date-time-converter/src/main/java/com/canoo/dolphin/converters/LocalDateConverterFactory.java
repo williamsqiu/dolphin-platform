@@ -45,7 +45,7 @@ public class LocalDateConverterFactory extends AbstractConverterFactory {
 
     @Override
     public List<Class> getSupportedTypes() {
-        return new ArrayList<>(Arrays.asList(LocalDate.class));
+        return Collections.singletonList(LocalDate.class);
     }
 
     @Override

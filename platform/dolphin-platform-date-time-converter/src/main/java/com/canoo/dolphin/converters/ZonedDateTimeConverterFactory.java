@@ -44,7 +44,7 @@ public class ZonedDateTimeConverterFactory extends AbstractConverterFactory {
 
     @Override
     public List<Class> getSupportedTypes() {
-        return new ArrayList<>(Arrays.asList(ZonedDateTime.class));
+        return Collections.singletonList(ZonedDateTime.class);
     }
 
     @Override

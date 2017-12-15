@@ -39,7 +39,7 @@ public class EnumConverterFactory extends AbstractConverterFactory {
 
     @Override
     public List<Class> getSupportedTypes() {
-        return new ArrayList<>(Arrays.asList(Enum.class));
+        return Collections.singletonList(Enum.class);
     }
 
     @Override

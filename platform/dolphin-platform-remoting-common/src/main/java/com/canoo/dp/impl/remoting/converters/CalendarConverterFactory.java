@@ -42,7 +42,7 @@ public class CalendarConverterFactory extends AbstractConverterFactory {
 
     @Override
     public List<Class> getSupportedTypes() {
-        return new ArrayList<>(Arrays.asList(Calendar.class));
+        return Collections.singletonList(Calendar.class);
     }
 
     @Override
