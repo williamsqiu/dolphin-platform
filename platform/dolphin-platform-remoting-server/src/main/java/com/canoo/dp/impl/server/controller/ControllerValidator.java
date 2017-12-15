@@ -28,6 +28,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.apiguardian.api.API.Status.INTERNAL;
@@ -109,39 +110,41 @@ public class ControllerValidator {
     }
 
     private void checkDolphinActionVoid(final Class<?> clazz) throws ControllerValidationException {
-        List<Method> methods = ReflectionHelper.getInheritedDeclaredMethods(clazz);
-        if(null != methods) {
-            for (Method method : methods) {
-                if (method.isAnnotationPresent(DolphinAction.class)) {
-                    if (!method.getReturnType().equals(Void.TYPE)) {
-                        throw new ControllerValidationException("Return type of controller action " + method.getName() + " in controller type " + clazz.getName() + " must be of type void.");
-                    }
-                }
-            }
+        Assert.requireNonNull(clazz, "clazz");
+        final ControllerValidationException controllerValidationException = ReflectionHelper.getInheritedDeclaredMethods(clazz).stream().
+                filter(method -> method.isAnnotationPresent(DolphinAction.class)).
+                filter(method -> !method.getReturnType().equals(Void.TYPE)).
+                findAny().
+                map(method -> new ControllerValidationException("Return type of controller action " + method.getName() + " in controller type " + clazz.getName() + " must be of type void.")).
+                orElse(null);
+
+        if(controllerValidationException != null){
+            throw controllerValidationException;
         }
     }
 
     private void checkDolphinActionAnnotatedWithParam(final Class<?> clazz)  throws ControllerValidationException {
-        List<Method> methods = ReflectionHelper.getInheritedDeclaredMethods(clazz);
-        if(null != methods) {
-            for (Method method : methods) {
-                if (method.isAnnotationPresent(DolphinAction.class)) {
-                    Annotation[][] paramAnnotations = method.getParameterAnnotations();
-                    for (Annotation[] annotations : paramAnnotations) {
-                        boolean paramAnnotationFound = false;
-                        for (Annotation annotation : annotations) {
-                            if (annotation.annotationType().equals(Param.class)) {
-                                paramAnnotationFound = true;
-                                break;
-                            }
-                        }
-                        if (!paramAnnotationFound) {
-                            throw new ControllerValidationException("DolphinAction " + method.getName() + " parameters must be annotated with @param in Controller " + clazz.getName());
-                        }
-                    }
-                }
-            }
+        Assert.requireNonNull(clazz, "clazz");
+
+        final ControllerValidationException controllerValidationException = ReflectionHelper.getInheritedDeclaredMethods(clazz).stream().
+                filter(method -> method.isAnnotationPresent(DolphinAction.class)).
+                filter(method -> checkMethodForMissingParamAnnotation(method)).
+                findAny().
+                map(method -> new ControllerValidationException("DolphinAction " + method.getName() + " parameters must be annotated with @param in Controller " + clazz.getName())).
+                orElse(null);
+
+        if(controllerValidationException != null){
+            throw controllerValidationException;
         }
+    }
+
+    private boolean checkMethodForMissingParamAnnotation(final Method method) {
+        Assert.requireNonNull(method, "method");
+        return Arrays.asList(method.getParameters()).stream().
+                filter(param -> !param.isAnnotationPresent(Param.class)).
+                findAny().
+                map(param -> true).
+                orElse(false);
     }
 
     private boolean isDolphinModelPresent(final Class<?> clazz) {
