@@ -16,7 +16,6 @@
 package com.canoo.dp.impl.remoting;
 
 import com.canoo.platform.core.DolphinRuntimeException;
-import com.canoo.platform.remoting.DolphinRemotingException;
 import com.canoo.platform.remoting.spi.converter.Converter;
 import com.canoo.platform.remoting.spi.converter.ConverterFactory;
 import com.canoo.dp.impl.platform.core.Assert;
@@ -46,7 +45,7 @@ public class Converters {
         while (iterator.hasNext()) {
             ConverterFactory factory = iterator.next();
             LOG.trace("Found converter factory {} with type identifier {}", factory.getClass(), factory.getTypeIdentifier());
-            if(!isTypeAlreadyAdded(factory) && !isClassAlreadyAdded(factory)) {
+            if(!isTypeAlreadyAdded(factory) && !isAnyConversionTypeAlreadyAdded(factory)) {
                 factory.init(beanRepository);
                 converterFactories.add(factory);
             }else{
@@ -66,15 +65,10 @@ public class Converters {
     }
 
 
-    private boolean isClassAlreadyAdded(final ConverterFactory converterFactory) {
+    private boolean isAnyConversionTypeAlreadyAdded(final ConverterFactory converterFactory) {
         Assert.requireNonNull(converterFactory, "converterFactory");
         for(ConverterFactory factory : converterFactories){
-            List<Class> list = factory.getSupportedTypes();
-            for(Class clazz:list){
-                if(converterFactory.getSupportedTypes().contains(clazz)){
-                    return true;
-                }
-            }
+            return factory.getSupportedTypes().stream().filter(type -> converterFactory.getSupportedTypes().contains(type)).findAny().map(c -> true).orElse(false);
         }
         return false;
     }
