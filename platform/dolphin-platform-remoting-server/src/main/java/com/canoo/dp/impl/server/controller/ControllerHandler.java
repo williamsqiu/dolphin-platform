@@ -345,11 +345,7 @@ public class ControllerHandler {
         Method foundMethod = null;
         for (Method method : allMethods) {
             if (method.isAnnotationPresent(DolphinAction.class)) {
-                DolphinAction actionAnnotation = method.getAnnotation(DolphinAction.class);
-                String currentActionName = method.getName();
-                if (actionAnnotation.value() != null && !actionAnnotation.value().trim().isEmpty()) {
-                    currentActionName = actionAnnotation.value();
-                }
+                final String currentActionName = ControllerUtils.getActionMethodName(method);
                 if (currentActionName.equals(actionName)) {
                     if (foundMethod != null) {
                         throw new RuntimeException("More than one method for action " + actionName + " found in " + controllerClass);

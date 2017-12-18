@@ -127,7 +127,7 @@ public class ControllerValidator {
                 filter(method -> method.isAnnotationPresent(DolphinAction.class)).
                 filter(method -> checkMethodForMissingParamAnnotation(method)).
                 findAny().
-                map(method -> new ControllerValidationException("DolphinAction " + method.getName() + " parameters must be annotated with @param in Controller " + clazz.getName())).
+                map(method -> new ControllerValidationException("DolphinAction " + ControllerUtils.getActionMethodName(method) + " parameters must be annotated with @param in Controller " + clazz.getName())).
                 orElse(null);
 
         if(controllerValidationException != null){
