@@ -18,6 +18,7 @@ package com.canoo.dp.impl.server.controller;
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.platform.core.ReflectionHelper;
 import com.canoo.platform.remoting.server.DolphinAction;
+import com.canoo.platform.remoting.server.DolphinController;
 import com.canoo.platform.remoting.server.DolphinModel;
 import com.canoo.platform.remoting.server.Param;
 import org.apiguardian.api.API;
@@ -43,6 +44,9 @@ public class ControllerValidator {
 
         Assert.requireNonNull(clazz, "Controller class");
 
+        if(!isClassAnnotatedWithDolhinController(clazz)){
+            throw new ControllerValidationException("Dolphin Controller " + clazz.getName() + " must be must be annotated with @DolphinController.");
+        }
         if (isInterface(clazz)) {
             throw new ControllerValidationException("Dolphin Controller " + ControllerUtils.getControllerName(clazz) + " must be a class.");
         }
@@ -69,6 +73,10 @@ public class ControllerValidator {
         checkPostConstructContainsParameter(clazz);
         checkDolphinActionVoid(clazz);
         checkDolphinActionAnnotatedWithParam(clazz);
+    }
+
+    private boolean isClassAnnotatedWithDolhinController(Class<?> clazz) {
+        return clazz.isAnnotationPresent(DolphinController.class);
     }
 
     private boolean isInterface(final Class<?> clazz) {

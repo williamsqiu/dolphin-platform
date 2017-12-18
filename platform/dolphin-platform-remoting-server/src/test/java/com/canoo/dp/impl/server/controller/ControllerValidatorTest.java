@@ -41,6 +41,10 @@ public class ControllerValidatorTest {
     }
 
     @Test(expectedExceptions = ControllerValidationException.class)
+    public void testControllerWithoutDolphinControllerAnnotation() throws ControllerValidationException{
+        controllerValidator.validate(ControllerWithoutDolphinControllerAnnotation.class);
+    }
+    @Test(expectedExceptions = ControllerValidationException.class)
     public void testControllerCannotBeAnInterface() throws ControllerValidationException{
         controllerValidator.validate(ControllerAsInterface.class);
     }
@@ -87,6 +91,7 @@ public class ControllerValidatorTest {
 
 }
 
+@DolphinController
 class ValidController {
 
     @DolphinModel
@@ -113,14 +118,16 @@ class ValidController {
     }
 }
 
+class ControllerWithoutDolphinControllerAnnotation{
+
+}
+
 @DolphinController
 interface ControllerAsInterface{}
-
 @DolphinController
 abstract class ControllerAsAbstract{}
 @DolphinController
 final class ControllerAsFinal{}
-
 @DolphinController
 class ControllerPostConstructWithParam{
 
@@ -190,7 +197,6 @@ class ControllerWithDolphinActionParam{
 }
 @DolphinController
 class ControllerWithoutDolphinModel{}
-
 @DolphinController
 class ControllerWithMoreThanOneDolphinModel{
     @DolphinModel
