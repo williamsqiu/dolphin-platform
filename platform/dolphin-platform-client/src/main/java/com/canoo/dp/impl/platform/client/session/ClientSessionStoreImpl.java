@@ -7,7 +7,7 @@ import org.apiguardian.api.API;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.net.URL;
+import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.locks.Lock;
@@ -27,7 +27,7 @@ public class ClientSessionStoreImpl implements ClientSessionStore{
     private UrlToAppDomainConverter converter = new SimpleUrlToAppDomainConverter();
 
     @Override
-    public String getClientIdentifierForUrl(final URL url) {
+    public String getClientIdentifierForUrl(final URI url) {
         Assert.requireNonNull(url, "url");
         final String applicationDomain = converter.getApplicationDomain(url);
         if(applicationDomain == null) {
@@ -45,7 +45,7 @@ public class ClientSessionStoreImpl implements ClientSessionStore{
         }
     }
 
-    public void setClientIdentifierForUrl(final URL url, final String clientId) {
+    public void setClientIdentifierForUrl(final URI url, final String clientId) {
         Assert.requireNonNull(url, "url");
         final String applicationDomain = converter.getApplicationDomain(url);
         if(applicationDomain == null) {
@@ -75,7 +75,7 @@ public class ClientSessionStoreImpl implements ClientSessionStore{
     }
 
     @Override
-    public void resetSession(final URL url) {
+    public void resetSession(final URI url) {
         LOG.debug("Resetting client id for url {}", url);
         setClientIdentifierForUrl(url, null);
     }

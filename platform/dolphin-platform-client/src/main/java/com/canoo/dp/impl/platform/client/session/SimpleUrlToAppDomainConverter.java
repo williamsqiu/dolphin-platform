@@ -4,7 +4,7 @@ import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.core.domain.UrlToAppDomainConverter;
 import org.apiguardian.api.API;
 
-import java.net.URL;
+import java.net.URI;
 
 import static org.apiguardian.api.API.Status.INTERNAL;
 
@@ -12,7 +12,7 @@ import static org.apiguardian.api.API.Status.INTERNAL;
 public class SimpleUrlToAppDomainConverter implements UrlToAppDomainConverter {
 
     @Override
-    public String getApplicationDomain(URL url) {
+    public String getApplicationDomain(URI url) {
         return Assert.requireNonNull(url, "url").getHost() + ":" + url.getPort();
     }
 }
