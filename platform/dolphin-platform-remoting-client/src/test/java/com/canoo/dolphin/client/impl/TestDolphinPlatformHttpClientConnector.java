@@ -18,7 +18,6 @@ package com.canoo.dolphin.client.impl;
 import com.canoo.dp.impl.client.DolphinPlatformHttpClientConnector;
 import com.canoo.dp.impl.client.legacy.ClientModelStore;
 import com.canoo.dp.impl.client.legacy.DefaultModelSynchronizer;
-import com.canoo.dp.impl.client.legacy.communication.AbstractClientConnector;
 import com.canoo.dp.impl.client.legacy.communication.SimpleExceptionHandler;
 import com.canoo.dp.impl.platform.client.http.HttpClientImpl;
 import com.canoo.dp.impl.platform.client.http.HttpStatus;
@@ -27,7 +26,6 @@ import com.canoo.dp.impl.remoting.commands.CreateContextCommand;
 import com.canoo.dp.impl.remoting.legacy.communication.Command;
 import com.canoo.dp.impl.remoting.legacy.communication.CreatePresentationModelCommand;
 import com.canoo.dp.impl.remoting.legacy.communication.JsonCodec;
-import com.canoo.dp.impl.remoting.legacy.util.Provider;
 import com.canoo.platform.client.HeadlessToolkit;
 import com.canoo.platform.client.PlatformClient;
 import com.canoo.platform.core.http.HttpClient;
@@ -100,12 +98,7 @@ public class TestDolphinPlatformHttpClientConnector {
             }
         });
 
-        final ClientModelStore clientModelStore = new ClientModelStore(new DefaultModelSynchronizer(new Provider<AbstractClientConnector>() {
-            @Override
-            public AbstractClientConnector get() {
-                return null;
-            }
-        }));
+        final ClientModelStore clientModelStore = new ClientModelStore(new DefaultModelSynchronizer(() -> null));
         final DolphinPlatformHttpClientConnector connector = new DolphinPlatformHttpClientConnector(getDummyURL(), PlatformClient.getClientConfiguration(), clientModelStore, new JsonCodec(), new SimpleExceptionHandler(), PlatformClient.getService(HttpClient.class));
 
         final CreatePresentationModelCommand command = new CreatePresentationModelCommand();
@@ -149,12 +142,7 @@ public class TestDolphinPlatformHttpClientConnector {
             }
         });
 
-        final ClientModelStore clientModelStore = new ClientModelStore(new DefaultModelSynchronizer(new Provider<AbstractClientConnector>() {
-            @Override
-            public AbstractClientConnector get() {
-                return null;
-            }
-        }));
+        final ClientModelStore clientModelStore = new ClientModelStore(new DefaultModelSynchronizer(() -> null));
 
         final DolphinPlatformHttpClientConnector connector = new DolphinPlatformHttpClientConnector(getDummyURL(), PlatformClient.getClientConfiguration(), clientModelStore, new JsonCodec(), new SimpleExceptionHandler(), new HttpClientImpl(new Gson(), PlatformClient.getClientConfiguration()));
 

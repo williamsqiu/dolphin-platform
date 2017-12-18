@@ -6,7 +6,12 @@ import java.net.URL;
 
 import static org.apiguardian.api.API.Status.EXPERIMENTAL;
 
+/**
+ * {@link java.util.function.Function} can be used...
+ */
 @API(since = "0.x", status = EXPERIMENTAL)
+@FunctionalInterface
+@Deprecated
 public interface UrlToAppDomainConverter {
 
     String getApplicationDomain(URL url);

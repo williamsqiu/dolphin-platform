@@ -22,7 +22,6 @@ import com.canoo.dp.impl.remoting.legacy.communication.PresentationModelDeletedC
 import com.canoo.dp.impl.remoting.legacy.communication.ValueChangedCommand;
 import com.canoo.dp.impl.remoting.legacy.core.Attribute;
 import com.canoo.dp.impl.remoting.legacy.util.DirectExecutor;
-import com.canoo.dp.impl.remoting.legacy.util.Provider;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -43,13 +42,7 @@ public class ClientConnectorTests {
 
     @BeforeMethod
     public void setUp() {
-        ModelSynchronizer defaultModelSynchronizer = new DefaultModelSynchronizer(new Provider<AbstractClientConnector>() {
-            @Override
-            public AbstractClientConnector get() {
-                return clientConnector;
-            }
-
-        });
+        ModelSynchronizer defaultModelSynchronizer = new DefaultModelSynchronizer(() -> clientConnector);
         clientModelStore = new ClientModelStore(defaultModelSynchronizer);
         clientConnector = new TestClientConnector(clientModelStore, DirectExecutor.getInstance());
         try {

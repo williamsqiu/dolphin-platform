@@ -18,6 +18,8 @@ package com.canoo.platform.remoting;
 import com.canoo.platform.core.functional.Subscription;
 import org.apiguardian.api.API;
 
+import java.util.Optional;
+
 import static org.apiguardian.api.API.Status.MAINTAINED;
 
 /**

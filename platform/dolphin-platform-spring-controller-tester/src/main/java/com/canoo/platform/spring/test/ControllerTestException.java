@@ -31,20 +31,6 @@ public class ControllerTestException extends RuntimeException {
 
     /**
      * Constructor
-     */
-    public ControllerTestException() {
-    }
-
-    /**
-     * Constructor
-     * @param message detailed message
-     */
-    public ControllerTestException(String message) {
-        super(message);
-    }
-
-    /**
-     * Constructor
      * @param message detailed message
      * @param cause the cause
      */
@@ -52,11 +38,4 @@ public class ControllerTestException extends RuntimeException {
         super(message, cause);
     }
 
-    /**
-     * Constructor
-     * @param cause the cause
-     */
-    public ControllerTestException(Throwable cause) {
-        super(cause);
-    }
 }

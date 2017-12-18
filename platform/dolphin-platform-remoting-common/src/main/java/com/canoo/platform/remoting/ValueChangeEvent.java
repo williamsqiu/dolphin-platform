@@ -17,6 +17,8 @@ package com.canoo.platform.remoting;
 
 import org.apiguardian.api.API;
 
+import java.util.Optional;
+
 import static org.apiguardian.api.API.Status.MAINTAINED;
 
 /**
@@ -49,4 +51,5 @@ public interface ValueChangeEvent<T> {
      * @return New internal value
      */
     T getNewValue();
+
 }

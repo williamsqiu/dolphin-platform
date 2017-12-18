@@ -22,19 +22,19 @@ import com.canoo.dp.impl.remoting.legacy.communication.CreatePresentationModelCo
 import com.canoo.dp.impl.remoting.legacy.communication.PresentationModelDeletedCommand;
 import com.canoo.dp.impl.remoting.legacy.communication.ValueChangedCommand;
 import com.canoo.dp.impl.remoting.legacy.core.Attribute;
-import com.canoo.dp.impl.remoting.legacy.util.Provider;
 import org.apiguardian.api.API;
 
 import java.beans.PropertyChangeEvent;
+import java.util.function.Supplier;
 
 import static org.apiguardian.api.API.Status.DEPRECATED;
 
 @API(since = "0.x", status = DEPRECATED)
 public class DefaultModelSynchronizer implements ModelSynchronizer {
 
-    private final Provider<AbstractClientConnector> connectionProvider;
+    private final Supplier<AbstractClientConnector> connectionProvider;
 
-    public DefaultModelSynchronizer(final Provider<AbstractClientConnector> connectionProvider) {
+    public DefaultModelSynchronizer(final Supplier<AbstractClientConnector> connectionProvider) {
         this.connectionProvider = connectionProvider;
     }
 

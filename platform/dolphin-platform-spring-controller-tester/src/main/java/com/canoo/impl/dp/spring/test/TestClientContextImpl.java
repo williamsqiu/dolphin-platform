@@ -4,12 +4,12 @@ import com.canoo.dp.impl.client.ClientContextImpl;
 import com.canoo.dp.impl.client.legacy.ClientModelStore;
 import com.canoo.dp.impl.client.legacy.communication.AbstractClientConnector;
 import com.canoo.dp.impl.platform.core.Assert;
-import com.canoo.dp.impl.remoting.legacy.util.Function;
 import com.canoo.platform.client.ClientConfiguration;
 import com.canoo.platform.client.session.ClientSessionStore;
 
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
 
 public class TestClientContextImpl extends ClientContextImpl implements TestClientContext {
 

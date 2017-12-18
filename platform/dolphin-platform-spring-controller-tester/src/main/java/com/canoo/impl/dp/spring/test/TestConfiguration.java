@@ -20,7 +20,6 @@ import com.canoo.dp.impl.client.legacy.communication.AbstractClientConnector;
 import com.canoo.dp.impl.platform.client.session.ClientSessionStoreImpl;
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.remoting.legacy.communication.Command;
-import com.canoo.dp.impl.remoting.legacy.util.Function;
 import com.canoo.dp.impl.server.client.ClientSessionProvider;
 import com.canoo.dp.impl.server.client.HttpClientSessionImpl;
 import com.canoo.dp.impl.server.config.ConfigurationFileLoader;
@@ -29,7 +28,6 @@ import com.canoo.dp.impl.server.context.DolphinContext;
 import com.canoo.dp.impl.server.controller.ControllerRepository;
 import com.canoo.dp.impl.server.scanner.DefaultClasspathScanner;
 import com.canoo.platform.client.PlatformClient;
-import com.canoo.platform.core.functional.Callback;
 import com.canoo.platform.server.client.ClientSession;
 import org.apiguardian.api.API;
 import org.springframework.web.context.WebApplicationContext;
@@ -39,6 +37,8 @@ import java.net.URL;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 import static org.apiguardian.api.API.Status.INTERNAL;
 
@@ -57,19 +57,8 @@ public class TestConfiguration {
         final ExecutorService clientExecutor = Executors.newSingleThreadExecutor();
 
         final ClientSessionStoreImpl clientSessionStore = new ClientSessionStoreImpl();
-        clientContext = new TestClientContextImpl(PlatformClient.getClientConfiguration(), new URL("http://dummy"), new Function<ClientModelStore, AbstractClientConnector>() {
-            @Override
-            public AbstractClientConnector call(ClientModelStore clientModelStore) {
-                return new DolphinTestClientConnector(clientModelStore, clientExecutor, new Function<List<Command>, List<Command>>() {
-
-                    @Override
-                    public List<Command> call(List<Command> commands) {
-                        return sendToServer(commands);
-                    }
-                });
-            }
-        }, clientSessionStore);
-
+        final Function<ClientModelStore, AbstractClientConnector> connectorProvider = s -> new DolphinTestClientConnector(s, clientExecutor, c -> sendToServer(c));
+        clientContext = new TestClientContextImpl(PlatformClient.getClientConfiguration(), new URL("http://dummy"), connectorProvider, clientSessionStore);
 
         //Server
         final ControllerRepository controllerRepository = new ControllerRepository(new DefaultClasspathScanner());
@@ -83,12 +72,8 @@ public class TestConfiguration {
         dolphinContextProviderMock.setCurrentContext(dolphinTestContext);
     }
 
-    private Callback<DolphinContext> createEmptyCallback() {
-        return new Callback<DolphinContext>() {
-            @Override
-            public void call(DolphinContext context) {
-
-            }
+    private Consumer<DolphinContext> createEmptyCallback() {
+        return (c) -> {
         };
     }
 

@@ -31,8 +31,6 @@ import com.canoo.dp.impl.remoting.PresentationModelBuilderFactory;
 import com.canoo.dp.impl.remoting.collections.ListMapperImpl;
 import com.canoo.dp.impl.remoting.commands.CreateContextCommand;
 import com.canoo.dp.impl.remoting.commands.DestroyContextCommand;
-import com.canoo.dp.impl.remoting.legacy.util.Function;
-import com.canoo.dp.impl.remoting.legacy.util.Provider;
 import com.canoo.platform.client.ClientConfiguration;
 import com.canoo.platform.client.session.ClientSessionStore;
 import com.canoo.platform.remoting.BeanManager;
@@ -46,6 +44,8 @@ import org.apiguardian.api.API;
 import java.net.URL;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BiFunction;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 import static org.apiguardian.api.API.Status.INTERNAL;
 
@@ -77,7 +77,7 @@ public class ClientContextImpl implements ClientContext {
         this.clientSessionStore = Assert.requireNonNull(clientSessionStore, "clientSessionStore");
         this.endpoint = Assert.requireNonNull(endpoint, "endpoint");
 
-        final ModelSynchronizer defaultModelSynchronizer = new DefaultModelSynchronizer(new Provider<AbstractClientConnector>() {
+        final ModelSynchronizer defaultModelSynchronizer = new DefaultModelSynchronizer(new Supplier<AbstractClientConnector>() {
             @Override
             public AbstractClientConnector get() {
                 return clientConnector;
@@ -85,7 +85,7 @@ public class ClientContextImpl implements ClientContext {
         });
 
         this.modelStore = new ClientModelStore(defaultModelSynchronizer);
-        this.clientConnector = connectorProvider.call(modelStore);
+        this.clientConnector = connectorProvider.apply(modelStore);
 
         final EventDispatcher dispatcher = new ClientEventDispatcher(modelStore);
         final BeanRepository beanRepository = new BeanRepositoryImpl(modelStore, dispatcher);
