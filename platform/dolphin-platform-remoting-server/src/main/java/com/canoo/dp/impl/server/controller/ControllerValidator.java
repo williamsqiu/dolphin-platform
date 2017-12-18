@@ -44,26 +44,26 @@ public class ControllerValidator {
         Assert.requireNonNull(clazz, "Controller class");
 
         if (isInterface(clazz)) {
-            throw new ControllerValidationException("Dolphin Controller " + clazz.getName() + " must be a class.");
+            throw new ControllerValidationException("Dolphin Controller " + ControllerUtils.getControllerName(clazz) + " must be a class.");
         }
         if (isAbstract(clazz)) {
-            throw new ControllerValidationException("Dolphin Controller " + clazz.getName() + " can't be abstract.");
+            throw new ControllerValidationException("Dolphin Controller " + ControllerUtils.getControllerName(clazz) + " can't be abstract.");
         }
         if (isFinal(clazz)) {
-            throw new ControllerValidationException("Dolphin Controller " + clazz.getName() + " can't be final.");
+            throw new ControllerValidationException("Dolphin Controller " + ControllerUtils.getControllerName(clazz) + " can't be final.");
         }
         if (isMoreThanOnePostConstruct(clazz)) {
-            throw new ControllerValidationException("Only one PostConstruct method is allowed in Controller " + clazz.getName());
+            throw new ControllerValidationException("Only one PostConstruct method is allowed in Controller " + ControllerUtils.getControllerName(clazz));
         }
         if (isMoreThanOnePreDestroy(clazz)) {
-            throw new ControllerValidationException("Only one PreDestroy method is allowed in Controller " + clazz.getName());
+            throw new ControllerValidationException("Only one PreDestroy method is allowed in Controller " + ControllerUtils.getControllerName(clazz));
         }
 
         if (!isDolphinModelPresent(clazz)) {
-            throw new ControllerValidationException("Controller " + clazz.getName() + " must have a DolphinModel.");
+            throw new ControllerValidationException("Controller " + ControllerUtils.getControllerName(clazz) + " must have a DolphinModel.");
         }
         if (isMoreThanOneDolphinModel(clazz)) {
-            throw new ControllerValidationException("Controller " + clazz.getName() + " should not contain more than one DolphinModel.");
+            throw new ControllerValidationException("Controller " + ControllerUtils.getControllerName(clazz) + " should not contain more than one DolphinModel.");
         }
         checkPreDestroyContainsParameter(clazz);
         checkPostConstructContainsParameter(clazz);
@@ -88,7 +88,7 @@ public class ControllerValidator {
         final ControllerValidationException controllerValidationException = ReflectionHelper.getInheritedDeclaredMethods(clazz).stream().
                 filter(method -> method.isAnnotationPresent(PostConstruct.class)).
                 filter(method -> method.getParameterTypes().length > 0).
-                findAny().map(method ->new ControllerValidationException("PreDestroy method " + method.getName() + " should not contain parameter in Controller " + clazz.getName())).
+                findAny().map(method ->new ControllerValidationException("PreDestroy method " + ControllerUtils.getActionMethodName(method) + " should not contain parameter in Controller " + ControllerUtils.getControllerName(clazz))).
                 orElse(null);
         if(controllerValidationException != null){
             throw controllerValidationException;
@@ -100,7 +100,7 @@ public class ControllerValidator {
         final ControllerValidationException controllerValidationException = ReflectionHelper.getInheritedDeclaredMethods(clazz).stream().
                 filter(method -> method.isAnnotationPresent(PreDestroy.class)).
                 filter(method -> method.getParameterTypes().length > 0).
-                findAny().map(method ->new ControllerValidationException("PreDestroy method " + method.getName() + " should not contain parameter in Controller " + clazz.getName())).
+                findAny().map(method ->new ControllerValidationException("PreDestroy method " + ControllerUtils.getActionMethodName(method) + " should not contain parameter in Controller " + ControllerUtils.getControllerName(clazz))).
                 orElse(null);
         if(controllerValidationException != null){
             throw controllerValidationException;
@@ -113,7 +113,7 @@ public class ControllerValidator {
                 filter(method -> method.isAnnotationPresent(DolphinAction.class)).
                 filter(method -> !method.getReturnType().equals(Void.TYPE)).
                 findAny().
-                map(method -> new ControllerValidationException("Return type of controller action " + method.getName() + " in controller type " + clazz.getName() + " must be of type void.")).
+                map(method -> new ControllerValidationException("Return type of controller action " + ControllerUtils.getActionMethodName(method) + " in controller type " + ControllerUtils.getControllerName(clazz) + " must be of type void.")).
                 orElse(null);
 
         if(controllerValidationException != null){
@@ -127,7 +127,7 @@ public class ControllerValidator {
                 filter(method -> method.isAnnotationPresent(DolphinAction.class)).
                 filter(method -> checkMethodForMissingParamAnnotation(method)).
                 findAny().
-                map(method -> new ControllerValidationException("DolphinAction " + ControllerUtils.getActionMethodName(method) + " parameters must be annotated with @param in Controller " + clazz.getName())).
+                map(method -> new ControllerValidationException("DolphinAction " + ControllerUtils.getActionMethodName(method) + " parameters must be annotated with @param in Controller " + ControllerUtils.getControllerName(clazz))).
                 orElse(null);
 
         if(controllerValidationException != null){

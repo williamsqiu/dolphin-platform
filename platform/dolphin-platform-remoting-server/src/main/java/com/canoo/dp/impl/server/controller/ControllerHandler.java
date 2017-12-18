@@ -129,7 +129,7 @@ public class ControllerHandler {
             firePostChildCreated(parentController, instance);
         }
 
-        LOG.trace("Created Controller of type %s and id %s for name %s", controllerClass.getName(), id, name);
+        LOG.trace("Created Controller of type %s and id %s for name %s", ControllerUtils.getControllerName(controllerClass), id, name);
 
         return id;
     }
@@ -213,7 +213,7 @@ public class ControllerHandler {
         for (Field field : allFields) {
             if (field.isAnnotationPresent(DolphinModel.class)) {
                 if (modelField != null) {
-                    throw new RuntimeException("More than one Model was found for controller " + controller.getClass().getName());
+                    throw new RuntimeException("More than one Model was found for controller " + ControllerUtils.getControllerName(controller.getClass()));
                 }
                 modelField = field;
             }
@@ -238,7 +238,7 @@ public class ControllerHandler {
         for (Field field : allFields) {
             if (field.isAnnotationPresent(ParentController.class)) {
                 if (parentField != null) {
-                    throw new RuntimeException("More than one parent was found for controller " + controller.getClass().getName());
+                    throw new RuntimeException("More than one parent was found for controller " + ControllerUtils.getControllerName(controller.getClass()));
                 }
                 parentField = field;
             }
@@ -275,10 +275,10 @@ public class ControllerHandler {
             }
             final Method actionMethod = getActionMethod(controllerClass, actionName);
             if(actionMethod == null) {
-                throw new InvokeActionException("No actionMethod with name " + actionName + " in controller class " + controllerClass.getName() + " found");
+                throw new InvokeActionException("No actionMethod with name " + actionName + " in controller class " + ControllerUtils.getControllerName(controllerClass) + " found");
             }
             final List<Object> args = getArgs(actionMethod, params);
-            LOG.debug("Will call {} action for controller {} ({}.{}) with {} params.", actionName, controllerId, controllerClass, actionMethod.getName(), args.size());
+            LOG.debug("Will call {} action for controller {} ({}.{}) with {} params.", actionName, controllerId, controllerClass, ControllerUtils.getActionMethodName(actionMethod), args.size());
             if(LOG.isTraceEnabled()) {
                 int index = 1;
                 for(Object param : args) {
