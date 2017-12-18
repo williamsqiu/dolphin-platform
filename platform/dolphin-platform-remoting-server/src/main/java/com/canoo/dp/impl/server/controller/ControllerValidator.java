@@ -84,28 +84,26 @@ public class ControllerValidator {
     }
 
     private void checkPostConstructContainsParameter(final Class<?> clazz) throws ControllerValidationException {
-        List<Method> methods = ReflectionHelper.getInheritedDeclaredMethods(clazz);
-        if(null != methods) {
-            for (Method method : methods) {
-                if (method.isAnnotationPresent(PostConstruct.class)) {
-                    if (method.getParameterTypes().length > 0) {
-                        throw new ControllerValidationException("PostConstruct method " + method.getName() + " should not contain parameter in Controller " + clazz.getName());
-                    }
-                }
-            }
+        Assert.requireNonNull(clazz, "clazz");
+        final ControllerValidationException controllerValidationException = ReflectionHelper.getInheritedDeclaredMethods(clazz).stream().
+                filter(method -> method.isAnnotationPresent(PostConstruct.class)).
+                filter(method -> method.getParameterTypes().length > 0).
+                findAny().map(method ->new ControllerValidationException("PreDestroy method " + method.getName() + " should not contain parameter in Controller " + clazz.getName())).
+                orElse(null);
+        if(controllerValidationException != null){
+            throw controllerValidationException;
         }
     }
 
     private void checkPreDestroyContainsParameter(final Class<?> clazz)  throws ControllerValidationException {
-        List<Method> methods = ReflectionHelper.getInheritedDeclaredMethods(clazz);
-        if(null != methods) {
-            for (Method method : methods) {
-                if (method.isAnnotationPresent(PreDestroy.class)) {
-                    if (method.getParameterTypes().length > 0) {
-                        throw new ControllerValidationException("PreDestroy method " + method.getName() + " should not contain parameter in Controller " + clazz.getName());
-                    }
-                }
-            }
+        Assert.requireNonNull(clazz, "clazz");
+        final ControllerValidationException controllerValidationException = ReflectionHelper.getInheritedDeclaredMethods(clazz).stream().
+                filter(method -> method.isAnnotationPresent(PreDestroy.class)).
+                filter(method -> method.getParameterTypes().length > 0).
+                findAny().map(method ->new ControllerValidationException("PreDestroy method " + method.getName() + " should not contain parameter in Controller " + clazz.getName())).
+                orElse(null);
+        if(controllerValidationException != null){
+            throw controllerValidationException;
         }
     }
 
@@ -125,7 +123,6 @@ public class ControllerValidator {
 
     private void checkDolphinActionAnnotatedWithParam(final Class<?> clazz)  throws ControllerValidationException {
         Assert.requireNonNull(clazz, "clazz");
-
         final ControllerValidationException controllerValidationException = ReflectionHelper.getInheritedDeclaredMethods(clazz).stream().
                 filter(method -> method.isAnnotationPresent(DolphinAction.class)).
                 filter(method -> checkMethodForMissingParamAnnotation(method)).
