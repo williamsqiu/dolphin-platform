@@ -17,6 +17,8 @@ package com.canoo.platform.remoting.spi.converter;
 
 import org.apiguardian.api.API;
 
+import java.util.List;
+
 import static org.apiguardian.api.API.Status.MAINTAINED;
 
 /**
@@ -45,6 +47,12 @@ public interface ConverterFactory {
      * @return true if this factory supports to convert the custom data type
      */
     boolean supportsType(Class<?> cls);
+
+    /**
+     * This method will be called to get all supported types for conversion
+     * @return List of supported converter class types
+     */
+    List<Class> getSupportedTypes();
 
     /**
      * Returns a unique identifier.

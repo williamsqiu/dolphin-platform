@@ -21,6 +21,7 @@ import org.apiguardian.api.API;
 import static org.apiguardian.api.API.Status.MAINTAINED;
 
 @API(since = "0.x", status = MAINTAINED)
+@FunctionalInterface
 public interface RemotingExceptionHandler {
 
     void handle(DolphinRemotingException e);

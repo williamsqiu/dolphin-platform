@@ -11,7 +11,7 @@ import static org.apiguardian.api.API.Status.EXPERIMENTAL;
 public interface MessageEventContext<T extends Serializable> extends Serializable {
     
     Topic<T> getTopic();
-    
+
     Map<String, Serializable> getMetadata();
     
     long getTimestamp();

@@ -54,4 +54,5 @@ public interface ClientContext extends ControllerFactory {
     CompletableFuture<Void> connect();
 
     String getClientId();
+
 }

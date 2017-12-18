@@ -21,6 +21,8 @@ import com.canoo.platform.remoting.server.DolphinAction;
 import com.canoo.platform.remoting.server.DolphinController;
 import org.apiguardian.api.API;
 
+import java.util.Map;
+
 import static org.apiguardian.api.API.Status.MAINTAINED;
 
 /**
@@ -46,6 +48,8 @@ public interface ControllerUnderTest<T> {
      * @param params
      */
     void invoke(String actionName, Param... params);
+
+    void invoke(String actionName, Map<String, Object> params);
 
     CommunicationMonitor createMonitor();
 

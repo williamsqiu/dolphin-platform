@@ -22,7 +22,7 @@ public interface MessageEvent<T extends Serializable> extends Serializable {
      * @return the data
      */
     T getData();
-    
+
     /**
      * Returns the context of the message
      * 

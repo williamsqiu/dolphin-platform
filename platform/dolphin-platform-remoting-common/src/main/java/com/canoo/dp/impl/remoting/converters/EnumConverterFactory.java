@@ -21,8 +21,7 @@ import org.apiguardian.api.API;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import static org.apiguardian.api.API.Status.INTERNAL;
 
@@ -36,6 +35,11 @@ public class EnumConverterFactory extends AbstractConverterFactory {
     @Override
     public boolean supportsType(Class<?> cls) {
         return Enum.class.isAssignableFrom(cls);
+    }
+
+    @Override
+    public List<Class> getSupportedTypes() {
+        return Collections.singletonList(Enum.class);
     }
 
     @Override

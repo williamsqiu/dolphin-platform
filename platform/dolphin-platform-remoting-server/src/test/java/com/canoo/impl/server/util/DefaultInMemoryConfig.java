@@ -20,11 +20,11 @@ import com.canoo.dp.impl.client.legacy.DefaultModelSynchronizer;
 import com.canoo.dp.impl.client.legacy.ModelSynchronizer;
 import com.canoo.dp.impl.client.legacy.communication.AbstractClientConnector;
 import com.canoo.dp.impl.client.legacy.communication.CommandBatcher;
-import com.canoo.dp.impl.remoting.legacy.util.Provider;
 import com.canoo.dp.impl.server.legacy.ServerConnector;
 import com.canoo.dp.impl.server.legacy.ServerModelStore;
 
 import java.util.concurrent.Executor;
+import java.util.function.Supplier;
 
 /**
  * Base class for running a client and server dolphin inside the same VM.
@@ -32,7 +32,7 @@ import java.util.concurrent.Executor;
  * Subclasses JavaFxInMemoryConfig and SwingInMemoryConfig additionally set the threading model
  * as appropriate for the UI (JavaFX or Swing, respectively.)
  */
-public class DefaultInMemoryConfig implements Provider<AbstractClientConnector> {
+public class DefaultInMemoryConfig implements Supplier<AbstractClientConnector> {
 
     private final ClientModelStore clientModelStore;
 

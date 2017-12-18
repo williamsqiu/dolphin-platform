@@ -8,6 +8,7 @@ import java.net.URI;
 import static org.apiguardian.api.API.Status.EXPERIMENTAL;
 
 @API(since = "0.x", status = EXPERIMENTAL)
+@FunctionalInterface
 public interface ClientContextFactory {
 
     ClientContext create(final ClientConfiguration clientConfiguration, final URI endpoint);

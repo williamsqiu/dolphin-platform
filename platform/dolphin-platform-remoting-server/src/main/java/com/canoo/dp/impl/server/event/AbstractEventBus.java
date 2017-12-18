@@ -19,14 +19,13 @@ import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.server.client.ClientSessionLifecycleHandler;
 import com.canoo.dp.impl.server.context.DolphinContext;
 import com.canoo.dp.impl.server.context.DolphinContextProvider;
-import com.canoo.platform.core.functional.Callback;
 import com.canoo.platform.core.functional.Subscription;
 import com.canoo.platform.remoting.server.event.ClientSessionEventFilter;
 import com.canoo.platform.remoting.server.event.MessageEventContext;
-import com.canoo.platform.remoting.server.event.RemotingEventBus;
-import com.canoo.platform.server.client.ClientSession;
 import com.canoo.platform.remoting.server.event.MessageListener;
+import com.canoo.platform.remoting.server.event.RemotingEventBus;
 import com.canoo.platform.remoting.server.event.Topic;
+import com.canoo.platform.server.client.ClientSession;
 import org.apiguardian.api.API;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,12 +60,7 @@ public abstract class AbstractEventBus implements RemotingEventBus {
 
     public void init(final DolphinContextProvider contextProvider, final ClientSessionLifecycleHandler lifecycleHandler) {
         this.contextProvider = Assert.requireNonNull(contextProvider, "contextProvider");
-        Assert.requireNonNull(lifecycleHandler, "lifecycleHandler").addSessionDestroyedListener(new Callback<ClientSession>() {
-            @Override
-            public void call(final ClientSession dolphinSession) {
-                onSessionEnds(dolphinSession.getId());
-            }
-        });
+        Assert.requireNonNull(lifecycleHandler, "lifecycleHandler").addSessionDestroyedListener((s) -> onSessionEnds(s.getId()));
         initialized.set(true);
     }
 

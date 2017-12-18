@@ -35,7 +35,6 @@ import com.canoo.dp.impl.remoting.PresentationModelBuilderFactory;
 import com.canoo.dp.impl.remoting.collections.ListMapperImpl;
 import com.canoo.dp.impl.remoting.legacy.communication.Command;
 import com.canoo.dp.impl.remoting.legacy.util.DirectExecutor;
-import com.canoo.dp.impl.remoting.legacy.util.Provider;
 import com.canoo.dp.impl.server.legacy.ServerConnector;
 import com.canoo.dp.impl.server.legacy.ServerModelStore;
 import com.canoo.platform.remoting.BeanManager;
@@ -80,12 +79,7 @@ public abstract class AbstractDolphinBasedTest {
     }
 
     protected ClientModelStore createClientModelStore(final AbstractClientConnector connector) {
-        ModelSynchronizer defaultModelSynchronizer = new DefaultModelSynchronizer(new Provider<AbstractClientConnector>() {
-            @Override
-            public AbstractClientConnector get() {
-                return connector;
-            }
-        });
+        ModelSynchronizer defaultModelSynchronizer = new DefaultModelSynchronizer(() -> connector);
         ClientModelStore clientModelStore = new ClientModelStore(defaultModelSynchronizer);
 
         return clientModelStore;

@@ -22,6 +22,8 @@ import com.canoo.dp.impl.remoting.converters.AbstractStringConverter;
 import org.apiguardian.api.API;
 
 import java.time.Period;
+import java.util.Collections;
+import java.util.List;
 
 import static com.canoo.dolphin.converters.ValueFieldTypes.PERIODE_FIELD_TYPE;
 import static org.apiguardian.api.API.Status.INTERNAL;
@@ -34,6 +36,11 @@ public class PeriodConverterFactory extends AbstractConverterFactory {
     @Override
     public boolean supportsType(Class<?> cls) {
         return Period.class.isAssignableFrom(cls);
+    }
+
+    @Override
+    public List<Class> getSupportedTypes() {
+        return Collections.singletonList(Period.class);
     }
 
     @Override

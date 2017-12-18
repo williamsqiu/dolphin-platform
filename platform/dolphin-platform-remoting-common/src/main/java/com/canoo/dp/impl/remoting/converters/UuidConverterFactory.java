@@ -24,7 +24,7 @@ import com.canoo.platform.remoting.spi.converter.Converter;
 import com.canoo.platform.remoting.spi.converter.ValueConverterException;
 import org.apiguardian.api.API;
 
-import java.util.UUID;
+import java.util.*;
 
 import static org.apiguardian.api.API.Status.INTERNAL;
 
@@ -55,6 +55,11 @@ public class UuidConverterFactory extends AbstractConverterFactory {
     @Override
     public boolean supportsType(Class<?> cls) {
         return UUID.class.equals(cls);
+    }
+
+    @Override
+    public List<Class> getSupportedTypes() {
+        return Collections.singletonList(UUID.class);
     }
 
     @Override

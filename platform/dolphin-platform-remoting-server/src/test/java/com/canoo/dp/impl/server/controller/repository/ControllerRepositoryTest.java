@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.dp.impl.server.controller;
+package com.canoo.dp.impl.server.controller.repository;
 
+import com.canoo.dp.impl.server.controller.ControllerRepository;
 import com.canoo.dp.impl.server.scanner.DefaultClasspathScanner;
 import org.testng.annotations.Test;
 
@@ -25,7 +26,7 @@ public class ControllerRepositoryTest {
 
     @Test
     public void testExistingControllers() throws Exception{
-        ControllerRepository controllerRepository = new ControllerRepository(new DefaultClasspathScanner());
+        ControllerRepository controllerRepository = new ControllerRepository(new DefaultClasspathScanner(ControllerRepositoryTest.class.getPackage().getName()));
         Class<?> controllerClass = controllerRepository.getControllerClassForName(TestController.class.getName());
         assertNotNull(controllerClass);
         assertEquals(controllerClass, TestController.class);
@@ -33,8 +34,8 @@ public class ControllerRepositoryTest {
 
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testWrongControllersName() throws Exception{
-        ControllerRepository controllerRepository = new ControllerRepository(new DefaultClasspathScanner());
-        Class<?> controllerClass = controllerRepository.getControllerClassForName("WrongControllerName");
+        ControllerRepository controllerRepository = new ControllerRepository(new DefaultClasspathScanner(ControllerRepositoryTest.class.getPackage().getName()));
+        controllerRepository.getControllerClassForName("WrongControllerName");
     }
 
 }

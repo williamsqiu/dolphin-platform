@@ -20,21 +20,19 @@ import com.canoo.dp.impl.client.legacy.communication.AbstractClientConnector;
 import com.canoo.dp.impl.platform.client.session.StrictClientSessionResponseHandler;
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.remoting.codec.OptimizedJsonCodec;
-import com.canoo.dp.impl.remoting.legacy.util.Function;
 import com.canoo.platform.client.ClientConfiguration;
 import com.canoo.platform.client.PlatformClient;
+import com.canoo.platform.client.session.ClientSessionStore;
 import com.canoo.platform.core.http.HttpClient;
 import com.canoo.platform.core.http.HttpURLConnectionHandler;
-import com.canoo.platform.client.session.ClientSessionStore;
-import com.canoo.platform.remoting.DolphinRemotingException;
 import com.canoo.platform.remoting.client.ClientContext;
 import com.canoo.platform.remoting.client.ClientContextFactory;
 import com.canoo.platform.remoting.client.ClientInitializationException;
-import com.canoo.platform.remoting.client.RemotingExceptionHandler;
 import org.apiguardian.api.API;
 
 import java.net.URI;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Function;
 
 import static org.apiguardian.api.API.Status.INTERNAL;
 
@@ -62,20 +60,10 @@ public class ClientContextFactoryImpl implements ClientContextFactory {
         final HttpClient httpClient = PlatformClient.getService(HttpClient.class);
         final HttpURLConnectionHandler clientSessionCheckResponseHandler = new StrictClientSessionResponseHandler(endpoint);
         httpClient.addResponseHandler(clientSessionCheckResponseHandler);
-
-        final Function<ClientModelStore, AbstractClientConnector> connectionProvider = new Function<ClientModelStore, AbstractClientConnector>() {
-            @Override
-            public AbstractClientConnector call(ClientModelStore clientModelStore) {
-                return new DolphinPlatformHttpClientConnector(endpoint, clientConfiguration, clientModelStore, OptimizedJsonCodec.getInstance(), new RemotingExceptionHandler() {
-                    @Override
-                    public void handle(DolphinRemotingException e) {
-//                        for(RemotingExceptionHandler handler : clientConfiguration.getRemotingExceptionHandlers()) {
-//                            handler.handle(e);
-//                        }
-                    }
-                }, httpClient);
-            }
+        final Function<ClientModelStore, AbstractClientConnector> connectionProvider = s -> {
+            return new DolphinPlatformHttpClientConnector(endpoint, clientConfiguration, s, OptimizedJsonCodec.getInstance(), e -> {}, httpClient);
         };
+
 
         return new ClientContextImpl(clientConfiguration, endpoint, connectionProvider, PlatformClient.getService(ClientSessionStore.class));
     }

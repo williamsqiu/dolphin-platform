@@ -16,6 +16,7 @@
 package com.canoo.dp.impl.server.controller;
 
 import com.canoo.platform.remoting.server.DolphinAction;
+import com.canoo.platform.remoting.server.DolphinController;
 import com.canoo.platform.remoting.server.DolphinModel;
 import com.canoo.platform.remoting.server.Param;
 import org.testng.annotations.BeforeTest;
@@ -39,6 +40,10 @@ public class ControllerValidatorTest {
         controllerValidator.validate(ValidController.class);
     }
 
+    @Test(expectedExceptions = ControllerValidationException.class)
+    public void testControllerWithoutDolphinControllerAnnotation() throws ControllerValidationException{
+        controllerValidator.validate(ControllerWithoutDolphinControllerAnnotation.class);
+    }
     @Test(expectedExceptions = ControllerValidationException.class)
     public void testControllerCannotBeAnInterface() throws ControllerValidationException{
         controllerValidator.validate(ControllerAsInterface.class);
@@ -86,6 +91,7 @@ public class ControllerValidatorTest {
 
 }
 
+@DolphinController
 class ValidController {
 
     @DolphinModel
@@ -112,10 +118,17 @@ class ValidController {
     }
 }
 
-interface ControllerAsInterface{}
+class ControllerWithoutDolphinControllerAnnotation{
 
+}
+
+@DolphinController
+interface ControllerAsInterface{}
+@DolphinController
 abstract class ControllerAsAbstract{}
+@DolphinController
 final class ControllerAsFinal{}
+@DolphinController
 class ControllerPostConstructWithParam{
 
     @DolphinModel
@@ -125,6 +138,7 @@ class ControllerPostConstructWithParam{
     public void postConstruct(String param) {
     }
 }
+@DolphinController
 class ControllerWithMoreThanOnePostConstruct{
 
     @DolphinModel
@@ -137,6 +151,7 @@ class ControllerWithMoreThanOnePostConstruct{
     public void postConstruct2() {
     }
 }
+@DolphinController
 class ControllerPreDestroyWithParam{
 
     @DolphinModel
@@ -146,6 +161,7 @@ class ControllerPreDestroyWithParam{
     public void preDestroy(String param) {
     }
 }
+@DolphinController
 class ControllerWithMoreThanOnePreDestroy{
 
     @DolphinModel
@@ -158,6 +174,7 @@ class ControllerWithMoreThanOnePreDestroy{
     public void preDestroy2() {
     }
 }
+@DolphinController
 class ControllerWithNonVoidDolphinAction{
 
     @DolphinModel
@@ -168,6 +185,7 @@ class ControllerWithNonVoidDolphinAction{
         return "";
     }
 }
+@DolphinController
 class ControllerWithDolphinActionParam{
 
     @DolphinModel
@@ -177,8 +195,9 @@ class ControllerWithDolphinActionParam{
     public void dolphinAction(String test) {
     }
 }
-
+@DolphinController
 class ControllerWithoutDolphinModel{}
+@DolphinController
 class ControllerWithMoreThanOneDolphinModel{
     @DolphinModel
     private TestBean testBean1;

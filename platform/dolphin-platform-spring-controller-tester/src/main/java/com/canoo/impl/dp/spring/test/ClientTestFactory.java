@@ -23,6 +23,8 @@ import com.canoo.platform.spring.test.ControllerTestException;
 import com.canoo.platform.spring.test.ControllerUnderTest;
 import org.apiguardian.api.API;
 
+import java.util.Map;
+
 import static org.apiguardian.api.API.Status.INTERNAL;
 
 @API(since = "0.x", status = INTERNAL)
@@ -41,6 +43,15 @@ public class ClientTestFactory {
 
                 @Override
                 public void invoke(String actionName, Param... params) {
+                    try {
+                        proxy.invoke(actionName, params).get();
+                    } catch (Exception e) {
+                        throw new ControllerTestException("Error in action invocation", e);
+                    }
+                }
+
+                @Override
+                public void invoke(String actionName, Map<String, Object> params) {
                     try {
                         proxy.invoke(actionName, params).get();
                     } catch (Exception e) {

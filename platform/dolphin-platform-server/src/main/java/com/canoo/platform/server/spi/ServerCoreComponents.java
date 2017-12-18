@@ -56,4 +56,5 @@ public interface ServerCoreComponents {
      * @see #provideInstance(Class, Object)
      */
     <T> T getInstance(Class<T> cls);
+
 }
