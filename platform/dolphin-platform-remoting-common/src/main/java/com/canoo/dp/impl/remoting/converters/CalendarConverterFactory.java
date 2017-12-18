@@ -24,8 +24,7 @@ import org.slf4j.LoggerFactory;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.TimeZone;
+import java.util.*;
 
 import static org.apiguardian.api.API.Status.INTERNAL;
 
@@ -39,6 +38,11 @@ public class CalendarConverterFactory extends AbstractConverterFactory {
     @Override
     public boolean supportsType(Class<?> cls) {
         return Calendar.class.isAssignableFrom(cls);
+    }
+
+    @Override
+    public List<Class> getSupportedTypes() {
+        return Collections.singletonList(Calendar.class);
     }
 
     @Override

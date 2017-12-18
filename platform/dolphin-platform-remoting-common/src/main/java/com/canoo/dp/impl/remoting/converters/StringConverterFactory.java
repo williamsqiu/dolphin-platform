@@ -18,6 +18,9 @@ package com.canoo.dp.impl.remoting.converters;
 import com.canoo.platform.remoting.spi.converter.Converter;
 import org.apiguardian.api.API;
 
+import java.util.Collections;
+import java.util.List;
+
 import static org.apiguardian.api.API.Status.INTERNAL;
 
 @API(since = "0.x", status = INTERNAL)
@@ -40,6 +43,11 @@ public class StringConverterFactory extends AbstractConverterFactory {
     @Override
     public boolean supportsType(Class<?> cls) {
         return String.class.equals(cls);
+    }
+
+    @Override
+    public List<Class> getSupportedTypes() {
+        return Collections.singletonList(String.class);
     }
 
     @Override

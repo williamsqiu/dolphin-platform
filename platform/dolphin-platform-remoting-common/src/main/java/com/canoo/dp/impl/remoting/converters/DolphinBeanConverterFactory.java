@@ -16,11 +16,15 @@
 package com.canoo.dp.impl.remoting.converters;
 
 import com.canoo.dp.impl.remoting.DolphinUtils;
+import com.canoo.platform.remoting.DolphinBean;
 import com.canoo.platform.remoting.spi.converter.Converter;
 import com.canoo.platform.remoting.spi.converter.ConverterFactory;
 import com.canoo.platform.remoting.spi.converter.DolphinBeanRepo;
 import com.canoo.platform.remoting.spi.converter.ValueConverterException;
 import org.apiguardian.api.API;
+
+import java.util.Collections;
+import java.util.List;
 
 import static org.apiguardian.api.API.Status.INTERNAL;
 
@@ -39,6 +43,11 @@ public class DolphinBeanConverterFactory implements ConverterFactory {
     @Override
     public boolean supportsType(Class<?> cls) {
         return DolphinUtils.isDolphinBean(cls);
+    }
+
+    @Override
+    public List<Class> getSupportedTypes() {
+        return Collections.singletonList(DolphinBean.class);
     }
 
     @Override

@@ -15,6 +15,7 @@
  */
 package com.canoo.dp.impl.remoting;
 
+import com.canoo.platform.core.DolphinRuntimeException;
 import com.canoo.platform.remoting.spi.converter.Converter;
 import com.canoo.platform.remoting.spi.converter.ConverterFactory;
 import com.canoo.dp.impl.platform.core.Assert;
@@ -22,10 +23,7 @@ import org.apiguardian.api.API;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ServiceLoader;
+import java.util.*;
 
 import static org.apiguardian.api.API.Status.INTERNAL;
 
@@ -47,20 +45,43 @@ public class Converters {
         while (iterator.hasNext()) {
             ConverterFactory factory = iterator.next();
             LOG.trace("Found converter factory {} with type identifier {}", factory.getClass(), factory.getTypeIdentifier());
-            factory.init(beanRepository);
-            converterFactories.add(factory);
+            if(!isTypeAlreadyAdded(factory) && !isAnyConversionTypeAlreadyAdded(factory)) {
+                factory.init(beanRepository);
+                converterFactories.add(factory);
+            }else{
+                throw new DolphinRuntimeException("Converter of type(s) "+ Arrays.toString(factory.getSupportedTypes().toArray()) + " already added to the factory.");
+            }
         }
     }
 
-    public int getFieldType(Class<?> clazz) {
+    private boolean isTypeAlreadyAdded(final ConverterFactory converterFactory) {
+        Assert.requireNonNull(converterFactory, "converterFactory");
+        for(ConverterFactory factory : converterFactories){
+            if(factory.getTypeIdentifier() == converterFactory.getTypeIdentifier()){
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    private boolean isAnyConversionTypeAlreadyAdded(final ConverterFactory converterFactory) {
+        Assert.requireNonNull(converterFactory, "converterFactory");
+        for(ConverterFactory factory : converterFactories){
+            return factory.getSupportedTypes().stream().filter(type -> converterFactory.getSupportedTypes().contains(type)).findAny().map(c -> true).orElse(false);
+        }
+        return false;
+    }
+
+    public int getFieldType(final Class<?> clazz) {
         return getFactory(clazz).getTypeIdentifier();
     }
 
-    public Converter getConverter(Class<?> clazz) {
+    public Converter getConverter(final Class<?> clazz) {
         return getFactory(clazz).getConverterForType(clazz);
     }
 
-    private ConverterFactory getFactory(Class<?> clazz) {
+    private ConverterFactory getFactory(final Class<?> clazz) {
         Assert.requireNonNull(clazz, "clazz");
         List<ConverterFactory> foundConverters = new ArrayList<>();
         for (ConverterFactory factory : converterFactories) {
