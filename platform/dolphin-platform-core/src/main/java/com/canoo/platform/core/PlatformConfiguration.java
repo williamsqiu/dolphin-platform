@@ -47,6 +47,14 @@ public interface PlatformConfiguration extends Serializable {
     String getProperty(final String key, final String defaultValue);
 
     /**
+     * Returns the value of the property with the given name.
+     *
+     * @param key name of the property
+     * @return value of the property
+     */
+    String getProperty(final String key);
+
+    /**
      * Returns the value of the property with the given name. If the configuration do not contain such a property the given default value will be returned.
      *
      * @param key name of the property

@@ -159,6 +159,11 @@ public class DefaultClientConfiguration implements ClientConfiguration {
     }
 
     @Override
+    public String getProperty(final String key) {
+        return getObjectProperty(key);
+    }
+
+    @Override
     public boolean getBooleanProperty(final String key, final boolean defaultValue) {
         return getObjectProperty(key, defaultValue);
     }

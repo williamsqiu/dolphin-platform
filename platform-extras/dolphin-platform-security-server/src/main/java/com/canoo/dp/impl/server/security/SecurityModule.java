@@ -12,12 +12,17 @@ import javax.servlet.ServletContext;
 import static org.apiguardian.api.API.Status.INTERNAL;
 
 @API(since = "0.19.0", status = INTERNAL)
-@ModuleDefinition(SecurityModule.MODULE_NAME)
+@ModuleDefinition
 public class SecurityModule extends AbstractBaseModule {
 
     public final static String MODULE_NAME = "SecurityModule";
 
     private final static String MODULE_ACTIVE_PROPERTY= "security.active";
+
+    @Override
+    public String getName() {
+        return MODULE_NAME;
+    }
 
     @Override
     public void initialize(final ServerCoreComponents coreComponents) throws ModuleInitializationException {

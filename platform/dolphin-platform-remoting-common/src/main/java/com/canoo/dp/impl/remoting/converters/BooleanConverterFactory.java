@@ -18,6 +18,9 @@ package com.canoo.dp.impl.remoting.converters;
 import com.canoo.platform.remoting.spi.converter.Converter;
 import org.apiguardian.api.API;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static org.apiguardian.api.API.Status.INTERNAL;
 
 @API(since = "0.x", status = INTERNAL)
@@ -41,6 +44,11 @@ public class BooleanConverterFactory extends AbstractConverterFactory {
     @Override
     public boolean supportsType(Class<?> cls) {
         return boolean.class.equals(cls) || Boolean.class.equals(cls);
+    }
+
+    @Override
+    public List<Class> getSupportedTypes() {
+        return Arrays.asList(boolean.class, Boolean.class);
     }
 
     @Override

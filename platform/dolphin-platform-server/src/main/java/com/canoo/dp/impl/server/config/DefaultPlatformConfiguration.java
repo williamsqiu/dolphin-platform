@@ -137,6 +137,10 @@ public final class DefaultPlatformConfiguration implements PlatformConfiguration
         return internalProperties.getProperty(key, defaultValue);
     }
 
+    public String getProperty(final String key) {
+        return internalProperties.getProperty(key);
+    }
+
     public Set<String> getPropertyKeys() {
         final Set<String> ret = new HashSet<>();
         for (final Object key : internalProperties.keySet()) {

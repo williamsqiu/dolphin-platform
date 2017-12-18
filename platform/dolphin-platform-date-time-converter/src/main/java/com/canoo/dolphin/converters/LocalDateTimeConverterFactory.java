@@ -26,9 +26,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.TimeZone;
+import java.util.*;
 
 import static com.canoo.dp.impl.platform.core.PlatformConstants.REMOTING_DATE_FORMAT_PATTERN;
 import static com.canoo.dp.impl.platform.core.PlatformConstants.TIMEZONE_UTC;
@@ -43,6 +41,11 @@ public class LocalDateTimeConverterFactory extends AbstractConverterFactory {
     @Override
     public boolean supportsType(Class<?> cls) {
         return LocalDateTime.class.isAssignableFrom(cls);
+    }
+
+    @Override
+    public List<Class> getSupportedTypes() {
+        return Collections.singletonList(LocalDateTime.class);
     }
 
     @Override
