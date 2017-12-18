@@ -142,17 +142,17 @@ public class TestDolphinPlatformHttpClientConnector {
 
         final ClientModelStore clientModelStore = new ClientModelStore(new DefaultModelSynchronizer(() -> null));
 
-        final DolphinPlatformHttpClientConnector connector = new DolphinPlatformHttpClientConnector(getDummyURL().toURI(), PlatformClient.getClientConfiguration(), clientModelStore, new JsonCodec(), new SimpleExceptionHandler(), new HttpClientImpl(new Gson(), PlatformClient.getClientConfiguration()));
+        final DolphinPlatformHttpClientConnector connector = new DolphinPlatformHttpClientConnector(getDummyURL(), PlatformClient.getClientConfiguration(), clientModelStore, new JsonCodec(), new SimpleExceptionHandler(), new HttpClientImpl(new Gson(), PlatformClient.getClientConfiguration()));
 
         final List<Command> commands = new ArrayList<>();
         commands.add(new CreateContextCommand());
         connector.transmit(commands);
     }
 
-    private URL getDummyURL() {
+    private URI getDummyURL(){
         try {
-            return new URL("http://dummyURL");
-        } catch (MalformedURLException e) {
+            return new URI("http://dummyURL");
+        } catch (URISyntaxException e) {
             throw new RuntimeException("Exception occurred while creating URL", e);
         }
     }
