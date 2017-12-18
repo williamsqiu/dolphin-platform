@@ -88,7 +88,7 @@ public class ControllerValidator {
         final ControllerValidationException controllerValidationException = ReflectionHelper.getInheritedDeclaredMethods(clazz).stream().
                 filter(method -> method.isAnnotationPresent(PostConstruct.class)).
                 filter(method -> method.getParameterTypes().length > 0).
-                findAny().map(method ->new ControllerValidationException("PreDestroy method " + ControllerUtils.getActionMethodName(method) + " should not contain parameter in Controller " + ControllerUtils.getControllerName(clazz))).
+                findAny().map(method ->new ControllerValidationException("PostConstruct method " + method.getName() + " should not contain parameter in Controller " + ControllerUtils.getControllerName(clazz))).
                 orElse(null);
         if(controllerValidationException != null){
             throw controllerValidationException;
@@ -100,7 +100,7 @@ public class ControllerValidator {
         final ControllerValidationException controllerValidationException = ReflectionHelper.getInheritedDeclaredMethods(clazz).stream().
                 filter(method -> method.isAnnotationPresent(PreDestroy.class)).
                 filter(method -> method.getParameterTypes().length > 0).
-                findAny().map(method ->new ControllerValidationException("PreDestroy method " + ControllerUtils.getActionMethodName(method) + " should not contain parameter in Controller " + ControllerUtils.getControllerName(clazz))).
+                findAny().map(method ->new ControllerValidationException("PreDestroy method " + method.getName() + " should not contain parameter in Controller " + ControllerUtils.getControllerName(clazz))).
                 orElse(null);
         if(controllerValidationException != null){
             throw controllerValidationException;
