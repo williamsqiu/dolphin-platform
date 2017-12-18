@@ -45,10 +45,6 @@ public interface ValueChangeEvent<T> {
      */
     T getOldValue();
 
-    default Optional<T> oldValue() {
-        return Optional.ofNullable(getOldValue());
-    }
-
     /**
      * New internal value of the {@link Property} that fired this event.
      *
@@ -56,7 +52,4 @@ public interface ValueChangeEvent<T> {
      */
     T getNewValue();
 
-    default Optional<T> newValue() {
-        return Optional.ofNullable(getNewValue());
-    }
 }

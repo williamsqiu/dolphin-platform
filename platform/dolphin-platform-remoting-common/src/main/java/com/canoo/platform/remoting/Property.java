@@ -115,10 +115,6 @@ public interface Property<T> {
      */
     T get();
 
-    default Optional<T> value() {
-        return Optional.ofNullable(get());
-    }
-
     /**
      * Adds a change listener to the property that will be called whenever the value of the property changes
      *

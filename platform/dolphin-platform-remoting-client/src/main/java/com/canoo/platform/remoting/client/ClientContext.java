@@ -19,7 +19,6 @@ import com.canoo.dp.impl.client.ClientContextFactoryImpl;
 import com.canoo.platform.remoting.BeanManager;
 import org.apiguardian.api.API;
 
-import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 import static org.apiguardian.api.API.Status.MAINTAINED;
@@ -56,7 +55,4 @@ public interface ClientContext extends ControllerFactory {
 
     String getClientId();
 
-    default Optional<String> clientId() {
-        return Optional.ofNullable(getClientId());
-    }
 }

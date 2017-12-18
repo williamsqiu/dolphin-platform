@@ -10,7 +10,6 @@ package com.canoo.platform.remoting.server.event;
 import org.apiguardian.api.API;
 
 import java.io.Serializable;
-import java.util.Optional;
 
 import static org.apiguardian.api.API.Status.EXPERIMENTAL;
 
@@ -24,10 +23,6 @@ public interface MessageEvent<T extends Serializable> extends Serializable {
      */
     T getData();
 
-    default Optional<T> data() {
-        return Optional.ofNullable(getData());
-    }
-    
     /**
      * Returns the context of the message
      * 

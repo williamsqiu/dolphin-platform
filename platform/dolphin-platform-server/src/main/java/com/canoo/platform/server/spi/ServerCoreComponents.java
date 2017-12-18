@@ -18,8 +18,6 @@ package com.canoo.platform.server.spi;
 import com.canoo.platform.core.PlatformConfiguration;
 import org.apiguardian.api.API;
 
-import java.util.Optional;
-
 import static org.apiguardian.api.API.Status.EXPERIMENTAL;
 
 /**
@@ -59,7 +57,4 @@ public interface ServerCoreComponents {
      */
     <T> T getInstance(Class<T> cls);
 
-    default <T> Optional<T> instance(final Class<T> cls) {
-        return Optional.ofNullable(getInstance(cls));
-    }
 }

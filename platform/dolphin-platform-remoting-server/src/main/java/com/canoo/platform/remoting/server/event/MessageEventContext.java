@@ -4,7 +4,6 @@ import org.apiguardian.api.API;
 
 import java.io.Serializable;
 import java.util.Map;
-import java.util.Optional;
 
 import static org.apiguardian.api.API.Status.EXPERIMENTAL;
 
@@ -12,10 +11,6 @@ import static org.apiguardian.api.API.Status.EXPERIMENTAL;
 public interface MessageEventContext<T extends Serializable> extends Serializable {
     
     Topic<T> getTopic();
-
-    default Optional<Serializable> metadata(final String key) {
-        return Optional.ofNullable(getMetadata().get(key));
-    }
 
     Map<String, Serializable> getMetadata();
     
