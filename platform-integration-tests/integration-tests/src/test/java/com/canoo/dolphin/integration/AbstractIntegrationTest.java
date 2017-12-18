@@ -23,7 +23,7 @@ import com.canoo.platform.remoting.client.ControllerProxy;
 import com.canoo.platform.remoting.client.Param;
 import org.testng.annotations.DataProvider;
 
-import java.net.URL;
+import java.net.URI;
 import java.time.Duration;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -76,7 +76,7 @@ public class AbstractIntegrationTest {
         PlatformClient.getClientConfiguration().getCookieStore().removeAll();
         try {
             waitUntilServerIsUp(endpoint, bootTimeoutInMinutes, TimeUnit.MINUTES);
-            ClientContext clientContext = PlatformClient.getService(ClientContextFactory.class).create(PlatformClient.getClientConfiguration(), new URL(endpoint + "/dolphin"));
+            ClientContext clientContext = PlatformClient.getService(ClientContextFactory.class).create(PlatformClient.getClientConfiguration(), new URI(endpoint + "/dolphin"));
             long timeOutTime = System.currentTimeMillis() + Duration.ofMinutes(timeoutInMinutes).toMillis();
             while(System.currentTimeMillis() < timeOutTime && clientContext.getClientId() ==  null){
                 try{
