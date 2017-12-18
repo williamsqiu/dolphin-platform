@@ -8,12 +8,12 @@ import com.canoo.dp.impl.remoting.legacy.util.Function;
 import com.canoo.platform.client.ClientConfiguration;
 import com.canoo.platform.client.session.ClientSessionStore;
 
-import java.net.URL;
+import java.net.URI;
 import java.util.concurrent.TimeUnit;
 
 public class TestClientContextImpl extends ClientContextImpl implements TestClientContext {
 
-    public TestClientContextImpl(final ClientConfiguration clientConfiguration, final URL endpoint, final Function<ClientModelStore, AbstractClientConnector> connectorProvider, final ClientSessionStore clientSessionStore) {
+    public TestClientContextImpl(final ClientConfiguration clientConfiguration, final URI endpoint, final Function<ClientModelStore, AbstractClientConnector> connectorProvider, final ClientSessionStore clientSessionStore) {
         super(clientConfiguration, endpoint, connectorProvider, clientSessionStore);
     }
 
