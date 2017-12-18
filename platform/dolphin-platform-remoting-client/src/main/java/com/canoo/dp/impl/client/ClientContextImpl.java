@@ -43,6 +43,7 @@ import com.canoo.platform.remoting.client.ControllerInitalizationException;
 import com.canoo.platform.remoting.client.ControllerProxy;
 import org.apiguardian.api.API;
 
+import java.net.URI;
 import java.net.URL;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BiFunction;
@@ -56,7 +57,7 @@ public class ClientContextImpl implements ClientContext {
 
     private final Function<ClientModelStore, AbstractClientConnector> connectorProvider;
 
-    private final URL endpoint;
+    private final URI endpoint;
 
     private final ClientSessionStore clientSessionStore;
 
@@ -71,7 +72,7 @@ public class ClientContextImpl implements ClientContext {
 
     private final DolphinCommandHandler dolphinCommandHandler;
 
-    public ClientContextImpl(final ClientConfiguration clientConfiguration, final URL endpoint, final Function<ClientModelStore, AbstractClientConnector> connectorProvider, final ClientSessionStore clientSessionStore) {
+    public ClientContextImpl(final ClientConfiguration clientConfiguration, final URI endpoint, final Function<ClientModelStore, AbstractClientConnector> connectorProvider, final ClientSessionStore clientSessionStore) {
         this.clientConfiguration = Assert.requireNonNull(clientConfiguration, "clientConfiguration");
         this.connectorProvider = Assert.requireNonNull(connectorProvider, "connectorProvider");
         this.clientSessionStore = Assert.requireNonNull(clientSessionStore, "clientSessionStore");

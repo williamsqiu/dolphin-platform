@@ -15,9 +15,9 @@ public class ClientSessionStoreImplTest {
         implement = new ClientSessionStoreImpl();
         URL url = new URL("http://example.com/80");
         clientID = "dolphin";
-        implement.setClientIdentifierForUrl(url, clientID);
+        implement.setClientIdentifierForUrl(url.toURI(), clientID);
         //when
-        final String result = implement.getClientIdentifierForUrl(url);
+        final String result = implement.getClientIdentifierForUrl(url.toURI());
         //then
         Assert.assertEquals(result, clientID);
     }
@@ -29,9 +29,9 @@ public class ClientSessionStoreImplTest {
         //when
         URL url = new URL("http://example.com/80");
         String clientID = "dolphin";
-        implement.setClientIdentifierForUrl(url, clientID);
+        implement.setClientIdentifierForUrl(url.toURI(), clientID);
         //then
-        final String setUrl = implement.getClientIdentifierForUrl(url);
+        final String setUrl = implement.getClientIdentifierForUrl(url.toURI());
         Assert.assertEquals(setUrl, clientID);
     }
 
@@ -45,12 +45,12 @@ public class ClientSessionStoreImplTest {
         clientID = "amzn";
         String clientID1 = "appl";
 
-        implement.setClientIdentifierForUrl(url, clientID);
-        implement.setClientIdentifierForUrl(url1, clientID1);
+        implement.setClientIdentifierForUrl(url.toURI(), clientID);
+        implement.setClientIdentifierForUrl(url1.toURI(), clientID1);
 
         //when
-        final String result = implement.getClientIdentifierForUrl(url);
-        final String result1 = implement.getClientIdentifierForUrl(url1);
+        final String result = implement.getClientIdentifierForUrl(url.toURI());
+        final String result1 = implement.getClientIdentifierForUrl(url1.toURI());
         //then
         Assert.assertEquals(result, clientID);
         Assert.assertEquals(result1, clientID1);
@@ -67,12 +67,12 @@ public class ClientSessionStoreImplTest {
         String clientID = "amzn";
         String clientID1 = "appl";
 
-        implement.setClientIdentifierForUrl(url, clientID);
-        implement.setClientIdentifierForUrl(url1, clientID1);
+        implement.setClientIdentifierForUrl(url.toURI(), clientID);
+        implement.setClientIdentifierForUrl(url1.toURI(), clientID1);
 
         //then
-        final String setUrl = implement.getClientIdentifierForUrl(url);
-        final String setUrl1 = implement.getClientIdentifierForUrl(url1);
+        final String setUrl = implement.getClientIdentifierForUrl(url.toURI());
+        final String setUrl1 = implement.getClientIdentifierForUrl(url1.toURI());
 
         Assert.assertEquals(setUrl, clientID);
         Assert.assertEquals(setUrl1, clientID1);
@@ -104,29 +104,29 @@ public class ClientSessionStoreImplTest {
         String clientID8 = "gthb";
         String clientID9 = "";
 
-        implement.setClientIdentifierForUrl(url, clientID);
-        implement.setClientIdentifierForUrl(url1, clientID1);
-        implement.setClientIdentifierForUrl(url2, clientID2);
-        implement.setClientIdentifierForUrl(url3, clientID3);
-        implement.setClientIdentifierForUrl(url4, clientID4);
-        implement.setClientIdentifierForUrl(url5, clientID5);
-        implement.setClientIdentifierForUrl(url6, clientID6);
-        implement.setClientIdentifierForUrl(url7, clientID7);
-        implement.setClientIdentifierForUrl(url8, clientID8);
-        implement.setClientIdentifierForUrl(url9, clientID9);
+        implement.setClientIdentifierForUrl(url.toURI(), clientID);
+        implement.setClientIdentifierForUrl(url1.toURI(), clientID1);
+        implement.setClientIdentifierForUrl(url2.toURI(), clientID2);
+        implement.setClientIdentifierForUrl(url3.toURI(), clientID3);
+        implement.setClientIdentifierForUrl(url4.toURI(), clientID4);
+        implement.setClientIdentifierForUrl(url5.toURI(), clientID5);
+        implement.setClientIdentifierForUrl(url6.toURI(), clientID6);
+        implement.setClientIdentifierForUrl(url7.toURI(), clientID7);
+        implement.setClientIdentifierForUrl(url8.toURI(), clientID8);
+        implement.setClientIdentifierForUrl(url9.toURI(), clientID9);
 
 
         //when
-        final String result = implement.getClientIdentifierForUrl(url);
-        final String result1 = implement.getClientIdentifierForUrl(url1);
-        final String result2 = implement.getClientIdentifierForUrl(url2);
-        final String result3 = implement.getClientIdentifierForUrl(url3);
-        final String result4 = implement.getClientIdentifierForUrl(url4);
-        final String result5 = implement.getClientIdentifierForUrl(url5);
-        final String result6 = implement.getClientIdentifierForUrl(url6);
-        final String result7 = implement.getClientIdentifierForUrl(url7);
-        final String result8 = implement.getClientIdentifierForUrl(url8);
-        final String result9 = implement.getClientIdentifierForUrl(url9);
+        final String result = implement.getClientIdentifierForUrl(url.toURI());
+        final String result1 = implement.getClientIdentifierForUrl(url1.toURI());
+        final String result2 = implement.getClientIdentifierForUrl(url2.toURI());
+        final String result3 = implement.getClientIdentifierForUrl(url3.toURI());
+        final String result4 = implement.getClientIdentifierForUrl(url4.toURI());
+        final String result5 = implement.getClientIdentifierForUrl(url5.toURI());
+        final String result6 = implement.getClientIdentifierForUrl(url6.toURI());
+        final String result7 = implement.getClientIdentifierForUrl(url7.toURI());
+        final String result8 = implement.getClientIdentifierForUrl(url8.toURI());
+        final String result9 = implement.getClientIdentifierForUrl(url9.toURI());
         //then
         Assert.assertEquals(result, clientID);
         Assert.assertEquals(result1, clientID1);
@@ -167,28 +167,28 @@ public class ClientSessionStoreImplTest {
         String clientID8 = "gthb";
         String clientID9 = "";
 
-        implement.setClientIdentifierForUrl(url, clientID);
-        implement.setClientIdentifierForUrl(url1, clientID1);
-        implement.setClientIdentifierForUrl(url2, clientID2);
-        implement.setClientIdentifierForUrl(url3, clientID3);
-        implement.setClientIdentifierForUrl(url4, clientID4);
-        implement.setClientIdentifierForUrl(url5, clientID5);
-        implement.setClientIdentifierForUrl(url6, clientID6);
-        implement.setClientIdentifierForUrl(url7, clientID7);
-        implement.setClientIdentifierForUrl(url8, clientID8);
-        implement.setClientIdentifierForUrl(url9, clientID9);
+        implement.setClientIdentifierForUrl(url.toURI(), clientID);
+        implement.setClientIdentifierForUrl(url1.toURI(), clientID1);
+        implement.setClientIdentifierForUrl(url2.toURI(), clientID2);
+        implement.setClientIdentifierForUrl(url3.toURI(), clientID3);
+        implement.setClientIdentifierForUrl(url4.toURI(), clientID4);
+        implement.setClientIdentifierForUrl(url5.toURI(), clientID5);
+        implement.setClientIdentifierForUrl(url6.toURI(), clientID6);
+        implement.setClientIdentifierForUrl(url7.toURI(), clientID7);
+        implement.setClientIdentifierForUrl(url8.toURI(), clientID8);
+        implement.setClientIdentifierForUrl(url9.toURI(), clientID9);
 
         //then
-        final String set = implement.getClientIdentifierForUrl(url);
-        final String set1 = implement.getClientIdentifierForUrl(url1);
-        final String set2 = implement.getClientIdentifierForUrl(url2);
-        final String set3 = implement.getClientIdentifierForUrl(url3);
-        final String set4 = implement.getClientIdentifierForUrl(url4);
-        final String set5 = implement.getClientIdentifierForUrl(url5);
-        final String set6 = implement.getClientIdentifierForUrl(url6);
-        final String set7 = implement.getClientIdentifierForUrl(url7);
-        final String set8 = implement.getClientIdentifierForUrl(url8);
-        final String set9 = implement.getClientIdentifierForUrl(url9);
+        final String set = implement.getClientIdentifierForUrl(url.toURI());
+        final String set1 = implement.getClientIdentifierForUrl(url1.toURI());
+        final String set2 = implement.getClientIdentifierForUrl(url2.toURI());
+        final String set3 = implement.getClientIdentifierForUrl(url3.toURI());
+        final String set4 = implement.getClientIdentifierForUrl(url4.toURI());
+        final String set5 = implement.getClientIdentifierForUrl(url5.toURI());
+        final String set6 = implement.getClientIdentifierForUrl(url6.toURI());
+        final String set7 = implement.getClientIdentifierForUrl(url7.toURI());
+        final String set8 = implement.getClientIdentifierForUrl(url8.toURI());
+        final String set9 = implement.getClientIdentifierForUrl(url9.toURI());
 
         Assert.assertEquals(set, clientID);
         Assert.assertEquals(set1, clientID1);
@@ -209,10 +209,10 @@ public class ClientSessionStoreImplTest {
         implement = new ClientSessionStoreImpl();
         //when
         URL url = new URL("http://example.com/80");
-        implement.resetSession(url);
+        implement.resetSession(url.toURI());
 
         //then
-        final String setUrl = implement.getClientIdentifierForUrl(url);
+        final String setUrl = implement.getClientIdentifierForUrl(url.toURI());
         Assert.assertEquals(setUrl, null);
 
     }
@@ -228,17 +228,17 @@ public class ClientSessionStoreImplTest {
         URL url5 = new URL("http://netflix.com/80");
 
 
-        implement.resetSession(url1);
-        implement.resetSession(url2);
-        implement.resetSession(url3);
-        implement.resetSession(url4);
-        implement.resetSession(url5);
+        implement.resetSession(url1.toURI());
+        implement.resetSession(url2.toURI());
+        implement.resetSession(url3.toURI());
+        implement.resetSession(url4.toURI());
+        implement.resetSession(url5.toURI());
 
-        final String reset1 = implement.getClientIdentifierForUrl(url1);
-        final String reset2 = implement.getClientIdentifierForUrl(url2);
-        final String reset3 = implement.getClientIdentifierForUrl(url3);
-        final String reset4 = implement.getClientIdentifierForUrl(url4);
-        final String reset5 = implement.getClientIdentifierForUrl(url5);
+        final String reset1 = implement.getClientIdentifierForUrl(url1.toURI());
+        final String reset2 = implement.getClientIdentifierForUrl(url2.toURI());
+        final String reset3 = implement.getClientIdentifierForUrl(url3.toURI());
+        final String reset4 = implement.getClientIdentifierForUrl(url4.toURI());
+        final String reset5 = implement.getClientIdentifierForUrl(url5.toURI());
 
         Assert.assertEquals(reset1, null);
         Assert.assertEquals(reset2, null);

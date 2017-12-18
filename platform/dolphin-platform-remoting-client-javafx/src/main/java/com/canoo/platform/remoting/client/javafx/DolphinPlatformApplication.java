@@ -89,7 +89,7 @@ public abstract class DolphinPlatformApplication extends Application {
 //    }
 
     private final ClientContext createClientContext() throws Exception {
-        return PlatformClient.getService(ClientContextFactory.class).create(PlatformClient.getClientConfiguration(), getServerEndpoint());
+        return PlatformClient.getService(ClientContextFactory.class).create(PlatformClient.getClientConfiguration(), getServerEndpoint().toURI());
     }
 
     /**

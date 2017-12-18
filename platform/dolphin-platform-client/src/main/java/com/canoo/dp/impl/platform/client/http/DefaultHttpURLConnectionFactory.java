@@ -21,7 +21,7 @@ import org.apiguardian.api.API;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
-import java.net.URL;
+import java.net.URI;
 import java.net.URLConnection;
 
 import static org.apiguardian.api.API.Status.INTERNAL;
@@ -30,9 +30,9 @@ import static org.apiguardian.api.API.Status.INTERNAL;
 public class DefaultHttpURLConnectionFactory implements HttpURLConnectionFactory {
 
     @Override
-    public HttpURLConnection create(final URL url) throws IOException {
+    public HttpURLConnection create(final URI url) throws IOException {
         Assert.requireNonNull(url, "url");
-        final URLConnection connection = url.openConnection();
+        final URLConnection connection = url.toURL().openConnection();
         if(connection instanceof HttpURLConnection) {
             return (HttpURLConnection) connection;
         }

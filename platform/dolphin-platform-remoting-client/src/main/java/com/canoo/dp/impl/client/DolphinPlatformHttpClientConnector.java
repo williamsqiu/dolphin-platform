@@ -31,6 +31,7 @@ import org.apiguardian.api.API;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.net.URI;
 import java.net.URL;
 import java.util.Collections;
 import java.util.List;
@@ -46,7 +47,7 @@ public class DolphinPlatformHttpClientConnector extends AbstractClientConnector 
 
     private static final Logger LOG = LoggerFactory.getLogger(DolphinPlatformHttpClientConnector.class);
 
-    private final URL servletUrl;
+    private final URI servletUrl;
 
     private final Codec codec;
 
@@ -54,7 +55,7 @@ public class DolphinPlatformHttpClientConnector extends AbstractClientConnector 
 
     private final AtomicBoolean disconnecting = new AtomicBoolean(false);
 
-    public DolphinPlatformHttpClientConnector(final URL servletUrl, final ClientConfiguration configuration, final ClientModelStore clientModelStore, final Codec codec, final RemotingExceptionHandler onException, final HttpClient client) {
+    public DolphinPlatformHttpClientConnector(final URI servletUrl, final ClientConfiguration configuration, final ClientModelStore clientModelStore, final Codec codec, final RemotingExceptionHandler onException, final HttpClient client) {
         super(clientModelStore, Assert.requireNonNull(configuration, "configuration").getUiExecutor(), new BlindCommandBatcher(), onException, configuration.getBackgroundExecutor());
         this.servletUrl = Assert.requireNonNull(servletUrl, "servletUrl");
         this.codec = Assert.requireNonNull(codec, "codec");

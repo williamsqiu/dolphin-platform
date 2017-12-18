@@ -28,13 +28,17 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.net.URISyntaxException;
 import java.net.URL;
 
 public class DistributionClient extends Application {
 
     private void connect(final Stage primaryStage, final URL endpoint) {
         final ClientContextFactory clientContextFactory = PlatformClient.getService(ClientContextFactory.class);
-        final ClientContext clientContext = clientContextFactory.create(PlatformClient.getClientConfiguration(), endpoint);
+        try{
+
+
+        final ClientContext clientContext = clientContextFactory.create(PlatformClient.getClientConfiguration(), endpoint.toURI());
         clientContext.connect().handle((v, e) -> {
             if (e != null) {
                 e.printStackTrace();
@@ -53,6 +57,9 @@ public class DistributionClient extends Application {
             });
             return null;
         });
+        }catch(URISyntaxException ex){
+            ex.printStackTrace();
+        }
     }
 
     @Override

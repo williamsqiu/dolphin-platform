@@ -42,9 +42,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -52,12 +50,12 @@ import java.util.List;
 public class TestDolphinPlatformHttpClientConnector {
 
     @Test
-    public void testSimpleCall() throws DolphinRemotingException {
+    public void testSimpleCall() throws DolphinRemotingException, URISyntaxException {
         PlatformClient.init(new HeadlessToolkit());
         PlatformClient.getClientConfiguration().setHttpURLConnectionFactory(new HttpURLConnectionFactory() {
             @Override
-            public HttpURLConnection create(URL url) throws IOException {
-                return new HttpURLConnection(url) {
+            public HttpURLConnection create(URI url) throws IOException {
+                return new HttpURLConnection(url.toURL()) {
                     @Override
                     public void disconnect() {
 
@@ -106,7 +104,7 @@ public class TestDolphinPlatformHttpClientConnector {
                 return null;
             }
         }));
-        final DolphinPlatformHttpClientConnector connector = new DolphinPlatformHttpClientConnector(getDummyURL(), PlatformClient.getClientConfiguration(), clientModelStore, new JsonCodec(), new SimpleExceptionHandler(), PlatformClient.getService(HttpClient.class));
+        final DolphinPlatformHttpClientConnector connector = new DolphinPlatformHttpClientConnector(getDummyURL().toURI(), PlatformClient.getClientConfiguration(), clientModelStore, new JsonCodec(), new SimpleExceptionHandler(), PlatformClient.getService(HttpClient.class));
 
         final CreatePresentationModelCommand command = new CreatePresentationModelCommand();
         command.setPmId("p1");
@@ -119,12 +117,12 @@ public class TestDolphinPlatformHttpClientConnector {
     }
 
     @Test(expectedExceptions = DolphinRemotingException.class)
-    public void testBadResponse() throws DolphinRemotingException {
+    public void testBadResponse() throws DolphinRemotingException, URISyntaxException {
         PlatformClient.init(new HeadlessToolkit());
         PlatformClient.getClientConfiguration().setHttpURLConnectionFactory(new HttpURLConnectionFactory() {
             @Override
-            public HttpURLConnection create(URL url) throws IOException {
-                return new HttpURLConnection(url) {
+            public HttpURLConnection create(URI url) throws IOException {
+                return new HttpURLConnection(url.toURL()) {
                     @Override
                     public void disconnect() {
 
@@ -156,7 +154,7 @@ public class TestDolphinPlatformHttpClientConnector {
             }
         }));
 
-        final DolphinPlatformHttpClientConnector connector = new DolphinPlatformHttpClientConnector(getDummyURL(), PlatformClient.getClientConfiguration(), clientModelStore, new JsonCodec(), new SimpleExceptionHandler(), new HttpClientImpl(new Gson(), PlatformClient.getClientConfiguration()));
+        final DolphinPlatformHttpClientConnector connector = new DolphinPlatformHttpClientConnector(getDummyURL().toURI(), PlatformClient.getClientConfiguration(), clientModelStore, new JsonCodec(), new SimpleExceptionHandler(), new HttpClientImpl(new Gson(), PlatformClient.getClientConfiguration()));
 
         final List<Command> commands = new ArrayList<>();
         commands.add(new CreateContextCommand());
