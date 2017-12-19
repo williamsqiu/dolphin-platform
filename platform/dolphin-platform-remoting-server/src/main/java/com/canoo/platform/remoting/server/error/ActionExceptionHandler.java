@@ -15,7 +15,7 @@ import static org.apiguardian.api.API.Status.EXPERIMENTAL;
  * a remote action call (see {@link com.canoo.platform.remoting.server.DolphinAction}). A method that is
  * annotated with this annotation must be a non static method with no return type
  * (<code>void</code> method) and must it define exactly one parameter of the type
- * {@link CaughtActionException}.
+ * {@link ActionExceptionEvent}.
  *
  * Exception handlers for remoting action calls can be defined in 2 different ways:
  * <ul>
@@ -34,14 +34,14 @@ import static org.apiguardian.api.API.Status.EXPERIMENTAL;
  * <ul>
  *     <li>The handlers that are defined in the controller class (or a super class) that throws the exception will be called first.</li>
  *     <li>All handlers for the controller will be sorted by the
- *     {@link HandlesActionExceptions#priority()} value. The highest value will be called first.</li>
- *     <li>Only handlers of that controller that define the thrown exception type or a super type of that exception by the generic type of the {@link CaughtActionException} parameter will be called.</li>
+ *     {@link ActionExceptionHandler#priority()} value. The highest value will be called first.</li>
+ *     <li>Only handlers of that controller that define the thrown exception type or a super type of that exception by the generic type of the {@link ActionExceptionEvent} parameter will be called.</li>
  *     <li>After the handlers that are defined by the controller all handlers that are defined in
  *     classes that are annotated with {@link com.canoo.platform.server.ServerListener} will
  *     be called.</li>
  *     <li>All handlers in this classes will be sorted by the
- *     {@link HandlesActionExceptions#priority()} value. The highest value will be called first.</li>
- *      <li>Only handlers that define the thrown exception type or a super type of that exception by the generic type of the {@link CaughtActionException} parameter will be called.</li>
+ *     {@link ActionExceptionHandler#priority()} value. The highest value will be called first.</li>
+ *      <li>Only handlers that define the thrown exception type or a super type of that exception by the generic type of the {@link ActionExceptionEvent} parameter will be called.</li>
  * </ul>
  *
  */
@@ -49,7 +49,7 @@ import static org.apiguardian.api.API.Status.EXPERIMENTAL;
 @Retention(RUNTIME)
 @Target(ElementType.METHOD)
 @API(since = "0.x", status = EXPERIMENTAL)
-public @interface HandlesActionExceptions {
+public @interface ActionExceptionHandler {
 
     int priority() default 1;
 }
