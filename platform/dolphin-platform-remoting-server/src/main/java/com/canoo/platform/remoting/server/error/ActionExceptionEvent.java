@@ -8,7 +8,7 @@ import static org.apiguardian.api.API.Status.EXPERIMENTAL;
  * Exception wrapper that is used as parameter for error handler methods that are defined by
  * the {@link ActionExceptionHandler} annotation.
  *
- * By default all exception handler will be called in a defined priority (see {@link ActionExceptionHandler})
+ * By default all exception handler will be called in a defined ordinal (see {@link ActionExceptionHandler})
  * with the same {@link ActionExceptionEvent} instance once an error occurs in a remote action call
  * (see {@link com.canoo.platform.remoting.server.DolphinAction}). By calling the
  * {@link ActionExceptionEvent#abort()} method in an handler all following handlers won't be called and the
