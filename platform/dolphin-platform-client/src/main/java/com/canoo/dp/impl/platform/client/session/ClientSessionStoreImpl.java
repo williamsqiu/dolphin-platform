@@ -2,7 +2,6 @@ package com.canoo.dp.impl.platform.client.session;
 
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.client.session.ClientSessionStore;
-import com.canoo.platform.core.domain.UrlToAppDomainConverter;
 import org.apiguardian.api.API;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.function.Function;
 
 import static org.apiguardian.api.API.Status.INTERNAL;
 
@@ -24,12 +24,12 @@ public class ClientSessionStoreImpl implements ClientSessionStore{
 
     private final Map<String, String> domainToId = new HashMap<>();
 
-    private UrlToAppDomainConverter converter = new SimpleUrlToAppDomainConverter();
+    private Function<URI, String> domainToAppConverter = new SimpleUrlToAppDomainConverter();
 
     @Override
     public String getClientIdentifierForUrl(final URI url) {
         Assert.requireNonNull(url, "url");
-        final String applicationDomain = converter.getApplicationDomain(url);
+        final String applicationDomain = domainToAppConverter.apply(url);
         if(applicationDomain == null) {
             throw new IllegalStateException("Can not define application domain for url " + url);
         }
@@ -47,7 +47,7 @@ public class ClientSessionStoreImpl implements ClientSessionStore{
 
     public void setClientIdentifierForUrl(final URI url, final String clientId) {
         Assert.requireNonNull(url, "url");
-        final String applicationDomain = converter.getApplicationDomain(url);
+        final String applicationDomain = domainToAppConverter.apply(url);
         if(applicationDomain == null) {
             throw new IllegalStateException("Can not define application domain for url " + url);
         }
@@ -80,11 +80,11 @@ public class ClientSessionStoreImpl implements ClientSessionStore{
         setClientIdentifierForUrl(url, null);
     }
 
-    public UrlToAppDomainConverter getConverter() {
-        return converter;
+    public Function<URI, String> getDomainToAppConverter() {
+        return domainToAppConverter;
     }
 
-    public void setConverter(final UrlToAppDomainConverter converter) {
-        this.converter = Assert.requireNonNull(converter, "converter");
+    public void setDomainToAppConverter(final Function<URI, String> domainToAppConverter) {
+        this.domainToAppConverter = Assert.requireNonNull(domainToAppConverter, "domainToAppConverter");
     }
 }

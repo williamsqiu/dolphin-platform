@@ -63,11 +63,4 @@ public interface ControllerProxy<T> extends ControllerFactory {
      * server side the {@link CompletableFuture#get()} call will throw an exception.
      */
     CompletableFuture<Void> destroy();
-
-    /**
-     * Returns the unique ID for the controller.
-     * @return the unique ID for the controller
-     */
-    @Deprecated
-    String getId();
 }

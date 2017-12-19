@@ -90,7 +90,7 @@ public class ControllerProxyImpl<T> implements ControllerProxy<T> {
         final ClientControllerActionCallBean bean = platformBeanRepository.createControllerActionCallBean(controllerId, actionName, params);
 
         CallActionCommand callActionCommand = new CallActionCommand();
-        callActionCommand.setControllerId(getId());
+        callActionCommand.setControllerId(controllerId);
         callActionCommand.setActionName(actionName);
         if(params != null) {
             for (Param param : params) {
@@ -134,7 +134,7 @@ public class ControllerProxyImpl<T> implements ControllerProxy<T> {
         final CompletableFuture<Void> ret = new CompletableFuture<>();
 
         final DestroyControllerCommand destroyControllerCommand = new DestroyControllerCommand();
-        destroyControllerCommand.setControllerId(getId());
+        destroyControllerCommand.setControllerId(controllerId);
 
         clientConnector.send(destroyControllerCommand, new OnFinishedHandler() {
             @Override
@@ -155,7 +155,7 @@ public class ControllerProxyImpl<T> implements ControllerProxy<T> {
     public <C> CompletableFuture<ControllerProxy<C>> createController(String name) {
         Assert.requireNonBlank(name, "name");
 
-        return controllerProxyFactory.<C>create(name, getId()).handle(new BiFunction<ControllerProxy<C>, Throwable, ControllerProxy<C>>() {
+        return controllerProxyFactory.<C>create(name, controllerId).handle(new BiFunction<ControllerProxy<C>, Throwable, ControllerProxy<C>>() {
             @Override
             public ControllerProxy<C> apply(ControllerProxy<C> cControllerProxy, Throwable throwable) {
                 if (throwable != null) {
