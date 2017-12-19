@@ -63,7 +63,6 @@ include 'platform-examples/lazy-loading-sample/lazy-loading-common'
 include 'platform-examples/lazy-loading-sample/lazy-loading-client-javafx'
 include 'platform-examples/lazy-loading-sample/lazy-loading-server-spring'
 
-include 'platform-examples/security-sample/security-common'
 include 'platform-examples/security-sample/security-client-javafx'
 include 'platform-examples/security-sample/security-server-spring'
 
