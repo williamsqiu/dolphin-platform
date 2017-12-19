@@ -16,7 +16,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import java.net.URL;
+import java.net.URI;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
@@ -33,11 +33,11 @@ public class Client extends Application {
 
     @Override
     public void init() throws Exception {
-        final URL productUrl = new URL("http://localhost:8080/dolphin");
+        final URI productUrl = new URI("http://localhost:8080/dolphin");
         productContext = createClientContext(productUrl);
         productContext.connect().get(3_000, TimeUnit.MILLISECONDS);
 
-        final URL userUrl = new URL("http://localhost:8081/dolphin");
+        final URI userUrl = new URI("http://localhost:8081/dolphin");
         userContext = createClientContext(userUrl);
         userContext.connect().get(3_000, TimeUnit.MILLISECONDS);
     }
@@ -81,7 +81,7 @@ public class Client extends Application {
         primaryStage.show();
     }
 
-    private final ClientContext createClientContext(final URL endpoint) throws Exception {
+    private final ClientContext createClientContext(final URI endpoint) throws Exception {
         final ClientConfiguration clientConfiguration = PlatformClient.getClientConfiguration();
         final ClientContextFactory clientContextFactory = PlatformClient.getService(ClientContextFactory.class);
         return clientContextFactory.create(clientConfiguration, endpoint);

@@ -28,12 +28,14 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import java.net.URL;
+import java.net.URI;
 
 public class DistributionClient extends Application {
 
-    private void connect(final Stage primaryStage, final URL endpoint) {
+    private void connect(final Stage primaryStage, final URI endpoint) {
         final ClientContextFactory clientContextFactory = PlatformClient.getService(ClientContextFactory.class);
+
+
         final ClientContext clientContext = clientContextFactory.create(PlatformClient.getClientConfiguration(), endpoint);
         clientContext.connect().handle((v, e) -> {
             if (e != null) {
@@ -60,11 +62,11 @@ public class DistributionClient extends Application {
         FxToolkit.init();
 
         final Button server1Button = new Button("Server instance 1");
-        final URL server1Url = new URL("http://localhost:8082/distribution-app/dolphin");
+        final URI server1Url = new URI("http://localhost:8082/distribution-app/dolphin");
         server1Button.setOnAction(e -> connect(primaryStage, server1Url));
 
         final Button server2Button = new Button("Server instance 2");
-        final URL server2Url = new URL("http://localhost:8083/distribution-app/dolphin");
+        final URI server2Url = new URI("http://localhost:8083/distribution-app/dolphin");
         server2Button.setOnAction(e -> connect(primaryStage, server2Url));
 
         final VBox selectBox = new VBox(server1Button, server2Button);

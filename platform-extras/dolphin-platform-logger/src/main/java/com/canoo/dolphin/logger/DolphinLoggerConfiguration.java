@@ -5,7 +5,7 @@ import com.canoo.dolphin.logger.impl.DolphinLoggerThreadFactory;
 import com.canoo.platform.core.http.HttpURLConnectionFactory;
 import org.slf4j.event.Level;
 
-import java.net.URL;
+import java.net.URI;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.concurrent.Executor;
@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
 
 public class DolphinLoggerConfiguration {
 
-    private URL remoteUrl;
+    private URI remoteUrl;
 
     private int parallelRequests = Runtime.getRuntime().availableProcessors() / 2 - 1;
 
@@ -38,11 +38,11 @@ public class DolphinLoggerConfiguration {
 
     private HttpURLConnectionFactory connectionFactory = new DefaultHttpURLConnectionFactory();
 
-    public URL getRemoteUrl() {
+    public URI getRemoteUrl() {
         return remoteUrl;
     }
 
-    public void setRemoteUrl(URL remoteUrl) {
+    public void setRemoteUrl(URI remoteUrl) {
         this.remoteUrl = remoteUrl;
     }
 

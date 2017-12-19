@@ -17,7 +17,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
-import java.net.URL;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
@@ -51,10 +52,10 @@ public class KeycloakSecurity implements Security {
         this.executor = Assert.requireNonNull(executor, "executor");
     }
 
-    private void receiveTokenFromKeycloak(final String content) throws IOException {
+    private void receiveTokenFromKeycloak(final String content) throws IOException, URISyntaxException {
         LOG.debug("receiving new token from keycloak server");
         final byte[] rawContent = content.getBytes(PlatformConstants.CHARSET);
-        final URL url = new URL(authEndpoint + "/auth/realms/" + realmName + "/protocol/openid-connect/token");
+        final URI url = new URI(authEndpoint + "/auth/realms/" + realmName + "/protocol/openid-connect/token");
         final HttpURLConnection connection = new DefaultHttpURLConnectionFactory().create(url);
         connection.setRequestMethod(RequestMethod.POST.getRawName());
         connection.setRequestProperty("charset", "UTF-8");
@@ -88,7 +89,7 @@ public class KeycloakSecurity implements Security {
         return (Future<Void>) executor.submit(() -> {
             try {
                 receiveTokenFromKeycloak("client_id=" + appName + "&username=" + user + "&password=" + password + "&grant_type=password");
-            } catch (IOException e) {
+            } catch (IOException | URISyntaxException e) {
                 throw new DolphinRuntimeException("Error in security", e);
             }
         });
@@ -98,7 +99,7 @@ public class KeycloakSecurity implements Security {
         return (Future<Void>) executor.submit(() -> {
                 try {
                     receiveTokenFromKeycloak("grant_type=refresh_token&refresh_token=" + connectResult.getRefresh_token() + "&client_id=" + appName);
-                } catch (IOException e) {
+                } catch (IOException | URISyntaxException e) {
                     throw new DolphinRuntimeException("Error in security", e);
                 }
             });

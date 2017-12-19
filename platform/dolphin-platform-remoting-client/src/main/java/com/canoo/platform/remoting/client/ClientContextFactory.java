@@ -3,7 +3,7 @@ package com.canoo.platform.remoting.client;
 import com.canoo.platform.client.ClientConfiguration;
 import org.apiguardian.api.API;
 
-import java.net.URL;
+import java.net.URI;
 
 import static org.apiguardian.api.API.Status.EXPERIMENTAL;
 
@@ -11,5 +11,5 @@ import static org.apiguardian.api.API.Status.EXPERIMENTAL;
 @FunctionalInterface
 public interface ClientContextFactory {
 
-    ClientContext create(final ClientConfiguration clientConfiguration, final URL endpoint);
+    ClientContext create(final ClientConfiguration clientConfiguration, final URI endpoint);
 }

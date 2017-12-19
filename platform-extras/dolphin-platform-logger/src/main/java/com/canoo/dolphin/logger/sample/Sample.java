@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.MarkerFactory;
 import org.slf4j.event.Level;
 
-import java.net.URL;
+import java.net.URI;
 
 public class Sample {
 
@@ -20,7 +20,7 @@ public class Sample {
 
 
         DolphinLoggerConfiguration configuration = new DolphinLoggerConfiguration();
-        configuration.setRemoteUrl(new URL("http://localhost:12201/gelf"));
+        configuration.setRemoteUrl(new URI("http://localhost:12201/gelf"));
         configuration.setMaxMessagesPerRequest(1);
         configuration.setRemotingQueueCheckSleepTime(1_000);
         configuration.setGlobalLevel(Level.TRACE);

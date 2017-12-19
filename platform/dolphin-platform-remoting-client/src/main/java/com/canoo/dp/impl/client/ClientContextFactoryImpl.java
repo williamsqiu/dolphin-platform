@@ -30,7 +30,7 @@ import com.canoo.platform.remoting.client.ClientContextFactory;
 import com.canoo.platform.remoting.client.ClientInitializationException;
 import org.apiguardian.api.API;
 
-import java.net.URL;
+import java.net.URI;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 
@@ -38,7 +38,7 @@ import static org.apiguardian.api.API.Status.INTERNAL;
 
 /**
  * Factory to create a {@link ClientContext}. Normally you will create a {@link ClientContext} at the bootstrap of your
- * client by using the {@link #create(ClientConfiguration, URL)} method and use this context as a singleton in your client.
+ * client by using the {@link #create(ClientConfiguration, URI)} method and use this context as a singleton in your client.
  * The {@link ClientContext} defines the connection between the client and the Dolphin Platform server endpoint.
  */
 @API(since = "0.x", status = INTERNAL)
@@ -55,7 +55,7 @@ public class ClientContextFactoryImpl implements ClientContextFactory {
      * @param clientConfiguration the configuration
      * @return the future
      */
-    public ClientContext create(final ClientConfiguration clientConfiguration, final URL endpoint) {
+    public ClientContext create(final ClientConfiguration clientConfiguration, final URI endpoint) {
         Assert.requireNonNull(clientConfiguration, "clientConfiguration");
         final HttpClient httpClient = PlatformClient.getService(HttpClient.class);
         final HttpURLConnectionHandler clientSessionCheckResponseHandler = new StrictClientSessionResponseHandler(endpoint);

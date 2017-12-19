@@ -33,7 +33,7 @@ import org.apiguardian.api.API;
 import org.springframework.web.context.WebApplicationContext;
 
 import javax.servlet.http.HttpSession;
-import java.net.URL;
+import java.net.URI;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -58,7 +58,7 @@ public class TestConfiguration {
 
         final ClientSessionStoreImpl clientSessionStore = new ClientSessionStoreImpl();
         final Function<ClientModelStore, AbstractClientConnector> connectorProvider = s -> new DolphinTestClientConnector(s, clientExecutor, c -> sendToServer(c));
-        clientContext = new TestClientContextImpl(PlatformClient.getClientConfiguration(), new URL("http://dummy"), connectorProvider, clientSessionStore);
+        clientContext = new TestClientContextImpl(PlatformClient.getClientConfiguration(), new URI("http://dummy"), connectorProvider, clientSessionStore);
 
         //Server
         final ControllerRepository controllerRepository = new ControllerRepository(new DefaultClasspathScanner());

@@ -40,9 +40,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -50,12 +48,12 @@ import java.util.List;
 public class TestDolphinPlatformHttpClientConnector {
 
     @Test
-    public void testSimpleCall() throws DolphinRemotingException {
+    public void testSimpleCall() throws DolphinRemotingException, URISyntaxException {
         PlatformClient.init(new HeadlessToolkit());
         PlatformClient.getClientConfiguration().setHttpURLConnectionFactory(new HttpURLConnectionFactory() {
             @Override
-            public HttpURLConnection create(URL url) throws IOException {
-                return new HttpURLConnection(url) {
+            public HttpURLConnection create(URI url) throws IOException {
+                return new HttpURLConnection(url.toURL()) {
                     @Override
                     public void disconnect() {
 
@@ -112,12 +110,12 @@ public class TestDolphinPlatformHttpClientConnector {
     }
 
     @Test(expectedExceptions = DolphinRemotingException.class)
-    public void testBadResponse() throws DolphinRemotingException {
+    public void testBadResponse() throws DolphinRemotingException, URISyntaxException {
         PlatformClient.init(new HeadlessToolkit());
         PlatformClient.getClientConfiguration().setHttpURLConnectionFactory(new HttpURLConnectionFactory() {
             @Override
-            public HttpURLConnection create(URL url) throws IOException {
-                return new HttpURLConnection(url) {
+            public HttpURLConnection create(URI url) throws IOException {
+                return new HttpURLConnection(url.toURL()) {
                     @Override
                     public void disconnect() {
 
@@ -151,10 +149,10 @@ public class TestDolphinPlatformHttpClientConnector {
         connector.transmit(commands);
     }
 
-    private URL getDummyURL() {
+    private URI getDummyURL(){
         try {
-            return new URL("http://dummyURL");
-        } catch (MalformedURLException e) {
+            return new URI("http://dummyURL");
+        } catch (URISyntaxException e) {
             throw new RuntimeException("Exception occurred while creating URL", e);
         }
     }

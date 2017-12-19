@@ -5,16 +5,16 @@ import com.canoo.platform.core.http.HttpURLConnectionFactory;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
-import java.net.URL;
+import java.net.URI;
 import java.net.URLConnection;
 
 @Deprecated
 public class DefaultHttpURLConnectionFactory implements HttpURLConnectionFactory {
 
     @Override
-    public HttpURLConnection create(final URL url) throws IOException {
+    public HttpURLConnection create(final URI url) throws IOException {
         Assert.requireNonNull(url, "url");
-        final URLConnection connection = url.openConnection();
+        final URLConnection connection = url.toURL().openConnection();
         if(connection instanceof HttpURLConnection) {
             return (HttpURLConnection) connection;
         }

@@ -12,9 +12,7 @@ import com.google.gson.Gson;
 import org.apiguardian.api.API;
 
 import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.*;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -68,7 +66,7 @@ public class HttpClientImpl implements HttpClient {
     }
 
     @Override
-    public HttpRequest request(final URL url, final RequestMethod method) {
+    public HttpRequest request(final URI url, final RequestMethod method) {
         try {
             Assert.requireNonNull(url, "url");
             Assert.requireNonNull(method, "method");
@@ -86,14 +84,14 @@ public class HttpClientImpl implements HttpClient {
     @Override
     public HttpRequest request(String url, RequestMethod method) {
         try {
-            return request(new URL(url), method);
-        } catch (MalformedURLException e) {
+            return request(new URI(url), method);
+        } catch (URISyntaxException e) {
             throw new DolphinRuntimeException("HTTP error", e);
         }
     }
 
     @Override
-    public HttpRequest request(URL url) {
+    public HttpRequest request(URI url) {
         return request(url, RequestMethod.GET);
     }
 

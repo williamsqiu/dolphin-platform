@@ -19,7 +19,7 @@ import org.apiguardian.api.API;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
-import java.net.URL;
+import java.net.URI;
 
 import static org.apiguardian.api.API.Status.EXPERIMENTAL;
 
@@ -36,6 +36,6 @@ public interface HttpURLConnectionFactory {
      * @return the connection
      * @throws IOException if the connection can not be created
      */
-    HttpURLConnection create(URL url) throws IOException;
+    HttpURLConnection create(URI url) throws IOException;
 
 }

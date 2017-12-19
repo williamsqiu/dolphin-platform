@@ -14,7 +14,7 @@ import org.slf4j.event.Level;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
-import java.net.URL;
+import java.net.URI;
 import java.util.Objects;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
@@ -26,7 +26,7 @@ public class RemoteLogger implements DolphinLoggerBridge {
 
     private final static Logger LOG = LoggerFactory.getLogger(RemoteLogger.class);
 
-    private final URL remoteUrl;
+    private final URI remoteUrl;
 
     private final Executor executor;
 
