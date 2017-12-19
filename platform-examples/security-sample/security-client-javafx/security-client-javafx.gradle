@@ -1,0 +1,7 @@
+dependencies {
+  compile project(':security-common')
+  compile project(':dolphin-platform-remoting-client-javafx')
+  compile project(':dolphin-platform-security-client')
+  runtime "org.slf4j:slf4j-simple:$slf4jVersion"
+  compile "org.slf4j:jul-to-slf4j:$slf4jVersion"
+}
