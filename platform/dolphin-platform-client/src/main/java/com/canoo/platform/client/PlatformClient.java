@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.ServiceLoader;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.apiguardian.api.API.Status.EXPERIMENTAL;
 
@@ -25,6 +26,8 @@ public class PlatformClient {
     private final Map<Class<?>, Object> services = new ConcurrentHashMap<>();
 
     private final ClientConfiguration clientConfiguration;
+
+    private AtomicBoolean isToolkitSet =  new AtomicBoolean(false);
 
     private PlatformClient() {
         this.clientConfiguration = ConfigurationFileLoader.loadConfiguration();
@@ -49,6 +52,7 @@ public class PlatformClient {
         services.clear();
         Assert.requireNonNull(toolkit, "toolkit");
         clientConfiguration.setUiExecutor(toolkit.getUiExecutor());
+        isToolkitSet.set(true);
     }
 
     private Set<Class<?>> implGetAllServiceTypes() {
@@ -57,11 +61,17 @@ public class PlatformClient {
 
     private <S> boolean hasServiceImpl(final Class<S> serviceClass) {
         Assert.requireNonNull(serviceClass, "serviceClass");
+        if(!isToolkitSet.get()){
+            throw new DolphinRuntimeException("Toolkit is not set!");
+        }
         return providers.containsKey(serviceClass);
     }
 
     private synchronized <S> S getServiceImpl(final Class<S> serviceClass) {
         Assert.requireNonNull(serviceClass, "serviceClass");
+        if(!isToolkitSet.get()){
+            throw new DolphinRuntimeException("Toolkit is not set!");
+        }
         if(services.containsKey(serviceClass)) {
             final S service = (S) services.get(serviceClass);
             return service;
