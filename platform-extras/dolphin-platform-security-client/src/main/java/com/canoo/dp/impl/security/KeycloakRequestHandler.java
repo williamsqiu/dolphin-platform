@@ -27,6 +27,9 @@ public class KeycloakRequestHandler implements HttpURLConnectionHandler {
 
     @Override
     public void handle(HttpURLConnection connection) {
+        //No redirect, can not be handled in Java
+        connection.setRequestProperty(SecurityHttpHeader.BEARER_ONLY_HEADER, "true");
+
         if(security.isAuthorized()) {
             long tokenLifetime = security.tokenExpiresAt() - System.currentTimeMillis();
             LOG.debug("security token will expire in " + tokenLifetime + " ms");
