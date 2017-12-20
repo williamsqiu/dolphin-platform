@@ -25,7 +25,7 @@ public class SimpleUrlToAppDomainConverterTest {
         URL url = new URL(PROTOCOL, HOST, PORT, "");
 
         // WHEN
-        String result = simpleUrlToAppDomainConverter.getApplicationDomain(url.toURI());
+        String result = simpleUrlToAppDomainConverter.apply(url.toURI());
 
         // THEN
         Assert.assertEquals(result, HOST + ":" + PORT);
@@ -34,6 +34,6 @@ public class SimpleUrlToAppDomainConverterTest {
     @Test(expectedExceptions = NullPointerException.class)
     public void getApplicationDomain_whenGivenANullURL_thenThrownANullPointerException() throws Exception {
         // WHEN
-        simpleUrlToAppDomainConverter.getApplicationDomain(null);
+        simpleUrlToAppDomainConverter.apply(null);
     }
 }
