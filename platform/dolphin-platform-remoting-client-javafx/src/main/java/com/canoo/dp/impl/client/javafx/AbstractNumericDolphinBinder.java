@@ -16,6 +16,7 @@
 package com.canoo.dp.impl.client.javafx;
 
 import com.canoo.platform.core.functional.Binding;
+import com.canoo.platform.core.functional.Subscription;
 import com.canoo.platform.remoting.Property;
 import com.canoo.platform.remoting.client.javafx.BidirectionalConverter;
 import com.canoo.platform.remoting.client.javafx.binding.NumericDolphinBinder;
@@ -54,5 +55,22 @@ public abstract class AbstractNumericDolphinBinder<T extends Number> extends Def
             property.set(getConverter().convert(observableValue.getValue()));
         }
         return () -> observableValue.removeListener(listener);
+    }
+
+    @Override
+    public Binding bidirectionalToNumeric(javafx.beans.property.Property<Number> javaFxProperty) {
+        if (javaFxProperty == null) {
+            throw new IllegalArgumentException("javaFxProperty must not be null");
+        }
+        Binding unidirectionalBinding = toNumeric(javaFxProperty);
+        Subscription subscription = property.onChanged(e -> {
+            if (!equals(javaFxProperty.getValue(), property.get())) {
+                javaFxProperty.setValue(getConverter().convertBack(property.get()));
+            }
+        });
+        return () -> {
+            unidirectionalBinding.unbind();
+            subscription.unsubscribe();
+        };
     }
 }

@@ -26,4 +26,5 @@ public interface NumericDolphinBinder<T extends Number> extends DolphinBinder<T>
 
     Binding toNumeric(final ObservableValue<Number> observableValue);
 
+    Binding bidirectionalToNumeric(final javafx.beans.property.Property<Number> property);
 }
