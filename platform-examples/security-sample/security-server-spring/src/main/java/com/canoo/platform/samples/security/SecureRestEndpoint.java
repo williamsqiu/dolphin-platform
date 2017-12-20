@@ -23,7 +23,7 @@ public class SecureRestEndpoint {
     public String getSecureMessage() {
         final String userName = Optional.ofNullable(securityContext.getUser()).
                 map(u -> u.getName()).
-                orElse("UNNOWN");
+                orElse("UNKNOWN");
         LOG.info("Secure endpoint called by {}", userName);
         return "A secure message that was requested by " + userName;
     }

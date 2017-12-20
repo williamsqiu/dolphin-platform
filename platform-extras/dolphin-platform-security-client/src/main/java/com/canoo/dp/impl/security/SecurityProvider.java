@@ -1,6 +1,7 @@
 package com.canoo.dp.impl.security;
 
 import com.canoo.dp.impl.platform.client.AbstractServiceProvider;
+import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.client.ClientConfiguration;
 import com.canoo.platform.client.security.Security;
 import org.apiguardian.api.API;
@@ -21,7 +22,9 @@ public class SecurityProvider extends AbstractServiceProvider<Security> {
     }
 
     @Override
-    protected Security createService(ClientConfiguration configuration) {
+    protected Security createService(final ClientConfiguration configuration) {
+        Assert.requireNonNull(configuration, "configuration");
+        
         final String authEndpoint = configuration.getProperty(AUTH_ENDPOINT_PROPERTY_NAME, AUTH_ENDPOINT_PROPERTY_DEFAULT_VALUE);
         final String realmName = configuration.getProperty(REALM_PROPERTY_NAME, REALM_PROPERTY_DEFAULT_VALUE);
         final String appName = configuration.getProperty(APPLICATION_PROPERTY_NAME, APPLICATION_PROPERTY_DEFAULT_VALUE);
