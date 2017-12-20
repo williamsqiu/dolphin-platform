@@ -28,16 +28,6 @@ public class CommunicationMonitorImpl implements CommunicationMonitor {
     }
 
     @Override
-    public void await() throws InterruptedException {
-        ping.set(true);
-        while (ping.get()) {
-            sendPing();
-
-            Thread.sleep(100);
-        }
-    }
-
-    @Override
     public void await(final long time, final TimeUnit unit) throws InterruptedException, TimeoutException {
         Assert.requireNonNull(unit, "unit");
         final long endTime = System.currentTimeMillis() + unit.toMillis(time);
