@@ -13,39 +13,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.dolphin.converters;
+package com.canoo.dp.impl.remoting.converters;
 
 import com.canoo.platform.remoting.spi.converter.Converter;
 import com.canoo.platform.remoting.spi.converter.ValueConverterException;
-import com.canoo.dp.impl.remoting.converters.AbstractConverterFactory;
-import com.canoo.dp.impl.remoting.converters.AbstractStringConverter;
 import org.apiguardian.api.API;
 
-import java.time.Period;
+import java.time.Duration;
 import java.util.Collections;
 import java.util.List;
 
-import static com.canoo.dolphin.converters.ValueFieldTypes.PERIODE_FIELD_TYPE;
 import static org.apiguardian.api.API.Status.INTERNAL;
 
 @API(since = "0.x", status = INTERNAL)
-public class PeriodConverterFactory extends AbstractConverterFactory {
+public class DurationConverterFactory extends AbstractConverterFactory {
 
-    private final static Converter CONVERTER = new PeriodConverter();
+    private final static Converter CONVERTER = new DurationConverter();
 
     @Override
     public boolean supportsType(Class<?> cls) {
-        return Period.class.isAssignableFrom(cls);
+        return Duration.class.isAssignableFrom(cls);
     }
 
     @Override
     public List<Class> getSupportedTypes() {
-        return Collections.singletonList(Period.class);
+        return Collections.singletonList(Duration.class);
     }
 
     @Override
     public int getTypeIdentifier() {
-        return PERIODE_FIELD_TYPE;
+        return ValueFieldTypes.DURATION_FIELD_TYPE;
     }
 
     @Override
@@ -53,29 +50,29 @@ public class PeriodConverterFactory extends AbstractConverterFactory {
         return CONVERTER;
     }
 
-    private static class PeriodConverter extends AbstractStringConverter<Period> {
+    private static class DurationConverter extends AbstractStringConverter<Duration> {
 
         @Override
-        public Period convertFromDolphin(String value) throws ValueConverterException {
-            if(value == null) {
+        public Duration convertFromDolphin(String value) throws ValueConverterException {
+            if (value == null) {
                 return null;
             }
             try {
-                return Period.parse(value);
+                return Duration.parse(value);
             } catch (Exception e) {
-                throw new ValueConverterException("Can not convert to Periode", e);
+                throw new ValueConverterException("Can not convert to Duration", e);
             }
         }
 
         @Override
-        public String convertToDolphin(Period value) throws ValueConverterException{
-            if(value == null) {
+        public String convertToDolphin(Duration value) throws ValueConverterException {
+            if (value == null) {
                 return null;
             }
             try {
                 return value.toString();
             } catch (Exception e) {
-                throw new ValueConverterException("Can not convert from Periode", e);
+                throw new ValueConverterException("Can not convert from Duration", e);
             }
         }
     }

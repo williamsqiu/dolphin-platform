@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2016 Canoo Engineering AG.
+ * Copyright 2015-2017 Canoo Engineering AG.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.canoo.dp.impl.remoting.converters;
 
-dependencies {
-    compile project(':dolphin-platform-remoting-common')
+import org.apiguardian.api.API;
+
+import static org.apiguardian.api.API.Status.INTERNAL;
+
+@API(since = "0.x", status = INTERNAL)
+public interface ValueFieldTypes {
+
+    int DURATION_FIELD_TYPE = 51;
+
+    int LOCAL_DATE_TIME_FIELD_TYPE = 52;
+
+    int PERIODE_FIELD_TYPE = 53;
+
+    int ZONED_DATE_TIME_FIELD_TYPE = 54;
+    
+    int LOCAL_DATE_FIELD_TYPE = 55;
 }
