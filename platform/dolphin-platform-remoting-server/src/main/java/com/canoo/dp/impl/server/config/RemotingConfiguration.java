@@ -16,7 +16,7 @@
 package com.canoo.dp.impl.server.config;
 
 import com.canoo.dp.impl.platform.core.Assert;
-import com.canoo.dp.impl.server.event.DefaultEventBusProvider;
+import com.canoo.dp.impl.server.event.spi.DefaultEventBusProvider;
 import com.canoo.platform.core.PlatformConfiguration;
 import org.apiguardian.api.API;
 
