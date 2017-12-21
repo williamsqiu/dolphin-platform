@@ -9,7 +9,28 @@ package structure or adding additional methods to public interfaces. In addition
 method of the API is annotated by `@Deprecated` since we plan to remove all this methods and classes for the final 1.0.0 release.
 In addition we are adding the @Api annotation to all classes. Based on this we define if a public API is already maintained or is currently in an incubation state. The annotations defines rhe split between provate and public API, too.
 
-== Version 1.0.0.RC1
+== Version 1.0.0.CR2
+_Release date: Dec, 21 2017_
+
+* Security sample added(https://github.com/canoo/dolphin-platform/issues/782[issue])
+* Removed default toolkit(https://github.com/canoo/dolphin-platform/issues/747[issue])
+* ServerModule.getName()(https://github.com/canoo/dolphin-platform/issues/742[issue])
+* URI used instead of URL(https://github.com/canoo/dolphin-platform/issues/714[issue])
+* Better exception for action handling(https://github.com/canoo/dolphin-platform/issues/462[issue])
+* Error handling for converters(https://github.com/canoo/dolphin-platform/issues/756[issue])
+* PlatformConfiguration.getProperty(String) added(https://github.com/canoo/dolphin-platform/issues/732[issue])
+* ListIterator support for ObservableList(https://github.com/canoo/dolphin-platform/issues/29[issue])
+* Hazelcast use SLF4J(https://github.com/canoo/dolphin-platform/issues/736[issue])
+* Define action params as map(https://github.com/canoo/dolphin-platform/issues/759[issue])
+* Better docker images for integration tests(https://github.com/canoo/dolphin-platform/issues/649[issue])
+* Travis is running again(https://github.com/canoo/dolphin-platform/issues/557[issue])
+* Unit tests support callLaterInClientSession(https://github.com/canoo/dolphin-platform/issues/751[issue])
+* Update to Java 8 as default dependency(https://github.com/canoo/dolphin-platform/issues/741[issue])
+* Java 8 workaround interfaces removed(https://github.com/canoo/dolphin-platform/issues/758[issue])
+* Sample for lazy loading(https://github.com/canoo/dolphin-platform/issues/754[issue])
+
+
+== Version 1.0.0.CR1
 _Release date: Nov, 7 2017_
 
 * Implement ObservableList modifications via sublist(https://github.com/canoo/dolphin-platform/issues/61[issue])
