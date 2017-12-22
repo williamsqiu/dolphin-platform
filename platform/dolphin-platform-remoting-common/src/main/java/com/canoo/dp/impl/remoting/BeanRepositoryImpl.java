@@ -17,8 +17,6 @@ package com.canoo.dp.impl.remoting;
 
 import com.canoo.platform.core.functional.Subscription;
 import com.canoo.dp.impl.platform.core.Assert;
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.Multimap;
 import com.canoo.dp.impl.remoting.legacy.core.ModelStore;
 import com.canoo.dp.impl.remoting.legacy.core.PresentationModel;
 import org.apiguardian.api.API;
@@ -30,38 +28,37 @@ import static org.apiguardian.api.API.Status.INTERNAL;
 /**
  * A {@code BeanRepository} keeps a list of all registered Dolphin Beans and the mapping between OpenDolphin IDs and
  * the associated Dolphin Bean.
- *
+ * <p>
  * A new bean needs to be registered with the {@link #registerBean(Object, PresentationModel, UpdateSource)} method and can be deleted
  * with the {@link #delete(Object)} method.
  */
 // TODO mapDolphinToObject() does not really fit here, we should probably move it to Converters, but first we need to fix scopes
 @API(since = "0.x", status = INTERNAL)
-public class BeanRepositoryImpl implements BeanRepository{
+public class BeanRepositoryImpl implements BeanRepository {
 
     private final Map<Object, PresentationModel> objectPmToDolphinPm = new IdentityHashMap<>();
     private final Map<String, Object> dolphinIdToObjectPm = new HashMap<>();
     private final ModelStore modelStore;
-    private final Multimap<Class<?>, BeanAddedListener<?>> beanAddedListenerMap = ArrayListMultimap.create();
+    private final Map<Class<?>, List<BeanAddedListener<?>>> beanAddedListenerMap = new HashMap<>();
     private List<BeanAddedListener<Object>> anyBeanAddedListeners = new ArrayList<>();
-    private final Multimap<Class<?>, BeanRemovedListener<?>> beanRemovedListenerMap = ArrayListMultimap.create();
+    private final Map<Class<?>, List<BeanRemovedListener<?>>> beanRemovedListenerMap = new HashMap<>();
+
     private List<BeanRemovedListener<Object>> anyBeanRemovedListeners = new ArrayList<>();
 
     public BeanRepositoryImpl(final ModelStore modelStore, final EventDispatcher dispatcher) {
         this.modelStore = Assert.requireNonNull(modelStore, "modelStore");
 
-        dispatcher.addRemovedHandler(new DolphinEventHandler() {
-            @SuppressWarnings("unchecked")
-            @Override
-            public void onEvent(PresentationModel model) {
-                final Object bean = dolphinIdToObjectPm.remove(model.getId());
-                if (bean != null) {
-                    objectPmToDolphinPm.remove(bean);
+        dispatcher.addRemovedHandler((PresentationModel model) -> {
+            final Object bean = dolphinIdToObjectPm.remove(model.getId());
+            if (bean != null) {
+                objectPmToDolphinPm.remove(bean);
+                if(beanRemovedListenerMap.containsKey(bean.getClass())){
                     for (final BeanRemovedListener beanRemovedListener : beanRemovedListenerMap.get(bean.getClass())) {
                         beanRemovedListener.beanDestructed(bean);
                     }
-                    for (final BeanRemovedListener beanRemovedListener : anyBeanRemovedListeners) {
-                        beanRemovedListener.beanDestructed(bean);
-                    }
+                }
+                for (final BeanRemovedListener beanRemovedListener : anyBeanRemovedListeners) {
+                    beanRemovedListener.beanDestructed(bean);
                 }
             }
         });
@@ -70,11 +67,14 @@ public class BeanRepositoryImpl implements BeanRepository{
     @Override
     public <T> Subscription addOnAddedListener(final Class<T> beanClass, final BeanAddedListener<? super T> listener) {
         DolphinUtils.assertIsDolphinBean(beanClass);
-        beanAddedListenerMap.put(beanClass, listener);
-        return new Subscription() {
-            @Override
-            public void unsubscribe() {
-                beanAddedListenerMap.remove(beanClass, listener);
+        if (beanAddedListenerMap.containsKey(beanClass)) {
+            beanAddedListenerMap.get(beanClass).add(listener);
+        } else {
+            beanAddedListenerMap.put(beanClass, Arrays.asList(listener));
+        }
+        return () -> {
+            if (beanAddedListenerMap.containsKey(beanClass)) {
+                beanAddedListenerMap.get(beanClass).remove(listener);
             }
         };
     }
@@ -82,22 +82,20 @@ public class BeanRepositoryImpl implements BeanRepository{
     @Override
     public Subscription addOnAddedListener(final BeanAddedListener<Object> listener) {
         anyBeanAddedListeners.add(listener);
-        return new Subscription() {
-            @Override
-            public void unsubscribe() {
-                anyBeanAddedListeners.remove(listener);
-            }
-        };
+        return () -> anyBeanAddedListeners.remove(listener);
     }
 
     @Override
     public <T> Subscription addOnRemovedListener(final Class<T> beanClass, final BeanRemovedListener<? super T> listener) {
         DolphinUtils.assertIsDolphinBean(beanClass);
-        beanRemovedListenerMap.put(beanClass, listener);
-        return new Subscription() {
-            @Override
-            public void unsubscribe() {
-                beanRemovedListenerMap.remove(beanClass, listener);
+        if (beanRemovedListenerMap.containsKey(beanClass)) {
+            beanRemovedListenerMap.get(beanClass).add(listener);
+        } else {
+            beanRemovedListenerMap.put(beanClass, Arrays.asList(listener));
+        }
+        return () -> {
+            if (beanRemovedListenerMap.containsKey(beanClass)) {
+                beanRemovedListenerMap.get(beanClass).remove(listener);
             }
         };
     }
@@ -105,12 +103,7 @@ public class BeanRepositoryImpl implements BeanRepository{
     @Override
     public Subscription addOnRemovedListener(final BeanRemovedListener<Object> listener) {
         anyBeanRemovedListeners.add(listener);
-        return new Subscription() {
-            @Override
-            public void unsubscribe() {
-                anyBeanRemovedListeners.remove(listener);
-            }
-        };
+        return () -> anyBeanRemovedListeners.remove(listener);
     }
 
     @Override
@@ -173,8 +166,10 @@ public class BeanRepositoryImpl implements BeanRepository{
         dolphinIdToObjectPm.put(model.getId(), bean);
 
         if (source == UpdateSource.OTHER) {
-            for (final BeanAddedListener beanAddedListener : beanAddedListenerMap.get(bean.getClass())) {
-                beanAddedListener.beanCreated(bean);
+            if(beanAddedListenerMap.containsKey(bean.getClass())){
+                for (final BeanAddedListener beanAddedListener : beanAddedListenerMap.get(bean.getClass())) {
+                    beanAddedListener.beanCreated(bean);
+                }
             }
             for (final BeanAddedListener beanAddedListener : anyBeanAddedListeners) {
                 beanAddedListener.beanCreated(bean);
