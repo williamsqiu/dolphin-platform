@@ -117,6 +117,7 @@ public class RemotingModule implements ServerModule {
 
             Iterator<EventBusProvider> iterator = ServiceLoader.load(EventBusProvider.class).iterator();
             boolean providerFound = false;
+            boolean flag = false;
             while (iterator.hasNext()) {
                 EventBusProvider provider = iterator.next();
                 if (configuration.getEventbusType().equals(provider.getType())) {
@@ -130,7 +131,11 @@ public class RemotingModule implements ServerModule {
                         ((AbstractEventBus) eventBus).init(contextProvider, lifecycleHandler);
                     }
                     coreComponents.provideInstance(RemotingEventBus.class, eventBus);
+                    flag = true;
                 }
+            }
+            if(!flag){
+                throw new ModuleInitializationException("Configured event bus is not on the classpath.");
             }
         }catch (ControllerValidationException cve){
             throw new ModuleInitializationException("Can not start Remote Presentation Model support based on bad controller definition", cve);
