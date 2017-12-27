@@ -13,24 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.dolphin.converters;
+package com.canoo.dolphin.impl.converters;
 
 import com.canoo.platform.remoting.spi.converter.Converter;
 import com.canoo.platform.remoting.spi.converter.ValueConverterException;
 import com.canoo.dp.impl.remoting.Converters;
 import com.canoo.dp.impl.remoting.BeanRepository;
+import com.canoo.dp.impl.remoting.converters.ValueFieldTypes;
 import mockit.Mocked;
 import org.testng.annotations.Test;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.TimeZone;
+import java.time.Period;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.fail;
 
-public class LocalDateTimeConverterFactoryTest {
+public class PeriodeConverterFactoryTest {
 
     @Test
     public void testFactoryFieldType(@Mocked BeanRepository beanRepository) {
@@ -38,10 +37,10 @@ public class LocalDateTimeConverterFactoryTest {
         Converters converters = new Converters(beanRepository);
 
         //When
-        int type = converters.getFieldType(LocalDateTime.class);
+        int type = converters.getFieldType(Period.class);
 
         //Then
-        assertEquals(type, ValueFieldTypes.LOCAL_DATE_TIME_FIELD_TYPE);
+        assertEquals(type, ValueFieldTypes.PERIODE_FIELD_TYPE);
     }
 
     @Test
@@ -50,7 +49,7 @@ public class LocalDateTimeConverterFactoryTest {
         Converters converters = new Converters(beanRepository);
 
         //When
-        Converter converter = converters.getConverter(LocalDateTime.class);
+        Converter converter = converters.getConverter(Period.class);
 
         //Then
         assertNotNull(converter);
@@ -62,14 +61,14 @@ public class LocalDateTimeConverterFactoryTest {
         Converters converters = new Converters(beanRepository);
 
         //When
-        Converter converter = converters.getConverter(LocalDateTime.class);
+        Converter converter = converters.getConverter(Period.class);
 
         //Then
-        testReconversion(converter, LocalDateTime.now());
-        testReconversion(converter, LocalDateTime.now(ZoneId.of(ZoneId.getAvailableZoneIds().iterator().next())));
-        testReconversion(converter, LocalDateTime.now(ZoneId.of("GMT")));
-        testReconversion(converter, LocalDateTime.now(ZoneId.of("Z")));
-        testReconversion(converter, LocalDateTime.now(ZoneId.of("UTC+6")));
+        testReconversion(converter, Period.ofDays(7));
+        testReconversion(converter, Period.ofYears(700_000_000));
+        testReconversion(converter, Period.ofWeeks(70_000_000));
+        testReconversion(converter, Period.ZERO);
+        testReconversion(converter, Period.ofDays(10_000_000));
     }
 
     @Test
@@ -78,7 +77,7 @@ public class LocalDateTimeConverterFactoryTest {
         Converters converters = new Converters(beanRepository);
 
         //When
-        Converter converter = converters.getConverter(LocalDateTime.class);
+        Converter converter = converters.getConverter(Period.class);
 
         //Then
         try {
@@ -95,7 +94,7 @@ public class LocalDateTimeConverterFactoryTest {
         Converters converters = new Converters(beanRepository);
 
         //When
-        Converter converter = converters.getConverter(LocalDateTime.class);
+        Converter converter = converters.getConverter(Period.class);
 
         //Then
         converter.convertFromDolphin(7);
@@ -107,24 +106,23 @@ public class LocalDateTimeConverterFactoryTest {
         Converters converters = new Converters(beanRepository);
 
         //When
-        Converter converter = converters.getConverter(LocalDateTime.class);
+        Converter converter = converters.getConverter(Period.class);
 
         //Then
         converter.convertToDolphin(7);
     }
 
-    private void testReconversion(Converter converter, LocalDateTime time) {
+    private void testReconversion(Converter converter, Period duration) {
         try {
-            Object dolphinObject = converter.convertToDolphin(time);
+            Object dolphinObject = converter.convertToDolphin(duration);
             assertNotNull(dolphinObject);
-            TimeZone.setDefault(TimeZone.getTimeZone(ZoneId.of("UTC-3")));
             Object reconvertedObject = converter.convertFromDolphin(dolphinObject);
             assertNotNull(reconvertedObject);
-            assertEquals(reconvertedObject.getClass(), LocalDateTime.class);
-            LocalDateTime reverted = (LocalDateTime) reconvertedObject;
-            assertEquals(reverted, time);
+            assertEquals(reconvertedObject.getClass(), Period.class);
+            Period reconvertedDuration = (Period) reconvertedObject;
+            assertEquals(reconvertedDuration, duration);
         } catch (ValueConverterException e) {
-            fail("Error in conversion");
+            fail("Error in conversion", e);
         }
     }
 }

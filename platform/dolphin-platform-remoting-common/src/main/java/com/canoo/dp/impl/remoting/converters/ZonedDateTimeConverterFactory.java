@@ -13,44 +13,40 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.dolphin.converters;
+package com.canoo.dp.impl.remoting.converters;
 
 import com.canoo.platform.remoting.spi.converter.Converter;
 import com.canoo.platform.remoting.spi.converter.ValueConverterException;
-import com.canoo.dp.impl.remoting.converters.AbstractConverterFactory;
-import com.canoo.dp.impl.remoting.converters.AbstractStringConverter;
 import org.apiguardian.api.API;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.*;
 
 import static com.canoo.dp.impl.platform.core.PlatformConstants.REMOTING_DATE_FORMAT_PATTERN;
 import static com.canoo.dp.impl.platform.core.PlatformConstants.TIMEZONE_UTC;
-import static com.canoo.dolphin.converters.ValueFieldTypes.LOCAL_DATE_TIME_FIELD_TYPE;
 import static org.apiguardian.api.API.Status.INTERNAL;
 
 @API(since = "0.x", status = INTERNAL)
-public class LocalDateTimeConverterFactory extends AbstractConverterFactory {
+public class ZonedDateTimeConverterFactory extends AbstractConverterFactory {
 
-    private final static Converter CONVERTER = new LocalDateTimeConverter();
+    private final static Converter CONVERTER = new ZonedDateTimeConverter();
 
     @Override
     public boolean supportsType(Class<?> cls) {
-        return LocalDateTime.class.isAssignableFrom(cls);
+        return ZonedDateTime.class.isAssignableFrom(cls);
     }
 
     @Override
     public List<Class> getSupportedTypes() {
-        return Collections.singletonList(LocalDateTime.class);
+        return Collections.singletonList(ZonedDateTime.class);
     }
 
     @Override
     public int getTypeIdentifier() {
-        return LOCAL_DATE_TIME_FIELD_TYPE;
+        return ValueFieldTypes.ZONED_DATE_TIME_FIELD_TYPE;
     }
 
     @Override
@@ -58,37 +54,38 @@ public class LocalDateTimeConverterFactory extends AbstractConverterFactory {
         return CONVERTER;
     }
 
-    private static class LocalDateTimeConverter extends AbstractStringConverter<LocalDateTime> {
+    private static class ZonedDateTimeConverter extends AbstractStringConverter<ZonedDateTime> {
 
         private final DateFormat dateFormat;
-        public LocalDateTimeConverter(){
+
+        public ZonedDateTimeConverter(){
             dateFormat = new SimpleDateFormat(REMOTING_DATE_FORMAT_PATTERN);
             dateFormat.setTimeZone(TimeZone.getTimeZone(TIMEZONE_UTC));
         }
         @Override
-        public LocalDateTime convertFromDolphin(String value) throws ValueConverterException {
+        public ZonedDateTime convertFromDolphin(String value) throws ValueConverterException {
             if (value == null) {
                 return null;
             }
             try {
-                final Calendar result = Calendar.getInstance(TimeZone.getTimeZone(TIMEZONE_UTC));
+                final Calendar result = Calendar.getInstance();
                 result.setTime(dateFormat.parse(value));
-                return result.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+                return result.toInstant().atZone(ZoneId.systemDefault());
             } catch (Exception e) {
-                throw new ValueConverterException("Can not convert to LocalDateTime", e);
+                throw new ValueConverterException("Can not convert to ZonedDateTime", e);
             }
         }
 
         @Override
-        public String convertToDolphin(LocalDateTime value) throws ValueConverterException {
+        public String convertToDolphin(ZonedDateTime value) throws ValueConverterException {
             if (value == null) {
                 return null;
             }
             try {
-                Date date = Date.from(value.toInstant(OffsetDateTime.now().getOffset()));
-                return dateFormat.format(date);
+                Calendar calendar = GregorianCalendar.from(value);
+                return dateFormat.format(calendar.getTime());
             } catch (Exception e) {
-                throw new ValueConverterException("Can not convert from LocalDateTime", e);
+                throw new ValueConverterException("Can not convert from ZonedDateTime", e);
             }
         }
     }

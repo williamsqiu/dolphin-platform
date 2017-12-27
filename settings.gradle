@@ -13,7 +13,6 @@ include 'platform/dolphin-platform-remoting-server'
 include 'platform/dolphin-platform-remoting-server-javaee'
 include 'platform/dolphin-platform-remoting-server-spring'
 include 'platform/dolphin-platform-spring-controller-tester'
-include 'platform/dolphin-platform-date-time-converter'
 include 'platform/dolphin-platform-distributed-eventbus'
 
 include 'platform-extras/dolphin-platform-logger'

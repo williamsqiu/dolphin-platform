@@ -13,12 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.dolphin.converters;
+package com.canoo.dp.impl.remoting.converters;
 
 import com.canoo.platform.remoting.spi.converter.Converter;
 import com.canoo.platform.remoting.spi.converter.ValueConverterException;
-import com.canoo.dp.impl.remoting.converters.AbstractConverterFactory;
-import com.canoo.dp.impl.remoting.converters.AbstractStringConverter;
 import org.apiguardian.api.API;
 
 import java.text.DateFormat;
@@ -30,7 +28,6 @@ import java.util.*;
 
 import static com.canoo.dp.impl.platform.core.PlatformConstants.REMOTING_DATE_FORMAT_PATTERN;
 import static com.canoo.dp.impl.platform.core.PlatformConstants.TIMEZONE_UTC;
-import static com.canoo.dolphin.converters.ValueFieldTypes.LOCAL_DATE_FIELD_TYPE;
 import static org.apiguardian.api.API.Status.INTERNAL;
 
 @API(since = "0.x", status = INTERNAL)
@@ -50,7 +47,7 @@ public class LocalDateConverterFactory extends AbstractConverterFactory {
 
     @Override
     public int getTypeIdentifier() {
-        return LOCAL_DATE_FIELD_TYPE;
+        return ValueFieldTypes.LOCAL_DATE_FIELD_TYPE;
     }
 
     @Override
