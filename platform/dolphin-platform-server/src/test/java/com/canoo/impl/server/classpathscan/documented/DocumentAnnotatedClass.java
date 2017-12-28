@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.impl.server.special;
+package com.canoo.impl.server.classpathscan.documented;
 
 import java.lang.annotation.Documented;
 
 @Documented
-public @interface SpecialAnnotatedClass {
+public @interface DocumentAnnotatedClass {
 }
