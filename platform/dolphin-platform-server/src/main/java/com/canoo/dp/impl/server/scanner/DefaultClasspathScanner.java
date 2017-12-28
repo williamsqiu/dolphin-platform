@@ -26,11 +26,9 @@ import org.reflections.util.FilterBuilder;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import static org.apiguardian.api.API.Status.INTERNAL;
 
@@ -44,19 +42,25 @@ public class DefaultClasspathScanner implements ClasspathScanner {
     private final Reflections reflections;
 
     public DefaultClasspathScanner() {
-        this(null);
+        this(Collections.emptyList());
     }
 
-    public DefaultClasspathScanner(final String rootPackage) {
+    public DefaultClasspathScanner(final String rootPackage){
+        this(Collections.singletonList(rootPackage));
+    }
+
+    public DefaultClasspathScanner(final String... rootPackages){
+        this(Arrays.asList(rootPackages));
+    }
+
+    public DefaultClasspathScanner(final List<String> rootPackages) {
 
         ConfigurationBuilder configuration = ConfigurationBuilder.build(DefaultClasspathScanner.class.getClassLoader());
         configuration = configuration.setExpandSuperTypes(false);
 
-        if(rootPackage != null && !rootPackage.trim().isEmpty()) {
-            configuration = configuration.forPackages(rootPackage);
-            configuration = configuration.setUrls(ClasspathHelper.forPackage(rootPackage));
-            configuration = configuration.filterInputsBy(new FilterBuilder().includePackage(rootPackage));
-        }
+        configuration = configuration.forPackages(rootPackages.toArray(new String[rootPackages.size()]));
+        configuration = configuration.setUrls(rootPackages.stream().map(rootPackage -> ClasspathHelper.forPackage(rootPackage)).flatMap(list -> list.stream()).collect(Collectors.toList()));
+        configuration = configuration.filterInputsBy(new FilterBuilder().includePackage(rootPackages.toArray(new String[rootPackages.size()])));
 
         //Special case for JBOSS Application server to get all classes
         try {

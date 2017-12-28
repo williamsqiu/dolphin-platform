@@ -41,7 +41,6 @@ import static com.canoo.dp.impl.server.config.DefaultPlatformConfiguration.ACTIV
 import static com.canoo.dp.impl.server.config.DefaultPlatformConfiguration.MBEAN_REGISTRATION;
 import static com.canoo.dp.impl.server.config.DefaultPlatformConfiguration.M_BEAN_REGISTRATION_DEFAULT_VALUE;
 import static com.canoo.dp.impl.server.config.DefaultPlatformConfiguration.ROOT_PACKAGE_FOR_CLASSPATH_SCAN;
-import static com.canoo.dp.impl.server.config.DefaultPlatformConfiguration.ROOT_PACKAGE_FOR_CLASSPATH_SCAN_DEFAULT_VALUE;
 
 @API(since = "0.x", status = INTERNAL)
 public class PlatformBootstrap {
@@ -71,7 +70,7 @@ public class PlatformBootstrap {
                 //See https://github.com/canoo/dolphin-platform/issues/498
                 final PlatformThreadFactory threadFactory = new SimpleDolphinPlatformThreadFactory();
                 final ManagedBeanFactory beanFactory = getBeanFactory(servletContext);
-                final DefaultClasspathScanner classpathScanner = new DefaultClasspathScanner(configuration.getProperty(ROOT_PACKAGE_FOR_CLASSPATH_SCAN, ROOT_PACKAGE_FOR_CLASSPATH_SCAN_DEFAULT_VALUE));
+                final DefaultClasspathScanner classpathScanner = new DefaultClasspathScanner(configuration.getListProperty(ROOT_PACKAGE_FOR_CLASSPATH_SCAN));
                 serverCoreComponents = new ServerCoreComponentsImpl(servletContext, configuration, threadFactory, classpathScanner, beanFactory);
 
                 final Set<Class<?>> moduleClasses = classpathScanner.getTypesAnnotatedWith(ModuleDefinition.class);
