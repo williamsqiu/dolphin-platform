@@ -10,7 +10,13 @@ import org.slf4j.event.Level;
 import org.slf4j.helpers.FormattingTuple;
 import org.slf4j.helpers.MessageFormatter;
 
-import java.util.*;
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -403,10 +409,9 @@ public class DolphinLogger implements Logger {
             try {
                 final LogMessage logMessage = new LogMessage();
                 logMessage.setLoggerName(name);
-                logMessage.setLevel(level.toString());
+                logMessage.setLevel(level);
                 logMessage.setMessage(msg);
-                logMessage.setTimeZone(TimeZone.getDefault());
-                logMessage.setTimestamp(System.currentTimeMillis());
+                logMessage.setTimestamp(ZonedDateTime.now());
                 logMessage.setThreadName(Thread.currentThread().getName());
                 logMessage.setContext(MDC.getCopyOfContextMap());
 
@@ -424,6 +429,8 @@ public class DolphinLogger implements Logger {
                         logMessage.setThrowable(tp.getThrowable());
                     }
                 }
+
+                loggerFactory.addToCache(logMessage);
 
                 for(DolphinLoggerBridge bridge : bridges) {
                     try {

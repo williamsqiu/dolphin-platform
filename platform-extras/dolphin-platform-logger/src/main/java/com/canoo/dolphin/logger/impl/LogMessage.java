@@ -1,17 +1,20 @@
 package com.canoo.dolphin.logger.impl;
 
-import java.io.Serializable;
+import org.slf4j.event.Level;
+
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Map;
-import java.util.TimeZone;
 
-public class LogMessage implements Serializable {
+public class LogMessage {
 
     private String loggerName;
 
-    private String level;
+    private Level level;
 
-    private long timestamp;
+    private ZonedDateTime timestamp;
 
     private String message;
 
@@ -21,11 +24,11 @@ public class LogMessage implements Serializable {
 
     private String exceptionMessage;
 
+    private String exceptionDetail;
+
     private String exceptionClass;
 
     private String threadName;
-
-    private TimeZone timeZone;
 
     private transient Throwable throwable;
 
@@ -35,14 +38,6 @@ public class LogMessage implements Serializable {
 
     public void setLoggerName(String loggerName) {
         this.loggerName = loggerName;
-    }
-
-    public String getLevel() {
-        return level;
-    }
-
-    public void setLevel(String level) {
-        this.level = level;
     }
 
     public String getMessage() {
@@ -93,34 +88,53 @@ public class LogMessage implements Serializable {
         this.threadName = threadName;
     }
 
-    public TimeZone getTimeZone() {
-        return timeZone;
-    }
-
-    public void setTimeZone(TimeZone timeZone) {
-        this.timeZone = timeZone;
-    }
-
-    public long getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(long timestamp) {
-        this.timestamp = timestamp;
-    }
-
     public Throwable getThrowable() {
         return throwable;
     }
 
-    public void setThrowable(Throwable throwable) {
+    public ZonedDateTime getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(ZonedDateTime timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public void setThrowable(final Throwable throwable) {
         this.throwable = throwable;
         if(throwable != null) {
             setExceptionClass(throwable.getClass().toString());
             setExceptionMessage(throwable.getMessage());
+            setExceptionDetail(toStackTrace(throwable));
         } else {
             setExceptionClass(null);
             setExceptionMessage(null);
+            setExceptionDetail(null);
         }
+    }
+
+    public Level getLevel() {
+        return level;
+    }
+
+    public void setLevel(Level level) {
+        this.level = level;
+    }
+
+    public String getExceptionDetail() {
+        return exceptionDetail;
+    }
+
+    public void setExceptionDetail(String exceptionDetail) {
+        this.exceptionDetail = exceptionDetail;
+    }
+
+    private String toStackTrace(final Throwable throwable) {
+        StringWriter stringWriter = new StringWriter();
+        PrintWriter stream = new PrintWriter(stringWriter);
+        if (throwable != null) {
+            throwable.printStackTrace(stream);
+        }
+        return stringWriter.toString().substring(0, stringWriter.toString().length() - 1);
     }
 }

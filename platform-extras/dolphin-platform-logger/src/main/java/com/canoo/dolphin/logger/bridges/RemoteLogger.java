@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URI;
+import java.util.Date;
 import java.util.Objects;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
@@ -87,17 +88,15 @@ public class RemoteLogger implements DolphinLoggerBridge {
                                 GelfMessage gelfMessage = new GelfMessage();
                                 gelfMessage.setMessage(message.getMessage());
                                 gelfMessage.setLoggerName(message.getLoggerName());
-                                gelfMessage.setLogLevel(message.getLevel());
-                                gelfMessage.setLogTimestamp(message.getTimestamp());
+                                gelfMessage.setLogLevel(message.getLevel().toString());
+                                final Date timestamp = Date.from(message.getTimestamp().toInstant());
+                                gelfMessage.setLogTimestamp(timestamp.getTime());
+                                gelfMessage.setTimeZone(message.getTimestamp().getZone().getId());
                                 gelfMessage.setThreadName(message.getThreadName());
                                 gelfMessage.setExceptionClass(message.getExceptionClass());
                                 gelfMessage.setExceptionMessage(message.getExceptionMessage());
                                 gelfMessage.setMarker(message.getMarker());
                                 gelfMessage.setContext(message.getContext());
-                                if(message.getTimeZone() != null) {
-                                    gelfMessage.setTimeZone(message.getTimeZone().getID());
-                                }
-
 
 
                                 final String content = gson.toJson(gelfMessage);

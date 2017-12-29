@@ -1,8 +1,10 @@
 package com.canoo.dolphin.logger;
 
+import com.canoo.dolphin.logger.impl.LogMessage;
 import com.canoo.dolphin.logger.spi.DolphinLoggerBridge;
 import com.canoo.dolphin.logger.spi.DolphinLoggerBridgeFactory;
 import com.canoo.dp.impl.platform.core.Assert;
+import com.canoo.platform.core.functional.Subscription;
 import org.slf4j.ILoggerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,10 +20,18 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Consumer;
 
 public class DolphinLoggerFactory implements ILoggerFactory {
 
     private final CopyOnWriteArrayList<String> markers = new CopyOnWriteArrayList<>();
+
+    private static final List<LogMessage> messageCache = new CopyOnWriteArrayList<>();
+
+    private static final List<Consumer<LogMessage>> listeners = new CopyOnWriteArrayList<>();
+
+
+    private static final int maxCacheSize = 10_000;
 
     private final AtomicBoolean configured = new AtomicBoolean(false);
 
@@ -108,6 +118,18 @@ public class DolphinLoggerFactory implements ILoggerFactory {
         return Collections.unmodifiableList(markers);
     }
 
+    public void addToCache(final LogMessage logMessage) {
+        //TODO: Must be done in background thread...
+        while(messageCache.size() > maxCacheSize) {
+            messageCache.remove(0);
+        }
+        messageCache.add(logMessage);
+
+        listeners.forEach(l -> l.accept(logMessage));
+    }
+
+
+
     public static void applyConfiguration(final DolphinLoggerConfiguration configuration) {
         final ILoggerFactory factory = LoggerFactory.getILoggerFactory();
         Objects.requireNonNull(factory);
@@ -116,5 +138,14 @@ public class DolphinLoggerFactory implements ILoggerFactory {
         } else {
             throw new IllegalStateException(LoggerFactory.class + " is not of type " + DolphinLoggerFactory.class);
         }
+    }
+
+    public static List<LogMessage> getLogCache() {
+        return messageCache;
+    }
+
+    public static Subscription addListener(Consumer<LogMessage> listener) {
+        listeners.add(listener);
+        return () -> listeners.remove(listener);
     }
 }

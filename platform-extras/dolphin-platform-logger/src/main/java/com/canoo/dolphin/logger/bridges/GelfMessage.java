@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
-public class GelfMessage implements Serializable{
+public class GelfMessage implements Serializable {
 
     private String message;
 

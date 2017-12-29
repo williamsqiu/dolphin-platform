@@ -7,8 +7,6 @@ import com.canoo.dolphin.logger.spi.DolphinLoggerBridge;
 import com.canoo.dp.impl.platform.core.ansi.AnsiOut;
 import org.slf4j.event.Level;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.Objects;
@@ -30,7 +28,6 @@ public class SimpleDolphinLogger implements DolphinLoggerBridge {
         if (DolphinLoggerUtils.isLevelEnabled(this.level, logMessage.getLevel())) {
 
             final String textColor = Optional.ofNullable(logMessage.getLevel()).
-                    map(l -> Level.valueOf(l)).
                     map(l -> {
                         if (l.equals(Level.ERROR)) {
                             return AnsiOut.ANSI_RED;
@@ -46,7 +43,8 @@ public class SimpleDolphinLogger implements DolphinLoggerBridge {
 
             final StringBuilder buf = new StringBuilder();
             buf.append(AnsiOut.ANSI_WHITE);
-            buf.append(dateFormat.format(new Date(logMessage.getTimestamp())));
+            final Date timestamp = Date.from(logMessage.getTimestamp().toInstant());
+            buf.append(dateFormat.format(timestamp));
             buf.append(AnsiOut.ANSI_RESET);
 
             buf.append(" ");
@@ -83,22 +81,13 @@ public class SimpleDolphinLogger implements DolphinLoggerBridge {
             if(logMessage.getThrowable() != null) {
                 buf.append(AnsiOut.ANSI_RED);
                 buf.append(System.lineSeparator());
-                buf.append(toStackTrace(logMessage.getThrowable()));
+                buf.append(logMessage.getExceptionDetail());
                 buf.append(AnsiOut.ANSI_RESET);
             }
             print(buf.toString());
         }
     }
 
-
-    private String toStackTrace(final Throwable throwable) {
-        StringWriter stringWriter = new StringWriter();
-        PrintWriter stream = new PrintWriter(stringWriter);
-        if (throwable != null) {
-            throwable.printStackTrace(stream);
-        }
-        return stringWriter.toString().substring(0, stringWriter.toString().length() - 1);
-    }
 
     private synchronized void print(final String message) {
         System.out.println(message);
