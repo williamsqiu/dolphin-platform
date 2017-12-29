@@ -28,7 +28,7 @@ public class DolphinLoggerFactory implements ILoggerFactory {
 
     private static final List<LogMessage> messageCache = new CopyOnWriteArrayList<>();
 
-    private static final List<Consumer<LogMessage>> listeners = new CopyOnWriteArrayList<>();
+    private static final List<Consumer<List<LogMessage>>> listeners = new CopyOnWriteArrayList<>();
 
 
     private static final int maxCacheSize = 10_000;
@@ -125,7 +125,13 @@ public class DolphinLoggerFactory implements ILoggerFactory {
         }
         messageCache.add(logMessage);
 
-        listeners.forEach(l -> l.accept(logMessage));
+        listeners.forEach(l -> {
+            try {
+                l.accept(messageCache);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
     }
 
 
@@ -144,7 +150,18 @@ public class DolphinLoggerFactory implements ILoggerFactory {
         return messageCache;
     }
 
-    public static Subscription addListener(Consumer<LogMessage> listener) {
+    public static void clearCache() {
+        messageCache.clear();
+        listeners.forEach(l -> {
+            try {
+                l.accept(messageCache);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    public static Subscription addListener(Consumer<List<LogMessage>> listener) {
         listeners.add(listener);
         return () -> listeners.remove(listener);
     }
