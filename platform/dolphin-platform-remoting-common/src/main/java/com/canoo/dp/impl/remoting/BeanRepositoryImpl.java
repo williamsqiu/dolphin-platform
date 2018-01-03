@@ -67,11 +67,7 @@ public class BeanRepositoryImpl implements BeanRepository {
     @Override
     public <T> Subscription addOnAddedListener(final Class<T> beanClass, final BeanAddedListener<? super T> listener) {
         DolphinUtils.assertIsDolphinBean(beanClass);
-        if (beanAddedListenerMap.containsKey(beanClass)) {
-            beanAddedListenerMap.get(beanClass).add(listener);
-        } else {
-            beanAddedListenerMap.put(beanClass, Arrays.asList(listener));
-        }
+        beanAddedListenerMap.computeIfAbsent(beanClass, s -> new ArrayList()).add(listener);
         return () -> {
             if (beanAddedListenerMap.containsKey(beanClass)) {
                 beanAddedListenerMap.get(beanClass).remove(listener);
@@ -88,11 +84,7 @@ public class BeanRepositoryImpl implements BeanRepository {
     @Override
     public <T> Subscription addOnRemovedListener(final Class<T> beanClass, final BeanRemovedListener<? super T> listener) {
         DolphinUtils.assertIsDolphinBean(beanClass);
-        if (beanRemovedListenerMap.containsKey(beanClass)) {
-            beanRemovedListenerMap.get(beanClass).add(listener);
-        } else {
-            beanRemovedListenerMap.put(beanClass, Arrays.asList(listener));
-        }
+        beanRemovedListenerMap.computeIfAbsent(beanClass, s -> new ArrayList()).add(listener);
         return () -> {
             if (beanRemovedListenerMap.containsKey(beanClass)) {
                 beanRemovedListenerMap.get(beanClass).remove(listener);
