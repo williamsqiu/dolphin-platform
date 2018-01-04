@@ -89,7 +89,7 @@ public abstract class AbstractEventBus implements RemotingEventBus {
             for (ListenerWithFilter<T> listenerAndFilter : listenersInCurrentSession) {
                 final Predicate<MessageEventContext<T>> filter = listenerAndFilter.getFilter();
                 final MessageListener<T> listener = listenerAndFilter.getListener();
-                if(filter == null || filter.test(event.getMessageEventContext())) {
+                if (filter == null || filter.test(event.getMessageEventContext())) {
                     listener.onMessage(event);
                 }
             }
@@ -160,7 +160,7 @@ public abstract class AbstractEventBus implements RemotingEventBus {
                         @Override
                         public void run() {
                             LOG.trace("Calling event listener for topic {} in Dolphin Platform context {}", topic.getName(), sessionId);
-                            final Predicate<MessageEventContext<T>> sessionFilter = ((ListenerWithFilter<T>)listenerAndFilter).getFilter();
+                            final Predicate<MessageEventContext<T>> sessionFilter = ((ListenerWithFilter<T>) listenerAndFilter).getFilter();
                             final MessageListener<T> listener = (MessageListener<T>) listenerAndFilter.getListener();
                             if (sessionFilter == null || sessionFilter.test(event.getMessageEventContext())) {
                                 listener.onMessage(event);
@@ -174,16 +174,10 @@ public abstract class AbstractEventBus implements RemotingEventBus {
 
     private <T extends Serializable> boolean sendInSameClientSession(final DolphinEvent<T> event, final MessageListener<T> listener) {
         Assert.requireNonNull(event, "event");
-
-        final DolphinContext currentContext = getCurrentContext();
-        if(currentContext != null) {
-            final ClientSession clientSession = currentContext.getClientSession();
-            if(clientSession != null) {
-                final MessageEventContext<T> eventContext = event.getMessageEventContext();
-                if(eventContext != null) {
-                    return new ClientSessionEventFilter(clientSession.getId()).test(eventContext);
-                }
-            }
+        final String listenerSessionId = listenerToSessionMap.get(listener);
+        final MessageEventContext<T> eventContext = event.getMessageEventContext();
+        if (eventContext != null) {
+            return new ClientSessionEventFilter(listenerSessionId).test(eventContext);
         }
         return false;
     }
