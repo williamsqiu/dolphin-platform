@@ -13,24 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.dolphin.converters;
+package com.canoo.dolphin.impl.converters;
 
 import com.canoo.platform.remoting.spi.converter.Converter;
 import com.canoo.platform.remoting.spi.converter.ValueConverterException;
 import com.canoo.dp.impl.remoting.Converters;
 import com.canoo.dp.impl.remoting.BeanRepository;
+import com.canoo.dp.impl.remoting.converters.ValueFieldTypes;
 import mockit.Mocked;
 import org.testng.annotations.Test;
 
+import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.TimeZone;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.fail;
 
-public class ZonedDateTimeConverterFactoryTest {
+public class LocalDateTimeConverterFactoryTest {
 
     @Test
     public void testFactoryFieldType(@Mocked BeanRepository beanRepository) {
@@ -38,10 +39,10 @@ public class ZonedDateTimeConverterFactoryTest {
         Converters converters = new Converters(beanRepository);
 
         //When
-        int type = converters.getFieldType(ZonedDateTime.class);
+        int type = converters.getFieldType(LocalDateTime.class);
 
         //Then
-        assertEquals(type, ValueFieldTypes.ZONED_DATE_TIME_FIELD_TYPE);
+        assertEquals(type, ValueFieldTypes.LOCAL_DATE_TIME_FIELD_TYPE);
     }
 
     @Test
@@ -50,7 +51,7 @@ public class ZonedDateTimeConverterFactoryTest {
         Converters converters = new Converters(beanRepository);
 
         //When
-        Converter converter = converters.getConverter(ZonedDateTime.class);
+        Converter converter = converters.getConverter(LocalDateTime.class);
 
         //Then
         assertNotNull(converter);
@@ -62,14 +63,14 @@ public class ZonedDateTimeConverterFactoryTest {
         Converters converters = new Converters(beanRepository);
 
         //When
-        Converter converter = converters.getConverter(ZonedDateTime.class);
+        Converter converter = converters.getConverter(LocalDateTime.class);
 
         //Then
-        testReconversion(converter, ZonedDateTime.now());
-        testReconversion(converter, ZonedDateTime.now(ZoneId.of(ZoneId.getAvailableZoneIds().iterator().next())));
-        testReconversion(converter, ZonedDateTime.now(ZoneId.of("GMT")));
-        testReconversion(converter, ZonedDateTime.now(ZoneId.of("Z")));
-        testReconversion(converter, ZonedDateTime.now(ZoneId.of("UTC+6")));
+        testReconversion(converter, LocalDateTime.now());
+        testReconversion(converter, LocalDateTime.now(ZoneId.of(ZoneId.getAvailableZoneIds().iterator().next())));
+        testReconversion(converter, LocalDateTime.now(ZoneId.of("GMT")));
+        testReconversion(converter, LocalDateTime.now(ZoneId.of("Z")));
+        testReconversion(converter, LocalDateTime.now(ZoneId.of("UTC+6")));
     }
 
     @Test
@@ -78,7 +79,7 @@ public class ZonedDateTimeConverterFactoryTest {
         Converters converters = new Converters(beanRepository);
 
         //When
-        Converter converter = converters.getConverter(ZonedDateTime.class);
+        Converter converter = converters.getConverter(LocalDateTime.class);
 
         //Then
         try {
@@ -90,41 +91,41 @@ public class ZonedDateTimeConverterFactoryTest {
     }
 
     @Test(expectedExceptions = ClassCastException.class)
-    public void testWrongDolphinValues(@Mocked BeanRepository beanRepository) throws ValueConverterException {
+    public void testWrongDolphinValues(@Mocked BeanRepository beanRepository) throws ValueConverterException{
         //Given
         Converters converters = new Converters(beanRepository);
 
         //When
-        Converter converter = converters.getConverter(ZonedDateTime.class);
+        Converter converter = converters.getConverter(LocalDateTime.class);
 
         //Then
         converter.convertFromDolphin(7);
     }
 
     @Test(expectedExceptions = ClassCastException.class)
-    public void testWrongBeanValues(@Mocked BeanRepository beanRepository) throws ValueConverterException {
+    public void testWrongBeanValues(@Mocked BeanRepository beanRepository) throws ValueConverterException{
         //Given
         Converters converters = new Converters(beanRepository);
 
         //When
-        Converter converter = converters.getConverter(ZonedDateTime.class);
+        Converter converter = converters.getConverter(LocalDateTime.class);
 
         //Then
         converter.convertToDolphin(7);
     }
 
-    private void testReconversion(Converter converter, ZonedDateTime time) {
+    private void testReconversion(Converter converter, LocalDateTime time) {
         try {
             Object dolphinObject = converter.convertToDolphin(time);
             assertNotNull(dolphinObject);
             TimeZone.setDefault(TimeZone.getTimeZone(ZoneId.of("UTC-3")));
             Object reconvertedObject = converter.convertFromDolphin(dolphinObject);
             assertNotNull(reconvertedObject);
-            assertEquals(reconvertedObject.getClass(), ZonedDateTime.class);
-            ZonedDateTime reverted = (ZonedDateTime) reconvertedObject;
-            assertEquals(reverted.withZoneSameInstant(ZoneId.of("UTC")), time.withZoneSameInstant(ZoneId.of("UTC")));
+            assertEquals(reconvertedObject.getClass(), LocalDateTime.class);
+            LocalDateTime reverted = (LocalDateTime) reconvertedObject;
+            assertEquals(reverted, time);
         } catch (ValueConverterException e) {
-            fail("Error in converter", e);
+            fail("Error in conversion");
         }
     }
 }

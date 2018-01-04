@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.dolphin.converters;
+package com.canoo.dolphin.impl.converters;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
@@ -23,6 +23,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.TimeZone;
 
+import com.canoo.dp.impl.remoting.converters.ValueFieldTypes;
 import org.testng.annotations.Test;
 
 import com.canoo.platform.remoting.spi.converter.Converter;

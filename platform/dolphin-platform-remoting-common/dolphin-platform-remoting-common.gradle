@@ -17,5 +17,4 @@
 dependencies {
     compile project(':dolphin-platform-core')
     compile "com.google.code.gson:gson:$gsonVersion"
-    compile "com.google.guava:guava:$guavaVersion"
 }
