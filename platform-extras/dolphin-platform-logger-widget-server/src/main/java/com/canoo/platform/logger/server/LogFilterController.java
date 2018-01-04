@@ -3,7 +3,7 @@ package com.canoo.platform.logger.server;
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.core.functional.Subscription;
 import com.canoo.platform.logger.model.LogSearchFilterBean;
-import com.canoo.platform.logger.server.util.LoggerSearchRequest;
+import com.canoo.platform.logger.model.LoggerSearchRequest;
 import com.canoo.platform.remoting.server.DolphinAction;
 import com.canoo.platform.remoting.server.DolphinController;
 import com.canoo.platform.remoting.server.DolphinModel;

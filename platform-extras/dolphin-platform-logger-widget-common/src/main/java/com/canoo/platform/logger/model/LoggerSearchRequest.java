@@ -1,4 +1,4 @@
-package com.canoo.platform.logger.server.util;
+package com.canoo.platform.logger.model;
 
 import org.slf4j.event.Level;
 

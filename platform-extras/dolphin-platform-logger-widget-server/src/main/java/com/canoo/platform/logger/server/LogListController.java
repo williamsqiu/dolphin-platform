@@ -5,7 +5,7 @@ import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.logger.model.LogEntryBean;
 import com.canoo.platform.logger.model.LogListBean;
 import com.canoo.platform.logger.server.service.LoggerRepository;
-import com.canoo.platform.logger.server.util.LoggerSearchRequest;
+import com.canoo.platform.logger.model.LoggerSearchRequest;
 import com.canoo.platform.remoting.BeanManager;
 import com.canoo.platform.remoting.server.DolphinController;
 import com.canoo.platform.remoting.server.DolphinModel;

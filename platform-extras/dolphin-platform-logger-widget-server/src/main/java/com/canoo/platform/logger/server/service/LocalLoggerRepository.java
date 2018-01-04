@@ -2,7 +2,7 @@ package com.canoo.platform.logger.server.service;
 
 import com.canoo.dolphin.logger.DolphinLoggerFactory;
 import com.canoo.dolphin.logger.impl.LogMessage;
-import com.canoo.platform.logger.server.util.LoggerSearchRequest;
+import com.canoo.platform.logger.model.LoggerSearchRequest;
 
 import java.util.Comparator;
 import java.util.stream.Stream;

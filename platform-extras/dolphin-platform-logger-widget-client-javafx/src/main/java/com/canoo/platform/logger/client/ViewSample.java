@@ -2,10 +2,13 @@ package com.canoo.platform.logger.client;
 
 import com.canoo.dolphin.logger.impl.LogMessage;
 import com.canoo.platform.logger.client.util.LogClientUtil;
+import com.canoo.platform.logger.client.view.LogFilterView;
 import com.canoo.platform.logger.client.view.LogListCell;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.ListView;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,7 +74,13 @@ public class ViewSample extends Application {
             }
         });
 
-        primaryStage.setScene(new Scene(listView));
+        LogFilterView filterView = new LogFilterView();
+        VBox main = new VBox(filterView, listView);
+        main.setFillWidth(true);
+        VBox.setVgrow(filterView, Priority.NEVER);
+        VBox.setVgrow(listView, Priority.ALWAYS);
+
+        primaryStage.setScene(new Scene(main));
         primaryStage.show();
     }
 

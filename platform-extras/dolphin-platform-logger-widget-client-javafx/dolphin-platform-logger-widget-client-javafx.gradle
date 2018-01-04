@@ -18,6 +18,8 @@ dependencies {
     compile project(':dolphin-platform-remoting-client-javafx')
     compile project(':dolphin-platform-logger-widget-common')
 
+    compile 'org.controlsfx:controlsfx:8.40.9'
+
     compile 'de.jensd:fontawesomefx-emojione:2.2.7-2'
     compile 'de.jensd:fontawesomefx-fontawesome:4.7.0-5'
     compile 'de.jensd:fontawesomefx-icons525:3.0.0-4'
