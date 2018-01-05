@@ -1,6 +1,6 @@
 package com.canoo.platform.logger.server;
 
-import com.canoo.dolphin.logger.impl.LogMessage;
+import com.canoo.platform.logging.spi.LogMessage;
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.logger.model.LogEntryBean;
 import com.canoo.platform.logger.model.LogListBean;

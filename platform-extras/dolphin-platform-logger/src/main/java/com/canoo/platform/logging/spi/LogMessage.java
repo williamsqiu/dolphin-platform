@@ -1,4 +1,4 @@
-package com.canoo.dolphin.logger.impl;
+package com.canoo.platform.logging.spi;
 
 import org.slf4j.event.Level;
 

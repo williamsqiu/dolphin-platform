@@ -1,10 +1,11 @@
-package com.canoo.dolphin.logger;
+package com.canoo.impl.dp.logging;
 
-import com.canoo.dolphin.logger.impl.LogMessage;
-import com.canoo.dolphin.logger.spi.DolphinLoggerBridge;
-import com.canoo.dolphin.logger.spi.DolphinLoggerBridgeFactory;
+import com.canoo.platform.logging.spi.LogMessage;
+import com.canoo.platform.logging.spi.DolphinLoggerBridge;
+import com.canoo.platform.logging.spi.DolphinLoggerBridgeFactory;
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.core.functional.Subscription;
+import com.canoo.platform.logging.DolphinLoggerConfiguration;
 import org.slf4j.ILoggerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +30,6 @@ public class DolphinLoggerFactory implements ILoggerFactory {
     private static final List<LogMessage> messageCache = new CopyOnWriteArrayList<>();
 
     private static final List<Consumer<List<LogMessage>>> listeners = new CopyOnWriteArrayList<>();
-
 
     private static final int maxCacheSize = 10_000;
 
@@ -133,8 +133,6 @@ public class DolphinLoggerFactory implements ILoggerFactory {
             }
         });
     }
-
-
 
     public static void applyConfiguration(final DolphinLoggerConfiguration configuration) {
         final ILoggerFactory factory = LoggerFactory.getILoggerFactory();

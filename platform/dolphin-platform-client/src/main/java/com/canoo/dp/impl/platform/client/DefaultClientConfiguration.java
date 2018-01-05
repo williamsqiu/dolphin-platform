@@ -1,6 +1,6 @@
 package com.canoo.dp.impl.platform.client;
 
-import com.canoo.dp.impl.platform.client.http.DefaultHttpURLConnectionFactory;
+import com.canoo.dp.impl.platform.core.http.DefaultHttpURLConnectionFactory;
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.platform.core.SimpleDolphinPlatformThreadFactory;
 import com.canoo.dp.impl.platform.core.SimpleUncaughtExceptionHandler;

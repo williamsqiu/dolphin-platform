@@ -1,7 +1,7 @@
-package com.canoo.dolphin.logger;
+package com.canoo.impl.dp.logging;
 
-import com.canoo.dolphin.logger.impl.LogMessage;
-import com.canoo.dolphin.logger.spi.DolphinLoggerBridge;
+import com.canoo.platform.logging.spi.LogMessage;
+import com.canoo.platform.logging.spi.DolphinLoggerBridge;
 import org.slf4j.Logger;
 import org.slf4j.MDC;
 import org.slf4j.Marker;

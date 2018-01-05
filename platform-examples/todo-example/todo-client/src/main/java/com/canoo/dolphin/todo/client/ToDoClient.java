@@ -15,9 +15,9 @@
  */
 package com.canoo.dolphin.todo.client;
 
-import com.canoo.dolphin.logger.DolphinLoggerConfiguration;
-import com.canoo.dolphin.logger.DolphinLoggerFactory;
-import com.canoo.dolphin.logger.impl.LogMessage;
+import com.canoo.platform.logging.DolphinLoggerConfiguration;
+import com.canoo.impl.dp.logging.DolphinLoggerFactory;
+import com.canoo.platform.logging.spi.LogMessage;
 import com.canoo.platform.logger.client.util.LogClientUtil;
 import com.canoo.platform.logger.client.view.LogListCell;
 import com.canoo.platform.remoting.client.ClientContext;

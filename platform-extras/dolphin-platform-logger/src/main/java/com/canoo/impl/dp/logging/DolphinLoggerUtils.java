@@ -1,4 +1,4 @@
-package com.canoo.dolphin.logger;
+package com.canoo.impl.dp.logging;
 
 import com.canoo.dp.impl.platform.core.Assert;
 import org.slf4j.event.Level;

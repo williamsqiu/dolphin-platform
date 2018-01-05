@@ -1,7 +1,7 @@
-package com.canoo.dolphin.logger;
+package com.canoo.platform.logging;
 
-import com.canoo.dolphin.core.DefaultHttpURLConnectionFactory;
-import com.canoo.dolphin.logger.impl.DolphinLoggerThreadFactory;
+import com.canoo.impl.dp.logging.DolphinLoggerThreadFactory;
+import com.canoo.dp.impl.platform.core.http.DefaultHttpURLConnectionFactory;
 import com.canoo.platform.core.http.HttpURLConnectionFactory;
 import org.slf4j.event.Level;
 

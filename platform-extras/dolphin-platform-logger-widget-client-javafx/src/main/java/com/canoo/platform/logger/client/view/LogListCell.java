@@ -1,6 +1,6 @@
 package com.canoo.platform.logger.client.view;
 
-import com.canoo.dolphin.logger.impl.LogMessage;
+import com.canoo.platform.logging.spi.LogMessage;
 import javafx.scene.control.ListCell;
 
 public class LogListCell extends ListCell<LogMessage> {

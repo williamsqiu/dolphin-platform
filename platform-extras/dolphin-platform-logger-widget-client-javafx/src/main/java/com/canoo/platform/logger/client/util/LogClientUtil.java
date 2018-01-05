@@ -1,7 +1,7 @@
 package com.canoo.platform.logger.client.util;
 
-import com.canoo.dolphin.logger.DolphinLoggerFactory;
-import com.canoo.dolphin.logger.impl.LogMessage;
+import com.canoo.impl.dp.logging.DolphinLoggerFactory;
+import com.canoo.platform.logging.spi.LogMessage;
 import com.canoo.platform.core.functional.Subscription;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;

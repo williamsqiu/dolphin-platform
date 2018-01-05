@@ -1,9 +1,9 @@
-package com.canoo.dolphin.logger.bridges;
+package com.canoo.impl.dp.logging.bridges;
 
-import com.canoo.dolphin.logger.DolphinLoggerConfiguration;
-import com.canoo.dolphin.logger.DolphinLoggerUtils;
-import com.canoo.dolphin.logger.impl.LogMessage;
-import com.canoo.dolphin.logger.spi.DolphinLoggerBridge;
+import com.canoo.platform.logging.DolphinLoggerConfiguration;
+import com.canoo.impl.dp.logging.DolphinLoggerUtils;
+import com.canoo.platform.logging.spi.LogMessage;
+import com.canoo.platform.logging.spi.DolphinLoggerBridge;
 import com.canoo.dp.impl.platform.core.ansi.AnsiOut;
 import org.slf4j.event.Level;
 

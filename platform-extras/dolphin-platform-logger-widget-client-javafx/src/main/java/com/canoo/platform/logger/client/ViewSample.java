@@ -1,6 +1,6 @@
 package com.canoo.platform.logger.client;
 
-import com.canoo.dolphin.logger.impl.LogMessage;
+import com.canoo.platform.logging.spi.LogMessage;
 import com.canoo.platform.logger.client.util.LogClientUtil;
 import com.canoo.platform.logger.client.view.LogFilterView;
 import com.canoo.platform.logger.client.view.LogListCell;

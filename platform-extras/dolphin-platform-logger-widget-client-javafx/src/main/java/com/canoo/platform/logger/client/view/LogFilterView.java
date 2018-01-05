@@ -1,6 +1,6 @@
 package com.canoo.platform.logger.client.view;
 
-import com.canoo.dolphin.logger.impl.LogMessage;
+import com.canoo.platform.logging.spi.LogMessage;
 import com.canoo.platform.logger.model.LoggerSearchRequest;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;

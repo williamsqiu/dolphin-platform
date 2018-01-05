@@ -1,8 +1,7 @@
-package com.canoo.dolphin.logger.sample;
+package com.canoo.platform.logging;
 
-import com.canoo.dolphin.logger.DolphinLogger;
-import com.canoo.dolphin.logger.DolphinLoggerConfiguration;
-import com.canoo.dolphin.logger.DolphinLoggerFactory;
+import com.canoo.impl.dp.logging.DolphinLogger;
+import com.canoo.impl.dp.logging.DolphinLoggerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MarkerFactory;

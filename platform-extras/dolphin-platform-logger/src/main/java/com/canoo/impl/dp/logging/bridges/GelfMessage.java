@@ -1,4 +1,4 @@
-package com.canoo.dolphin.logger.bridges;
+package com.canoo.impl.dp.logging.bridges;
 
 import java.io.Serializable;
 import java.util.List;

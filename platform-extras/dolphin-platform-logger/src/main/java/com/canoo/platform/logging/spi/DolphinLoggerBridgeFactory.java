@@ -1,6 +1,6 @@
-package com.canoo.dolphin.logger.spi;
+package com.canoo.platform.logging.spi;
 
-import com.canoo.dolphin.logger.DolphinLoggerConfiguration;
+import com.canoo.platform.logging.DolphinLoggerConfiguration;
 
 public interface DolphinLoggerBridgeFactory {
 

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.dp.impl.platform.client.http;
+package com.canoo.dp.impl.platform.core.http;
 
 import org.apiguardian.api.API;
 
@@ -23,6 +23,8 @@ import static org.apiguardian.api.API.Status.INTERNAL;
 public interface HttpStatus {
 
     int HTTP_OK = 200;
+
+    int ACCEPTED = 202;
 
     int SC_MULTIPLE_CHOICES = 300;
 

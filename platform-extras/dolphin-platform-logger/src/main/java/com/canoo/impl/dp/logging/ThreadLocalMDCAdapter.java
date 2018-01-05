@@ -1,4 +1,4 @@
-package com.canoo.dolphin.logger.impl;
+package com.canoo.impl.dp.logging;
 
 import org.slf4j.spi.MDCAdapter;
 

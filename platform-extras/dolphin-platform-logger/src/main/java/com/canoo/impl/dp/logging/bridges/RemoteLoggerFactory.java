@@ -1,8 +1,8 @@
-package com.canoo.dolphin.logger.bridges;
+package com.canoo.impl.dp.logging.bridges;
 
-import com.canoo.dolphin.logger.DolphinLoggerConfiguration;
-import com.canoo.dolphin.logger.spi.DolphinLoggerBridge;
-import com.canoo.dolphin.logger.spi.DolphinLoggerBridgeFactory;
+import com.canoo.platform.logging.DolphinLoggerConfiguration;
+import com.canoo.platform.logging.spi.DolphinLoggerBridge;
+import com.canoo.platform.logging.spi.DolphinLoggerBridgeFactory;
 
 public class RemoteLoggerFactory implements DolphinLoggerBridgeFactory {
 

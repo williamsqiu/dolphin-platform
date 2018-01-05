@@ -1,10 +1,9 @@
-package com.canoo.dolphin.logger.bridges;
+package com.canoo.impl.dp.logging.bridges;
 
-import com.canoo.dolphin.core.HttpConstants;
-import com.canoo.dolphin.logger.DolphinLoggerConfiguration;
-import com.canoo.dolphin.logger.DolphinLoggerUtils;
-import com.canoo.dolphin.logger.impl.LogMessage;
-import com.canoo.dolphin.logger.spi.DolphinLoggerBridge;
+import com.canoo.platform.logging.DolphinLoggerConfiguration;
+import com.canoo.impl.dp.logging.DolphinLoggerUtils;
+import com.canoo.platform.logging.spi.LogMessage;
+import com.canoo.platform.logging.spi.DolphinLoggerBridge;
 import com.canoo.platform.core.http.HttpURLConnectionFactory;
 import com.google.gson.Gson;
 import org.slf4j.Logger;
@@ -22,6 +21,13 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
+
+import static com.canoo.dp.impl.platform.core.http.HttpHeaderConstants.CHARSET;
+import static com.canoo.dp.impl.platform.core.http.HttpHeaderConstants.CONTENT_TYPE_HEADER;
+import static com.canoo.dp.impl.platform.core.http.HttpHeaderConstants.JSON_MIME_TYPE;
+import static com.canoo.dp.impl.platform.core.http.HttpStatus.ACCEPTED;
+import static com.canoo.dp.impl.platform.core.http.HttpStatus.HTTP_OK;
+import static com.canoo.platform.core.http.RequestMethod.POST;
 
 public class RemoteLogger implements DolphinLoggerBridge {
 
@@ -82,8 +88,8 @@ public class RemoteLogger implements DolphinLoggerBridge {
                                 final HttpURLConnection conn = connectionFactory.create(remoteUrl);
                                 conn.setDoOutput(true);
                                 conn.setDoInput(true);
-                                conn.setRequestProperty(HttpConstants.CONTENT_TYPE_HEADER, HttpConstants.JSON_MIME_TYPE);
-                                conn.setRequestMethod(HttpConstants.POST_METHOD);
+                                conn.setRequestProperty(CONTENT_TYPE_HEADER, JSON_MIME_TYPE);
+                                conn.setRequestMethod(POST.getRawName());
 
                                 GelfMessage gelfMessage = new GelfMessage();
                                 gelfMessage.setMessage(message.getMessage());
@@ -101,12 +107,12 @@ public class RemoteLogger implements DolphinLoggerBridge {
 
                                 final String content = gson.toJson(gelfMessage);
                                 OutputStream w = conn.getOutputStream();
-                                w.write(content.getBytes(HttpConstants.CHARSET));
+                                w.write(content.getBytes(CHARSET));
                                 w.close();
 
                                 //RESPONSE
                                 int responseCode = conn.getResponseCode();
-                                if (responseCode != HttpConstants.HTTP_OK && responseCode != HttpConstants.HTTP_ACCEPTED) {
+                                if (responseCode != HTTP_OK && responseCode != ACCEPTED) {
                                     throw new IOException("Bad Request! status code " + responseCode);
                                 }
                             } catch (Exception e) {

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.dp.impl.platform.client.http;
+package com.canoo.dp.impl.platform.core.http;
 
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.core.http.HttpURLConnectionFactory;

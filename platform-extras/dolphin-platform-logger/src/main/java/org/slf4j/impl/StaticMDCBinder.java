@@ -1,6 +1,6 @@
 package org.slf4j.impl;
 
-import com.canoo.dolphin.logger.impl.ThreadLocalMDCAdapter;
+import com.canoo.impl.dp.logging.ThreadLocalMDCAdapter;
 import org.slf4j.spi.MDCAdapter;
 
 public class StaticMDCBinder {
