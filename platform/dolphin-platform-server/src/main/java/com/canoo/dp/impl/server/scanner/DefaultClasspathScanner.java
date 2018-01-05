@@ -22,12 +22,13 @@ import org.reflections.Reflections;
 import org.reflections.util.ClasspathHelper;
 import org.reflections.util.ConfigurationBuilder;
 import org.reflections.util.FilterBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.net.URL;
 import java.util.*;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import static org.apiguardian.api.API.Status.INTERNAL;
@@ -38,6 +39,8 @@ import static org.apiguardian.api.API.Status.INTERNAL;
  */
 @API(since = "0.x", status = INTERNAL)
 public class DefaultClasspathScanner implements ClasspathScanner {
+
+    private static final Logger LOG = LoggerFactory.getLogger(DefaultClasspathScanner.class);
 
     private final Reflections reflections;
 
@@ -55,12 +58,19 @@ public class DefaultClasspathScanner implements ClasspathScanner {
 
     public DefaultClasspathScanner(final List<String> rootPackages) {
 
+        Assert.requireNonNull(rootPackages, "rootPackages");
+
+        LOG.info("Scanning class path for root packages {}", Arrays.toString(rootPackages.toArray()));
+
+        //logging
         ConfigurationBuilder configuration = ConfigurationBuilder.build(DefaultClasspathScanner.class.getClassLoader());
         configuration = configuration.setExpandSuperTypes(false);
 
-        configuration = configuration.forPackages(rootPackages.toArray(new String[rootPackages.size()]));
-        configuration = configuration.setUrls(rootPackages.stream().map(rootPackage -> ClasspathHelper.forPackage(rootPackage)).flatMap(list -> list.stream()).collect(Collectors.toList()));
-        configuration = configuration.filterInputsBy(new FilterBuilder().includePackage(rootPackages.toArray(new String[rootPackages.size()])));
+        if(rootPackages != null && rootPackages.size() > 0) {
+            configuration = configuration.forPackages(rootPackages.toArray(new String[rootPackages.size()]));
+            configuration = configuration.setUrls(rootPackages.stream().map(rootPackage -> ClasspathHelper.forPackage(rootPackage)).flatMap(list -> list.stream()).collect(Collectors.toList()));
+            configuration = configuration.filterInputsBy(new FilterBuilder().includePackage(rootPackages.toArray(new String[rootPackages.size()])));
+        }
 
         //Special case for JBOSS Application server to get all classes
         try {
@@ -80,9 +90,9 @@ public class DefaultClasspathScanner implements ClasspathScanner {
             }
         }
         for (URL url : toRemove) {
+            LOG.info("Url removed {}", url.toString());
             configuration.getUrls().remove(url);
         }
-
         reflections = new Reflections(configuration);
     }
 
