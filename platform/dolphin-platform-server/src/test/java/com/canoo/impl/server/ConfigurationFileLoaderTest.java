@@ -22,7 +22,6 @@ import org.testng.annotations.Test;
 import static org.testng.Assert.*;
 import static com.canoo.dp.impl.server.config.DefaultPlatformConfiguration.USE_CROSS_SITE_ORIGIN_FILTER;
 import static com.canoo.dp.impl.server.config.DefaultPlatformConfiguration.ROOT_PACKAGE_FOR_CLASSPATH_SCAN;
-import static com.canoo.dp.impl.server.config.DefaultPlatformConfiguration.ROOT_PACKAGE_FOR_CLASSPATH_SCAN_DEFAULT_VALUE;
 import static com.canoo.dp.impl.server.config.DefaultPlatformConfiguration.USE_CROSS_SITE_ORIGIN_FILTER_DEFAULT_VALUE;
 
 
@@ -36,7 +35,7 @@ public class ConfigurationFileLoaderTest {
 
             //then:
             assertEquals(configuration.getBooleanProperty(USE_CROSS_SITE_ORIGIN_FILTER), false);
-            assertEquals(configuration.getProperty(ROOT_PACKAGE_FOR_CLASSPATH_SCAN, ROOT_PACKAGE_FOR_CLASSPATH_SCAN_DEFAULT_VALUE), null);
+            assertEquals(configuration.getProperty(ROOT_PACKAGE_FOR_CLASSPATH_SCAN), null);
         } catch (Exception e) {
             fail("Error in test", e);
         }

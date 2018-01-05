@@ -15,12 +15,13 @@
  */
 package com.canoo.impl.server;
 
-import com.canoo.impl.server.special.SpecialAnnotatedClass;
+import com.canoo.impl.server.classpathscan.documented.DocumentAnnotatedClass;
 import com.canoo.impl.server.util.AnnotatedClassForClasspathScan;
 import com.canoo.impl.server.util.AnnotationForClasspathScanTest;
 import com.canoo.dp.impl.server.scanner.DefaultClasspathScanner;
 import org.testng.annotations.Test;
 
+import javax.annotation.Resource;
 import javax.annotation.Resources;
 import java.lang.annotation.Documented;
 import java.util.Set;
@@ -31,10 +32,11 @@ import static org.testng.Assert.assertTrue;
 
 public class ClasspathScannerTest {
 
+    private static final String CLASSPATH_SCAN = "com.canoo.impl.server.classpathscan";
     @Test
     public void testSimpleScan() {
         //There can't be a class that is annotated with Inject
-        DefaultClasspathScanner scanner = new DefaultClasspathScanner();
+        final DefaultClasspathScanner scanner = new DefaultClasspathScanner();
         Set<Class<?>> classes = scanner.getTypesAnnotatedWith(Resources.class);
         assertNotNull(classes);
         assertEquals(classes.size(), 0);
@@ -48,21 +50,39 @@ public class ClasspathScannerTest {
     @Test
     public void testInPackageScan() {
         //There can't be a class that is annotated with Inject
-        DefaultClasspathScanner scanner = new DefaultClasspathScanner("com.canoo.impl");
-        Set<Class<?>> classes = scanner.getTypesAnnotatedWith(Resources.class);
-        assertNotNull(classes);
-        assertEquals(classes.size(), 0);
+        final DefaultClasspathScanner scanner = new DefaultClasspathScanner(CLASSPATH_SCAN);
+        assertNotNull(scanner);
+        assertForAnnotation(scanner);
+    }
 
-        classes = scanner.getTypesAnnotatedWith(AnnotationForClasspathScanTest.class);
-        assertNotNull(classes);
-        assertEquals(classes.size(), 1);
-        assertTrue(classes.contains(AnnotatedClassForClasspathScan.class));
+    @Test
+    public void testInMultiplePackages() {
+        //There can't be a class that is annotated with Inject
+        final DefaultClasspathScanner scanner = new DefaultClasspathScanner("com.canoo.impl.server.classpathscan.documented", "com.canoo.impl.server.classpathscan.resource");
+        assertForAnnotation(scanner);
+    }
+
+    private void assertForAnnotation(final DefaultClasspathScanner scanner) {
+        final Set<Class<?>> resourceClasses = scanner.getTypesAnnotatedWith(Resource.class);
+        assertNotNull(resourceClasses);
+        assertEquals(resourceClasses.size(), 1);
+
+        final Set<Class<?>> documentClasses = scanner.getTypesAnnotatedWith(Documented.class);
+        assertNotNull(documentClasses);
+        assertEquals(documentClasses.size(), 1);
+    }
+
+    @Test
+    public void testInMultiplePackagesWithBasePackageFirst() {
+        //There can't be a class that is annotated with Inject
+        final DefaultClasspathScanner scanner = new DefaultClasspathScanner(CLASSPATH_SCAN, "com.canoo.impl.server.classpathscan.documented", "com.canoo.impl.server.classpathscan.resource");
+        assertForAnnotation(scanner);
     }
 
     @Test
     public void testScanOtherPackage() {
         //There can't be a class that is annotated with Inject
-        DefaultClasspathScanner scanner = new DefaultClasspathScanner("com.canoo.impl.server.special");
+        final DefaultClasspathScanner scanner = new DefaultClasspathScanner(CLASSPATH_SCAN);
         Set<Class<?>> classes = scanner.getTypesAnnotatedWith(Resources.class);
         assertNotNull(classes);
         assertEquals(classes.size(), 0);
@@ -74,12 +94,12 @@ public class ClasspathScannerTest {
         classes = scanner.getTypesAnnotatedWith(Documented.class);
         assertNotNull(classes);
         assertEquals(classes.size(), 1);
-        assertTrue(classes.contains(SpecialAnnotatedClass.class));
+        assertTrue(classes.contains(DocumentAnnotatedClass.class));
     }
 
     @Test(expectedExceptions = NullPointerException.class)
     public void testNullArgument() {
-        DefaultClasspathScanner scanner = new DefaultClasspathScanner();
+        final DefaultClasspathScanner scanner = new DefaultClasspathScanner();
         Set<Class<?>> classes = scanner.getTypesAnnotatedWith(null);
     }
 
