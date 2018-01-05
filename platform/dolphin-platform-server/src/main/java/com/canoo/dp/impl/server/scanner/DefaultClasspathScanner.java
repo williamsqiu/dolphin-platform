@@ -60,13 +60,12 @@ public class DefaultClasspathScanner implements ClasspathScanner {
 
         Assert.requireNonNull(rootPackages, "rootPackages");
 
-        LOG.info("Scanning class path for root packages {}", Arrays.toString(rootPackages.toArray()));
+        LOG.trace("Scanning class path for root packages {}", Arrays.toString(rootPackages.toArray()));
 
-        //logging
         ConfigurationBuilder configuration = ConfigurationBuilder.build(DefaultClasspathScanner.class.getClassLoader());
         configuration = configuration.setExpandSuperTypes(false);
 
-        if(rootPackages != null && rootPackages.size() > 0) {
+        if(rootPackages.size() > 0) {
             configuration = configuration.forPackages(rootPackages.toArray(new String[rootPackages.size()]));
             configuration = configuration.setUrls(rootPackages.stream().map(rootPackage -> ClasspathHelper.forPackage(rootPackage)).flatMap(list -> list.stream()).collect(Collectors.toList()));
             configuration = configuration.filterInputsBy(new FilterBuilder().includePackage(rootPackages.toArray(new String[rootPackages.size()])));
@@ -89,8 +88,9 @@ public class DefaultClasspathScanner implements ClasspathScanner {
                 toRemove.add(url);
             }
         }
+        LOG.trace("Configuration Urls {}", Arrays.toString(configuration.getUrls().toArray()));
         for (URL url : toRemove) {
-            LOG.info("Url removed {}", url.toString());
+            LOG.trace("Url removed {}", url.toString());
             configuration.getUrls().remove(url);
         }
         reflections = new Reflections(configuration);
