@@ -103,7 +103,7 @@ public class DolphinContextCommunicationHandler {
                 writeCommands(results, response);
             } catch (Exception e) {
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-                LOG.error("Can not write response!", e);
+                LOG.error("Can not writeRequestContent response!", e);
                 return;
             }
         } catch (Exception e) {

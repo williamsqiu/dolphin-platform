@@ -25,7 +25,7 @@ public class CookieResponseHandler implements HttpURLConnectionHandler {
         try {
             clientCookieHandler.updateCookiesFromResponse(connection);
         } catch (URISyntaxException e) {
-            throw new DolphinRuntimeException("Can not read cookies from response", e);
+            throw new DolphinRuntimeException("Can not readResponseContent cookies from response", e);
         }
     }
 }

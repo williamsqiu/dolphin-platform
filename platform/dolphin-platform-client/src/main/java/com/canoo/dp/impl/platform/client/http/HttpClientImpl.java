@@ -3,7 +3,7 @@ package com.canoo.dp.impl.platform.client.http;
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.client.ClientConfiguration;
 import com.canoo.platform.core.http.HttpClient;
-import com.canoo.platform.core.http.HttpRequest;
+import com.canoo.platform.core.http.HttpCallRequestBuilder;
 import com.canoo.platform.core.http.HttpURLConnectionFactory;
 import com.canoo.platform.core.http.HttpURLConnectionHandler;
 import com.canoo.platform.core.http.RequestMethod;
@@ -41,18 +41,9 @@ public class HttpClientImpl implements HttpClient {
         this.configuration = configuration;
     }
 
-    public HttpURLConnectionFactory getConnectionFactory() {
-        return httpURLConnectionFactory;
-    }
-
-    @Override
     public void addRequestHandler(final HttpURLConnectionHandler handler) {
         Assert.requireNonNull(handler, "handler");
         requestHandlers.add(handler);
-    }
-
-    public void removeRequestHandler(final HttpURLConnectionHandler handler) {
-        requestHandlers.remove(handler);
     }
 
     @Override
@@ -61,28 +52,8 @@ public class HttpClientImpl implements HttpClient {
         responseHandlers.add(handler);
     }
 
-    public void removeResponseHandler(final HttpURLConnectionHandler handler) {
-        responseHandlers.remove(handler);
-    }
-
     @Override
-    public HttpRequest request(final URI url, final RequestMethod method) {
-        try {
-            Assert.requireNonNull(url, "url");
-            Assert.requireNonNull(method, "method");
-
-            final HttpURLConnection connection = httpURLConnectionFactory.create(url);
-            Assert.requireNonNull(connection, "connection");
-
-            connection.setRequestMethod(method.getRawName());
-            return new HttpRequestImpl(connection, gson, requestHandlers, responseHandlers, configuration);
-        } catch (IOException e) {
-            throw new DolphinRuntimeException("HTTP error", e);
-        }
-    }
-
-    @Override
-    public HttpRequest request(String url, RequestMethod method) {
+    public HttpCallRequestBuilder request(String url, RequestMethod method) {
         try {
             return request(new URI(url), method);
         } catch (URISyntaxException e) {
@@ -91,12 +62,14 @@ public class HttpClientImpl implements HttpClient {
     }
 
     @Override
-    public HttpRequest request(URI url) {
-        return request(url, RequestMethod.GET);
-    }
-
-    @Override
-    public HttpRequest request(String url) {
-        return request(url, RequestMethod.GET);
+    public HttpCallRequestBuilder request(final URI url, final RequestMethod method) {
+        try {
+            Assert.requireNonNull(url, "url");
+            Assert.requireNonNull(method, "method");
+            final HttpClientConnection clientConnection = new HttpClientConnection(httpURLConnectionFactory, url, method);
+            return new HttpCallRequestBuilderImpl(clientConnection, gson, requestHandlers, responseHandlers, configuration);
+        } catch (IOException e) {
+            throw new DolphinRuntimeException("HTTP error", e);
+        }
     }
 }

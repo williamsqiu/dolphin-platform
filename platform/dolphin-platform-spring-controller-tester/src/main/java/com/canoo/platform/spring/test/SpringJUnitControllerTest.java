@@ -31,7 +31,7 @@ import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 import static org.apiguardian.api.API.Status.MAINTAINED;
 
 /**
- * Base class for JUnit based controller tests in Spring. This class can be extended to write custom controller tests.
+ * Base class for JUnit based controller tests in Spring. This class can be extended to writeRequestContent custom controller tests.
  *
  * @see ControllerTest
  * @see AbstractJUnit4SpringContextTests

@@ -32,7 +32,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.URI;
-import java.net.URL;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -79,7 +78,7 @@ public class DolphinPlatformHttpClientConnector extends AbstractClientConnector 
 
         try {
             String data = codec.encode(commands);
-            String receivedContent = client.request(servletUrl, RequestMethod.POST).withContent(data, "application/json;charset=utf-8").readString().execute().get();
+            String receivedContent = client.request(servletUrl, RequestMethod.POST).withContent(data, "application/json;charset=utf-8").readString().execute().get().getContent();
             return codec.decode(receivedContent);
         } catch (Exception e) {
             throw new DolphinRemotingException("Error in remoting layer", e);

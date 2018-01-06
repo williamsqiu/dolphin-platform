@@ -1,21 +1,14 @@
 package com.canoo.platform.core.http;
 
-import org.apiguardian.api.API;
+import java.util.List;
 
-import static org.apiguardian.api.API.Status.EXPERIMENTAL;
+public interface HttpResponse<V> {
 
-@API(since = "0.x", status = EXPERIMENTAL)
-public interface HttpResponse {
+    List<HttpHeader> getHeaders();
 
-    HttpExecutor<ByteArrayProvider> readBytes();
+    V getContent();
 
-    HttpExecutor<ByteArrayProvider> readBytes(String contentType);
+    byte[] getRawContent();
 
-    HttpExecutor<String> readString();
-
-    HttpExecutor<String> readString(String contentType);
-
-    <R> HttpExecutor<R> readObject(Class<R> responseType);
-
-    HttpExecutor<Void> withoutResult();
+    int getStatusCode();
 }
