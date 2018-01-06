@@ -1,6 +1,7 @@
 package com.canoo.dp.impl.platform.client.http;
 
 import com.canoo.dp.impl.platform.core.Assert;
+import com.canoo.dp.impl.platform.core.http.DefaultHttpURLConnectionFactory;
 import com.canoo.platform.client.ClientConfiguration;
 import com.canoo.platform.core.http.HttpClient;
 import com.canoo.platform.core.http.HttpCallRequestBuilder;

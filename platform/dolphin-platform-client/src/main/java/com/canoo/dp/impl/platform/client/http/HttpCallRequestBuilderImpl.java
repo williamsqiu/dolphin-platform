@@ -14,6 +14,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import static com.canoo.dp.impl.platform.core.http.HttpHeaderConstants.CONTENT_LENGHT_HEADER;
+import static com.canoo.dp.impl.platform.core.http.HttpHeaderConstants.CONTENT_TYPE_HEADER;
+import static com.canoo.dp.impl.platform.core.http.HttpHeaderConstants.JSON_MIME_TYPE;
 import static org.apiguardian.api.API.Status.INTERNAL;
 
 @API(since = "0.x", status = INTERNAL)
@@ -52,8 +55,8 @@ public class HttpCallRequestBuilderImpl implements HttpCallRequestBuilder {
 
     @Override
     public HttpCallResponseBuilder withContent(final byte[] content, final String contentType) {
-        withHeader("Content-Type", contentType);
-        withHeader("Content-Length", content.length + "");
+        withHeader(CONTENT_TYPE_HEADER, contentType);
+        withHeader(CONTENT_LENGHT_HEADER, content.length + "");
 
         connection.setDoOutput(true);
         return done(() -> content);
@@ -61,7 +64,7 @@ public class HttpCallRequestBuilderImpl implements HttpCallRequestBuilder {
 
     @Override
     public <I> HttpCallResponseBuilder withContent(final I content) {
-        return withContent(gson.toJson(content), "application/json;charset=utf-8");
+        return withContent(gson.toJson(content), JSON_MIME_TYPE);
     }
 
     @Override

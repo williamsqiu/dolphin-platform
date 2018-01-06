@@ -16,10 +16,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static com.canoo.dp.impl.platform.core.PlatformConstants.ACCEPT_CHARSET_HEADER;
-import static com.canoo.dp.impl.platform.core.PlatformConstants.ACCEPT_HEADER;
-import static com.canoo.dp.impl.platform.core.PlatformConstants.CHARSET;
-import static com.canoo.dp.impl.platform.core.PlatformConstants.JSON_MIME_TYPE;
+import static com.canoo.dp.impl.platform.core.http.HttpHeaderConstants.ACCEPT_CHARSET_HEADER;
+import static com.canoo.dp.impl.platform.core.http.HttpHeaderConstants.ACCEPT_HEADER;
+import static com.canoo.dp.impl.platform.core.http.HttpHeaderConstants.CHARSET;
+import static com.canoo.dp.impl.platform.core.http.HttpHeaderConstants.JSON_MIME_TYPE;
 import static org.apiguardian.api.API.Status.INTERNAL;
 
 @API(since = "0.x", status = INTERNAL)

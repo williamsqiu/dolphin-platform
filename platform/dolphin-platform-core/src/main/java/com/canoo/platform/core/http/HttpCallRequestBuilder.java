@@ -1,11 +1,13 @@
 package com.canoo.platform.core.http;
 
-import com.canoo.dp.impl.platform.core.PlatformConstants;
 import com.canoo.platform.core.DolphinRuntimeException;
 import org.apiguardian.api.API;
 
 import java.io.UnsupportedEncodingException;
 
+import static com.canoo.dp.impl.platform.core.http.HttpHeaderConstants.CHARSET;
+import static com.canoo.dp.impl.platform.core.http.HttpHeaderConstants.RAW_MIME_TYPE;
+import static com.canoo.dp.impl.platform.core.http.HttpHeaderConstants.TEXT_MIME_TYPE;
 import static org.apiguardian.api.API.Status.EXPERIMENTAL;
 
 @API(since = "0.x", status = EXPERIMENTAL)
@@ -14,19 +16,19 @@ public interface HttpCallRequestBuilder {
     HttpCallRequestBuilder withHeader(String name, String content);
 
     default HttpCallResponseBuilder withContent(byte[] content) {
-        return withContent(content, "application/raw");
+        return withContent(content, RAW_MIME_TYPE);
     }
 
     HttpCallResponseBuilder withContent(byte[] content, String contentType);
 
     default HttpCallResponseBuilder withContent(String content) {
-        return withContent(content, "application/txt;charset=utf-8");
+        return withContent(content, TEXT_MIME_TYPE);
     }
 
     default HttpCallResponseBuilder withContent(String content, String contentType) {
-        withHeader( "charset", "UTF-8");
+        withHeader( "charset", CHARSET);
         try {
-            return withContent(content.getBytes(PlatformConstants.CHARSET), contentType);
+            return withContent(content.getBytes(CHARSET), contentType);
         } catch (UnsupportedEncodingException e) {
             throw new DolphinRuntimeException("Encoding error", e);
         }
