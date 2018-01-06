@@ -1,6 +1,6 @@
 package org.slf4j.impl;
 
-import com.canoo.dolphin.logger.DolphinLoggerFactory;
+import com.canoo.impl.dp.logging.DolphinLoggerFactory;
 import org.slf4j.ILoggerFactory;
 import org.slf4j.spi.LoggerFactoryBinder;
 

@@ -1,6 +1,7 @@
 package com.canoo.dp.impl.platform.client.http;
 
 import com.canoo.dp.impl.platform.core.Assert;
+import com.canoo.dp.impl.platform.core.http.HttpStatus;
 import com.canoo.platform.client.ClientConfiguration;
 import com.canoo.platform.core.http.ByteArrayProvider;
 import com.canoo.platform.core.http.HttpExecutor;
