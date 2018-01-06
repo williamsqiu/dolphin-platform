@@ -19,7 +19,7 @@ import java.util.Optional;
 
 public class LogListView extends HBox {
 
-    private ObjectProperty<LogMessage> logMessage = new SimpleObjectProperty<>();
+    private final ObjectProperty<LogMessage> logMessage = new SimpleObjectProperty<>();
 
     private final Label messageLabel = new Label();
 
@@ -128,7 +128,7 @@ public class LogListView extends HBox {
         return logMessage;
     }
 
-    public void setLogMessage(LogMessage logMessage) {
+    public void setLogMessage(final LogMessage logMessage) {
         this.logMessage.set(logMessage);
     }
 }

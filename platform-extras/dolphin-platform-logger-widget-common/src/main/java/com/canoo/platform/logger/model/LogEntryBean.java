@@ -34,7 +34,7 @@ public class LogEntryBean {
         return message;
     }
 
-    public void setMessage(String message) {
+    public void setMessage(final String message) {
         this.message.set(message);
     }
 
@@ -46,7 +46,7 @@ public class LogEntryBean {
         return loggerName;
     }
 
-    public void setLoggerName(String loggerName) {
+    public void setLoggerName(final String loggerName) {
         this.loggerName.set(loggerName);
     }
 
@@ -58,7 +58,7 @@ public class LogEntryBean {
         return logTimestamp;
     }
 
-    public void setLogTimestamp(ZonedDateTime logTimestamp) {
+    public void setLogTimestamp(final ZonedDateTime logTimestamp) {
         this.logTimestamp.set(logTimestamp);
     }
 
@@ -70,7 +70,7 @@ public class LogEntryBean {
         return threadName;
     }
 
-    public void setThreadName(String threadName) {
+    public void setThreadName(final String threadName) {
         this.threadName.set(threadName);
     }
 
@@ -82,7 +82,7 @@ public class LogEntryBean {
         return exceptionMessage;
     }
 
-    public void setExceptionMessage(String exceptionMessage) {
+    public void setExceptionMessage(final String exceptionMessage) {
         this.exceptionMessage.set(exceptionMessage);
     }
 
@@ -94,7 +94,7 @@ public class LogEntryBean {
         return exceptionClass;
     }
 
-    public void setExceptionClass(String exceptionClass) {
+    public void setExceptionClass(final String exceptionClass) {
         this.exceptionClass.set(exceptionClass);
     }
 
@@ -110,7 +110,7 @@ public class LogEntryBean {
         return logLevel;
     }
 
-    public void setLogLevel(Level logLevel) {
+    public void setLogLevel(final Level logLevel) {
         this.logLevel.set(logLevel);
     }
 }

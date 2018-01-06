@@ -24,9 +24,9 @@ public class ViewSample extends Application {
     private static final Logger LOG = LoggerFactory.getLogger(ViewSample.class);
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(final Stage primaryStage) throws Exception {
 
-        ListView<LogMessage> listView = new ListView<>();
+        final ListView<LogMessage> listView = new ListView<>();
         listView.setCellFactory(v -> new LogListCell());
         listView.setItems(LogClientUtil.createObservableListFromLocalCache());
 
@@ -74,8 +74,8 @@ public class ViewSample extends Application {
             }
         });
 
-        LogFilterView filterView = new LogFilterView();
-        VBox main = new VBox(filterView, listView);
+        final LogFilterView filterView = new LogFilterView();
+        final VBox main = new VBox(filterView, listView);
         main.setFillWidth(true);
         VBox.setVgrow(filterView, Priority.NEVER);
         VBox.setVgrow(listView, Priority.ALWAYS);

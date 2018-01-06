@@ -1,5 +1,6 @@
 package com.canoo.platform.logger.client.util;
 
+import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.core.functional.Subscription;
 import javafx.beans.InvalidationListener;
 import javafx.collections.ListChangeListener;
@@ -19,9 +20,9 @@ public class BoundLogList<E> implements ObservableList<E>, Subscription {
 
     private final ObservableList<E> observableList;
 
-    public BoundLogList(Subscription subscription, ObservableList<E> observableList) {
-        this.subscription = subscription;
-        this.observableList = observableList;
+    public BoundLogList(final Subscription subscription, final ObservableList<E> observableList) {
+        this.subscription = Assert.requireNonNull(subscription, "subscription");
+        this.observableList = Assert.requireNonNull(observableList, "observableList");
     }
 
     @Override
@@ -30,42 +31,42 @@ public class BoundLogList<E> implements ObservableList<E>, Subscription {
     }
 
     @Override
-    public void addListener(ListChangeListener<? super E> listener) {
+    public void addListener(final ListChangeListener<? super E> listener) {
         observableList.addListener(listener);
     }
 
     @Override
-    public void removeListener(ListChangeListener<? super E> listener) {
+    public void removeListener(final ListChangeListener<? super E> listener) {
         observableList.removeListener(listener);
     }
 
     @Override
-    public boolean addAll(E[] elements) {
+    public boolean addAll(final E[] elements) {
         throw new RuntimeException("Can not mutate " + getClass());
     }
 
     @Override
-    public boolean setAll(E[] elements) {
+    public boolean setAll(final E[] elements) {
         throw new RuntimeException("Can not mutate " + getClass());
     }
 
     @Override
-    public boolean setAll(Collection<? extends E> col) {
+    public boolean setAll(final Collection<? extends E> col) {
         throw new RuntimeException("Can not mutate " + getClass());
     }
 
     @Override
-    public boolean removeAll(E[] elements) {
+    public boolean removeAll(final E[] elements) {
         throw new RuntimeException("Can not mutate " + getClass());
     }
 
     @Override
-    public boolean retainAll(E[] elements) {
+    public boolean retainAll(final E[] elements) {
         throw new RuntimeException("Can not mutate " + getClass());
     }
 
     @Override
-    public void remove(int from, int to) {
+    public void remove(final int from, final int to) {
         throw new RuntimeException("Can not mutate " + getClass());
     }
 
@@ -80,7 +81,7 @@ public class BoundLogList<E> implements ObservableList<E>, Subscription {
     }
 
     @Override
-    public boolean contains(Object o) {
+    public boolean contains(final Object o) {
         return observableList.contains(o);
     }
 
@@ -95,42 +96,42 @@ public class BoundLogList<E> implements ObservableList<E>, Subscription {
     }
 
     @Override
-    public <T> T[] toArray(T[] a) {
+    public <T> T[] toArray(final T[] a) {
         return observableList.toArray(a);
     }
 
     @Override
-    public boolean add(E e) {
+    public boolean add(final E e) {
         throw new RuntimeException("Can not mutate " + getClass());
     }
 
     @Override
-    public boolean remove(Object o) {
+    public boolean remove(final Object o) {
         throw new RuntimeException("Can not mutate " + getClass());
     }
 
     @Override
-    public boolean containsAll(Collection<?> c) {
+    public boolean containsAll(final Collection<?> c) {
         return observableList.containsAll(c);
     }
 
     @Override
-    public boolean addAll(Collection<? extends E> c) {
+    public boolean addAll(final Collection<? extends E> c) {
         throw new RuntimeException("Can not mutate " + getClass());
     }
 
     @Override
-    public boolean addAll(int index, Collection<? extends E> c) {
+    public boolean addAll(final int index, final Collection<? extends E> c) {
         throw new RuntimeException("Can not mutate " + getClass());
     }
 
     @Override
-    public boolean removeAll(Collection<?> c) {
+    public boolean removeAll(final Collection<?> c) {
         throw new RuntimeException("Can not mutate " + getClass());
     }
 
     @Override
-    public boolean retainAll(Collection<?> c) {
+    public boolean retainAll(final Collection<?> c) {
         throw new RuntimeException("Can not mutate " + getClass());
     }
 
@@ -140,32 +141,32 @@ public class BoundLogList<E> implements ObservableList<E>, Subscription {
     }
 
     @Override
-    public E get(int index) {
+    public E get(final int index) {
         return observableList.get(index);
     }
 
     @Override
-    public E set(int index, E element) {
+    public E set(final int index, final E element) {
         throw new RuntimeException("Can not mutate " + getClass());
     }
 
     @Override
-    public void add(int index, E element) {
+    public void add(final int index, final E element) {
         throw new RuntimeException("Can not mutate " + getClass());
     }
 
     @Override
-    public E remove(int index) {
+    public E remove(final int index) {
         throw new RuntimeException("Can not mutate " + getClass());
     }
 
     @Override
-    public int indexOf(Object o) {
+    public int indexOf(final Object o) {
         return observableList.indexOf(o);
     }
 
     @Override
-    public int lastIndexOf(Object o) {
+    public int lastIndexOf(final Object o) {
         return observableList.lastIndexOf(o);
     }
 
@@ -175,22 +176,22 @@ public class BoundLogList<E> implements ObservableList<E>, Subscription {
     }
 
     @Override
-    public ListIterator<E> listIterator(int index) {
+    public ListIterator<E> listIterator(final int index) {
         return observableList.listIterator(index);
     }
 
     @Override
-    public List<E> subList(int fromIndex, int toIndex) {
+    public List<E> subList(final int fromIndex, final int toIndex) {
         return observableList.subList(fromIndex, toIndex);
     }
 
     @Override
-    public void addListener(InvalidationListener listener) {
+    public void addListener(final InvalidationListener listener) {
         observableList.addListener(listener);
     }
 
     @Override
-    public void removeListener(InvalidationListener listener) {
+    public void removeListener(final InvalidationListener listener) {
         observableList.removeListener(listener);
     }
 }

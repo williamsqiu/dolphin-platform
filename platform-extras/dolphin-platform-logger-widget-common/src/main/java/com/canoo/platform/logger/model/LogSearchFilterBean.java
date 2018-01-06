@@ -26,7 +26,7 @@ public class LogSearchFilterBean {
         return startDate;
     }
 
-    public void setStartDate(ZonedDateTime startDate) {
+    public void setStartDate(final ZonedDateTime startDate) {
         this.startDate.set(startDate);
     }
 
@@ -38,7 +38,7 @@ public class LogSearchFilterBean {
         return endDateTime;
     }
 
-    public void setEndDateTime(ZonedDateTime endDateTime) {
+    public void setEndDateTime(final ZonedDateTime endDateTime) {
         this.endDateTime.set(endDateTime);
     }
 
@@ -54,7 +54,7 @@ public class LogSearchFilterBean {
         return maxResults;
     }
 
-    public void setMaxResults(Integer maxResults) {
+    public void setMaxResults(final Integer maxResults) {
         this.maxResults.set(maxResults);
     }
 }

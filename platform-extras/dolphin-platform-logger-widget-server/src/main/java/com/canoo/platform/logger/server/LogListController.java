@@ -28,7 +28,7 @@ public class LogListController {
         this.repository = Assert.requireNonNull(repository, "repository");
     }
 
-    protected final void update(LoggerSearchRequest request) {
+    protected final void update(final LoggerSearchRequest request) {
         Assert.requireNonNull(request, "request");
 
         model.getEntries().clear();

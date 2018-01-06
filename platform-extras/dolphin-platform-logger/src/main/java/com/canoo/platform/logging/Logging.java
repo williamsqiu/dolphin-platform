@@ -85,7 +85,7 @@ public class Logging {
         return MarkerFactory.getMarker(markerText);
     }
 
-    public Subscription addLoggingListener(Consumer<List<LogMessage>> listener) {
+    public Subscription addLoggingListener(final Consumer<List<LogMessage>> listener) {
         throw new DolphinRuntimeException("Not yet implemented!");
     }
 

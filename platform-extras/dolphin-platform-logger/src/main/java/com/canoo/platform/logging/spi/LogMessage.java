@@ -36,7 +36,7 @@ public class LogMessage {
         return loggerName;
     }
 
-    public void setLoggerName(String loggerName) {
+    public void setLoggerName(final String loggerName) {
         this.loggerName = loggerName;
     }
 
@@ -44,7 +44,7 @@ public class LogMessage {
         return message;
     }
 
-    public void setMessage(String message) {
+    public void setMessage(final String message) {
         this.message = message;
     }
 
@@ -52,7 +52,7 @@ public class LogMessage {
         return marker;
     }
 
-    public void setMarker(List<String> marker) {
+    public void setMarker(final List<String> marker) {
         this.marker = marker;
     }
 
@@ -60,7 +60,7 @@ public class LogMessage {
         return context;
     }
 
-    public void setContext(Map<String, String> context) {
+    public void setContext(final Map<String, String> context) {
         this.context = context;
     }
 
@@ -68,7 +68,7 @@ public class LogMessage {
         return exceptionMessage;
     }
 
-    public void setExceptionMessage(String exceptionMessage) {
+    public void setExceptionMessage(final String exceptionMessage) {
         this.exceptionMessage = exceptionMessage;
     }
 
@@ -76,7 +76,7 @@ public class LogMessage {
         return exceptionClass;
     }
 
-    public void setExceptionClass(String exceptionClass) {
+    public void setExceptionClass(final String exceptionClass) {
         this.exceptionClass = exceptionClass;
     }
 
@@ -84,7 +84,7 @@ public class LogMessage {
         return threadName;
     }
 
-    public void setThreadName(String threadName) {
+    public void setThreadName(final String threadName) {
         this.threadName = threadName;
     }
 
@@ -96,7 +96,7 @@ public class LogMessage {
         return timestamp;
     }
 
-    public void setTimestamp(ZonedDateTime timestamp) {
+    public void setTimestamp(final ZonedDateTime timestamp) {
         this.timestamp = timestamp;
     }
 
@@ -117,7 +117,7 @@ public class LogMessage {
         return level;
     }
 
-    public void setLevel(Level level) {
+    public void setLevel(final Level level) {
         this.level = level;
     }
 
@@ -125,13 +125,13 @@ public class LogMessage {
         return exceptionDetail;
     }
 
-    public void setExceptionDetail(String exceptionDetail) {
+    public void setExceptionDetail(final String exceptionDetail) {
         this.exceptionDetail = exceptionDetail;
     }
 
     private String toStackTrace(final Throwable throwable) {
-        StringWriter stringWriter = new StringWriter();
-        PrintWriter stream = new PrintWriter(stringWriter);
+        final StringWriter stringWriter = new StringWriter();
+        final PrintWriter stream = new PrintWriter(stringWriter);
         if (throwable != null) {
             throwable.printStackTrace(stream);
         }

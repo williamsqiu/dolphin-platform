@@ -15,7 +15,7 @@ public class LoggerSearchRequest {
 
     private final int maxResults;
 
-    public LoggerSearchRequest(ZonedDateTime startDate, ZonedDateTime endDateTime, Set<Level> level, int maxResults) {
+    public LoggerSearchRequest(final ZonedDateTime startDate, final ZonedDateTime endDateTime, final Set<Level> level, int maxResults) {
         this.startDate = startDate;
         this.endDateTime = endDateTime;
         this.level = level;

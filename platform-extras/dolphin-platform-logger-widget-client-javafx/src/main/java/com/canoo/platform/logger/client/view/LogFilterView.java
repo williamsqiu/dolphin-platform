@@ -1,7 +1,8 @@
 package com.canoo.platform.logger.client.view;
 
-import com.canoo.platform.logging.spi.LogMessage;
+import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.logger.model.LoggerSearchRequest;
+import com.canoo.platform.logging.spi.LogMessage;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.beans.property.Property;
@@ -235,6 +236,7 @@ public class LogFilterView extends HBox {
     }
 
     public boolean filter(final LogMessage message) {
+        Assert.requireNonNull(message, "message");
         final LocalDate startDate = Optional.ofNullable(startDatePicker.getValue()).orElse(LocalDate.now());
         final LocalTime startTime = LocalTime.of(startHourSpinner.getValue(), startMinuteSpinner.getValue(), startSecondSpinner.getValue(), startMilliSpinner.getValue() * 1_000_000);
         final ZonedDateTime startDateTime = ZonedDateTime.of(LocalDateTime.of(startDate, startTime), ZoneId.systemDefault());
@@ -273,6 +275,7 @@ public class LogFilterView extends HBox {
     }
 
     public void setLoggerSearchRequest(final LoggerSearchRequest loggerSearchRequest) {
+        Assert.requireNonNull(loggerSearchRequest, "loggerSearchRequest");
         this.loggerSearchRequest.setValue(loggerSearchRequest);
     }
 }

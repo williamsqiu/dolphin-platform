@@ -159,7 +159,8 @@ public class DolphinLoggerFactory implements ILoggerFactory {
         });
     }
 
-    public static Subscription addListener(Consumer<List<LogMessage>> listener) {
+    public static Subscription addListener(final Consumer<List<LogMessage>> listener) {
+        Assert.requireNonNull(listener, "listener");
         listeners.add(listener);
         return () -> listeners.remove(listener);
     }
