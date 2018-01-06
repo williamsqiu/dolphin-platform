@@ -30,7 +30,7 @@ public class RestClient {
         final CityDetails details = httpClient.request(endpoint, RequestMethod.POST).
                 withContent(city).
                 readObject(CityDetails.class).
-                execute().get();
+                execute().get().getContent();
 
         System.out.println("City " + details.getName() + " has " + details.getPopulation() + " citizens");
     }
