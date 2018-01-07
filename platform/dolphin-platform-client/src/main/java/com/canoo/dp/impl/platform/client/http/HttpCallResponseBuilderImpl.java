@@ -54,7 +54,7 @@ public class HttpCallResponseBuilderImpl implements HttpCallResponseBuilder {
 
     @Override
     public HttpCallExecutor<ByteArrayProvider> readBytes() {
-        final ResponseContentConverter<ByteArrayProvider> converter = b -> new SimpleByteArrayProvider(connection.readResponseContent());
+        final ResponseContentConverter<ByteArrayProvider> converter = b -> new SimpleByteArrayProvider(b);
         return createExecutor(converter);
     }
 
@@ -62,7 +62,7 @@ public class HttpCallResponseBuilderImpl implements HttpCallResponseBuilder {
     public HttpCallExecutor<String> readString() {
         connection.addRequestHeader(new HttpHeaderImpl(ACCEPT_CHARSET_HEADER, CHARSET));
 
-        final ResponseContentConverter<String> converter = b -> new String(connection.readResponseContent(), CHARSET);
+        final ResponseContentConverter<String> converter = b -> new String(b, CHARSET);
         return createExecutor(converter);
     }
 

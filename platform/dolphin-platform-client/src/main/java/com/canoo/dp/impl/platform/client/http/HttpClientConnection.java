@@ -51,8 +51,6 @@ public class HttpClientConnection {
     }
 
     public byte[] readResponseContent() throws IOException {
-        connection.setDoInput(true);
-
         try (final InputStream is = connection.getInputStream()) {
             try (final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
                 int read = is.read();
