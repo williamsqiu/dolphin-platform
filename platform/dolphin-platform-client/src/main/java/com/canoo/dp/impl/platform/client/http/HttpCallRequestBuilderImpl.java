@@ -59,7 +59,7 @@ public class HttpCallRequestBuilderImpl implements HttpCallRequestBuilder {
         withHeader(CONTENT_LENGHT_HEADER, content.length + "");
 
         connection.setDoOutput(true);
-        return done(() -> content);
+        return continueWithResponseBuilder(() -> content);
     }
 
     @Override
@@ -69,10 +69,10 @@ public class HttpCallRequestBuilderImpl implements HttpCallRequestBuilder {
 
     @Override
     public HttpCallResponseBuilder withoutContent() {
-        return done(() -> new byte[0]);
+        return continueWithResponseBuilder(() -> new byte[0]);
     }
 
-    private HttpCallResponseBuilder done(final ByteArrayProvider dataProvider) {
+    private HttpCallResponseBuilder continueWithResponseBuilder(final ByteArrayProvider dataProvider) {
         Assert.requireNonNull(dataProvider, "dataProvider");
         if (done.get()) {
             throw new DolphinRuntimeException("Request already defined!");

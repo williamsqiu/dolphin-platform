@@ -50,36 +50,27 @@ public class HttpCallExecutorImpl<R> implements HttpCallExecutor<R> {
     @Override
     public CompletableFuture<HttpResponse<R>> execute() {
         final CompletableFuture<HttpResponse<R>> completableFuture = new CompletableFuture<>();
-        executor.submit(new Runnable() {
-
-            @Override
-            public void run() {
-                try {
-                    final HttpResponse<R> result = provider.get();
-                    final int statusCode = result.getStatusCode();
-                    if(statusCode >= 300) {
-                        final Exception e = new DolphinRuntimeException("Bad Response: " + statusCode);
-                        if(errorHandler != null) {
-                            uiExecutor.execute(() -> errorHandler.accept(e, result));
-                        }
-                        completableFuture.completeExceptionally(e);
-                    } else {
-                        if (onDone != null) {
-                            uiExecutor.execute(new Runnable() {
-                                @Override
-                                public void run() {
-                                    onDone.accept(result);
-                                }
-                            });
-                        }
-                        completableFuture.complete(result);
-                    }
-                } catch (final Throwable e) {
-                    if(errorHandler != null) {
-                        uiExecutor.execute(() -> errorHandler.accept(e, null));
+        executor.submit(() -> {
+            try {
+                final HttpResponse<R> result = provider.get();
+                final int statusCode = result.getStatusCode();
+                if (statusCode >= 300) {
+                    final Exception e = new DolphinRuntimeException("Bad Response: " + statusCode);
+                    if (errorHandler != null) {
+                        uiExecutor.execute(() -> errorHandler.accept(e, result));
                     }
                     completableFuture.completeExceptionally(e);
+                } else {
+                    if (onDone != null) {
+                        uiExecutor.execute(() -> onDone.accept(result));
+                    }
+                    completableFuture.complete(result);
                 }
+            } catch (final Throwable e) {
+                if (errorHandler != null) {
+                    uiExecutor.execute(() -> errorHandler.accept(e, null));
+                }
+                completableFuture.completeExceptionally(e);
             }
         });
         return completableFuture;

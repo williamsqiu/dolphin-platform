@@ -31,7 +31,7 @@ import org.testng.annotations.BeforeMethod;
 import static org.apiguardian.api.API.Status.MAINTAINED;
 
 /**
- * Base class for TestNG based controller tests in Spring. This class can be extended to writeRequestContent custom controller tests.
+ * Base class for TestNG based controller tests in Spring. This class can be extended to write custom controller tests.
  *
  * @author Hendrik Ebbers
  * @see ControllerTest

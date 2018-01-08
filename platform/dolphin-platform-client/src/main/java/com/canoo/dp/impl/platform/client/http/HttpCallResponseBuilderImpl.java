@@ -85,6 +85,8 @@ public class HttpCallResponseBuilderImpl implements HttpCallResponseBuilder {
 
     @Override
     public HttpCallExecutor<ByteArrayProvider> readBytes(final String contentType) {
+        Assert.requireNonNull(contentType, "contentType");
+
         connection.addRequestHeader(new HttpHeaderImpl(ACCEPT_HEADER, contentType));
         return readBytes();
     }
@@ -102,6 +104,8 @@ public class HttpCallResponseBuilderImpl implements HttpCallResponseBuilder {
     }
 
     private <R> HttpResponse<R> handleRequest(final ResponseContentConverter<R> converter) throws Exception {
+        Assert.requireNonNull(converter, "converter");
+
         if (handled.get()) {
             throw new DolphinRuntimeException("Http call already handled");
         }
@@ -117,7 +121,6 @@ public class HttpCallResponseBuilderImpl implements HttpCallResponseBuilder {
         final List<HttpHeader> headers = connection.getResponseHeaders();
 
         return new HttpResponseImpl<R>(headers, responseCode, rawContent, content);
-
     }
 
 }

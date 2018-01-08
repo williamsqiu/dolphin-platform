@@ -17,12 +17,12 @@ public interface HttpClient {
     void addResponseHandler(final HttpURLConnectionHandler handler);
 
     @Deprecated
-    default HttpCallRequestBuilder request(URI url) {
+    default HttpCallRequestBuilder request(final URI url) {
         return get(url);
     }
 
     @Deprecated
-    default HttpCallRequestBuilder request(String url) {
+    default HttpCallRequestBuilder request(final String url) {
         return get(url);
     }
 
