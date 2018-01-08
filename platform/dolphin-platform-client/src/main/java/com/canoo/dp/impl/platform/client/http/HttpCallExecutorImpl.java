@@ -42,7 +42,7 @@ public class HttpCallExecutorImpl<R> implements HttpCallExecutor<R> {
     }
 
     @Override
-    public HttpCallExecutor<R> onError(BiConsumer<Throwable, HttpResponse<R>> errorHandler) {
+    public HttpCallExecutor<R> onError(final BiConsumer<Throwable, HttpResponse<R>> errorHandler) {
         this.errorHandler = errorHandler;
         return this;
     }
