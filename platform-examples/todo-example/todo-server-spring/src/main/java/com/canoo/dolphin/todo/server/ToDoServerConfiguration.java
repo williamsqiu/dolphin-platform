@@ -15,6 +15,8 @@
  */
 package com.canoo.dolphin.todo.server;
 
+import com.canoo.platform.logger.server.service.LocalLoggerRepository;
+import com.canoo.platform.logger.server.service.LoggerRepository;
 import com.canoo.platform.remoting.server.event.RemotingEventBus;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Bean;
@@ -23,6 +25,12 @@ import org.springframework.context.annotation.Scope;
 
 @Configuration
 public class ToDoServerConfiguration {
+
+    @Bean
+    @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
+    public LoggerRepository createLoggerRepository() {
+        return new LocalLoggerRepository();
+    }
 
     @Bean
     @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)

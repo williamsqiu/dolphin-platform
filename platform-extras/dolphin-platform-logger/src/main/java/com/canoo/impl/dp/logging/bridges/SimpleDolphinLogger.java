@@ -19,7 +19,7 @@ public class SimpleDolphinLogger implements DolphinLoggerBridge {
     private final Level level;
 
     public SimpleDolphinLogger(final DolphinLoggerConfiguration configuration) {
-        this.level = Objects.requireNonNull(configuration.getGlobalLevel());
+        this.level = Level.TRACE;
         this.dateFormat = Objects.requireNonNull(configuration.getDateFormat());
     }
 

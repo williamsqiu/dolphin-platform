@@ -1,7 +1,9 @@
 package com.canoo.platform.logger.server;
 
 import com.canoo.dp.impl.platform.core.Assert;
+import com.canoo.platform.logger.model.LogHistoryBean;
 import com.canoo.platform.remoting.server.DolphinController;
+import com.canoo.platform.remoting.server.DolphinModel;
 import com.canoo.platform.remoting.server.PostChildCreated;
 
 @DolphinController
@@ -10,6 +12,9 @@ public class LogHistoryParentController {
     private LogFilterController filterController;
 
     private LogListController listController;
+
+    @DolphinModel
+    private LogHistoryBean model;
 
     @PostChildCreated
     public void onFilterControllerAdded(final LogFilterController controller) {

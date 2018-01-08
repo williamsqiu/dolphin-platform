@@ -17,7 +17,7 @@ public class LocalLoggerRepository implements LoggerRepository {
                 filter(l -> l.getTimestamp().isAfter(searchRequest.getStartDate())).
                 filter(l -> l.getTimestamp().isBefore(searchRequest.getEndDateTime())).
                 filter(l -> searchRequest.getLevel().contains(l.getLevel())).
-                sorted(Comparator.comparing(LogMessage::getTimestamp)).
+                sorted(Comparator.comparing(LogMessage::getTimestamp).reversed()).
                 limit(searchRequest.getMaxResults());
     }
 }

@@ -20,6 +20,13 @@ mainClassName = 'com.canoo.dolphin.todo.server.ToDoServer'
 
 dependencies {
   compile project(':todo-server')
-  compile project(':dolphin-platform-remoting-server-spring')
-  testCompile project(':dolphin-platform-spring-controller-tester')
+  compile(project(':dolphin-platform-remoting-server-spring')) {
+    exclude group: 'ch.qos.logback'
+  }
+  testCompile(project(':dolphin-platform-spring-controller-tester')) {
+    exclude group: 'ch.qos.logback'
+  }
+
+  compile project(':dolphin-platform-logger-widget-server')
+
 }

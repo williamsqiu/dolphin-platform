@@ -15,6 +15,7 @@
  */
 package com.canoo.dolphin.todo.client;
 
+import com.canoo.platform.logger.client.view.LogListViewController;
 import com.canoo.platform.remoting.client.ClientContext;
 import com.canoo.platform.remoting.client.javafx.DolphinPlatformApplication;
 import javafx.application.Application;
@@ -35,6 +36,12 @@ public class ToDoClient extends DolphinPlatformApplication {
     @Override
     protected void start(Stage primaryStage, ClientContext clientContext) throws Exception {
         ToDoView viewController = new ToDoView(clientContext);
+
+        LogListViewController logListViewController = new LogListViewController(clientContext);
+        Stage logStage = new Stage();
+        logStage.setScene(new Scene(logListViewController.getParent()));
+        logStage.show();
+
         Scene scene = new Scene(viewController.getParent());
         scene.getStylesheets().add(ToDoClient.class.getResource("style.css").toExternalForm());
         primaryStage.setScene(scene);

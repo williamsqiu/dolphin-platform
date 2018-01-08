@@ -1,18 +1,27 @@
 package com.canoo.platform.logger.server;
 
-import com.canoo.platform.logging.spi.LogMessage;
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.logger.model.LogEntryBean;
 import com.canoo.platform.logger.model.LogListBean;
-import com.canoo.platform.logger.server.service.LoggerRepository;
 import com.canoo.platform.logger.model.LoggerSearchRequest;
+import com.canoo.platform.logger.server.service.LoggerRepository;
+import com.canoo.platform.logging.spi.LogMessage;
 import com.canoo.platform.remoting.BeanManager;
+import com.canoo.platform.remoting.server.DolphinAction;
 import com.canoo.platform.remoting.server.DolphinController;
 import com.canoo.platform.remoting.server.DolphinModel;
+import org.slf4j.event.Level;
 
 import javax.inject.Inject;
+import java.time.ZonedDateTime;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
-@DolphinController
+import static com.canoo.platform.logger.LoggerRemotingConstants.LOG_LIST_CONTROLLER_NAME;
+import static com.canoo.platform.logger.LoggerRemotingConstants.UPDATE_ACTION;
+
+@DolphinController(LOG_LIST_CONTROLLER_NAME)
 public class LogListController {
 
     private final BeanManager beanManager;
@@ -35,6 +44,16 @@ public class LogListController {
         repository.search(request).
                 map(m -> convert(m)).
                 forEach(b -> model.getEntries().add(b));
+    }
+
+    @DolphinAction(UPDATE_ACTION)
+    public void update() {
+        final ZonedDateTime startDate = ZonedDateTime.now().minusDays(1);
+        final ZonedDateTime endDateTime = ZonedDateTime.now();
+        final Set<Level> level = new HashSet<>(Arrays.asList(Level.values()));
+        final int maxResults = 100;
+        final LoggerSearchRequest request = new LoggerSearchRequest(startDate, endDateTime, level, maxResults);
+        update(request);
     }
 
     private LogEntryBean convert(final LogMessage logMessage) {

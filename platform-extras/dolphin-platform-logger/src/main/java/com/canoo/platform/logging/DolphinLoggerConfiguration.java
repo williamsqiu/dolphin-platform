@@ -8,6 +8,8 @@ import org.slf4j.event.Level;
 import java.net.URI;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -29,6 +31,8 @@ public class DolphinLoggerConfiguration {
 
     private Level globalLevel = Level.INFO;
 
+    private final ConcurrentMap<String, Level> loggerLevelMap = new ConcurrentHashMap();
+
     private Executor remoteLoggingExecutor = new ThreadPoolExecutor(parallelRequests + 1, parallelRequests + 1,
             Long.MAX_VALUE, TimeUnit.DAYS,
             new LinkedBlockingDeque<>(),
@@ -37,6 +41,19 @@ public class DolphinLoggerConfiguration {
     private DateFormat dateFormat = new SimpleDateFormat();
 
     private HttpURLConnectionFactory connectionFactory = new DefaultHttpURLConnectionFactory();
+
+    public void setLevel(String name, Level level) {
+        loggerLevelMap.put(name, level);
+    }
+
+    public Level getLevelFor(final String loggerName) {
+        return loggerLevelMap.keySet().stream().
+                filter(v -> loggerName.startsWith(v)).
+                sorted((a, b) -> a.compareTo(b)).
+                findFirst().
+                map(v -> loggerLevelMap.get(v)).
+                orElse(getGlobalLevel());
+    }
 
     public URI getRemoteUrl() {
         return remoteUrl;
