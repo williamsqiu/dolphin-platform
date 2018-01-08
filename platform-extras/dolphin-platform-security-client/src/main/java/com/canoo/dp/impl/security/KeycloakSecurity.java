@@ -1,6 +1,6 @@
 package com.canoo.dp.impl.security;
 
-import com.canoo.dp.impl.platform.client.http.DefaultHttpURLConnectionFactory;
+import com.canoo.dp.impl.platform.core.http.DefaultHttpURLConnectionFactory;
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.platform.core.PlatformConstants;
 import com.canoo.platform.client.PlatformClient;
@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -64,16 +65,29 @@ public class KeycloakSecurity implements Security {
         connection.setDoOutput(true);
         connection.setDoInput(true);
 
-        final OutputStream w = connection.getOutputStream();
-        w.write(rawContent);
-        w.close();
+        try {
+            final OutputStream w = connection.getOutputStream();
+            w.write(rawContent);
+            w.close();
+        } catch (IOException e) {
+            throw new DolphinRuntimeException("Looks like the security server is not reachable", e);
+        }
 
-        final InputStream is = connection.getInputStream();
+        final int responseCode = connection.getResponseCode();
+        if(responseCode == 401) {
+            throw new DolphinRuntimeException("Invalid login!");
+        }
+
         final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        int read = is.read();
-        while (read != -1) {
-            byteArrayOutputStream.write(read);
-            read = is.read();
+        try {
+            final InputStream is = connection.getInputStream();
+            int read = is.read();
+            while (read != -1) {
+                byteArrayOutputStream.write(read);
+                read = is.read();
+            }
+        } catch (FileNotFoundException e) {
+            throw new DolphinRuntimeException("Maybe the realm or application is not defined in the keycloak server", e);
         }
         final byte[] rawInput = byteArrayOutputStream.toByteArray();
         final String input = new String(rawInput);
@@ -90,7 +104,7 @@ public class KeycloakSecurity implements Security {
             try {
                 receiveTokenFromKeycloak("client_id=" + appName + "&username=" + user + "&password=" + password + "&grant_type=password");
             } catch (IOException | URISyntaxException e) {
-                throw new DolphinRuntimeException("Error in security", e);
+                throw new DolphinRuntimeException("Can not receive security token!", e);
             }
         });
     }
@@ -100,7 +114,7 @@ public class KeycloakSecurity implements Security {
                 try {
                     receiveTokenFromKeycloak("grant_type=refresh_token&refresh_token=" + connectResult.getRefresh_token() + "&client_id=" + appName);
                 } catch (IOException | URISyntaxException e) {
-                    throw new DolphinRuntimeException("Error in security", e);
+                    throw new DolphinRuntimeException("Can not refresh security token!", e);
                 }
             });
     }

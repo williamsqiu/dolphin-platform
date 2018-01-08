@@ -13,3 +13,8 @@ com.canoo.dp.impl.remoting.converters.StringConverterFactory
 com.canoo.dp.impl.remoting.converters.BigDecimalConverterFactory
 com.canoo.dp.impl.remoting.converters.BigIntegerConverterFactory
 com.canoo.dp.impl.remoting.converters.UuidConverterFactory
+com.canoo.dp.impl.remoting.converters.DurationConverterFactory
+com.canoo.dp.impl.remoting.converters.LocalDateTimeConverterFactory
+com.canoo.dp.impl.remoting.converters.PeriodConverterFactory
+com.canoo.dp.impl.remoting.converters.ZonedDateTimeConverterFactory
+com.canoo.dp.impl.remoting.converters.LocalDateConverterFactory

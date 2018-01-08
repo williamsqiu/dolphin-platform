@@ -21,7 +21,6 @@ import com.canoo.platform.core.DolphinRuntimeException;
 import com.canoo.platform.remoting.client.ClientContext;
 import com.canoo.platform.remoting.client.ClientContextFactory;
 import com.canoo.platform.remoting.client.ClientInitializationException;
-import com.canoo.platform.remoting.client.ClientShutdownException;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.stage.Stage;
@@ -256,18 +255,5 @@ public abstract class DolphinPlatformApplication extends Application {
         Assert.requireNonNull(runtimeException, "runtimeException");
         LOG.error("Dolphin Platform runtime error in thread " + runtimeException.getThread().getName(), runtimeException);
         Platform.exit();
-    }
-
-    /**
-     * This method is called if the connection to the Dolphin Platform server can't be closed on {@link Application#stop()}.
-     * Application developers can define some kind of error handling here.
-     * By default the methods prints the exception in the log an call {@link System#exit(int)}
-     *
-     * @param shutdownException
-     */
-    protected void onShutdownError(ClientShutdownException shutdownException) {
-        Assert.requireNonNull(shutdownException, "shutdownException");
-        LOG.error("Dolphin Platform shutdown error", shutdownException);
-        System.exit(-1);
     }
 }

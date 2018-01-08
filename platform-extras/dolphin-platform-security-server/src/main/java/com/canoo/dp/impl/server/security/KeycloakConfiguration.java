@@ -9,6 +9,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static com.canoo.dp.impl.security.SecurityConfiguration.APPLICATION_PROPERTY_DEFAULT_VALUE;
+import static com.canoo.dp.impl.security.SecurityConfiguration.APPLICATION_PROPERTY_NAME;
+import static com.canoo.dp.impl.security.SecurityConfiguration.AUTH_ENDPOINT_PROPERTY_DEFAULT_VALUE;
+import static com.canoo.dp.impl.security.SecurityConfiguration.AUTH_ENDPOINT_PROPERTY_NAME;
+import static com.canoo.dp.impl.security.SecurityConfiguration.REALM_PROPERTY_DEFAULT_VALUE;
+import static com.canoo.dp.impl.security.SecurityConfiguration.REALM_PROPERTY_NAME;
 import static org.apiguardian.api.API.Status.INTERNAL;
 
 @API(since = "0.19.0", status = INTERNAL)
@@ -17,18 +23,6 @@ public class KeycloakConfiguration implements Serializable {
     public final static String SECURITY_ACTIVE_PROPERTY_NAME = "security.active";
 
     public final static boolean SECURITY_ACTIVE_PROPERTY_DEFAULT_VALUE = true;
-
-    public final static String SECURITY_REALM_PROPERTY_NAME = "security.realm";
-
-    public final static String SECURITY_REALM_PROPERTY_DEFAULT_VALUE = "myRealm";
-
-    public final static String SECURITY_APPLICATION_PROPERTY_NAME = "security.application";
-
-    public final static String SECURITY_APPLICATION_PROPERTY_DEFAULT_VALUE = "myApp";
-
-    public final static String SECURITY_SERVER_URL_PROPERTY_NAME = "security.server";
-
-    public final static String SECURITY_SERVER_URL_PROPERTY_DEFAULT_PROPERTY = "http://localhost:8080";
 
     public final static String SECURE_ENDPOINTS_PROPERTY_NAME = "security.endpoints";
 
@@ -46,9 +40,9 @@ public class KeycloakConfiguration implements Serializable {
 
     public KeycloakConfiguration(final PlatformConfiguration platformConfiguration) {
         Assert.requireNonNull(platformConfiguration, "platformConfiguration");
-        this.realmName = platformConfiguration.getProperty(SECURITY_REALM_PROPERTY_NAME, null);
-        this.applicationName = platformConfiguration.getProperty(SECURITY_APPLICATION_PROPERTY_NAME, null);
-        this.authEndpoint = platformConfiguration.getProperty(SECURITY_SERVER_URL_PROPERTY_NAME, null);
+        this.realmName = platformConfiguration.getProperty(REALM_PROPERTY_NAME, REALM_PROPERTY_DEFAULT_VALUE);
+        this.applicationName = platformConfiguration.getProperty(APPLICATION_PROPERTY_NAME, APPLICATION_PROPERTY_DEFAULT_VALUE) ;
+        this.authEndpoint = platformConfiguration.getProperty(AUTH_ENDPOINT_PROPERTY_NAME, AUTH_ENDPOINT_PROPERTY_DEFAULT_VALUE) + "/auth";
         this.secureEndpoints.addAll(platformConfiguration.getListProperty(SECURE_ENDPOINTS_PROPERTY_NAME, Collections.emptyList()));
         this.securityActive = platformConfiguration.getBooleanProperty(SECURITY_ACTIVE_PROPERTY_NAME, false);
     }

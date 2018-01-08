@@ -16,6 +16,7 @@
 package com.canoo.dp.impl.server.config;
 
 import com.canoo.dp.impl.platform.core.Assert;
+import com.canoo.dp.impl.server.bootstrap.modules.CorsModule;
 import com.canoo.platform.core.PlatformConfiguration;
 import org.apiguardian.api.API;
 import org.slf4j.Logger;
@@ -60,8 +61,6 @@ public final class DefaultPlatformConfiguration implements PlatformConfiguration
 
     public final static boolean M_BEAN_REGISTRATION_DEFAULT_VALUE = false;
 
-    public final static String ROOT_PACKAGE_FOR_CLASSPATH_SCAN_DEFAULT_VALUE = null;
-
     public final static boolean ACTIVE_DEFAULT_VALUE = true;
 
     public final static List<String> ACCESS_CONTROL_ALLOW_HEADERS_DEFAULT_VALUE = Arrays.asList("Content-Type", "x-requested-with", "origin", "authorization", "accept", "client-security-token");
@@ -85,7 +84,6 @@ public final class DefaultPlatformConfiguration implements PlatformConfiguration
         setIntProperty(SESSION_TIMEOUT, SESSION_TIMEOUT_DEFAULT_VALUE);
         setBooleanProperty(USE_CROSS_SITE_ORIGIN_FILTER, USE_CROSS_SITE_ORIGIN_FILTER_DEFAULT_VALUE);
         setBooleanProperty(MBEAN_REGISTRATION, M_BEAN_REGISTRATION_DEFAULT_VALUE);
-        setProperty(ROOT_PACKAGE_FOR_CLASSPATH_SCAN, ROOT_PACKAGE_FOR_CLASSPATH_SCAN_DEFAULT_VALUE);
         setBooleanProperty(PLATFORM_ACTIVE, ACTIVE_DEFAULT_VALUE);
         setListProperty(ACCESS_CONTROL_ALLOW_HEADERS, ACCESS_CONTROL_ALLOW_HEADERS_DEFAULT_VALUE);
         setListProperty(ACCESS_CONTROL_ALLOW_METHODS, ACCESS_CONTROL_ALLOW_METHODS_DEFAULT_VALUE);
@@ -93,6 +91,7 @@ public final class DefaultPlatformConfiguration implements PlatformConfiguration
         setLongProperty(ACCESS_CONTROL_MAXAGE, ACCESS_CONTROL_MAX_AGE_DEFAULT_VALUE);
         setIntProperty(MAX_CLIENTS_PER_SESSION, MAX_CLIENTS_PER_SESSION_DEFAULT_VALUE);
         setListProperty(ID_FILTER_URL_MAPPINGS, ID_FILTER_URL_MAPPINGS_DEFAULT_VALUE);
+        setBooleanProperty(CorsModule.CORS_MODULE_ACTIVE, true);
         setListProperty(CORS_ENDPOINTS_URL_MAPPINGS, CORS_ENDPOINTS_URL_MAPPINGS_DEFAULT_VALUE);
     }
 

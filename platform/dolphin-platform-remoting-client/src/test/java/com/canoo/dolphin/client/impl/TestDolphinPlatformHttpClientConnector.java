@@ -20,7 +20,7 @@ import com.canoo.dp.impl.client.legacy.ClientModelStore;
 import com.canoo.dp.impl.client.legacy.DefaultModelSynchronizer;
 import com.canoo.dp.impl.client.legacy.communication.SimpleExceptionHandler;
 import com.canoo.dp.impl.platform.client.http.HttpClientImpl;
-import com.canoo.dp.impl.platform.client.http.HttpStatus;
+import com.canoo.dp.impl.platform.core.http.HttpStatus;
 import com.canoo.dp.impl.platform.core.PlatformConstants;
 import com.canoo.dp.impl.remoting.commands.CreateContextCommand;
 import com.canoo.dp.impl.remoting.legacy.communication.Command;

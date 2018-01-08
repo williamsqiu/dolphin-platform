@@ -76,4 +76,8 @@ public abstract class AbstractProperty<T> implements Property<T> {
         return "Dolphin " + getClass().getSimpleName() + "[value: " + get() + "]";
     }
 
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
 }

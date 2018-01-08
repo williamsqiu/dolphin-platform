@@ -31,17 +31,19 @@ public class DolphinSecurityBootstrap {
     private KeycloakSecurityContextExtractFilter extractFilter;
 
     public void init(final ServletContext servletContext, final PlatformConfiguration configuration) {
+        Assert.requireNonNull(servletContext, "servletContext");
         Assert.requireNonNull(configuration, "configuration");
+
         final KeycloakConfiguration keycloakConfiguration = new KeycloakConfiguration(configuration);
         if(keycloakConfiguration.isSecurityActive()) {
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("Adding security to the following endpoint: {}", keycloakConfiguration.getSecureEndpoints().stream().reduce("", (a, b) -> a + ", " + b));
+            if (LOG.isInfoEnabled()) {
+                keycloakConfiguration.getSecureEndpoints().stream().forEach(e -> {
+                    LOG.info("Adding security to the following endpoint: {}", e);
+                });
             }
             this.extractFilter = new KeycloakSecurityContextExtractFilter();
             DolphinKeycloakConfigResolver.setConfiguration(keycloakConfiguration);
-            if(!new DolphinKeycloakConfigResolver().resolve(null).isConfigured()) {
-                LOG.error("SecurityContext is not configured!");
-            }
+
             final FilterRegistration.Dynamic keycloakSecurityFilter = servletContext.addFilter(FILTER_NAME, new KeycloakOIDCFilter());
             keycloakSecurityFilter.setInitParameter(KEYCLOAK_CONFIG_RESOLVER_PROPERTY_NAME, DolphinKeycloakConfigResolver.class.getName());
             keycloakSecurityFilter.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, keycloakConfiguration.getSecureEndpointsArray());
