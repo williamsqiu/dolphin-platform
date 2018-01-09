@@ -51,7 +51,7 @@ public class RestClient extends Application {
                     withContent(city).
                     readObject(CityDetails.class).
                     onDone(d -> showResult(d.getContent())).
-                    onError((ex, r) -> showError(city)).
+                    onError(ex -> showError(city)).
                     execute();
         });
 

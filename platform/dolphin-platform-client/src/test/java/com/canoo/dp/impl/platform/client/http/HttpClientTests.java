@@ -18,6 +18,7 @@ import java.net.ServerSocket;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.canoo.dp.impl.platform.core.http.HttpStatus.SC_HTTP_RESOURCE_NOTFOUND;
 import static com.canoo.dp.impl.platform.core.http.HttpStatus.SC_HTTP_UNAUTHORIZED;
@@ -85,6 +86,32 @@ public class HttpClientTests {
         //then:
         future.get(1_000, TimeUnit.MILLISECONDS);
     }
+
+
+    @Test
+    public void testSimpleGetWithPromise() throws Exception {
+        //given:
+        final HttpClient client = PlatformClient.getService(HttpClient.class);
+        final AtomicBoolean doneCalled = new AtomicBoolean(false);
+        final AtomicBoolean errorCalled = new AtomicBoolean(false);
+
+        //when:
+        CompletableFuture<HttpResponse<Void>> future = client.get("http://localhost:" + freePort).
+                withoutContent().
+                withoutResult().
+                onDone(response -> doneCalled.set(true)).
+                onError(e -> errorCalled.set(true)).
+                execute();
+
+        //then:
+        HttpResponse<Void> response = future.get(1_000, TimeUnit.MILLISECONDS);
+        assertThat("Done callable was not called", doneCalled.get(), is(true));
+        assertThat("Error callable was called", errorCalled.get(), is(false));
+        assertThat("response not defined", response, notNullValue());
+        assertThat("Wrong response code", response.getStatusCode(), is(200));
+        assertThat("Content should not be null", response.getRawContent(), notNullValue());
+    }
+
 
     @Test
     public void testSimpleGetWithStringContent() throws Exception {
