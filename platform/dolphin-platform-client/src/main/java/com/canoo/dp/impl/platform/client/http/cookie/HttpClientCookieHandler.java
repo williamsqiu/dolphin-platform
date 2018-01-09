@@ -44,10 +44,12 @@ public class HttpClientCookieHandler {
         this.cookieStore = Assert.requireNonNull(cookieStore, "cookieStore");
     }
 
-    public void updateCookiesFromResponse(final HttpURLConnection conn) throws URISyntaxException {
+    public void updateCookiesFromResponse(final HttpURLConnection connection) throws URISyntaxException {
+        Assert.requireNonNull(connection, "connection");
         LOG.debug("adding cookies from response to cookie store");
-        Map<String, List<String>> headerFields = conn.getHeaderFields();
-        List<String> cookiesHeader = headerFields.get(SET_COOKIE_HEADER);
+
+        final Map<String, List<String>> headerFields = connection.getHeaderFields();
+        final List<String> cookiesHeader = headerFields.get(SET_COOKIE_HEADER);
         if (cookiesHeader != null) {
             LOG.debug("found '{}' header field", SET_COOKIE_HEADER);
             for (String cookie : cookiesHeader) {
@@ -55,34 +57,35 @@ public class HttpClientCookieHandler {
                     continue;
                 }
                 LOG.debug("will parse '{}' header content '{}'", cookie);
-                List<HttpCookie> cookies = new ArrayList<>();
+                final List<HttpCookie> cookies = new ArrayList<>();
                 try {
                     cookies.addAll(HttpCookie.parse(cookie));
-                } catch (Exception e) {
+                } catch (final Exception e) {
                     throw new DolphinRuntimeException("Can not convert '" + SET_COOKIE_HEADER + "' response header field to http cookies. Bad content: " + cookie, e);
                 }
                 LOG.debug("Found {} http cookies in header", cookies.size());
-                for (HttpCookie httpCookie : cookies) {
+                for (final HttpCookie httpCookie : cookies) {
                     LOG.trace("Found Cookie '{}' for Domain '{}' at Ports '{}' with Path '{}", httpCookie.getValue(), httpCookie.getDomain(), httpCookie.getPortlist(), httpCookie.getPath());
-                    cookieStore.add(conn.getURL().toURI(), httpCookie);
+                    cookieStore.add(connection.getURL().toURI(), httpCookie);
                 }
 
             }
         }
     }
 
-    public void setRequestCookies(final HttpURLConnection conn) throws URISyntaxException {
+    public void setRequestCookies(final HttpURLConnection connection) throws URISyntaxException {
+        Assert.requireNonNull(connection, "connection");
         LOG.debug("adding cookies from cookie store to request");
         if (cookieStore.getCookies().size() > 0) {
             String cookieValue = "";
-            for (HttpCookie cookie : cookieStore.get(conn.getURL().toURI())) {
+            for (final HttpCookie cookie : cookieStore.get(connection.getURL().toURI())) {
                 LOG.trace("Cookie '{}' is for Domain '{}' at Ports '{}' with Path '{}", cookie.getValue(), cookie.getDomain(), cookie.getPortlist(), cookie.getPath());
                 cookieValue = cookieValue + cookie + ";";
             }
             if (!cookieValue.isEmpty()) {
                 cookieValue = cookieValue.substring(0, cookieValue.length());
                 LOG.debug("Adding '{}' header to request. Content: {}", SET_COOKIE_HEADER, cookieValue);
-                conn.setRequestProperty(COOKIE_HEADER, cookieValue);
+                connection.setRequestProperty(COOKIE_HEADER, cookieValue);
             }
         }
     }

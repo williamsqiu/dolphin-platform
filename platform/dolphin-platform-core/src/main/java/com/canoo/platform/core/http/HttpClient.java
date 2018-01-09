@@ -14,7 +14,7 @@ import static org.apiguardian.api.API.Status.EXPERIMENTAL;
 public interface HttpClient {
 
     @Deprecated
-    void addResponseHandler(final HttpURLConnectionHandler handler);
+    void addResponseHandler(HttpURLConnectionHandler handler);
 
     @Deprecated
     default HttpCallRequestBuilder request(final URI url) {

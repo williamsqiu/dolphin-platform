@@ -40,7 +40,7 @@ public class HttpCallResponseBuilderImpl implements HttpCallResponseBuilder {
 
     private final ClientConfiguration configuration;
 
-    public HttpCallResponseBuilderImpl(final HttpClientConnection connection, final ByteArrayProvider dataProvider, final Gson gson, final List<HttpURLConnectionHandler> requestHandlers, final List<HttpURLConnectionHandler> responseHandlers, ClientConfiguration configuration) {
+    public HttpCallResponseBuilderImpl(final HttpClientConnection connection, final ByteArrayProvider dataProvider, final Gson gson, final List<HttpURLConnectionHandler> requestHandlers, final List<HttpURLConnectionHandler> responseHandlers, final ClientConfiguration configuration) {
         this.connection = Assert.requireNonNull(connection, "connection");
         this.dataProvider = Assert.requireNonNull(dataProvider, "dataProvider");
         this.gson = Assert.requireNonNull(gson, "gson");

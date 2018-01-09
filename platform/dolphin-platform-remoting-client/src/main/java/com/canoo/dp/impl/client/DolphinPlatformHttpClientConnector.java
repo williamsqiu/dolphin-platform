@@ -78,10 +78,10 @@ public class DolphinPlatformHttpClientConnector extends AbstractClientConnector 
         }
 
         try {
-            String data = codec.encode(commands);
-            String receivedContent = client.request(servletUrl, RequestMethod.POST).withContent(data, HttpHeaderConstants.JSON_MIME_TYPE).readString().execute().get().getContent();
+            final String data = codec.encode(commands);
+            final String receivedContent = client.request(servletUrl, RequestMethod.POST).withContent(data, HttpHeaderConstants.JSON_MIME_TYPE).readString().execute().get().getContent();
             return codec.decode(receivedContent);
-        } catch (Exception e) {
+        } catch (final Exception e) {
             throw new DolphinRemotingException("Error in remoting layer", e);
         }
     }
