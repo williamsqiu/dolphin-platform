@@ -60,20 +60,6 @@ public class HttpClientConnection {
     }
 
     public int readResponseCode() throws IOException {
-        try {
-            Thread.sleep(1_000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        System.out.println("A");
-        System.out.println("A");
-        System.out.println("A");
-        System.out.println("A");
-        System.out.println("A");
-        System.out.println("A");
-        System.out.println("A");
-        System.out.println("A");
-
         return connection.getResponseCode();
     }
 
