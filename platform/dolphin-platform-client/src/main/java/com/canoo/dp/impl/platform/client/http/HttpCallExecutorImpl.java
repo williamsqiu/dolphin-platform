@@ -2,21 +2,22 @@ package com.canoo.dp.impl.platform.client.http;
 
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.client.ClientConfiguration;
-import com.canoo.platform.core.DolphinRuntimeException;
-import com.canoo.platform.core.http.HttpCallExecutor;
+import com.canoo.platform.core.functional.ExecutablePromise;
+import com.canoo.platform.core.http.BadResponseException;
+import com.canoo.platform.core.http.ConnectionException;
+import com.canoo.platform.core.http.HttpException;
 import com.canoo.platform.core.http.HttpResponse;
 import org.apiguardian.api.API;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
-import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 import static org.apiguardian.api.API.Status.INTERNAL;
 
 @API(since = "0.x", status = INTERNAL)
-public class HttpCallExecutorImpl<R> implements HttpCallExecutor<R> {
+public class HttpCallExecutorImpl<R> implements ExecutablePromise<HttpResponse<R>, HttpException> {
 
     private final ExecutorService executor;
 
@@ -26,7 +27,7 @@ public class HttpCallExecutorImpl<R> implements HttpCallExecutor<R> {
 
     private Consumer<HttpResponse<R>> onDone;
 
-    private BiConsumer<Throwable, HttpResponse<R>> errorHandler;
+    private Consumer<HttpException> errorHandler;
 
     public HttpCallExecutorImpl(final ClientConfiguration configuration, final HttpProvider<R> provider) {
         Assert.requireNonNull(configuration, "configuration");
@@ -36,13 +37,13 @@ public class HttpCallExecutorImpl<R> implements HttpCallExecutor<R> {
     }
 
     @Override
-    public HttpCallExecutor<R> onDone(final Consumer<HttpResponse<R>> onDone) {
+    public HttpCallExecutorImpl<R> onDone(final Consumer<HttpResponse<R>> onDone) {
         this.onDone = onDone;
         return this;
     }
 
     @Override
-    public HttpCallExecutor<R> onError(final BiConsumer<Throwable, HttpResponse<R>> errorHandler) {
+    public HttpCallExecutorImpl<R> onError(Consumer<HttpException> errorHandler) {
         this.errorHandler = errorHandler;
         return this;
     }
@@ -55,9 +56,9 @@ public class HttpCallExecutorImpl<R> implements HttpCallExecutor<R> {
                 final HttpResponse<R> result = provider.get();
                 final int statusCode = result.getStatusCode();
                 if (statusCode >= 300) {
-                    final Exception e = new DolphinRuntimeException("Bad Response: " + statusCode);
+                    final HttpException e = new BadResponseException(result, "Bad Response: " + statusCode);
                     if (errorHandler != null) {
-                        uiExecutor.execute(() -> errorHandler.accept(e, result));
+                        uiExecutor.execute(() -> errorHandler.accept(e));
                     }
                     completableFuture.completeExceptionally(e);
                 } else {
@@ -66,9 +67,10 @@ public class HttpCallExecutorImpl<R> implements HttpCallExecutor<R> {
                     }
                     completableFuture.complete(result);
                 }
-            } catch (final Throwable e) {
+            } catch (final Throwable throwable) {
+                final HttpException e = new ConnectionException("Server not reachable", throwable);
                 if (errorHandler != null) {
-                    uiExecutor.execute(() -> errorHandler.accept(e, null));
+                    uiExecutor.execute(() -> errorHandler.accept(e));
                 }
                 completableFuture.completeExceptionally(e);
             }

@@ -1,5 +1,6 @@
 package com.canoo.platform.core.http;
 
+import com.canoo.platform.core.functional.ExecutablePromise;
 import org.apiguardian.api.API;
 
 import static org.apiguardian.api.API.Status.EXPERIMENTAL;
@@ -7,15 +8,15 @@ import static org.apiguardian.api.API.Status.EXPERIMENTAL;
 @API(since = "0.x", status = EXPERIMENTAL)
 public interface HttpCallResponseBuilder {
 
-    HttpCallExecutor<ByteArrayProvider> readBytes();
+    ExecutablePromise<HttpResponse<ByteArrayProvider>, HttpException> readBytes();
 
-    HttpCallExecutor<ByteArrayProvider> readBytes(String contentType);
+    ExecutablePromise<HttpResponse<ByteArrayProvider>, HttpException> readBytes(String contentType);
 
-    HttpCallExecutor<String> readString();
+    ExecutablePromise<HttpResponse<String>, HttpException> readString();
 
-    HttpCallExecutor<String> readString(String contentType);
+    ExecutablePromise<HttpResponse<String>, HttpException> readString(String contentType);
 
-    <R> HttpCallExecutor<R> readObject(Class<R> responseType);
+    <R> ExecutablePromise<HttpResponse<R>, HttpException> readObject(Class<R> responseType);
 
-    HttpCallExecutor<Void> withoutResult();
+    ExecutablePromise<HttpResponse<Void>, HttpException> withoutResult();
 }

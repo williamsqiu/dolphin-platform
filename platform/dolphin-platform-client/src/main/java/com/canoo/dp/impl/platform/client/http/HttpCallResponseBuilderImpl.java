@@ -3,9 +3,10 @@ package com.canoo.dp.impl.platform.client.http;
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.client.ClientConfiguration;
 import com.canoo.platform.core.DolphinRuntimeException;
+import com.canoo.platform.core.functional.ExecutablePromise;
 import com.canoo.platform.core.http.ByteArrayProvider;
-import com.canoo.platform.core.http.HttpCallExecutor;
 import com.canoo.platform.core.http.HttpCallResponseBuilder;
+import com.canoo.platform.core.http.HttpException;
 import com.canoo.platform.core.http.HttpHeader;
 import com.canoo.platform.core.http.HttpResponse;
 import com.canoo.platform.core.http.HttpURLConnectionHandler;
@@ -53,13 +54,13 @@ public class HttpCallResponseBuilderImpl implements HttpCallResponseBuilder {
     }
 
     @Override
-    public HttpCallExecutor<ByteArrayProvider> readBytes() {
+    public ExecutablePromise<HttpResponse<ByteArrayProvider>, HttpException> readBytes() {
         final ResponseContentConverter<ByteArrayProvider> converter = b -> new SimpleByteArrayProvider(b);
         return createExecutor(converter);
     }
 
     @Override
-    public HttpCallExecutor<String> readString() {
+    public ExecutablePromise<HttpResponse<String>, HttpException> readString() {
         connection.addRequestHeader(new HttpHeaderImpl(ACCEPT_CHARSET_HEADER, CHARSET));
 
         final ResponseContentConverter<String> converter = b -> new String(b, CHARSET);
@@ -67,7 +68,7 @@ public class HttpCallResponseBuilderImpl implements HttpCallResponseBuilder {
     }
 
     @Override
-    public <R> HttpCallExecutor<R> readObject(final Class<R> responseType) {
+    public <R> ExecutablePromise<HttpResponse<R>, HttpException> readObject(final Class<R> responseType) {
         Assert.requireNonNull(responseType, "responseType");
 
         connection.addRequestHeader(new HttpHeaderImpl(ACCEPT_CHARSET_HEADER, CHARSET));
@@ -78,13 +79,13 @@ public class HttpCallResponseBuilderImpl implements HttpCallResponseBuilder {
     }
 
     @Override
-    public HttpCallExecutor<Void> withoutResult() {
+    public ExecutablePromise<HttpResponse<Void>, HttpException> withoutResult() {
         final ResponseContentConverter<Void> converter = b -> null;
         return createExecutor(converter);
     }
 
     @Override
-    public HttpCallExecutor<ByteArrayProvider> readBytes(final String contentType) {
+    public ExecutablePromise<HttpResponse<ByteArrayProvider>, HttpException> readBytes(final String contentType) {
         Assert.requireNonNull(contentType, "contentType");
 
         connection.addRequestHeader(new HttpHeaderImpl(ACCEPT_HEADER, contentType));
@@ -92,14 +93,14 @@ public class HttpCallResponseBuilderImpl implements HttpCallResponseBuilder {
     }
 
     @Override
-    public HttpCallExecutor<String> readString(final String contentType) {
+    public ExecutablePromise<HttpResponse<String>, HttpException> readString(final String contentType) {
         Assert.requireNonNull(contentType, "contentType");
 
         connection.addRequestHeader(new HttpHeaderImpl(ACCEPT_HEADER, contentType));
         return readString();
     }
 
-    private <R> HttpCallExecutor<R> createExecutor(final ResponseContentConverter<R> converter) {
+    private <R> ExecutablePromise<HttpResponse<R>, HttpException> createExecutor(final ResponseContentConverter<R> converter) {
         return new HttpCallExecutorImpl<>(configuration, () -> handleRequest(converter));
     }
 
