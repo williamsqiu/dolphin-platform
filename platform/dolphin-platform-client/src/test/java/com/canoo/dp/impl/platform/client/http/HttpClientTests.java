@@ -2,7 +2,10 @@ package com.canoo.dp.impl.platform.client.http;
 
 import com.canoo.dp.impl.platform.core.http.HttpHeaderConstants;
 import com.canoo.platform.client.PlatformClient;
+import com.canoo.platform.core.http.BadEndpointException;
+import com.canoo.platform.core.http.BadResponseException;
 import com.canoo.platform.core.http.ByteArrayProvider;
+import com.canoo.platform.core.http.ConnectionException;
 import com.canoo.platform.core.http.HttpClient;
 import com.canoo.platform.core.http.HttpResponse;
 import com.google.gson.Gson;
@@ -13,6 +16,7 @@ import spark.Spark;
 
 import java.net.ServerSocket;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -24,20 +28,31 @@ public class HttpClientTests {
     private final int freePort;
 
     public HttpClientTests() {
+        freePort = getFreePort();
+    }
+
+    private int getFreePort() {
+        final int freePort;
         try (ServerSocket socket = new ServerSocket(0)) {
             socket.setReuseAddress(true);
             freePort = socket.getLocalPort();
         } catch (Exception e) {
             throw new RuntimeException();
         }
+        return freePort;
     }
 
     @BeforeClass
     public void startSpark() {
         Spark.port(freePort);
+        Spark.threadPool(100, 1_000, 10);
         Spark.get("/", (req, res) -> "Spark Server for HTTP client integration tests");
+        Spark.get("/error", (req, res) -> {
+            res.status(401);
+            return "UPPS";
+        });
         Spark.post("/", (req, res) -> "CHECK");
-        Spark.get("/", HttpHeaderConstants.JSON_MIME_TYPE,  (req, res) -> {
+        Spark.get("/", HttpHeaderConstants.JSON_MIME_TYPE, (req, res) -> {
 
             final Gson gson = new Gson();
             final DummyJson dummy = new DummyJson("Joe", 33, true);
@@ -123,7 +138,7 @@ public class HttpClientTests {
     }
 
     @Test
-    public void testGetWithContent() throws Exception {
+    public void testPostWithContent() throws Exception {
         //given:
         final HttpClient client = PlatformClient.getService(HttpClient.class);
 
@@ -135,6 +150,67 @@ public class HttpClientTests {
 
         //then:
         final String content = future.get(1_000, TimeUnit.MILLISECONDS).getContent();
+    }
+
+    @Test
+    public void testBadEndpoint() throws Exception {
+        //given:
+        final HttpClient client = PlatformClient.getService(HttpClient.class);
+
+        //when:
+        CompletableFuture<HttpResponse<Void>> future = client.get("http://localhost:" + freePort + "/not/available").
+                withoutContent().
+                withoutResult().
+                execute();
+
+        //then:
+        try {
+            future.get(1_000, TimeUnit.MILLISECONDS);
+        } catch (ExecutionException e) {
+            final Throwable internalException = e.getCause();
+            assertThat("Wrong exception type", internalException.getClass(), is(BadEndpointException.class));
+        }
+    }
+
+    @Test
+    public void testBadConnection() throws Exception {
+        //given:
+        final HttpClient client = PlatformClient.getService(HttpClient.class);
+
+        //when:
+        CompletableFuture<HttpResponse<Void>> future = client.get("http://localhost:" + getFreePort()).
+                withoutContent().
+                withoutResult().
+                execute();
+
+        //then:
+        try {
+            future.get(1_000, TimeUnit.MILLISECONDS);
+        } catch (ExecutionException e) {
+            final Throwable internalException = e.getCause();
+            assertThat("Wrong exception type", internalException.getClass(), is(ConnectionException.class));
+        }
+    }
+
+    @Test
+    public void testBadResponse() throws Exception {
+        //given:
+        final HttpClient client = PlatformClient.getService(HttpClient.class);
+
+        //when:
+        CompletableFuture<HttpResponse<Void>> future = client.get("http://localhost:" + freePort + "/error").
+                withoutContent().
+                withoutResult().
+                execute();
+
+        //then:
+        try {
+            future.get(1_000, TimeUnit.HOURS);
+        } catch (ExecutionException e) {
+            final Throwable internalException = e.getCause();
+            internalException.printStackTrace();
+            assertThat("Wrong exception type", internalException.getClass(), is(BadResponseException.class));
+        }
     }
 
     /**

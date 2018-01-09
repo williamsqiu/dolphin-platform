@@ -4,7 +4,6 @@ import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.client.ClientConfiguration;
 import com.canoo.platform.core.functional.ExecutablePromise;
 import com.canoo.platform.core.http.BadResponseException;
-import com.canoo.platform.core.http.ConnectionException;
 import com.canoo.platform.core.http.HttpException;
 import com.canoo.platform.core.http.HttpResponse;
 import org.apiguardian.api.API;
@@ -54,6 +53,7 @@ public class HttpCallExecutorImpl<R> implements ExecutablePromise<HttpResponse<R
         executor.submit(() -> {
             try {
                 final HttpResponse<R> result = provider.get();
+
                 final int statusCode = result.getStatusCode();
                 if (statusCode >= 300) {
                     final HttpException e = new BadResponseException(result, "Bad Response: " + statusCode);
@@ -67,8 +67,7 @@ public class HttpCallExecutorImpl<R> implements ExecutablePromise<HttpResponse<R
                     }
                     completableFuture.complete(result);
                 }
-            } catch (final Throwable throwable) {
-                final HttpException e = new ConnectionException("Server not reachable", throwable);
+            } catch (final HttpException e) {
                 if (errorHandler != null) {
                     uiExecutor.execute(() -> errorHandler.accept(e));
                 }

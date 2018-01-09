@@ -4,6 +4,8 @@ import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.core.http.HttpHeader;
 import com.canoo.platform.core.http.HttpURLConnectionFactory;
 import com.canoo.platform.core.http.RequestMethod;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -14,14 +16,22 @@ import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.canoo.platform.core.http.RequestMethod.GET;
+
 public class HttpClientConnection {
+
+    private final static Logger LOG = LoggerFactory.getLogger(HttpClientConnection.class);
 
     private final HttpURLConnection connection;
 
+    private final RequestMethod method;
+
+    private final URI url;
+
     public HttpClientConnection(final HttpURLConnectionFactory httpURLConnectionFactory, final URI url, final RequestMethod method) throws IOException {
         Assert.requireNonNull(httpURLConnectionFactory, "httpURLConnectionFactory");
-        Assert.requireNonNull(url, "url");
-        Assert.requireNonNull(method, "method");
+        this.url = Assert.requireNonNull(url, "url");
+        this.method = Assert.requireNonNull(method, "method");
 
         this.connection = httpURLConnectionFactory.create(url);
         if(connection == null) {
@@ -39,6 +49,9 @@ public class HttpClientConnection {
     public void writeRequestContent(final byte[] content) throws IOException {
         Assert.requireNonNull(content, "content");
         if (content.length > 0) {
+            if(method.equals(GET)) {
+                LOG.warn("You are currently defining a request content for a HTTP GET call for endpoint '{}'", url);
+            }
             setDoOutput(true);
             try (final OutputStream w = connection.getOutputStream()) {
                 w.write(content);
@@ -47,6 +60,20 @@ public class HttpClientConnection {
     }
 
     public int readResponseCode() throws IOException {
+        try {
+            Thread.sleep(1_000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println("A");
+        System.out.println("A");
+        System.out.println("A");
+        System.out.println("A");
+        System.out.println("A");
+        System.out.println("A");
+        System.out.println("A");
+        System.out.println("A");
+
         return connection.getResponseCode();
     }
 

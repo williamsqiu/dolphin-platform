@@ -4,7 +4,9 @@ import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.client.ClientConfiguration;
 import com.canoo.platform.core.DolphinRuntimeException;
 import com.canoo.platform.core.functional.ExecutablePromise;
+import com.canoo.platform.core.http.BadEndpointException;
 import com.canoo.platform.core.http.ByteArrayProvider;
+import com.canoo.platform.core.http.ConnectionException;
 import com.canoo.platform.core.http.HttpCallResponseBuilder;
 import com.canoo.platform.core.http.HttpException;
 import com.canoo.platform.core.http.HttpHeader;
@@ -13,6 +15,8 @@ import com.canoo.platform.core.http.HttpURLConnectionHandler;
 import com.google.gson.Gson;
 import org.apiguardian.api.API;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -104,7 +108,7 @@ public class HttpCallResponseBuilderImpl implements HttpCallResponseBuilder {
         return new HttpCallExecutorImpl<>(configuration, () -> handleRequest(converter));
     }
 
-    private <R> HttpResponse<R> handleRequest(final ResponseContentConverter<R> converter) throws Exception {
+    private <R> HttpResponse<R> handleRequest(final ResponseContentConverter<R> converter) throws HttpException {
         Assert.requireNonNull(converter, "converter");
 
         if (handled.get()) {
@@ -113,15 +117,30 @@ public class HttpCallResponseBuilderImpl implements HttpCallResponseBuilder {
         handled.set(true);
 
         requestHandlers.forEach(h -> h.handle(connection.getConnection()));
-        connection.writeRequestContent(dataProvider.get());
-        final int responseCode = connection.readResponseCode();
-        responseHandlers.forEach(h -> h.handle(connection.getConnection()));
+        final byte[] rawBytes = dataProvider.get();
+        try {
+            connection.writeRequestContent(rawBytes);
+        } catch (final IOException e) {
+            throw new ConnectionException("Can not connect to server", e);
+        }
 
-        final byte[] rawContent = connection.readResponseContent();
-        final R content = converter.convert(rawContent);
-        final List<HttpHeader> headers = connection.getResponseHeaders();
+        try {
+            int responseCode = connection.readResponseCode();
+            final byte[] rawContent = connection.readResponseContent();
 
-        return new HttpResponseImpl<R>(headers, responseCode, rawContent, content);
+            responseHandlers.forEach(h -> h.handle(connection.getConnection()));
+
+            final R content = converter.convert(rawContent);
+            final List<HttpHeader> headers = connection.getResponseHeaders();
+
+            return new HttpResponseImpl<R>(headers, responseCode, rawContent, content);
+        } catch (FileNotFoundException e) {
+            throw new BadEndpointException("Wrong endpoint defined", e);
+        } catch (IOException e) {
+            throw new ConnectionException("No response from server", e);
+        } catch (Exception e) {
+            throw new HttpException("Can not handle response", e);
+        }
     }
 
 }
