@@ -2,13 +2,13 @@ package com.canoo.dp.impl.platform.client.http;
 
 import com.canoo.dp.impl.platform.core.http.HttpHeaderConstants;
 import com.canoo.platform.client.PlatformClient;
-import com.canoo.platform.core.http.BadEndpointException;
 import com.canoo.platform.core.http.BadResponseException;
 import com.canoo.platform.core.http.ByteArrayProvider;
 import com.canoo.platform.core.http.ConnectionException;
 import com.canoo.platform.core.http.HttpClient;
 import com.canoo.platform.core.http.HttpResponse;
 import com.google.gson.Gson;
+import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -19,6 +19,8 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
+import static com.canoo.dp.impl.platform.core.http.HttpStatus.SC_HTTP_RESOURCE_NOTFOUND;
+import static com.canoo.dp.impl.platform.core.http.HttpStatus.SC_HTTP_UNAUTHORIZED;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
@@ -165,10 +167,12 @@ public class HttpClientTests {
 
         //then:
         try {
-            future.get(1_000, TimeUnit.MILLISECONDS);
+            HttpResponse<?> response = future.get(1_000, TimeUnit.HOURS);
+            Assert.fail();
         } catch (ExecutionException e) {
-            final Throwable internalException = e.getCause();
-            assertThat("Wrong exception type", internalException.getClass(), is(BadEndpointException.class));
+            assertThat("Wrong exception type", e.getCause().getClass(), is(BadResponseException.class));
+            final BadResponseException badResponseException = (BadResponseException) e.getCause();
+            assertThat("Wrong response type", badResponseException.getResponse().getStatusCode(), is(SC_HTTP_RESOURCE_NOTFOUND));
         }
     }
 
@@ -205,11 +209,12 @@ public class HttpClientTests {
 
         //then:
         try {
-            future.get(1_000, TimeUnit.HOURS);
+            HttpResponse<?> response = future.get(1_000, TimeUnit.HOURS);
+            Assert.fail();
         } catch (ExecutionException e) {
-            final Throwable internalException = e.getCause();
-            internalException.printStackTrace();
-            assertThat("Wrong exception type", internalException.getClass(), is(BadResponseException.class));
+            assertThat("Wrong exception type", e.getCause().getClass(), is(BadResponseException.class));
+            final BadResponseException badResponseException = (BadResponseException) e.getCause();
+            assertThat("Wrong response type", badResponseException.getResponse().getStatusCode(), is(SC_HTTP_UNAUTHORIZED));
         }
     }
 

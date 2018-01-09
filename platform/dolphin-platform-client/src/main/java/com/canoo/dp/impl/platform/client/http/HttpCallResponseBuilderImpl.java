@@ -4,7 +4,6 @@ import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.client.ClientConfiguration;
 import com.canoo.platform.core.DolphinRuntimeException;
 import com.canoo.platform.core.functional.ExecutablePromise;
-import com.canoo.platform.core.http.BadEndpointException;
 import com.canoo.platform.core.http.ByteArrayProvider;
 import com.canoo.platform.core.http.ConnectionException;
 import com.canoo.platform.core.http.HttpCallResponseBuilder;
@@ -15,7 +14,6 @@ import com.canoo.platform.core.http.HttpURLConnectionHandler;
 import com.google.gson.Gson;
 import org.apiguardian.api.API;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
@@ -131,8 +129,6 @@ public class HttpCallResponseBuilderImpl implements HttpCallResponseBuilder {
             final R content = converter.convert(rawContent);
             final List<HttpHeader> headers = connection.getResponseHeaders();
             return new HttpResponseImpl<R>(headers, responseCode, rawContent, content);
-        } catch (FileNotFoundException e) {
-            throw new BadEndpointException("Wrong endpoint defined", e);
         } catch (IOException e) {
             throw new ConnectionException("No response from server", e);
         } catch (Exception e) {
