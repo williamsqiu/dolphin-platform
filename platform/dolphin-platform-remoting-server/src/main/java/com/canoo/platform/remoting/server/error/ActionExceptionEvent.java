@@ -20,6 +20,18 @@ import static org.apiguardian.api.API.Status.EXPERIMENTAL;
 public interface ActionExceptionEvent<T extends Throwable> {
 
     /**
+     * Returns the name of action that caused the exception
+     * @return name of action
+     */
+    String getActionName();
+
+    /**
+     * Returns the name of the controller that contains the action that caused the exception
+     * @return name of the controller
+     */
+    String getControllerName();
+
+    /**
      * Returns the exception that is wrapped by this instance. The returned exception is the
      * exception instance that was thrown by the action call.
      * @return the exception
