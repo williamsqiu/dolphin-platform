@@ -34,7 +34,7 @@ public class HttpClientConnection {
         this.method = Assert.requireNonNull(method, "method");
 
         this.connection = httpURLConnectionFactory.create(url);
-        if(connection == null) {
+        if (connection == null) {
             throw new IllegalStateException("Connection was not created. Check connection factory!");
         }
         this.connection.setRequestMethod(method.getRawName());
@@ -49,7 +49,7 @@ public class HttpClientConnection {
     public void writeRequestContent(final byte[] content) throws IOException {
         Assert.requireNonNull(content, "content");
         if (content.length > 0) {
-            if(method.equals(GET)) {
+            if (method.equals(GET)) {
                 LOG.warn("You are currently defining a request content for a HTTP GET call for endpoint '{}'", url);
             }
             setDoOutput(true);
@@ -64,16 +64,35 @@ public class HttpClientConnection {
     }
 
     public byte[] readResponseContent() throws IOException {
-        try (final InputStream is = connection.getInputStream()) {
+        final InputStream errorstream = connection.getErrorStream();
+
+        if(errorstream == null) {
+            try (final InputStream inputStream = connection.getInputStream()) {
+                try (final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
+                    int read = inputStream.read();
+                    while (read != -1) {
+                        byteArrayOutputStream.write(read);
+                        read = inputStream.read();
+                    }
+                    return byteArrayOutputStream.toByteArray();
+                }
+            }
+        } else {
             try (final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
-                int read = is.read();
+                int read = errorstream.read();
                 while (read != -1) {
                     byteArrayOutputStream.write(read);
-                    read = is.read();
+                    read = errorstream.read();
                 }
                 return byteArrayOutputStream.toByteArray();
+            } finally {
+                errorstream.close();
             }
         }
+    }
+
+    public String getResponseMessage() throws IOException {
+        return connection.getResponseMessage();
     }
 
     public List<HttpHeader> getResponseHeaders() {

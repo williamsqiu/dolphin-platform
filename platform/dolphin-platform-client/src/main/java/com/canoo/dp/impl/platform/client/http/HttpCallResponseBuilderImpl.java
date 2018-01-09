@@ -125,20 +125,12 @@ public class HttpCallResponseBuilderImpl implements HttpCallResponseBuilder {
         }
 
         try {
-
             int responseCode = connection.readResponseCode();
-
-            if (responseCode >= 300) {
-                responseHandlers.forEach(h -> h.handle(connection.getConnection()));
-                final List<HttpHeader> headers = connection.getResponseHeaders();
-                return new HttpResponseImpl<R>(headers, responseCode, null, null);
-            } else {
-                final byte[] rawContent = connection.readResponseContent();
-                responseHandlers.forEach(h -> h.handle(connection.getConnection()));
-                final R content = converter.convert(rawContent);
-                final List<HttpHeader> headers = connection.getResponseHeaders();
-                return new HttpResponseImpl<R>(headers, responseCode, rawContent, content);
-            }
+            final byte[] rawContent = connection.readResponseContent();
+            responseHandlers.forEach(h -> h.handle(connection.getConnection()));
+            final R content = converter.convert(rawContent);
+            final List<HttpHeader> headers = connection.getResponseHeaders();
+            return new HttpResponseImpl<R>(headers, responseCode, rawContent, content);
         } catch (FileNotFoundException e) {
             throw new BadEndpointException("Wrong endpoint defined", e);
         } catch (IOException e) {
