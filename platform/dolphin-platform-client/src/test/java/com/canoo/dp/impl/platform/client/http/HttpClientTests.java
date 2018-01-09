@@ -36,6 +36,7 @@ public class HttpClientTests {
     public void startSpark() {
         Spark.port(freePort);
         Spark.get("/", (req, res) -> "Spark Server for HTTP client integration tests");
+        Spark.post("/", (req, res) -> "CHECK");
         Spark.get("/", HttpHeaderConstants.JSON_MIME_TYPE,  (req, res) -> {
 
             final Gson gson = new Gson();
@@ -121,13 +122,13 @@ public class HttpClientTests {
         assertThat("Wrong isJavaChampion", dummy.isJavaChampion(), is(true));
     }
 
-    @Test(enabled = false)
+    @Test
     public void testGetWithContent() throws Exception {
         //given:
         final HttpClient client = PlatformClient.getService(HttpClient.class);
 
         //when:
-        CompletableFuture<HttpResponse<String>> future = client.get("http://localhost:" + freePort)
+        CompletableFuture<HttpResponse<String>> future = client.post("http://localhost:" + freePort)
                 .withContent("String")
                 .readString()
                 .execute();
