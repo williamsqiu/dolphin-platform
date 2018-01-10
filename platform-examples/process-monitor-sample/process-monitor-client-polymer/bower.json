@@ -12,7 +12,7 @@
     "tests"
   ],
   "dependencies": {
-    "dolphin-platform-polymer": "canoo/dolphin-platform-polymer#1.0.0-CR.2",
+    "dolphin-platform-polymer": "canoo/dolphin-platform-polymer#1.0.0-CR.3",
     "font-roboto": "PolymerElements/font-roboto-local#^1.0.1",
     "paper-item": "PolymerElements/paper-item#^2.0.0",
     "paper-styles": "PolymerElements/paper-styles#^2.0.0",
