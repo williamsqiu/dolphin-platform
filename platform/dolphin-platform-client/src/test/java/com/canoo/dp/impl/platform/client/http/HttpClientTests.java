@@ -76,15 +76,22 @@ public class HttpClientTests {
     public void testSimpleGet() throws Exception {
         //given:
         final HttpClient client = PlatformClient.getService(HttpClient.class);
+        final AtomicBoolean actionCalled = new AtomicBoolean(false);
+        final AtomicBoolean doneCalled = new AtomicBoolean(false);
+        final AtomicBoolean errorCalled = new AtomicBoolean(false);
 
         //when:
-        CompletableFuture<HttpResponse<Void>> future = client.get("http://localhost:" + freePort).
-                withoutContent().
-                withoutResult().
-                execute();
+        final CompletableFuture<HttpResponse<Void>> future = getHttpResponseCompletableFuture(client, actionCalled, doneCalled, errorCalled);
 
         //then:
         future.get(1_000, TimeUnit.MILLISECONDS);
+        final HttpResponse<Void> response = future.get(1_000, TimeUnit.MILLISECONDS);
+        assertThat("response not defined", response, notNullValue());
+        assertThat("Wrong response code", response.getStatusCode(), is(200));
+        assertThat("Content should not be null", response.getRawContent(), notNullValue());
+
+        assertThatDoneCalledAndErrorNotCalled(actionCalled, doneCalled, errorCalled);
+
     }
 
 
@@ -92,24 +99,20 @@ public class HttpClientTests {
     public void testSimpleGetWithPromise() throws Exception {
         //given:
         final HttpClient client = PlatformClient.getService(HttpClient.class);
+        final AtomicBoolean actionCalled = new AtomicBoolean(false);
         final AtomicBoolean doneCalled = new AtomicBoolean(false);
         final AtomicBoolean errorCalled = new AtomicBoolean(false);
 
         //when:
-        CompletableFuture<HttpResponse<Void>> future = client.get("http://localhost:" + freePort).
-                withoutContent().
-                withoutResult().
-                onDone(response -> doneCalled.set(true)).
-                onError(e -> errorCalled.set(true)).
-                execute();
+        final CompletableFuture<HttpResponse<Void>> future = getHttpResponseCompletableFuture(client, actionCalled, doneCalled, errorCalled);
 
         //then:
-        HttpResponse<Void> response = future.get(1_000, TimeUnit.MILLISECONDS);
-        assertThat("Done callable was not called", doneCalled.get(), is(true));
-        assertThat("Error callable was called", errorCalled.get(), is(false));
+        final HttpResponse<Void> response = future.get(1_000, TimeUnit.MILLISECONDS);
         assertThat("response not defined", response, notNullValue());
         assertThat("Wrong response code", response.getStatusCode(), is(200));
         assertThat("Content should not be null", response.getRawContent(), notNullValue());
+
+        assertThatDoneCalledAndErrorNotCalled(actionCalled, doneCalled, errorCalled);
     }
 
 
@@ -117,131 +120,315 @@ public class HttpClientTests {
     public void testSimpleGetWithStringContent() throws Exception {
         //given:
         final HttpClient client = PlatformClient.getService(HttpClient.class);
+        final AtomicBoolean actionCalled = new AtomicBoolean(false);
+        final AtomicBoolean doneCalled = new AtomicBoolean(false);
+        final AtomicBoolean errorCalled = new AtomicBoolean(false);
 
         //when:
-        CompletableFuture<HttpResponse<String>> future = client.get("http://localhost:" + freePort)
+        final CompletableFuture<HttpResponse<String>> future = client.get("http://localhost:" + freePort)
                 .withoutContent()
                 .readString()
+                .onDone(response -> {
+                    actionCalled.set(true);
+                    doneCalled.set(true);
+                })
+                .onError(e -> {
+                    actionCalled.set(true);
+                    errorCalled.set(true);
+                })
                 .execute();
 
         //then:
-        final String content = future.get(1_000, TimeUnit.MILLISECONDS).getContent();
+        final HttpResponse<String> response = future.get(1_000, TimeUnit.MILLISECONDS);
+        assertThat("response not defined", response, notNullValue());
+        assertThat("Wrong response code", response.getStatusCode(), is(200));
+        assertThat("Content should not be null", response.getRawContent(), notNullValue());
+
+        final String content = response.getContent();
         assertThat("String content does not match", content, is("Spark Server for HTTP client integration tests"));
+
+        assertThatDoneCalledAndErrorNotCalled(actionCalled, doneCalled, errorCalled);
     }
 
     @Test
     public void testSimpleGetWithByteContent() throws Exception {
         //given:
         final HttpClient client = PlatformClient.getService(HttpClient.class);
+        final AtomicBoolean actionCalled = new AtomicBoolean(false);
+        final AtomicBoolean doneCalled = new AtomicBoolean(false);
+        final AtomicBoolean errorCalled = new AtomicBoolean(false);
 
         //when:
-        CompletableFuture<HttpResponse<ByteArrayProvider>> future = client.get("http://localhost:" + freePort)
+        final CompletableFuture<HttpResponse<ByteArrayProvider>> future = client.get("http://localhost:" + freePort)
                 .withoutContent()
                 .readBytes()
+                .onDone(response -> {
+                    actionCalled.set(true);
+                    doneCalled.set(true);
+                })
+                .onError(e -> {
+                    actionCalled.set(true);
+                    errorCalled.set(true);
+                })
                 .execute();
 
         //then:
-        final byte[] bytes = future.get(1_000, TimeUnit.MILLISECONDS).getContent().get();
+        final HttpResponse<ByteArrayProvider> response = future.get(1_000, TimeUnit.MILLISECONDS);
+        assertThat("response not defined", response, notNullValue());
+        assertThat("Wrong response code", response.getStatusCode(), is(200));
+        assertThat("Content should not be null", response.getRawContent(), notNullValue());
+
+        final byte[] bytes = response.getContent().get();
         assertThat("Byte content does not match", bytes, is("Spark Server for HTTP client integration tests".getBytes()));
+
+        assertThatDoneCalledAndErrorNotCalled(actionCalled, doneCalled, errorCalled);
     }
 
     @Test
     public void testSimpleGetWithJsonContentType() throws Exception {
         //given:
         final HttpClient client = PlatformClient.getService(HttpClient.class);
+        final AtomicBoolean actionCalled = new AtomicBoolean(false);
+        final AtomicBoolean doneCalled = new AtomicBoolean(false);
+        final AtomicBoolean errorCalled = new AtomicBoolean(false);
 
         //when:
-        CompletableFuture<HttpResponse<String>> future = client.get("http://localhost:" + freePort)
+        final CompletableFuture<HttpResponse<String>> future = client.get("http://localhost:" + freePort)
                 .withoutContent()
                 .readString(HttpHeaderConstants.JSON_MIME_TYPE)
+                .onDone(response -> {
+                    actionCalled.set(true);
+                    doneCalled.set(true);
+                })
+                .onError(e -> {
+                    actionCalled.set(true);
+                    errorCalled.set(true);
+                })
                 .execute();
 
         //then:
-        final String json = future.get(1_000, TimeUnit.MILLISECONDS).getContent();
+        final HttpResponse<String> response = future.get(1_000, TimeUnit.MILLISECONDS);
+        assertThat("response not defined", response, notNullValue());
+        assertThat("Wrong response code", response.getStatusCode(), is(200));
+        assertThat("Content should not be null", response.getRawContent(), notNullValue());
+
+        final String json = response.getContent();
         final Gson gson = new Gson();
         final DummyJson dummy = gson.fromJson(json, DummyJson.class);
         assertThat("No JSON object created", dummy, notNullValue());
         assertThat("Wrong name", dummy.getName(), is("Joe"));
         assertThat("Wrong age", dummy.getAge(), is(33));
         assertThat("Wrong isJavaChampion", dummy.isJavaChampion(), is(true));
+
+        assertThatDoneCalledAndErrorNotCalled(actionCalled, doneCalled, errorCalled);
     }
 
     @Test
     public void testPostWithContent() throws Exception {
         //given:
         final HttpClient client = PlatformClient.getService(HttpClient.class);
+        final AtomicBoolean actionCalled = new AtomicBoolean(false);
+        final AtomicBoolean doneCalled = new AtomicBoolean(false);
+        final AtomicBoolean errorCalled = new AtomicBoolean(false);
 
         //when:
-        CompletableFuture<HttpResponse<String>> future = client.post("http://localhost:" + freePort)
+        final CompletableFuture<HttpResponse<String>> future = client.post("http://localhost:" + freePort)
                 .withContent("String")
                 .readString()
+                .onDone(response -> {
+                    actionCalled.set(true);
+                    doneCalled.set(true);
+                })
+                .onError(e -> {
+                    actionCalled.set(true);
+                    errorCalled.set(true);
+                })
                 .execute();
 
         //then:
-        final String content = future.get(1_000, TimeUnit.MILLISECONDS).getContent();
+        final HttpResponse<String> response = future.get(1_000, TimeUnit.MILLISECONDS);
+        assertThat("response not defined", response, notNullValue());
+        assertThat("Wrong response code", response.getStatusCode(), is(200));
+        assertThat("Content should not be null", response.getRawContent(), notNullValue());
+
+        final String content = response.getContent();
+        assertThat("String content does not match", content, is("CHECK"));
+
+        assertThatDoneCalledAndErrorNotCalled(actionCalled, doneCalled, errorCalled);
+    }
+
+    @Test
+    public void testPostWithoutContent() throws Exception {
+        //given:
+        final HttpClient client = PlatformClient.getService(HttpClient.class);
+        final AtomicBoolean actionCalled = new AtomicBoolean(false);
+        final AtomicBoolean doneCalled = new AtomicBoolean(false);
+        final AtomicBoolean errorCalled = new AtomicBoolean(false);
+
+        //when:
+        final CompletableFuture<HttpResponse<String>> future = client.post("http://localhost:" + freePort)
+                .withoutContent()
+                .readString()
+                .onDone(response -> {
+                    actionCalled.set(true);
+                    doneCalled.set(true);
+                })
+                .onError(e -> {
+                    actionCalled.set(true);
+                    errorCalled.set(true);
+                })
+                .execute();
+
+        //then:
+        final HttpResponse<String> response = future.get(1_000, TimeUnit.MILLISECONDS);
+        assertThat("response not defined", response, notNullValue());
+        assertThat("Wrong response code", response.getStatusCode(), is(200));
+        assertThat("Content should not be null", response.getRawContent(), notNullValue());
+
+        final String content = response.getContent();
+        assertThat("String content does not match", content, is("CHECK"));
+
+        assertThatDoneCalledAndErrorNotCalled(actionCalled, doneCalled, errorCalled);
     }
 
     @Test
     public void testBadEndpoint() throws Exception {
         //given:
         final HttpClient client = PlatformClient.getService(HttpClient.class);
+        final AtomicBoolean actionCalled = new AtomicBoolean(false);
+        final AtomicBoolean doneCalled = new AtomicBoolean(false);
+        final AtomicBoolean errorCalled = new AtomicBoolean(false);
 
         //when:
-        CompletableFuture<HttpResponse<Void>> future = client.get("http://localhost:" + freePort + "/not/available").
-                withoutContent().
-                withoutResult().
-                execute();
+        final CompletableFuture<HttpResponse<Void>> future = client.get("http://localhost:" + freePort + "/not/available")
+                .withoutContent()
+                .withoutResult()
+                .onDone(response -> {
+                    actionCalled.set(true);
+                    doneCalled.set(true);
+                })
+                .onError(e -> {
+                    actionCalled.set(true);
+                    errorCalled.set(true);
+                })
+                .execute();
 
         //then:
-        try {
-            HttpResponse<?> response = future.get(1_000, TimeUnit.HOURS);
-            Assert.fail();
-        } catch (ExecutionException e) {
-            assertThat("Wrong exception type", e.getCause().getClass(), is(BadResponseException.class));
-            final BadResponseException badResponseException = (BadResponseException) e.getCause();
-            assertThat("Wrong response type", badResponseException.getResponse().getStatusCode(), is(SC_HTTP_RESOURCE_NOTFOUND));
-        }
+        assertThatBadResponseException(doneCalled, errorCalled, future, SC_HTTP_RESOURCE_NOTFOUND);
+        assertThatErrorCalledAndDoneNotCalled(actionCalled, doneCalled, errorCalled);
     }
 
     @Test
     public void testBadConnection() throws Exception {
         //given:
         final HttpClient client = PlatformClient.getService(HttpClient.class);
+        final AtomicBoolean actionCalled = new AtomicBoolean(false);
+        final AtomicBoolean doneCalled = new AtomicBoolean(false);
+        final AtomicBoolean errorCalled = new AtomicBoolean(false);
 
         //when:
-        CompletableFuture<HttpResponse<Void>> future = client.get("http://localhost:" + getFreePort()).
-                withoutContent().
-                withoutResult().
-                execute();
+        final CompletableFuture<HttpResponse<Void>> future = client.get("http://localhost:" + getFreePort())
+                .withoutContent()
+                .withoutResult()
+                .onDone(response -> {
+                    actionCalled.set(true);
+                    doneCalled.set(true);
+                })
+                .onError(e -> {
+                    actionCalled.set(true);
+                    errorCalled.set(true);
+                })
+                .execute();
 
         //then:
-        try {
-            future.get(1_000, TimeUnit.MILLISECONDS);
-        } catch (ExecutionException e) {
-            final Throwable internalException = e.getCause();
-            assertThat("Wrong exception type", internalException.getClass(), is(ConnectionException.class));
-        }
+        assertThatConnectionException(future);
+        assertThatErrorCalledAndDoneNotCalled(actionCalled, doneCalled, errorCalled);
     }
 
     @Test
     public void testBadResponse() throws Exception {
         //given:
         final HttpClient client = PlatformClient.getService(HttpClient.class);
+        final AtomicBoolean actionCalled = new AtomicBoolean(false);
+        final AtomicBoolean doneCalled = new AtomicBoolean(false);
+        final AtomicBoolean errorCalled = new AtomicBoolean(false);
 
         //when:
-        CompletableFuture<HttpResponse<Void>> future = client.get("http://localhost:" + freePort + "/error").
-                withoutContent().
-                withoutResult().
-                execute();
+        final CompletableFuture<HttpResponse<Void>> future = client.get("http://localhost:" + freePort + "/error")
+                .withoutContent()
+                .withoutResult()
+                .onDone(response -> {
+                    actionCalled.set(true);
+                    doneCalled.set(true);
+                })
+                .onError(e -> {
+                    actionCalled.set(true);
+                    errorCalled.set(true);
+                })
+                .execute();
 
         //then:
+        assertThatBadResponseException(doneCalled, errorCalled, future, SC_HTTP_UNAUTHORIZED);
+        assertThatErrorCalledAndDoneNotCalled(actionCalled, doneCalled, errorCalled);
+    }
+
+    private CompletableFuture<HttpResponse<Void>> getHttpResponseCompletableFuture(final HttpClient client, final AtomicBoolean actionCalled, final AtomicBoolean doneCalled, final AtomicBoolean errorCalled) {
+        return client.get("http://localhost:" + freePort)
+                .withoutContent()
+                .withoutResult()
+                .onDone(response -> {
+                    actionCalled.set(true);
+                    doneCalled.set(true);
+                })
+                .onError(e -> {
+                    actionCalled.set(true);
+                    errorCalled.set(true);
+                })
+                .execute();
+    }
+
+    private void retry(final AtomicBoolean actionCalled) throws InterruptedException {
+        int retries = 0;
+        while(!actionCalled.get() && retries < 5) {
+            Thread.sleep(1_000);
+            retries++;
+        }
+    }
+
+    private void assertThatDoneCalledAndErrorNotCalled(final AtomicBoolean actionCalled, final AtomicBoolean doneCalled, final AtomicBoolean errorCalled) throws InterruptedException {
+        retry(actionCalled);
+
+        assertThat("Neither Done or Error callable was called", actionCalled.get(), is(true));
+        assertThat("Done callable was not called", doneCalled.get(), is(true));
+        assertThat("Error callable was called", errorCalled.get(), is(false));
+    }
+
+    private void assertThatErrorCalledAndDoneNotCalled(final AtomicBoolean actionCalled, final AtomicBoolean doneCalled, final AtomicBoolean errorCalled) throws InterruptedException {
+        retry(actionCalled);
+
+        assertThat("Neither Done or Error callable was called", actionCalled.get(), is(true));
+        assertThat("Done callable was called", doneCalled.get(), is(false));
+        assertThat("Error callable was not called", errorCalled.get(), is(true));
+    }
+
+    private void assertThatBadResponseException(final AtomicBoolean doneCalled, final AtomicBoolean errorCalled, final CompletableFuture<HttpResponse<Void>> future, final int scHttpUnauthorized) throws InterruptedException, java.util.concurrent.TimeoutException {
         try {
-            HttpResponse<?> response = future.get(1_000, TimeUnit.HOURS);
+            future.get(1_000, TimeUnit.MILLISECONDS);
             Assert.fail();
         } catch (ExecutionException e) {
             assertThat("Wrong exception type", e.getCause().getClass(), is(BadResponseException.class));
             final BadResponseException badResponseException = (BadResponseException) e.getCause();
-            assertThat("Wrong response type", badResponseException.getResponse().getStatusCode(), is(SC_HTTP_UNAUTHORIZED));
+            assertThat("Wrong response type", badResponseException.getResponse().getStatusCode(), is(scHttpUnauthorized));
+        }
+    }
+
+    private void assertThatConnectionException(final CompletableFuture<HttpResponse<Void>> future) throws InterruptedException, java.util.concurrent.TimeoutException {
+        try {
+            future.get(1_000, TimeUnit.MILLISECONDS);
+            Assert.fail();
+        } catch (ExecutionException e) {
+            final Throwable internalException = e.getCause();
+            assertThat("Wrong exception type", internalException.getClass(), is(ConnectionException.class));
         }
     }
 
