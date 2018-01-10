@@ -11,7 +11,7 @@ public class Client {
 
         final String message = client.request("http://localhost:8080/api/message").
                 withoutContent().
-                readString().execute().get();
+                readString().execute().get().getContent();
         System.out.println(message);
 
         final Security security = PlatformClient.getService(Security.class);
@@ -19,7 +19,7 @@ public class Client {
 
         final String message2 = client.request("http://localhost:8080/api/secure/message").
                 withoutContent().
-                readString().execute().get();
+                readString().execute().get().getContent();
         System.out.println(message2);
     }
 }

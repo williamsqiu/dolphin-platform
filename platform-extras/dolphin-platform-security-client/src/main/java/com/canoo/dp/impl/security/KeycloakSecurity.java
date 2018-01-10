@@ -1,8 +1,7 @@
 package com.canoo.dp.impl.security;
 
-import com.canoo.dp.impl.platform.core.http.DefaultHttpURLConnectionFactory;
 import com.canoo.dp.impl.platform.core.Assert;
-import com.canoo.dp.impl.platform.core.PlatformConstants;
+import com.canoo.dp.impl.platform.core.http.DefaultHttpURLConnectionFactory;
 import com.canoo.platform.client.PlatformClient;
 import com.canoo.platform.client.security.Security;
 import com.canoo.platform.core.DolphinRuntimeException;
@@ -24,6 +23,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
+import static com.canoo.dp.impl.platform.core.http.HttpHeaderConstants.CHARSET;
 import static org.apiguardian.api.API.Status.INTERNAL;
 
 @API(since = "0.19.0", status = INTERNAL)
@@ -55,7 +55,7 @@ public class KeycloakSecurity implements Security {
 
     private void receiveTokenFromKeycloak(final String content) throws IOException, URISyntaxException {
         LOG.debug("receiving new token from keycloak server");
-        final byte[] rawContent = content.getBytes(PlatformConstants.CHARSET);
+        final byte[] rawContent = content.getBytes(CHARSET);
         final URI url = new URI(authEndpoint + "/auth/realms/" + realmName + "/protocol/openid-connect/token");
         final HttpURLConnection connection = new DefaultHttpURLConnectionFactory().create(url);
         connection.setRequestMethod(RequestMethod.POST.getRawName());

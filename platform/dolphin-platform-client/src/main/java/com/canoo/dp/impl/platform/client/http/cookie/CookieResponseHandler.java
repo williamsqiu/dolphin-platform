@@ -24,7 +24,7 @@ public class CookieResponseHandler implements HttpURLConnectionHandler {
         Assert.requireNonNull(connection, "connection");
         try {
             clientCookieHandler.updateCookiesFromResponse(connection);
-        } catch (URISyntaxException e) {
+        } catch (final URISyntaxException e) {
             throw new DolphinRuntimeException("Can not read cookies from response", e);
         }
     }

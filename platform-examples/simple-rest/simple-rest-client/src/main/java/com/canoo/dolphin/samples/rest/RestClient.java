@@ -17,20 +17,19 @@ package com.canoo.dolphin.samples.rest;
 
 import com.canoo.platform.client.PlatformClient;
 import com.canoo.platform.core.http.HttpClient;
-import com.canoo.platform.core.http.RequestMethod;
 
 public class RestClient {
 
-    public static void main(String[] args) throws Exception{
+    public static void main(String[] args) throws Exception {
         final String endpoint = "http://localhost:8080/simple-rest/api/city";
         final HttpClient httpClient = PlatformClient.getService(HttpClient.class);
 
         final City city = new City("Dortmund", "Germany");
 
-        final CityDetails details = httpClient.request(endpoint, RequestMethod.POST).
+        final CityDetails details = httpClient.post(endpoint).
                 withContent(city).
                 readObject(CityDetails.class).
-                execute().get();
+                execute().get().getContent();
 
         System.out.println("City " + details.getName() + " has " + details.getPopulation() + " citizens");
     }
