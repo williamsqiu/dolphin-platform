@@ -17,10 +17,16 @@ package com.canoo.dolphin.webdeployment.server;
 
 import com.canoo.platform.remoting.server.spring.DolphinPlatformRemotingApplication;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.web.support.SpringBootServletInitializer;
 
 @DolphinPlatformRemotingApplication
-public class ServerApplication {
+public class ServerApplication extends SpringBootServletInitializer{
 
+    @Override
+    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+        return application.sources(ServerApplication.class);
+    }
     public static void main(String[] args) throws Exception {
         SpringApplication.run(new Class[]{ServerApplication.class}, args);
     }
