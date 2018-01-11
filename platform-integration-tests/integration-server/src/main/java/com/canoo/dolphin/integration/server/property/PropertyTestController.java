@@ -17,19 +17,19 @@ package com.canoo.dolphin.integration.server.property;
 
 import com.canoo.platform.core.functional.Subscription;
 import com.canoo.dolphin.integration.property.PropertyTestBean;
-import com.canoo.platform.remoting.server.DolphinAction;
-import com.canoo.platform.remoting.server.DolphinController;
-import com.canoo.platform.remoting.server.DolphinModel;
+import com.canoo.platform.remoting.server.RemotingAction;
+import com.canoo.platform.remoting.server.RemotingController;
+import com.canoo.platform.remoting.server.RemotingModel;
 
 import java.util.Objects;
 
 import static com.canoo.dolphin.integration.IntegrationConstants.NOT_NULL;
 import static com.canoo.dolphin.integration.property.PropertyTestConstants.*;
 
-@DolphinController(PROPERTY_CONTROLLER_NAME)
+@RemotingController(PROPERTY_CONTROLLER_NAME)
 public class PropertyTestController {
 
-    @DolphinModel
+    @RemotingModel
     private PropertyTestBean model;
 
     private Subscription bigDecimalChangedSubscription;
@@ -60,7 +60,7 @@ public class PropertyTestController {
 
     private Subscription uuidChangedSubscription;
 
-    @DolphinAction(CHECK_MODEL_CREATION_ACTION)
+    @RemotingAction(CHECK_MODEL_CREATION_ACTION)
     public void checkModelCreation() {
         Objects.requireNonNull(model, "Model should not be null");
         Objects.requireNonNull(model.bigDecimalValueProperty(), "big decimal property" + NOT_NULL);
@@ -79,7 +79,7 @@ public class PropertyTestController {
         Objects.requireNonNull(model.uuidValueProperty(), "uuid property" + NOT_NULL);
     }
 
-    @DolphinAction(SET_TO_DEFAULTS_ACTION)
+    @RemotingAction(SET_TO_DEFAULTS_ACTION)
     public void setToDefaults() {
         model.setBigDecimalValue(BIG_DECIMAL_VALUE);
         model.setBigIntegerValue(BIG_INTEGER_VALUE);
@@ -97,7 +97,7 @@ public class PropertyTestController {
         model.setUuidValue(UUID_VALUE);
     }
 
-    @DolphinAction(ADD_CHANGE_LISTENER)
+    @RemotingAction(ADD_CHANGE_LISTENER)
     public void addChangeListener() {
         resetChangedFlags();
         bigDecimalChangedSubscription = model.bigDecimalValueProperty().onChanged(e -> model.setBigDecimalValueChanged(true));
@@ -118,7 +118,7 @@ public class PropertyTestController {
         model.stringValueProperty().onChanged(e -> System.out.println("Value changed from " + e.getOldValue() + " to " + e.getNewValue()));
     }
 
-    @DolphinAction(REMOVE_CHANGE_LISTENER)
+    @RemotingAction(REMOVE_CHANGE_LISTENER)
     public void removeChangeListener() {
         bigDecimalChangedSubscription.unsubscribe();
         bigDecimalChangedSubscription = null;
@@ -164,7 +164,7 @@ public class PropertyTestController {
         resetChangedFlags();
     }
 
-    @DolphinAction(RESET_CHANGE_FLAGS)
+    @RemotingAction(RESET_CHANGE_FLAGS)
     public void resetChangedFlags() {
         model.setBigDecimalValueChanged(false);
         model.setBigIntegerValueChanged(false);
@@ -182,7 +182,7 @@ public class PropertyTestController {
         model.setUuidValueChanged(false);
     }
 
-    @DolphinAction(RESET_TO_NULL_ACTION)
+    @RemotingAction(RESET_TO_NULL_ACTION)
     public void resetToNull() {
         model.setBigDecimalValue(null);
         model.setBigIntegerValue(null);
@@ -200,7 +200,7 @@ public class PropertyTestController {
         model.setUuidValue(null);
     }
 
-    @DolphinAction(PING)
+    @RemotingAction(PING)
     public void ping() {
 
     }

@@ -1,10 +1,10 @@
 package com.canoo.platform.logger.server;
 
 import com.canoo.dp.impl.platform.core.Assert;
-import com.canoo.platform.remoting.server.DolphinController;
+import com.canoo.platform.remoting.server.RemotingController;
 import com.canoo.platform.remoting.server.PostChildCreated;
 
-@DolphinController
+@RemotingController
 public class LogHistoryParentController {
 
     private LogFilterController filterController;

@@ -24,7 +24,7 @@ import com.canoo.dp.impl.platform.core.IdentitySet;
 import com.canoo.dp.impl.platform.core.ReflectionHelper;
 import com.canoo.dp.impl.server.config.RemotingConfiguration;
 import com.canoo.platform.remoting.BeanManager;
-import com.canoo.platform.remoting.server.DolphinModel;
+import com.canoo.platform.remoting.server.RemotingModel;
 import org.apiguardian.api.API;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,7 +41,7 @@ import static org.apiguardian.api.API.Status.INTERNAL;
  * The garbage collection for Dolphin Platform models. Whenever a new Dolphin bean {@link DolphinBean}
  * has been created or the hierarchy in a Dolphin model changes the GC will check if the mutated models are still
  * referenced by a root model. In this case a root model is a model as it's defined as a model for a MVC group in
- * Dolphin Platform (see {@link DolphinModel}).
+ * Dolphin Platform (see {@link RemotingModel}).
  */
 @API(since = "0.x", status = INTERNAL)
 public class GarbageCollector {
@@ -199,7 +199,7 @@ public class GarbageCollector {
 
     /**
      * Calling this method triggers the garbage collection. For all dolphin beans (see {@link DolphinBean}) that
-     * are not referenced by a root bean (see {@link DolphinModel}) the defined {@link GarbageCollectionCallback} (see constructor)
+     * are not referenced by a root bean (see {@link RemotingModel}) the defined {@link GarbageCollectionCallback} (see constructor)
      * will be called.
      */
     public synchronized void gc() {

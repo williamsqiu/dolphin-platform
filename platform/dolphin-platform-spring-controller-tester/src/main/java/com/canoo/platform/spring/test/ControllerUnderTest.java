@@ -17,8 +17,8 @@ package com.canoo.platform.spring.test;
 
 import com.canoo.platform.remoting.client.Param;
 import com.canoo.platform.remoting.DolphinBean;
-import com.canoo.platform.remoting.server.DolphinAction;
-import com.canoo.platform.remoting.server.DolphinController;
+import com.canoo.platform.remoting.server.RemotingAction;
+import com.canoo.platform.remoting.server.RemotingController;
 import org.apiguardian.api.API;
 
 import java.util.Map;
@@ -26,7 +26,7 @@ import java.util.Map;
 import static org.apiguardian.api.API.Status.MAINTAINED;
 
 /**
- * Provides acces to a controller (see {@link DolphinController}) and its model for tests
+ * Provides acces to a controller (see {@link RemotingController}) and its model for tests
  *
  * @param <T> type of the model
  * @author Hendrik Ebbers
@@ -42,7 +42,7 @@ public interface ControllerUnderTest<T> {
     T getModel();
 
     /**
-     * Invokes an action on the controller. See {@link DolphinAction}
+     * Invokes an action on the controller. See {@link RemotingAction}
      *
      * @param actionName
      * @param params

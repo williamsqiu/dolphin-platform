@@ -27,7 +27,7 @@ import static org.apiguardian.api.API.Status.MAINTAINED;
 
 /**
  * <p>
- * A method of a Dolphin controller (see {@link DolphinController}) that is annotated by this
+ * A method of a Dolphin controller (see {@link RemotingController}) that is annotated by this
  * annotation defines a Dolphin action that can be called on the client by using the controller proxy.
  * <br>
  * <center><img src="doc-files/invoke-action.png" alt="server controller action is invoked by a client view"></center>
@@ -39,7 +39,7 @@ import static org.apiguardian.api.API.Status.MAINTAINED;
  *     {@literal @}DolphinControllerInfo("my-controller")
  *     public class MyController {
  *
- *         {@literal @}DolphinAction("my-action")
+ *         {@literal @}RemotingAction("my-action")
  *         private void doSomeAction() { . . . };
  *     }
  * </pre>
@@ -47,13 +47,13 @@ import static org.apiguardian.api.API.Status.MAINTAINED;
  *</p>
  *
  * @author Hendrik Ebbers
- * @see DolphinController
+ * @see RemotingController
  */
 @Documented
 @Retention(RUNTIME)
 @Target(ElementType.METHOD)
 @API(since = "0.x", status = MAINTAINED)
-public @interface DolphinAction {
+public @interface RemotingAction {
 
     /**
      * Defines the name of the action

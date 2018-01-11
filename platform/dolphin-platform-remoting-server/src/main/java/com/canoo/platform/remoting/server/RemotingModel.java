@@ -28,9 +28,9 @@ import static org.apiguardian.api.API.Status.MAINTAINED;
 
 /**
  * <p>
- * Can be used in a dolphin controller (see {@link DolphinController}) to
+ * Can be used in a dolphin controller (see {@link RemotingController}) to
  * define and inject the model of the controller (MVC group). In each dolphin controller only one field can
- * be annoted by {@link DolphinModel} and the field type must match the model
+ * be annoted by {@link RemotingModel} and the field type must match the model
  * definition of the Dolphin Platform (see {@link DolphinBean} for a detailed definition).
  *</p>
  * <p>
@@ -40,7 +40,7 @@ import static org.apiguardian.api.API.Status.MAINTAINED;
  * <center><img src="doc-files/model-sync.png" alt="model is synchronized between client and server"></center>
  *</p>
  * <p>
- * A model that is injected by using {@link DolphinModel} will automatically be create when the
+ * A model that is injected by using {@link RemotingModel} will automatically be create when the
  * server controller is created and will be destroyed with the controller. By doing so the complete MVC group (shared
  * model, controller on server side and the view on client side) will have the same lifecycle and the model can easily
  * be accessed from client and server.
@@ -49,10 +49,10 @@ import static org.apiguardian.api.API.Status.MAINTAINED;
  * Example:
  *<blockquote>
  * <pre>
- *     {@literal @}DolphinController("my-controller")
+ *     {@literal @}RemotingController("my-controller")
  *     public class MyController {
  *
- *          {@literal @}DolphinModel
+ *          {@literal @}RemotingModel
  *          private MyModel model;
  *
  *         {@literal @}PostContruct()
@@ -65,11 +65,11 @@ import static org.apiguardian.api.API.Status.MAINTAINED;
  *</p>
  *
  * @author Hendrik Ebbers
- * @see DolphinController
+ * @see RemotingController
  */
 @Documented
 @Retention(RUNTIME)
 @Target(ElementType.FIELD)
 @API(since = "0.x", status = MAINTAINED)
-public @interface DolphinModel {
+public @interface RemotingModel {
 }
