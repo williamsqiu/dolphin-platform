@@ -46,10 +46,6 @@ public class InMemoryClientConnector extends AbstractClientConnector {
     }
 
     @Override
-    protected void release() {
-    }
-
-    @Override
     public List<Command> transmit(final List<Command> commands) {
         LOG.trace("transmitting {} commands", commands.size());
         if (serverConnector == null) {

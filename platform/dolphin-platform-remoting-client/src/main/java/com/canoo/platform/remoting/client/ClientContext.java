@@ -55,4 +55,5 @@ public interface ClientContext extends ControllerFactory {
 
     String getClientId();
 
+    void addRemotingExceptionHandler(RemotingExceptionHandler exceptionHandler);
 }

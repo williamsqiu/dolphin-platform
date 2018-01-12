@@ -45,14 +45,6 @@ public class InMemoryClientConnector extends AbstractClientConnector {
         connect(false);
     }
 
-    public ServerConnector getServerConnector() {
-        return serverConnector;
-    }
-
-    @Override
-    protected void release() {
-    }
-
     @Override
     public List<Command> transmit(final List<Command> commands) {
         LOG.trace("transmitting {} commands", commands.size());

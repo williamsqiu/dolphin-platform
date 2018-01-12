@@ -39,10 +39,10 @@ import com.canoo.platform.remoting.client.ClientContext;
 import com.canoo.platform.remoting.client.ClientInitializationException;
 import com.canoo.platform.remoting.client.ControllerInitalizationException;
 import com.canoo.platform.remoting.client.ControllerProxy;
+import com.canoo.platform.remoting.client.RemotingExceptionHandler;
 import org.apiguardian.api.API;
 
 import java.net.URI;
-import java.net.URL;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -181,6 +181,11 @@ public class ClientContextImpl implements ClientContext {
     @Override
     public String getClientId() {
         return clientSessionStore.getClientIdentifierForUrl(endpoint);
+    }
+
+    @Override
+    public void addRemotingExceptionHandler(final RemotingExceptionHandler exceptionHandler) {
+        Assert.requireNonNull(exceptionHandler, "exceptionHandler");
     }
 
 }

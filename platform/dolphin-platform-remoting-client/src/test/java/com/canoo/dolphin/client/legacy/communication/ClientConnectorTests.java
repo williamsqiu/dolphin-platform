@@ -7,6 +7,7 @@ import com.canoo.dp.impl.client.legacy.DefaultModelSynchronizer;
 import com.canoo.dp.impl.client.legacy.ModelSynchronizer;
 import com.canoo.dp.impl.client.legacy.communication.AbstractClientConnector;
 import com.canoo.dp.impl.client.legacy.communication.AttributeChangeListener;
+import com.canoo.dp.impl.client.legacy.communication.ClientResponseHandler;
 import com.canoo.dp.impl.client.legacy.communication.CommandBatcher;
 import com.canoo.dp.impl.client.legacy.communication.OnFinishedHandler;
 import com.canoo.dp.impl.client.legacy.communication.SimpleExceptionHandler;
@@ -40,18 +41,37 @@ import java.util.concurrent.TimeUnit;
 
 public class ClientConnectorTests {
 
+    private TestClientConnector clientConnector;
+    private ClientModelStore clientModelStore;
+    private ClientResponseHandler responseHandler;
+    private AttributeChangeListener attributeChangeListener;
+    /**
+     * Since command transmission is done in parallel to test execution thread the test method might finish
+     * before the command processing is complete. Therefore tearDown() waits for this CountDownLatch
+     * (which btw. is initialized in {@link #setUp()} and decremented in the handler of a {@code dolphin.sync ( )} call).
+     * Also putting asserts in the callback handler of a {@code dolphin.sync ( )} call seems not to be reliable since JUnit
+     * seems not to be informed (reliably) of failing assertions.
+     * <p>
+     * Therefore the following approach for the test methods has been taken to:
+     * - initialize the CountDownLatch in {@code testBaseValueChange # setup ( )}
+     * - after the "act" section of a test method: call {@code syncAndWaitUntilDone ( )} which releases the latch inside a dolphin.sync handler and then (in the main thread) waits for the latch
+     * - performs all assertions
+     */
+    private CountDownLatch syncDone;
+
     @BeforeMethod
     public void setUp() {
         ModelSynchronizer defaultModelSynchronizer = new DefaultModelSynchronizer(() -> clientConnector);
         clientModelStore = new ClientModelStore(defaultModelSynchronizer);
         clientConnector = new TestClientConnector(clientModelStore, DirectExecutor.getInstance());
+        this.responseHandler = new ClientResponseHandler(clientModelStore);
         try {
             attributeChangeListener = clientModelStore.getAttributeChangeListener();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
 
-        clientConnector.connect(false);
+        clientConnector.connect();
 
         initLatch();
     }
@@ -91,7 +111,7 @@ public class ClientConnectorTests {
 
     @Test
     public void testSevereLogWhenCommandNotFound() {
-        clientConnector.dispatchHandle(new EmptyCommand());
+        responseHandler.dispatchHandle(new EmptyCommand());
         syncAndWaitUntilDone();
         assertOnlySyncCommandWasTransmitted();
     }
@@ -102,7 +122,7 @@ public class ClientConnectorTests {
         Assert.assertEquals(null, clientModelStore.findPresentationModelById(myPmId));
         CreatePresentationModelCommand command = new CreatePresentationModelCommand();
         command.setPmId(myPmId);
-        clientConnector.dispatchHandle(command);
+        responseHandler.dispatchHandle(command);
         Assert.assertNotNull(clientModelStore.findPresentationModelById(myPmId));
         syncAndWaitUntilDone();
         assertCommandsTransmitted(2);
@@ -177,7 +197,7 @@ public class ClientConnectorTests {
     public void testHandle_ValueChangedWithBadBaseValueIgnoredInNonStrictMode() {
         ClientAttribute attribute = new ClientAttribute("attr", "initialValue");
         clientModelStore.registerAttribute(attribute);
-        clientConnector.dispatchHandle(new ValueChangedCommand(attribute.getId(), "newValue"));
+        responseHandler.dispatchHandle(new ValueChangedCommand(attribute.getId(), "newValue"));
         Assert.assertEquals("newValue", attribute.getValue());
     }
 
@@ -186,7 +206,7 @@ public class ClientConnectorTests {
         ClientAttribute attribute = new ClientAttribute("attr", "initialValue");
         clientModelStore.registerAttribute(attribute);
 
-        clientConnector.dispatchHandle(new ValueChangedCommand(attribute.getId(), "newValue"));
+        responseHandler.dispatchHandle(new ValueChangedCommand(attribute.getId(), "newValue"));
         Assert.assertEquals("newValue", attribute.getValue());
     }
 
@@ -198,8 +218,8 @@ public class ClientConnectorTests {
         map.put("value", "initialValue");
         map.put("qualifier", "qualifier");
         ((ArrayList<Map<String, Object>>) attributes).add(map);
-        clientConnector.dispatchHandle(new CreatePresentationModelCommand("p1", "type", attributes));
-        clientConnector.dispatchHandle(new CreatePresentationModelCommand("p1", "type", attributes));
+        responseHandler.dispatchHandle(new CreatePresentationModelCommand("p1", "type", attributes));
+        responseHandler.dispatchHandle(new CreatePresentationModelCommand("p1", "type", attributes));
     }
 
     @Test
@@ -211,7 +231,7 @@ public class ClientConnectorTests {
         map.put("qualifier", "qualifier");
         ((ArrayList<Map<String, Object>>) attributes).add(map);
 
-        clientConnector.dispatchHandle(new CreatePresentationModelCommand("p1", "type", attributes));
+        responseHandler.dispatchHandle(new CreatePresentationModelCommand("p1", "type", attributes));
         Assert.assertNotNull(clientModelStore.findPresentationModelById("p1"));
         Assert.assertNotNull(clientModelStore.findPresentationModelById("p1").getAttribute("attr"));
         Assert.assertEquals("initialValue", clientModelStore.findPresentationModelById("p1").getAttribute("attr").getValue());
@@ -230,7 +250,7 @@ public class ClientConnectorTests {
         map.put("value", "initialValue");
         map.put("qualifier", "qualifier");
         ((ArrayList<Map<String, Object>>) attributes).add(map);
-        clientConnector.dispatchHandle(new CreatePresentationModelCommand("p1", "type", attributes, true));
+        responseHandler.dispatchHandle(new CreatePresentationModelCommand("p1", "type", attributes, true));
         Assert.assertNotNull(clientModelStore.findPresentationModelById("p1"));
         Assert.assertNotNull(clientModelStore.findPresentationModelById("p1").getAttribute("attr"));
         Assert.assertEquals("initialValue", clientModelStore.findPresentationModelById("p1").getAttribute("attr").getValue());
@@ -242,7 +262,7 @@ public class ClientConnectorTests {
     @Test(expectedExceptions = IllegalStateException.class)
     public void testHandle_CreatePresentationModel_MergeAttributesToExistingModel() {
         clientModelStore.createModel("p1", null);
-        clientConnector.dispatchHandle(new CreatePresentationModelCommand("p1", "type", Collections.<Map<String, Object>>emptyList()));
+        responseHandler.dispatchHandle(new CreatePresentationModelCommand("p1", "type", Collections.<Map<String, Object>>emptyList()));
     }
 
     @Test
@@ -250,11 +270,11 @@ public class ClientConnectorTests {
         ClientPresentationModel p1 = clientModelStore.createModel("p1", null);
         p1.setClientSideOnly(true);
         ClientPresentationModel p2 = clientModelStore.createModel("p2", null);
-        clientConnector.dispatchHandle(new DeletePresentationModelCommand(null));
+        responseHandler.dispatchHandle(new DeletePresentationModelCommand(null));
         ClientPresentationModel model = new ClientPresentationModel("p3", Collections.<ClientAttribute>emptyList());
-        clientConnector.dispatchHandle(new DeletePresentationModelCommand(model.getId()));
-        clientConnector.dispatchHandle(new DeletePresentationModelCommand(p1.getId()));
-        clientConnector.dispatchHandle(new DeletePresentationModelCommand(p2.getId()));
+        responseHandler.dispatchHandle(new DeletePresentationModelCommand(model.getId()));
+        responseHandler.dispatchHandle(new DeletePresentationModelCommand(p1.getId()));
+        responseHandler.dispatchHandle(new DeletePresentationModelCommand(p2.getId()));
         Assert.assertNull(clientModelStore.findPresentationModelById(p1.getId()));
         Assert.assertNull(clientModelStore.findPresentationModelById(p2.getId()));
         syncAndWaitUntilDone();
@@ -274,24 +294,10 @@ public class ClientConnectorTests {
         Assert.assertEquals(1, deletedPresentationModelNotificationCount);
     }
 
-    private TestClientConnector clientConnector;
-    private ClientModelStore clientModelStore;
-    private AttributeChangeListener attributeChangeListener;
-    /**
-     * Since command transmission is done in parallel to test execution thread the test method might finish
-     * before the command processing is complete. Therefore tearDown() waits for this CountDownLatch
-     * (which btw. is initialized in {@link #setUp()} and decremented in the handler of a {@code dolphin.sync ( )} call).
-     * Also putting asserts in the callback handler of a {@code dolphin.sync ( )} call seems not to be reliable since JUnit
-     * seems not to be informed (reliably) of failing assertions.
-     * <p>
-     * Therefore the following approach for the test methods has been taken to:
-     * - initialize the CountDownLatch in {@code testBaseValueChange # setup ( )}
-     * - after the "act" section of a test method: call {@code syncAndWaitUntilDone ( )} which releases the latch inside a dolphin.sync handler and then (in the main thread) waits for the latch
-     * - performs all assertions
-     */
-    private CountDownLatch syncDone;
-
     public class TestClientConnector extends AbstractClientConnector {
+
+        private final List<Command> transmittedCommands = new ArrayList<Command>();
+
         public TestClientConnector(ClientModelStore modelStore, Executor uiExecutor) {
             super(modelStore, uiExecutor, new CommandBatcher(), new SimpleExceptionHandler(), Executors.newCachedThreadPool());
         }
@@ -332,7 +338,10 @@ public class ClientConnectorTests {
             return Collections.emptyList();
         }
 
-        private List<Command> transmittedCommands = new ArrayList<Command>();
+        @Override
+        public void connect() {
+            connect(false);
+        }
     }
 
     public class ExtendedAttribute extends ClientAttribute {

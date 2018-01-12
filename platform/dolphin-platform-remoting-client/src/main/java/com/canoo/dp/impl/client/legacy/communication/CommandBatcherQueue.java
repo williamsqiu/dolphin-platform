@@ -70,4 +70,14 @@ public class CommandBatcherQueue implements DataflowQueue<List<CommandAndHandler
             queueLock.unlock();
         }
     }
+
+    @Override
+    public void clear() {
+        queueLock.lock();
+        try {
+            internalQueue.clear();
+        } finally {
+            queueLock.unlock();
+        }
+    }
 };
