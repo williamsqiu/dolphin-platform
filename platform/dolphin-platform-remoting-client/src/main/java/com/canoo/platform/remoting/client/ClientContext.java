@@ -16,6 +16,7 @@
 package com.canoo.platform.remoting.client;
 
 import com.canoo.dp.impl.client.ClientContextFactoryImpl;
+import com.canoo.platform.core.functional.Subscription;
 import com.canoo.platform.remoting.BeanManager;
 import org.apiguardian.api.API;
 
@@ -55,5 +56,5 @@ public interface ClientContext extends ControllerFactory {
 
     String getClientId();
 
-    void addRemotingExceptionHandler(RemotingExceptionHandler exceptionHandler);
+    Subscription addRemotingExceptionHandler(RemotingExceptionHandler exceptionHandler);
 }

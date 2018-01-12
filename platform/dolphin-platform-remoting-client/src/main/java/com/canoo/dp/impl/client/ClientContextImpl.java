@@ -28,11 +28,14 @@ import com.canoo.dp.impl.remoting.ClassRepositoryImpl;
 import com.canoo.dp.impl.remoting.Converters;
 import com.canoo.dp.impl.remoting.EventDispatcher;
 import com.canoo.dp.impl.remoting.PresentationModelBuilderFactory;
+import com.canoo.dp.impl.remoting.codec.OptimizedJsonCodec;
 import com.canoo.dp.impl.remoting.collections.ListMapperImpl;
 import com.canoo.dp.impl.remoting.commands.CreateContextCommand;
 import com.canoo.dp.impl.remoting.commands.DestroyContextCommand;
 import com.canoo.platform.client.ClientConfiguration;
 import com.canoo.platform.client.session.ClientSessionStore;
+import com.canoo.platform.core.functional.Subscription;
+import com.canoo.platform.core.http.HttpClient;
 import com.canoo.platform.remoting.BeanManager;
 import com.canoo.platform.remoting.DolphinRemotingException;
 import com.canoo.platform.remoting.client.ClientContext;
@@ -43,9 +46,10 @@ import com.canoo.platform.remoting.client.RemotingExceptionHandler;
 import org.apiguardian.api.API;
 
 import java.net.URI;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 import static org.apiguardian.api.API.Status.INTERNAL;
@@ -54,8 +58,6 @@ import static org.apiguardian.api.API.Status.INTERNAL;
 public class ClientContextImpl implements ClientContext {
 
     private final ClientConfiguration clientConfiguration;
-
-    private final Function<ClientModelStore, AbstractClientConnector> connectorProvider;
 
     private final URI endpoint;
 
@@ -72,9 +74,11 @@ public class ClientContextImpl implements ClientContext {
 
     private final DolphinCommandHandler dolphinCommandHandler;
 
-    public ClientContextImpl(final ClientConfiguration clientConfiguration, final URI endpoint, final Function<ClientModelStore, AbstractClientConnector> connectorProvider, final ClientSessionStore clientSessionStore) {
+    private final List<RemotingExceptionHandler> remotingExceptionHandlers = new CopyOnWriteArrayList<>();
+
+    public ClientContextImpl(final ClientConfiguration clientConfiguration, final URI endpoint, final HttpClient httpClient, final ClientSessionStore clientSessionStore) {
         this.clientConfiguration = Assert.requireNonNull(clientConfiguration, "clientConfiguration");
-        this.connectorProvider = Assert.requireNonNull(connectorProvider, "connectorProvider");
+        Assert.requireNonNull(httpClient, "httpClient");
         this.clientSessionStore = Assert.requireNonNull(clientSessionStore, "clientSessionStore");
         this.endpoint = Assert.requireNonNull(endpoint, "endpoint");
 
@@ -86,7 +90,15 @@ public class ClientContextImpl implements ClientContext {
         });
 
         this.modelStore = new ClientModelStore(defaultModelSynchronizer);
-        this.clientConnector = connectorProvider.apply(modelStore);
+
+        final RemotingExceptionHandler connectorExceptionHandler = new RemotingExceptionHandler() {
+            @Override
+            public void handle(final DolphinRemotingException e) {
+                remotingExceptionHandlers.forEach(h -> h.handle(e));
+            }
+        };
+
+        this.clientConnector = new DolphinPlatformHttpClientConnector(endpoint, clientConfiguration, modelStore, OptimizedJsonCodec.getInstance(), connectorExceptionHandler, httpClient);
 
         final EventDispatcher dispatcher = new ClientEventDispatcher(modelStore);
         final BeanRepository beanRepository = new BeanRepositoryImpl(modelStore, dispatcher);
@@ -184,8 +196,10 @@ public class ClientContextImpl implements ClientContext {
     }
 
     @Override
-    public void addRemotingExceptionHandler(final RemotingExceptionHandler exceptionHandler) {
+    public Subscription addRemotingExceptionHandler(final RemotingExceptionHandler exceptionHandler) {
         Assert.requireNonNull(exceptionHandler, "exceptionHandler");
+        remotingExceptionHandlers.add(exceptionHandler);
+        return () -> remotingExceptionHandlers.remove(exceptionHandler);
     }
 
 }

@@ -15,11 +15,8 @@
  */
 package com.canoo.dp.impl.client;
 
-import com.canoo.dp.impl.client.legacy.ClientModelStore;
-import com.canoo.dp.impl.client.legacy.communication.AbstractClientConnector;
 import com.canoo.dp.impl.platform.client.session.StrictClientSessionResponseHandler;
 import com.canoo.dp.impl.platform.core.Assert;
-import com.canoo.dp.impl.remoting.codec.OptimizedJsonCodec;
 import com.canoo.platform.client.ClientConfiguration;
 import com.canoo.platform.client.PlatformClient;
 import com.canoo.platform.client.session.ClientSessionStore;
@@ -32,7 +29,6 @@ import org.apiguardian.api.API;
 
 import java.net.URI;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.Function;
 
 import static org.apiguardian.api.API.Status.INTERNAL;
 
@@ -60,12 +56,7 @@ public class ClientContextFactoryImpl implements ClientContextFactory {
         final HttpClient httpClient = PlatformClient.getService(HttpClient.class);
         final HttpURLConnectionHandler clientSessionCheckResponseHandler = new StrictClientSessionResponseHandler(endpoint);
         httpClient.addResponseHandler(clientSessionCheckResponseHandler);
-        final Function<ClientModelStore, AbstractClientConnector> connectionProvider = s -> {
-            return new DolphinPlatformHttpClientConnector(endpoint, clientConfiguration, s, OptimizedJsonCodec.getInstance(), e -> {}, httpClient);
-        };
-
-
-        return new ClientContextImpl(clientConfiguration, endpoint, connectionProvider, PlatformClient.getService(ClientSessionStore.class));
+        return new ClientContextImpl(clientConfiguration, endpoint, httpClient, PlatformClient.getService(ClientSessionStore.class));
     }
 
 }
