@@ -290,7 +290,11 @@ public class ControllerHandler {
                     index++;
                 }
             }
-            ReflectionHelper.invokePrivileged(actionMethod, controller, args.toArray());
+            try {
+                ReflectionHelper.invokePrivileged(actionMethod, controller, args.toArray());
+            } catch (Exception e) {
+
+            }
         } catch (InvokeActionException e) {
           throw e;
         } catch (Exception e) {

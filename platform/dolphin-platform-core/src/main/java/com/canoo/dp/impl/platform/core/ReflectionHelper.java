@@ -15,11 +15,13 @@
  */
 package com.canoo.dp.impl.platform.core;
 
+import com.canoo.platform.core.DolphinRuntimeException;
 import org.apiguardian.api.API;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Proxy;
@@ -28,6 +30,7 @@ import java.security.PrivilegedAction;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.apiguardian.api.API.Status.INTERNAL;
 
@@ -90,8 +93,11 @@ public class ReflectionHelper {
                 try {
                     method.setAccessible(true);
                     return method.invoke(instance, args);
-                } catch (Exception ex) {
-                    throw new IllegalArgumentException("Cannot invoke method '"
+                } catch (InvocationTargetException ex) {
+                    throw new DolphinRuntimeException("Error while calling method '"
+                            + method.getName() + "' on instance of type '" + instance.getClass() + "'. Method details: " + method.toGenericString(), ex);
+                } catch (IllegalAccessException ex) {
+                    throw new DolphinRuntimeException("Cannot invoke method '"
                             + method.getName() + "' on instance of type '" + instance.getClass() + "'. Method details: " + method.toGenericString(), ex);
                 } finally {
                     method.setAccessible(wasAccessible);
@@ -137,6 +143,11 @@ public class ReflectionHelper {
         return result;
     }
 
+    public static Optional<Method> getMethod(final Class<?> type, final String name, Class... paramTypes) {
+        return getInheritedDeclaredMethods(type).stream()
+                .filter(m -> m.getName().equals(name))
+                .filter(m -> Arrays.equals(m.getParameterTypes(), paramTypes)).findFirst();
+    }
 
 
     public static boolean isProxyInstance(final Object bean) {
