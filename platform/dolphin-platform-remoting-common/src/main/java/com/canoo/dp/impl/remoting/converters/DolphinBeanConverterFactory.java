@@ -16,7 +16,7 @@
 package com.canoo.dp.impl.remoting.converters;
 
 import com.canoo.dp.impl.remoting.DolphinUtils;
-import com.canoo.platform.remoting.DolphinBean;
+import com.canoo.platform.remoting.RemotingBean;
 import com.canoo.platform.remoting.spi.converter.Converter;
 import com.canoo.platform.remoting.spi.converter.ConverterFactory;
 import com.canoo.platform.remoting.spi.converter.DolphinBeanRepo;
@@ -47,7 +47,7 @@ public class DolphinBeanConverterFactory implements ConverterFactory {
 
     @Override
     public List<Class> getSupportedTypes() {
-        return Collections.singletonList(DolphinBean.class);
+        return Collections.singletonList(RemotingBean.class);
     }
 
     @Override

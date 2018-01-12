@@ -16,7 +16,7 @@
 package com.canoo.dp.impl.remoting;
 
 import com.canoo.platform.remoting.ObservableList;
-import com.canoo.platform.remoting.DolphinBean;
+import com.canoo.platform.remoting.RemotingBean;
 import com.canoo.platform.remoting.Property;
 import com.canoo.dp.impl.platform.core.Assert;
 import org.apiguardian.api.API;
@@ -58,7 +58,7 @@ public class DolphinUtils {
 
     public static boolean isDolphinBean(Class<?> beanClass) {
         Assert.requireNonNull(beanClass, "beanClass");
-        return beanClass.isAnnotationPresent(DolphinBean.class);
+        return beanClass.isAnnotationPresent(RemotingBean.class);
     }
 
 

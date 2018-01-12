@@ -27,13 +27,13 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import static org.apiguardian.api.API.Status.MAINTAINED;
 
 /**
- * Each class that is part of a Dolphin Platform model must be annotated with {@link DolphinBean}.
+ * Each class that is part of a Dolphin Platform model must be annotated with {@link RemotingBean}.
  * All fields of the a dolphin bean must be defined as {@link Property} or {@link ObservableList}.
  * Methods in the classes will be ignored.
  *
  * Example:
  * <code>
- *     @DolphinBean
+ *     @RemotingBean
  *     public class MyModel {
  *
  *         private Property<String> name;
@@ -53,6 +53,6 @@ import static org.apiguardian.api.API.Status.MAINTAINED;
 @Retention(RUNTIME)
 @Target(ElementType.TYPE)
 @API(since = "0.x", status = MAINTAINED)
-public @interface DolphinBean {
+public @interface RemotingBean {
 
 }

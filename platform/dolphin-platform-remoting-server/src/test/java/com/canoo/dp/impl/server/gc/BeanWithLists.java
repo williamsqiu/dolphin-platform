@@ -16,9 +16,9 @@
 package com.canoo.dp.impl.server.gc;
 
 import com.canoo.platform.remoting.ObservableList;
-import com.canoo.platform.remoting.DolphinBean;
+import com.canoo.platform.remoting.RemotingBean;
 
-@DolphinBean
+@RemotingBean
 public class BeanWithLists {
 
     private ObservableList<String> stringList;

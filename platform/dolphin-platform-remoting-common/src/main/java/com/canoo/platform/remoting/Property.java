@@ -18,12 +18,10 @@ package com.canoo.platform.remoting;
 import com.canoo.platform.core.functional.Subscription;
 import org.apiguardian.api.API;
 
-import java.util.Optional;
-
 import static org.apiguardian.api.API.Status.MAINTAINED;
 
 /**
- * Defines a property that can be part of a model (see {@link DolphinBean}). Since Java has no native property system this is needed to provide
+ * Defines a property that can be part of a model (see {@link RemotingBean}). Since Java has no native property system this is needed to provide
  * listener / observer support to properties.
  * <p>
  * The public API of Dolphin Platform don't contain an implementation of this interface since the lifecycle of all
@@ -32,7 +30,7 @@ import static org.apiguardian.api.API.Status.MAINTAINED;
  * <p>
  * <blockquote>
  * <pre>
- *     {@literal @}DolphinBean
+ *     {@literal @}RemotingBean
  *     public class MyModel {
  *
  *
@@ -50,7 +48,7 @@ import static org.apiguardian.api.API.Status.MAINTAINED;
  * {@link Property} but often the model classes provide some convenience methods like shown in the following example:
  * <blockquote>
  * <pre>
- *     {@literal @}DolphinBean
+ *     {@literal @}RemotingBean
  *     public class MyModel {
  *
  *
@@ -79,7 +77,7 @@ import static org.apiguardian.api.API.Status.MAINTAINED;
  * <p>
  * <blockquote>
  * <pre>
- *     {@literal @}DolphinBean
+ *     {@literal @}RemotingBean
  *     public class MainModel {
  *
  *
@@ -93,7 +91,7 @@ import static org.apiguardian.api.API.Status.MAINTAINED;
  * </pre>
  * </blockquote>
  * <p>
- * For more information see {@link DolphinBean}
+ * For more information see {@link RemotingBean}
  *
  * @param <T> Type of the property must be a scalar, not a collection
  * @author Hendrik Ebbers

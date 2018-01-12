@@ -16,7 +16,7 @@
 package com.canoo.platform.spring.test;
 
 import com.canoo.platform.remoting.client.Param;
-import com.canoo.platform.remoting.DolphinBean;
+import com.canoo.platform.remoting.RemotingBean;
 import com.canoo.platform.remoting.server.RemotingAction;
 import com.canoo.platform.remoting.server.RemotingController;
 import org.apiguardian.api.API;
@@ -35,7 +35,7 @@ import static org.apiguardian.api.API.Status.MAINTAINED;
 public interface ControllerUnderTest<T> {
 
     /**
-     * Returns the model of the controller (see {@link DolphinBean})
+     * Returns the model of the controller (see {@link RemotingBean})
      *
      * @return the model
      */

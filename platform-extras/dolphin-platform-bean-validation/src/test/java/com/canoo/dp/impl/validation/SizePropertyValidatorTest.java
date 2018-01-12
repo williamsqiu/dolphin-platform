@@ -1,7 +1,7 @@
 package com.canoo.dp.impl.validation;
 
 import com.canoo.dp.impl.remoting.MockedProperty;
-import com.canoo.platform.remoting.DolphinBean;
+import com.canoo.platform.remoting.RemotingBean;
 import com.canoo.platform.remoting.Property;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -10,7 +10,6 @@ import javax.validation.Configuration;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import java.util.Set;
@@ -28,7 +27,7 @@ public class SizePropertyValidatorTest {
 
     @Test
     public void testCheckValid() throws Exception {
-        @DolphinBean
+        @RemotingBean
         class TestedClass {
             @Size(min = 3, max = 8)
             private Property<Object> value = new MockedProperty<>();

@@ -1,9 +1,9 @@
 package com.canoo.dolphin.integration.runlater;
 
-import com.canoo.platform.remoting.DolphinBean;
+import com.canoo.platform.remoting.RemotingBean;
 import com.canoo.platform.remoting.Property;
 
-@DolphinBean
+@RemotingBean
 public class RunLaterTestBean {
 
     private Property<Integer> postConstructPreRunLaterCallIndex;

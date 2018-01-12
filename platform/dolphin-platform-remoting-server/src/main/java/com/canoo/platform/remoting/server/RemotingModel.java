@@ -15,7 +15,7 @@
  */
 package com.canoo.platform.remoting.server;
 
-import com.canoo.platform.remoting.DolphinBean;
+import com.canoo.platform.remoting.RemotingBean;
 import org.apiguardian.api.API;
 
 import java.lang.annotation.Documented;
@@ -31,11 +31,11 @@ import static org.apiguardian.api.API.Status.MAINTAINED;
  * Can be used in a dolphin controller (see {@link RemotingController}) to
  * define and inject the model of the controller (MVC group). In each dolphin controller only one field can
  * be annoted by {@link RemotingModel} and the field type must match the model
- * definition of the Dolphin Platform (see {@link DolphinBean} for a detailed definition).
+ * definition of the Dolphin Platform (see {@link RemotingBean} for a detailed definition).
  *</p>
  * <p>
  * As defined by the Dolphin Platform all models will be automatically synchronized between client and server. See
- * {@link DolphinBean} for more details.
+ * {@link RemotingBean} for more details.
  * <br>
  * <center><img src="doc-files/model-sync.png" alt="model is synchronized between client and server"></center>
  *</p>
