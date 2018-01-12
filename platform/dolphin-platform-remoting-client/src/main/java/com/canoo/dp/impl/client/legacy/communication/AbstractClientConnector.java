@@ -20,6 +20,7 @@ import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.remoting.legacy.commands.InterruptLongPollCommand;
 import com.canoo.dp.impl.remoting.legacy.commands.StartLongPollCommand;
 import com.canoo.dp.impl.remoting.legacy.communication.Command;
+import com.canoo.platform.core.functional.Subscription;
 import com.canoo.platform.remoting.DolphinRemotingException;
 import com.canoo.platform.remoting.client.RemotingExceptionHandler;
 import org.apiguardian.api.API;
@@ -28,10 +29,12 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.Executor;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import static org.apiguardian.api.API.Status.DEPRECATED;
@@ -56,6 +59,8 @@ public abstract class AbstractClientConnector {
     private final AtomicBoolean connectedFlag = new AtomicBoolean(false);
 
     private final AtomicBoolean useLongPolling = new AtomicBoolean(false);
+
+    private final List<Consumer<Boolean>> connectionListener = new CopyOnWriteArrayList<>();
 
     private final StartLongPollCommand pushListener;
 
@@ -97,7 +102,7 @@ public abstract class AbstractClientConnector {
             } else {
                 LOG.debug("internal remoting error after remoting was closed...", exception);
             }
-        }finally {
+        } finally {
             errorHandlingLock.unlock();
         }
     }
@@ -228,13 +233,15 @@ public abstract class AbstractClientConnector {
     protected void connect(final boolean longPoll) {
         connectionStateLock.lock();
         try {
-            if (connectedFlag.get()) {
-                throw new IllegalStateException("Can not call connect on a connected connection");
+            if (isConnected()) {
+                throw new IllegalStateException("already connected");
             }
             connectedFlag.set(true);
             useLongPolling.set(longPoll);
             commandBatcher.clear();
             backgroundExecutor.execute(() -> commandProcessing());
+            uiExecutor.execute(() -> connectionListener.forEach(l -> l.accept(true)));
+
         } finally {
             connectionStateLock.unlock();
         }
@@ -247,15 +254,21 @@ public abstract class AbstractClientConnector {
     public void disconnect() {
         connectionStateLock.lock();
         try {
-            if (!connectedFlag.get()) {
-                throw new IllegalStateException("Can not call disconnect on a disconnected connection");
+            if (!isConnected()) {
+                throw new IllegalStateException("already disconnected");
             }
             connectedFlag.set(false);
             useLongPolling.set(false);
-
             commandBatcher.clear();
+            uiExecutor.execute(() -> connectionListener.forEach(l -> l.accept(false)));
         } finally {
             connectionStateLock.unlock();
         }
+    }
+
+    public Subscription addConnectionListener(final Consumer<Boolean> listener) {
+        Assert.requireNonNull(listener, "listener");
+        connectionListener.add(listener);
+        return () -> connectionListener.remove(listener);
     }
 }
