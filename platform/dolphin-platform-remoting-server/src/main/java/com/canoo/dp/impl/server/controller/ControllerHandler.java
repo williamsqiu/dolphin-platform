@@ -15,16 +15,16 @@
  */
 package com.canoo.dp.impl.server.controller;
 
-import com.canoo.platform.remoting.spi.converter.ValueConverterException;
-import com.canoo.dp.impl.remoting.Converters;
-import com.canoo.dp.impl.remoting.BeanRepository;
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.platform.core.ReflectionHelper;
-import com.canoo.platform.server.spi.components.ManagedBeanFactory;
+import com.canoo.dp.impl.remoting.BeanRepository;
+import com.canoo.dp.impl.remoting.Converters;
 import com.canoo.dp.impl.server.beans.PostConstructInterceptor;
+import com.canoo.dp.impl.server.error.ActionErrorHandler;
 import com.canoo.dp.impl.server.mbean.DolphinContextMBeanRegistry;
 import com.canoo.dp.impl.server.mbean.beans.ModelProvider;
 import com.canoo.dp.impl.server.model.ServerBeanBuilder;
+import com.canoo.platform.core.DolphinRuntimeException;
 import com.canoo.platform.core.functional.Subscription;
 import com.canoo.platform.remoting.server.DolphinAction;
 import com.canoo.platform.remoting.server.DolphinModel;
@@ -32,12 +32,15 @@ import com.canoo.platform.remoting.server.Param;
 import com.canoo.platform.remoting.server.ParentController;
 import com.canoo.platform.remoting.server.PostChildCreated;
 import com.canoo.platform.remoting.server.PreChildDestroyed;
+import com.canoo.platform.remoting.spi.converter.ValueConverterException;
+import com.canoo.platform.server.spi.components.ManagedBeanFactory;
 import org.apiguardian.api.API;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -82,6 +85,8 @@ public class ControllerHandler {
 
     private final Converters converters;
 
+    private final ActionErrorHandler actionErrorHandler;
+
     public ControllerHandler(final DolphinContextMBeanRegistry mBeanRegistry, final ManagedBeanFactory beanFactory, final ServerBeanBuilder beanBuilder, final BeanRepository beanRepository, final ControllerRepository controllerRepository, final Converters converters) {
         this.mBeanRegistry = Assert.requireNonNull(mBeanRegistry, "mBeanRegistry");
         this.beanFactory = Assert.requireNonNull(beanFactory, "beanFactory");
@@ -89,6 +94,7 @@ public class ControllerHandler {
         this.controllerRepository = Assert.requireNonNull(controllerRepository, "controllerRepository");
         this.beanRepository = Assert.requireNonNull(beanRepository, "beanRepository");
         this.converters = Assert.requireNonNull(converters, "converters");
+        this.actionErrorHandler = new ActionErrorHandler();
     }
 
     public Object getControllerModel(String id) {
@@ -292,8 +298,13 @@ public class ControllerHandler {
             }
             try {
                 ReflectionHelper.invokePrivileged(actionMethod, controller, args.toArray());
-            } catch (Exception e) {
-
+            } catch (DolphinRuntimeException e) {
+                if(e.getCause() instanceof InvocationTargetException) {
+                    final InvocationTargetException invocationTargetException = (InvocationTargetException) e.getCause();
+                    final Throwable internalException = invocationTargetException.getCause();
+                    actionErrorHandler.handle(internalException, controller, ControllerUtils.getControllerName(controllerClass), actionName);
+                }
+                throw e;
             }
         } catch (InvokeActionException e) {
           throw e;

@@ -29,6 +29,7 @@ public class ActionErrorHandler {
         final List<Consumer<ActionExceptionEvent<T>>> consumers = new ArrayList<>();
         consumers.addAll(getConsumersForTypeInController(throwable.getClass(), controller));
         consumers.addAll(getConsumersForType(throwable.getClass()));
+        LOG.debug("Found {} handlers to handle action exception of type {}", consumers.size(), throwable.getClass());
 
         final Iterator<Consumer<ActionExceptionEvent<T>>> iterator = consumers.iterator();
         while (!exceptionEvent.isAborted() && iterator.hasNext()) {
