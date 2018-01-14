@@ -86,8 +86,7 @@ public abstract class AbstractClientConnector {
 
         errorHandlingLock.lock();
         try {
-            final boolean handle = isConnected();
-            if (handle) {
+            if (isConnected()) {
                 try {
                     uiExecutor.execute(() -> {
                         if (exception instanceof DolphinRemotingException) {

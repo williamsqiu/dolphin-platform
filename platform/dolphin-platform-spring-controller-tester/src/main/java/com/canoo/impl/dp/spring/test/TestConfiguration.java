@@ -15,9 +15,6 @@
  */
 package com.canoo.impl.dp.spring.test;
 
-import com.canoo.dp.impl.client.legacy.ClientModelStore;
-import com.canoo.dp.impl.client.legacy.communication.AbstractClientConnector;
-import com.canoo.dp.impl.platform.client.session.ClientSessionStoreImpl;
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.remoting.legacy.communication.Command;
 import com.canoo.dp.impl.server.client.ClientSessionProvider;
@@ -35,10 +32,7 @@ import org.springframework.web.context.WebApplicationContext;
 import javax.servlet.http.HttpSession;
 import java.net.URI;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 import static org.apiguardian.api.API.Status.INTERNAL;
 
@@ -53,12 +47,6 @@ public class TestConfiguration {
         Assert.requireNonNull(context, "context");
         Assert.requireNonNull(httpSession, "httpSession");
 
-        //PlatformClient
-        final ExecutorService clientExecutor = Executors.newSingleThreadExecutor();
-
-        final ClientSessionStoreImpl clientSessionStore = new ClientSessionStoreImpl();
-        final Function<ClientModelStore, AbstractClientConnector> connectorProvider = s -> new DolphinTestClientConnector(s, clientExecutor, c -> sendToServer(c));
-        clientContext = new TestClientContextImpl(PlatformClient.getClientConfiguration(), new URI("http://dummy"), connectorProvider, clientSessionStore);
 
         //Server
         final ControllerRepository controllerRepository = new ControllerRepository(new DefaultClasspathScanner());
@@ -70,6 +58,8 @@ public class TestConfiguration {
         dolphinTestContext = new TestDolphinContext(new RemotingConfiguration(ConfigurationFileLoader.loadConfiguration()), new HttpClientSessionImpl(httpSession), dolphinContextProviderMock, containerManager, controllerRepository, createEmptyCallback());
 
         dolphinContextProviderMock.setCurrentContext(dolphinTestContext);
+        clientContext = new TestClientContextImpl(PlatformClient.getClientConfiguration(), new URI("http://dummy"), dolphinTestContext);
+
     }
 
     private Consumer<DolphinContext> createEmptyCallback() {

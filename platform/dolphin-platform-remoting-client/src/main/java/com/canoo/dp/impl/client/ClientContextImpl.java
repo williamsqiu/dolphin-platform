@@ -78,7 +78,6 @@ public class ClientContextImpl implements ClientContext {
 
     public ClientContextImpl(final ClientConfiguration clientConfiguration, final URI endpoint, final HttpClient httpClient, final ClientSessionStore clientSessionStore) {
         this.clientConfiguration = Assert.requireNonNull(clientConfiguration, "clientConfiguration");
-        Assert.requireNonNull(httpClient, "httpClient");
         this.clientSessionStore = Assert.requireNonNull(clientSessionStore, "clientSessionStore");
         this.endpoint = Assert.requireNonNull(endpoint, "endpoint");
 
@@ -98,7 +97,8 @@ public class ClientContextImpl implements ClientContext {
             }
         };
 
-        this.clientConnector = new DolphinPlatformHttpClientConnector(endpoint, clientConfiguration, modelStore, OptimizedJsonCodec.getInstance(), connectorExceptionHandler, httpClient);
+        this.clientConnector = createConnector(modelStore, httpClient, connectorExceptionHandler);
+        Assert.requireNonNull(clientConnector, "clientConnector");
 
         final EventDispatcher dispatcher = new ClientEventDispatcher(modelStore);
         final BeanRepository beanRepository = new BeanRepositoryImpl(modelStore, dispatcher);
@@ -109,6 +109,10 @@ public class ClientContextImpl implements ClientContext {
         this.dolphinCommandHandler = new DolphinCommandHandler(clientConnector);
         this.controllerProxyFactory = new ControllerProxyFactory(dolphinCommandHandler, clientConnector, modelStore, beanRepository, dispatcher, converters);
         this.clientBeanManager = new BeanManagerImpl(beanRepository, new ClientBeanBuilderImpl(classRepository, beanRepository, new ListMapperImpl(modelStore, classRepository, beanRepository, builderFactory, dispatcher), builderFactory, dispatcher));
+    }
+
+    protected AbstractClientConnector createConnector(final ClientModelStore modelStore, final HttpClient httpClient, final RemotingExceptionHandler connectorExceptionHandler) {
+        return new DolphinPlatformHttpClientConnector(endpoint, clientConfiguration, modelStore, OptimizedJsonCodec.getInstance(), connectorExceptionHandler, httpClient);
     }
 
     protected DolphinCommandHandler getDolphinCommandHandler() {

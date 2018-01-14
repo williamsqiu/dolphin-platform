@@ -102,19 +102,6 @@ public abstract class DolphinPlatformApplication extends Application {
 
         applicationInit();
 
-        PlatformClient.getClientConfiguration().setUncaughtExceptionHandler((Thread thread, Throwable exception) -> {
-            PlatformClient.getClientConfiguration().getUiExecutor().execute(() -> {
-                Assert.requireNonNull(thread, "thread");
-                Assert.requireNonNull(exception, "exception");
-
-                if (connectInProgress.get()) {
-                    runtimeExceptionsAtInitialization.add(new DolphinRuntimeException(thread, "Unhandled error in Dolphin Platform background thread", exception));
-                } else {
-                    onRuntimeError(primaryStage, new DolphinRuntimeException(thread, "Unhandled error in Dolphin Platform background thread", exception));
-                }
-            });
-        });
-
         try {
             clientContext = createClientContext();
             Assert.requireNonNull(clientContext, "clientContext");
