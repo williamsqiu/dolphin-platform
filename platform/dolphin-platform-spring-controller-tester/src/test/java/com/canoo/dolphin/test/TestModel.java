@@ -16,10 +16,10 @@
 package com.canoo.dolphin.test;
 
 import com.canoo.platform.remoting.ObservableList;
-import com.canoo.platform.remoting.DolphinBean;
+import com.canoo.platform.remoting.RemotingBean;
 import com.canoo.platform.remoting.Property;
 
-@DolphinBean
+@RemotingBean
 public class TestModel {
 
     private Property<String> value;

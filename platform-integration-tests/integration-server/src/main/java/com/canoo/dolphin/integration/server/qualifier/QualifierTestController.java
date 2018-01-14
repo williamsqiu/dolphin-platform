@@ -19,9 +19,9 @@ import com.canoo.dolphin.integration.qualifier.QualifierTestBean;
 import com.canoo.dolphin.integration.qualifier.QualifierTestSubBean;
 import com.canoo.platform.remoting.BeanManager;
 import com.canoo.platform.core.functional.Binding;
-import com.canoo.platform.remoting.server.DolphinAction;
-import com.canoo.platform.remoting.server.DolphinController;
-import com.canoo.platform.remoting.server.DolphinModel;
+import com.canoo.platform.remoting.server.RemotingAction;
+import com.canoo.platform.remoting.server.RemotingController;
+import com.canoo.platform.remoting.server.RemotingModel;
 import com.canoo.platform.remoting.server.binding.PropertyBinder;
 import com.canoo.platform.remoting.server.binding.Qualifier;
 
@@ -35,7 +35,7 @@ import static com.canoo.dolphin.integration.qualifier.QualifierTestConstants.DUM
 import static com.canoo.dolphin.integration.qualifier.QualifierTestConstants.QUALIFIER_CONTROLLER_NAME;
 import static com.canoo.dolphin.integration.qualifier.QualifierTestConstants.UNBIND_ACTION;
 
-@DolphinController(QUALIFIER_CONTROLLER_NAME)
+@RemotingController(QUALIFIER_CONTROLLER_NAME)
 public class QualifierTestController {
 
     private final static Qualifier<String> STRING_QUALIFIER = Qualifier.create();
@@ -44,7 +44,7 @@ public class QualifierTestController {
 
     private final static Qualifier<Integer> INTEGER_QUALIFIER = Qualifier.create();
 
-    @DolphinModel
+    @RemotingModel
     private QualifierTestBean model;
 
     @Inject
@@ -83,15 +83,15 @@ public class QualifierTestController {
         bindings.clear();
     }
 
-    @DolphinAction(DUMMY_ACTION)
+    @RemotingAction(DUMMY_ACTION)
     public void dummyAction() {}
 
-    @DolphinAction(BIND_ACTION)
+    @RemotingAction(BIND_ACTION)
     public void bindAction() {
         bind();
     }
 
-    @DolphinAction(UNBIND_ACTION)
+    @RemotingAction(UNBIND_ACTION)
     public void unbindAction() {
         unbind();
     }

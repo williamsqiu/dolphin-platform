@@ -15,10 +15,10 @@
  */
 package com.canoo.dolphin.client.util;
 
-import com.canoo.platform.remoting.DolphinBean;
+import com.canoo.platform.remoting.RemotingBean;
 import com.canoo.platform.remoting.Property;
 
-@DolphinBean
+@RemotingBean
 public class ParentModel {
 
     private Property<String> parentProperty;

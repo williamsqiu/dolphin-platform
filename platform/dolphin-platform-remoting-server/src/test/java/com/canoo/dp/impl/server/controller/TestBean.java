@@ -15,8 +15,8 @@
  */
 package com.canoo.dp.impl.server.controller;
 
-import com.canoo.platform.remoting.DolphinBean;
+import com.canoo.platform.remoting.RemotingBean;
 
-@DolphinBean
+@RemotingBean
 public class TestBean {
 }

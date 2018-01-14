@@ -15,7 +15,7 @@
  */
 /**
  * This package contains a first garbage collection implementation for the Dolphin Platform model.
- * As defined by {@link com.canoo.platform.remoting.server.DolphinModel} and {@link com.canoo.platform.remoting.DolphinBean} each
+ * As defined by {@link com.canoo.platform.remoting.server.RemotingModel} and {@link com.canoo.platform.remoting.RemotingBean} each
  * Dolphin Platform model is a hierarchy of several Dolphin Platform beans. All the beans will automatically be synchronized
  * between server and client. To do so the remoting layer holds a representation of each Dolphin Platform Bean.
  * When the server controller removes a bean out of the hierarchy the garbage collection should notice this and automatically

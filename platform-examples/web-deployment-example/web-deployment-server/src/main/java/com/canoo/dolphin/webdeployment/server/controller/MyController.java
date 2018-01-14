@@ -15,9 +15,9 @@
  */
 package com.canoo.dolphin.webdeployment.server.controller;
 
-import com.canoo.platform.remoting.server.DolphinAction;
-import com.canoo.platform.remoting.server.DolphinController;
-import com.canoo.platform.remoting.server.DolphinModel;
+import com.canoo.platform.remoting.server.RemotingAction;
+import com.canoo.platform.remoting.server.RemotingController;
+import com.canoo.platform.remoting.server.RemotingModel;
 import com.canoo.dolphin.webdeployment.Constants;
 import com.canoo.dolphin.webdeployment.model.MyModel;
 
@@ -27,10 +27,10 @@ import javax.annotation.PostConstruct;
  * This class defines the controller. Whenever a matching view is created in a client a controller instance will be
  * created on the server. The controller is completelly managed by the container and therefore features like CDI can
  * be used without any problems in the controller.
- * The {@link DolphinController} annotation defines the unique name of this controller type. In this sample a static
+ * The {@link RemotingController} annotation defines the unique name of this controller type. In this sample a static
  * constant is used for the name that is shared with the JavaFX client.
  */
-@DolphinController(Constants.CONTROLLER_NAME)
+@RemotingController(Constants.CONTROLLER_NAME)
 public class MyController {
 
     /**
@@ -38,7 +38,7 @@ public class MyController {
      * and before the init() method (annotated with {@link PostConstruct}) is called the model will be injected in the
      * controller.
      */
-    @DolphinModel
+    @RemotingModel
     private MyModel model;
 
     /**
@@ -54,12 +54,12 @@ public class MyController {
     }
 
     /**
-     * By adding the {@link DolphinAction} annotation to a method this method can be triggered as a controller action on
+     * By adding the {@link RemotingAction} annotation to a method this method can be triggered as a controller action on
      * the client. To do so the client must trigger the action based on its name. As long as no value is defined for the
      * annotation the method name will be used. This means that this method can be triggered by calling a "reset" action
      * on the client.
      */
-    @DolphinAction(Constants.RESET_ACTION)
+    @RemotingAction(Constants.RESET_ACTION)
     public void reset() {
         model.setValue(null);
     }

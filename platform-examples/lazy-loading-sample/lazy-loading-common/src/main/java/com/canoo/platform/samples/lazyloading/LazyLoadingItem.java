@@ -1,11 +1,11 @@
 package com.canoo.platform.samples.lazyloading;
 
-import com.canoo.platform.remoting.DolphinBean;
+import com.canoo.platform.remoting.RemotingBean;
 import com.canoo.platform.remoting.Property;
 
 import java.time.LocalDateTime;
 
-@DolphinBean
+@RemotingBean
 public class LazyLoadingItem {
 
     private Property<String> name;

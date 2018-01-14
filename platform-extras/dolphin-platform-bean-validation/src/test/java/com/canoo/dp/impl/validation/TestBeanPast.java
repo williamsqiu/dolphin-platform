@@ -1,14 +1,14 @@
 package com.canoo.dp.impl.validation;
 
 import com.canoo.dp.impl.remoting.MockedProperty;
-import com.canoo.platform.remoting.DolphinBean;
+import com.canoo.platform.remoting.RemotingBean;
 import com.canoo.platform.remoting.Property;
 
 import javax.validation.constraints.Past;
 import java.util.Calendar;
 import java.util.Date;
 
-@DolphinBean
+@RemotingBean
 public class TestBeanPast {
     @Past
     private Property<Date> date = new MockedProperty<>();

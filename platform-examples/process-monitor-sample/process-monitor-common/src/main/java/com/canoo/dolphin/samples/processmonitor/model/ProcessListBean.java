@@ -16,9 +16,9 @@
 package com.canoo.dolphin.samples.processmonitor.model;
 
 import com.canoo.platform.remoting.ObservableList;
-import com.canoo.platform.remoting.DolphinBean;
+import com.canoo.platform.remoting.RemotingBean;
 
-@DolphinBean
+@RemotingBean
 public class ProcessListBean {
 
     private ObservableList<ProcessBean> items;

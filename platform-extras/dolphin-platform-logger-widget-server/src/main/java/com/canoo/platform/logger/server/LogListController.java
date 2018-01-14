@@ -7,19 +7,19 @@ import com.canoo.platform.logger.model.LogListBean;
 import com.canoo.platform.logger.server.service.LoggerRepository;
 import com.canoo.platform.logger.model.LoggerSearchRequest;
 import com.canoo.platform.remoting.BeanManager;
-import com.canoo.platform.remoting.server.DolphinController;
-import com.canoo.platform.remoting.server.DolphinModel;
+import com.canoo.platform.remoting.server.RemotingController;
+import com.canoo.platform.remoting.server.RemotingModel;
 
 import javax.inject.Inject;
 
-@DolphinController
+@RemotingController
 public class LogListController {
 
     private final BeanManager beanManager;
 
     private final LoggerRepository repository;
 
-    @DolphinModel
+    @RemotingModel
     private LogListBean model;
 
     @Inject

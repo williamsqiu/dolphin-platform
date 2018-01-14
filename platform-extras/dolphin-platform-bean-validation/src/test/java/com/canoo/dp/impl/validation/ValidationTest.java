@@ -16,7 +16,7 @@
 package com.canoo.dp.impl.validation;
 
 import com.canoo.dp.impl.remoting.MockedProperty;
-import com.canoo.platform.remoting.DolphinBean;
+import com.canoo.platform.remoting.RemotingBean;
 import com.canoo.platform.remoting.Property;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -45,7 +45,7 @@ public class ValidationTest {
 
     @Test
     public void testPatternValidator() {
-        @DolphinBean
+        @RemotingBean
         class TestedClass {
             @Pattern(regexp = "^a.*b$",flags = Pattern.Flag.CASE_INSENSITIVE)
             private Property<CharSequence> value = new MockedProperty<>();
@@ -72,7 +72,7 @@ public class ValidationTest {
 
     @Test
     public void testNotNullValidator() {
-        @DolphinBean
+        @RemotingBean
         class TestedClass {
             @NotNull
             private Property<Object> value = new MockedProperty<>();
@@ -95,7 +95,7 @@ public class ValidationTest {
 
     @Test
     public void testNullValidator() {
-        @DolphinBean
+        @RemotingBean
         class TestedClass {
             @Null
             private Property<Object> value = new MockedProperty<>();
@@ -118,7 +118,7 @@ public class ValidationTest {
 
     @Test
     public void testAssertTrueValidator() {
-        @DolphinBean
+        @RemotingBean
         class TestedClass {
             @AssertTrue
             private Property<Boolean> value = new MockedProperty<>();
@@ -141,7 +141,7 @@ public class ValidationTest {
 
     @Test
     public void testAssertFalseValidator() {
-        @DolphinBean
+        @RemotingBean
         class TestedClass {
             @AssertFalse
             private Property<Boolean> value = new MockedProperty<>();
@@ -442,7 +442,7 @@ public class ValidationTest {
     
     @Test
     public void testDigitsValidator() {
-        @DolphinBean
+        @RemotingBean
         class TestedClass {
             @Digits(integer=4,fraction=2)
             private Property<CharSequence> value = new MockedProperty<>();

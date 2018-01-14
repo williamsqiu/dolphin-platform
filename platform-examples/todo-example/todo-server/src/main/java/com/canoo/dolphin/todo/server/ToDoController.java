@@ -16,9 +16,9 @@
 package com.canoo.dolphin.todo.server;
 
 import com.canoo.platform.remoting.BeanManager;
-import com.canoo.platform.remoting.server.DolphinAction;
-import com.canoo.platform.remoting.server.DolphinController;
-import com.canoo.platform.remoting.server.DolphinModel;
+import com.canoo.platform.remoting.server.RemotingAction;
+import com.canoo.platform.remoting.server.RemotingController;
+import com.canoo.platform.remoting.server.RemotingModel;
 import com.canoo.platform.remoting.server.Param;
 import com.canoo.platform.remoting.server.event.RemotingEventBus;
 import com.canoo.platform.samples.distribution.common.model.ToDoItem;
@@ -37,7 +37,7 @@ import static com.canoo.dolphin.todo.server.ToDoEventTopics.ITEM_ADDED;
 import static com.canoo.dolphin.todo.server.ToDoEventTopics.ITEM_MARK_CHANGED;
 import static com.canoo.dolphin.todo.server.ToDoEventTopics.ITEM_REMOVED;
 
-@DolphinController(TODO_CONTROLLER_NAME)
+@RemotingController(TODO_CONTROLLER_NAME)
 public class ToDoController {
 
     private final BeanManager beanManager;
@@ -46,7 +46,7 @@ public class ToDoController {
 
     private final TodoItemStore todoItemStore;
 
-    @DolphinModel
+    @RemotingModel
     private ToDoList toDoList;
 
     @Inject
@@ -64,18 +64,18 @@ public class ToDoController {
         todoItemStore.itemNameStream().forEach(name -> addItem(name));
     }
 
-    @DolphinAction(ADD_ACTION)
+    @RemotingAction(ADD_ACTION)
     public void onItemAddAction() {
         todoItemStore.addItem(toDoList.getNewItemText().get());
         toDoList.getNewItemText().set("");
     }
 
-    @DolphinAction(CHANGE_ACTION)
+    @RemotingAction(CHANGE_ACTION)
     public void onItemStateChangedAction(@Param(ITEM_PARAM) String name) {
         todoItemStore.changeItemState(name);
     }
 
-    @DolphinAction(REMOVE_ACTION)
+    @RemotingAction(REMOVE_ACTION)
     public void onItemRemovedAction(@Param(ITEM_PARAM) String name) {
         todoItemStore.removeItem(name);
     }

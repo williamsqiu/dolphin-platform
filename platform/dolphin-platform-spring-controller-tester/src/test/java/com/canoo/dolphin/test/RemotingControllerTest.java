@@ -22,7 +22,7 @@ import org.testng.annotations.Test;
 
 import static org.testng.Assert.*;
 
-public class DolphinControllerTest extends SpringTestNGControllerTest {
+public class RemotingControllerTest extends SpringTestNGControllerTest {
 
     @Test
     public void testCreation() {

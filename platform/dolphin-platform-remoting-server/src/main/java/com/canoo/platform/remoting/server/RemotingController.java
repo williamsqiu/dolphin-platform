@@ -34,7 +34,7 @@ import static org.apiguardian.api.API.Status.MAINTAINED;
  * <center><img src="doc-files/model-sync.png" alt="model is synchronized between client and server"></center>
  * </p>
  * <p>
- * Each dolphin controller must be annotated with {@link DolphinController}.
+ * Each dolphin controller must be annotated with {@link RemotingController}.
  * A dolphin controller will automatically managed by the container (spring or JavaEE) and the lifecycle
  * of the controller is bound to the view lifecycle. A server site controller will be automatically created
  * when a macthing controller proxy is created at the client. This means that you can have several instances of
@@ -46,8 +46,8 @@ import static org.apiguardian.api.API.Status.MAINTAINED;
  * that are supported by the Platform like {@link javax.annotation.PostConstruct} or {@code javax.inject.Inject}.
  * In addition Dolphin Platform supports some custom annotations that can be used in a controller:
  * <ul>
- * <li>{@link DolphinModel}</li>
- * <li>{@link DolphinAction}</li>
+ * <li>{@link RemotingModel}</li>
+ * <li>{@link RemotingAction}</li>
  * <li>{@link Param}</li>
  * </ul>
  * </p>
@@ -55,13 +55,13 @@ import static org.apiguardian.api.API.Status.MAINTAINED;
  * Example:
  * <blockquote>
  * <pre>
- *     {@literal @}DolphinController("my-controller")
+ *     {@literal @}RemotingController("my-controller")
  *     public class MyController {
  *
- *          {@literal @}DolphinModel
+ *          {@literal @}RemotingModel
  *          private MyModel model;
  *
- *         {@literal @}DolphinAction()
+ *         {@literal @}RemotingAction()
  *         private void onAction() { . . . };
  *     }
  * </pre>
@@ -75,7 +75,7 @@ import static org.apiguardian.api.API.Status.MAINTAINED;
 @Retention(RUNTIME)
 @Target(ElementType.TYPE)
 @API(since = "0.x", status = MAINTAINED)
-public @interface DolphinController {
+public @interface RemotingController {
 
     /**
      * The unique name of the controller. If this is empty the fully qualified class name of the controller class

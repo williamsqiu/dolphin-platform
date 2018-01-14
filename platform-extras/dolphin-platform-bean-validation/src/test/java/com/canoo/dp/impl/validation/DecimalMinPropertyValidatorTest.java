@@ -1,7 +1,7 @@
 package com.canoo.dp.impl.validation;
 
 import com.canoo.dp.impl.remoting.MockedProperty;
-import com.canoo.platform.remoting.DolphinBean;
+import com.canoo.platform.remoting.RemotingBean;
 import com.canoo.platform.remoting.Property;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -18,7 +18,7 @@ import static org.testng.Assert.assertEquals;
  */
 public class DecimalMinPropertyValidatorTest {
 
-    @DolphinBean
+    @RemotingBean
     private class MinBean {
         // inclusive = true by default
         @DecimalMin(value = "1234.5E-4")
