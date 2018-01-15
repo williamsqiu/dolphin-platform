@@ -146,18 +146,24 @@ public class ClientContextImpl implements ClientContext {
     public synchronized CompletableFuture<Void> disconnect() {
         final CompletableFuture<Void> result = new CompletableFuture<>();
         backgroundExecutor.execute(() -> {
-            final Command command = new DestroyContextCommand();
-            dolphinCommandHandler.invokeDolphinCommand(command).handle((v, throwable) -> {
-                clientConnector.disconnect();
-                clientSessionStore.resetSession(endpoint);
-                if (throwable != null) {
-                    final Exception e = new DolphinRemotingException("Can't disconnect", throwable);
+            try {
+                final Command command = new DestroyContextCommand();
+                dolphinCommandHandler.invokeDolphinCommand(command).handle((v, throwable) -> {
+                    clientConnector.disconnect();
+                    clientSessionStore.resetSession(endpoint);
+                    if (throwable != null) {
+                        final Exception e = new DolphinRemotingException("Can't disconnect", throwable);
+                        result.completeExceptionally(e);
+                    } else {
+                        result.complete(v);
+                    }
+                    return v;
+                }).get();
+            } catch (Exception e) {
+                if(!result.isCompletedExceptionally()) {
                     result.completeExceptionally(e);
-                } else {
-                    result.complete(v);
                 }
-                return v;
-            });
+            }
         });
         return result;
     }
