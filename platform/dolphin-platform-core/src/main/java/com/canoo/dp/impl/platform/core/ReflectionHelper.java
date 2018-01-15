@@ -25,6 +25,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Proxy;
+import java.lang.reflect.Type;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.ArrayList;
@@ -176,5 +177,59 @@ public class ReflectionHelper {
     public static boolean isPrimitiveNumber(final Class<?> cls) {
         Assert.requireNonNull(cls, "cls");
         return (Integer.TYPE.equals(cls) || Long.TYPE.equals(cls) || Double.TYPE.equals(cls) || Float.TYPE.equals(cls) || Short.TYPE.equals(cls) || Byte.TYPE.equals(cls));
+    }
+
+    public static boolean hasGenericTypeCount(final ParameterizedType type, final int count) {
+        Assert.requireNonNull(type, "type");
+        if (count < 0) {
+            throw new IllegalArgumentException("count must be >= 0");
+        }
+        return type.getActualTypeArguments().length == count;
+    }
+
+    public static Type getGenericType(final ParameterizedType type, final int index) {
+        Assert.requireNonNull(type, "type");
+        if (index < 0) {
+            throw new IllegalArgumentException("Can not get generic type at negativ index.");
+        }
+        if (type.getActualTypeArguments().length <= index) {
+            throw new IllegalArgumentException("Can not get generic type at index " + index + " since type has only " + type.getActualTypeArguments().length + " generic parameters. Type: " + type);
+        }
+        return type.getActualTypeArguments()[0];
+    }
+
+    public static ParameterizedType toParameterizedType(final Type type) {
+        Assert.requireNonNull(type, "type");
+        if (isParameterizedType(type)) {
+            return (ParameterizedType) type;
+        } else {
+            throw new IllegalArgumentException("The given type is not a ParameterizedType. Type: " + type);
+        }
+    }
+
+    public static boolean isParameterizedType(Type type) {
+        Assert.requireNonNull(type, "type");
+        if (type instanceof ParameterizedType) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static Class toClass(final Type type) {
+        if (isClass(type)) {
+            return (Class) type;
+        } else {
+            throw new IllegalArgumentException("The given type is not a class. Type: " + type);
+        }
+    }
+
+    public static boolean isClass(final Type type) {
+        Assert.requireNonNull(type, "type");
+        if (type instanceof Class) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

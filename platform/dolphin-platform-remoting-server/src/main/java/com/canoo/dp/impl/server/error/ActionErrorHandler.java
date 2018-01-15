@@ -8,12 +8,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
+
+import static com.canoo.dp.impl.platform.core.ReflectionHelper.isParameterizedType;
 
 public class ActionErrorHandler {
 
@@ -47,17 +51,32 @@ public class ActionErrorHandler {
 
     private <T extends Throwable> List<Consumer<ActionExceptionEvent<T>>> getConsumersForTypeInController(Class<? extends Throwable> throwableClass, Object controller) {
         Assert.requireNonNull(controller, "controller");
-        return ReflectionHelper.getInheritedDeclaredMethods(controller.getClass()).stream().
-                filter(m -> m.isAnnotationPresent(ActionExceptionHandler.class)).
-                filter(m -> m.getParameterCount() == 1).
-                filter(m -> m.getParameterTypes()[0].isAssignableFrom(throwableClass)).
-                sorted((m1, m2) -> {
+        return ReflectionHelper.getInheritedDeclaredMethods(controller.getClass()).stream()
+                .filter(m -> m.isAnnotationPresent(ActionExceptionHandler.class))
+                .filter(m -> m.getParameterCount() == 1)
+                .filter(m -> m.getGenericParameterTypes().length == 1)
+                .filter(m -> ActionExceptionEvent.class.equals(m.getParameterTypes()[0]))
+                .filter(m -> filterGenericExceptionType(m.getGenericParameterTypes()[0], throwableClass))
+                .sorted((m1, m2) -> {
                     final int ordinal1 = m1.getAnnotation(ActionExceptionHandler.class).ordinal();
                     final int ordinal2 = m2.getAnnotation(ActionExceptionHandler.class).ordinal();
                     return Integer.compare(ordinal1, ordinal2);
-                }).
-                map(m -> this.<T>createConsumer(m, controller)).
-                collect(Collectors.toList());
+                })
+                .map(m -> this.<T>createConsumer(m, controller))
+                .collect(Collectors.toList());
+    }
+
+    private boolean filterGenericExceptionType(final Type genericType, final Class<? extends Throwable> throwableClass) {
+        Assert.requireNonNull(genericType, "genericType");
+        Assert.requireNonNull(throwableClass, "throwableClass");
+        if(isParameterizedType(genericType)) {
+            final ParameterizedType parameterizedType = ReflectionHelper.toParameterizedType(genericType);
+            if(ReflectionHelper.hasGenericTypeCount(parameterizedType, 1)) {
+                Type genericTypeDef = ReflectionHelper.getGenericType(parameterizedType, 0);
+                return ReflectionHelper.toClass(genericTypeDef).isAssignableFrom(throwableClass);
+            }
+        }
+        return false;
     }
 
     private <T extends Throwable> List<Consumer<ActionExceptionEvent<T>>> getConsumersForType(Class<? extends Throwable> throwableClass) {
