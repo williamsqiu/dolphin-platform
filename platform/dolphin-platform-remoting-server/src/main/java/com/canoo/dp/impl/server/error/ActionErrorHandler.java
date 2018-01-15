@@ -50,6 +50,7 @@ public class ActionErrorHandler {
     }
 
     private <T extends Throwable> List<Consumer<ActionExceptionEvent<T>>> getConsumersForTypeInController(Class<? extends Throwable> throwableClass, Object controller) {
+        Assert.requireNonNull(throwableClass, "throwableClass");
         Assert.requireNonNull(controller, "controller");
         return ReflectionHelper.getInheritedDeclaredMethods(controller.getClass()).stream()
                 .filter(m -> m.isAnnotationPresent(ActionExceptionHandler.class))
