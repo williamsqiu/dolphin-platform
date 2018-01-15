@@ -126,6 +126,17 @@ subprojects { subprj ->
                              'https://canoo.github.io/dolphin-platform/javadoc/server/',
                              'https://canoo.github.io/dolphin-platform/javadoc/server-spring/',
                              'https://canoo.github.io/dolphin-platform/javadoc/server-jee/']
+
+            if (subprj.file('src/main/javadoc/overview.html').exists()) {
+                options.overview = file('src/main/javadoc/overview.html')
+            }
+            doLast {
+                copy {
+                    from file('src/main/javadoc')
+                    into javadoc.destinationDir
+                    include '**/doc-files/*'
+                }
+            }
         }
 
         task sourcesJar(type: Jar) {
@@ -157,7 +168,6 @@ subprojects { subprj ->
             testCompile "org.jmockit:jmockit:$jmockitVersion"
         }
     }
-
 }
 
 evaluationDependsOnChildren()
