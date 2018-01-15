@@ -49,7 +49,7 @@ import java.net.URI;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.function.BiFunction;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import static org.apiguardian.api.API.Status.INTERNAL;
@@ -127,14 +127,11 @@ public class ClientContextImpl implements ClientContext {
             throw new IllegalStateException("connect was not called!");
         }
 
-        return controllerProxyFactory.<T>create(name).handle(new BiFunction<ControllerProxy<T>, Throwable, ControllerProxy<T>>() {
-            @Override
-            public ControllerProxy<T> apply(ControllerProxy<T> controllerProxy, Throwable throwable) {
-                if (throwable != null) {
-                    throw new ControllerInitalizationException(throwable);
-                }
-                return controllerProxy;
+        return controllerProxyFactory.<T>create(name).handle((proxy, throwable) -> {
+            if (throwable != null) {
+                throw new ControllerInitalizationException(throwable);
             }
+            return proxy;
         });
     }
 
@@ -146,50 +143,36 @@ public class ClientContextImpl implements ClientContext {
     @Override
     public synchronized CompletableFuture<Void> disconnect() {
         final CompletableFuture<Void> result = new CompletableFuture<>();
-
-        clientConfiguration.getBackgroundExecutor().execute(new Runnable() {
-            @Override
-            public void run() {
-                dolphinCommandHandler.invokeDolphinCommand(new DestroyContextCommand()).handle(new BiFunction<Void, Throwable, Object>() {
-                    @Override
-                    public Object apply(Void aVoid, Throwable throwable) {
-                        clientConnector.disconnect();
-                        clientSessionStore.resetSession(endpoint);
-                        if (throwable != null) {
-                            result.completeExceptionally(new DolphinRemotingException("Can't disconnect", throwable));
-                        } else {
-                            result.complete(null);
-                        }
-                        return null;
-                    }
-                });
-            }
+        clientConfiguration.getBackgroundExecutor().execute(() -> {
+            dolphinCommandHandler.invokeDolphinCommand(new DestroyContextCommand()).handle((v, throwable) -> {
+                clientConnector.disconnect();
+                clientSessionStore.resetSession(endpoint);
+                if (throwable != null) {
+                    final Exception e = new DolphinRemotingException("Can't disconnect", throwable);
+                    result.completeExceptionally(e);
+                } else {
+                    result.complete(v);
+                }
+                return v;
+            });
         });
         return result;
     }
 
     @Override
     public CompletableFuture<Void> connect() {
-
-
         final CompletableFuture<Void> result = new CompletableFuture<>();
         clientConnector.connect();
-
-        clientConfiguration.getBackgroundExecutor().execute(new Runnable() {
-            @Override
-            public void run() {
-                dolphinCommandHandler.invokeDolphinCommand(new CreateContextCommand()).handle(new BiFunction<Void, Throwable, Void>() {
-                    @Override
-                    public Void apply(Void aVoid, Throwable throwable) {
-                        if (throwable != null) {
-                            result.completeExceptionally(new ClientInitializationException("Can't call init action!", throwable));
-                        } else {
-                        }
-                        result.complete(null);
-                        return null;
-                    }
-                });
-            }
+        clientConfiguration.getBackgroundExecutor().execute(() -> {
+            dolphinCommandHandler.invokeDolphinCommand(new CreateContextCommand()).handle((v, throwable) -> {
+                if (throwable != null) {
+                    final Exception e = new ClientInitializationException("Can't call init action!", throwable);
+                    result.completeExceptionally(e);
+                } else {
+                    result.complete(v);
+                }
+                return v;
+            });
         });
         return result;
     }
@@ -206,4 +189,11 @@ public class ClientContextImpl implements ClientContext {
         return () -> remotingExceptionHandlers.remove(exceptionHandler);
     }
 
+    public boolean isConnected() {
+        return clientConnector.isConnected();
+    }
+
+    public Subscription addConnectionListener(final Consumer<Boolean> listener) {
+        return clientConnector.addConnectionListener(listener);
+    }
 }
