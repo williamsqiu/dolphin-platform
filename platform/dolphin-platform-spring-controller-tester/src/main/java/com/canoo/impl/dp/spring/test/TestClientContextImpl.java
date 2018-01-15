@@ -27,7 +27,7 @@ public class TestClientContextImpl extends ClientContextImpl implements TestClie
     }
 
     @Override
-    protected AbstractClientConnector createConnector(final ClientModelStore modelStore, final HttpClient httpClient, final RemotingExceptionHandler connectorExceptionHandler) {
+    protected AbstractClientConnector createConnector(final ClientConfiguration configuration, final ClientModelStore modelStore, final HttpClient httpClient, final RemotingExceptionHandler connectorExceptionHandler) {
         return new DolphinTestClientConnector(modelStore, Executors.newSingleThreadExecutor(), c -> dolphinServerContext.handle(c));
     }
 

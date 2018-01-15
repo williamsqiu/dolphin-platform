@@ -32,6 +32,7 @@ import com.canoo.dp.impl.remoting.codec.OptimizedJsonCodec;
 import com.canoo.dp.impl.remoting.collections.ListMapperImpl;
 import com.canoo.dp.impl.remoting.commands.CreateContextCommand;
 import com.canoo.dp.impl.remoting.commands.DestroyContextCommand;
+import com.canoo.dp.impl.remoting.legacy.communication.Command;
 import com.canoo.platform.client.ClientConfiguration;
 import com.canoo.platform.client.session.ClientSessionStore;
 import com.canoo.platform.core.functional.Subscription;
@@ -49,6 +50,7 @@ import java.net.URI;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.Executor;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -57,8 +59,6 @@ import static org.apiguardian.api.API.Status.INTERNAL;
 @API(since = "0.x", status = INTERNAL)
 public class ClientContextImpl implements ClientContext {
 
-    private final ClientConfiguration clientConfiguration;
-
     private final URI endpoint;
 
     private final ClientSessionStore clientSessionStore;
@@ -66,6 +66,8 @@ public class ClientContextImpl implements ClientContext {
     private final AbstractClientConnector clientConnector;
 
     private final ClientModelStore modelStore;
+
+    private final Executor backgroundExecutor;
 
     @Deprecated
     private  final BeanManager clientBeanManager;
@@ -77,10 +79,10 @@ public class ClientContextImpl implements ClientContext {
     private final List<RemotingExceptionHandler> remotingExceptionHandlers = new CopyOnWriteArrayList<>();
 
     public ClientContextImpl(final ClientConfiguration clientConfiguration, final URI endpoint, final HttpClient httpClient, final ClientSessionStore clientSessionStore) {
-        this.clientConfiguration = Assert.requireNonNull(clientConfiguration, "clientConfiguration");
+        Assert.requireNonNull(clientConfiguration, "clientConfiguration");
         this.clientSessionStore = Assert.requireNonNull(clientSessionStore, "clientSessionStore");
         this.endpoint = Assert.requireNonNull(endpoint, "endpoint");
-
+        this.backgroundExecutor = clientConfiguration.getBackgroundExecutor();
         final ModelSynchronizer defaultModelSynchronizer = new DefaultModelSynchronizer(new Supplier<AbstractClientConnector>() {
             @Override
             public AbstractClientConnector get() {
@@ -97,7 +99,7 @@ public class ClientContextImpl implements ClientContext {
             }
         };
 
-        this.clientConnector = createConnector(modelStore, httpClient, connectorExceptionHandler);
+        this.clientConnector = createConnector(clientConfiguration, modelStore, httpClient, connectorExceptionHandler);
         Assert.requireNonNull(clientConnector, "clientConnector");
 
         final EventDispatcher dispatcher = new ClientEventDispatcher(modelStore);
@@ -111,8 +113,8 @@ public class ClientContextImpl implements ClientContext {
         this.clientBeanManager = new BeanManagerImpl(beanRepository, new ClientBeanBuilderImpl(classRepository, beanRepository, new ListMapperImpl(modelStore, classRepository, beanRepository, builderFactory, dispatcher), builderFactory, dispatcher));
     }
 
-    protected AbstractClientConnector createConnector(final ClientModelStore modelStore, final HttpClient httpClient, final RemotingExceptionHandler connectorExceptionHandler) {
-        return new DolphinPlatformHttpClientConnector(endpoint, clientConfiguration, modelStore, OptimizedJsonCodec.getInstance(), connectorExceptionHandler, httpClient);
+    protected AbstractClientConnector createConnector(final ClientConfiguration configuration, final ClientModelStore modelStore, final HttpClient httpClient, final RemotingExceptionHandler connectorExceptionHandler) {
+        return new DolphinPlatformHttpClientConnector(endpoint, configuration, modelStore, OptimizedJsonCodec.getInstance(), connectorExceptionHandler, httpClient);
     }
 
     protected DolphinCommandHandler getDolphinCommandHandler() {
@@ -143,8 +145,9 @@ public class ClientContextImpl implements ClientContext {
     @Override
     public synchronized CompletableFuture<Void> disconnect() {
         final CompletableFuture<Void> result = new CompletableFuture<>();
-        clientConfiguration.getBackgroundExecutor().execute(() -> {
-            dolphinCommandHandler.invokeDolphinCommand(new DestroyContextCommand()).handle((v, throwable) -> {
+        backgroundExecutor.execute(() -> {
+            final Command command = new DestroyContextCommand();
+            dolphinCommandHandler.invokeDolphinCommand(command).handle((v, throwable) -> {
                 clientConnector.disconnect();
                 clientSessionStore.resetSession(endpoint);
                 if (throwable != null) {
@@ -163,8 +166,9 @@ public class ClientContextImpl implements ClientContext {
     public CompletableFuture<Void> connect() {
         final CompletableFuture<Void> result = new CompletableFuture<>();
         clientConnector.connect();
-        clientConfiguration.getBackgroundExecutor().execute(() -> {
-            dolphinCommandHandler.invokeDolphinCommand(new CreateContextCommand()).handle((v, throwable) -> {
+        backgroundExecutor.execute(() -> {
+            final Command command = new CreateContextCommand();
+            dolphinCommandHandler.invokeDolphinCommand(command).handle((v, throwable) -> {
                 if (throwable != null) {
                     final Exception e = new ClientInitializationException("Can't call init action!", throwable);
                     result.completeExceptionally(e);
