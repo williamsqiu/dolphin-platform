@@ -16,6 +16,6 @@
 
 dependencies {
   compile project(':microservice-product-common')
-  compile 'javax.inject:javax.inject:1'
+  compile "javax.inject:javax.inject:$javaxInjectVersion"
   compile project(':dolphin-platform-remoting-server-spring')
 }

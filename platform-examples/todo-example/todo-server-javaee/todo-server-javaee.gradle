@@ -19,7 +19,7 @@ apply plugin: 'war'
 dependencies {
     compile project(':todo-server')
     compile project(':dolphin-platform-remoting-server-javaee')
-    compileOnly 'javax:javaee-api:6.0'
+    compileOnly "javax:javaee-api:$javaeeApiVersion"
 }
 
 war {

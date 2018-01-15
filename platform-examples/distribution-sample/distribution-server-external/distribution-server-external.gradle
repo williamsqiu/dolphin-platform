@@ -20,6 +20,6 @@ mainClassName = 'com.canoo.platform.samples.distribution.server.external.Externa
 
 dependencies {
   compile "com.google.code.gson:gson:$gsonVersion"
-  compile "com.hazelcast:hazelcast-client:3.6.2"
+  compile "com.hazelcast:hazelcast-client:$hazelcastClientVersion"
   compile "org.springframework.boot:spring-boot-starter-web:$springBootVersion"
 }
