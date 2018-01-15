@@ -18,14 +18,14 @@ dependencies {
     compile project(':dolphin-platform-remoting-client-javafx')
     compile project(':dolphin-platform-logger-widget-common')
 
-    compile 'org.controlsfx:controlsfx:8.40.9'
+    compile "org.controlsfx:controlsfx:$controlFxVersion"
 
-    compile 'de.jensd:fontawesomefx-emojione:2.2.7-2'
-    compile 'de.jensd:fontawesomefx-fontawesome:4.7.0-5'
-    compile 'de.jensd:fontawesomefx-icons525:3.0.0-4'
-    compile 'de.jensd:fontawesomefx-materialdesignfont:1.7.22-4'
-    compile 'de.jensd:fontawesomefx-materialicons:2.2.0-5'
-    compile 'de.jensd:fontawesomefx-octicons:4.3.0-5'
-    compile 'de.jensd:fontawesomefx-weathericons:2.0.10-5'
-    compile 'de.jensd:fontawesomefx-controls:8.15'
+    compile "de.jensd:fontawesomefx-emojione:$fontAwesomeEmonjioneVersion"
+    compile "de.jensd:fontawesomefx-fontawesome:$fontAwesomeVersion"
+    compile "de.jensd:fontawesomefx-icons525:$fontAwesomeIcons525Version"
+    compile "de.jensd:fontawesomefx-materialdesignfont:$fontAwesomeMDfontVersion"
+    compile "de.jensd:fontawesomefx-materialicons:$fontAwesomeMIconVersion"
+    compile "de.jensd:fontawesomefx-octicons:$fontAwesomeOctIconVersion"
+    compile "de.jensd:fontawesomefx-weathericons:$fontAwesomeWIVersion"
+    compile "de.jensd:fontawesomefx-controls:$fontAwesomeControlsVersion"
 }
