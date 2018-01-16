@@ -112,6 +112,7 @@ The following code snippet shows an AngularJS controller that creates a Dolphin 
 [source,javascript]
 ----
 app.controller("myAngularComponentName", function ($scope, clientContext) {
+        clientContext.connect();
         clientContext.createController($scope, 'myDolphinPlatformControllerName');
 });
 ----
