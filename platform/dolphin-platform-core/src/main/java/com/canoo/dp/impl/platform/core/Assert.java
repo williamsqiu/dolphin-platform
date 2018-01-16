@@ -17,6 +17,7 @@ package com.canoo.dp.impl.platform.core;
 
 import org.apiguardian.api.API;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -112,6 +113,20 @@ public final class Assert {
             requireState(value != null, msg);
         }
         return collection;
+    }
+
+    public static <T> T[] requireNonNullEntries(final T[] array, String argumentName) {
+        requireNonNull(array, "array");
+        requireNonNullEntries(Arrays.asList(array), argumentName);
+        return array;
+    }
+
+    public static <T> T[] requireNotEmpty(final T[] array, String argumentName) {
+        requireNonNull(array, "array");
+        if(array.length == 0) {
+            throw new IllegalArgumentException(String.format(NOT_EMPTY_MSG_FORMAT, array));
+        }
+        return array;
     }
 
     /**

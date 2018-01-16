@@ -348,4 +348,14 @@ public class ActionTestController {
     private void onException(final ActionExceptionEvent<Exception> exceptionEvent) {
         addErrorBean(exceptionEvent);
     }
+
+    @ActionExceptionHandler
+    private void onAnyException(final ActionExceptionEvent<?> exceptionEvent) {
+        addErrorBean(exceptionEvent);
+    }
+
+    @ActionExceptionHandler
+    private void onAnyRuntimeException(final ActionExceptionEvent<? extends RuntimeException> exceptionEvent) {
+        addErrorBean(exceptionEvent);
+    }
 }

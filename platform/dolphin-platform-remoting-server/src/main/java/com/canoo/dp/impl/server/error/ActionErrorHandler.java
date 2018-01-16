@@ -2,6 +2,7 @@ package com.canoo.dp.impl.server.error;
 
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.platform.core.ReflectionHelper;
+import com.canoo.dp.impl.platform.core.commons.lang.TypeUtils;
 import com.canoo.platform.remoting.server.error.ActionExceptionEvent;
 import com.canoo.platform.remoting.server.error.ActionExceptionHandler;
 import org.slf4j.Logger;
@@ -73,9 +74,10 @@ public class ActionErrorHandler {
         if(isParameterizedType(genericType)) {
             final ParameterizedType parameterizedType = ReflectionHelper.toParameterizedType(genericType);
             if(ReflectionHelper.hasGenericTypeCount(parameterizedType, 1)) {
-                Type genericTypeDef = ReflectionHelper.getGenericType(parameterizedType, 0);
-                return ReflectionHelper.toClass(genericTypeDef).isAssignableFrom(throwableClass);
+                final Type genericTypeDef = ReflectionHelper.getGenericType(parameterizedType, 0);
+                return TypeUtils.isAssignable(throwableClass, genericTypeDef);
             }
+
         }
         return false;
     }

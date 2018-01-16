@@ -26,11 +26,14 @@ import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Proxy;
 import java.lang.reflect.Type;
+import java.lang.reflect.WildcardType;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import static org.apiguardian.api.API.Status.INTERNAL;
@@ -40,8 +43,42 @@ public class ReflectionHelper {
 
     private static final Logger LOG = LoggerFactory.getLogger(ReflectionHelper.class);
 
+    private static final Map<Class<?>, Class<?>> primitiveWrapperMap = new HashMap<>();
+    private static final Map<Class<?>, Class<?>> wrapperPrimitiveMap = new HashMap<>();
+
+    static {
+        primitiveWrapperMap.put(Boolean.TYPE, Boolean.class);
+        primitiveWrapperMap.put(Byte.TYPE, Byte.class);
+        primitiveWrapperMap.put(Character.TYPE, Character.class);
+        primitiveWrapperMap.put(Short.TYPE, Short.class);
+        primitiveWrapperMap.put(Integer.TYPE, Integer.class);
+        primitiveWrapperMap.put(Long.TYPE, Long.class);
+        primitiveWrapperMap.put(Double.TYPE, Double.class);
+        primitiveWrapperMap.put(Float.TYPE, Float.class);
+        primitiveWrapperMap.put(Void.TYPE, Void.TYPE);
+        wrapperPrimitiveMap.put(Boolean.class, Boolean.TYPE);
+        wrapperPrimitiveMap.put(Byte.class, Byte.TYPE);
+        wrapperPrimitiveMap.put(Character.class, Character.TYPE);
+        wrapperPrimitiveMap.put(Short.class, Short.TYPE);
+        wrapperPrimitiveMap.put(Integer.class, Integer.TYPE);
+        wrapperPrimitiveMap.put(Long.class, Long.TYPE);
+        wrapperPrimitiveMap.put(Double.class, Double.TYPE);
+        wrapperPrimitiveMap.put(Float.class, Float.TYPE);
+        wrapperPrimitiveMap.put(Void.class, Void.TYPE);
+    }
+
 
     private ReflectionHelper() {
+    }
+
+    public static Optional<Class<?>> getPrimitiveType(Class<?> cls) {
+        Assert.requireNonNull(cls, "cls");
+        return Optional.ofNullable(wrapperPrimitiveMap.get(cls));
+    }
+
+    public static Optional<Class<?>> getWrapperClass(Class<?> cls) {
+        Assert.requireNonNull(cls, "cls");
+        return Optional.ofNullable(primitiveWrapperMap.get(cls));
     }
 
     public static <T> T getPrivileged(final Field field, final Object bean) {
@@ -210,6 +247,23 @@ public class ReflectionHelper {
     public static boolean isParameterizedType(Type type) {
         Assert.requireNonNull(type, "type");
         if (type instanceof ParameterizedType) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static WildcardType toWildcardType(final Type type) {
+        if (isWildcardType(type)) {
+            return (WildcardType) type;
+        } else {
+            throw new IllegalArgumentException("The given type is not a WildcardType. Type: " + type);
+        }
+    }
+
+    public static boolean isWildcardType(final Type type) {
+        Assert.requireNonNull(type, "type");
+        if (type instanceof WildcardType) {
             return true;
         } else {
             return false;
