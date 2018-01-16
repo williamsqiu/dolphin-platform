@@ -125,7 +125,7 @@ controller will automatically start the destruction once the view component is r
 === Calling actions on the Dolphin Platform controller
 
 The controller proxy instance that is created can easily be used to invoke Dolphin Platform actions (that are defined by
-@DolphinAction as descripted in the chapter about the controller API). To do so the controller proxy provides an
+@RemotingAction as descripted in the chapter about the controller API). To do so the controller proxy provides an
 `invoke(...)` method.
 
 Let's say we have an AngularJS view that is defined by the following html code:

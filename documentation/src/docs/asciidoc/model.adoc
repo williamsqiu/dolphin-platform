@@ -22,7 +22,7 @@ attributes. Based on this a definition for a bean with only one String attribute
 
 [source,java]
 ----
-@DolphinBean
+@RemotingBean
 public class MyModel {
 
     private Property<String> value;
@@ -42,11 +42,11 @@ public class MyModel {
 }
 ----
 
-NOTE: Maybe you ask yourself why the `@DolphinBean` annotation is needed. Internally the Dolphin Platform checks if a bean
-class is annotated with `@DolphinBean` and will trow a `BeanDefinitionException` if the annotation is not present. By
+NOTE: Maybe you ask yourself why the `@RemotingBean` annotation is needed. Internally the Dolphin Platform checks if a bean
+class is annotated with `@RemotingBean` and will trow a `BeanDefinitionException` if the annotation is not present. By
 doing so it will be easy to check if you use the right model classes. We plan to add some additional features based on
 the annotation in the future. One example can be an annotation processor that checks if all classes that are defined as
-the Dolphin Platform beans (by adding the `@DolphinBean` annotation) are valid Dolphin Platform beans.
+the Dolphin Platform beans (by adding the `@RemotingBean` annotation) are valid Dolphin Platform beans.
 
 NOTE: As you can see the class defines not only a basic getter and setter method for the property.
 Like for JavaFX properties we think that it's best practice to provide a method to access the property
@@ -105,7 +105,7 @@ support for observers. A Dolphin Platform bean that contains a list might look l
 
 [source,java]
 ----
-@DolphinBean
+@RemotingBean
 public class MyModel {
 
     private ObservableList<String> values;
@@ -128,7 +128,7 @@ shows how a model class that contains a list of other beans might look:
 
 [source,java]
 ----
-@DolphinBean
+@RemotingBean
 public class MainModel {
 
     private ObservableList<MyModel> values;
@@ -198,15 +198,15 @@ As we have seen until now a model is defined by properties and collections. Sinc
 defined as interfaces and no model provides a specific constructor it's still not clear how a new instance of a model should
 created. Thanks to the Dolphin Platform architecture a developer don't need to think about the model instanciation or the
 lifecycle of a model. Whenever a new MVC group is created by the platform the model instance will be created automatically.
-To do so the model must be defined in the controller. The Dolphin Platform provides the `@DolphinModel` annotation that is
+To do so the model must be defined in the controller. The Dolphin Platform provides the `@RemotingModel` annotation that is
 used to inject the created model instance in the controller instance. The following sample code shows a minimal controller
 that defines its model type:
 
 ----
-@DolphinController
+@RemotingController
 public class MyController {
 
-    @DolphinModel
+    @RemotingModel
     private MyModel model;
 
 }
@@ -293,7 +293,7 @@ shown view might look like this:
 
 [source,java]
 ----
-@DolphinBean
+@RemotingBean
 public class PhotoOverviewModel {
 
   private Property<String> title;
@@ -306,7 +306,7 @@ public class PhotoOverviewModel {
 
 }
 
-@DolphinBean
+@RemotingBean
 public class PhotoModel {
 
   private Property<String> imageUrl;
@@ -351,7 +351,7 @@ this class can simply be injected in any controller:
 
 [source,java]
 ----
-@DolphinController
+@RemotingController
 public class MyController {
 
     @Inject

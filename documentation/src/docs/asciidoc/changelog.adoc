@@ -124,7 +124,7 @@ _Release date: Jul 10, 2017_
 * Convert TypeScript code to ES6 (https://github.com/canoo/dolphin-platform/issues/520[issue])
 * ClientContext provide isConnected() (https://github.com/canoo/dolphin-platform/issues/511[issue])
 * Sending the old value with the ValueChangeEvent is now optional (https://github.com/canoo/dolphin-platform/issues/529[issue])
-* Fix Error when calling an DolphinAction with null param value (https://github.com/canoo/dolphin-platform/issues/542[issue])
+* Fix Error when calling an RemotingAction with null param value (https://github.com/canoo/dolphin-platform/issues/542[issue])
 * Fix Error for sending UTF-8 chars as values (https://github.com/canoo/dolphin-platform/issues/540[issue])
 * Fix NPE while publishing on Dolphin-EventBus without having a session  (https://github.com/canoo/dolphin-platform/issues/534[issue])
 
@@ -190,7 +190,7 @@ _Release date: Mar 21, 2017_
 
 * Server configuration can be injected as a bean (https://github.com/canoo/dolphin-platform/issues/409[issue])
 * Add config to deactivate DolphinPlatformBootstrap while testing(https://github.com/canoo/dolphin-platform/issues/397[issue])
-* No need to add @DolphinBean etc. to the complete class hierarchy of a bean (https://github.com/canoo/dolphin-platform/issues/395[issue])
+* No need to add @RemotingBean etc. to the complete class hierarchy of a bean (https://github.com/canoo/dolphin-platform/issues/395[issue])
 * Android API is compiled against latest DolphinPlatform (https://github.com/canoo/dolphin-platform/issues/376[issue])
 * Bugfix for NPE in DolphinCommandRegistration (https://github.com/canoo/dolphin-platform/issues/52[issue])
 * Bugfix for CME in BeanRepository (https://github.com/canoo/dolphin-platform/issues/54[issue])

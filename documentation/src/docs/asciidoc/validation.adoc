@@ -50,7 +50,7 @@ defines a "not null" constrain for a `String` property:
 
 [source,java]
 ----
-@DolphinBean
+@RemotingBean
 public class MyModel {
 
     @NotNull
@@ -75,7 +75,7 @@ Configuration<?> validationConf = Validation.byDefaultProvider().configure();
 
 Validator validator = validationConf.buildValidatorFactory().getValidator();
 
-Set<ConstraintViolation<TestBean>> violations = validator.validate(dolphinModel);
+Set<ConstraintViolation<TestBean>> violations = validator.validate(remotingModel);
 if(!violations.isEmpty()) {
     //Handle violations
 }
