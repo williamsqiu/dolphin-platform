@@ -15,10 +15,10 @@
  */
 package com.canoo.dolphin.samples.processmonitor.model;
 
-import com.canoo.platform.remoting.DolphinBean;
+import com.canoo.platform.remoting.RemotingBean;
 import com.canoo.platform.remoting.Property;
 
-@DolphinBean
+@RemotingBean
 public class ProcessBean {
 
     private Property<String> processID;

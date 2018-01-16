@@ -16,9 +16,9 @@
 package com.canoo.impl.server.util;
 
 import com.canoo.platform.remoting.ObservableList;
-import com.canoo.platform.remoting.DolphinBean;
+import com.canoo.platform.remoting.RemotingBean;
 
-@DolphinBean
+@RemotingBean
 public class ListReferenceModel {
 
     public enum DataType {LIST_VALUE_1, LIST_VALUE_2}

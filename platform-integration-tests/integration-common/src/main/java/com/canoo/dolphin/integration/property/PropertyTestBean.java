@@ -15,7 +15,7 @@
  */
 package com.canoo.dolphin.integration.property;
 
-import com.canoo.platform.remoting.DolphinBean;
+import com.canoo.platform.remoting.RemotingBean;
 import com.canoo.platform.remoting.Property;
 
 import java.lang.annotation.ElementType;
@@ -25,7 +25,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
 
-@DolphinBean
+@RemotingBean
 public class PropertyTestBean {
 
     private Property<String> stringValue;

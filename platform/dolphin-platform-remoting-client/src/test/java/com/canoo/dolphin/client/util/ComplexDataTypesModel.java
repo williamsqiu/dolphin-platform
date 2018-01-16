@@ -15,13 +15,13 @@
  */
 package com.canoo.dolphin.client.util;
 
-import com.canoo.platform.remoting.DolphinBean;
+import com.canoo.platform.remoting.RemotingBean;
 import com.canoo.platform.remoting.Property;
 
 import java.util.Calendar;
 import java.util.Date;
 
-@DolphinBean
+@RemotingBean
 public class ComplexDataTypesModel {
 
     public enum EnumValues { VALUE_1, VALUE_2 }

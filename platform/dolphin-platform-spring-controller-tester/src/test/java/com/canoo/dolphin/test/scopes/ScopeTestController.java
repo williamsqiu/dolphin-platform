@@ -15,13 +15,13 @@
  */
 package com.canoo.dolphin.test.scopes;
 
-import com.canoo.platform.remoting.server.DolphinController;
-import com.canoo.platform.remoting.server.DolphinModel;
+import com.canoo.platform.remoting.server.RemotingController;
+import com.canoo.platform.remoting.server.RemotingModel;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
 
-@DolphinController("ScopeTestController")
+@RemotingController("ScopeTestController")
 public class ScopeTestController {
 
     @Autowired
@@ -36,7 +36,7 @@ public class ScopeTestController {
     @Autowired
     private SingletonService singletonService;
 
-    @DolphinModel
+    @RemotingModel
     private ScopeModel model;
 
     @PostConstruct

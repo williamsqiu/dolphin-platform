@@ -16,7 +16,7 @@
 package com.canoo.dp.impl.server.gc;
 
 import com.canoo.platform.remoting.ObservableList;
-import com.canoo.platform.remoting.DolphinBean;
+import com.canoo.platform.remoting.RemotingBean;
 import org.apiguardian.api.API;
 
 import static org.apiguardian.api.API.Status.INTERNAL;
@@ -24,7 +24,7 @@ import static org.apiguardian.api.API.Status.INTERNAL;
 /**
  * A {@link Reference} that is defined by a {@link ObservableList}.
  * Example for such a reference: Dolphin bean A contains a {@link ObservableList} that contains dolphin bean B
- * For more information see {@link Reference} and {@link DolphinBean}
+ * For more information see {@link Reference} and {@link RemotingBean}
  */
 @API(since = "0.x", status = INTERNAL)
 public class ListReference extends Reference {

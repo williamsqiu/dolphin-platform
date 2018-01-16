@@ -19,8 +19,8 @@ import com.canoo.platform.remoting.BeanManager;
 import com.canoo.dolphin.samples.processmonitor.model.ProcessBean;
 import com.canoo.dolphin.samples.processmonitor.model.ProcessListBean;
 import com.canoo.platform.remoting.server.ClientSessionExecutor;
-import com.canoo.platform.remoting.server.DolphinController;
-import com.canoo.platform.remoting.server.DolphinModel;
+import com.canoo.platform.remoting.server.RemotingController;
+import com.canoo.platform.remoting.server.RemotingModel;
 import com.canoo.platform.remoting.server.RemotingContext;
 import oshi.SystemInfo;
 import oshi.hardware.GlobalMemory;
@@ -38,7 +38,7 @@ import java.util.concurrent.Future;
 
 import static com.canoo.dolphin.samples.processmonitor.ProcessMonitorConstants.CONTROLLER_NAME;
 
-@DolphinController(CONTROLLER_NAME)
+@RemotingController(CONTROLLER_NAME)
 public class ProcessMonitorController {
 
     private static DecimalFormat format = new DecimalFormat("0.00");
@@ -54,7 +54,7 @@ public class ProcessMonitorController {
     @Inject
     private AsyncServerRunner asyncServerRunner;
 
-    @DolphinModel
+    @RemotingModel
     private ProcessListBean processList;
 
     private Future<Void> executor;

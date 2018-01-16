@@ -15,10 +15,10 @@
  */
 package com.canoo.platform.samples.distribution.common.model;
 
-import com.canoo.platform.remoting.DolphinBean;
+import com.canoo.platform.remoting.RemotingBean;
 import com.canoo.platform.remoting.Property;
 
-@DolphinBean
+@RemotingBean
 public class ToDoItem {
 
     private Property<String> text;

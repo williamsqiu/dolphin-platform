@@ -15,10 +15,10 @@
  */
 package com.canoo.dolphin.test.qualifier;
 
-import com.canoo.platform.remoting.DolphinBean;
+import com.canoo.platform.remoting.RemotingBean;
 import com.canoo.platform.remoting.Property;
 
-@DolphinBean
+@RemotingBean
 public class QualifierTestModel {
 
     private Property<QualifierTestSubModelOne> subModelOneProperty;

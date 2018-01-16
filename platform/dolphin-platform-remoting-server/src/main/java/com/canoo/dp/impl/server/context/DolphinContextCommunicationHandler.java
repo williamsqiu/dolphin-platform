@@ -77,7 +77,7 @@ public class DolphinContextCommunicationHandler {
         final List<Command> commands = new ArrayList<>();
         try {
             commands.addAll(readCommands(request));
-        } catch (Exception e) {
+        } catch (final Exception e) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             LOG.error("Can not parse request! (DolphinContext " + clientSession.getId() + ")", e);
             return;
@@ -90,7 +90,7 @@ public class DolphinContextCommunicationHandler {
             final List<Command> results = new ArrayList<>();
             try {
                 results.addAll(handle(context, commands));
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                 LOG.error("Can not withoutResult the the received commands (DolphinContext " + context.getId() + ")", e);
                 return;
@@ -101,12 +101,12 @@ public class DolphinContextCommunicationHandler {
 
             try {
                 writeCommands(results, response);
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-                LOG.error("Can not write response!", e);
+                LOG.error("Can not writeRequestContent response!", e);
                 return;
             }
-        } catch (Exception e) {
+        } catch (final Exception e) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             LOG.error("Can not find or create matching dolphin context in session " + httpSession.getId(), e);
             return;

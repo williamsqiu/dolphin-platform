@@ -15,22 +15,22 @@
  */
 package com.canoo.dolphin.test.eventbus;
 
-import com.canoo.platform.remoting.server.DolphinAction;
-import com.canoo.platform.remoting.server.DolphinController;
-import com.canoo.platform.remoting.server.DolphinModel;
+import com.canoo.platform.remoting.server.RemotingAction;
+import com.canoo.platform.remoting.server.RemotingController;
+import com.canoo.platform.remoting.server.RemotingModel;
 import com.canoo.platform.remoting.server.event.RemotingEventBus;
 import org.springframework.beans.factory.annotation.Autowired;
 
-@DolphinController(EventBusTestConstants.EVENT_BUS_PUBLISHER_CONTROLLER_NAME)
+@RemotingController(EventBusTestConstants.EVENT_BUS_PUBLISHER_CONTROLLER_NAME)
 public class EventBusPublisherController {
 
-    @DolphinModel
+    @RemotingModel
     private EventBusTestModel model;
 
     @Autowired
     private RemotingEventBus eventBus;
 
-    @DolphinAction(EventBusTestConstants.CALL_ACTION)
+    @RemotingAction(EventBusTestConstants.CALL_ACTION)
     public void call() {
         eventBus.publish(EventBusTestConstants.TEST_TOPIC, model.valueProperty().get());
     }

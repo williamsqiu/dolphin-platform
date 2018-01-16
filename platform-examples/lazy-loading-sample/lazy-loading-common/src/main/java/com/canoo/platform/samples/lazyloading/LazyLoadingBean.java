@@ -1,10 +1,10 @@
 package com.canoo.platform.samples.lazyloading;
 
-import com.canoo.platform.remoting.DolphinBean;
+import com.canoo.platform.remoting.RemotingBean;
 import com.canoo.platform.remoting.ObservableList;
 import com.canoo.platform.remoting.Property;
 
-@DolphinBean
+@RemotingBean
 public class LazyLoadingBean {
 
     private Property<Integer> requestedSize;

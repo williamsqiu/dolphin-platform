@@ -26,12 +26,12 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import static org.apiguardian.api.API.Status.MAINTAINED;
 
 /**
- * Can you used to annotate a method in a dolphin controller (see {@link DolphinController}) as an event handler that will automatically be called if a child controller was created for the given controller (see client API).
+ * Can you used to annotate a method in a dolphin controller (see {@link RemotingController}) as an event handler that will automatically be called if a child controller was created for the given controller (see client API).
  * The method must have exactly one parameter that is of the class or superclass / interface of the child controller.
  *
  * @author Hendrik Ebbers
  *
- * @see DolphinController
+ * @see RemotingController
  * @see ParentController
  * @see PreChildDestroyed
  */
