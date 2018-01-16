@@ -15,9 +15,8 @@
  */
 package com.canoo.dp.impl.platform.client.http.cookie;
 
-import com.canoo.dp.impl.platform.core.PlatformConstants;
-import com.canoo.platform.core.DolphinRuntimeException;
 import com.canoo.dp.impl.platform.core.Assert;
+import com.canoo.platform.core.DolphinRuntimeException;
 import org.apiguardian.api.API;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +29,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import static com.canoo.dp.impl.platform.core.http.HttpHeaderConstants.COOKIE_HEADER;
+import static com.canoo.dp.impl.platform.core.http.HttpHeaderConstants.SET_COOKIE_HEADER;
 import static org.apiguardian.api.API.Status.INTERNAL;
 
 @API(since = "0.x", status = INTERNAL)
@@ -43,45 +44,48 @@ public class HttpClientCookieHandler {
         this.cookieStore = Assert.requireNonNull(cookieStore, "cookieStore");
     }
 
-    public void updateCookiesFromResponse(final HttpURLConnection conn) throws URISyntaxException {
+    public void updateCookiesFromResponse(final HttpURLConnection connection) throws URISyntaxException {
+        Assert.requireNonNull(connection, "connection");
         LOG.debug("adding cookies from response to cookie store");
-        Map<String, List<String>> headerFields = conn.getHeaderFields();
-        List<String> cookiesHeader = headerFields.get(PlatformConstants.SET_COOKIE_HEADER);
+
+        final Map<String, List<String>> headerFields = connection.getHeaderFields();
+        final List<String> cookiesHeader = headerFields.get(SET_COOKIE_HEADER);
         if (cookiesHeader != null) {
-            LOG.debug("found '{}' header field", PlatformConstants.SET_COOKIE_HEADER);
+            LOG.debug("found '{}' header field", SET_COOKIE_HEADER);
             for (String cookie : cookiesHeader) {
                 if (cookie == null || cookie.isEmpty()) {
                     continue;
                 }
                 LOG.debug("will parse '{}' header content '{}'", cookie);
-                List<HttpCookie> cookies = new ArrayList<>();
+                final List<HttpCookie> cookies = new ArrayList<>();
                 try {
                     cookies.addAll(HttpCookie.parse(cookie));
-                } catch (Exception e) {
-                    throw new DolphinRuntimeException("Can not convert '" + PlatformConstants.SET_COOKIE_HEADER + "' response header field to http cookies. Bad content: " + cookie, e);
+                } catch (final Exception e) {
+                    throw new DolphinRuntimeException("Can not convert '" + SET_COOKIE_HEADER + "' response header field to http cookies. Bad content: " + cookie, e);
                 }
                 LOG.debug("Found {} http cookies in header", cookies.size());
-                for (HttpCookie httpCookie : cookies) {
+                for (final HttpCookie httpCookie : cookies) {
                     LOG.trace("Found Cookie '{}' for Domain '{}' at Ports '{}' with Path '{}", httpCookie.getValue(), httpCookie.getDomain(), httpCookie.getPortlist(), httpCookie.getPath());
-                    cookieStore.add(conn.getURL().toURI(), httpCookie);
+                    cookieStore.add(connection.getURL().toURI(), httpCookie);
                 }
 
             }
         }
     }
 
-    public void setRequestCookies(final HttpURLConnection conn) throws URISyntaxException {
+    public void setRequestCookies(final HttpURLConnection connection) throws URISyntaxException {
+        Assert.requireNonNull(connection, "connection");
         LOG.debug("adding cookies from cookie store to request");
         if (cookieStore.getCookies().size() > 0) {
             String cookieValue = "";
-            for (HttpCookie cookie : cookieStore.get(conn.getURL().toURI())) {
+            for (final HttpCookie cookie : cookieStore.get(connection.getURL().toURI())) {
                 LOG.trace("Cookie '{}' is for Domain '{}' at Ports '{}' with Path '{}", cookie.getValue(), cookie.getDomain(), cookie.getPortlist(), cookie.getPath());
                 cookieValue = cookieValue + cookie + ";";
             }
             if (!cookieValue.isEmpty()) {
                 cookieValue = cookieValue.substring(0, cookieValue.length());
-                LOG.debug("Adding '{}' header to request. Content: {}", PlatformConstants.SET_COOKIE_HEADER, cookieValue);
-                conn.setRequestProperty(PlatformConstants.COOKIE_HEADER, cookieValue);
+                LOG.debug("Adding '{}' header to request. Content: {}", SET_COOKIE_HEADER, cookieValue);
+                connection.setRequestProperty(COOKIE_HEADER, cookieValue);
             }
         }
     }

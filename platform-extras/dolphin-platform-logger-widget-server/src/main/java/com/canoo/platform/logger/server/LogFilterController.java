@@ -4,9 +4,9 @@ import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.core.functional.Subscription;
 import com.canoo.platform.logger.model.LogSearchFilterBean;
 import com.canoo.platform.logger.model.LoggerSearchRequest;
-import com.canoo.platform.remoting.server.DolphinAction;
-import com.canoo.platform.remoting.server.DolphinController;
-import com.canoo.platform.remoting.server.DolphinModel;
+import com.canoo.platform.remoting.server.RemotingAction;
+import com.canoo.platform.remoting.server.RemotingController;
+import com.canoo.platform.remoting.server.RemotingModel;
 import org.slf4j.event.Level;
 
 import java.time.LocalDateTime;
@@ -20,37 +20,37 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Consumer;
 
-@DolphinController
+@RemotingController
 public class LogFilterController {
 
-    @DolphinModel
+    @RemotingModel
     private LogSearchFilterBean model;
 
     private final List<Consumer<LoggerSearchRequest>> searchListener = new ArrayList<>();
 
-    @DolphinAction
+    @RemotingAction
     public void search() {
         final LoggerSearchRequest request = getCurrentRequest();
         searchListener.forEach(l -> l.accept(request));
     }
 
-    @DolphinAction
+    @RemotingAction
     public void clearStartDate() {
         final LocalDateTime minTime = LocalDateTime.MIN;
         model.setStartDate(ZonedDateTime.of(minTime, ZoneId.systemDefault()));
     }
 
-    @DolphinAction
+    @RemotingAction
     public void setStartDateToNow() {
         model.setStartDate(ZonedDateTime.now());
     }
 
-    @DolphinAction
+    @RemotingAction
     public void setEndDateToNow() {
         model.setEndDateTime(ZonedDateTime.now());
     }
 
-    @DolphinAction
+    @RemotingAction
     public void removeLevelFiltering() {
         model.getLevel().clear();
         model.getLevel().addAll(Level.values());

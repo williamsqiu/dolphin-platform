@@ -17,9 +17,9 @@ package com.canoo.dolphin.test.qualifier;
 
 import com.canoo.platform.remoting.BeanManager;
 import com.canoo.platform.core.functional.Binding;
-import com.canoo.platform.remoting.server.DolphinAction;
-import com.canoo.platform.remoting.server.DolphinController;
-import com.canoo.platform.remoting.server.DolphinModel;
+import com.canoo.platform.remoting.server.RemotingAction;
+import com.canoo.platform.remoting.server.RemotingController;
+import com.canoo.platform.remoting.server.RemotingModel;
 import com.canoo.platform.remoting.server.binding.PropertyBinder;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -35,10 +35,10 @@ import static com.canoo.dolphin.test.qualifier.QualifierTestConstants.QUALIFIER_
 import static com.canoo.dolphin.test.qualifier.QualifierTestConstants.STRING_QUALIFIER;
 import static com.canoo.dolphin.test.qualifier.QualifierTestConstants.UNBIND_ACTION;
 
-@DolphinController(QUALIFIER_CONTROLLER_NAME)
+@RemotingController(QUALIFIER_CONTROLLER_NAME)
 public class QualifierTestController {
 
-    @DolphinModel
+    @RemotingModel
     private QualifierTestModel model;
 
     @Autowired
@@ -77,17 +77,17 @@ public class QualifierTestController {
         bindings.clear();
     }
 
-    @DolphinAction(DUMMY_ACTION)
+    @RemotingAction(DUMMY_ACTION)
     public void dummyAction() {
 
     }
 
-    @DolphinAction(BIND_ACTION)
+    @RemotingAction(BIND_ACTION)
     public void bindAction() {
         bind();
     }
 
-    @DolphinAction(UNBIND_ACTION)
+    @RemotingAction(UNBIND_ACTION)
     public void unbindAction() {
         unbind();
     }

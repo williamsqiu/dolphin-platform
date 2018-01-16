@@ -27,7 +27,7 @@ import static org.apiguardian.api.API.Status.MAINTAINED;
 
 /**
  * <p>
- * When defining a controller method by using {@link DolphinAction} the
+ * When defining a controller method by using {@link RemotingAction} the
  * Dolphin Platform supports methods parameters. The parameters can be set on the client when calling
  * the action method. To define parameters o the server controller method each paramter must be annotated
  * with the {@link Param} annotation.
@@ -37,10 +37,10 @@ import static org.apiguardian.api.API.Status.MAINTAINED;
  *
  * <blockquote>
  * <pre>
- *     {@literal @}DolphinController("my-controller")
+ *     {@literal @}RemotingController("my-controller")
  *     public class MyController {
  *
- *         {@literal @}DolphinAction("my-action")
+ *         {@literal @}RemotingAction("my-action")
  *         private void showById(@Param("id") id) { . . . };
  *     }
  * </pre>
@@ -48,7 +48,7 @@ import static org.apiguardian.api.API.Status.MAINTAINED;
  *</p>
  *
  * @author Hendrik Ebbers
- * @see DolphinAction
+ * @see RemotingAction
  */
 @Documented
 @Retention(RUNTIME)

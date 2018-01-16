@@ -39,7 +39,7 @@ import static org.apiguardian.api.API.Status.MAINTAINED;
  * <p>When using the MVC API of Dolphin Platform the lifecycle of the model is defined by the MVC group and the model
  * will automatically be removed when the MVC group is removed. If the {@link BeanManager} is used as
  * standalone API the developer must handle the lifecycle of the models and removePresentationModel them by using the {@link BeanManager}</p>
- * <p>All synchronized models must follow some specific rules that are described in the {@link DolphinBean} annotation</p>
+ * <p>All synchronized models must follow some specific rules that are described in the {@link RemotingBean} annotation</p>
  *
  * <p>By using the default Spring or JavaEE implementation of the Dolphin platform the {@link BeanManager}
  * will be provided as a managed bean and can be injected wherever the container allows injection.</p>

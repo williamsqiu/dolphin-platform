@@ -1,13 +1,13 @@
 package com.canoo.platform.logger.model;
 
-import com.canoo.platform.remoting.DolphinBean;
+import com.canoo.platform.remoting.RemotingBean;
 import com.canoo.platform.remoting.ObservableList;
 import com.canoo.platform.remoting.Property;
 import org.slf4j.event.Level;
 
 import java.time.ZonedDateTime;
 
-@DolphinBean
+@RemotingBean
 public class LogEntryBean {
 
     private Property<String> message;

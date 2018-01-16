@@ -16,5 +16,5 @@
 
 dependencies {
     compile project(':dolphin-platform-security-server')
-    compileOnly 'javax.enterprise:cdi-api:1.1'
+    compileOnly "javax.enterprise:cdi-api:$javaxCDIVersion"
 }

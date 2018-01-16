@@ -17,14 +17,14 @@ package com.canoo.dp.impl.server.gc;
 
 import com.canoo.platform.remoting.ObservableList;
 import com.canoo.dp.impl.remoting.DolphinUtils;
-import com.canoo.platform.remoting.DolphinBean;
+import com.canoo.platform.remoting.RemotingBean;
 import com.canoo.platform.remoting.Property;
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.platform.core.IdentitySet;
 import com.canoo.dp.impl.platform.core.ReflectionHelper;
 import com.canoo.dp.impl.server.config.RemotingConfiguration;
 import com.canoo.platform.remoting.BeanManager;
-import com.canoo.platform.remoting.server.DolphinModel;
+import com.canoo.platform.remoting.server.RemotingModel;
 import org.apiguardian.api.API;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,10 +38,10 @@ import java.util.Map;
 import static org.apiguardian.api.API.Status.INTERNAL;
 
 /**
- * The garbage collection for Dolphin Platform models. Whenever a new Dolphin bean {@link DolphinBean}
+ * The garbage collection for Dolphin Platform models. Whenever a new Dolphin bean {@link RemotingBean}
  * has been created or the hierarchy in a Dolphin model changes the GC will check if the mutated models are still
  * referenced by a root model. In this case a root model is a model as it's defined as a model for a MVC group in
- * Dolphin Platform (see {@link DolphinModel}).
+ * Dolphin Platform (see {@link RemotingModel}).
  */
 @API(since = "0.x", status = INTERNAL)
 public class GarbageCollector {
@@ -79,7 +79,7 @@ public class GarbageCollector {
     }
 
     /**
-     * This method must be called for each new Dolphin bean (see {@link DolphinBean}).
+     * This method must be called for each new Dolphin bean (see {@link RemotingBean}).
      * Normally beans are created by {@link BeanManager#create(Class)}
      *
      * @param bean     the bean that was created
@@ -164,7 +164,7 @@ public class GarbageCollector {
     }
 
     /**
-     * This method must be called for each item that is added to a {@link ObservableList} that is part of a Dolphin bean (see {@link DolphinBean})
+     * This method must be called for each item that is added to a {@link ObservableList} that is part of a Dolphin bean (see {@link RemotingBean})
      *
      * @param list  the list
      * @param value the added item
@@ -185,7 +185,7 @@ public class GarbageCollector {
     }
 
     /**
-     * This method must be called for each item that is removed to a {@link ObservableList} that is part of a Dolphin bean (see {@link DolphinBean})
+     * This method must be called for each item that is removed to a {@link ObservableList} that is part of a Dolphin bean (see {@link RemotingBean})
      *
      * @param list  the list
      * @param value the removed item
@@ -198,8 +198,8 @@ public class GarbageCollector {
     }
 
     /**
-     * Calling this method triggers the garbage collection. For all dolphin beans (see {@link DolphinBean}) that
-     * are not referenced by a root bean (see {@link DolphinModel}) the defined {@link GarbageCollectionCallback} (see constructor)
+     * Calling this method triggers the garbage collection. For all dolphin beans (see {@link RemotingBean}) that
+     * are not referenced by a root bean (see {@link RemotingModel}) the defined {@link GarbageCollectionCallback} (see constructor)
      * will be called.
      */
     public synchronized void gc() {

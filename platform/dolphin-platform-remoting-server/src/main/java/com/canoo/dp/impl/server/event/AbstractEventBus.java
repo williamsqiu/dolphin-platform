@@ -162,8 +162,12 @@ public abstract class AbstractEventBus implements RemotingEventBus {
                             LOG.trace("Calling event listener for topic {} in Dolphin Platform context {}", topic.getName(), sessionId);
                             final Predicate<MessageEventContext<T>> sessionFilter = ((ListenerWithFilter<T>) listenerAndFilter).getFilter();
                             final MessageListener<T> listener = (MessageListener<T>) listenerAndFilter.getListener();
-                            if (sessionFilter == null || sessionFilter.test(event.getMessageEventContext())) {
-                                listener.onMessage(event);
+                            try {
+                                if (sessionFilter == null || sessionFilter.test(event.getMessageEventContext())) {
+                                    listener.onMessage(event);
+                                }
+                            } catch (final Exception e) {
+                                LOG.error("Error in calling event listener for topic '" + topic.getName() + "' in Dolphin Platform context " + sessionId, e);
                             }
                         }
                     });

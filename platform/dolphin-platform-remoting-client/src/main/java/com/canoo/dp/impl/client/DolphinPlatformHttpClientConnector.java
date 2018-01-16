@@ -19,6 +19,7 @@ import com.canoo.dp.impl.client.legacy.ClientModelStore;
 import com.canoo.dp.impl.client.legacy.communication.AbstractClientConnector;
 import com.canoo.dp.impl.client.legacy.communication.BlindCommandBatcher;
 import com.canoo.dp.impl.platform.core.Assert;
+import com.canoo.dp.impl.platform.core.http.HttpHeaderConstants;
 import com.canoo.dp.impl.remoting.commands.DestroyContextCommand;
 import com.canoo.dp.impl.remoting.legacy.communication.Codec;
 import com.canoo.dp.impl.remoting.legacy.communication.Command;
@@ -32,7 +33,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.URI;
-import java.net.URL;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -78,10 +78,10 @@ public class DolphinPlatformHttpClientConnector extends AbstractClientConnector 
         }
 
         try {
-            String data = codec.encode(commands);
-            String receivedContent = client.request(servletUrl, RequestMethod.POST).withContent(data, "application/json;charset=utf-8").readString().execute().get();
+            final String data = codec.encode(commands);
+            final String receivedContent = client.request(servletUrl, RequestMethod.POST).withContent(data, HttpHeaderConstants.JSON_MIME_TYPE).readString().execute().get().getContent();
             return codec.decode(receivedContent);
-        } catch (Exception e) {
+        } catch (final Exception e) {
             throw new DolphinRemotingException("Error in remoting layer", e);
         }
     }

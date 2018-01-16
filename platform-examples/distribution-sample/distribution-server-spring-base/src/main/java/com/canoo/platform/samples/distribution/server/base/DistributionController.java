@@ -15,9 +15,9 @@
  */
 package com.canoo.platform.samples.distribution.server.base;
 
-import com.canoo.platform.remoting.server.DolphinAction;
-import com.canoo.platform.remoting.server.DolphinController;
-import com.canoo.platform.remoting.server.DolphinModel;
+import com.canoo.platform.remoting.server.RemotingAction;
+import com.canoo.platform.remoting.server.RemotingController;
+import com.canoo.platform.remoting.server.RemotingModel;
 import com.canoo.platform.remoting.server.Param;
 import com.canoo.platform.remoting.server.event.ClientSessionEventFilter;
 import com.canoo.platform.remoting.server.event.MessageEventContext;
@@ -36,14 +36,14 @@ import static com.canoo.platform.samples.distribution.common.DistributionAppCons
 import static com.canoo.platform.samples.distribution.server.base.DistributionEventTopics.ITEM_ADDED;
 import static com.canoo.platform.samples.distribution.server.base.DistributionEventTopics.ITEM_REMOVED;
 
-@DolphinController(CONTROLLER_NAME)
+@RemotingController(CONTROLLER_NAME)
 public class DistributionController {
 
     private final RemotingEventBus eventBus;
 
     private final ClientSession session;
 
-    @DolphinModel
+    @RemotingModel
     private ToDoList toDoList;
 
     @Inject
@@ -59,7 +59,7 @@ public class DistributionController {
         eventBus.subscribe(ITEM_ADDED, message -> addItem(message.getData()), excludeMe);
     }
 
-    @DolphinAction(ADD_ACTION)
+    @RemotingAction(ADD_ACTION)
     public void onItemAddAction() {
         final String itemName = toDoList.getNewItemText();
         toDoList.setNewItemText("");
@@ -68,7 +68,7 @@ public class DistributionController {
         eventBus.publish(ITEM_ADDED, itemName);
     }
 
-    @DolphinAction(REMOVE_ACTION)
+    @RemotingAction(REMOVE_ACTION)
     public void onItemRemovedAction(@Param(ITEM_PARAM) final String name) {
         removeItem(name);
         eventBus.publish(ITEM_REMOVED, name);

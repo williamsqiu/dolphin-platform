@@ -2,18 +2,18 @@ package com.canoo.platform.logger.server;
 
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.logger.model.LogHistoryBean;
-import com.canoo.platform.remoting.server.DolphinController;
-import com.canoo.platform.remoting.server.DolphinModel;
 import com.canoo.platform.remoting.server.PostChildCreated;
+import com.canoo.platform.remoting.server.RemotingController;
+import com.canoo.platform.remoting.server.RemotingModel;
 
-@DolphinController
+@RemotingController
 public class LogHistoryParentController {
 
     private LogFilterController filterController;
 
     private LogListController listController;
 
-    @DolphinModel
+    @RemotingModel
     private LogHistoryBean model;
 
     @PostChildCreated

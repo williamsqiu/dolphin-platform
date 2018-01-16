@@ -15,6 +15,7 @@
  */
 package com.canoo.dp.impl.server.controller;
 
+import com.canoo.platform.remoting.server.*;
 import com.canoo.platform.remoting.spi.converter.ValueConverterException;
 import com.canoo.dp.impl.remoting.Converters;
 import com.canoo.dp.impl.remoting.BeanRepository;
@@ -26,12 +27,7 @@ import com.canoo.dp.impl.server.mbean.DolphinContextMBeanRegistry;
 import com.canoo.dp.impl.server.mbean.beans.ModelProvider;
 import com.canoo.dp.impl.server.model.ServerBeanBuilder;
 import com.canoo.platform.core.functional.Subscription;
-import com.canoo.platform.remoting.server.DolphinAction;
-import com.canoo.platform.remoting.server.DolphinModel;
-import com.canoo.platform.remoting.server.Param;
-import com.canoo.platform.remoting.server.ParentController;
-import com.canoo.platform.remoting.server.PostChildCreated;
-import com.canoo.platform.remoting.server.PreChildDestroyed;
+import com.canoo.platform.remoting.server.RemotingAction;
 import org.apiguardian.api.API;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -211,7 +207,7 @@ public class ControllerHandler {
         Field modelField = null;
 
         for (Field field : allFields) {
-            if (field.isAnnotationPresent(DolphinModel.class)) {
+            if (field.isAnnotationPresent(RemotingModel.class)) {
                 if (modelField != null) {
                     throw new RuntimeException("More than one Model was found for controller " + ControllerUtils.getControllerName(controller.getClass()));
                 }
@@ -344,7 +340,7 @@ public class ControllerHandler {
         List<Method> allMethods = ReflectionHelper.getInheritedDeclaredMethods(controllerClass);
         Method foundMethod = null;
         for (Method method : allMethods) {
-            if (method.isAnnotationPresent(DolphinAction.class)) {
+            if (method.isAnnotationPresent(RemotingAction.class)) {
                 final String currentActionName = ControllerUtils.getActionMethodName(method);
                 if (currentActionName.equals(actionName)) {
                     if (foundMethod != null) {

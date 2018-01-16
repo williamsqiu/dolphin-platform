@@ -1,14 +1,14 @@
 package com.canoo.dp.impl.validation;
 
 import com.canoo.dp.impl.remoting.MockedProperty;
-import com.canoo.platform.remoting.DolphinBean;
+import com.canoo.platform.remoting.RemotingBean;
 import com.canoo.platform.remoting.Property;
 
 import javax.validation.constraints.Min;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
-@DolphinBean
+@RemotingBean
 public class TestBeanMin {
     @Min(1)
     private Property<BigDecimal> bigDecimal = new MockedProperty<>();

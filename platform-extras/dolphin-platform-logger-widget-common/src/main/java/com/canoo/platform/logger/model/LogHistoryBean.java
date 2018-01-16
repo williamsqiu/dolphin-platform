@@ -1,7 +1,7 @@
 package com.canoo.platform.logger.model;
 
-import com.canoo.platform.remoting.DolphinBean;
+import com.canoo.platform.remoting.RemotingBean;
 
-@DolphinBean
+@RemotingBean
 public class LogHistoryBean {
 }

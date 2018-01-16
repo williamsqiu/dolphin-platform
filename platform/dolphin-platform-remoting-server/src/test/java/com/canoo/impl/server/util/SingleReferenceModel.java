@@ -15,10 +15,10 @@
  */
 package com.canoo.impl.server.util;
 
-import com.canoo.platform.remoting.DolphinBean;
+import com.canoo.platform.remoting.RemotingBean;
 import com.canoo.platform.remoting.Property;
 
-@DolphinBean
+@RemotingBean
 public class SingleReferenceModel {
 
     private Property<SimpleTestModel> referenceProperty;

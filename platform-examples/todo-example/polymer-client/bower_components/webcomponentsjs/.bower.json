@@ -28,7 +28,7 @@
     "tag": "v1.0.22",
     "commit": "96e624f7d966770d4ab0f117cbd1d7aa447194aa"
   },
-  "_source": "git://github.com/webcomponents/webcomponentsjs.git",
-  "_target": "^v1.0.19",
+  "_source": "https://github.com/webcomponents/webcomponentsjs.git",
+  "_target": "^v1.0.2",
   "_originalSource": "webcomponents/webcomponentsjs"
 }

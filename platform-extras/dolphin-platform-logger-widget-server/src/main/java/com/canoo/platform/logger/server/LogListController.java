@@ -7,9 +7,9 @@ import com.canoo.platform.logger.model.LoggerSearchRequest;
 import com.canoo.platform.logger.server.service.LoggerRepository;
 import com.canoo.platform.logging.spi.LogMessage;
 import com.canoo.platform.remoting.BeanManager;
-import com.canoo.platform.remoting.server.DolphinAction;
-import com.canoo.platform.remoting.server.DolphinController;
-import com.canoo.platform.remoting.server.DolphinModel;
+import com.canoo.platform.remoting.server.RemotingAction;
+import com.canoo.platform.remoting.server.RemotingController;
+import com.canoo.platform.remoting.server.RemotingModel;
 import org.slf4j.event.Level;
 
 import javax.inject.Inject;
@@ -21,14 +21,14 @@ import java.util.Set;
 import static com.canoo.platform.logger.LoggerRemotingConstants.LOG_LIST_CONTROLLER_NAME;
 import static com.canoo.platform.logger.LoggerRemotingConstants.UPDATE_ACTION;
 
-@DolphinController(LOG_LIST_CONTROLLER_NAME)
+@RemotingController(LOG_LIST_CONTROLLER_NAME)
 public class LogListController {
 
     private final BeanManager beanManager;
 
     private final LoggerRepository repository;
 
-    @DolphinModel
+    @RemotingModel
     private LogListBean model;
 
     @Inject
@@ -46,7 +46,7 @@ public class LogListController {
                 forEach(b -> model.getEntries().add(b));
     }
 
-    @DolphinAction(UPDATE_ACTION)
+    @RemotingAction(UPDATE_ACTION)
     public void update() {
         final ZonedDateTime startDate = ZonedDateTime.now().minusDays(1);
         final ZonedDateTime endDateTime = ZonedDateTime.now();

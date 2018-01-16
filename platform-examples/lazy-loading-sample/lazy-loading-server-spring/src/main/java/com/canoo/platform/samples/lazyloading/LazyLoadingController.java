@@ -1,11 +1,8 @@
 package com.canoo.platform.samples.lazyloading;
 
 import com.canoo.platform.remoting.BeanManager;
-import com.canoo.platform.remoting.server.ClientSessionExecutor;
-import com.canoo.platform.remoting.server.DolphinAction;
-import com.canoo.platform.remoting.server.DolphinController;
-import com.canoo.platform.remoting.server.DolphinModel;
-import com.canoo.platform.remoting.server.RemotingContext;
+import com.canoo.platform.remoting.server.*;
+import com.canoo.platform.remoting.server.RemotingModel;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -22,7 +19,7 @@ import java.util.stream.IntStream;
 import static com.canoo.platform.samples.lazyloading.Constants.CONTROLLER_NAME;
 import static com.canoo.platform.samples.lazyloading.Constants.REFRESH_ACTION;
 
-@DolphinController(CONTROLLER_NAME)
+@RemotingController(CONTROLLER_NAME)
 public class LazyLoadingController {
 
     private final static ExecutorService taskExecutor = Executors.newCachedThreadPool();
@@ -33,7 +30,7 @@ public class LazyLoadingController {
 
     private final BeanManager beanManager;
 
-    @DolphinModel
+    @RemotingModel
     private LazyLoadingBean model;
 
     @Inject
@@ -47,7 +44,7 @@ public class LazyLoadingController {
         refresh();
     }
 
-    @DolphinAction(REFRESH_ACTION)
+    @RemotingAction(REFRESH_ACTION)
     public void refresh() {
         states.forEach(f -> f.cancel(true));
         states.clear();

@@ -50,7 +50,7 @@ public class RestClient extends Application {
             httpClient.request(endpoint, RequestMethod.POST).
                     withContent(city).
                     readObject(CityDetails.class).
-                    onDone(d -> showResult(d)).
+                    onDone(d -> showResult(d.getContent())).
                     onError(ex -> showError(city)).
                     execute();
         });

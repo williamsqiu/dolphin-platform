@@ -20,5 +20,5 @@ mainClassName = 'com.canoo.platform.samples.distribution.server.hazelcast.Hazelc
 
 dependencies {
   compile "org.springframework.boot:spring-boot-starter-web:$springBootVersion"
-  compile 'com.hazelcast:hazelcast:3.6.2'
+  compile "com.hazelcast:hazelcast:$hazelcastClientVersion"
 }

@@ -33,13 +33,13 @@ import static org.apiguardian.api.API.Status.MAINTAINED;
  * a developer only need to use the interface like it is already descriped in the {@link Property}
  * class.
  * Like the {@link Property} a {@link ObservableList} can be used in any Dolphin Platform model
- * (see {@link DolphinBean}).
+ * (see {@link RemotingBean}).
  * <p>
  * Example:
  * <p>
  * <blockquote>
  * <pre>
- *     {@literal @}DolphinBean
+ *     {@literal @}RemotingBean
  *     public class MyModel {
  *
  *         {@code private ObservableList<String> values;}

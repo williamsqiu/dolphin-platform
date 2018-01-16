@@ -26,7 +26,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import static org.apiguardian.api.API.Status.MAINTAINED;
 
 /**
- * Can be used in a dolphin controller (see {@link DolphinController}) to
+ * Can be used in a dolphin controller (see {@link RemotingController}) to
  * define and inject the parent controller. This can only be done if the controller
  * was created as a child of another controller (see client site API).
  *
@@ -34,7 +34,7 @@ import static org.apiguardian.api.API.Status.MAINTAINED;
  *
  *  @see PostChildCreated
  *  @see PreChildDestroyed
- *  @see DolphinController
+ *  @see RemotingController
  */
 @Documented
 @Retention(RUNTIME)
