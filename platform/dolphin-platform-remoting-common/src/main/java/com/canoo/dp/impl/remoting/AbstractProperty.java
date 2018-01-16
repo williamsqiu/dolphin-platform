@@ -22,6 +22,7 @@ import com.canoo.platform.remoting.Property;
 import org.apiguardian.api.API;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import static org.apiguardian.api.API.Status.INTERNAL;
@@ -78,6 +79,14 @@ public abstract class AbstractProperty<T> implements Property<T> {
 
     @Override
     public int hashCode() {
-        return super.hashCode();
+        return Objects.hash(get());
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        final AbstractProperty<?> that = (AbstractProperty<?>) o;
+        return Objects.equals(get(), that.get());
     }
 }
