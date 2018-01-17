@@ -1,4 +1,4 @@
-package com.canoo.dp.impl.platform.client.http;
+package com.canoo.dp.impl.platform.core.http;
 
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.core.http.HttpHeader;
@@ -7,15 +7,16 @@ import com.canoo.platform.core.http.RequestMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static com.canoo.dp.impl.platform.core.http.HttpHeaderConstants.CHARSET;
+import static com.canoo.dp.impl.platform.core.http.HttpHeaderConstants.CHARSET_HEADER;
+import static com.canoo.dp.impl.platform.core.http.HttpHeaderConstants.CONTENT_LENGHT_HEADER;
 import static com.canoo.platform.core.http.RequestMethod.GET;
 
 public class HttpClientConnection {
@@ -41,9 +42,23 @@ public class HttpClientConnection {
         connection.setUseCaches(false);
     }
 
+    public HttpClientConnection(final URI url, final RequestMethod method) throws IOException {
+        this(new DefaultHttpURLConnectionFactory(), url, method);
+    }
+
+    public void addRequestHeader(final String name, final String content) {
+        addRequestHeader(new HttpHeaderImpl(name, content));
+    }
+
     public void addRequestHeader(final HttpHeader headers) {
         Assert.requireNonNull(headers, "headers");
         connection.setRequestProperty(headers.getName(), headers.getContent());
+    }
+
+    public void writeRequestContent(final String content) throws IOException {
+        Assert.requireNonNull(content, "content");
+        writeRequestContent(content.getBytes(CHARSET));
+        addRequestHeader(CHARSET_HEADER, CHARSET);
     }
 
     public void writeRequestContent(final byte[] content) throws IOException {
@@ -53,9 +68,8 @@ public class HttpClientConnection {
                 LOG.warn("You are currently defining a request content for a HTTP GET call for endpoint '{}'", url);
             }
             setDoOutput(true);
-            try (final OutputStream w = connection.getOutputStream()) {
-                w.write(content);
-            }
+            addRequestHeader(CONTENT_LENGHT_HEADER, content.length + "");
+            ConnectionUtils.writeContent(connection, content);
         }
     }
 
@@ -64,35 +78,24 @@ public class HttpClientConnection {
     }
 
     public byte[] readResponseContent() throws IOException {
-        final InputStream errorstream = connection.getErrorStream();
+        return ConnectionUtils.readContent(connection);
+    }
 
-        if(errorstream == null) {
-            try (final InputStream inputStream = connection.getInputStream()) {
-                try (final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
-                    int read = inputStream.read();
-                    while (read != -1) {
-                        byteArrayOutputStream.write(read);
-                        read = inputStream.read();
-                    }
-                    return byteArrayOutputStream.toByteArray();
-                }
-            }
-        } else {
-            try (final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
-                int read = errorstream.read();
-                while (read != -1) {
-                    byteArrayOutputStream.write(read);
-                    read = errorstream.read();
-                }
-                return byteArrayOutputStream.toByteArray();
-            } finally {
-                errorstream.close();
-            }
-        }
+    public String readUTFResponseContent() throws IOException {
+        final String charSet = Optional.ofNullable(getResponseHeader(CHARSET_HEADER)).map(h -> h.getContent()).orElse(CHARSET);
+        return new String(readResponseContent(), charSet);
     }
 
     public String getResponseMessage() throws IOException {
         return connection.getResponseMessage();
+    }
+
+    public HttpHeader getResponseHeader(final String name) {
+        return getResponseHeaders().stream()
+                .filter(h -> h.getName() != null)
+                .filter(h -> h.getName().equals(name))
+                .findFirst()
+                .orElse(null);
     }
 
     public List<HttpHeader> getResponseHeaders() {

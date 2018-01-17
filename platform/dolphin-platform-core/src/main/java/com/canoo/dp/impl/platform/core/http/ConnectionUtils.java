@@ -27,15 +27,18 @@ public class ConnectionUtils {
 
     public static byte[] readContent(final HttpURLConnection connection) throws IOException {
         Assert.requireNonNull(connection, "connection");
-        final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        try(final InputStream is = connection.getInputStream()) {
-            int read = is.read();
-            while (read != -1) {
-                byteArrayOutputStream.write(read);
-                read = is.read();
+        final InputStream errorstream = connection.getErrorStream();
+        if(errorstream == null) {
+            try (final InputStream inputStream = connection.getInputStream()) {
+                return readContent(inputStream);
+            }
+        } else {
+            try {
+                return readContent(errorstream);
+            } finally {
+                errorstream.close();
             }
         }
-        return byteArrayOutputStream.toByteArray();
     }
 
     public static String readUTF8Content(final HttpURLConnection connection) throws IOException {

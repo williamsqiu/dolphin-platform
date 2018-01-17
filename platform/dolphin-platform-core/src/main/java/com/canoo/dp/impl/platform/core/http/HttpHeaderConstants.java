@@ -6,6 +6,8 @@ public interface HttpHeaderConstants {
 
     String CONTENT_TYPE_HEADER = "Content-Type";
 
+    String CHARSET_HEADER = "charset";
+
     String CONTENT_LENGHT_HEADER = "Content-Length";
 
     String ACCEPT_HEADER = "Accept";

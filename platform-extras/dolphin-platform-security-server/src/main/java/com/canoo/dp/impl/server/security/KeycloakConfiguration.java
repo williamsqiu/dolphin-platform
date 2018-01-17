@@ -30,6 +30,7 @@ public class KeycloakConfiguration implements Serializable {
 
     public final static String LOGIN_ENDPOINTS_PROPERTY_NAME = "security.loginEndpoint";
 
+    public final static String LOGIN_ENDPOINTS_PROPERTY_DEFAULT_VALUE = "/openid-connect";
 
     public final static String SECURE_ENDPOINTS_PROPERTY_DEFAULT_VALUE = "/dolphin";
 
@@ -56,7 +57,7 @@ public class KeycloakConfiguration implements Serializable {
         this.secureEndpoints.addAll(platformConfiguration.getListProperty(SECURE_ENDPOINTS_PROPERTY_NAME, Collections.emptyList()));
         this.securityActive = platformConfiguration.getBooleanProperty(SECURITY_ACTIVE_PROPERTY_NAME, false);
         this.loginEndpointActive = platformConfiguration.getBooleanProperty(LOGIN_ENDPOINTS_ACTIVE_PROPERTY_NAME, true);
-        this.loginEndpoint = platformConfiguration.getProperty(LOGIN_ENDPOINTS_PROPERTY_NAME, "/login");
+        this.loginEndpoint = platformConfiguration.getProperty(LOGIN_ENDPOINTS_PROPERTY_NAME, LOGIN_ENDPOINTS_PROPERTY_DEFAULT_VALUE);
 
     }
 

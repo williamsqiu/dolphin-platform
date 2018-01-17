@@ -1,7 +1,7 @@
 package com.canoo.dp.impl.security;
 
 import com.canoo.dp.impl.platform.core.Assert;
-import com.canoo.dp.impl.platform.core.http.DefaultHttpURLConnectionFactory;
+import com.canoo.dp.impl.platform.core.http.HttpClientConnection;
 import com.canoo.platform.client.PlatformClient;
 import com.canoo.platform.client.security.Security;
 import com.canoo.platform.core.DolphinRuntimeException;
@@ -11,19 +11,14 @@ import org.apiguardian.api.API;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
-import static com.canoo.dp.impl.platform.core.http.HttpHeaderConstants.CHARSET;
+import static com.canoo.dp.impl.platform.core.http.HttpStatus.SC_HTTP_UNAUTHORIZED;
 import static org.apiguardian.api.API.Status.INTERNAL;
 
 @API(since = "0.19.0", status = INTERNAL)
@@ -55,43 +50,16 @@ public class KeycloakSecurity implements Security {
 
     private void receiveTokenFromKeycloak(final String content) throws IOException, URISyntaxException {
         LOG.debug("receiving new token from keycloak server");
-        final byte[] rawContent = content.getBytes(CHARSET);
         final URI url = new URI(authEndpoint + "/auth/realms/" + realmName + "/protocol/openid-connect/token");
-        final HttpURLConnection connection = new DefaultHttpURLConnectionFactory().create(url);
-        connection.setRequestMethod(RequestMethod.POST.getRawName());
-        connection.setRequestProperty("charset", "UTF-8");
-        connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-        connection.setRequestProperty("Content-Length", rawContent.length + "");
-        connection.setDoOutput(true);
-        connection.setDoInput(true);
-
-        try {
-            final OutputStream w = connection.getOutputStream();
-            w.write(rawContent);
-            w.close();
-        } catch (IOException e) {
-            throw new DolphinRuntimeException("Looks like the security server is not reachable", e);
-        }
-
-        final int responseCode = connection.getResponseCode();
-        if(responseCode == 401) {
+        final HttpClientConnection clientConnection = new HttpClientConnection(url, RequestMethod.POST);
+        clientConnection.addRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        clientConnection.setDoOutput(true);
+        clientConnection.writeRequestContent(content);
+        final int responseCode = clientConnection.readResponseCode();
+        if(responseCode == SC_HTTP_UNAUTHORIZED) {
             throw new DolphinRuntimeException("Invalid login!");
         }
-
-        final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        try {
-            final InputStream is = connection.getInputStream();
-            int read = is.read();
-            while (read != -1) {
-                byteArrayOutputStream.write(read);
-                read = is.read();
-            }
-        } catch (FileNotFoundException e) {
-            throw new DolphinRuntimeException("Maybe the realm or application is not defined in the keycloak server", e);
-        }
-        final byte[] rawInput = byteArrayOutputStream.toByteArray();
-        final String input = new String(rawInput);
-
+        final String input = clientConnection.readUTFResponseContent();
         final Gson gson = PlatformClient.getService(Gson.class);
         final KeycloakOpenidConnectResult result = gson.fromJson(input, KeycloakOpenidConnectResult.class);
         connectResult = result;
