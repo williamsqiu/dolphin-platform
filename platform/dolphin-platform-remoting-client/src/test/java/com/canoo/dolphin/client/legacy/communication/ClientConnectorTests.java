@@ -340,7 +340,7 @@ public class ClientConnectorTests {
 
         @Override
         public void connect() {
-            connect(false);
+            connect();
         }
     }
 

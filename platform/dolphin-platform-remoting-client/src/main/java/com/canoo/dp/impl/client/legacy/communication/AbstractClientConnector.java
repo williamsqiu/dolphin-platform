@@ -106,15 +106,15 @@ public abstract class AbstractClientConnector {
         }
     }
 
-    private void doRequest(final boolean addLongPollCommand) throws InterruptedException, DolphinRemotingException {
-        releaseNeeded.set(addLongPollCommand);
+    private void doRequest() throws InterruptedException, DolphinRemotingException {
+        releaseNeeded.set(true);
         try {
             final List<CommandAndHandler> toProcess = commandBatcher.getWaitingBatches().getVal();
             final List<Command> commands = toProcess.stream()
                     .map(c -> c.getCommand())
                     .collect(Collectors.toList());
 
-            if (addLongPollCommand) {
+            if(useLongPolling.get()) {
                 commands.add(pushListener);
             }
 
@@ -139,10 +139,10 @@ public abstract class AbstractClientConnector {
     protected void commandProcessing() {
         try {
             //first request without long poll
-            doRequest(false);
+            doRequest();
 
             while (isConnected()) {
-                doRequest(useLongPolling.get());
+                doRequest();
             }
         } catch (Exception e) {
             handleError(e);
@@ -229,14 +229,13 @@ public abstract class AbstractClientConnector {
         }
     }
 
-    protected void connect(final boolean longPoll) {
+    public void connect() {
         connectionStateLock.lock();
         try {
             if (isConnected()) {
                 throw new IllegalStateException("already connected");
             }
             connectedFlag.set(true);
-            useLongPolling.set(longPoll);
             commandBatcher.clear();
             backgroundExecutor.execute(() -> commandProcessing());
             uiExecutor.execute(() -> connectionListener.forEach(l -> l.accept(true)));
@@ -244,10 +243,6 @@ public abstract class AbstractClientConnector {
         } finally {
             connectionStateLock.unlock();
         }
-    }
-
-    public void connect() {
-        connect(true);
     }
 
     public void disconnect() {
@@ -269,5 +264,9 @@ public abstract class AbstractClientConnector {
         Assert.requireNonNull(listener, "listener");
         connectionListener.add(listener);
         return () -> connectionListener.remove(listener);
+    }
+
+    public void startLongPolling() {
+        useLongPolling.set(true);
     }
 }

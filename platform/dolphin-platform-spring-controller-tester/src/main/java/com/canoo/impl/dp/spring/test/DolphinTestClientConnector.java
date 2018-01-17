@@ -49,11 +49,6 @@ public class DolphinTestClientConnector extends AbstractClientConnector {
     protected void commandProcessing() {}
 
     @Override
-    public void connect() {
-        connect(false);
-    }
-
-    @Override
     public void disconnect() {}
 
     @Override

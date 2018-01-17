@@ -1,4 +1,4 @@
-package com.canoo.platform.samples;
+package com.canoo.platform.samples.reconnect;
 
 import com.canoo.platform.core.DolphinRuntimeException;
 import com.canoo.platform.remoting.DolphinRemotingException;
@@ -9,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,8 +31,13 @@ public class ReconnectClient extends DolphinPlatformApplication {
 
     @Override
     protected void start(final Stage primaryStage, final ClientContext clientContext) throws Exception {
-        Button button = new Button("test");
-        primaryStage.setScene(new Scene(button));
+        final Button button = new Button("test");
+
+        final StatusView statusView = new StatusView(clientContext);
+
+        final HBox parent = new HBox(statusView.getRootNode(), button);
+
+        primaryStage.setScene(new Scene(parent));
         primaryStage.show();
     }
 

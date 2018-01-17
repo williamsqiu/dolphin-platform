@@ -182,7 +182,7 @@ public class ClientContextImpl implements ClientContext {
                     result.complete(v);
                 }
                 return v;
-            });
+            }).thenAccept(v -> clientConnector.startLongPolling());
         });
         return result;
     }
