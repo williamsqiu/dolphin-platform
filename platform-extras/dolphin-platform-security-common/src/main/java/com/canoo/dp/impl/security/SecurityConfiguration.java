@@ -15,5 +15,9 @@ public interface SecurityConfiguration {
 
     String APPLICATION_PROPERTY_NAME = "security.keycloak.app";
 
+    String DIRECT_CONNECTION_PROPERTY_NAME = "security.useDirectConnection";
+
+    boolean DIRECT_CONNECTION_PROPERTY_DEFAULT_VALUE = false;
+
     String APPLICATION_PROPERTY_DEFAULT_VALUE = "myApp";
 }

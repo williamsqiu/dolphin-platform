@@ -2,6 +2,7 @@ package com.canoo.dp.impl.security;
 
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.platform.core.http.HttpClientConnection;
+import com.canoo.platform.client.ClientConfiguration;
 import com.canoo.platform.client.PlatformClient;
 import com.canoo.platform.client.security.Security;
 import com.canoo.platform.core.DolphinRuntimeException;
@@ -19,6 +20,15 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
 import static com.canoo.dp.impl.platform.core.http.HttpStatus.SC_HTTP_UNAUTHORIZED;
+import static com.canoo.dp.impl.security.SecurityConfiguration.APPLICATION_PROPERTY_DEFAULT_VALUE;
+import static com.canoo.dp.impl.security.SecurityConfiguration.APPLICATION_PROPERTY_NAME;
+import static com.canoo.dp.impl.security.SecurityConfiguration.AUTH_ENDPOINT_PROPERTY_DEFAULT_VALUE;
+import static com.canoo.dp.impl.security.SecurityConfiguration.AUTH_ENDPOINT_PROPERTY_NAME;
+import static com.canoo.dp.impl.security.SecurityConfiguration.DIRECT_CONNECTION_PROPERTY_DEFAULT_VALUE;
+import static com.canoo.dp.impl.security.SecurityConfiguration.DIRECT_CONNECTION_PROPERTY_NAME;
+import static com.canoo.dp.impl.security.SecurityConfiguration.REALM_PROPERTY_DEFAULT_VALUE;
+import static com.canoo.dp.impl.security.SecurityConfiguration.REALM_PROPERTY_NAME;
+import static com.canoo.dp.impl.security.SecurityHttpHeader.REALM_NAME_HEADER;
 import static org.apiguardian.api.API.Status.INTERNAL;
 
 @API(since = "0.19.0", status = INTERNAL)
@@ -28,7 +38,6 @@ public class KeycloakSecurity implements Security {
 
     private static final Logger LOG = LoggerFactory.getLogger(KeycloakSecurity.class);
 
-
     private final String authEndpoint;
 
     private final String realmName;
@@ -37,21 +46,55 @@ public class KeycloakSecurity implements Security {
 
     private final ExecutorService executor;
 
+    private final boolean directConnect;
+
     private KeycloakOpenidConnectResult connectResult;
 
     private long tokenCreation;
 
-    public KeycloakSecurity(final String authEndpoint, final String realmName, final String appName, final ExecutorService executor) {
-        this.appName = Assert.requireNonBlank(appName, "appName");
-        this.authEndpoint = Assert.requireNonBlank(authEndpoint, "authEndpoint");
-        this.realmName = Assert.requireNonBlank(realmName, "realmName");
-        this.executor = Assert.requireNonNull(executor, "executor");
+    public KeycloakSecurity(final ClientConfiguration configuration) {
+        Assert.requireNonNull(configuration, "configuration");
+
+        this.appName =configuration.getProperty(APPLICATION_PROPERTY_NAME, APPLICATION_PROPERTY_DEFAULT_VALUE);
+        Assert.requireNonBlank(appName, "appName");
+
+        this.authEndpoint = configuration.getProperty(AUTH_ENDPOINT_PROPERTY_NAME, AUTH_ENDPOINT_PROPERTY_DEFAULT_VALUE);
+        Assert.requireNonBlank(authEndpoint, "authEndpoint");
+
+        this.realmName = configuration.getProperty(REALM_PROPERTY_NAME, REALM_PROPERTY_DEFAULT_VALUE);
+        Assert.requireNonBlank(realmName, "realmName");
+
+        this.directConnect = configuration.getBooleanProperty(DIRECT_CONNECTION_PROPERTY_NAME, DIRECT_CONNECTION_PROPERTY_DEFAULT_VALUE);
+
+        this.executor = configuration.getBackgroundExecutor();
+        Assert.requireNonNull(executor, "executor");
+    }
+
+    private HttpClientConnection createDirectConnection() throws URISyntaxException, IOException {
+        final URI url = new URI(authEndpoint + "/auth/realms/" + realmName + "/protocol/openid-connect/token");
+        final HttpClientConnection clientConnection = new HttpClientConnection(url, RequestMethod.POST);
+        return clientConnection;
+    }
+
+    private HttpClientConnection createServerProxyConnection() throws URISyntaxException, IOException {
+        final URI url = new URI(authEndpoint);
+        final HttpClientConnection clientConnection = new HttpClientConnection(url, RequestMethod.POST);
+        clientConnection.addRequestHeader(REALM_NAME_HEADER, realmName);
+        return clientConnection;
+    }
+
+    private HttpClientConnection createConnection() throws IOException, URISyntaxException {
+        if(directConnect) {
+            return createDirectConnection();
+        } else {
+            return createServerProxyConnection();
+        }
     }
 
     private void receiveTokenFromKeycloak(final String content) throws IOException, URISyntaxException {
+        Assert.requireNonNull(content, "content");
         LOG.debug("receiving new token from keycloak server");
-        final URI url = new URI(authEndpoint + "/auth/realms/" + realmName + "/protocol/openid-connect/token");
-        final HttpClientConnection clientConnection = new HttpClientConnection(url, RequestMethod.POST);
+        final HttpClientConnection clientConnection = createConnection();
         clientConnection.addRequestHeader("Content-Type", "application/x-www-form-urlencoded");
         clientConnection.setDoOutput(true);
         clientConnection.writeRequestContent(content);
