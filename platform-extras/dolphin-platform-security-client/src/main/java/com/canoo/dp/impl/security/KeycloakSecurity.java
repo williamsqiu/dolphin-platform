@@ -79,7 +79,9 @@ public class KeycloakSecurity implements Security {
     private HttpClientConnection createServerProxyConnection() throws URISyntaxException, IOException {
         final URI url = new URI(authEndpoint);
         final HttpClientConnection clientConnection = new HttpClientConnection(url, RequestMethod.POST);
-        clientConnection.addRequestHeader(REALM_NAME_HEADER, realmName);
+        if(realmName != null && !realmName.isEmpty()) {
+            clientConnection.addRequestHeader(REALM_NAME_HEADER, realmName);
+        }
         return clientConnection;
     }
 
@@ -121,9 +123,13 @@ public class KeycloakSecurity implements Security {
     }
 
     public Future<Void> refreshToken() {
+        if(connectResult == null) {
+            throw new IllegalStateException("Can not refresh token without valid login");
+        }
+        final String refreshToken = connectResult.getRefresh_token();
         return (Future<Void>) executor.submit(() -> {
                 try {
-                    receiveTokenFromKeycloak("grant_type=refresh_token&refresh_token=" + connectResult.getRefresh_token() + "&client_id=" + appName);
+                    receiveTokenFromKeycloak("grant_type=refresh_token&refresh_token=" + refreshToken + "&client_id=" + appName);
                 } catch (IOException | URISyntaxException e) {
                     throw new DolphinRuntimeException("Can not refresh security token!", e);
                 }
