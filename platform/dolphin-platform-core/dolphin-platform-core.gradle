@@ -19,3 +19,13 @@ dependencies {
     compile "com.google.guava:guava:$guavaVersion"
     compile "org.apiguardian:apiguardian-api:$apiguardianVersion"
 }
+
+processResources {
+    filesMatching(infoFilePatterns) {
+        expand(
+                'version' : project.version,
+                'buildDate' : buildDate,
+                'buildTime' : buildTime
+        )
+    }
+}
