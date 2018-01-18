@@ -28,3 +28,6 @@ license {
     exclude '**/META-INF/services/*'
     exclude '**/banner.txt'
 }
+
+// force license updates before compilation
+classes.dependsOn licenseFormat
