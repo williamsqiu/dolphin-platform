@@ -28,6 +28,8 @@ import static org.hamcrest.Matchers.notNullValue;
 
 public class HttpClientTests {
 
+    //Maybe we can use http://wiremock.org/docs/getting-started/
+
     private final int freePort;
 
     public HttpClientTests() {
