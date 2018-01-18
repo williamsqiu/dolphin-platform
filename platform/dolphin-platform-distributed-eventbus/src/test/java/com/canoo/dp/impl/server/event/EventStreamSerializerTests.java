@@ -10,6 +10,7 @@ import com.google.gson.JsonParser;
 import com.hazelcast.nio.ObjectDataInput;
 import com.hazelcast.nio.ObjectDataOutput;
 import com.hazelcast.nio.serialization.Data;
+import com.hazelcast.version.Version;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -172,8 +173,8 @@ public class EventStreamSerializerTests {
         final Iterator<JsonElement> elementIterator = metadataArray.iterator();
         while (elementIterator.hasNext()) {
             final JsonObject metadata = elementIterator.next().getAsJsonObject();
-            if(metadata.getAsJsonPrimitive(METADATA_KEY_PARAM).getAsString().equals(key)) {
-                if(metadata.get(METADATA_VALUE_PARAM).isJsonNull()) {
+            if (metadata.getAsJsonPrimitive(METADATA_KEY_PARAM).getAsString().equals(key)) {
+                if (metadata.get(METADATA_VALUE_PARAM).isJsonNull()) {
                     return null;
                 } else {
                     return Base64Utils.fromBase64(metadata.getAsJsonPrimitive(METADATA_VALUE_PARAM).getAsString());
@@ -210,7 +211,7 @@ public class EventStreamSerializerTests {
 
         Assert.assertTrue(root.getAsJsonObject().has(DATA_PARAM));
         Assert.assertTrue(root.getAsJsonObject().get(DATA_PARAM).isJsonPrimitive() || root.getAsJsonObject().get(DATA_PARAM).isJsonNull());
-        if(root.getAsJsonObject().get(DATA_PARAM).isJsonPrimitive()) {
+        if (root.getAsJsonObject().get(DATA_PARAM).isJsonPrimitive()) {
             Assert.assertTrue(root.getAsJsonObject().getAsJsonPrimitive(DATA_PARAM).isString());
         }
 
@@ -230,7 +231,7 @@ public class EventStreamSerializerTests {
         Assert.assertTrue(context.has(METADATA_PARAM));
         Assert.assertTrue(context.get(METADATA_PARAM).isJsonArray());
         final JsonArray metadataArray = context.getAsJsonArray(METADATA_PARAM);
-        if(metadataArray.size() > 0) {
+        if (metadataArray.size() > 0) {
             final Iterator<JsonElement> elementIterator = metadataArray.iterator();
             while (elementIterator.hasNext()) {
                 JsonElement metadataElem = elementIterator.next();
@@ -243,7 +244,7 @@ public class EventStreamSerializerTests {
                 Assert.assertTrue(metadata.has(METADATA_VALUE_PARAM));
                 Assert.assertTrue(metadata.get(METADATA_VALUE_PARAM).isJsonPrimitive() ||
                         metadata.get(METADATA_VALUE_PARAM).isJsonNull());
-                if(metadata.get(METADATA_VALUE_PARAM).isJsonPrimitive()) {
+                if (metadata.get(METADATA_VALUE_PARAM).isJsonPrimitive()) {
                     Assert.assertTrue(metadata.getAsJsonPrimitive(METADATA_VALUE_PARAM).isString());
                 }
             }
@@ -305,6 +306,16 @@ public class EventStreamSerializerTests {
 
         @Override
         public <T> T readObject() throws IOException {
+            throw new RuntimeException("Not needed for test");
+        }
+
+        @Override
+        public <T> T readDataAsObject() throws IOException {
+            throw new RuntimeException("Not needed for test");
+        }
+
+        @Override
+        public <T> T readObject(final Class aClass) throws IOException {
             throw new RuntimeException("Not needed for test");
         }
 
@@ -397,11 +408,17 @@ public class EventStreamSerializerTests {
         public String readUTF() throws IOException {
             return new GsonBuilder().serializeNulls().create().toJson(jsonElement);
         }
+
+        @Override
+        public Version getVersion() {
+            return Version.UNKNOWN;
+        }
     }
 
     private class ByteObjectDataOutput implements ObjectDataOutput {
 
         private final StringBuffer content = new StringBuffer();
+
 
         @Override
         public void writeByteArray(byte[] bytes) throws IOException {
@@ -461,6 +478,11 @@ public class EventStreamSerializerTests {
         @Override
         public byte[] toByteArray() {
             return content.toString().getBytes();
+        }
+
+        @Override
+        public byte[] toByteArray(final int padding) {
+            return new byte[padding];
         }
 
         @Override
@@ -536,6 +558,11 @@ public class EventStreamSerializerTests {
         @Override
         public void writeUTF(String s) throws IOException {
             content.append(s);
+        }
+
+        @Override
+        public Version getVersion() {
+            return Version.UNKNOWN;
         }
     }
 
