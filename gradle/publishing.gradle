@@ -16,7 +16,6 @@
 
 apply plugin: 'maven-publish'
 apply plugin: 'com.jfrog.bintray'
-apply plugin: 'net.nemerosa.versioning'
 apply plugin: 'com.bmuschko.nexus'
 
 def pomConfig = {
@@ -100,7 +99,7 @@ jar {
             'Created-By': System.properties['java.version'] + " (" + System.properties['java.vendor'] + " " + System.properties['java.vm.version'] + ")",
             'Build-Date': project.buildDate,
             'Build-Time': project.buildTime,
-            'Build-Revision': versioning.info.commit,
+            'Build-Revision': project.buildRevision,
             'Specification-Title': project.name,
             'Specification-Version': project.version,
             'Implementation-Title': project.name,

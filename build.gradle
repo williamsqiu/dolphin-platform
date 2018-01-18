@@ -40,12 +40,16 @@ if (project.hasProperty('sonarToken')) {
     System.setProperty("sonar.login", project.getProperty("sonarToken"))
 }
 
+apply plugin: 'net.nemerosa.versioning'
+
 Date buildTimeAndDate = new Date()
 ext {
     buildDate = new SimpleDateFormat('yyyy-MM-dd').format(buildTimeAndDate)
     buildTime = new SimpleDateFormat('HH:mm:ss.SSSZ').format(buildTimeAndDate)
+    buildRevision = versioning.info.commit
     projectsWithCoverage = []
     jacocoMergeExecFile = "${buildDir}/reports/jacoco/test/jacocoTestReport.exec"
+    infoFilePatterns = '**/build.properties'
 }
 
 
@@ -86,6 +90,16 @@ subprojects { subprj ->
     }
 
     test.useTestNG()
+
+    processResources {
+        filesMatching(infoFilePatterns) {
+            expand(
+                    'version' : project.version,
+                    'buildDate' : buildDate,
+                    'buildTime' : buildTime
+            )
+        }
+    }
 
     if (!subprj.publishJars.toBoolean()) {
         sonarqube {
