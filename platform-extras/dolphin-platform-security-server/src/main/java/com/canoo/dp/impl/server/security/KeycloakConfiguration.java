@@ -26,15 +26,26 @@ public class KeycloakConfiguration implements Serializable {
 
     public final static String SECURE_ENDPOINTS_PROPERTY_NAME = "security.endpoints";
 
+    public final static String LOGIN_ENDPOINTS_ACTIVE_PROPERTY_NAME = "security.loginEndpoint.active";
+
+    public final static String LOGIN_ENDPOINTS_PROPERTY_NAME = "security.loginEndpoint";
+
+    public final static String LOGIN_ENDPOINTS_PROPERTY_DEFAULT_VALUE = "/openid-connect";
+
     public final static String SECURE_ENDPOINTS_PROPERTY_DEFAULT_VALUE = "/dolphin";
 
     private final String realmName;
 
     private final boolean securityActive;
 
+    private final boolean loginEndpointActive;
+
+
     private final String applicationName;
 
     private final String authEndpoint;
+
+    private final String loginEndpoint;
 
     private final List<String> secureEndpoints = new ArrayList<>();
 
@@ -45,6 +56,9 @@ public class KeycloakConfiguration implements Serializable {
         this.authEndpoint = platformConfiguration.getProperty(AUTH_ENDPOINT_PROPERTY_NAME, AUTH_ENDPOINT_PROPERTY_DEFAULT_VALUE) + "/auth";
         this.secureEndpoints.addAll(platformConfiguration.getListProperty(SECURE_ENDPOINTS_PROPERTY_NAME, Collections.emptyList()));
         this.securityActive = platformConfiguration.getBooleanProperty(SECURITY_ACTIVE_PROPERTY_NAME, false);
+        this.loginEndpointActive = platformConfiguration.getBooleanProperty(LOGIN_ENDPOINTS_ACTIVE_PROPERTY_NAME, true);
+        this.loginEndpoint = platformConfiguration.getProperty(LOGIN_ENDPOINTS_PROPERTY_NAME, LOGIN_ENDPOINTS_PROPERTY_DEFAULT_VALUE);
+
     }
 
     public String getRealmName() {
@@ -75,5 +89,13 @@ public class KeycloakConfiguration implements Serializable {
 
     public boolean isSecurityActive() {
         return securityActive;
+    }
+
+    public boolean isLoginEndpointActive() {
+        return loginEndpointActive;
+    }
+
+    public String getLoginEndpoint() {
+        return loginEndpoint;
     }
 }

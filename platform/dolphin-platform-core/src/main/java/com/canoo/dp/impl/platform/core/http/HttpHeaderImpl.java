@@ -1,4 +1,4 @@
-package com.canoo.dp.impl.platform.client.http;
+package com.canoo.dp.impl.platform.core.http;
 
 import com.canoo.platform.core.http.HttpHeader;
 
@@ -22,5 +22,10 @@ public class HttpHeaderImpl implements HttpHeader {
     @Override
     public String getContent() {
         return content;
+    }
+
+    @Override
+    public String toString() {
+        return name + ":" + content;
     }
 }

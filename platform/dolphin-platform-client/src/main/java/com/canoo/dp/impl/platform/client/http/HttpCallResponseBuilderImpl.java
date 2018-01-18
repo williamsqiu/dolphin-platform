@@ -1,9 +1,10 @@
 package com.canoo.dp.impl.platform.client.http;
 
 import com.canoo.dp.impl.platform.core.Assert;
+import com.canoo.dp.impl.platform.core.http.HttpClientConnection;
+import com.canoo.dp.impl.platform.core.http.HttpHeaderImpl;
 import com.canoo.platform.client.ClientConfiguration;
 import com.canoo.platform.core.DolphinRuntimeException;
-import com.canoo.platform.core.functional.ExecutablePromise;
 import com.canoo.platform.core.functional.Promise;
 import com.canoo.platform.core.http.ByteArrayProvider;
 import com.canoo.platform.core.http.ConnectionException;
