@@ -22,18 +22,15 @@ buildscript {
     }
 
     dependencies {
-        classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.6.3'
+        classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.8.2'
         classpath 'nl.javadude.gradle.plugins:license-gradle-plugin:0.11.0'
-        classpath 'org.kordamp.gradle:stats-gradle-plugin:0.2.0'
-        classpath 'com.github.ben-manes:gradle-versions-plugin:0.13.0'
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.1'
-        classpath 'net.nemerosa:versioning:2.4.0'
+        classpath 'org.kordamp.gradle:stats-gradle-plugin:0.2.2'
+        classpath 'com.github.ben-manes:gradle-versions-plugin:0.17.0'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.0'
+        classpath 'net.nemerosa:versioning:2.6.1'
         classpath 'com.bmuschko:gradle-nexus-plugin:2.3.1'
+        classpath 'org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.6.1'
     }
-}
-
-plugins {
-    id "org.sonarqube" version "2.2"
 }
 
 if (project.hasProperty('sonarToken')) {
@@ -41,6 +38,9 @@ if (project.hasProperty('sonarToken')) {
 }
 
 apply plugin: 'net.nemerosa.versioning'
+apply plugin: 'org.sonarqube'
+apply plugin: 'jacoco'
+apply plugin: 'com.github.kt3k.coveralls'
 
 Date buildTimeAndDate = new Date()
 ext {
@@ -51,7 +51,6 @@ ext {
     jacocoMergeExecFile = "${buildDir}/reports/jacoco/test/jacocoTestReport.exec"
     infoFilePatterns = '**/build.properties'
 }
-
 
 allprojects {
     apply plugin: 'base'
@@ -66,9 +65,6 @@ allprojects {
         options.addStringOption('Xdoclint:none', '-quiet')
     }
 }
-
-apply plugin: 'jacoco'
-apply plugin: 'com.github.kt3k.coveralls'
 
 jacoco {
     toolVersion = jacocoVersion
@@ -209,7 +205,7 @@ task jacocoRootMergeReport(dependsOn: jacocoRootMerge, type: JacocoReport) {
         html.enabled = true
         xml.enabled = true
         csv.enabled = false
-        html.destination = "${buildDir}/reports/jacoco/test/html"
-        xml.destination = "${buildDir}/reports/jacoco/test/jacocoTestReport.xml"
+        html.destination = file("${buildDir}/reports/jacoco/test/html")
+        xml.destination = file("${buildDir}/reports/jacoco/test/jacocoTestReport.xml")
     }
 }
