@@ -23,4 +23,6 @@ public interface HttpHeaderConstants {
     String TEXT_MIME_TYPE = "application/txt;charset=utf-8";
 
     String RAW_MIME_TYPE = "application/raw";
+
+    String FORM_MIME_TYPE = "application/x-www-form-urlencoded";
 }

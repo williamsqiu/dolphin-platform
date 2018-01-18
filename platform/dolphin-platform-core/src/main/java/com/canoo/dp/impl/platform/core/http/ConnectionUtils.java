@@ -16,6 +16,7 @@ public class ConnectionUtils {
     private ConnectionUtils() {}
 
     public static byte[] readContent(final InputStream inputStream) throws IOException {
+        Assert.requireNonNull(inputStream, "inputStream");
         final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         int read = inputStream.read();
             while (read != -1) {

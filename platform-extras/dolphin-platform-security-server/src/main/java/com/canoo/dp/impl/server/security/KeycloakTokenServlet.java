@@ -43,7 +43,7 @@ public class KeycloakTokenServlet extends HttpServlet {
             }
             final byte[] responseContent = clientConnection.readResponseContent();
             ConnectionUtils.writeContent(resp.getOutputStream(), responseContent);
-        } catch (Exception e) {
+        } catch (final Exception e) {
             resp.sendError(SC_HTTP_UNAUTHORIZED, "Can not authorize");
         }
     }

@@ -19,6 +19,8 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
+import static com.canoo.dp.impl.platform.core.http.HttpHeaderConstants.CONTENT_TYPE_HEADER;
+import static com.canoo.dp.impl.platform.core.http.HttpHeaderConstants.FORM_MIME_TYPE;
 import static com.canoo.dp.impl.platform.core.http.HttpStatus.SC_HTTP_UNAUTHORIZED;
 import static com.canoo.dp.impl.security.SecurityConfiguration.APPLICATION_PROPERTY_DEFAULT_VALUE;
 import static com.canoo.dp.impl.security.SecurityConfiguration.APPLICATION_PROPERTY_NAME;
@@ -55,7 +57,7 @@ public class KeycloakSecurity implements Security {
     public KeycloakSecurity(final ClientConfiguration configuration) {
         Assert.requireNonNull(configuration, "configuration");
 
-        this.appName =configuration.getProperty(APPLICATION_PROPERTY_NAME, APPLICATION_PROPERTY_DEFAULT_VALUE);
+        this.appName = configuration.getProperty(APPLICATION_PROPERTY_NAME, APPLICATION_PROPERTY_DEFAULT_VALUE);
         Assert.requireNonBlank(appName, "appName");
 
         this.authEndpoint = configuration.getProperty(AUTH_ENDPOINT_PROPERTY_NAME, AUTH_ENDPOINT_PROPERTY_DEFAULT_VALUE);
@@ -97,7 +99,7 @@ public class KeycloakSecurity implements Security {
         Assert.requireNonNull(content, "content");
         LOG.debug("receiving new token from keycloak server");
         final HttpClientConnection clientConnection = createConnection();
-        clientConnection.addRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        clientConnection.addRequestHeader(CONTENT_TYPE_HEADER, FORM_MIME_TYPE);
         clientConnection.setDoOutput(true);
         clientConnection.writeRequestContent(content);
         final int responseCode = clientConnection.readResponseCode();
