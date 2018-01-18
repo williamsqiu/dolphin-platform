@@ -1,8 +1,11 @@
-buildscript {
-    repositories {
-        jcenter()
-    }
-}
+ext.depProjects = [
+    ':dolphin-platform-core',
+    ':dolphin-platform-remoting-common',
+    ':dolphin-platform-client',
+    ':dolphin-platform-remoting-client'
+]
+
+apply from: rootProject.file('gradle/code-coverage.gradle')
 
 dependencies {
     testCompile project(':dolphin-platform-remoting-client')
@@ -34,7 +37,6 @@ task dockerComposeDown(type: Exec) {
 
 task dockerComposeUp(type: Exec) {
     commandLine "docker-compose", "up", "-d", "--build", "--force-recreate"
-
 }
 dockerComposeUp.dependsOn(copyWar)
 test.dependsOn dockerComposeUp

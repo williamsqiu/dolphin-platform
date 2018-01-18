@@ -48,7 +48,11 @@ ext {
     buildTime = new SimpleDateFormat('HH:mm:ss.SSSZ').format(buildTimeAndDate)
     buildRevision = versioning.info.commit
     projectsWithCoverage = []
-    jacocoMergeExecFile = "${buildDir}/reports/jacoco/test/jacocoTestReport.exec"
+    baseJaCocoDir = "${buildDir}/reports/jacoco/test/"
+    jacocoMergeExecFile = "${baseJaCocoDir}jacocoTestReport.exec"
+    jacocoMergeReportHTMLFile = "${baseJaCocoDir}/html/"
+    jacocoMergeReportXMLFile = "${baseJaCocoDir}/jacocoTestReport.xml"
+    depProjects = []
     infoFilePatterns = '**/build.properties'
 }
 
@@ -59,6 +63,7 @@ allprojects {
 
     repositories {
         jcenter()
+        mavenLocal()
     }
 
     tasks.withType(Javadoc) {
@@ -80,22 +85,7 @@ subprojects { subprj ->
         targetCompatibility = subprj.targetCompatibility
     }
 
-    repositories {
-        mavenLocal()
-        jcenter()
-    }
-
     test.useTestNG()
-
-    processResources {
-        filesMatching(infoFilePatterns) {
-            expand(
-                    'version' : project.version,
-                    'buildDate' : buildDate,
-                    'buildTime' : buildTime
-            )
-        }
-    }
 
     if (!subprj.publishJars.toBoolean()) {
         sonarqube {
@@ -103,12 +93,9 @@ subprojects { subprj ->
                 skipProject = true
             }
         }
-    }
-
-    if (subprj.publishJars.toBoolean()) {
+    } else {
         subprj.apply from: rootProject.file('gradle/publishing.gradle')
         subprj.apply from: rootProject.file('gradle/code-coverage.gradle')
-        projectsWithCoverage << subprj
 
         sonarqube {
             sonarqube {
@@ -198,14 +185,18 @@ task jacocoRootMerge(type: org.gradle.testing.jacoco.tasks.JacocoMerge) {
 }
 
 task jacocoRootMergeReport(dependsOn: jacocoRootMerge, type: JacocoReport) {
-    executionData files(projectsWithCoverage.jacocoTestReport.executionData)
-    sourceDirectories = files(projectsWithCoverage.sourceSets.main.allSource.srcDirs)
+    group = 'Reporting'
+    description = 'Aggregate Jacoco coverage reports.'
+
+    additionalSourceDirs = files(projectsWithCoverage.sourceSets.main.allSource.srcDirs)
+    sourceDirectories = files(projectsWithCoverage .sourceSets.main.allSource.srcDirs)
     classDirectories = files(projectsWithCoverage.sourceSets.main.output)
+    executionData = files(jacocoRootMerge.destinationFile)
+
     reports {
         html.enabled = true
         xml.enabled = true
-        csv.enabled = false
-        html.destination = file("${buildDir}/reports/jacoco/test/html")
-        xml.destination = file("${buildDir}/reports/jacoco/test/jacocoTestReport.xml")
+        html.destination = file(jacocoMergeReportHTMLFile)
+        xml.destination = file(jacocoMergeReportXMLFile)
     }
 }
