@@ -75,7 +75,7 @@ Configuration<?> validationConf = Validation.byDefaultProvider().configure();
 
 Validator validator = validationConf.buildValidatorFactory().getValidator();
 
-Set<ConstraintViolation<TestBean>> violations = validator.validate(remotingModel);
+Set<ConstraintViolation<TestBean>> violations = validator.validate(dolphinModel);
 if(!violations.isEmpty()) {
     //Handle violations
 }
