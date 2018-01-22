@@ -234,7 +234,7 @@ public class EventStreamSerializerTests {
         if (metadataArray.size() > 0) {
             final Iterator<JsonElement> elementIterator = metadataArray.iterator();
             while (elementIterator.hasNext()) {
-                JsonElement metadataElem = elementIterator.next();
+                final JsonElement metadataElem = elementIterator.next();
                 Assert.assertTrue(metadataElem.isJsonObject());
                 final JsonObject metadata = metadataElem.getAsJsonObject();
                 Assert.assertTrue(metadata.has(METADATA_KEY_PARAM));
@@ -421,57 +421,57 @@ public class EventStreamSerializerTests {
 
 
         @Override
-        public void writeByteArray(byte[] bytes) throws IOException {
+        public void writeByteArray(final byte[] bytes) throws IOException {
             throw new RuntimeException("Not needed for test");
         }
 
         @Override
-        public void writeBooleanArray(boolean[] booleans) throws IOException {
+        public void writeBooleanArray(final boolean[] booleans) throws IOException {
             throw new RuntimeException("Not needed for test");
         }
 
         @Override
-        public void writeCharArray(char[] chars) throws IOException {
+        public void writeCharArray(final char[] chars) throws IOException {
             throw new RuntimeException("Not needed for test");
         }
 
         @Override
-        public void writeIntArray(int[] ints) throws IOException {
+        public void writeIntArray(final int[] ints) throws IOException {
             throw new RuntimeException("Not needed for test");
         }
 
         @Override
-        public void writeLongArray(long[] longs) throws IOException {
+        public void writeLongArray(final long[] longs) throws IOException {
             throw new RuntimeException("Not needed for test");
         }
 
         @Override
-        public void writeDoubleArray(double[] values) throws IOException {
+        public void writeDoubleArray(final double[] values) throws IOException {
             throw new RuntimeException("Not needed for test");
         }
 
         @Override
-        public void writeFloatArray(float[] values) throws IOException {
+        public void writeFloatArray(final float[] values) throws IOException {
             throw new RuntimeException("Not needed for test");
         }
 
         @Override
-        public void writeShortArray(short[] values) throws IOException {
+        public void writeShortArray(final short[] values) throws IOException {
             throw new RuntimeException("Not needed for test");
         }
 
         @Override
-        public void writeUTFArray(String[] values) throws IOException {
+        public void writeUTFArray(final String[] values) throws IOException {
             throw new RuntimeException("Not needed for test");
         }
 
         @Override
-        public void writeObject(Object object) throws IOException {
+        public void writeObject(final Object object) throws IOException {
             throw new RuntimeException("Not needed for test");
         }
 
         @Override
-        public void writeData(Data data) throws IOException {
+        public void writeData(final Data data) throws IOException {
             throw new RuntimeException("Not needed for test");
         }
 
@@ -491,72 +491,72 @@ public class EventStreamSerializerTests {
         }
 
         @Override
-        public void write(int b) throws IOException {
+        public void write(final int b) throws IOException {
             throw new RuntimeException("Not needed for test");
         }
 
         @Override
-        public void write(byte[] b) throws IOException {
+        public void write(final byte[] b) throws IOException {
             throw new RuntimeException("Not needed for test");
         }
 
         @Override
-        public void write(byte[] b, int off, int len) throws IOException {
+        public void write(final byte[] b, final int off, final int len) throws IOException {
             throw new RuntimeException("Not needed for test");
         }
 
         @Override
-        public void writeBoolean(boolean v) throws IOException {
+        public void writeBoolean(final boolean v) throws IOException {
             throw new RuntimeException("Not needed for test");
         }
 
         @Override
-        public void writeByte(int v) throws IOException {
+        public void writeByte(final int v) throws IOException {
             throw new RuntimeException("Not needed for test");
         }
 
         @Override
-        public void writeShort(int v) throws IOException {
+        public void writeShort(final int v) throws IOException {
             throw new RuntimeException("Not needed for test");
         }
 
         @Override
-        public void writeChar(int v) throws IOException {
+        public void writeChar(final int v) throws IOException {
             throw new RuntimeException("Not needed for test");
         }
 
         @Override
-        public void writeInt(int v) throws IOException {
+        public void writeInt(final int v) throws IOException {
             throw new RuntimeException("Not needed for test");
         }
 
         @Override
-        public void writeLong(long v) throws IOException {
+        public void writeLong(final long v) throws IOException {
             throw new RuntimeException("Not needed for test");
         }
 
         @Override
-        public void writeFloat(float v) throws IOException {
+        public void writeFloat(final float v) throws IOException {
             throw new RuntimeException("Not needed for test");
         }
 
         @Override
-        public void writeDouble(double v) throws IOException {
+        public void writeDouble(final double v) throws IOException {
             throw new RuntimeException("Not needed for test");
         }
 
         @Override
-        public void writeBytes(String s) throws IOException {
+        public void writeBytes(final String s) throws IOException {
             throw new RuntimeException("Not needed for test");
         }
 
         @Override
-        public void writeChars(String s) throws IOException {
+        public void writeChars(final String s) throws IOException {
             throw new RuntimeException("Not needed for test");
         }
 
         @Override
-        public void writeUTF(String s) throws IOException {
+        public void writeUTF(final String s) throws IOException {
             content.append(s);
         }
 
