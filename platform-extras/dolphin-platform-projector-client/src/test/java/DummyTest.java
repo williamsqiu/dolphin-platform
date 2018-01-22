@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2016 Canoo Engineering AG.
+ * Copyright 2015-2016 Canoo Engineering AG.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import org.testng.annotations.Test;
 
-dependencies {
-    compile project(':dolphin-platform-remoting-common')
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+
+/**
+ * Until this module do not contain any "real" tests we need to add a dummy test for the build
+ */
+public class DummyTest {
+
+    @Test
+    public void testDummy() {
+        assertThat(true, is(true));
+    }
 }

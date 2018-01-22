@@ -15,5 +15,6 @@
  */
 
 dependencies {
-    compile project(':dolphin-platform-remoting-common')
+    compile project(':dolphin-platform-remoting-client-javafx')
+    compile project(':dolphin-platform-projector-common')
 }

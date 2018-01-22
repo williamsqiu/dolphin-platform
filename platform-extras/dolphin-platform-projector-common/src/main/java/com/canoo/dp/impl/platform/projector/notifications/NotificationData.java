@@ -2,7 +2,9 @@ package com.canoo.dp.impl.platform.projector.notifications;
 
 import com.canoo.dp.impl.platform.projector.message.MessageType;
 
-public class NotificationData {
+import java.io.Serializable;
+
+public class NotificationData implements Serializable{
 
     private String title;
 
