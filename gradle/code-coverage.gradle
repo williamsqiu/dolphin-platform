@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2016 Canoo Engineering AG.
+ * Copyright 2015-2018 Canoo Engineering AG.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,14 +21,27 @@ jacoco {
 }
 
 jacocoTestReport {
-    group = 'Reporting'
-    description = 'Generate Jacoco coverage reports after running tests.'
-    additionalSourceDirs = project.files(sourceSets.main.allSource.srcDirs)
-    sourceDirectories = project.files(sourceSets.main.allSource.srcDirs)
-    classDirectories =  project.files(sourceSets.main.output)
+    group = "Reporting"
+    description = "Generate Jacoco coverage reports after running tests."
+
+    List cd = []
+    Set csd = [] as Set
+    project.depProjects.each { String projectName ->
+        cd.addAll project(projectName).sourceSets.main.output.classesDirs*.path
+        csd << project(projectName).sourceSets.main.allSource.srcDirs
+    }
+    cd.addAll sourceSets.main.output.classesDirs*.path
+    csd << sourceSets.main.allSource.srcDirs
+
+    additionalSourceDirs = project.files(csd)
+    sourceDirectories = project.files(csd)
+    classDirectories =  project.files(cd)
+
     reports {
         xml.enabled = true
         csv.enabled = false
         html.enabled = true
     }
 }
+
+projectsWithCoverage << project
