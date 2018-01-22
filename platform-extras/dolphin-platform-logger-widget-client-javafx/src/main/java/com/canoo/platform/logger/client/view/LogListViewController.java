@@ -1,5 +1,6 @@
 package com.canoo.platform.logger.client.view;
 
+import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.client.ClientConfiguration;
 import com.canoo.platform.client.PlatformClient;
 import com.canoo.platform.logger.client.widgets.LogListCell;
@@ -19,7 +20,7 @@ public class LogListViewController extends AbstractViewController<LogListBean> {
 
     private final ListView<LogMessage> listView;
 
-    public LogListViewController(ClientContext clientContext) {
+    public LogListViewController(final ClientContext clientContext) {
         super(clientContext, LOG_LIST_CONTROLLER_NAME);
         listView = new ListView<>();
         listView.setCellFactory(v -> new LogListCell());
@@ -42,6 +43,7 @@ public class LogListViewController extends AbstractViewController<LogListBean> {
     }
 
     private LogMessage convertBean(final LogEntryBean bean) {
+        Assert.requireNonNull(bean, "bean");
         final LogMessage message = new LogMessage();
         message.setMessage(bean.getMessage());
         message.setLevel(bean.getLogLevel());

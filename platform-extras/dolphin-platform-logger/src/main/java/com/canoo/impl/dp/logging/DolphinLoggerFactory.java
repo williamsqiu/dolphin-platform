@@ -46,7 +46,7 @@ public class DolphinLoggerFactory implements ILoggerFactory {
         if (!configured.get()) {
             configure(new DolphinLoggerConfiguration());
         }
-        DolphinLogger logger = this.loggerMap.get(name);
+        final DolphinLogger logger = this.loggerMap.get(name);
         if (logger != null) {
             return logger;
         } else {
@@ -65,9 +65,9 @@ public class DolphinLoggerFactory implements ILoggerFactory {
         Assert.requireNonNull(configuration, "configuration");
         bridges.clear();
 
-        Iterator<DolphinLoggerBridgeFactory> iterator = ServiceLoader.load(DolphinLoggerBridgeFactory.class).iterator();
+        final Iterator<DolphinLoggerBridgeFactory> iterator = ServiceLoader.load(DolphinLoggerBridgeFactory.class).iterator();
         while (iterator.hasNext()) {
-            DolphinLoggerBridge bridge = iterator.next().create(configuration);
+            final DolphinLoggerBridge bridge = iterator.next().create(configuration);
             if(bridge != null) {
                 bridges.add(bridge);
             }
@@ -75,7 +75,7 @@ public class DolphinLoggerFactory implements ILoggerFactory {
 
         markers.clear();
 
-        for(DolphinLogger logger : loggerMap.values()) {
+        for(final DolphinLogger logger : loggerMap.values()) {
             logger.updateBridges(Collections.unmodifiableList(bridges));
             final Level level = configuration.getLevelFor(logger.getName());
             logger.setLevel(level);

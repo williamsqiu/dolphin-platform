@@ -17,6 +17,8 @@ import java.util.concurrent.TimeUnit;
 
 public class DolphinLoggerConfiguration {
 
+    private final ConcurrentMap<String, Level> loggerLevelMap = new ConcurrentHashMap();
+
     private URI remoteUrl;
 
     private int parallelRequests = Runtime.getRuntime().availableProcessors() / 2 - 1;
@@ -31,8 +33,6 @@ public class DolphinLoggerConfiguration {
 
     private Level globalLevel = Level.INFO;
 
-    private final ConcurrentMap<String, Level> loggerLevelMap = new ConcurrentHashMap();
-
     private Executor remoteLoggingExecutor = new ThreadPoolExecutor(parallelRequests + 1, parallelRequests + 1,
             Long.MAX_VALUE, TimeUnit.DAYS,
             new LinkedBlockingDeque<>(),
@@ -42,7 +42,7 @@ public class DolphinLoggerConfiguration {
 
     private HttpURLConnectionFactory connectionFactory = new DefaultHttpURLConnectionFactory();
 
-    public void setLevel(String name, Level level) {
+    public void setLevel(final String name, final Level level) {
         loggerLevelMap.put(name, level);
     }
 
@@ -59,7 +59,7 @@ public class DolphinLoggerConfiguration {
         return remoteUrl;
     }
 
-    public void setRemoteUrl(URI remoteUrl) {
+    public void setRemoteUrl(final URI remoteUrl) {
         this.remoteUrl = remoteUrl;
     }
 
@@ -67,7 +67,7 @@ public class DolphinLoggerConfiguration {
         return globalLevel;
     }
 
-    public void setGlobalLevel(Level globalLevel) {
+    public void setGlobalLevel(final Level globalLevel) {
         this.globalLevel = globalLevel;
     }
 
@@ -75,7 +75,7 @@ public class DolphinLoggerConfiguration {
         return remoteLoggingExecutor;
     }
 
-    public void setRemoteLoggingExecutor(Executor remoteLoggingExecutor) {
+    public void setRemoteLoggingExecutor(final Executor remoteLoggingExecutor) {
         this.remoteLoggingExecutor = remoteLoggingExecutor;
     }
 
@@ -83,7 +83,7 @@ public class DolphinLoggerConfiguration {
         return dateFormat;
     }
 
-    public void setDateFormat(DateFormat dateFormat) {
+    public void setDateFormat(final DateFormat dateFormat) {
         this.dateFormat = dateFormat;
     }
 
@@ -91,7 +91,7 @@ public class DolphinLoggerConfiguration {
         return connectionFactory;
     }
 
-    public void setConnectionFactory(HttpURLConnectionFactory connectionFactory) {
+    public void setConnectionFactory(final HttpURLConnectionFactory connectionFactory) {
         this.connectionFactory = connectionFactory;
     }
 
@@ -99,7 +99,7 @@ public class DolphinLoggerConfiguration {
         return parallelRequests;
     }
 
-    public void setParallelRequests(int parallelRequests) {
+    public void setParallelRequests(final int parallelRequests) {
         this.parallelRequests = parallelRequests;
     }
 
@@ -107,7 +107,7 @@ public class DolphinLoggerConfiguration {
         return maxMessagesPerRequest;
     }
 
-    public void setMaxMessagesPerRequest(int maxMessagesPerRequest) {
+    public void setMaxMessagesPerRequest(final int maxMessagesPerRequest) {
         this.maxMessagesPerRequest = maxMessagesPerRequest;
     }
 
@@ -115,7 +115,7 @@ public class DolphinLoggerConfiguration {
         return remotingErrorWaitTime;
     }
 
-    public void setRemotingErrorWaitTime(int remotingErrorWaitTime) {
+    public void setRemotingErrorWaitTime(final int remotingErrorWaitTime) {
         this.remotingErrorWaitTime = remotingErrorWaitTime;
     }
 
@@ -123,7 +123,7 @@ public class DolphinLoggerConfiguration {
         return maxRemotingQueueSize;
     }
 
-    public void setMaxRemotingQueueSize(int maxRemotingQueueSize) {
+    public void setMaxRemotingQueueSize(final int maxRemotingQueueSize) {
         this.maxRemotingQueueSize = maxRemotingQueueSize;
     }
 
@@ -131,7 +131,7 @@ public class DolphinLoggerConfiguration {
         return remotingQueueCheckSleepTime;
     }
 
-    public void setRemotingQueueCheckSleepTime(int remotingQueueCheckSleepTime) {
+    public void setRemotingQueueCheckSleepTime(final int remotingQueueCheckSleepTime) {
         this.remotingQueueCheckSleepTime = remotingQueueCheckSleepTime;
     }
 }
