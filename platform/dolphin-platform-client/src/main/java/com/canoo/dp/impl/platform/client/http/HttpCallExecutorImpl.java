@@ -17,7 +17,7 @@ package com.canoo.dp.impl.platform.client.http;
 
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.client.ClientConfiguration;
-import com.canoo.platform.core.functional.ExecutablePromise;
+import com.canoo.platform.core.functional.Promise;
 import com.canoo.platform.core.http.BadResponseException;
 import com.canoo.platform.core.http.HttpException;
 import com.canoo.platform.core.http.HttpResponse;
@@ -31,7 +31,7 @@ import java.util.function.Consumer;
 import static org.apiguardian.api.API.Status.INTERNAL;
 
 @API(since = "0.x", status = INTERNAL)
-public class HttpCallExecutorImpl<R> implements ExecutablePromise<HttpResponse<R>, HttpException> {
+public class HttpCallExecutorImpl<R> implements Promise<HttpResponse<R>, HttpException> {
 
     private final ExecutorService executor;
 

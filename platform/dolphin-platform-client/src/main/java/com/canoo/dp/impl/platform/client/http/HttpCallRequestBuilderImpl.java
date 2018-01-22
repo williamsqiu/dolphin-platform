@@ -16,6 +16,8 @@
 package com.canoo.dp.impl.platform.client.http;
 
 import com.canoo.dp.impl.platform.core.Assert;
+import com.canoo.dp.impl.platform.core.http.HttpClientConnection;
+import com.canoo.dp.impl.platform.core.http.HttpHeaderImpl;
 import com.canoo.platform.client.ClientConfiguration;
 import com.canoo.platform.core.DolphinRuntimeException;
 import com.canoo.platform.core.http.ByteArrayProvider;
@@ -29,7 +31,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static com.canoo.dp.impl.platform.core.http.HttpHeaderConstants.CONTENT_LENGHT_HEADER;
 import static com.canoo.dp.impl.platform.core.http.HttpHeaderConstants.CONTENT_TYPE_HEADER;
 import static com.canoo.dp.impl.platform.core.http.HttpHeaderConstants.JSON_MIME_TYPE;
 import static org.apiguardian.api.API.Status.INTERNAL;
@@ -71,8 +72,6 @@ public class HttpCallRequestBuilderImpl implements HttpCallRequestBuilder {
     @Override
     public HttpCallResponseBuilder withContent(final byte[] content, final String contentType) {
         withHeader(CONTENT_TYPE_HEADER, contentType);
-        withHeader(CONTENT_LENGHT_HEADER, content.length + "");
-
         connection.setDoOutput(true);
         return continueWithResponseBuilder(() -> content);
     }

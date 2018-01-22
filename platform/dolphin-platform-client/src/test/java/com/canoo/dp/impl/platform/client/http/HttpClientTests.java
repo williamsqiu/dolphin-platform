@@ -65,7 +65,6 @@ public class HttpClientTests {
     @BeforeClass
     public void startSpark() {
         Spark.port(freePort);
-        Spark.threadPool(100, 1_000, 10);
         Spark.get("/", (req, res) -> "Spark Server for HTTP client integration tests");
         Spark.get("/error", (req, res) -> {
             res.status(401);
@@ -263,7 +262,7 @@ public class HttpClientTests {
                 .execute();
 
         //then:
-        final HttpResponse<String> response = future.get(1_000, TimeUnit.MILLISECONDS);
+        final HttpResponse<String> response = future.get(100_000, TimeUnit.MILLISECONDS);
         assertThat("response not defined", response, notNullValue());
         assertThat("Wrong response code", response.getStatusCode(), is(200));
         assertThat("Content should not be null", response.getRawContent(), notNullValue());

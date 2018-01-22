@@ -39,11 +39,8 @@ public class SecurityProvider extends AbstractServiceProvider<Security> {
     @Override
     protected Security createService(final ClientConfiguration configuration) {
         Assert.requireNonNull(configuration, "configuration");
-        
-        final String authEndpoint = configuration.getProperty(AUTH_ENDPOINT_PROPERTY_NAME, AUTH_ENDPOINT_PROPERTY_DEFAULT_VALUE);
-        final String realmName = configuration.getProperty(REALM_PROPERTY_NAME, REALM_PROPERTY_DEFAULT_VALUE);
-        final String appName = configuration.getProperty(APPLICATION_PROPERTY_NAME, APPLICATION_PROPERTY_DEFAULT_VALUE);
 
-        return new KeycloakSecurity(authEndpoint, realmName, appName, configuration.getBackgroundExecutor());
+
+        return new KeycloakSecurity(configuration);
     }
 }

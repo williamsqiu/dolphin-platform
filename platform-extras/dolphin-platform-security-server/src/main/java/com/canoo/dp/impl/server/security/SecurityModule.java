@@ -45,6 +45,11 @@ public class SecurityModule extends AbstractBaseModule {
         final KeycloakConfiguration configuration = new KeycloakConfiguration(coreComponents.getConfiguration());
         final DolphinSecurityBootstrap bootstrap = DolphinSecurityBootstrap.getInstance();
         bootstrap.init(coreComponents.getInstance(ServletContext.class), coreComponents.getConfiguration());
+
+        if(configuration.isLoginEndpointActive()) {
+            final ServletContext servletContext = coreComponents.getInstance(ServletContext.class);
+            servletContext.addServlet("security-login", new KeycloakTokenServlet(configuration)).addMapping(configuration.getLoginEndpoint());
+        }
     }
 
     @Override
