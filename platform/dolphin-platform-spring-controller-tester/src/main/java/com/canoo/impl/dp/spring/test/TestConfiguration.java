@@ -55,8 +55,8 @@ public class TestConfiguration {
         Assert.requireNonNull(context, "context");
         Assert.requireNonNull(httpSession, "httpSession");
 
-        DefaultPlatformConfiguration defaultPlatformConfiguration = ConfigurationFileLoader.loadConfiguration();
-        RemotingConfiguration remotingConfiguration = new RemotingConfiguration(defaultPlatformConfiguration);
+        final DefaultPlatformConfiguration defaultPlatformConfiguration = ConfigurationFileLoader.loadConfiguration();
+        final RemotingConfiguration remotingConfiguration = new RemotingConfiguration(defaultPlatformConfiguration);
 
         //PlatformClient
         final ExecutorService clientExecutor = Executors.newSingleThreadExecutor();

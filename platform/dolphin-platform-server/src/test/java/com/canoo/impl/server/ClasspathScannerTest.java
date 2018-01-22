@@ -39,7 +39,7 @@ public class ClasspathScannerTest {
     @Test
     public void testSimpleScan() {
         //There can't be a class that is annotated with Inject
-        DefaultPlatformConfiguration defaultPlatformConfiguration = ConfigurationFileLoader.loadConfiguration();
+        final DefaultPlatformConfiguration defaultPlatformConfiguration = ConfigurationFileLoader.loadConfiguration();
         final DefaultClasspathScanner scanner = new DefaultClasspathScanner(defaultPlatformConfiguration.getListProperty(ROOT_PACKAGE_FOR_CLASSPATH_SCAN));
         Set<Class<?>> classes = scanner.getTypesAnnotatedWith(Resources.class);
         assertNotNull(classes);
