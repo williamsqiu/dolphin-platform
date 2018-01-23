@@ -9,7 +9,7 @@ public class Client {
     public static void main(String[] args) throws Exception{
         final HttpClient client = PlatformClient.getService(HttpClient.class);
 
-        final String message = client.request("http://localhost:8080/api/message").
+        final String message = client.get("http://localhost:8080/api/message").
                 withoutContent().
                 readString().execute().get().getContent();
         System.out.println(message);
@@ -17,7 +17,7 @@ public class Client {
         final Security security = PlatformClient.getService(Security.class);
         security.login("admin", "admin").get();
 
-        final String message2 = client.request("http://localhost:8080/api/secure/message").
+        final String message2 = client.get("http://localhost:8080/api/secure/message").
                 withoutContent().
                 readString().execute().get().getContent();
         System.out.println(message2);

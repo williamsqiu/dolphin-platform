@@ -18,10 +18,10 @@ public class SecureRestEndpoint {
     private final static Logger LOG = LoggerFactory.getLogger(SecureRestEndpoint.class);
 
     @Autowired
-    SecurityContext securityContext;
+    private SecurityContext securityContext;
 
     @Autowired
-    RestTemplate restTemplate;
+    private RestTemplate restTemplate;
 
     @RequestMapping(method = RequestMethod.POST)
     public String convert(String message) {

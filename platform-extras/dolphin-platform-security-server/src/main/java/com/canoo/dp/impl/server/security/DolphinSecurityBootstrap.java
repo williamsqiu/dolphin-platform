@@ -3,6 +3,7 @@ package com.canoo.dp.impl.server.security;
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.core.PlatformConfiguration;
 import com.canoo.platform.server.security.SecurityContext;
+import com.canoo.platform.server.security.User;
 import org.apiguardian.api.API;
 import org.keycloak.adapters.servlet.KeycloakOIDCFilter;
 import org.slf4j.Logger;
@@ -54,7 +55,17 @@ public class DolphinSecurityBootstrap {
     }
 
     public SecurityContext getSecurityForCurrentRequest() {
-        return extractFilter.getSecurity();
+        return new SecurityContext() {
+            @Override
+            public User getUser() {
+                return extractFilter.getSecurity().getUser();
+            }
+
+            @Override
+            public void accessDenied() {
+                extractFilter.getSecurity().accessDenied();
+            }
+        };
     }
 
     public Optional<String> tokenForCurrentRequest() {

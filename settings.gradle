@@ -68,6 +68,11 @@ include 'platform-examples/lazy-loading-sample/lazy-loading-server-spring'
 include 'platform-examples/security-sample/security-client-javafx'
 include 'platform-examples/security-sample/security-server-spring'
 
+include 'platform-examples/remoting-security-sample/remoting-security-common'
+include 'platform-examples/remoting-security-sample/remoting-security-client-javafx'
+include 'platform-examples/remoting-security-sample/remoting-security-server-spring'
+
+
 include 'platform-examples/distribution-sample/distribution-server-hazelcast'
 include 'platform-examples/distribution-sample/distribution-common'
 include 'platform-examples/distribution-sample/distribution-client'

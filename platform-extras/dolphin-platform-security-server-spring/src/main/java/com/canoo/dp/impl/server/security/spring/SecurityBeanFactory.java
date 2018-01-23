@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.annotation.ApplicationScope;
-import org.springframework.web.context.annotation.RequestScope;
 
 import static org.apiguardian.api.API.Status.INTERNAL;
 
@@ -16,7 +15,7 @@ import static org.apiguardian.api.API.Status.INTERNAL;
 public class SecurityBeanFactory {
 
     @Bean("security")
-    @RequestScope
+    @ApplicationScope
     public SecurityContext createDolphinSession() {
         return DolphinSecurityBootstrap.getInstance().getSecurityForCurrentRequest();
     }

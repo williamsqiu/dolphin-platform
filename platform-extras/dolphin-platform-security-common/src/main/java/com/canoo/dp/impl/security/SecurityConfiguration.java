@@ -7,7 +7,7 @@ public interface SecurityConfiguration {
 
     String AUTH_ENDPOINT_PROPERTY_NAME = "security.keycloak.endpoint";
 
-    String AUTH_ENDPOINT_PROPERTY_DEFAULT_VALUE = "http://localhost:8080";
+    String AUTH_ENDPOINT_PROPERTY_DEFAULT_VALUE = "http://localhost:8080/openid-connect";
 
     String REALM_PROPERTY_NAME = "security.keycloak.realm";
 
