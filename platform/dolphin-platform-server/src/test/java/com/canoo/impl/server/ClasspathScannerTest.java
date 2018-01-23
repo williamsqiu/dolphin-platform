@@ -15,6 +15,8 @@
  */
 package com.canoo.impl.server;
 
+import com.canoo.dp.impl.server.config.ConfigurationFileLoader;
+import com.canoo.dp.impl.server.config.DefaultPlatformConfiguration;
 import com.canoo.impl.server.classpathscan.documented.DocumentAnnotatedClass;
 import com.canoo.impl.server.util.AnnotatedClassForClasspathScan;
 import com.canoo.impl.server.util.AnnotationForClasspathScanTest;
@@ -26,6 +28,7 @@ import javax.annotation.Resources;
 import java.lang.annotation.Documented;
 import java.util.Set;
 
+import static com.canoo.dp.impl.server.config.DefaultPlatformConfiguration.ROOT_PACKAGE_FOR_CLASSPATH_SCAN;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
@@ -36,7 +39,8 @@ public class ClasspathScannerTest {
     @Test
     public void testSimpleScan() {
         //There can't be a class that is annotated with Inject
-        final DefaultClasspathScanner scanner = new DefaultClasspathScanner();
+        final DefaultPlatformConfiguration defaultPlatformConfiguration = ConfigurationFileLoader.loadConfiguration();
+        final DefaultClasspathScanner scanner = new DefaultClasspathScanner(defaultPlatformConfiguration.getListProperty(ROOT_PACKAGE_FOR_CLASSPATH_SCAN));
         Set<Class<?>> classes = scanner.getTypesAnnotatedWith(Resources.class);
         assertNotNull(classes);
         assertEquals(classes.size(), 0);
@@ -99,7 +103,7 @@ public class ClasspathScannerTest {
 
     @Test(expectedExceptions = NullPointerException.class)
     public void testNullArgument() {
-        final DefaultClasspathScanner scanner = new DefaultClasspathScanner();
+        final DefaultClasspathScanner scanner = new DefaultClasspathScanner(CLASSPATH_SCAN);
         Set<Class<?>> classes = scanner.getTypesAnnotatedWith(null);
     }
 

@@ -44,10 +44,6 @@ public class DefaultClasspathScanner implements ClasspathScanner {
 
     private final Reflections reflections;
 
-    public DefaultClasspathScanner() {
-        this(Collections.emptyList());
-    }
-
     public DefaultClasspathScanner(final String rootPackage){
         this(Collections.singletonList(rootPackage));
     }
