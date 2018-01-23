@@ -1,6 +1,7 @@
 package com.canoo.dp.impl.platform.projector.client.media;
 
 import com.canoo.dp.impl.platform.projector.client.css.CssHelper;
+import com.canoo.dp.impl.platform.projector.client.css.DefaultPropertyBasedCssMetaData;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;

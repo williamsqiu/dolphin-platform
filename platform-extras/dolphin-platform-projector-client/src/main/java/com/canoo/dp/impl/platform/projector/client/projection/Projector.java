@@ -5,7 +5,6 @@ import com.canoo.dp.impl.platform.projector.action.ServerAction;
 import com.canoo.dp.impl.platform.projector.base.Projectable;
 import com.canoo.dp.impl.platform.projector.client.base.ClientActionSupport;
 import com.canoo.dp.impl.platform.projector.form.Form;
-import com.canoo.dp.impl.platform.projector.gantt.GanttBean;
 import com.canoo.dp.impl.platform.projector.graph.GraphDataBean;
 import com.canoo.dp.impl.platform.projector.lazy.concrete.MediaLazyListBean;
 import com.canoo.dp.impl.platform.projector.view.View;
@@ -39,7 +38,6 @@ public class Projector {
         register(GraphDataBean.class, new GraphFactory());
         register(View.class, new ViewFactory());
         register(MediaLazyListBean.class, new LazyListFactory());
-        register(GanttBean.class, new GanttFactory());
     }
 
     public <T> void register(final Class<T> projectableClass, final ProjectionFactory<T> factory) {

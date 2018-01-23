@@ -3,6 +3,7 @@ package com.canoo.dp.impl.platform.projector.client.form;
 import com.canoo.dp.impl.platform.projector.client.projection.Utils;
 import com.canoo.dp.impl.platform.projector.form.FormField;
 import com.canoo.platform.remoting.client.javafx.BidirectionalConverter;
+import com.canoo.platform.remoting.client.javafx.Converter;
 import com.canoo.platform.remoting.client.javafx.FXBinder;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;

@@ -8,6 +8,7 @@ import com.canoo.platform.remoting.server.RemotingModel;
 import com.canoo.platform.remoting.server.event.RemotingEventBus;
 
 import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 
 import static com.canoo.dp.impl.platform.projector.notifications.NotificationConstants.GLOBAL_NOTIFICATIONS_CONTROLLER;
 import static com.canoo.dp.impl.platform.projector.server.notifications.NotificationsTopics.GLOBAL_NOTIFICATION;
