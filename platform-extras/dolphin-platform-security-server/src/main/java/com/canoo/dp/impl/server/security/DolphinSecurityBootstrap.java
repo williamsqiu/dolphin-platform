@@ -12,6 +12,7 @@ import javax.servlet.DispatcherType;
 import javax.servlet.FilterRegistration;
 import javax.servlet.ServletContext;
 import java.util.EnumSet;
+import java.util.Optional;
 
 import static org.apiguardian.api.API.Status.INTERNAL;
 
@@ -54,6 +55,10 @@ public class DolphinSecurityBootstrap {
 
     public SecurityContext getSecurityForCurrentRequest() {
         return extractFilter.getSecurity();
+    }
+
+    public Optional<String> tokenForCurrentRequest() {
+        return extractFilter.token();
     }
 
     public static DolphinSecurityBootstrap getInstance() {

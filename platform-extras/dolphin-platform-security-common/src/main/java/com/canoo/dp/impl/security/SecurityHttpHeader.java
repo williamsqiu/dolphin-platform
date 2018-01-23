@@ -11,4 +11,7 @@ public interface SecurityHttpHeader {
 
     String BEARER_ONLY_HEADER = "X-platform-security-bearer-only";
 
+    String AUTHORIZATION_HEADER = "Authorization";
+
+    String BEARER = "Bearer ";
 }

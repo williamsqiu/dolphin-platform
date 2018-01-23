@@ -14,6 +14,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Optional;
 
 import static org.apiguardian.api.API.Status.INTERNAL;
 
@@ -56,6 +57,10 @@ public class KeycloakSecurityContextExtractFilter implements Filter, AccessDenie
 
     public SecurityContextKeycloakImpl getSecurity() {
         return new SecurityContextKeycloakImpl(contextHolder.get(), this);
+    }
+
+    public Optional<String> token() {
+        return Optional.ofNullable(contextHolder.get()).map(c -> c.getTokenString());
     }
 
     @Override
