@@ -9,8 +9,6 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.annotation.ApplicationScope;
 import org.springframework.web.context.annotation.RequestScope;
 
-import java.util.Collections;
-
 import static org.apiguardian.api.API.Status.INTERNAL;
 
 @API(since = "0.19.0", status = INTERNAL)
@@ -24,16 +22,15 @@ public class SecurityBeanFactory {
     }
 
     @Bean
-    @RequestScope
-    public RestTemplate restTemplate(final SecurityRequestInterceptor interceptor) {
-        final RestTemplate template = new RestTemplate();
-        template.setInterceptors(Collections.singletonList(interceptor));
+    @ApplicationScope
+    public RestTemplate restTemplate(final SecurityClientRequestFactory requestFactory) {
+        final RestTemplate template = new RestTemplate(requestFactory);
         return template;
     }
 
     @Bean
     @ApplicationScope
-    public SecurityRequestInterceptor securityInterceptor() {
-        return new SecurityRequestInterceptor(() -> DolphinSecurityBootstrap.getInstance().tokenForCurrentRequest().orElse(null));
+    public SecurityClientRequestFactory securityClientRequestFactory() {
+        return new SecurityClientRequestFactory(() -> DolphinSecurityBootstrap.getInstance().tokenForCurrentRequest().orElse(null));
     }
 }
