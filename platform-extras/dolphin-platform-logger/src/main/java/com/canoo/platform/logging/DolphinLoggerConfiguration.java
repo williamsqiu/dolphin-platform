@@ -1,3 +1,18 @@
+/*
+ * Copyright 2015-2018 Canoo Engineering AG.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.canoo.platform.logging;
 
 import com.canoo.impl.dp.logging.DolphinLoggerThreadFactory;
@@ -8,12 +23,16 @@ import org.slf4j.event.Level;
 import java.net.URI;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 public class DolphinLoggerConfiguration {
+
+    private final ConcurrentMap<String, Level> loggerLevelMap = new ConcurrentHashMap();
 
     private URI remoteUrl;
 
@@ -38,11 +57,24 @@ public class DolphinLoggerConfiguration {
 
     private HttpURLConnectionFactory connectionFactory = new DefaultHttpURLConnectionFactory();
 
+    public void setLevel(final String name, final Level level) {
+        loggerLevelMap.put(name, level);
+    }
+
+    public Level getLevelFor(final String loggerName) {
+        return loggerLevelMap.keySet().stream().
+                filter(v -> loggerName.startsWith(v)).
+                sorted((a, b) -> a.compareTo(b)).
+                findFirst().
+                map(v -> loggerLevelMap.get(v)).
+                orElse(getGlobalLevel());
+    }
+
     public URI getRemoteUrl() {
         return remoteUrl;
     }
 
-    public void setRemoteUrl(URI remoteUrl) {
+    public void setRemoteUrl(final URI remoteUrl) {
         this.remoteUrl = remoteUrl;
     }
 
@@ -50,7 +82,7 @@ public class DolphinLoggerConfiguration {
         return globalLevel;
     }
 
-    public void setGlobalLevel(Level globalLevel) {
+    public void setGlobalLevel(final Level globalLevel) {
         this.globalLevel = globalLevel;
     }
 
@@ -58,7 +90,7 @@ public class DolphinLoggerConfiguration {
         return remoteLoggingExecutor;
     }
 
-    public void setRemoteLoggingExecutor(Executor remoteLoggingExecutor) {
+    public void setRemoteLoggingExecutor(final Executor remoteLoggingExecutor) {
         this.remoteLoggingExecutor = remoteLoggingExecutor;
     }
 
@@ -66,7 +98,7 @@ public class DolphinLoggerConfiguration {
         return dateFormat;
     }
 
-    public void setDateFormat(DateFormat dateFormat) {
+    public void setDateFormat(final DateFormat dateFormat) {
         this.dateFormat = dateFormat;
     }
 
@@ -74,7 +106,7 @@ public class DolphinLoggerConfiguration {
         return connectionFactory;
     }
 
-    public void setConnectionFactory(HttpURLConnectionFactory connectionFactory) {
+    public void setConnectionFactory(final HttpURLConnectionFactory connectionFactory) {
         this.connectionFactory = connectionFactory;
     }
 
@@ -82,7 +114,7 @@ public class DolphinLoggerConfiguration {
         return parallelRequests;
     }
 
-    public void setParallelRequests(int parallelRequests) {
+    public void setParallelRequests(final int parallelRequests) {
         this.parallelRequests = parallelRequests;
     }
 
@@ -90,7 +122,7 @@ public class DolphinLoggerConfiguration {
         return maxMessagesPerRequest;
     }
 
-    public void setMaxMessagesPerRequest(int maxMessagesPerRequest) {
+    public void setMaxMessagesPerRequest(final int maxMessagesPerRequest) {
         this.maxMessagesPerRequest = maxMessagesPerRequest;
     }
 
@@ -98,7 +130,7 @@ public class DolphinLoggerConfiguration {
         return remotingErrorWaitTime;
     }
 
-    public void setRemotingErrorWaitTime(int remotingErrorWaitTime) {
+    public void setRemotingErrorWaitTime(final int remotingErrorWaitTime) {
         this.remotingErrorWaitTime = remotingErrorWaitTime;
     }
 
@@ -106,7 +138,7 @@ public class DolphinLoggerConfiguration {
         return maxRemotingQueueSize;
     }
 
-    public void setMaxRemotingQueueSize(int maxRemotingQueueSize) {
+    public void setMaxRemotingQueueSize(final int maxRemotingQueueSize) {
         this.maxRemotingQueueSize = maxRemotingQueueSize;
     }
 
@@ -114,7 +146,7 @@ public class DolphinLoggerConfiguration {
         return remotingQueueCheckSleepTime;
     }
 
-    public void setRemotingQueueCheckSleepTime(int remotingQueueCheckSleepTime) {
+    public void setRemotingQueueCheckSleepTime(final int remotingQueueCheckSleepTime) {
         this.remotingQueueCheckSleepTime = remotingQueueCheckSleepTime;
     }
 }

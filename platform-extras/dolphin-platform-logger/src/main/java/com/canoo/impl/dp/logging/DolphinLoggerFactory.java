@@ -1,3 +1,18 @@
+/*
+ * Copyright 2015-2018 Canoo Engineering AG.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.canoo.impl.dp.logging;
 
 import com.canoo.platform.logging.spi.LogMessage;
@@ -37,8 +52,6 @@ public class DolphinLoggerFactory implements ILoggerFactory {
 
     private final ConcurrentMap<String, DolphinLogger> loggerMap = new ConcurrentHashMap();
 
-    private final ConcurrentMap<String, Level> loggerLevelMap = new ConcurrentHashMap();
-
     private final List<DolphinLoggerBridge> bridges = new CopyOnWriteArrayList<>();
 
     private DolphinLoggerConfiguration configuration;
@@ -48,16 +61,13 @@ public class DolphinLoggerFactory implements ILoggerFactory {
         if (!configured.get()) {
             configure(new DolphinLoggerConfiguration());
         }
-        DolphinLogger logger = this.loggerMap.get(name);
+        final DolphinLogger logger = this.loggerMap.get(name);
         if (logger != null) {
             return logger;
         } else {
-            Level loggerLevel = loggerLevelMap.get(name);
-            if(loggerLevel == null) {
-                loggerLevel = configuration.getGlobalLevel();
-            }
-            DolphinLogger newInstance = new DolphinLogger(this, name, bridges, loggerLevel);
-            DolphinLogger oldInstance = this.loggerMap.putIfAbsent(name, newInstance);
+            final Level loggerLevel = configuration.getLevelFor(name);
+            final DolphinLogger newInstance = new DolphinLogger(this, name, bridges, loggerLevel);
+            final DolphinLogger oldInstance = this.loggerMap.putIfAbsent(name, newInstance);
             return oldInstance == null ? newInstance : oldInstance;
         }
     }
@@ -70,9 +80,9 @@ public class DolphinLoggerFactory implements ILoggerFactory {
         Assert.requireNonNull(configuration, "configuration");
         bridges.clear();
 
-        Iterator<DolphinLoggerBridgeFactory> iterator = ServiceLoader.load(DolphinLoggerBridgeFactory.class).iterator();
+        final Iterator<DolphinLoggerBridgeFactory> iterator = ServiceLoader.load(DolphinLoggerBridgeFactory.class).iterator();
         while (iterator.hasNext()) {
-            DolphinLoggerBridge bridge = iterator.next().create(configuration);
+            final DolphinLoggerBridge bridge = iterator.next().create(configuration);
             if(bridge != null) {
                 bridges.add(bridge);
             }
@@ -80,12 +90,9 @@ public class DolphinLoggerFactory implements ILoggerFactory {
 
         markers.clear();
 
-        for(DolphinLogger logger : loggerMap.values()) {
+        for(final DolphinLogger logger : loggerMap.values()) {
             logger.updateBridges(Collections.unmodifiableList(bridges));
-            Level level = loggerLevelMap.get(logger.getName());
-            if(level == null) {
-                level = configuration.getGlobalLevel();
-            }
+            final Level level = configuration.getLevelFor(logger.getName());
             logger.setLevel(level);
         }
 

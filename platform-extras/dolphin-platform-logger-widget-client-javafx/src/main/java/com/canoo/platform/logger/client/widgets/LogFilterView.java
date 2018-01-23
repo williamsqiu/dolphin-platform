@@ -1,4 +1,4 @@
-package com.canoo.platform.logger.client.view;
+package com.canoo.platform.logger.client.widgets;
 
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.logger.model.LoggerSearchRequest;

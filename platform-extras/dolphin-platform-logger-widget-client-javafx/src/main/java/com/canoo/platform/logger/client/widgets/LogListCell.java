@@ -1,4 +1,4 @@
-package com.canoo.platform.logger.client.view;
+package com.canoo.platform.logger.client.widgets;
 
 import com.canoo.platform.logging.spi.LogMessage;
 import javafx.scene.control.ListCell;

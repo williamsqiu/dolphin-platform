@@ -1,3 +1,18 @@
+/*
+ * Copyright 2015-2018 Canoo Engineering AG.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.canoo.dp.impl.platform.client.http;
 
 import com.canoo.dp.impl.platform.core.http.HttpHeaderConstants;
@@ -28,6 +43,8 @@ import static org.hamcrest.Matchers.notNullValue;
 
 public class HttpClientTests {
 
+    //Maybe we can use http://wiremock.org/docs/getting-started/
+
     private final int freePort;
 
     public HttpClientTests() {
@@ -48,7 +65,6 @@ public class HttpClientTests {
     @BeforeClass
     public void startSpark() {
         Spark.port(freePort);
-        Spark.threadPool(100, 1_000, 10);
         Spark.get("/", (req, res) -> "Spark Server for HTTP client integration tests");
         Spark.get("/error", (req, res) -> {
             res.status(401);
@@ -246,7 +262,7 @@ public class HttpClientTests {
                 .execute();
 
         //then:
-        final HttpResponse<String> response = future.get(1_000, TimeUnit.MILLISECONDS);
+        final HttpResponse<String> response = future.get(100_000, TimeUnit.MILLISECONDS);
         assertThat("response not defined", response, notNullValue());
         assertThat("Wrong response code", response.getStatusCode(), is(200));
         assertThat("Content should not be null", response.getRawContent(), notNullValue());
