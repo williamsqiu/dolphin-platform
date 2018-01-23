@@ -3,6 +3,7 @@ package com.canoo.dp.impl.platform.core.http;
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.core.http.ByteArrayProvider;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,6 +15,17 @@ import static com.canoo.dp.impl.platform.core.http.HttpHeaderConstants.CHARSET;
 public class ConnectionUtils {
 
     private ConnectionUtils() {}
+
+    public static byte[] readContent(final BufferedReader reader) throws IOException {
+        Assert.requireNonNull(reader, "reader");
+        final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        int read = reader.read();
+        while (read != -1) {
+            byteArrayOutputStream.write(read);
+            read = reader.read();
+        }
+        return byteArrayOutputStream.toByteArray();
+    }
 
     public static byte[] readContent(final InputStream inputStream) throws IOException {
         Assert.requireNonNull(inputStream, "inputStream");
@@ -54,6 +66,7 @@ public class ConnectionUtils {
         Assert.requireNonNull(outputStream, "outputStream");
         Assert.requireNonNull(rawData, "rawData");
         outputStream.write(rawData);
+        outputStream.flush();
     }
 
     public static void writeContent(final HttpURLConnection connection, final byte[] rawData) throws IOException {

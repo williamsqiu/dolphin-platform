@@ -15,7 +15,7 @@ public class Client {
         System.out.println(message);
 
         final Security security = PlatformClient.getService(Security.class);
-        security.login("user", "secret").get();
+        security.login("admin", "admin").get();
 
         final String message2 = client.request("http://localhost:8080/api/secure/message").
                 withoutContent().

@@ -21,7 +21,7 @@ import com.canoo.platform.core.http.HttpClient;
 public class RestClient {
 
     public static void main(String[] args) throws Exception {
-        final String endpoint = "http://localhost:8080/simple-rest/api/city";
+        final String endpoint = "http://localhost:8080/openid-connect";
         final HttpClient httpClient = PlatformClient.getService(HttpClient.class);
 
         final City city = new City("Dortmund", "Germany");
