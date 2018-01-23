@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2016 Canoo Engineering AG.
+ * Copyright 2015-2018 Canoo Engineering AG.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,32 +22,39 @@ buildscript {
     }
 
     dependencies {
-        classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.6.3'
+        classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.8.2'
         classpath 'nl.javadude.gradle.plugins:license-gradle-plugin:0.11.0'
-        classpath 'org.kordamp.gradle:stats-gradle-plugin:0.2.0'
-        classpath 'com.github.ben-manes:gradle-versions-plugin:0.13.0'
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.1'
-        classpath 'net.nemerosa:versioning:2.4.0'
+        classpath 'org.kordamp.gradle:stats-gradle-plugin:0.2.2'
+        classpath 'com.github.ben-manes:gradle-versions-plugin:0.17.0'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.0'
+        classpath 'net.nemerosa:versioning:2.6.1'
         classpath 'com.bmuschko:gradle-nexus-plugin:2.3.1'
+        classpath 'org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.6.1'
     }
-}
-
-plugins {
-    id "org.sonarqube" version "2.2"
 }
 
 if (project.hasProperty('sonarToken')) {
     System.setProperty("sonar.login", project.getProperty("sonarToken"))
 }
 
+apply plugin: 'net.nemerosa.versioning'
+apply plugin: 'org.sonarqube'
+apply plugin: 'jacoco'
+apply plugin: 'com.github.kt3k.coveralls'
+
 Date buildTimeAndDate = new Date()
 ext {
     buildDate = new SimpleDateFormat('yyyy-MM-dd').format(buildTimeAndDate)
     buildTime = new SimpleDateFormat('HH:mm:ss.SSSZ').format(buildTimeAndDate)
+    buildRevision = versioning.info.commit
     projectsWithCoverage = []
-    jacocoMergeExecFile = "${buildDir}/reports/jacoco/test/jacocoTestReport.exec"
+    baseJaCocoDir = "${buildDir}/reports/jacoco/test/"
+    jacocoMergeExecFile = "${baseJaCocoDir}jacocoTestReport.exec"
+    jacocoMergeReportHTMLFile = "${baseJaCocoDir}/html/"
+    jacocoMergeReportXMLFile = "${baseJaCocoDir}/jacocoTestReport.xml"
+    depProjects = []
+    infoFilePatterns = '**/build.properties'
 }
-
 
 allprojects {
     apply plugin: 'base'
@@ -56,15 +63,13 @@ allprojects {
 
     repositories {
         jcenter()
+        mavenLocal()
     }
 
     tasks.withType(Javadoc) {
         options.addStringOption('Xdoclint:none', '-quiet')
     }
 }
-
-apply plugin: 'jacoco'
-apply plugin: 'com.github.kt3k.coveralls'
 
 jacoco {
     toolVersion = jacocoVersion
@@ -80,11 +85,6 @@ subprojects { subprj ->
         targetCompatibility = subprj.targetCompatibility
     }
 
-    repositories {
-        mavenLocal()
-        jcenter()
-    }
-
     test.useTestNG()
 
     if (!subprj.publishJars.toBoolean()) {
@@ -93,12 +93,9 @@ subprojects { subprj ->
                 skipProject = true
             }
         }
-    }
-
-    if (subprj.publishJars.toBoolean()) {
+    } else {
         subprj.apply from: rootProject.file('gradle/publishing.gradle')
         subprj.apply from: rootProject.file('gradle/code-coverage.gradle')
-        projectsWithCoverage << subprj
 
         sonarqube {
             sonarqube {
@@ -188,14 +185,18 @@ task jacocoRootMerge(type: org.gradle.testing.jacoco.tasks.JacocoMerge) {
 }
 
 task jacocoRootMergeReport(dependsOn: jacocoRootMerge, type: JacocoReport) {
-    executionData files(projectsWithCoverage.jacocoTestReport.executionData)
-    sourceDirectories = files(projectsWithCoverage.sourceSets.main.allSource.srcDirs)
+    group = 'Reporting'
+    description = 'Aggregate Jacoco coverage reports.'
+
+    additionalSourceDirs = files(projectsWithCoverage.sourceSets.main.allSource.srcDirs)
+    sourceDirectories = files(projectsWithCoverage .sourceSets.main.allSource.srcDirs)
     classDirectories = files(projectsWithCoverage.sourceSets.main.output)
+    executionData = files(jacocoRootMerge.destinationFile)
+
     reports {
         html.enabled = true
         xml.enabled = true
-        csv.enabled = false
-        html.destination = "${buildDir}/reports/jacoco/test/html"
-        xml.destination = "${buildDir}/reports/jacoco/test/jacocoTestReport.xml"
+        html.destination = file(jacocoMergeReportHTMLFile)
+        xml.destination = file(jacocoMergeReportXMLFile)
     }
 }
