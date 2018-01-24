@@ -51,6 +51,8 @@ public class KeycloakConfiguration implements Serializable {
 
     private final String realmName;
 
+    private final List<String> realmNames;
+
     private final boolean securityActive;
 
     private final boolean loginEndpointActive;
@@ -67,6 +69,10 @@ public class KeycloakConfiguration implements Serializable {
     public KeycloakConfiguration(final PlatformConfiguration platformConfiguration) {
         Assert.requireNonNull(platformConfiguration, "platformConfiguration");
         this.realmName = platformConfiguration.getProperty(REALM_PROPERTY_NAME, REALM_PROPERTY_DEFAULT_VALUE);
+        this.realmNames = platformConfiguration.getListProperty(REALM_PROPERTY_NAME, Collections.emptyList());
+        if(this.realmNames.isEmpty()){
+            this.realmNames.add(this.realmName);
+        }
         this.applicationName = platformConfiguration.getProperty(APPLICATION_PROPERTY_NAME, APPLICATION_PROPERTY_DEFAULT_VALUE) ;
         this.authEndpoint = platformConfiguration.getProperty(AUTH_ENDPOINT_PROPERTY_NAME, AUTH_ENDPOINT_PROPERTY_DEFAULT_VALUE) + "/auth";
         this.secureEndpoints.addAll(platformConfiguration.getListProperty(SECURE_ENDPOINTS_PROPERTY_NAME, Collections.emptyList()));
@@ -78,6 +84,10 @@ public class KeycloakConfiguration implements Serializable {
 
     public String getRealmName() {
         return realmName;
+    }
+
+    public List<String> getRealmNames() {
+        return realmNames;
     }
 
     public String getApplicationName() {
