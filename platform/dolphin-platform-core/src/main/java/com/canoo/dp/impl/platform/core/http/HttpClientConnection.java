@@ -72,8 +72,8 @@ public class HttpClientConnection {
 
     public void writeRequestContent(final String content) throws IOException {
         Assert.requireNonNull(content, "content");
-        writeRequestContent(content.getBytes(CHARSET));
         addRequestHeader(CHARSET_HEADER, CHARSET);
+        writeRequestContent(content.getBytes(CHARSET));
     }
 
     public void writeRequestContent(final byte[] content) throws IOException {
@@ -82,8 +82,8 @@ public class HttpClientConnection {
             if (method.equals(GET)) {
                 LOG.warn("You are currently defining a request content for a HTTP GET call for endpoint '{}'", url);
             }
-            setDoOutput(true);
             addRequestHeader(CONTENT_LENGHT_HEADER, content.length + "");
+            setDoOutput(true);
             ConnectionUtils.writeContent(connection, content);
         }
     }

@@ -20,6 +20,8 @@ import com.canoo.dp.impl.platform.core.http.ConnectionUtils;
 import com.canoo.dp.impl.platform.core.http.HttpClientConnection;
 import com.canoo.platform.core.DolphinRuntimeException;
 import com.canoo.platform.core.http.RequestMethod;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -29,10 +31,17 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.Optional;
 
+import static com.canoo.dp.impl.platform.core.http.HttpHeaderConstants.CHARSET;
+import static com.canoo.dp.impl.platform.core.http.HttpHeaderConstants.CHARSET_HEADER;
+import static com.canoo.dp.impl.platform.core.http.HttpHeaderConstants.CONTENT_TYPE_HEADER;
+import static com.canoo.dp.impl.platform.core.http.HttpHeaderConstants.FORM_MIME_TYPE;
 import static com.canoo.dp.impl.platform.core.http.HttpStatus.SC_HTTP_UNAUTHORIZED;
+import static com.canoo.dp.impl.security.SecurityHttpHeader.APPLICATION_NAME_HEADER;
 import static com.canoo.dp.impl.security.SecurityHttpHeader.REALM_NAME_HEADER;
 
 public class KeycloakTokenServlet extends HttpServlet {
+
+    private final static Logger LOG = LoggerFactory.getLogger(KeycloakTokenServlet.class);
 
     private final KeycloakConfiguration configuration;
 
@@ -43,19 +52,25 @@ public class KeycloakTokenServlet extends HttpServlet {
     @Override
     protected void doPost(final HttpServletRequest req, final HttpServletResponse resp) throws ServletException, IOException {
         try {
+            LOG.debug("open-id endpoint called");
             final String realmName = Optional.ofNullable(req.getHeader(REALM_NAME_HEADER)).orElse(configuration.getRealmName());
+            final String appName = Optional.ofNullable(req.getHeader(APPLICATION_NAME_HEADER)).orElse(configuration.getApplicationName());
             final String authEndPoint = configuration.getAuthEndpoint();
-            final byte[] content = ConnectionUtils.readContent(req.getInputStream());
+            final String content = ConnectionUtils.readUTF8Content(req.getInputStream()) + "&client_id=" + appName;
 
+
+            LOG.debug("Calling Keycloak");
             final URI url = new URI(authEndPoint + "/realms/" + realmName + "/protocol/openid-connect/token");
             final HttpClientConnection clientConnection = new HttpClientConnection(url, RequestMethod.POST);
-            clientConnection.addRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-            clientConnection.setDoOutput(true);
+            clientConnection.addRequestHeader(CONTENT_TYPE_HEADER, FORM_MIME_TYPE);
+            clientConnection.addRequestHeader(CHARSET_HEADER, CHARSET);
             clientConnection.writeRequestContent(content);
             final int responseCode = clientConnection.readResponseCode();
             if(responseCode == SC_HTTP_UNAUTHORIZED) {
+                LOG.debug("Invalid login!");
                 throw new DolphinRuntimeException("Invalid login!");
             }
+            LOG.debug("sending auth token to client");
             final byte[] responseContent = clientConnection.readResponseContent();
             ConnectionUtils.writeContent(resp.getOutputStream(), responseContent);
         } catch (final Exception e) {

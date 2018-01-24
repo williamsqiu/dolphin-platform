@@ -25,6 +25,8 @@ import org.slf4j.LoggerFactory;
 
 import java.net.HttpURLConnection;
 
+import static com.canoo.dp.impl.security.SecurityHttpHeader.AUTHORIZATION_HEADER;
+import static com.canoo.dp.impl.security.SecurityHttpHeader.BEARER;
 import static org.apiguardian.api.API.Status.INTERNAL;
 
 @API(since = "0.19.0", status = INTERNAL)
@@ -60,7 +62,7 @@ public class KeycloakRequestHandler implements HttpURLConnectionHandler {
         String accessToken = security.getAccessToken();
         if(accessToken != null && !accessToken.isEmpty()) {
             LOG.debug("Adding security access token to request");
-            connection.setRequestProperty("Authorization", "Bearer " + accessToken);
+            connection.setRequestProperty(AUTHORIZATION_HEADER, BEARER + accessToken);
         }
     }
 }
