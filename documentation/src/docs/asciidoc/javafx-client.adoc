@@ -52,16 +52,16 @@ case the server controller might look like this:
 
 [source,java]
 ----
-@DolphinController(ControllerConstants.NAME)
+@RemotingController(ControllerConstants.NAME)
 public class Controller {
 
   @Inject
   private PersistenceService persistence;
 
-  @DolphinModel
+  @RemotingModel
   private MyModel model;
 
-  @DolphinAction(ControllerConstants.SAVE)
+  @RemotingAction(ControllerConstants.SAVE)
   public void save() {
     persistence.insert(model.getName());
   }

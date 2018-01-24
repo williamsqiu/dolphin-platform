@@ -103,7 +103,7 @@ public abstract class AbstractViewController<M> {
 
     /**
      * This invokes a action on the server side controller. For more information how an action can be defined in the
-     * controller have a look at the DolphinAction annotation in the server module.
+     * controller have a look at the RemotingAction annotation in the server module.
      * This method don't block and can be called from the Platform thread. To check if an server
      *
      * @param actionName name of the action

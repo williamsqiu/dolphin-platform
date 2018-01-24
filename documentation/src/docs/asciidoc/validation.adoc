@@ -50,7 +50,7 @@ defines a "not null" constrain for a `String` property:
 
 [source,java]
 ----
-@DolphinBean
+@RemotingBean
 public class MyModel {
 
     @NotNull

@@ -39,7 +39,7 @@ import static org.apiguardian.api.API.Status.INTERNAL;
 
 /**
  * A {@code ClassRepository} manages {@link ClassInfo} objects for all registered Dolphin Beans. A {@code ClassInfo}
- * object keeps information on class level about the properties and ObservableLists of a DolphinBean.
+ * object keeps information on class level about the properties and ObservableLists of a RemotingBean.
  */
 @API(since = "0.x", status = INTERNAL)
 public class ClassRepositoryImpl implements ClassRepository {

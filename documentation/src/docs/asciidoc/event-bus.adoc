@@ -61,7 +61,7 @@ public interface EventTopics {
 
 == Sending an event
 
-The Dolphin Platform provides an injectable `DolphinEventBus` bean that must be used to send an event to a topic. By
+The Dolphin Platform provides an injectable `RemotingEventBus` bean that must be used to send an event to a topic. By
 doing so each bean that is managed by the underlying container (like Spring or JavaEE) can publish events. To publish an
 event you always need to define the topic to that the event should be published. In addition data can be sent as part of
 the event message. Publishing an event is a non-blocking operation. Here is an example how a event can be sent to a
@@ -73,7 +73,7 @@ specific topic:
 public class MyLocalStoreService {
  
     @Inject
-    private DolphinEventBus eventBus;
+    private RemotingEventBus eventBus;
     
     public void addDescription(String desc) {
         eventBus.publish(EventTopics.DESCRIPTION_ADDED_TOPIC, desc);
@@ -100,14 +100,14 @@ can be done:
 
 [source,java]
 ----
-@DolphinController(ControllerConstants.CONTROLLER_NAME)
+@RemotingController(ControllerConstants.CONTROLLER_NAME)
 public class MyViewController {
  
-    @DolphinModel
+    @RemotingModel
     private MyModel model;
     
     @Inject
-    private DolphinEventBus eventBus;
+    private RemotingEventBus eventBus;
     
     @PostContruct
     public void init() {
@@ -129,24 +129,24 @@ client and server the changes of the model that are done in the subscription of 
 automatically be snychronized with the client and can trigger an update of the UI. By doing so it's quite easy to update
 several clients dynamically based on events.
 
-The `DolphinEventBus` doesn't provide a method to unregister subscriptions. Instead of this the `subscribe(...)` methods
+The `RemotingEventBus` doesn't provide a method to unregister subscriptions. Instead of this the `subscribe(...)` methods
 return an object of type `Subscription`. This object can easily be used to unsubscribe from a topic. By doing so the
 following code defines a controller that can be dynamically subscribed and unsubscribed from a topic:
 
 [source,java]
 ----
-@DolphinController(ControllerConstants.CONTROLLER_NAME)
+@RemotingController(ControllerConstants.CONTROLLER_NAME)
 public class MyViewController {
  
-    @DolphinModel
+    @RemotingModel
     private MyModel model;
     
     @Inject
-    private DolphinEventBus eventBus;
+    private RemotingEventBus eventBus;
     
     private Subscription subscription;
     
-    @DolphinAction
+    @RemotingAction
     public void activateLiveUpdates() {
         if(subscription != null) {
             subscription = eventBus.subscribe(EventTopics.DESCRIPTION_ADDED_TOPIC, e -> {
@@ -155,7 +155,7 @@ public class MyViewController {
         }
     }
     
-    @DolphinAction
+    @RemotingAction
     public void deactivateLiveUpdates() {
         if(subscription != null) {
             subscription.unsubscribe();
