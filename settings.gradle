@@ -23,6 +23,7 @@ include 'platform-extras/dolphin-platform-logger-widget-server'
 include 'platform-extras/dolphin-platform-bean-validation'
 
 include 'platform-extras/dolphin-platform-data'
+include 'platform-extras/dolphin-platform-data-jpa'
 
 include 'platform-extras/dolphin-platform-reactive'
 include 'platform-extras/dolphin-platform-security-common'

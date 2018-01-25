@@ -2,6 +2,7 @@ package com.canoo.dp.impl.platform.data;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Default Interface for CRUD-Services
@@ -25,11 +26,15 @@ public interface CrudService<ID extends Serializable, T extends EntityWithId<ID>
      */
     T findById(ID id);
 
+    Optional<T> byId(ID id);
+
+    Class<T> getDataClass();
+
     /**
      * Persists the given entity
      * @param toSave the entity that should be persisted
      */
-    void save(T toSave);
+    T save(T toSave);
 
     /**
      * removes the given entity from the persistence
