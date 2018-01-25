@@ -1,4 +1,4 @@
-# Dolpin Plaztform services
+# Dolphin Plaztform services
 
 ## Setup
 
