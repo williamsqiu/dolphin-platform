@@ -10,6 +10,8 @@ import java.util.List;
  */
 public interface CrudService<ID extends Serializable, T extends EntityWithId<ID>> {
 
+    T createNewInstance();
+
     /**
      * Return all entities that are currently persited
      * @return all entities that are currently persited

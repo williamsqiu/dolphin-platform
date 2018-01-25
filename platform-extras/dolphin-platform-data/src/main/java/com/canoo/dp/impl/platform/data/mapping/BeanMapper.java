@@ -7,11 +7,11 @@ import java.util.List;
 
 public interface BeanMapper {
 
-    <ID extends Serializable, B, E extends EntityWithId<ID>> B toBean(E entity);
+    <ID extends Serializable, B, E extends EntityWithId<ID>> B toBean(E entity, Class<B> beanClass);
 
-    <ID extends Serializable, B, E extends EntityWithId<ID>> E toEntity(B bean);
+    <ID extends Serializable, B, E extends EntityWithId<ID>> E toEntity(B bean, Class<E> entityClass);
 
-    <ID extends Serializable, B, E extends EntityWithId<ID>> List<B> toBeanList(List<E> entityList);
+    <ID extends Serializable, B, E extends EntityWithId<ID>> List<B> toBeanList(List<E> entityList, Class<B> beanClass);
 
-    <ID extends Serializable, B, E extends EntityWithId<ID>> List<E> toEntityList(List<B> beanList);
+    <ID extends Serializable, B, E extends EntityWithId<ID>> List<E> toEntityList(List<B> beanList, Class<E> entityClass);
 }
