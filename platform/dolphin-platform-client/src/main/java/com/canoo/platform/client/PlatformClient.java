@@ -17,6 +17,7 @@ package com.canoo.platform.client;
 
 import com.canoo.dp.impl.platform.client.config.ConfigurationFileLoader;
 import com.canoo.dp.impl.platform.core.Assert;
+import com.canoo.dp.impl.platform.core.ansi.PlatformLogo;
 import com.canoo.platform.client.spi.ServiceProvider;
 import com.canoo.platform.core.DolphinRuntimeException;
 import org.apiguardian.api.API;
@@ -45,6 +46,7 @@ public class PlatformClient {
     private AtomicBoolean isToolkitSet =  new AtomicBoolean(false);
 
     private PlatformClient() {
+        PlatformLogo.printLogo();
         this.clientConfiguration = ConfigurationFileLoader.loadConfiguration();
 
         final ServiceLoader<ServiceProvider> loader = ServiceLoader.load(ServiceProvider.class);

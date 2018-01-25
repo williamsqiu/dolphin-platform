@@ -15,32 +15,37 @@
  */
 package com.canoo.dp.impl.server.bootstrap;
 
-import com.canoo.dp.impl.platform.core.ansi.AnsiOut;
-import com.canoo.platform.core.DolphinRuntimeException;
-import com.canoo.platform.core.PlatformThreadFactory;
-import com.canoo.dp.impl.platform.core.SimpleDolphinPlatformThreadFactory;
 import com.canoo.dp.impl.platform.core.Assert;
-import com.canoo.platform.server.spi.components.ManagedBeanFactory;
+import com.canoo.dp.impl.platform.core.SimpleDolphinPlatformThreadFactory;
+import com.canoo.dp.impl.platform.core.ansi.PlatformLogo;
 import com.canoo.dp.impl.server.config.DefaultPlatformConfiguration;
 import com.canoo.dp.impl.server.mbean.MBeanRegistry;
 import com.canoo.dp.impl.server.scanner.DefaultClasspathScanner;
+import com.canoo.platform.core.DolphinRuntimeException;
+import com.canoo.platform.core.PlatformThreadFactory;
 import com.canoo.platform.server.spi.ModuleDefinition;
 import com.canoo.platform.server.spi.ModuleInitializationException;
 import com.canoo.platform.server.spi.ServerCoreComponents;
 import com.canoo.platform.server.spi.ServerModule;
+import com.canoo.platform.server.spi.components.ManagedBeanFactory;
 import org.apiguardian.api.API;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletContext;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.ServiceLoader;
+import java.util.Set;
 
-import static org.apiguardian.api.API.Status.INTERNAL;
-import static com.canoo.dp.impl.server.config.DefaultPlatformConfiguration.PLATFORM_ACTIVE;
 import static com.canoo.dp.impl.server.config.DefaultPlatformConfiguration.ACTIVE_DEFAULT_VALUE;
 import static com.canoo.dp.impl.server.config.DefaultPlatformConfiguration.MBEAN_REGISTRATION;
 import static com.canoo.dp.impl.server.config.DefaultPlatformConfiguration.M_BEAN_REGISTRATION_DEFAULT_VALUE;
+import static com.canoo.dp.impl.server.config.DefaultPlatformConfiguration.PLATFORM_ACTIVE;
 import static com.canoo.dp.impl.server.config.DefaultPlatformConfiguration.ROOT_PACKAGE_FOR_CLASSPATH_SCAN;
+import static org.apiguardian.api.API.Status.INTERNAL;
 
 @API(since = "0.x", status = INTERNAL)
 public class PlatformBootstrap {
@@ -56,7 +61,7 @@ public class PlatformBootstrap {
         Assert.requireNonNull(configuration, "configuration");
 
         if(configuration.getBooleanProperty(PLATFORM_ACTIVE, ACTIVE_DEFAULT_VALUE)) {
-            printLogo();
+            PlatformLogo.printLogo();
             try {
                 LOG.info("Will boot Dolphin Plaform now");
 
@@ -135,34 +140,4 @@ public class PlatformBootstrap {
         return serverCoreComponents;
     }
 
-    private void printLogo() {
-        final String strokeColor = AnsiOut.ANSI_BLUE;
-        final String textColor = AnsiOut.ANSI_RED;
-        final String borderColor = AnsiOut.ANSI_GREEN;
-
-
-        final String borderStart = AnsiOut.ANSI_BOLD + borderColor;
-        final String borderEnd = AnsiOut.ANSI_RESET;
-        final String borderPipe = borderStart + "|" + borderEnd;
-        final String logoStart = AnsiOut.ANSI_BOLD + strokeColor;
-        final String logoEnd = AnsiOut.ANSI_RESET;
-        final String textStart = textColor;
-        final String textEnd = AnsiOut.ANSI_RESET;
-        final String boldTextStart = AnsiOut.ANSI_BOLD + textColor;
-        final String boldTextEnd = AnsiOut.ANSI_RESET;
-
-        System.out.println("");
-        System.out.println("  " + borderStart + "_____________________________________________________________________________________" + borderEnd);
-        System.out.println("  " + borderPipe + logoStart + "   _____        _       _     _       _____  _       _    __                       " + borderPipe);
-        System.out.println("  " + borderPipe + logoStart + "  |  __ \\      | |     | |   (_)     |  __ \\| |     | |  / _|                      " + borderPipe);
-        System.out.println("  " + borderPipe + logoStart + "  | |  | | ___ | |_ __ | |__  _ _ __ | |__) | | __ _| |_| |_ ___  _ __ _ __ ___    " + borderPipe);
-        System.out.println("  " + borderPipe + logoStart + "  | |  | |/ _ \\| | '_ \\| '_ \\| | '_ \\|  ___/| |/ _` | __|  _/ _ \\| '__| '_ ` _ \\   " + borderPipe);
-        System.out.println("  " + borderPipe + logoStart + "  | |  | | (_) | | |_) | | | | | | | | |    | | (_| | |_| || (_) | |  | | | | | |  " + borderPipe);
-        System.out.println("  " + borderPipe + logoStart + "  | |__| |\\___/|_| .__/|_| |_|_|_| |_|_|    |_|\\__,_|\\__|_| \\___/|_|  |_| |_| | |  " + borderPipe);
-        System.out.println("  " + borderPipe + logoStart + "  |_____/        | |                                                          |_|  " + borderPipe);
-        System.out.println("  " + borderPipe + logoStart + "                 |_|   " + textStart + "supported by " + textEnd + boldTextStart + "canoo.com" + boldTextEnd + "                                      " + borderPipe);
-        System.out.println("  " + borderPipe + borderStart + "___________________________________________________________________________________" + borderEnd + borderPipe);
-        System.out.println("");
-        System.out.println("");
-    }
 }
