@@ -28,6 +28,7 @@ public interface Security {
 
     boolean isAuthorized();
 
+    @Deprecated
     String getRealmName();
 
     @Deprecated

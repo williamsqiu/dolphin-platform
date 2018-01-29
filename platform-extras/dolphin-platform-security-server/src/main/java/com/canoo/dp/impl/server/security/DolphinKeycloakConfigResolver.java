@@ -51,10 +51,10 @@ public class DolphinKeycloakConfigResolver implements KeycloakConfigResolver {
         Optional.ofNullable(authEndPoint).orElseThrow(() -> new SecurityException("Auth endpoint for security check is not configured!"));
 
         final AdapterConfig adapterConfig = new AdapterConfig();
-        if(isRealmExist(realmName)){
+        if(isRealmAllowed(realmName)){
             adapterConfig.setRealm(realmName);
         }else{
-            throw new SecurityException("Access Denied");
+            throw new SecurityException("Access Denied! The given realm is not in the allowed realms.");
         }
 
         adapterConfig.setResource(applicationName);
@@ -64,7 +64,7 @@ public class DolphinKeycloakConfigResolver implements KeycloakConfigResolver {
         return KeycloakDeploymentBuilder.build(adapterConfig);
     }
 
-    public static boolean isRealmExist(final String realmName){
+    public static boolean isRealmAllowed(final String realmName){
         Assert.requireNonNull(realmName, "realmName");
         return configuration.getRealmNames().contains(realmName);
     }

@@ -68,9 +68,9 @@ public class KeycloakConfiguration implements Serializable {
 
     public KeycloakConfiguration(final PlatformConfiguration platformConfiguration) {
         Assert.requireNonNull(platformConfiguration, "platformConfiguration");
-        this.realmName = platformConfiguration.getProperty(REALM_PROPERTY_NAME, REALM_PROPERTY_DEFAULT_VALUE);
+        this.realmName = platformConfiguration.getProperty(REALM_PROPERTY_NAME);
         this.realmNames = platformConfiguration.getListProperty(REALM_PROPERTY_NAME, Collections.emptyList());
-        if(this.realmNames.isEmpty()){
+        if(this.realmName != null && !this.realmName.isEmpty()){
             this.realmNames.add(this.realmName);
         }
         this.applicationName = platformConfiguration.getProperty(APPLICATION_PROPERTY_NAME, APPLICATION_PROPERTY_DEFAULT_VALUE) ;
