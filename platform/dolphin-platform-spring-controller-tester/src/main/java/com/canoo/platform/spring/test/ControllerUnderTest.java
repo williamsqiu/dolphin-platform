@@ -58,4 +58,5 @@ public interface ControllerUnderTest<T> {
      */
     void destroy();
 
+    <S> ControllerUnderTest<S> createController(String childControllerName);
 }
