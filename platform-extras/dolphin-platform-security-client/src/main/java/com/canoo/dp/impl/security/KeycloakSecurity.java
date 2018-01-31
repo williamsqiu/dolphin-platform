@@ -182,11 +182,6 @@ public class KeycloakSecurity implements Security {
         return connectResult != null;
     }
 
-    @Override
-    public String getRealmName() {
-        return realmName;
-    }
-
     public String getAccessToken() {
         if (connectResult == null) {
             return null;
