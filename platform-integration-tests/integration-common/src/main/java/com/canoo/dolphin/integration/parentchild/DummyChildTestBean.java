@@ -19,11 +19,7 @@ import com.canoo.platform.remoting.Property;
 import com.canoo.platform.remoting.RemotingBean;
 
 @RemotingBean
-public class ParentTestBean {
-
-    private Property<Boolean> postCreatedCalled;
-
-    private Property<Boolean> preDestroyedCalled;
+public class DummyChildTestBean {
 
     private Property<Boolean> postChildCreatedCalled;
 
@@ -51,30 +47,6 @@ public class ParentTestBean {
 
     public Boolean getPreChildDestroyedCalled() {
         return preChildDestroyedCalled.get();
-    }
-
-    public Property<Boolean> postCreatedCalledProperty() {
-        return postCreatedCalled;
-    }
-
-    public Property<Boolean> preDestroyedCalledProperty() {
-        return preDestroyedCalled;
-    }
-
-    public void setPostCreatedCalled(Boolean postCreatedCalled) {
-        this.postCreatedCalled.set(postCreatedCalled);
-    }
-
-    public void setPreDestroyedCalled(Boolean preDestroyedCalled) {
-        this.preDestroyedCalled.set(preDestroyedCalled);
-    }
-
-    public Boolean getPostCreatedCalled() {
-        return postCreatedCalled.get();
-    }
-
-    public Boolean getPreDestroyedCalled() {
-        return preDestroyedCalled.get();
     }
 
 }

@@ -35,23 +35,21 @@ public class ParentTestController {
 
     @PostConstruct
     private void init() {
-        System.out.println("PostConstruct");
+        model.setPostCreatedCalled(true);
     }
 
     @PostChildCreated
     private void onChildControllerCreated(ChildTestController childController) {
-        System.out.println("PostChildCreated");
         model.setPostChildCreatedCalled(true);
     }
 
     @PreChildDestroyed
     private void onChildControllerDestroyed(ChildTestController childController) {
-        System.out.println("PreChildDestroyed");
         model.setPreChildDestroyedCalled(true);
     }
 
     @PreDestroy
     private void destroy() {
-        System.out.println("PreDestroy");
+        model.setPreDestroyedCalled(true);
     }
 }

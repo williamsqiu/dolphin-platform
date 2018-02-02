@@ -35,81 +35,35 @@ public class ClientTestFactory {
         Assert.requireNonBlank(controllerName, "controllerName");
         try {
             final ControllerProxy<T> proxy = (ControllerProxy<T>) clientContext.createController(controllerName).get();
-            return new ControllerProxyWrapper<>(clientContext, proxy);
-//            return new ControllerUnderTest<T>() {
-//                @Override
-//                public T getModel() {
-//                    return proxy.getModel();
-//                }
-//
-//                @Override
-//                public void invoke(String actionName, Param... params) {
-//                    try {
-//                        proxy.invoke(actionName, params).get();
-//                    } catch (Exception e) {
-//                        throw new ControllerTestException("Error in action invocation", e);
-//                    }
-//                }
-//
-//                @Override
-//                public void invoke(String actionName, Map<String, Object> params) {
-//                    try {
-//                        proxy.invoke(actionName, params).get();
-//                    } catch (Exception e) {
-//                        throw new ControllerTestException("Error in action invocation", e);
-//                    }
-//                }
-//
-//                @Override
-//                public CommunicationMonitor createMonitor() {
-//                    return new CommunicationMonitorImpl(clientContext);
-//                }
-//
-//                @Override
-//                public void destroy() {
-//                    try {
-//                        proxy.destroy().get();
-//                    } catch (Exception e) {
-//                        throw new ControllerTestException("Error in destroy", e);
-//                    }
-//                }
-//
-//                @Override
-//                public <S> ControllerUnderTest<S> createController(String childControllerName) {
-//                    try {
-//                        return (ControllerUnderTest<S>) proxy.createController(childControllerName).get();
-//                    } catch (Exception e) {
-//                        throw new ControllerTestException("Error in sub controller", e);
-//                    }
-//                }
-//            };
+            return new ControllerUnderTestWrapper<>(clientContext, proxy);
         } catch (Exception e) {
             throw new ControllerTestException("Can't create controller proxy", e);
         }
-
     }
-   static class ControllerProxyWrapper<T> implements ControllerUnderTest<T>{
+
+    static class ControllerUnderTestWrapper<T> implements ControllerUnderTest<T> {
 
         private final ControllerProxy<T> proxy;
         private final TestClientContext clientContext;
 
-        public ControllerProxyWrapper(final TestClientContext clientContext, final ControllerProxy<T> controllerProxy){
+        public ControllerUnderTestWrapper(final TestClientContext clientContext, final ControllerProxy<T> controllerProxy) {
             this.clientContext = clientContext;
             this.proxy = controllerProxy;
         }
+
         @Override
         public T getModel() {
             return proxy.getModel();
         }
 
-       @Override
-       public void invoke(String actionName, Param... params) {
-           try {
-               proxy.invoke(actionName, params).get();
-           } catch (Exception e) {
-               throw new ControllerTestException("Error in action invocation", e);
-           }
-       }
+        @Override
+        public void invoke(String actionName, Param... params) {
+            try {
+                proxy.invoke(actionName, params).get();
+            } catch (Exception e) {
+                throw new ControllerTestException("Error in action invocation", e);
+            }
+        }
 
         @Override
         public void invoke(String actionName, Map<String, Object> params) {
@@ -137,13 +91,12 @@ public class ClientTestFactory {
         @Override
         public <S> ControllerUnderTest<S> createController(String childControllerName) {
             try {
-                ControllerProxy<T> controllerProxy = (ControllerProxy<T>)proxy.createController(childControllerName).get();
-                return new ControllerProxyWrapper(clientContext, controllerProxy);
+                ControllerProxy<T> controllerProxy = (ControllerProxy<T>) proxy.createController(childControllerName).get();
+                return new ControllerUnderTestWrapper(clientContext, controllerProxy);
             } catch (Exception e) {
                 throw new ControllerTestException("Error in sub controller", e);
             }
         }
     }
-
 }
 

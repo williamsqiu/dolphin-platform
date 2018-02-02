@@ -21,32 +21,32 @@ import com.canoo.platform.remoting.RemotingBean;
 @RemotingBean
 public class ChildTestBean {
 
-    private Property<Boolean> postChildCreatedCalled;
+    private Property<Boolean> postCreatedCalled;
 
-    private Property<Boolean> preChildDestroyedCalled;
+    private Property<Boolean> preDestroyedCalled;
 
-    public Property<Boolean> postChildCreatedCalledProperty() {
-        return postChildCreatedCalled;
+    public Property<Boolean> postCreatedCalledProperty() {
+        return postCreatedCalled;
     }
 
-    public Property<Boolean> preChildDestroyedCalledProperty() {
-        return preChildDestroyedCalled;
+    public Property<Boolean> preDestroyedCalledProperty() {
+        return preDestroyedCalled;
     }
 
-    public void setPostChildCreatedCalled(Boolean postChildCreatedCalled) {
-        this.postChildCreatedCalled.set(postChildCreatedCalled);
+    public void setPostCreatedCalled(Boolean postCreatedCalled) {
+        this.postCreatedCalled.set(postCreatedCalled);
     }
 
-    public void setPreChildDestroyedCalled(Boolean preChildDestroyedCalled) {
-        this.preChildDestroyedCalled.set(preChildDestroyedCalled);
+    public void setPreDestroyedCalled(Boolean preDestroyedCalled) {
+        this.preDestroyedCalled.set(preDestroyedCalled);
     }
 
-    public Boolean getPostChildCreatedCalled() {
-        return postChildCreatedCalled.get();
+    public Boolean getPostCreatedCalled() {
+        return postCreatedCalled.get();
     }
 
-    public Boolean getPreChildDestroyedCalled() {
-        return preChildDestroyedCalled.get();
+    public Boolean getPreDestroyedCalled() {
+        return preDestroyedCalled.get();
     }
 
 }

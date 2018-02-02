@@ -13,13 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.dolphin.integration.parentchild;
+package com.canoo.dolphin.integration.server.parentchild;
 
-public interface ParentChildTestConstants {
+import com.canoo.dolphin.integration.parentchild.ChildTestBean;
+import com.canoo.platform.remoting.server.RemotingController;
+import com.canoo.platform.remoting.server.RemotingModel;
 
-    String PARENT_CONTROLLER_NAME = "ParentController";
+import static com.canoo.dolphin.integration.parentchild.ParentChildTestConstants.DUMMY_CHILD_CONTROLLER_NAME;
 
-    String CHILD_CONTROLLER_NAME = "ChildController";
+@RemotingController(DUMMY_CHILD_CONTROLLER_NAME)
+public class DummyChildTestController {
 
-    String DUMMY_CHILD_CONTROLLER_NAME = "DummyChildController";
+    @RemotingModel
+    private ChildTestBean model;
+
 }

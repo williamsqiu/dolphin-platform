@@ -23,6 +23,7 @@ import com.canoo.platform.remoting.client.ControllerProxy;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import static com.canoo.dolphin.integration.parentchild.ParentChildTestConstants.CHILD_CONTROLLER_NAME;
 import static com.canoo.dolphin.integration.parentchild.ParentChildTestConstants.PARENT_CONTROLLER_NAME;
 
 
@@ -32,7 +33,8 @@ public class ParentChildControllerTest extends AbstractIntegrationTest {
     public void testCreateController(String containerType, String endpoint) {
         try {
             ClientContext context = connect(endpoint);
-            ControllerProxy<EnterpriseTestBean> controller = createController(context, PARENT_CONTROLLER_NAME);
+            ControllerProxy<ParentTestBean> controller = createController(context, PARENT_CONTROLLER_NAME);
+            controller.createController(CHILD_CONTROLLER_NAME);
             Assert.assertNotNull(controller);
             Assert.assertNotNull(controller.getModel());
             Assert.assertEquals(controller.getModel().getClass(), ParentTestBean.class);
@@ -48,6 +50,7 @@ public class ParentChildControllerTest extends AbstractIntegrationTest {
         try {
             ClientContext context = connect(endpoint);
             ControllerProxy<ParentTestBean> controller = createController(context, PARENT_CONTROLLER_NAME);
+            controller.createController(CHILD_CONTROLLER_NAME);
             Assert.assertTrue(controller.getModel().getPostChildCreatedCalled());
             destroy(controller, endpoint);
             disconnect(context, endpoint);
@@ -61,6 +64,7 @@ public class ParentChildControllerTest extends AbstractIntegrationTest {
         try {
             ClientContext context = connect(endpoint);
             ControllerProxy<ParentTestBean> controller = createController(context, PARENT_CONTROLLER_NAME);
+            controller.createController(CHILD_CONTROLLER_NAME);
             Property<Boolean> preDestroyProperty = controller.getModel().preChildDestroyedCalledProperty();
             Assert.assertNull(preDestroyProperty.get());
             destroy(controller, endpoint);
