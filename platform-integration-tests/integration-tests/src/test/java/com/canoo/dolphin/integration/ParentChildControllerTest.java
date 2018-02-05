@@ -15,7 +15,7 @@
  */
 package com.canoo.dolphin.integration;
 
-import com.canoo.dolphin.integration.enterprise.EnterpriseTestBean;
+import com.canoo.dolphin.integration.parentchild.ChildTestBean;
 import com.canoo.dolphin.integration.parentchild.ParentTestBean;
 import com.canoo.platform.remoting.Property;
 import com.canoo.platform.remoting.client.ClientContext;
@@ -24,6 +24,7 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import static com.canoo.dolphin.integration.parentchild.ParentChildTestConstants.CHILD_CONTROLLER_NAME;
+import static com.canoo.dolphin.integration.parentchild.ParentChildTestConstants.DUMMY_CHILD_CONTROLLER_NAME;
 import static com.canoo.dolphin.integration.parentchild.ParentChildTestConstants.PARENT_CONTROLLER_NAME;
 
 
@@ -34,10 +35,11 @@ public class ParentChildControllerTest extends AbstractIntegrationTest {
         try {
             ClientContext context = connect(endpoint);
             ControllerProxy<ParentTestBean> controller = createController(context, PARENT_CONTROLLER_NAME);
-            controller.createController(CHILD_CONTROLLER_NAME);
+            ControllerProxy<?> childController = controller.createController(CHILD_CONTROLLER_NAME).get();
             Assert.assertNotNull(controller);
             Assert.assertNotNull(controller.getModel());
             Assert.assertEquals(controller.getModel().getClass(), ParentTestBean.class);
+            Assert.assertEquals(childController.getModel().getClass(), ChildTestBean.class);
             destroy(controller, endpoint);
             disconnect(context, endpoint);
         } catch (Exception e) {
@@ -46,12 +48,34 @@ public class ParentChildControllerTest extends AbstractIntegrationTest {
     }
 
     @Test(dataProvider = ENDPOINTS_DATAPROVIDER, description = "Test if @PostChildCreated is called in controller")
-    public void testPostConstruct(String containerType, String endpoint) {
+    public void testPostChildCreatedCalledWhenChildControllerCreated(String containerType, String endpoint) {
         try {
             ClientContext context = connect(endpoint);
             ControllerProxy<ParentTestBean> controller = createController(context, PARENT_CONTROLLER_NAME);
+            Assert.assertTrue(controller.getModel().postCreatedCalledProperty().get());
+            Property<Boolean> postChildCreatedProperty = controller.getModel().postChildCreatedCalledProperty();
+            Assert.assertNull(postChildCreatedProperty.get());
             controller.createController(CHILD_CONTROLLER_NAME);
-            Assert.assertTrue(controller.getModel().getPostChildCreatedCalled());
+            Thread.sleep(1000);
+            Assert.assertTrue(postChildCreatedProperty.get());
+            destroy(controller, endpoint);
+            disconnect(context, endpoint);
+        } catch (Exception e) {
+            Assert.fail("Can not create controller for " + containerType, e);
+        }
+    }
+
+    @Test(dataProvider = ENDPOINTS_DATAPROVIDER, description = "Test if @PostChildCreated is not called in controller")
+    public void testPostChildCreatedCalledWhenNonChildControllerCreated(String containerType, String endpoint) {
+        try {
+            ClientContext context = connect(endpoint);
+            ControllerProxy<ParentTestBean> controller = createController(context, PARENT_CONTROLLER_NAME);
+            Assert.assertTrue(controller.getModel().postCreatedCalledProperty().get());
+            Property<Boolean> postChildCreatedProperty = controller.getModel().postChildCreatedCalledProperty();
+            Assert.assertNull(postChildCreatedProperty.get());
+            controller.createController(DUMMY_CHILD_CONTROLLER_NAME);
+            Thread.sleep(1000);
+            Assert.assertNull(postChildCreatedProperty.get());
             destroy(controller, endpoint);
             disconnect(context, endpoint);
         } catch (Exception e) {
@@ -60,15 +84,50 @@ public class ParentChildControllerTest extends AbstractIntegrationTest {
     }
 
     @Test(dataProvider = ENDPOINTS_DATAPROVIDER, description = "Test if @PreChildDestroyed is called in controller")
-    public void testPreDestroy(String containerType, String endpoint) {
+    public void testPreChildDestroyedCalledWhenChildControllerDestroyed(String containerType, String endpoint) {
         try {
             ClientContext context = connect(endpoint);
             ControllerProxy<ParentTestBean> controller = createController(context, PARENT_CONTROLLER_NAME);
             controller.createController(CHILD_CONTROLLER_NAME);
+            Property<Boolean> preChildDestroyProperty = controller.getModel().preChildDestroyedCalledProperty();
+            Assert.assertNull(preChildDestroyProperty.get());
+            destroy(controller, endpoint);
+            Assert.assertTrue(preChildDestroyProperty.get());
+            disconnect(context, endpoint);
+        } catch (Exception e) {
+            Assert.fail("Can not create controller for " + containerType, e);
+        }
+    }
+
+    @Test(dataProvider = ENDPOINTS_DATAPROVIDER, description = "Test if @PreChildDestroyed is not called in controller")
+    public void testPreChildDestroyedNotCalledWhenNonChildControllerDestroyed(String containerType, String endpoint) {
+        try {
+            ClientContext context = connect(endpoint);
+            ControllerProxy<ParentTestBean> controller = createController(context, PARENT_CONTROLLER_NAME);
+            ControllerProxy<?> childController = controller.createController(DUMMY_CHILD_CONTROLLER_NAME).get();
             Property<Boolean> preDestroyProperty = controller.getModel().preChildDestroyedCalledProperty();
             Assert.assertNull(preDestroyProperty.get());
+            childController.destroy();
+            Assert.assertNull(preDestroyProperty.get());
+            disconnect(context, endpoint);
+        } catch (Exception e) {
+            Assert.fail("Can not create controller for " + containerType, e);
+        }
+    }
+
+    @Test(dataProvider = ENDPOINTS_DATAPROVIDER, description = "Test if @PreDestroyed in parent is called first")
+    public void testPreDestroyInParentIsCalledFirstWhenParentIsDestroyed(String containerType, String endpoint) {
+        try {
+            ClientContext context = connect(endpoint);
+            ControllerProxy<ParentTestBean> controller = createController(context, PARENT_CONTROLLER_NAME);
+            ControllerProxy<?> childController = controller.createController(CHILD_CONTROLLER_NAME).get();
+            Property<Boolean> childPreDestroyCalledProperty = ((ChildTestBean)childController.getModel()).preDestroyedCalledProperty();
+            Property<Boolean> parentPreDestroyCalledProperty = controller.getModel().preDestroyedCalledProperty();
+            Assert.assertNull(parentPreDestroyCalledProperty.get());
+            Assert.assertNull(childPreDestroyCalledProperty.get());
             destroy(controller, endpoint);
-            Assert.assertTrue(preDestroyProperty.get());
+            Assert.assertTrue(parentPreDestroyCalledProperty.get());
+            Assert.assertTrue(childPreDestroyCalledProperty.get());
             disconnect(context, endpoint);
         } catch (Exception e) {
             Assert.fail("Can not create controller for " + containerType, e);

@@ -55,7 +55,7 @@ public class ParentChildTestControllerTest extends SpringTestNGControllerTest {
     }
 
     @Test
-    public void testPostChildCreatedCalledWhenNonChildControllerCreated() {
+    public void testPostChildCreatedNotCalledWhenNonChildControllerCreated() {
         Property<Boolean> postChildCreatedProperty = controller.getModel().postChildCreatedCalledProperty();
         Assert.assertNull(postChildCreatedProperty.get());
         controller.createController(DUMMY_CHILD_CONTROLLER_NAME);
@@ -73,7 +73,7 @@ public class ParentChildTestControllerTest extends SpringTestNGControllerTest {
     }
 
     @Test
-    public void testPreChildDestroyedCalledWhenNonChildControllerDestroyed() {
+    public void testPreChildDestroyedNotCalledWhenNonChildControllerDestroyed() {
         ControllerUnderTest<DummyChildTestBean>  dummyController = controller.createController(DUMMY_CHILD_CONTROLLER_NAME);
         Property<Boolean> preDestroyCalledProperty = controller.getModel().preChildDestroyedCalledProperty();
         Assert.assertNull(preDestroyCalledProperty.get());
