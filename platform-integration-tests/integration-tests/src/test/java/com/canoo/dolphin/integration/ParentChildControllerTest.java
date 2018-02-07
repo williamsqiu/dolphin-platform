@@ -56,7 +56,7 @@ public class ParentChildControllerTest extends AbstractIntegrationTest {
             Property<Boolean> postChildCreatedProperty = controller.getModel().postChildCreatedCalledProperty();
             Assert.assertNull(postChildCreatedProperty.get());
             controller.createController(CHILD_CONTROLLER_NAME);
-            Thread.sleep(1000);
+            Thread.sleep(2000);
             Assert.assertTrue(postChildCreatedProperty.get());
             destroy(controller, endpoint);
             disconnect(context, endpoint);
