@@ -37,11 +37,11 @@ public class ParentTestBean {
         return preChildDestroyedCalled;
     }
 
-    public void setPostChildCreatedCalled(Boolean postChildCreatedCalled) {
+    public void setPostChildCreatedCalled(final Boolean postChildCreatedCalled) {
         this.postChildCreatedCalled.set(postChildCreatedCalled);
     }
 
-    public void setPreChildDestroyedCalled(Boolean preChildDestroyedCalled) {
+    public void setPreChildDestroyedCalled(final Boolean preChildDestroyedCalled) {
         this.preChildDestroyedCalled.set(preChildDestroyedCalled);
     }
 
@@ -61,11 +61,11 @@ public class ParentTestBean {
         return preDestroyedCalled;
     }
 
-    public void setPostCreatedCalled(Boolean postCreatedCalled) {
+    public void setPostCreatedCalled(final Boolean postCreatedCalled) {
         this.postCreatedCalled.set(postCreatedCalled);
     }
 
-    public void setPreDestroyedCalled(Boolean preDestroyedCalled) {
+    public void setPreDestroyedCalled(final Boolean preDestroyedCalled) {
         this.preDestroyedCalled.set(preDestroyedCalled);
     }
 

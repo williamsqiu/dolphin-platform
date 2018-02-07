@@ -31,7 +31,7 @@ import static com.canoo.dolphin.integration.parentchild.ParentChildTestConstants
 public class ParentChildControllerTest extends AbstractIntegrationTest {
 
     @Test(dataProvider = ENDPOINTS_DATAPROVIDER, description = "Test if controller and model can be created")
-    public void testCreateController(String containerType, String endpoint) {
+    public void testCreateController(final String containerType, final String endpoint) {
         try {
             ClientContext context = connect(endpoint);
             ControllerProxy<ParentTestBean> controller = createController(context, PARENT_CONTROLLER_NAME);
@@ -48,7 +48,7 @@ public class ParentChildControllerTest extends AbstractIntegrationTest {
     }
 
     @Test(dataProvider = ENDPOINTS_DATAPROVIDER, description = "Test if @PostChildCreated is called in controller")
-    public void testPostChildCreatedCalledWhenChildControllerCreated(String containerType, String endpoint) {
+    public void testPostChildCreatedCalledWhenChildControllerCreated(final String containerType, final String endpoint) {
         try {
             ClientContext context = connect(endpoint);
             ControllerProxy<ParentTestBean> controller = createController(context, PARENT_CONTROLLER_NAME);
@@ -66,7 +66,7 @@ public class ParentChildControllerTest extends AbstractIntegrationTest {
     }
 
     @Test(dataProvider = ENDPOINTS_DATAPROVIDER, description = "Test if @PostChildCreated is not called in controller")
-    public void testPostChildCreatedCalledWhenNonChildControllerCreated(String containerType, String endpoint) {
+    public void testPostChildCreatedCalledWhenNonChildControllerCreated(final String containerType, final String endpoint) {
         try {
             ClientContext context = connect(endpoint);
             ControllerProxy<ParentTestBean> controller = createController(context, PARENT_CONTROLLER_NAME);
@@ -84,7 +84,7 @@ public class ParentChildControllerTest extends AbstractIntegrationTest {
     }
 
     @Test(dataProvider = ENDPOINTS_DATAPROVIDER, description = "Test if @PreChildDestroyed is called in controller")
-    public void testPreChildDestroyedCalledWhenChildControllerDestroyed(String containerType, String endpoint) {
+    public void testPreChildDestroyedCalledWhenChildControllerDestroyed(final String containerType, final String endpoint) {
         try {
             ClientContext context = connect(endpoint);
             ControllerProxy<ParentTestBean> controller = createController(context, PARENT_CONTROLLER_NAME);
@@ -100,7 +100,7 @@ public class ParentChildControllerTest extends AbstractIntegrationTest {
     }
 
     @Test(dataProvider = ENDPOINTS_DATAPROVIDER, description = "Test if @PreChildDestroyed is not called in controller")
-    public void testPreChildDestroyedNotCalledWhenNonChildControllerDestroyed(String containerType, String endpoint) {
+    public void testPreChildDestroyedNotCalledWhenNonChildControllerDestroyed(final String containerType, final String endpoint) {
         try {
             ClientContext context = connect(endpoint);
             ControllerProxy<ParentTestBean> controller = createController(context, PARENT_CONTROLLER_NAME);
@@ -116,7 +116,7 @@ public class ParentChildControllerTest extends AbstractIntegrationTest {
     }
 
     @Test(dataProvider = ENDPOINTS_DATAPROVIDER, description = "Test if @PreDestroyed in parent is called first")
-    public void testPreDestroyInParentIsCalledFirstWhenParentIsDestroyed(String containerType, String endpoint) {
+    public void testPreDestroyInParentIsCalledFirstWhenParentIsDestroyed(final String containerType, final String endpoint) {
         try {
             ClientContext context = connect(endpoint);
             ControllerProxy<ParentTestBean> controller = createController(context, PARENT_CONTROLLER_NAME);

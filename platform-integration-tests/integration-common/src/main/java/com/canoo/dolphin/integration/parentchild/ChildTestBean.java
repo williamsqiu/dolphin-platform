@@ -33,11 +33,11 @@ public class ChildTestBean {
         return preDestroyedCalled;
     }
 
-    public void setPostCreatedCalled(Boolean postCreatedCalled) {
+    public void setPostCreatedCalled(final Boolean postCreatedCalled) {
         this.postCreatedCalled.set(postCreatedCalled);
     }
 
-    public void setPreDestroyedCalled(Boolean preDestroyedCalled) {
+    public void setPreDestroyedCalled(final Boolean preDestroyedCalled) {
         this.preDestroyedCalled.set(preDestroyedCalled);
     }
 

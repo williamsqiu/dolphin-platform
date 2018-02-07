@@ -39,12 +39,12 @@ public class ParentTestController {
     }
 
     @PostChildCreated
-    private void onChildControllerCreated(ChildTestController childController) {
+    private void onChildControllerCreated(final ChildTestController childController) {
         model.setPostChildCreatedCalled(true);
     }
 
     @PreChildDestroyed
-    private void onChildControllerDestroyed(ChildTestController childController) {
+    private void onChildControllerDestroyed(final ChildTestController childController) {
         model.setPreChildDestroyedCalled(true);
     }
 
