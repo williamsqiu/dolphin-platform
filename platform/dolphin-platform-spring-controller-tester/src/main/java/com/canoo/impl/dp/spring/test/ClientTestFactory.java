@@ -15,6 +15,8 @@
  */
 package com.canoo.impl.dp.spring.test;
 
+import java.util.Map;
+
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.remoting.client.ControllerProxy;
 import com.canoo.platform.remoting.client.Param;
@@ -22,8 +24,6 @@ import com.canoo.platform.spring.test.CommunicationMonitor;
 import com.canoo.platform.spring.test.ControllerTestException;
 import com.canoo.platform.spring.test.ControllerUnderTest;
 import org.apiguardian.api.API;
-
-import java.util.Map;
 
 import static org.apiguardian.api.API.Status.INTERNAL;
 
@@ -35,46 +35,68 @@ public class ClientTestFactory {
         Assert.requireNonBlank(controllerName, "controllerName");
         try {
             final ControllerProxy<T> proxy = (ControllerProxy<T>) clientContext.createController(controllerName).get();
-            return new ControllerUnderTest<T>() {
-                @Override
-                public T getModel() {
-                    return proxy.getModel();
-                }
-
-                @Override
-                public void invoke(String actionName, Param... params) {
-                    try {
-                        proxy.invoke(actionName, params).get();
-                    } catch (Exception e) {
-                        throw new ControllerTestException("Error in action invocation", e);
-                    }
-                }
-
-                @Override
-                public void invoke(String actionName, Map<String, Object> params) {
-                    try {
-                        proxy.invoke(actionName, params).get();
-                    } catch (Exception e) {
-                        throw new ControllerTestException("Error in action invocation", e);
-                    }
-                }
-
-                @Override
-                public CommunicationMonitor createMonitor() {
-                    return new CommunicationMonitorImpl(clientContext);
-                }
-
-                @Override
-                public void destroy() {
-                    try {
-                        proxy.destroy().get();
-                    } catch (Exception e) {
-                        throw new ControllerTestException("Error in destroy", e);
-                    }
-                }
-            };
+            return new ControllerUnderTestWrapper<>(clientContext, proxy);
         } catch (Exception e) {
             throw new ControllerTestException("Can't create controller proxy", e);
         }
     }
+
+    static class ControllerUnderTestWrapper<T> implements ControllerUnderTest<T> {
+
+        private final ControllerProxy<T> proxy;
+        private final TestClientContext clientContext;
+
+        public ControllerUnderTestWrapper(final TestClientContext clientContext, final ControllerProxy<T> controllerProxy) {
+            this.clientContext = clientContext;
+            this.proxy = controllerProxy;
+        }
+
+        @Override
+        public T getModel() {
+            return proxy.getModel();
+        }
+
+        @Override
+        public void invoke(String actionName, Param... params) {
+            try {
+                proxy.invoke(actionName, params).get();
+            } catch (Exception e) {
+                throw new ControllerTestException("Error in action invocation", e);
+            }
+        }
+
+        @Override
+        public void invoke(String actionName, Map<String, Object> params) {
+            try {
+                proxy.invoke(actionName, params).get();
+            } catch (Exception e) {
+                throw new ControllerTestException("Error in action invocation", e);
+            }
+        }
+
+        @Override
+        public CommunicationMonitor createMonitor() {
+            return new CommunicationMonitorImpl(clientContext);
+        }
+
+        @Override
+        public void destroy() {
+            try {
+                proxy.destroy().get();
+            } catch (Exception e) {
+                throw new ControllerTestException("Error in destroy", e);
+            }
+        }
+
+        @Override
+        public <S> ControllerUnderTest<S> createController(String childControllerName) {
+            try {
+                ControllerProxy<T> controllerProxy = (ControllerProxy<T>) proxy.createController(childControllerName).get();
+                return new ControllerUnderTestWrapper(clientContext, controllerProxy);
+            } catch (Exception e) {
+                throw new ControllerTestException("Error in sub controller", e);
+            }
+        }
+    }
 }
+
