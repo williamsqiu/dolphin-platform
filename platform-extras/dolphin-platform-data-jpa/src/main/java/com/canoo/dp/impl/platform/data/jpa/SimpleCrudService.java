@@ -1,5 +1,6 @@
 package com.canoo.dp.impl.platform.data.jpa;
 
+import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.platform.data.CrudService;
 
 import javax.persistence.EntityManager;
@@ -52,6 +53,7 @@ public class SimpleCrudService<E extends AbstractEntity> implements CrudService<
 
     @Override
     public E save(final E entity) {
+        Assert.requireNonNull(entity , "entity");
         if (entity.getId() == null) {
             entityManager.persist(entity);
             return entity;

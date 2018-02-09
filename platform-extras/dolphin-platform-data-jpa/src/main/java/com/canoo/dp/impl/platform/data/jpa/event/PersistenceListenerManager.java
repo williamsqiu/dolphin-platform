@@ -22,7 +22,7 @@ public class PersistenceListenerManager {
      * Returns the singleton
      * @return the singleton
      */
-    public static PersistenceListenerManager getInstance() {
+    public static final PersistenceListenerManager getInstance() {
         return instance;
     }
 
@@ -30,7 +30,7 @@ public class PersistenceListenerManager {
      * Adds a listener that will be notified for all JPA events
      * @param listener the listener
      */
-    public void addListener(PersistenceListener listener) {
+    public final void addListener(PersistenceListener listener) {
         listeners.add(listener);
     }
 
@@ -38,30 +38,30 @@ public class PersistenceListenerManager {
      * Removes a listener
      * @param listener the listener
      */
-    public void removeListener(PersistenceListener listener) {
+    public final void removeListener(PersistenceListener listener) {
         listeners.remove(listener);
     }
 
     /**
      * Removes all listeners
      */
-    public void clear() {
+    public final void clear() {
         listeners.clear();
     }
 
-    public void firePersisted(AbstractEntity entity) {
+    public final void firePersisted(AbstractEntity entity) {
         for(PersistenceListener listener : listeners) {
             listener.onEntityPersisted(entity);
         }
     }
 
-    public void fireRemoved(AbstractEntity entity) {
+    public final void fireRemoved(AbstractEntity entity) {
         for(PersistenceListener listener : listeners) {
             listener.onEntityRemoved(entity);
         }
     }
 
-    public void fireUpdated(AbstractEntity entity) {
+    public final void fireUpdated(AbstractEntity entity) {
         for(PersistenceListener listener : listeners) {
             listener.onEntityUpdated(entity);
         }

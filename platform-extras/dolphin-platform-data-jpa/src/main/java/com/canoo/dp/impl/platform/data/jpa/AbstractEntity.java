@@ -28,7 +28,7 @@ public class AbstractEntity implements EntityWithId<Long> {
     }
 
     @Override
-    public final void setId(Long id) {
+    public final void setId(final Long id) {
         this.id = id;
     }
 

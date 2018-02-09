@@ -1,5 +1,6 @@
 package com.canoo.dp.impl.platform.data.audit;
 
+import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.platform.data.jpa.AbstractEntity;
 import com.canoo.dp.impl.platform.data.jpa.event.PersistenceListener;
 import com.canoo.dp.impl.platform.data.jpa.event.PersistenceListenerManager;
@@ -17,6 +18,9 @@ import java.util.List;
 
 public class AuditContext {
 
+    private static final String DB_H2 = "h2";
+    private static final String DB_POSTGRES = "postgres";
+    private static final String DB_MYSQL = "mysql";
     private final Javers javers;
 
     public AuditContext(final ConnectionProvider connectionProvider, final String dialect, final String schema) {
@@ -24,6 +28,9 @@ public class AuditContext {
     }
 
     public AuditContext(final ConnectionProvider connectionProvider, final DialectName dialect, final String schema) {
+        Assert.requireNonNull(connectionProvider , "connectionProvider");
+        Assert.requireNonNull(dialect , "dialect");
+        Assert.requireNonNull(schema , "schema");
         final JaversSqlRepository repository = SqlRepositoryBuilder.sqlRepository()
                 .withConnectionProvider(connectionProvider)
                 .withDialect(dialect)
@@ -58,19 +65,20 @@ public class AuditContext {
     }
 
     private static DialectName convertToDialect(final String dialectName) {
-        if(dialectName.equals("h2")) {
+        if(dialectName.equals(DB_H2)) {
             return DialectName.H2;
         }
-        if(dialectName.equals("postgres")) {
+        if(dialectName.equals(DB_POSTGRES)) {
             return DialectName.POSTGRES;
         }
-        if(dialectName.equals("mysql")) {
+        if(dialectName.equals(DB_MYSQL)) {
             return DialectName.MYSQL;
         }
         throw new DolphinRuntimeException("Dialect not supported");
     }
 
     private <T extends  AbstractEntity> boolean isAuditable(final T entity) {
+        Assert.requireNonNull(entity , "entity");
         if(entity.getClass().isAnnotationPresent(Auditable.class)) {
             return true;
         }
@@ -82,6 +90,7 @@ public class AuditContext {
     }
 
     public <T extends  AbstractEntity> List<CdoSnapshot> getChanges(final T entity) {
+        Assert.requireNonNull(entity , "entity");
         if(isAuditable(entity)) {
             return javers.findSnapshots(QueryBuilder.byInstanceId(entity.getId(), entity.getClass()).build());
         } else {

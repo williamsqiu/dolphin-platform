@@ -12,12 +12,12 @@ public class I18nServiceImpl implements I18nService {
     }
 
     @Override
-    public String getText(String textKey, Locale locale) {
+    public String getText(final String textKey, final Locale locale) {
         return getText(bundleBaseName, textKey, locale);
     }
 
     @Override
-    public String getText(String resourceBaseName, String textKey, Locale locale) {
+    public String getText(final String resourceBaseName, final String textKey, final Locale locale) {
         ResourceBundle textBundle = Utf8ResourceBundle.getBundle(resourceBaseName, locale);
         return textBundle.getString(textKey);
     }
