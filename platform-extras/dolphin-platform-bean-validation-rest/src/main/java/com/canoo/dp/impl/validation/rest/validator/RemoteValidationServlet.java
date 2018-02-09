@@ -152,7 +152,7 @@ public class RemoteValidationServlet extends HttpServlet {
         if (propertyElement.isJsonNull()) {
             return remoteValidator.validateValue(typeName, propertyName, null);
         }
-        JsonPrimitive primitiveValue = propertyElement.getAsJsonPrimitive();
+        final JsonPrimitive primitiveValue = propertyElement.getAsJsonPrimitive();
         if (primitiveValue.isBoolean()) {
             return remoteValidator.validateValue(typeName, propertyName, primitiveValue.getAsBoolean());
         } else if (primitiveValue.isNumber()) {

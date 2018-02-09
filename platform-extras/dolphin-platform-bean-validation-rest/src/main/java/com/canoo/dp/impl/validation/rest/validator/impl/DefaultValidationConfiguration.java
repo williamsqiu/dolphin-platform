@@ -41,12 +41,12 @@ public class DefaultValidationConfiguration implements RemoteValidationConfigura
     }
 
     //TODO: Rename
-    public void setAddViolationMessageToResponse(boolean addViolationMessageToResponse) {
+    public void setAddViolationMessageToResponse(final boolean addViolationMessageToResponse) {
         this.addViolationMessageToResponse = addViolationMessageToResponse;
     }
 
     //TODO: Rename
-    public void setAddViolationMessageTemplateToResponse(boolean addViolationMessageTemplateToResponse) {
+    public void setAddViolationMessageTemplateToResponse(final boolean addViolationMessageTemplateToResponse) {
         this.addViolationMessageTemplateToResponse = addViolationMessageTemplateToResponse;
     }
 

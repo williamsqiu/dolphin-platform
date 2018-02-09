@@ -53,9 +53,9 @@ public class RemoteValidator {
 
     private Class<?> getClassForType(final String typeName) {
         Assert.requireNonNull(typeName, "typeName");
-        Map<String, Class<?>> mapping = configuration.getTypeMapping();
+        final Map<String, Class<?>> mapping = configuration.getTypeMapping();
         if(mapping.containsKey(typeName)) {
-            Class<?> cls = mapping.get(typeName);
+            final Class<?> cls = mapping.get(typeName);
             if(cls == null) {
                 throw new IllegalStateException("null value specified for type " + typeName);
             }
@@ -63,7 +63,7 @@ public class RemoteValidator {
         }
         try {
             return classLoader.loadClass(typeName);
-        } catch (ClassNotFoundException e) {
+        } catch (final ClassNotFoundException e) {
             throw new IllegalArgumentException("Can not find class for type " + typeName, e);
         }
     }

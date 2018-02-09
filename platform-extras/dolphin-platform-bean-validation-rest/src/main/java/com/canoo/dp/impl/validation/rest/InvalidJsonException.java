@@ -21,11 +21,11 @@ package com.canoo.dp.impl.validation.rest;
  */
 public class InvalidJsonException extends Exception {
 
-    public InvalidJsonException(String message) {
+    public InvalidJsonException(final String message) {
         super(message);
     }
 
-    public InvalidJsonException(String message, Throwable cause) {
+    public InvalidJsonException(final String message, final Throwable cause) {
         super(message, cause);
     }
 }
