@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2016 Canoo Engineering AG.
+ * Copyright 2015-2018 Canoo Engineering AG.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,6 @@
 dependencies {
     compile project(':dolphin-platform-server')
     compile project(':dolphin-platform-security-common')
-    compile "org.keycloak:keycloak-servlet-filter-adapter:$keyclockServletFilterAdapterVersion"
+    compile "org.keycloak:keycloak-servlet-filter-adapter:$keyclockVersion"
     compileOnly "javax.servlet:javax.servlet-api:$servletApiVersion"
 }

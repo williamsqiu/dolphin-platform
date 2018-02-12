@@ -12,12 +12,12 @@ be found link:javadoc/server/[here]
 
 == Defining a controller
 
-A controller type is defined as a Java class on the server. This is done with the `@DolphinController` annotation. Each
+A controller type is defined as a Java class on the server. This is done with the `@RemotingController` annotation. Each
 controller class on the server must be annotated by using this annotation to define the class as a Dolphin Platform controller:
 
 [source,java]
 ----
-@DolphinController
+@RemotingController
 public class MyViewController {
 
     //...
@@ -30,11 +30,11 @@ the full name of the controller class is used. In the given example the controll
 `com.company.app.controller.MyViewController` (if it's part of the `com.company.app.controller` package). In general
 it's a better to specify an identifier for the controller class since refactoring (like moving the controller class in
 a different package) can change its identifier. A custom identifier for a controller can simply be defined by using the
-`@DolphinController` annotation:
+`@RemotingController` annotation:
 
 [source,java]
 ----
-@DolphinController("ViewController1")
+@RemotingController("ViewController1")
 public class MyViewController {
 
     //...
@@ -67,7 +67,7 @@ By doing so the constants can easily be used to specify the identifier of a cont
 
 [source,java]
 ----
-@DolphinController(ControllerConstants.CONTROLLER1_NAME)
+@RemotingController(ControllerConstants.CONTROLLER1_NAME)
 public class MyViewController {
 
     //...
@@ -79,15 +79,15 @@ public class MyViewController {
 
 Since the view and the controller share a model it's important that the controller knows about the model. To do so the
 model type must be specified in the controller class. Whenever a controller will be created the model will automatically
-be injected in the controller. To define the model in the controller Dolphin Platform provides the `@DolphinModel`
+be injected in the controller. To define the model in the controller Dolphin Platform provides the `@RemotingModel`
 annotation. By using this annotation the related model type can be specified in a controller and simply injected at runtime:
 
 [source,java]
 ----
-@DolphinController(ControllerConstants.CONTROLLER1_NAME)
+@RemotingController(ControllerConstants.CONTROLLER1_NAME)
 public class MyViewController {
 
-    @DolphinModel
+    @RemotingModel
     private MyModel model;
 
 }
@@ -96,8 +96,8 @@ public class MyViewController {
 How a model can be specified and how it can be used on the client and the server can be found in the documentation of
 the model API.
 
-IMPORTANT: A Dolphin Platform controller must have exactly 1 model. Using the `@DolphinModel` annotation more than 1
-time in a controller will cause an exception at runtime. If you do not define a model (by using `@DolphinModel`) an
+IMPORTANT: A Dolphin Platform controller must have exactly 1 model. Using the `@RemotingModel` annotation more than 1
+time in a controller will cause an exception at runtime. If you do not define a model (by using `@RemotingModel`) an
 exception will be thrown as well.
 
 == Controller actions
@@ -109,17 +109,17 @@ maybe stores some date in the database or refreshes the model.
 .Calling an action
 image::action.png[]
 
-A controller action is defined as a method in the controller that is annotated by `@DolphinAction`:
+A controller action is defined as a method in the controller that is annotated by `@RemotingAction`:
 
 [source,java]
 ----
-@DolphinController(ControllerConstants.CONTROLLER1_NAME)
+@RemotingController(ControllerConstants.CONTROLLER1_NAME)
 public class MyViewController {
  
-    @DolphinModel
+    @RemotingModel
     private MyModel model;
     
-    @DolphinAction
+    @RemotingAction
     public void onAction() {
         System.out.println("Action was triggered!");
     }
@@ -128,18 +128,18 @@ public class MyViewController {
 ----
 
 Because the action will be triggered by the client it must be specified by an identifier. This identifier must be unique
-in the given controller type. By default the name of the method will be used but as described for the `@DolphinController`
+in the given controller type. By default the name of the method will be used but as described for the `@RemotingController`
 annotation it's best practice to specify a custom constant name to avoid refactoring issues:
 
 [source,java]
 ----
-@DolphinController(ControllerConstants.CONTROLLER1_NAME)
+@RemotingController(ControllerConstants.CONTROLLER1_NAME)
 public class MyViewController {
  
-    @DolphinModel
+    @RemotingModel
     private MyModel model;
     
-    @DolphinAction(ControllerConstants.ACTION1_NAME)
+    @RemotingAction(ControllerConstants.ACTION1_NAME)
     public void onAction() {
         System.out.println("Action was triggered!");
     }
@@ -153,13 +153,13 @@ specified by an identifier. To define the identifier for a parameter of the acti
 
 [source,java]
 ----
-@DolphinController(ControllerConstants.CONTROLLER1_NAME)
+@RemotingController(ControllerConstants.CONTROLLER1_NAME)
 public class MyViewController {
  
-    @DolphinModel
+    @RemotingModel
     private MyModel model;
     
-    @DolphinAction(ControllerConstants.ACTION1_NAME)
+    @RemotingAction(ControllerConstants.ACTION1_NAME)
     public void onAction(@Param("id") String id) {
         System.out.println("Action was triggered for id " + id);
     }
@@ -185,10 +185,10 @@ like `@PostConstruct` and `@PreDestroy` are supported. The following example sho
 
 [source,java]
 ----
-@DolphinController(ControllerConstants.CONTROLLER1_NAME)
+@RemotingController(ControllerConstants.CONTROLLER1_NAME)
 public class MyViewController {
  
-    @DolphinModel
+    @RemotingModel
     private MyModel model;
     
     @Inject
@@ -246,10 +246,10 @@ The given service can now simply be injected in any controller:
 
 [source,java]
 ----
-@DolphinController(ControllerConstants.CONTROLLER1_NAME)
+@RemotingController(ControllerConstants.CONTROLLER1_NAME)
 public class MyViewController {
  
-    @DolphinModel
+    @RemotingModel
     private MyModel model;
     
     @Inject
@@ -281,7 +281,7 @@ Example:
 
 [source,java]
 ----
-@DolphinController
+@RemotingController
 public class MyViewController {
 
     @Inject
@@ -301,11 +301,11 @@ Example:
 
 [source,java]
 ----
-@DolphinController
+@RemotingController
 public class MyViewController {
 
     @Inject
-    private DolphinEventBus eventBus;
+    private RemotingEventBus eventBus;
 
      //...
 
@@ -323,7 +323,7 @@ Example:
 
 [source,java]
 ----
-@DolphinController
+@RemotingController
 public class MyViewController {
 
     @Inject
@@ -343,7 +343,7 @@ Example:
 
 [source,java]
 ----
-@DolphinController
+@RemotingController
 public class MyViewController {
 
     @Inject

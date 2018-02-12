@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2017 Canoo Engineering AG.
+ * Copyright 2015-2018 Canoo Engineering AG.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,5 +42,4 @@ public class AnsiOut {
     public static final String ANSI_PURPLE_BACKGROUND = "\u001B[45m";
     public static final String ANSI_CYAN_BACKGROUND = "\u001B[46m";
     public static final String ANSI_WHITE_BACKGROUND = "\u001B[47m";
-
 }

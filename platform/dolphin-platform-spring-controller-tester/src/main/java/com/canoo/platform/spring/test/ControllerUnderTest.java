@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2017 Canoo Engineering AG.
+ * Copyright 2015-2018 Canoo Engineering AG.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -58,4 +58,5 @@ public interface ControllerUnderTest<T> {
      */
     void destroy();
 
+    <S> ControllerUnderTest<S> createController(String childControllerName);
 }

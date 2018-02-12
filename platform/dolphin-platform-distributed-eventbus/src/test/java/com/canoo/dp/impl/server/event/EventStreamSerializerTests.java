@@ -1,3 +1,18 @@
+/*
+ * Copyright 2015-2018 Canoo Engineering AG.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.canoo.dp.impl.server.event;
 
 import com.canoo.platform.remoting.server.event.Topic;
@@ -10,6 +25,7 @@ import com.google.gson.JsonParser;
 import com.hazelcast.nio.ObjectDataInput;
 import com.hazelcast.nio.ObjectDataOutput;
 import com.hazelcast.nio.serialization.Data;
+import com.hazelcast.version.Version;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -172,8 +188,8 @@ public class EventStreamSerializerTests {
         final Iterator<JsonElement> elementIterator = metadataArray.iterator();
         while (elementIterator.hasNext()) {
             final JsonObject metadata = elementIterator.next().getAsJsonObject();
-            if(metadata.getAsJsonPrimitive(METADATA_KEY_PARAM).getAsString().equals(key)) {
-                if(metadata.get(METADATA_VALUE_PARAM).isJsonNull()) {
+            if (metadata.getAsJsonPrimitive(METADATA_KEY_PARAM).getAsString().equals(key)) {
+                if (metadata.get(METADATA_VALUE_PARAM).isJsonNull()) {
                     return null;
                 } else {
                     return Base64Utils.fromBase64(metadata.getAsJsonPrimitive(METADATA_VALUE_PARAM).getAsString());
@@ -210,7 +226,7 @@ public class EventStreamSerializerTests {
 
         Assert.assertTrue(root.getAsJsonObject().has(DATA_PARAM));
         Assert.assertTrue(root.getAsJsonObject().get(DATA_PARAM).isJsonPrimitive() || root.getAsJsonObject().get(DATA_PARAM).isJsonNull());
-        if(root.getAsJsonObject().get(DATA_PARAM).isJsonPrimitive()) {
+        if (root.getAsJsonObject().get(DATA_PARAM).isJsonPrimitive()) {
             Assert.assertTrue(root.getAsJsonObject().getAsJsonPrimitive(DATA_PARAM).isString());
         }
 
@@ -230,10 +246,10 @@ public class EventStreamSerializerTests {
         Assert.assertTrue(context.has(METADATA_PARAM));
         Assert.assertTrue(context.get(METADATA_PARAM).isJsonArray());
         final JsonArray metadataArray = context.getAsJsonArray(METADATA_PARAM);
-        if(metadataArray.size() > 0) {
+        if (metadataArray.size() > 0) {
             final Iterator<JsonElement> elementIterator = metadataArray.iterator();
             while (elementIterator.hasNext()) {
-                JsonElement metadataElem = elementIterator.next();
+                final JsonElement metadataElem = elementIterator.next();
                 Assert.assertTrue(metadataElem.isJsonObject());
                 final JsonObject metadata = metadataElem.getAsJsonObject();
                 Assert.assertTrue(metadata.has(METADATA_KEY_PARAM));
@@ -243,7 +259,7 @@ public class EventStreamSerializerTests {
                 Assert.assertTrue(metadata.has(METADATA_VALUE_PARAM));
                 Assert.assertTrue(metadata.get(METADATA_VALUE_PARAM).isJsonPrimitive() ||
                         metadata.get(METADATA_VALUE_PARAM).isJsonNull());
-                if(metadata.get(METADATA_VALUE_PARAM).isJsonPrimitive()) {
+                if (metadata.get(METADATA_VALUE_PARAM).isJsonPrimitive()) {
                     Assert.assertTrue(metadata.getAsJsonPrimitive(METADATA_VALUE_PARAM).isString());
                 }
             }
@@ -305,6 +321,16 @@ public class EventStreamSerializerTests {
 
         @Override
         public <T> T readObject() throws IOException {
+            throw new RuntimeException("Not needed for test");
+        }
+
+        @Override
+        public <T> T readDataAsObject() throws IOException {
+            throw new RuntimeException("Not needed for test");
+        }
+
+        @Override
+        public <T> T readObject(final Class aClass) throws IOException {
             throw new RuntimeException("Not needed for test");
         }
 
@@ -397,64 +423,70 @@ public class EventStreamSerializerTests {
         public String readUTF() throws IOException {
             return new GsonBuilder().serializeNulls().create().toJson(jsonElement);
         }
+
+        @Override
+        public Version getVersion() {
+            return Version.UNKNOWN;
+        }
     }
 
     private class ByteObjectDataOutput implements ObjectDataOutput {
 
         private final StringBuffer content = new StringBuffer();
 
+
         @Override
-        public void writeByteArray(byte[] bytes) throws IOException {
+        public void writeByteArray(final byte[] bytes) throws IOException {
             throw new RuntimeException("Not needed for test");
         }
 
         @Override
-        public void writeBooleanArray(boolean[] booleans) throws IOException {
+        public void writeBooleanArray(final boolean[] booleans) throws IOException {
             throw new RuntimeException("Not needed for test");
         }
 
         @Override
-        public void writeCharArray(char[] chars) throws IOException {
+        public void writeCharArray(final char[] chars) throws IOException {
             throw new RuntimeException("Not needed for test");
         }
 
         @Override
-        public void writeIntArray(int[] ints) throws IOException {
+        public void writeIntArray(final int[] ints) throws IOException {
             throw new RuntimeException("Not needed for test");
         }
 
         @Override
-        public void writeLongArray(long[] longs) throws IOException {
+        public void writeLongArray(final long[] longs) throws IOException {
             throw new RuntimeException("Not needed for test");
         }
 
         @Override
-        public void writeDoubleArray(double[] values) throws IOException {
+        public void writeDoubleArray(final double[] values) throws IOException {
             throw new RuntimeException("Not needed for test");
         }
 
         @Override
-        public void writeFloatArray(float[] values) throws IOException {
+        public void writeFloatArray(final float[] values) throws IOException {
             throw new RuntimeException("Not needed for test");
         }
 
         @Override
-        public void writeShortArray(short[] values) throws IOException {
+        public void writeShortArray(final short[] values) throws IOException {
             throw new RuntimeException("Not needed for test");
         }
 
         @Override
-        public void writeUTFArray(String[] values) throws IOException {
+        public void writeUTFArray(final String[] values) throws IOException {
             throw new RuntimeException("Not needed for test");
         }
 
         @Override
-        public void writeObject(Object object) throws IOException {
+        public void writeObject(final Object object) throws IOException {
             throw new RuntimeException("Not needed for test");
         }
 
         @Override
-        public void writeData(Data data) throws IOException {
+        public void writeData(final Data data) throws IOException {
             throw new RuntimeException("Not needed for test");
         }
 
@@ -464,78 +496,88 @@ public class EventStreamSerializerTests {
         }
 
         @Override
+        public byte[] toByteArray(final int padding) {
+            return new byte[padding];
+        }
+
+        @Override
         public ByteOrder getByteOrder() {
             throw new RuntimeException("Not needed for test");
         }
 
         @Override
-        public void write(int b) throws IOException {
+        public void write(final int b) throws IOException {
             throw new RuntimeException("Not needed for test");
         }
 
         @Override
-        public void write(byte[] b) throws IOException {
+        public void write(final byte[] b) throws IOException {
             throw new RuntimeException("Not needed for test");
         }
 
         @Override
-        public void write(byte[] b, int off, int len) throws IOException {
+        public void write(final byte[] b, final int off, final int len) throws IOException {
             throw new RuntimeException("Not needed for test");
         }
 
         @Override
-        public void writeBoolean(boolean v) throws IOException {
+        public void writeBoolean(final boolean v) throws IOException {
             throw new RuntimeException("Not needed for test");
         }
 
         @Override
-        public void writeByte(int v) throws IOException {
+        public void writeByte(final int v) throws IOException {
             throw new RuntimeException("Not needed for test");
         }
 
         @Override
-        public void writeShort(int v) throws IOException {
+        public void writeShort(final int v) throws IOException {
             throw new RuntimeException("Not needed for test");
         }
 
         @Override
-        public void writeChar(int v) throws IOException {
+        public void writeChar(final int v) throws IOException {
             throw new RuntimeException("Not needed for test");
         }
 
         @Override
-        public void writeInt(int v) throws IOException {
+        public void writeInt(final int v) throws IOException {
             throw new RuntimeException("Not needed for test");
         }
 
         @Override
-        public void writeLong(long v) throws IOException {
+        public void writeLong(final long v) throws IOException {
             throw new RuntimeException("Not needed for test");
         }
 
         @Override
-        public void writeFloat(float v) throws IOException {
+        public void writeFloat(final float v) throws IOException {
             throw new RuntimeException("Not needed for test");
         }
 
         @Override
-        public void writeDouble(double v) throws IOException {
+        public void writeDouble(final double v) throws IOException {
             throw new RuntimeException("Not needed for test");
         }
 
         @Override
-        public void writeBytes(String s) throws IOException {
+        public void writeBytes(final String s) throws IOException {
             throw new RuntimeException("Not needed for test");
         }
 
         @Override
-        public void writeChars(String s) throws IOException {
+        public void writeChars(final String s) throws IOException {
             throw new RuntimeException("Not needed for test");
         }
 
         @Override
-        public void writeUTF(String s) throws IOException {
+        public void writeUTF(final String s) throws IOException {
             content.append(s);
+        }
+
+        @Override
+        public Version getVersion() {
+            return Version.UNKNOWN;
         }
     }
 
