@@ -19,10 +19,10 @@ import com.canoo.dolphin.integration.action.ActionErrorBean;
 import com.canoo.dolphin.integration.action.ActionTestBean;
 import com.canoo.platform.core.DolphinRuntimeException;
 import com.canoo.platform.remoting.BeanManager;
-import com.canoo.platform.remoting.server.DolphinAction;
-import com.canoo.platform.remoting.server.DolphinController;
-import com.canoo.platform.remoting.server.DolphinModel;
 import com.canoo.platform.remoting.server.Param;
+import com.canoo.platform.remoting.server.RemotingAction;
+import com.canoo.platform.remoting.server.RemotingController;
+import com.canoo.platform.remoting.server.RemotingModel;
 import com.canoo.platform.remoting.server.error.ActionExceptionEvent;
 import com.canoo.platform.remoting.server.error.ActionExceptionHandler;
 
@@ -37,71 +37,71 @@ import java.util.UUID;
 
 import static com.canoo.dolphin.integration.action.ActionTestConstants.*;
 
-@DolphinController(ACTION_CONTROLLER_NAME)
+@RemotingController(ACTION_CONTROLLER_NAME)
 public class ActionTestController {
 
-    @DolphinModel
+    @RemotingModel
     private ActionTestBean model;
 
     @Inject
     private BeanManager beanManager;
 
-    @DolphinAction(RESET_MODEL_ACTION)
+    @RemotingAction(RESET_MODEL_ACTION)
     public void resetModel() {
         model.setBooleanValue(null);
         model.setStringValue(null);
     }
 
-    @DolphinAction(PUBLIC_ACTION)
+    @RemotingAction(PUBLIC_ACTION)
     public void publicAction() {
         model.setBooleanValue(true);
     }
 
-    @DolphinAction(PRIVATE_ACTION)
+    @RemotingAction(PRIVATE_ACTION)
     private void privateAction() {
         model.setBooleanValue(true);
     }
 
-    @DolphinAction(PUBLIC_WITH_BOOLEAN_PARAM_ACTION)
+    @RemotingAction(PUBLIC_WITH_BOOLEAN_PARAM_ACTION)
     public void withStringParam(@Param(PARAM_NAME) Boolean value) {
         model.setBooleanValue(value);
     }
 
-    @DolphinAction(PRIVATE_WITH_STRING_PARAM_ACTION)
+    @RemotingAction(PRIVATE_WITH_STRING_PARAM_ACTION)
     private void withStringParam(@Param(PARAM_NAME) String value) {
         model.setBooleanValue(true);
         model.setStringValue(value);
     }
 
-    @DolphinAction(PRIVATE_WITH_SEVERAL_PARAMS_ACTION)
+    @RemotingAction(PRIVATE_WITH_SEVERAL_PARAMS_ACTION)
     private void withSeveralParams(@Param(PARAM_NAME_1) String value1, @Param(PARAM_NAME_2) String value2, @Param(PARAM_NAME_3) int value3) {
         model.setBooleanValue(true);
         model.setStringValue(value1 + value2 + value3);
     }
 
-    @DolphinAction(WITH_EXCEPTION_ACTION)
+    @RemotingAction(WITH_EXCEPTION_ACTION)
     private void withException() {
         throw new RuntimeException("huhu");
     }
 
 
     /** Start Integer Type Related Action */
-    @DolphinAction(PUBLIC_WITH_INTEGER_PARAM_ACTION)
+    @RemotingAction(PUBLIC_WITH_INTEGER_PARAM_ACTION)
     public void withPublicIntegerParam(@Param(PARAM_NAME) int value) {
         model.setIntegerValue(value);
     }
 
-    @DolphinAction(PRIVATE_WITH_INTEGER_PARAM_ACTION)
+    @RemotingAction(PRIVATE_WITH_INTEGER_PARAM_ACTION)
     private void withPrivateIntegerParam(@Param(PARAM_NAME) int value) {
         model.setIntegerValue(value);
     }
 
-    @DolphinAction(PUBLIC_WITH_SEVERAL_INTEGER_PARAMS_ACTION)
+    @RemotingAction(PUBLIC_WITH_SEVERAL_INTEGER_PARAMS_ACTION)
     public void withSeveralPublicIntegerParams(@Param(PARAM_NAME_1) int value1, @Param(PARAM_NAME_2) int value2, @Param(PARAM_NAME_3) int value3) {
         model.setIntegerValue(value1 + value2 + value3);
     }
 
-    @DolphinAction(PRIVATE_WITH_SEVERAL_INTEGER_PARAMS_ACTION)
+    @RemotingAction(PRIVATE_WITH_SEVERAL_INTEGER_PARAMS_ACTION)
     private void withSeveralPrivateIntegerParams(@Param(PARAM_NAME_1) int value1, @Param(PARAM_NAME_2) int value2) {
         model.setIntegerValue(value1 + value2);
     }
@@ -109,22 +109,22 @@ public class ActionTestController {
 
 
     /** Start Long Type Related Action */
-    @DolphinAction(PUBLIC_WITH_LONG_PARAM_ACTION)
+    @RemotingAction(PUBLIC_WITH_LONG_PARAM_ACTION)
     public void withPublicLongParam(@Param(PARAM_NAME) long value) {
         model.setLongValue(value);
     }
 
-    @DolphinAction(PRIVATE_WITH_LONG_PARAM_ACTION)
+    @RemotingAction(PRIVATE_WITH_LONG_PARAM_ACTION)
     private void withPrivateLongParam(@Param(PARAM_NAME) long value) {
         model.setLongValue(value);
     }
 
-    @DolphinAction(PUBLIC_WITH_SEVERAL_LONG_PARAMS_ACTION)
+    @RemotingAction(PUBLIC_WITH_SEVERAL_LONG_PARAMS_ACTION)
     public void withSeveralPublicLongParams(@Param(PARAM_NAME_1) long value1, @Param(PARAM_NAME_2) long value2, @Param(PARAM_NAME_3) long value3) {
         model.setLongValue(value1 + value2 + value3);
     }
 
-    @DolphinAction(PRIVATE_WITH_SEVERAL_LONG_PARAMS_ACTION)
+    @RemotingAction(PRIVATE_WITH_SEVERAL_LONG_PARAMS_ACTION)
     private void withSeveralPrivateLongParams(@Param(PARAM_NAME_1) long value1, @Param(PARAM_NAME_2) long value2) {
         model.setLongValue(value1 + value2);
     }
@@ -132,22 +132,22 @@ public class ActionTestController {
 
 
     /** Start Float Type Related Action */
-    @DolphinAction(PUBLIC_WITH_FLOAT_PARAM_ACTION)
+    @RemotingAction(PUBLIC_WITH_FLOAT_PARAM_ACTION)
     public void withPublicFloatParam(@Param(PARAM_NAME) float value) {
         model.setFloatValue(value);
     }
 
-    @DolphinAction(PRIVATE_WITH_FLOAT_PARAM_ACTION)
+    @RemotingAction(PRIVATE_WITH_FLOAT_PARAM_ACTION)
     private void withPrivateFloatParam(@Param(PARAM_NAME) float value) {
         model.setFloatValue(value);
     }
 
-    @DolphinAction(PUBLIC_WITH_SEVERAL_FLOAT_PARAMS_ACTION)
+    @RemotingAction(PUBLIC_WITH_SEVERAL_FLOAT_PARAMS_ACTION)
     public void withSeveralPublicFloatParams(@Param(PARAM_NAME_1) float value1, @Param(PARAM_NAME_2) float value2, @Param(PARAM_NAME_3) float value3) {
         model.setFloatValue(value1 + value2 + value3);
     }
 
-    @DolphinAction(PRIVATE_WITH_SEVERAL_FLOAT_PARAMS_ACTION)
+    @RemotingAction(PRIVATE_WITH_SEVERAL_FLOAT_PARAMS_ACTION)
     private void withSeveralPrivateFloatParams(@Param(PARAM_NAME_1) float value1, @Param(PARAM_NAME_2) float value2) {
         model.setFloatValue(value1 + value2);
     }
@@ -155,44 +155,44 @@ public class ActionTestController {
 
 
     /** Start Double Type Related Action */
-    @DolphinAction(PUBLIC_WITH_DOUBLE_PARAM_ACTION)
+    @RemotingAction(PUBLIC_WITH_DOUBLE_PARAM_ACTION)
     public void withPublicDoubleParam(@Param(PARAM_NAME) double value) {
         model.setDoubleValue(value);
     }
 
-    @DolphinAction(PRIVATE_WITH_DOUBLE_PARAM_ACTION)
+    @RemotingAction(PRIVATE_WITH_DOUBLE_PARAM_ACTION)
     private void withPrivateDoubleParam(@Param(PARAM_NAME) double value) {
         model.setDoubleValue(value);
     }
 
-    @DolphinAction(PUBLIC_WITH_SEVERAL_DOUBLE_PARAMS_ACTION)
+    @RemotingAction(PUBLIC_WITH_SEVERAL_DOUBLE_PARAMS_ACTION)
     public void withSeveralPublicDoubleParams(@Param(PARAM_NAME_1) double value1, @Param(PARAM_NAME_2) double value2, @Param(PARAM_NAME_3) double value3) {
         model.setDoubleValue(value1 + value2 + value3);
     }
 
-    @DolphinAction(PRIVATE_WITH_SEVERAL_DOUBLE_PARAMS_ACTION)
+    @RemotingAction(PRIVATE_WITH_SEVERAL_DOUBLE_PARAMS_ACTION)
     private void withSeveralPrivateDoubleParams(@Param(PARAM_NAME_1) double value1, @Param(PARAM_NAME_2) double value2) {
         model.setDoubleValue(value1 + value2);
     }
     /** End Double Type Related Action */
 
     /** Start BigDecimal Type Related Action */
-    @DolphinAction(PUBLIC_WITH_BIGDECIMAL_PARAM_ACTION)
+    @RemotingAction(PUBLIC_WITH_BIGDECIMAL_PARAM_ACTION)
     public void withPublicBigDecimalParam(@Param(PARAM_NAME) BigDecimal value) {
         model.setBigDecimalValue(value);
     }
 
-    @DolphinAction(PRIVATE_WITH_BIGDECIMAL_PARAM_ACTION)
+    @RemotingAction(PRIVATE_WITH_BIGDECIMAL_PARAM_ACTION)
     private void withPrivateBigDecimalParam(@Param(PARAM_NAME) BigDecimal value) {
         model.setBigDecimalValue(value);
     }
 
-    @DolphinAction(PUBLIC_WITH_SEVERAL_BIGDECIMAL_PARAMS_ACTION)
+    @RemotingAction(PUBLIC_WITH_SEVERAL_BIGDECIMAL_PARAMS_ACTION)
     public void withSeveralPublicBigDecimalParams(@Param(PARAM_NAME_1) BigDecimal value1, @Param(PARAM_NAME_2) BigDecimal value2, @Param(PARAM_NAME_3) BigDecimal value3) {
         model.setBigDecimalValue(value1.add(value2).add(value3));
     }
 
-    @DolphinAction(PRIVATE_WITH_SEVERAL_BIGDECIMAL_PARAMS_ACTION)
+    @RemotingAction(PRIVATE_WITH_SEVERAL_BIGDECIMAL_PARAMS_ACTION)
     private void withSeveralPrivateBigDecimalParams(@Param(PARAM_NAME_1) BigDecimal value1, @Param(PARAM_NAME_2) BigDecimal value2) {
         model.setBigDecimalValue(value1.add(value2));
     }
@@ -200,22 +200,22 @@ public class ActionTestController {
 
 
     /** Start BigInteger Type Related Action */
-    @DolphinAction(PUBLIC_WITH_BIGINTEGER_PARAM_ACTION)
+    @RemotingAction(PUBLIC_WITH_BIGINTEGER_PARAM_ACTION)
     public void withPublicBigIntegerParam(@Param(PARAM_NAME) BigInteger value) {
         model.setBigIntegerValue(value);
     }
 
-    @DolphinAction(PRIVATE_WITH_BIGINTEGER_PARAM_ACTION)
+    @RemotingAction(PRIVATE_WITH_BIGINTEGER_PARAM_ACTION)
     private void withPrivateBigIntegerParam(@Param(PARAM_NAME) BigInteger value) {
         model.setBigIntegerValue(value);
     }
 
-    @DolphinAction(PUBLIC_WITH_SEVERAL_BIGINTEGER_PARAMS_ACTION)
+    @RemotingAction(PUBLIC_WITH_SEVERAL_BIGINTEGER_PARAMS_ACTION)
     public void withSeveralPublicBigIntegerParams(@Param(PARAM_NAME_1) BigInteger value1, @Param(PARAM_NAME_2) BigInteger value2, @Param(PARAM_NAME_3) BigInteger value3) {
         model.setBigIntegerValue(value1.add(value2).add(value3));
     }
 
-    @DolphinAction(PRIVATE_WITH_SEVERAL_BIGINTEGER_PARAMS_ACTION)
+    @RemotingAction(PRIVATE_WITH_SEVERAL_BIGINTEGER_PARAMS_ACTION)
     private void withSeveralPrivateBigIntegerParams(@Param(PARAM_NAME_1) BigInteger value1, @Param(PARAM_NAME_2) BigInteger value2) {
         model.setBigIntegerValue(value1.add(value2));
     }
@@ -223,22 +223,22 @@ public class ActionTestController {
 
 
     /** Start Byte Type Related Action */
-    @DolphinAction(PUBLIC_WITH_BYTE_PARAM_ACTION)
+    @RemotingAction(PUBLIC_WITH_BYTE_PARAM_ACTION)
     public void withPublicByteParam(@Param(PARAM_NAME) byte value) {
         model.setByteValue(value);
     }
 
-    @DolphinAction(PRIVATE_WITH_BYTE_PARAM_ACTION)
+    @RemotingAction(PRIVATE_WITH_BYTE_PARAM_ACTION)
     private void withPrivateByteParam(@Param(PARAM_NAME) byte value) {
         model.setByteValue(value);
     }
 
-    @DolphinAction(PUBLIC_WITH_SEVERAL_BYTE_PARAMS_ACTION)
+    @RemotingAction(PUBLIC_WITH_SEVERAL_BYTE_PARAMS_ACTION)
     public void withSeveralPublicByteParams(@Param(PARAM_NAME_1) byte value1, @Param(PARAM_NAME_2) byte value2, @Param(PARAM_NAME_3) byte value3) {
         model.setByteValue((byte)(value1 + value2 + value3));
     }
 
-    @DolphinAction(PRIVATE_WITH_SEVERAL_BYTE_PARAMS_ACTION)
+    @RemotingAction(PRIVATE_WITH_SEVERAL_BYTE_PARAMS_ACTION)
     private void withSeveralPrivateByteParams(@Param(PARAM_NAME_1) byte value1, @Param(PARAM_NAME_2) byte value2) {
         model.setByteValue((byte)(value1 + value2));
     }
@@ -246,12 +246,12 @@ public class ActionTestController {
 
 
     /** Start Calendar Type Related Action */
-    @DolphinAction(PUBLIC_WITH_CALENDER_PARAM_ACTION)
+    @RemotingAction(PUBLIC_WITH_CALENDER_PARAM_ACTION)
     public void withPublicCalendarParam(@Param(PARAM_NAME) Calendar value) {
         model.setCalendarValue(value);
     }
 
-    @DolphinAction(PRIVATE_WITH_CALENDER_PARAM_ACTION)
+    @RemotingAction(PRIVATE_WITH_CALENDER_PARAM_ACTION)
     private void withPrivateCalendarParam(@Param(PARAM_NAME) Calendar value) {
         model.setCalendarValue(value);
     }
@@ -259,12 +259,12 @@ public class ActionTestController {
     /** End Calendar Type Related Action */
 
     /** Start Date Type Related Action */
-    @DolphinAction(PUBLIC_WITH_DATE_PARAM_ACTION)
+    @RemotingAction(PUBLIC_WITH_DATE_PARAM_ACTION)
     public void withPublicDateParam(@Param(PARAM_NAME) Date value) {
         model.setDateValue(value);
     }
 
-    @DolphinAction(PRIVATE_WITH_DATE_PARAM_ACTION)
+    @RemotingAction(PRIVATE_WITH_DATE_PARAM_ACTION)
     private void withPrivateDateParam(@Param(PARAM_NAME) Date value) {
         model.setDateValue(value);
     }
@@ -273,22 +273,22 @@ public class ActionTestController {
 
 
     /** Start Short Type Related Action */
-    @DolphinAction(PUBLIC_WITH_SHORT_PARAM_ACTION)
+    @RemotingAction(PUBLIC_WITH_SHORT_PARAM_ACTION)
     public void withPublicShortParam(@Param(PARAM_NAME) short value) {
         model.setShortValue(value);
     }
 
-    @DolphinAction(PRIVATE_WITH_SHORT_PARAM_ACTION)
+    @RemotingAction(PRIVATE_WITH_SHORT_PARAM_ACTION)
     private void withPrivateShortParam(@Param(PARAM_NAME) short value) {
         model.setShortValue(value);
     }
 
-    @DolphinAction(PUBLIC_WITH_SEVERAL_SHORT_PARAMS_ACTION)
+    @RemotingAction(PUBLIC_WITH_SEVERAL_SHORT_PARAMS_ACTION)
     public void withSeveralPublicShortParams(@Param(PARAM_NAME_1) short value1, @Param(PARAM_NAME_2) short value2, @Param(PARAM_NAME_3) short value3) {
         model.setShortValue((short)(value1 + value2 + value3));
     }
 
-    @DolphinAction(PRIVATE_WITH_SEVERAL_SHORT_PARAMS_ACTION)
+    @RemotingAction(PRIVATE_WITH_SEVERAL_SHORT_PARAMS_ACTION)
     private void withSeveralPrivateShortParams(@Param(PARAM_NAME_1) short value1, @Param(PARAM_NAME_2) short value2) {
         model.setShortValue((short)(value1 + value2));
     }
@@ -297,12 +297,12 @@ public class ActionTestController {
 
 
     /** Start UUID Type Related Action */
-    @DolphinAction(PUBLIC_WITH_UUID_PARAM_ACTION)
+    @RemotingAction(PUBLIC_WITH_UUID_PARAM_ACTION)
     public void withPublicUUIDParam(@Param(PARAM_NAME) UUID value) {
         model.setUuidValue(value);
     }
 
-    @DolphinAction(PRIVATE_WITH_UUID_PARAM_ACTION)
+    @RemotingAction(PRIVATE_WITH_UUID_PARAM_ACTION)
     private void withPrivateUUIDParam(@Param(PARAM_NAME) UUID value) {
         model.setUuidValue(value);
     }
@@ -310,12 +310,12 @@ public class ActionTestController {
 
 
     /** Start ElementType Type Related Action */
-    @DolphinAction(PUBLIC_WITH_ELEMENT_TYPE_PARAM_ACTION)
+    @RemotingAction(PUBLIC_WITH_ELEMENT_TYPE_PARAM_ACTION)
     public void withPublicElementTypeParam(@Param(PARAM_NAME) ElementType value) {
         model.setEnumValue(value);
     }
 
-    @DolphinAction(PRIVATE_WITH_ELEMENT_TYPE_PARAM_ACTION)
+    @RemotingAction(PRIVATE_WITH_ELEMENT_TYPE_PARAM_ACTION)
     private void withPrivateElementTypeParam(@Param(PARAM_NAME) ElementType value) {
         model.setEnumValue(value);
     }
