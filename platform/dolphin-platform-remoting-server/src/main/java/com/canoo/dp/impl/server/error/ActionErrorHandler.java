@@ -12,7 +12,6 @@ import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.function.Consumer;
@@ -33,7 +32,6 @@ public class ActionErrorHandler {
         final ActionExceptionEventImpl exceptionEvent = new ActionExceptionEventImpl(actionName, controllerName, throwable);
         final List<Consumer<ActionExceptionEvent<T>>> consumers = new ArrayList<>();
         consumers.addAll(getConsumersForTypeInController(throwable.getClass(), controller));
-        consumers.addAll(getConsumersForType(throwable.getClass()));
         LOG.debug("Found {} handlers to handle action exception of type {}", consumers.size(), throwable.getClass());
 
         final Iterator<Consumer<ActionExceptionEvent<T>>> iterator = consumers.iterator();
@@ -80,10 +78,6 @@ public class ActionErrorHandler {
 
         }
         return false;
-    }
-
-    private <T extends Throwable> List<Consumer<ActionExceptionEvent<T>>> getConsumersForType(Class<? extends Throwable> throwableClass) {
-        return Collections.emptyList();
     }
 
     private <T extends Throwable> Consumer<ActionExceptionEvent<T>> createConsumer(final Method method, final Object instance) {
