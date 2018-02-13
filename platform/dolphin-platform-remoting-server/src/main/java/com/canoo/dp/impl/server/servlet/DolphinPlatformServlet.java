@@ -15,6 +15,7 @@
  */
 package com.canoo.dp.impl.server.servlet;
 
+import com.canoo.dp.impl.platform.core.timing.TimingHandler;
 import com.canoo.dp.impl.server.context.DolphinContextCommunicationHandler;
 import org.apiguardian.api.API;
 
@@ -40,6 +41,6 @@ public class DolphinPlatformServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        communicationHandler.handle(req, resp);
+        TimingHandler.record("Remoting request", () -> communicationHandler.handle(req, resp));
     }
 }

@@ -20,6 +20,7 @@ import com.canoo.dp.impl.client.legacy.DefaultModelSynchronizer;
 import com.canoo.dp.impl.client.legacy.ModelSynchronizer;
 import com.canoo.dp.impl.client.legacy.communication.AbstractClientConnector;
 import com.canoo.dp.impl.platform.core.Assert;
+import com.canoo.dp.impl.platform.core.timing.TimingHandler;
 import com.canoo.dp.impl.remoting.BeanManagerImpl;
 import com.canoo.dp.impl.remoting.BeanRepository;
 import com.canoo.dp.impl.remoting.BeanRepositoryImpl;
@@ -42,7 +43,6 @@ import com.canoo.platform.remoting.client.ControllerProxy;
 import org.apiguardian.api.API;
 
 import java.net.URI;
-import java.net.URL;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -130,7 +130,7 @@ public class ClientContextImpl implements ClientContext {
     @Override
     public synchronized CompletableFuture<Void> disconnect() {
         final CompletableFuture<Void> result = new CompletableFuture<>();
-
+        TimingHandler.record("Remoting disconnect", result);
         clientConfiguration.getBackgroundExecutor().execute(new Runnable() {
             @Override
             public void run() {
@@ -154,9 +154,8 @@ public class ClientContextImpl implements ClientContext {
 
     @Override
     public CompletableFuture<Void> connect() {
-
-
         final CompletableFuture<Void> result = new CompletableFuture<>();
+        TimingHandler.record("Remoting connect", result);
         clientConnector.connect();
 
         clientConfiguration.getBackgroundExecutor().execute(new Runnable() {

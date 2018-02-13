@@ -16,6 +16,7 @@
 package com.canoo.dp.impl.server.scanner;
 
 import com.canoo.dp.impl.platform.core.Assert;
+import com.canoo.dp.impl.platform.core.timing.TimingHandler;
 import com.canoo.platform.server.spi.components.ClasspathScanner;
 import org.apiguardian.api.API;
 import org.reflections.Reflections;
@@ -53,43 +54,43 @@ public class DefaultClasspathScanner implements ClasspathScanner {
     }
 
     public DefaultClasspathScanner(final List<String> rootPackages) {
-
         Assert.requireNonNull(rootPackages, "rootPackages");
-
         LOG.trace("Scanning class path for root packages {}", Arrays.toString(rootPackages.toArray()));
 
-        ConfigurationBuilder configuration = ConfigurationBuilder.build(DefaultClasspathScanner.class.getClassLoader());
-        configuration = configuration.setExpandSuperTypes(false);
+        reflections = TimingHandler.record("Classpath scanner initialization", () -> {
+            ConfigurationBuilder configuration = ConfigurationBuilder.build(DefaultClasspathScanner.class.getClassLoader());
+            configuration = configuration.setExpandSuperTypes(false);
 
-        if(rootPackages.size() > 0) {
-            configuration = configuration.forPackages(rootPackages.toArray(new String[rootPackages.size()]));
-            configuration = configuration.setUrls(rootPackages.stream().map(rootPackage -> ClasspathHelper.forPackage(rootPackage)).flatMap(list -> list.stream()).collect(Collectors.toList()));
-            configuration = configuration.filterInputsBy(new FilterBuilder().includePackage(rootPackages.toArray(new String[rootPackages.size()])));
-        }
-
-        //Special case for JBOSS Application server to get all classes
-        try {
-            Enumeration<URL> res = DefaultClasspathScanner.class.getClassLoader().getResources("");
-            configuration.getUrls().addAll(Collections.list(res));
-        } catch (IOException e) {
-            throw new RuntimeException("Error in Dolphin Platform controller class scan", e);
-        }
-
-
-        //Remove native libs (will be added on Mac in a Spring Boot app)
-        Set<URL> urls = configuration.getUrls();
-        List<URL> toRemove = new ArrayList<>();
-        for (URL url : urls) {
-            if (url.toString().endsWith(".jnilib")) {
-                toRemove.add(url);
+            if(rootPackages.size() > 0) {
+                configuration = configuration.forPackages(rootPackages.toArray(new String[rootPackages.size()]));
+                configuration = configuration.setUrls(rootPackages.stream().map(rootPackage -> ClasspathHelper.forPackage(rootPackage)).flatMap(list -> list.stream()).collect(Collectors.toList()));
+                configuration = configuration.filterInputsBy(new FilterBuilder().includePackage(rootPackages.toArray(new String[rootPackages.size()])));
             }
-        }
-        LOG.trace("Configuration Urls {}", Arrays.toString(configuration.getUrls().toArray()));
-        for (URL url : toRemove) {
-            LOG.trace("Url removed {}", url.toString());
-            configuration.getUrls().remove(url);
-        }
-        reflections = new Reflections(configuration);
+
+            //Special case for JBOSS Application server to get all classes
+            try {
+                Enumeration<URL> res = DefaultClasspathScanner.class.getClassLoader().getResources("");
+                configuration.getUrls().addAll(Collections.list(res));
+            } catch (IOException e) {
+                throw new RuntimeException("Error in Dolphin Platform controller class scan", e);
+            }
+
+
+            //Remove native libs (will be added on Mac in a Spring Boot app)
+            Set<URL> urls = configuration.getUrls();
+            List<URL> toRemove = new ArrayList<>();
+            for (URL url : urls) {
+                if (url.toString().endsWith(".jnilib")) {
+                    toRemove.add(url);
+                }
+            }
+            LOG.trace("Configuration Urls {}", Arrays.toString(configuration.getUrls().toArray()));
+            for (URL url : toRemove) {
+                LOG.trace("Url removed {}", url.toString());
+                configuration.getUrls().remove(url);
+            }
+            return new Reflections(configuration);
+        });
     }
 
     /**

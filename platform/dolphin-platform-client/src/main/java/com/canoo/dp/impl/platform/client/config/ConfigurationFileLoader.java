@@ -17,6 +17,7 @@ package com.canoo.dp.impl.platform.client.config;
 
 import com.canoo.dp.impl.platform.client.DefaultClientConfiguration;
 import com.canoo.dp.impl.platform.core.Assert;
+import com.canoo.dp.impl.platform.core.timing.TimingHandler;
 import org.apiguardian.api.API;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,7 +41,9 @@ public class ConfigurationFileLoader {
     }
 
     public static DefaultClientConfiguration loadConfiguration() {
-        final DefaultClientConfiguration configuration = createConfiguration();
+        final DefaultClientConfiguration configuration = TimingHandler.record("Configuration initialization", "The configuration is loaded", () -> createConfiguration());
+
+
         Assert.requireNonNull(configuration, "configuration");
 
         LOG.debug("Configuration created with {} properties", configuration.getPropertyKeys().size());

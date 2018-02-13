@@ -15,6 +15,7 @@
  */
 package com.canoo.dolphin.todo.client;
 
+import com.canoo.dp.impl.platform.core.timing.TimingHandler;
 import com.canoo.platform.remoting.client.ClientContext;
 import com.canoo.platform.remoting.client.javafx.DolphinPlatformApplication;
 import javafx.application.Application;
@@ -24,6 +25,7 @@ import javafx.stage.Stage;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.concurrent.Executors;
 
 public class ToDoClient extends DolphinPlatformApplication {
 
@@ -34,6 +36,9 @@ public class ToDoClient extends DolphinPlatformApplication {
 
     @Override
     protected void start(Stage primaryStage, ClientContext clientContext) throws Exception {
+
+
+
         ToDoView viewController = new ToDoView(clientContext);
         Scene scene = new Scene(viewController.getParent());
         scene.getStylesheets().add(ToDoClient.class.getResource("style.css").toExternalForm());
@@ -43,6 +48,16 @@ public class ToDoClient extends DolphinPlatformApplication {
     }
 
     public static void main(String[] args) {
+        Executors.newSingleThreadExecutor().execute(() -> {
+            while (true) {
+                try {
+                    Thread.sleep(5_000);
+                    TimingHandler.printAll();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
         Platform.setImplicitExit(false);
         Application.launch(args);
     }

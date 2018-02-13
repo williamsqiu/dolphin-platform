@@ -15,13 +15,26 @@
  */
 package com.canoo.dolphin.todo.server;
 
+import com.canoo.dp.impl.platform.core.timing.TimingHandler;
 import com.canoo.platform.remoting.server.spring.DolphinPlatformRemotingApplication;
 import org.springframework.boot.SpringApplication;
+
+import java.util.concurrent.Executors;
 
 @DolphinPlatformRemotingApplication
 public class ToDoServer {
 
     public static void main(String... args) {
+        Executors.newSingleThreadExecutor().execute(() -> {
+            while (true) {
+                try {
+                    Thread.sleep(5_000);
+                    TimingHandler.printAll();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
         SpringApplication.run(ToDoServer.class, args);
     }
 }

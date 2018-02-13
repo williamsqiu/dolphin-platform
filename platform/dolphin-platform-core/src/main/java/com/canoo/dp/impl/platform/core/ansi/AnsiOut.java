@@ -17,6 +17,8 @@ package com.canoo.dp.impl.platform.core.ansi;
 
 import org.apiguardian.api.API;
 
+import java.util.stream.IntStream;
+
 import static org.apiguardian.api.API.Status.INTERNAL;
 
 @API(since = "0.x", status = INTERNAL)
@@ -42,4 +44,35 @@ public class AnsiOut {
     public static final String ANSI_PURPLE_BACKGROUND = "\u001B[45m";
     public static final String ANSI_CYAN_BACKGROUND = "\u001B[46m";
     public static final String ANSI_WHITE_BACKGROUND = "\u001B[47m";
+
+
+    public static void printLinefeed() {
+        System.out.println();
+    }
+
+    public static void reset() {
+        print(ANSI_RESET);
+    }
+
+    public static void set(String str) {
+        reset();
+        print(str);
+    }
+
+    public static void print(String str) {
+        System.out.print(str);
+    }
+
+    public static void printHorizontalLine(int length) {
+        IntStream.range(0, length - 1).forEach(i -> System.out.print("_"));
+    }
+
+    public static void printVerticalLine() {
+        System.out.print("|");
+    }
+
+    public static void printSpaces(int length) {
+        IntStream.range(0, length - 1).forEach(i -> System.out.print(" "));
+    }
+
 }

@@ -16,6 +16,7 @@
 package com.canoo.dp.impl.platform.client.http;
 
 import com.canoo.dp.impl.platform.core.Assert;
+import com.canoo.dp.impl.platform.core.timing.TimingHandler;
 import com.canoo.platform.client.ClientConfiguration;
 import com.canoo.platform.core.functional.Promise;
 import com.canoo.platform.core.http.BadResponseException;
@@ -65,6 +66,7 @@ public class HttpCallExecutorImpl<R> implements Promise<HttpResponse<R>, HttpExc
     @Override
     public CompletableFuture<HttpResponse<R>> execute() {
         final CompletableFuture<HttpResponse<R>> completableFuture = new CompletableFuture<>();
+        TimingHandler.record("Http request", completableFuture);
         executor.submit(() -> {
             try {
                 final HttpResponse<R> result = provider.get();

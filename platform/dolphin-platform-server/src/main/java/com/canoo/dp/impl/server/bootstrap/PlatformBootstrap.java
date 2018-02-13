@@ -18,6 +18,7 @@ package com.canoo.dp.impl.server.bootstrap;
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.platform.core.SimpleDolphinPlatformThreadFactory;
 import com.canoo.dp.impl.platform.core.ansi.PlatformLogo;
+import com.canoo.dp.impl.platform.core.timing.TimingHandler;
 import com.canoo.dp.impl.server.config.DefaultPlatformConfiguration;
 import com.canoo.dp.impl.server.mbean.MBeanRegistry;
 import com.canoo.dp.impl.server.scanner.DefaultClasspathScanner;
@@ -60,65 +61,66 @@ public class PlatformBootstrap {
         Assert.requireNonNull(servletContext, "servletContext");
         Assert.requireNonNull(configuration, "configuration");
 
-        if(configuration.getBooleanProperty(PLATFORM_ACTIVE, ACTIVE_DEFAULT_VALUE)) {
-            PlatformLogo.printLogo();
-            try {
-                LOG.info("Will boot Dolphin Plaform now");
+        TimingHandler.record("Platform bootstrap", () -> {
+            if(configuration.getBooleanProperty(PLATFORM_ACTIVE, ACTIVE_DEFAULT_VALUE)) {
+                PlatformLogo.printLogo();
+                try {
+                    LOG.info("Will boot Dolphin Plaform now");
 
-                servletContext.setAttribute(CONFIGURATION_ATTRIBUTE_NAME, configuration);
-                configuration.log();
+                    servletContext.setAttribute(CONFIGURATION_ATTRIBUTE_NAME, configuration);
+                    configuration.log();
 
-                MBeanRegistry.getInstance().setMbeanSupport(configuration.getBooleanProperty(MBEAN_REGISTRATION, M_BEAN_REGISTRATION_DEFAULT_VALUE));
+                    MBeanRegistry.getInstance().setMbeanSupport(configuration.getBooleanProperty(MBEAN_REGISTRATION, M_BEAN_REGISTRATION_DEFAULT_VALUE));
 
 
-                //TODO: We need to provide a container specific thread factory that contains managed threads
-                //See https://github.com/canoo/dolphin-platform/issues/498
-                final PlatformThreadFactory threadFactory = new SimpleDolphinPlatformThreadFactory();
-                final ManagedBeanFactory beanFactory = getBeanFactory(servletContext);
-                final DefaultClasspathScanner classpathScanner = new DefaultClasspathScanner(configuration.getListProperty(ROOT_PACKAGE_FOR_CLASSPATH_SCAN));
-                serverCoreComponents = new ServerCoreComponentsImpl(servletContext, configuration, threadFactory, classpathScanner, beanFactory);
+                    //TODO: We need to provide a container specific thread factory that contains managed threads
+                    //See https://github.com/canoo/dolphin-platform/issues/498
+                    final PlatformThreadFactory threadFactory = new SimpleDolphinPlatformThreadFactory();
+                    final ManagedBeanFactory beanFactory = getBeanFactory(servletContext);
+                    final DefaultClasspathScanner classpathScanner = new DefaultClasspathScanner(configuration.getListProperty(ROOT_PACKAGE_FOR_CLASSPATH_SCAN));
+                    serverCoreComponents = new ServerCoreComponentsImpl(servletContext, configuration, threadFactory, classpathScanner, beanFactory);
 
-                final Set<Class<?>> moduleClasses = classpathScanner.getTypesAnnotatedWith(ModuleDefinition.class);
+                    final Set<Class<?>> moduleClasses = classpathScanner.getTypesAnnotatedWith(ModuleDefinition.class);
 
-                final Map<String, ServerModule> modules = new HashMap<>();
-                for (final Class<?> moduleClass : moduleClasses) {
-                    if(!ServerModule.class.isAssignableFrom(moduleClass)) {
-                        throw new DolphinRuntimeException("Class " + moduleClass + " is annoated with " + ModuleDefinition.class.getSimpleName() + " but do not implement " + ServerModule.class.getSimpleName());
-                    }
-                    ModuleDefinition moduleDefinition = moduleClass.getAnnotation(ModuleDefinition.class);
-                    ServerModule instance = (ServerModule) moduleClass.newInstance();
-                    modules.put(instance.getName(), instance);
-                }
-
-                LOG.info("Found {} Dolphin Plaform modules", modules.size());
-                if (LOG.isTraceEnabled()) {
-                    for (final String moduleName : modules.keySet()) {
-                        LOG.trace("Found Dolphin Plaform module {}", moduleName);
-                    }
-                }
-
-                for (final Map.Entry<String, ServerModule> moduleEntry : modules.entrySet()) {
-                    LOG.debug("Will initialize Dolphin Plaform module {}", moduleEntry.getKey());
-                    final ServerModule module = moduleEntry.getValue();
-                    if (module.shouldBoot(serverCoreComponents.getConfiguration())) {
-                        final List<String> neededModules = module.getModuleDependencies();
-                        for (final String neededModule : neededModules) {
-                            if (!modules.containsKey(neededModule)) {
-                                throw new ModuleInitializationException("Module " + moduleEntry.getKey() + " depends on missing module " + neededModule);
-                            }
+                    final Map<String, ServerModule> modules = new HashMap<>();
+                    for (final Class<?> moduleClass : moduleClasses) {
+                        if(!ServerModule.class.isAssignableFrom(moduleClass)) {
+                            throw new DolphinRuntimeException("Class " + moduleClass + " is annoated with " + ModuleDefinition.class.getSimpleName() + " but do not implement " + ServerModule.class.getSimpleName());
                         }
-                        module.initialize(serverCoreComponents);
+                        ModuleDefinition moduleDefinition = moduleClass.getAnnotation(ModuleDefinition.class);
+                        ServerModule instance = (ServerModule) moduleClass.newInstance();
+                        modules.put(instance.getName(), instance);
                     }
-                }
-                LOG.info("Dolphin Plaform booted");
-            } catch (Exception e) {
-                throw new RuntimeException("Can not boot Dolphin Platform", e);
-            }
-        } else {
-            LOG.info("Dolphin Plaform is deactivated");
-        }
-    }
 
+                    LOG.info("Found {} Dolphin Plaform modules", modules.size());
+                    if (LOG.isTraceEnabled()) {
+                        for (final String moduleName : modules.keySet()) {
+                            LOG.trace("Found Dolphin Plaform module {}", moduleName);
+                        }
+                    }
+
+                    for (final Map.Entry<String, ServerModule> moduleEntry : modules.entrySet()) {
+                        LOG.debug("Will initialize Dolphin Plaform module {}", moduleEntry.getKey());
+                        final ServerModule module = moduleEntry.getValue();
+                        if (module.shouldBoot(serverCoreComponents.getConfiguration())) {
+                            final List<String> neededModules = module.getModuleDependencies();
+                            for (final String neededModule : neededModules) {
+                                if (!modules.containsKey(neededModule)) {
+                                    throw new ModuleInitializationException("Module " + moduleEntry.getKey() + " depends on missing module " + neededModule);
+                                }
+                            }
+                            module.initialize(serverCoreComponents);
+                        }
+                    }
+                    LOG.info("Dolphin Plaform booted");
+                } catch (Exception e) {
+                    throw new RuntimeException("Can not boot Dolphin Platform", e);
+                }
+            } else {
+                LOG.info("Dolphin Plaform is deactivated");
+            }
+        });
+    }
 
     private ManagedBeanFactory getBeanFactory(final ServletContext servletContext) {
         final ServiceLoader<ManagedBeanFactory> serviceLoader = ServiceLoader.load(ManagedBeanFactory.class);

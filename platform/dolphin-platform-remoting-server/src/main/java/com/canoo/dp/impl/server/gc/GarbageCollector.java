@@ -15,6 +15,7 @@
  */
 package com.canoo.dp.impl.server.gc;
 
+import com.canoo.dp.impl.platform.core.timing.TimingHandler;
 import com.canoo.platform.remoting.ObservableList;
 import com.canoo.dp.impl.remoting.DolphinUtils;
 import com.canoo.platform.remoting.RemotingBean;
@@ -210,24 +211,26 @@ public class GarbageCollector {
 
         LOG.trace("Garbage collection started! GC will remove {} beans!", removeOnGC.size());
 
-        onRemoveCallback.onReject(removeOnGC.keySet());
+        TimingHandler.record("Remoting model gc", () -> {
+            onRemoveCallback.onReject(removeOnGC.keySet());
 
-        for (Map.Entry<Instance, Object> entry : removeOnGC.entrySet()) {
-            Instance removedInstance = entry.getKey();
-            for (Property property : removedInstance.getProperties()) {
-                propertyToParent.remove(property);
+            for (Map.Entry<Instance, Object> entry : removeOnGC.entrySet()) {
+                Instance removedInstance = entry.getKey();
+                for (Property property : removedInstance.getProperties()) {
+                    propertyToParent.remove(property);
+                }
+                for (ObservableList list : removedInstance.getLists()) {
+                    listToParent.remove(list);
+                }
+                allInstances.remove(entry.getValue());
             }
-            for (ObservableList list : removedInstance.getLists()) {
-                listToParent.remove(list);
-            }
-            allInstances.remove(entry.getValue());
-        }
 
-        removedBeansCount = removedBeansCount + removeOnGC.size();
-        removeOnGC.clear();
-        gcCalls = gcCalls + 1;
+            removedBeansCount = removedBeansCount + removeOnGC.size();
+            removeOnGC.clear();
+            gcCalls = gcCalls + 1;
 
-        LOG.trace("Garbage collection done! GC currently manages {} referenced beans!", allInstances.size());
+            LOG.trace("Garbage collection done! GC currently manages {} referenced beans!", allInstances.size());
+        });
     }
 
     public synchronized int getManagedInstancesCount() {

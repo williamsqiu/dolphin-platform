@@ -16,6 +16,7 @@
 package com.canoo.dp.impl.server.context;
 
 import com.canoo.dp.impl.platform.core.Assert;
+import com.canoo.dp.impl.platform.core.timing.TimingHandler;
 import com.canoo.dp.impl.remoting.BeanManagerImpl;
 import com.canoo.dp.impl.remoting.ClassRepository;
 import com.canoo.dp.impl.remoting.ClassRepositoryImpl;
@@ -210,11 +211,11 @@ public class DolphinContext {
     }
 
     private void onInitContext() {
-        platformBeanRepository = new ServerPlatformBeanRepository(serverModelStore, beanRepository, dispatcher, converters);
+        TimingHandler.record("Remoting init context", () -> platformBeanRepository = new ServerPlatformBeanRepository(serverModelStore, beanRepository, dispatcher, converters));
     }
 
     private void onDestroyContext() {
-        destroy();
+        TimingHandler.record("Remoting destroy context", () -> destroy());
     }
 
     public void destroy() {
@@ -274,15 +275,16 @@ public class DolphinContext {
     }
 
     public void interrupt() {
-        taskQueue.interrupt();
+        TimingHandler.record("Remoting interrupt long poll", () -> taskQueue.interrupt());
     }
 
     protected void onLongPoll() {
+
         if (configuration.isUseGc()) {
             LOG.trace("Handling GarbageCollection for DolphinContext {}", getId());
             onGarbageCollection();
         }
-        taskQueue.executeTasks();
+        TimingHandler.record("Remoting long poll", () -> taskQueue.executeTasks());
     }
 
     private void onGarbageCollection() {

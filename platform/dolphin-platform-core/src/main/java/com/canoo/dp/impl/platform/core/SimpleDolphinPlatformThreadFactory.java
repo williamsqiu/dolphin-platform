@@ -29,6 +29,10 @@ import static org.apiguardian.api.API.Status.INTERNAL;
 @API(since = "0.x", status = INTERNAL)
 public class SimpleDolphinPlatformThreadFactory implements PlatformThreadFactory {
 
+    private final static String NAME_PREFIX = "Dolphin-Platform-Background-Thread-";
+
+    private final static String GROUP_NAME = "Dolphin Platform executors";
+
     private final AtomicInteger threadNumber = new AtomicInteger(0);
 
     private final Lock uncaughtExceptionHandlerLock = new ReentrantLock();
@@ -39,7 +43,7 @@ public class SimpleDolphinPlatformThreadFactory implements PlatformThreadFactory
 
     public SimpleDolphinPlatformThreadFactory(final Thread.UncaughtExceptionHandler uncaughtExceptionHandler) {
         this.uncaughtExceptionHandler = Assert.requireNonNull(uncaughtExceptionHandler, "uncaughtExceptionHandler");
-        this.group = new ThreadGroup("Dolphin Platform executors");
+        this.group = new ThreadGroup(GROUP_NAME);
     }
 
     public SimpleDolphinPlatformThreadFactory() {
@@ -49,21 +53,20 @@ public class SimpleDolphinPlatformThreadFactory implements PlatformThreadFactory
     @Override
     public Thread newThread(final Runnable task) {
         Assert.requireNonNull(task, "task");
-        return AccessController.doPrivileged(new PrivilegedAction<Thread>() {
-            @Override
-            public Thread run() {
-                final Thread backgroundThread = new Thread(group, task);
-                backgroundThread.setName("Dolphin-Platform-Background-Thread-" + threadNumber.getAndIncrement());
-                backgroundThread.setDaemon(false);
-                uncaughtExceptionHandlerLock.lock();
-                try {
-                    backgroundThread.setUncaughtExceptionHandler(uncaughtExceptionHandler);
-                } finally {
-                    uncaughtExceptionHandlerLock.unlock();
-                }
-                return backgroundThread;
+        final Thread thread = AccessController.doPrivileged((PrivilegedAction<Thread>) () -> {
+            final Thread backgroundThread = new Thread(group, task);
+            backgroundThread.setName(NAME_PREFIX + threadNumber.getAndIncrement());
+            backgroundThread.setDaemon(false);
+            uncaughtExceptionHandlerLock.lock();
+            try {
+                backgroundThread.setUncaughtExceptionHandler(uncaughtExceptionHandler);
+            } finally {
+                uncaughtExceptionHandlerLock.unlock();
             }
+
+            return backgroundThread;
         });
+        return thread;
     }
 
     public void setUncaughtExceptionHandler(Thread.UncaughtExceptionHandler uncaughtExceptionHandler) {
