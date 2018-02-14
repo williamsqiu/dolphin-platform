@@ -15,7 +15,7 @@
  */
 package com.canoo.impl.dp.logging.bridges;
 
-import com.canoo.dp.impl.platform.core.ansi.AnsiOut;
+import com.canoo.dp.impl.platform.core.ansi.AnsiUtils;
 import com.canoo.platform.logging.DolphinLoggerConfiguration;
 import com.canoo.platform.logging.spi.DolphinLoggerBridge;
 import com.canoo.platform.logging.spi.LogMessage;
@@ -39,35 +39,35 @@ public class SimpleDolphinLogger implements DolphinLoggerBridge {
         final String textColor = Optional.ofNullable(logMessage.getLevel()).
                 map(l -> {
                     if (l.equals(Level.ERROR)) {
-                        return AnsiOut.ANSI_RED;
+                        return AnsiUtils.ANSI_RED;
                     }
                     if (l.equals(Level.WARN)) {
-                        return AnsiOut.ANSI_YELLOW;
+                        return AnsiUtils.ANSI_YELLOW;
                     }
                     if (l.equals(Level.INFO)) {
-                        return AnsiOut.ANSI_BLUE;
+                        return AnsiUtils.ANSI_BLUE;
                     }
-                    return AnsiOut.ANSI_CYAN;
-                }).orElse(AnsiOut.ANSI_CYAN);
+                    return AnsiUtils.ANSI_CYAN;
+                }).orElse(AnsiUtils.ANSI_CYAN);
 
         final StringBuilder buf = new StringBuilder();
-        buf.append(AnsiOut.ANSI_WHITE);
+        buf.append(AnsiUtils.ANSI_WHITE);
         final Date timestamp = Date.from(logMessage.getTimestamp().toInstant());
         buf.append(dateFormat.format(timestamp));
-        buf.append(AnsiOut.ANSI_RESET);
+        buf.append(AnsiUtils.ANSI_RESET);
 
         buf.append(" ");
 
-        buf.append(AnsiOut.ANSI_BOLD);
+        buf.append(AnsiUtils.ANSI_BOLD);
         buf.append(textColor);
         buf.append(logMessage.getLevel());
 
         buf.append(" - ");
 
         buf.append(logMessage.getMessage());
-        buf.append(AnsiOut.ANSI_RESET);
+        buf.append(AnsiUtils.ANSI_RESET);
 
-        buf.append(AnsiOut.ANSI_WHITE);
+        buf.append(AnsiUtils.ANSI_WHITE);
         buf.append(" - ");
 
         buf.append(logMessage.getLoggerName());
@@ -85,13 +85,13 @@ public class SimpleDolphinLogger implements DolphinLoggerBridge {
         }
         buf.append(" - ");
         buf.append(logMessage.getThreadName());
-        buf.append(AnsiOut.ANSI_RESET);
+        buf.append(AnsiUtils.ANSI_RESET);
 
         if (logMessage.getThrowable() != null) {
-            buf.append(AnsiOut.ANSI_RED);
+            buf.append(AnsiUtils.ANSI_RED);
             buf.append(System.lineSeparator());
             buf.append(logMessage.getExceptionDetail());
-            buf.append(AnsiOut.ANSI_RESET);
+            buf.append(AnsiUtils.ANSI_RESET);
         }
         print(buf.toString());
     }

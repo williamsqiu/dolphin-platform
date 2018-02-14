@@ -17,12 +17,21 @@ package com.canoo.dp.impl.platform.core.ansi;
 
 import org.apiguardian.api.API;
 
+import java.util.Arrays;
 import java.util.stream.IntStream;
 
 import static org.apiguardian.api.API.Status.INTERNAL;
 
 @API(since = "0.x", status = INTERNAL)
-public class AnsiOut {
+public class AnsiUtils {
+
+    public final static String PREFIX = "\u001B[";
+
+    public final static String FOREGROUND_PREFIX = "3";
+
+    public final static String BACKGROUND_PREFIX = "4";
+
+    public final static String SUFFIX = "m";
 
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_BOLD = "\u001B[1m";
@@ -54,9 +63,9 @@ public class AnsiOut {
         print(ANSI_RESET);
     }
 
-    public static void set(String str) {
+    public static void set(String... conf) {
         reset();
-        print(str);
+        Arrays.asList(conf).forEach(s -> print(s));
     }
 
     public static void print(String str) {

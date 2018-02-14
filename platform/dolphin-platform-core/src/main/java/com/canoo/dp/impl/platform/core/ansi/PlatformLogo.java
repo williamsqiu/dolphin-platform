@@ -39,19 +39,19 @@ public class PlatformLogo {
         final String versionString = Optional.of(version).map(v -> "Version " + version + " | ").orElse("");
         final String versionEndSuffix = "                                      ".substring(versionString.length());
 
-        final String strokeColor = AnsiOut.ANSI_BLUE;
-        final String textColor = AnsiOut.ANSI_RED;
-        final String borderColor = AnsiOut.ANSI_GREEN;
+        final String strokeColor = AnsiUtils.ANSI_BLUE;
+        final String textColor = AnsiUtils.ANSI_RED;
+        final String borderColor = AnsiUtils.ANSI_GREEN;
 
 
-        final String borderStart = AnsiOut.ANSI_BOLD + borderColor;
-        final String borderEnd = AnsiOut.ANSI_RESET;
+        final String borderStart = AnsiUtils.ANSI_BOLD + borderColor;
+        final String borderEnd = AnsiUtils.ANSI_RESET;
         final String borderPipe = borderStart + "|" + borderEnd;
-        final String logoStart = AnsiOut.ANSI_BOLD + strokeColor;
+        final String logoStart = AnsiUtils.ANSI_BOLD + strokeColor;
         final String textStart = textColor;
-        final String textEnd = AnsiOut.ANSI_RESET;
-        final String boldTextStart = AnsiOut.ANSI_BOLD + textColor;
-        final String boldTextEnd = AnsiOut.ANSI_RESET;
+        final String textEnd = AnsiUtils.ANSI_RESET;
+        final String boldTextStart = AnsiUtils.ANSI_BOLD + textColor;
+        final String boldTextEnd = AnsiUtils.ANSI_RESET;
 
         System.out.println("");
         System.out.println("  " + borderStart + "_____________________________________________________________________________________" + borderEnd);

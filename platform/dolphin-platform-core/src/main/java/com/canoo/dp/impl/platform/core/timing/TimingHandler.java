@@ -1,7 +1,7 @@
 package com.canoo.dp.impl.platform.core.timing;
 
 import com.canoo.dp.impl.platform.core.Assert;
-import com.canoo.dp.impl.platform.core.ansi.AnsiOut;
+import com.canoo.dp.impl.platform.core.ansi.AnsiUtils;
 import com.canoo.platform.core.functional.Task;
 import com.canoo.platform.core.timing.Timing;
 import com.canoo.platform.core.timing.TimingGroup;
@@ -121,88 +121,88 @@ public class TimingHandler {
     }
 
     public static void printAll() {
-        AnsiOut.printLinefeed();
+        AnsiUtils.printLinefeed();
 
-        AnsiOut.printHorizontalLine(95);
-        AnsiOut.printLinefeed();
+        AnsiUtils.printHorizontalLine(95);
+        AnsiUtils.printLinefeed();
 
-        AnsiOut.printVerticalLine();
-        AnsiOut.printSpaces(93);
-        AnsiOut.printVerticalLine();
-        AnsiOut.printLinefeed();
+        AnsiUtils.printVerticalLine();
+        AnsiUtils.printSpaces(93);
+        AnsiUtils.printVerticalLine();
+        AnsiUtils.printLinefeed();
 
-        AnsiOut.printVerticalLine();
-        AnsiOut.printSpaces(2);
-        AnsiOut.set(AnsiOut.ANSI_BLUE);
-        AnsiOut.print("Timing for group '");
-        AnsiOut.set(AnsiOut.ANSI_BOLD);
+        AnsiUtils.printVerticalLine();
+        AnsiUtils.printSpaces(2);
+        AnsiUtils.set(AnsiUtils.ANSI_BLUE);
+        AnsiUtils.print("Timing for group '");
+        AnsiUtils.set(AnsiUtils.ANSI_BOLD);
         final String groupName = getGroup().getName();
-        AnsiOut.print(groupName);
-        AnsiOut.reset();
-        AnsiOut.set(AnsiOut.ANSI_BLUE);
-        AnsiOut.print("'");
-        AnsiOut.reset();
-        AnsiOut.printSpaces(73 - groupName.length());
-        AnsiOut.printVerticalLine();
-        AnsiOut.printLinefeed();
+        AnsiUtils.print(groupName);
+        AnsiUtils.reset();
+        AnsiUtils.set(AnsiUtils.ANSI_BLUE);
+        AnsiUtils.print("'");
+        AnsiUtils.reset();
+        AnsiUtils.printSpaces(73 - groupName.length());
+        AnsiUtils.printVerticalLine();
+        AnsiUtils.printLinefeed();
 
-        AnsiOut.printVerticalLine();
-        AnsiOut.printHorizontalLine(93);
-        AnsiOut.printVerticalLine();
-        AnsiOut.printLinefeed();
+        AnsiUtils.printVerticalLine();
+        AnsiUtils.printHorizontalLine(93);
+        AnsiUtils.printVerticalLine();
+        AnsiUtils.printLinefeed();
 
         getGroup().getContent().forEach(c -> {
-            AnsiOut.printVerticalLine();
-            AnsiOut.printSpaces(4);
-            AnsiOut.set(AnsiOut.ANSI_PURPLE);
-            AnsiOut.print("Timing for context '");
-            AnsiOut.set(AnsiOut.ANSI_BOLD);
+            AnsiUtils.printVerticalLine();
+            AnsiUtils.printSpaces(4);
+            AnsiUtils.set(AnsiUtils.ANSI_PURPLE);
+            AnsiUtils.print("Timing for context '");
+            AnsiUtils.set(AnsiUtils.ANSI_BOLD);
             final String contentName = c.getName();
-            AnsiOut.print(c.getName());
-            AnsiOut.reset();
-            AnsiOut.set(AnsiOut.ANSI_PURPLE);
-            AnsiOut.print("'");
-            AnsiOut.reset();
-            AnsiOut.printSpaces(69 - contentName.length());
-            AnsiOut.printVerticalLine();
-            AnsiOut.printLinefeed();
+            AnsiUtils.print(c.getName());
+            AnsiUtils.reset();
+            AnsiUtils.set(AnsiUtils.ANSI_PURPLE);
+            AnsiUtils.print("'");
+            AnsiUtils.reset();
+            AnsiUtils.printSpaces(69 - contentName.length());
+            AnsiUtils.printVerticalLine();
+            AnsiUtils.printLinefeed();
 
             c.getTimings().forEach(t -> {
-                AnsiOut.printVerticalLine();
-                AnsiOut.printSpaces(8);
-                AnsiOut.set(AnsiOut.ANSI_GREEN);
-                AnsiOut.printVerticalLine();
-                AnsiOut.print("--");
-                AnsiOut.printSpaces(2);
-                AnsiOut.print("Record '");
-                AnsiOut.set(AnsiOut.ANSI_BOLD);
+                AnsiUtils.printVerticalLine();
+                AnsiUtils.printSpaces(8);
+                AnsiUtils.set(AnsiUtils.ANSI_GREEN);
+                AnsiUtils.printVerticalLine();
+                AnsiUtils.print("--");
+                AnsiUtils.printSpaces(2);
+                AnsiUtils.print("Record '");
+                AnsiUtils.set(AnsiUtils.ANSI_BOLD);
                 final String name = t.getName();
-                AnsiOut.print(name);
-                AnsiOut.reset();
-                AnsiOut.set(AnsiOut.ANSI_GREEN);
-                AnsiOut.print("'");
-                AnsiOut.reset();
-                AnsiOut.printSpaces(48 - name.length());
-                AnsiOut.set(AnsiOut.ANSI_GREEN);
-                AnsiOut.print("Duration: ");
+                AnsiUtils.print(name);
+                AnsiUtils.reset();
+                AnsiUtils.set(AnsiUtils.ANSI_GREEN);
+                AnsiUtils.print("'");
+                AnsiUtils.reset();
+                AnsiUtils.printSpaces(48 - name.length());
+                AnsiUtils.set(AnsiUtils.ANSI_GREEN);
+                AnsiUtils.print("Duration: ");
                 final String time = t.getDuration().toMillis() + " ms";
-                AnsiOut.print(time);
-                AnsiOut.reset();
-                AnsiOut.printSpaces(16 - time.length());
-                AnsiOut.printVerticalLine();
-                AnsiOut.printLinefeed();
+                AnsiUtils.print(time);
+                AnsiUtils.reset();
+                AnsiUtils.printSpaces(16 - time.length());
+                AnsiUtils.printVerticalLine();
+                AnsiUtils.printLinefeed();
             });
-            AnsiOut.printVerticalLine();
-            AnsiOut.printSpaces(93);
-            AnsiOut.printVerticalLine();
-            AnsiOut.printLinefeed();
+            AnsiUtils.printVerticalLine();
+            AnsiUtils.printSpaces(93);
+            AnsiUtils.printVerticalLine();
+            AnsiUtils.printLinefeed();
         });
 
-        AnsiOut.printVerticalLine();
-        AnsiOut.printHorizontalLine(93);
-        AnsiOut.printVerticalLine();
-        AnsiOut.printLinefeed();
+        AnsiUtils.printVerticalLine();
+        AnsiUtils.printHorizontalLine(93);
+        AnsiUtils.printVerticalLine();
+        AnsiUtils.printLinefeed();
 
-        AnsiOut.printLinefeed();
+        AnsiUtils.printLinefeed();
     }
 }
