@@ -6,7 +6,7 @@ SCRIPT_VERSION="v1.0.0 (2018-02-15)";
 function show_help() {
     echo "Usage: prepare-release <package> <version> [candidate]"
     echo
-    echo "  package:      The package that should be released. Possible packages are: javascript, js-frameworks, java"
+    echo "  package:      The package that should be released. Possible packages are: javascript, js-frameworks, java-examples, java"
     echo "  version:      The release version number in the format major.minor.patch, e.g. 1.0.0"
     echo "  candidate:    Optional release candidate number, e.g 4"
     echo
@@ -16,10 +16,11 @@ function show_help() {
     echo "This script expects the packages to be found as subdirectories (git projects) relative to this script"
     echo "  - javascript       dolphin-platform-js"
     echo "  - js-frameworks    dolphin-platform-polymer, dolphin-platform-angularjs"
+    echo "  - java-examples    dolphin-platform examples"
     echo "  - java             dolphin-platform"
     echo
     echo "Because of the project dependencies, the order of releases MUST be"
-    echo "  javascript, js-frameworks, java"
+    echo "  javascript, js-frameworks, java-examples, java"
     exit 1
 }
 
@@ -58,8 +59,10 @@ if [ $1 == "javascript" ]; then
     PACKAGE=1
 elif [ $1 == "js-frameworks" ]; then
     PACKAGE=2
-elif [ $1 == "java" ]; then
+elif [ $1 == "java-examples" ]; then
     PACKAGE=3
+elif [ $1 == "java" ]; then
+    PACKAGE=4
 fi
 
 if [ $PACKAGE -eq 0 ]; then
@@ -183,6 +186,26 @@ if [ $FAULT -eq 1 ]; then
     exit 1
 fi
 
+# params <project-directory> <bower-directory>
+function bower_install() {
+    cd $SCRIPT_DIR
+    cd "$1"
+
+    cd "$2"
+
+    echo "- Bower install for $2"
+
+    rm -rf bower_components/
+    bower install --force-latest > /dev/null 2>&1
+    RETURN=$?
+    if [[ $RETURN != 0 ]]; then
+        echo "- Bower install failed!"
+        exit $RETURN;
+    else
+        echo "- Bower install ok."
+    fi
+}
+
 # params <directory>
 function update_master() {
     cd $SCRIPT_DIR
@@ -215,6 +238,15 @@ function switch_branch() {
     echo "- Switching branch $BRANCH_NAME for $CURRENT_DIR"
 
     git checkout $BRANCH_NAME > /dev/null 2>&1
+}
+
+# params <regex> <file>
+function sed_withfix() {
+    sed -i -e "$1" $2
+    # macos fix
+    if [ -f "$2-e" ]; then
+        rm "$2-e"
+    fi
 }
 
 # params <version>
@@ -253,24 +285,11 @@ function release_javascript() {
     echo "Create release for dolphin-platform-js on master branch"
 
     echo "- Set up version number $1 for sonar-project.properties, package.json and bower.json"
-    sed -i -e "s/sonar.projectVersion=.*/sonar.projectVersion=${1}/g" sonar-project.properties
-    sed -i -e "s/\"version\"\: \".*\",/\"version\"\: \"${1}\",/g" package.json
-    sed -i -e "s/\"version\"\: \".*\",/\"version\"\: \"${1}\",/g" bower.json
-    
-    # macos fix
-    if [ -f "sonar-project.properties-e" ]; then
-        rm sonar-project.properties-e
-    fi
+    sed_withfix "s/sonar.projectVersion=.*/sonar.projectVersion=${1}/g" sonar-project.properties
+    sed_withfix "s/\"version\"\: \".*\",/\"version\"\: \"${1}\",/g" package.json
+    sed_withfix "s/\"version\"\: \".*\",/\"version\"\: \"${1}\",/g" bower.json
 
-    if [ -f "package.json-e" ]; then
-        rm package.json-e
-    fi
-
-    if [ -f "bower.json-e" ]; then
-        rm bower.json-e
-    fi
-
-    echo "- Commit changes to release"
+    echo "- Commit changes to master"
 
     git add -A > /dev/null 2>&1
     git commit -m "Version updated to $1" > /dev/null 2>&1
@@ -280,21 +299,16 @@ function release_javascript() {
 
     echo "- Create tag for $1"
     git tag $1 > /dev/null 2>&1
-
-    echo "- Please check the new release manuelly in $DIRECTORY_JS_CORE_PROJECT"
-    echo "  + Check files changed for the master branch with 'git show' and 'git log'"
-    echo "  + Check files changed for the release/$1 branch with 'git show' and 'git log'"
-    echo "  + Check the existence of the tag for '$1' with 'git tag'"
-    echo "  + If the check is okay, upload the release to github.com with 'git push'"
 }
 
+# params <version>
 function release_polymer() {
     cd $SCRIPT_DIR
     echo "Build for dolphin-platform-polymer on master"
     update_master $DIRECTORY_POLYMER_PROJECT
 
     echo "- Update dependency for dolphin-platform.js in bower.json"
-    sed -i -e "s/\"dolphin-platform-js\": \".*\",/\"dolphin-platform-js\"\: \"${1}\",/g" bower.json
+    sed_withfix "s/\"dolphin-platform-js\": \".*\",/\"dolphin-platform-js\"\: \"${1}\",/g" bower.json
 
     bower install --force-latest > /dev/null 2>&1
     RETURN=$?
@@ -305,22 +319,13 @@ function release_polymer() {
         echo "- Bower install ok."
     fi
 
-    npm install > /dev/null 2>&1
+    npm run install:all > /dev/null 2>&1
     RETURN=$?
     if [[ $RETURN != 0 ]]; then
-        echo "- NPM install failed!"
+        echo "- NPM install:all failed!"
         exit $RETURN;
     else
-        echo "- NPM install ok."
-    fi
-
-    npm run build > /dev/null 2>&1
-    RETURN=$?
-    if [[ $RETURN != 0 ]]; then
-        echo "- NPM build failed!"
-        exit $RETURN;
-    else
-        echo "- NPM build ok."
+        echo "- NPM install:all ok."
     fi
 
     npm run lint > /dev/null 2>&1
@@ -346,23 +351,10 @@ function release_polymer() {
     echo "- Set up version number $1 for package.json and bower.json"
     # sonar-project.properties does not exist in that project
     # sed -i -e "s/sonar.projectVersion=.*/sonar.projectVersion=${1}/g" sonar-project.properties
-    sed -i -e "s/\"version\"\: \".*\",/\"version\"\: \"${1}\",/g" package.json
-    sed -i -e "s/\"version\"\: \".*\",/\"version\"\: \"${1}\",/g" bower.json
-    
-    # macos fix
-    if [ -f "sonar-project.properties-e" ]; then
-        rm sonar-project.properties-e
-    fi
+    sed_withfix "s/\"version\"\: \".*\",/\"version\"\: \"${1}\",/g" package.json
+    sed_withfix "s/\"version\"\: \".*\",/\"version\"\: \"${1}\",/g" bower.json
 
-    if [ -f "package.json-e" ]; then
-        rm package.json-e
-    fi
-
-    if [ -f "bower.json-e" ]; then
-        rm bower.json-e
-    fi
-
-    echo "- Commit changes to release"
+    echo "- Commit changes to master"
 
     git add -A > /dev/null 2>&1
     git commit -m "Version updated to $1" > /dev/null 2>&1
@@ -374,13 +366,14 @@ function release_polymer() {
     git tag $1 > /dev/null 2>&1
 }
 
+# params <version>
 function release_angularjs() {
     cd $SCRIPT_DIR
     echo "Build for dolphin-platform-angularjs on master"
     update_master $DIRECTORY_ANGULAR_PROJECT
 
     echo "- Update dependency for dolphin-platform.js in bower.json"
-    sed -i -e "s/\"dolphin-platform-js\": \".*\",/\"dolphin-platform-js\"\: \"${1}\",/g" bower.json
+    sed_withfix "s/\"dolphin-platform-js\": \".*\",/\"dolphin-platform-js\"\: \"${1}\",/g" bower.json
 
     bower install > /dev/null 2>&1
     RETURN=$?
@@ -430,24 +423,11 @@ function release_angularjs() {
     echo "Create release for dolphin-platform-angularjs on master branch"
 
     echo "- Set up version number $1 for sonar-project.properties, package.json and bower.json"
-    sed -i -e "s/sonar.projectVersion=.*/sonar.projectVersion=${1}/g" sonar-project.properties
-    sed -i -e "s/\"version\"\: \".*\",/\"version\"\: \"${1}\",/g" package.json
-    sed -i -e "s/\"version\"\: \".*\",/\"version\"\: \"${1}\",/g" bower.json
-    
-    # macos fix
-    if [ -f "sonar-project.properties-e" ]; then
-        rm sonar-project.properties-e
-    fi
+    sed_withfix "s/sonar.projectVersion=.*/sonar.projectVersion=${1}/g" sonar-project.properties
+    sed_withfix "s/\"version\"\: \".*\",/\"version\"\: \"${1}\",/g" package.json
+    sed_withfix "s/\"version\"\: \".*\",/\"version\"\: \"${1}\",/g" bower.json
 
-    if [ -f "package.json-e" ]; then
-        rm package.json-e
-    fi
-
-    if [ -f "bower.json-e" ]; then
-        rm bower.json-e
-    fi
-
-    echo "- Commit changes to release"
+    echo "- Commit changes to master"
 
     git add -A > /dev/null 2>&1
     git commit -m "Version updated to $1" > /dev/null 2>&1
@@ -459,14 +439,102 @@ function release_angularjs() {
     git tag $1 > /dev/null 2>&1
 }
 
+# params <javascript-version> <version>
+function release_java_examples() {
+    cd $SCRIPT_DIR
+    echo "Build for dolphin-platform on master"
+    update_master $DIRECTORY_MAIN_PROJECT
+
+    echo "- Update dependency for dolphin-platform-angularjs in bower.json for all examples"
+    sed_withfix "s/\"dolphin-platform-angularjs\": \".*\",/\"dolphin-platform-angularjs\"\: \"${1}\",/g" platform-examples/todo-example/angularjs-client/bower.json
+    sed_withfix "s/\"dolphin-platform-angularjs\": \".*\",/\"dolphin-platform-angularjs\"\: \"${1}\",/g" platform-examples/process-monitor-sample/process-monitor-client-angularjs/bower.json
+
+    echo "- Update dependency for dolphin-platform-polymer in bower.json for all examples"
+    sed_withfix "s/\"dolphin-platform-polymer\": \".*\",/\"dolphin-platform-polymer\"\: \"${1}\",/g" platform-examples/todo-example/polymer-client/bower.json
+    sed_withfix "s/\"dolphin-platform-polymer\": \".*\",/\"dolphin-platform-polymer\"\: \"${1}\",/g" platform-examples/process-monitor-sample/process-monitor-client-polymer/bower.json
+    sed_withfix "s/\"dolphin-platform-polymer\": \".*\",/\"dolphin-platform-polymer\"\: \"${1}\",/g" platform-examples/web-deployment-example/polymer-client/bower.json
+    sed_withfix "s/\"dolphin-platform-polymer\": \".*\",/\"dolphin-platform-polymer\"\: \"${1}\",/g" platform-extras/dolphin-platform-projector-polymer/bower.json
+
+    bower_install $DIRECTORY_MAIN_PROJECT platform-examples/todo-example/angularjs-client
+    bower_install $DIRECTORY_MAIN_PROJECT platform-examples/process-monitor-sample/process-monitor-client-angularjs
+
+    bower_install $DIRECTORY_MAIN_PROJECT platform-examples/todo-example/polymer-client
+    bower_install $DIRECTORY_MAIN_PROJECT platform-examples/process-monitor-sample/process-monitor-client-polymer
+    bower_install $DIRECTORY_MAIN_PROJECT platform-examples/web-deployment-example/polymer-client
+    bower_install $DIRECTORY_MAIN_PROJECT platform-extras/dolphin-platform-projector-polymer
+
+    cd $SCRIPT_DIR
+    cd $DIRECTORY_MAIN_PROJECT
+
+    DATE=`date '+%b, %d %Y'`
+    NL='
+'
+    sed_withfix "s/The annotations defines rhe split between provate and public API, too./The annotations defines rhe split between provate and public API, too.\\${NL}\\${NL}\\${NL}== Version ${2}\\${NL}_Release date: ${DATE}_\\${NL}\\${NL} \* Insert Changelog here!\\${NL}/g" documentation/src/docs/asciidoc/changelog.adoc
+}
+
+# params <javascript-version> <version>
+function release_java() {
+    cd $SCRIPT_DIR
+    echo "Build for dolphin-platform on master"
+    
+    git add -A > /dev/null 2>&1
+    git commit -m "Version updated to $2" > /dev/null 2>&1
+
+    create_branch $DIRECTORY_MAIN_PROJECT $2
+    switch_branch $DIRECTORY_MAIN_PROJECT $2
+
+    ./gradlew clean > /dev/null 2>&1
+    RETURN=$?
+    if [[ $RETURN != 0 ]]; then
+        echo "- Clean failed!"
+        exit $RETURN;
+    else
+        echo "- Clean ok."
+    fi
+
+    ./gradlew build > /dev/null 2>&1
+    RETURN=$?
+    if [[ $RETURN != 0 ]]; then
+        echo "- Build failed!"
+        exit $RETURN;
+    else
+        echo "- Build ok."
+    fi
+
+    sed_withfix "s/version=.*/version=${2}/g" gradle.properties
+
+    echo "- Create tag for $2"
+    git tag $2 > /dev/null 2>&1
+
+}
+
 if [ $PACKAGE -eq 1 ]; then
     release_javascript $JAVASCRIPT_VERSION
+
+    echo "- Please check the new release manuelly in $DIRECTORY_JS_CORE_PROJECT"
+    echo "  + Check files changed for the master branch with 'git show' and 'git log'"
+    echo "  + Check files changed for the release/$JAVASCRIPT_VERSION branch with 'git show' and 'git log'"
+    echo "  + Check the existence of the tag for '$JAVASCRIPT_VERSION' with 'git tag'"
+    echo "  + If the check is okay, upload the release to github.com. For the master do 'git push', for the branch do 'git push --set-upstream origin', and for the tag do 'git push origin $JAVASCRIPT_VERSION'"
+
     notify "dolphin-platform-js $JAVASCRIPT_VERSION" "Release prepared"
 elif [ $PACKAGE -eq 2 ]; then
     release_angularjs $JAVASCRIPT_VERSION
     release_polymer $JAVASCRIPT_VERSION
+
+    echo "- Please check the new release manuelly in $DIRECTORY_POLYMER_PROJECT and $DIRECTORY_ANGULAR_PROJECT"
+    echo "  + Check files changed for the master branch with 'git show' and 'git log'"
+    echo "  + Check files changed for the release/$JAVASCRIPT_VERSION branch with 'git show' and 'git log'"
+    echo "  + Check the existence of the tag for '$JAVASCRIPT_VERSION' with 'git tag'"
+    echo "  + If the check is okay, upload the release to github.com. For the master do 'git push', for the branch do 'git push --set-upstream origin', and for the tag do 'git push origin $JAVASCRIPT_VERSION'"
+
+    notify "dolphin-platform-polymer and dolphin-platform-angular $JAVASCRIPT_VERSION" "Release prepared"
 elif [ $PACKAGE -eq 3 ]; then
-    echo "not implemented yet"
+    release_java_examples $JAVASCRIPT_VERSION $JAVA_VERSION
+    notify "dolphin-platform-examples $JAVASCRIPT_VERSION" "Release prepared"
+elif [ $PACKAGE -eq 4 ]; then
+    release_java $JAVASCRIPT_VERSION $JAVA_VERSION
+    notify "dolphin-platform $JAVA_VERSION" "Release prepared"
 fi
 
 cd $SCRIPT_DIR
