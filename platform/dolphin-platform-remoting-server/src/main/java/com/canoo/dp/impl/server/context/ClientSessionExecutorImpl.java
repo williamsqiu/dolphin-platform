@@ -54,16 +54,13 @@ public class ClientSessionExecutorImpl implements ClientSessionExecutor {
     public <T> CompletableFuture<T> callLaterInClientSession(final Callable<T> task) {
         Assert.requireNonNull(task, "task");
         final CompletableFuture<T> future = new CompletableFuture();
-        runLaterExecutor.execute(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    T result = task.call();
-                    future.complete(result);
-                } catch (Exception e) {
-                    LOG.error("Unchaught exception in task!", e);
-                    future.completeExceptionally(e);
-                }
+        runLaterExecutor.execute(() -> {
+            try {
+                final T result = task.call();
+                future.complete(result);
+            } catch (final Exception e) {
+                LOG.error("Unchaught exception in task!", e);
+                future.completeExceptionally(e);
             }
         });
         return future;
