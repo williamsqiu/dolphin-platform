@@ -101,25 +101,16 @@ public class KeycloakSecurity implements Security {
         return clientConnection;
     }
 
-    private HttpClientConnection createConnection() throws IOException, URISyntaxException {
-        if(directConnect) {
-            return createDirectConnection();
-        } else {
-            return createServerProxyConnection();
-        }
-    }
-
-    private void receiveToken(final HttpClientConnection connection, final String content) throws IOException, URISyntaxException {
+    private void receiveToken(final HttpClientConnection connection, final String content) throws IOException {
         Assert.requireNonNull(content, "content");
         LOG.debug("receiving new token from keycloak server");
-        final HttpClientConnection clientConnection = createConnection();
-        clientConnection.setDoOutput(true);
-        clientConnection.writeRequestContent(content);
-        final int responseCode = clientConnection.readResponseCode();
+        connection.setDoOutput(true);
+        connection.writeRequestContent(content);
+        final int responseCode = connection.readResponseCode();
         if(responseCode == SC_HTTP_UNAUTHORIZED) {
             throw new DolphinRuntimeException("Invalid login!");
         }
-        final String input = clientConnection.readUTFResponseContent();
+        final String input = connection.readUTFResponseContent();
         final Gson gson = PlatformClient.getService(Gson.class);
         final KeycloakOpenidConnectResult result = gson.fromJson(input, KeycloakOpenidConnectResult.class);
         connectResult = result;
