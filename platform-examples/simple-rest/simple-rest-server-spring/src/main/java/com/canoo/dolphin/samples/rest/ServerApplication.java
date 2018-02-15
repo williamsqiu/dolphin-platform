@@ -15,10 +15,10 @@
  */
 package com.canoo.dolphin.samples.rest;
 
+import com.canoo.platform.server.spring.DolphinPlatformApplication;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication
+@DolphinPlatformApplication
 public class ServerApplication {
 
     public static void main(String[] args) {

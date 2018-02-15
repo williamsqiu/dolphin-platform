@@ -22,6 +22,8 @@ import com.canoo.platform.remoting.server.ClientSessionExecutor;
 import com.canoo.platform.remoting.server.RemotingController;
 import com.canoo.platform.remoting.server.RemotingModel;
 import com.canoo.platform.remoting.server.RemotingContext;
+import com.canoo.platform.server.timing.Metric;
+import com.canoo.platform.server.timing.ServerTiming;
 import oshi.SystemInfo;
 import oshi.hardware.GlobalMemory;
 import oshi.software.os.OSProcess;
@@ -54,6 +56,9 @@ public class ProcessMonitorController {
     @Inject
     private AsyncServerRunner asyncServerRunner;
 
+    @Inject
+    private ServerTiming serverTiming;
+
     @RemotingModel
     private ProcessListBean processList;
 
@@ -79,26 +84,31 @@ public class ProcessMonitorController {
 
 
     private void update() {
-        List<OSProcess> procs = Arrays.asList(os.getProcesses(10, OperatingSystem.ProcessSort.CPU));
-        for (OSProcess process : procs) {
-            ProcessBean bean = null;
-            if(processList.getItems().size() <= procs.indexOf(process)) {
-                bean = beanManager.create(ProcessBean.class);
-                processList.getItems().add(bean);
-            } else {
-                bean = processList.getItems().get(procs.indexOf(process));
+        final Metric metric = serverTiming.start("processUpdate", "Update of OS process list");
+        try {
+            List<OSProcess> procs = Arrays.asList(os.getProcesses(10, OperatingSystem.ProcessSort.CPU));
+            for (OSProcess process : procs) {
+                ProcessBean bean = null;
+                if (processList.getItems().size() <= procs.indexOf(process)) {
+                    bean = beanManager.create(ProcessBean.class);
+                    processList.getItems().add(bean);
+                } else {
+                    bean = processList.getItems().get(procs.indexOf(process));
+                }
+                bean.setProcessID(new Integer(process.getProcessID()).toString());
+                bean.setCpuPercentage(format.format(100d * (process.getKernelTime() + process.getUserTime()) / process.getUpTime()));
+                bean.setMemoryPercentage(format.format(100d * process.getResidentSetSize() / memory.getTotal()));
+                bean.setName(process.getName());
             }
-            bean.setProcessID(new Integer(process.getProcessID()).toString());
-            bean.setCpuPercentage(format.format(100d * (process.getKernelTime() + process.getUserTime()) / process.getUpTime()));
-            bean.setMemoryPercentage(format.format(100d * process.getResidentSetSize() / memory.getTotal()));
-            bean.setName(process.getName());
+            asyncServerRunner.execute(new Runnable() {
+                @Override
+                public void run() {
+                    sessionExecutor.runLaterInClientSession(() -> update());
+                }
+            });
+        } finally {
+            metric.stop();
         }
-        asyncServerRunner.execute(new Runnable() {
-            @Override
-            public void run() {
-                sessionExecutor.runLaterInClientSession(() -> update());
-            }
-        });
     }
 
 }

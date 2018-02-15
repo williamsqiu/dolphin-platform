@@ -15,6 +15,9 @@
  */
 package com.canoo.dolphin.samples.rest;
 
+import com.canoo.platform.server.timing.Metric;
+import com.canoo.platform.server.timing.ServerTiming;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -24,12 +27,45 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/city")
 public class CityEndpoint {
 
+    @Autowired
+    private ServerTiming serverTiming;
+
+    @RequestMapping(method = RequestMethod.GET)
+    public String testMetrics() {
+        final Metric metric1 = serverTiming.start("loadCache");
+        sleep(1_100);
+        metric1.stop();
+
+        final Metric metric2 = serverTiming.start("loadFromDB");
+        sleep(456);
+        metric2.stop();
+
+        final Metric metric3 = serverTiming.start("convertData");
+        sleep(1_462);
+        metric3.stop();
+
+        return "DONE";
+    }
+
     @RequestMapping(method = RequestMethod.POST)
     public CityDetails getDetails(@RequestBody final City city) {
-        final CityDetails cityDetails = new CityDetails(city);
-        cityDetails.setDescription("No description");
-        cityDetails.setPopulation((long) (Math.random() * 1_000_000));
-        return cityDetails;
+        final Metric metric = serverTiming.start("getCityDetail");
+        try {
+            final CityDetails cityDetails = new CityDetails(city);
+            cityDetails.setDescription("No description");
+            cityDetails.setPopulation((long) (Math.random() * 1_000_000));
+            return cityDetails;
+        } finally {
+            metric.stop();
+        }
+    }
+
+    private void sleep(long ms) {
+        try {
+            Thread.sleep(ms);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
 }
