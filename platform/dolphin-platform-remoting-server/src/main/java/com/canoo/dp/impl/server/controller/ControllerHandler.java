@@ -22,7 +22,6 @@ import com.canoo.dp.impl.remoting.Converters;
 import com.canoo.dp.impl.server.beans.PostConstructInterceptor;
 import com.canoo.dp.impl.server.error.ActionErrorHandler;
 import com.canoo.dp.impl.server.mbean.DolphinContextMBeanRegistry;
-import com.canoo.dp.impl.server.mbean.beans.ModelProvider;
 import com.canoo.dp.impl.server.model.ServerBeanBuilder;
 import com.canoo.platform.core.DolphinRuntimeException;
 import com.canoo.platform.core.functional.Subscription;
@@ -97,7 +96,7 @@ public class ControllerHandler {
         this.actionErrorHandler = new ActionErrorHandler();
     }
 
-    public Object getControllerModel(String id) {
+    public Object getControllerModel(final String id) {
         return models.get(id);
     }
 
@@ -112,7 +111,7 @@ public class ControllerHandler {
         final String id = UUID.randomUUID().toString();
         final Object instance = beanFactory.createDependentInstance(controllerClass, new PostConstructInterceptor() {
             @Override
-            public void intercept(Object controller) {
+            public void intercept(final Object controller) {
                 attachModel(id, controller);
                 if(parentControllerId != null) {
                     attachParent(id, controller, parentControllerId);
@@ -122,12 +121,7 @@ public class ControllerHandler {
         controllers.put(id, instance);
         controllerClassMapping.put(id, controllerClass);
 
-        mBeanSubscriptions.put(id, mBeanRegistry.registerController(controllerClass, id, new ModelProvider() {
-            @Override
-            public Object getModel() {
-                return models.get(id);
-            }
-        }));
+        mBeanSubscriptions.put(id, mBeanRegistry.registerController(controllerClass, id, () -> models.get(id)));
 
         if(parentControllerId != null) {
             final Object parentController = controllers.get(parentControllerId);
@@ -145,7 +139,7 @@ public class ControllerHandler {
 
         final List<String> childControllerIds = parentChildRelations.remove(id);
         if(childControllerIds != null && !childControllerIds.isEmpty()) {
-            for(String childControllerId : childControllerIds) {
+            for(final String childControllerId : childControllerIds) {
                 destroyController(childControllerId);
             }
         }
@@ -155,7 +149,7 @@ public class ControllerHandler {
 
         final String parentControllerId = childToParentRelations.remove(id);
         if(parentControllerId != null) {
-            Object parentController = controllers.get(parentControllerId);
+            final Object parentController = controllers.get(parentControllerId);
             Assert.requireNonNull(parentController, "parentController");
             firePreChildDestroyed(parentController, controller);
         }
@@ -175,7 +169,7 @@ public class ControllerHandler {
     }
 
     public void destroyAllControllers() {
-        List<String> currentControllerIds = new ArrayList<>(getAllControllerIds());
+        final List<String> currentControllerIds = new ArrayList<>(getAllControllerIds());
         for(String id : currentControllerIds) {
             destroyController(id);
         }
@@ -187,7 +181,7 @@ public class ControllerHandler {
 
         final List<Method> allMethods = ReflectionHelper.getInheritedDeclaredMethods(parentController.getClass());
 
-        for(Method method : allMethods) {
+        for(final Method method : allMethods) {
             if(method.isAnnotationPresent(PostChildCreated.class)) {
                 if(method.getParameters()[0].getType().isAssignableFrom(childController.getClass())) {
                     ReflectionHelper.invokePrivileged(method, parentController, childController);
@@ -199,7 +193,7 @@ public class ControllerHandler {
     private void firePreChildDestroyed(final Object parentController, final Object childController) {
         final List<Method> allMethods = ReflectionHelper.getInheritedDeclaredMethods(parentController.getClass());
 
-        for(Method method : allMethods) {
+        for(final Method method : allMethods) {
             if(method.isAnnotationPresent(PreChildDestroyed.class)) {
                 if(method.getParameters()[0].getType().isAssignableFrom(childController.getClass())) {
                     ReflectionHelper.invokePrivileged(method, parentController, childController);
@@ -212,11 +206,11 @@ public class ControllerHandler {
         Assert.requireNonNull(controllerId, "controllerId");
         Assert.requireNonNull(controller, "controller");
 
-        List<Field> allFields = ReflectionHelper.getInheritedDeclaredFields(controller.getClass());
+        final List<Field> allFields = ReflectionHelper.getInheritedDeclaredFields(controller.getClass());
 
         Field modelField = null;
 
-        for (Field field : allFields) {
+        for (final Field field : allFields) {
             if (field.isAnnotationPresent(RemotingModel.class)) {
                 if (modelField != null) {
                     throw new RuntimeException("More than one Model was found for controller " + ControllerUtils.getControllerName(controller.getClass()));
@@ -226,7 +220,7 @@ public class ControllerHandler {
         }
 
         if (modelField != null) {
-            Object model = beanBuilder.createRootModel(modelField.getType());
+            final Object model = beanBuilder.createRootModel(modelField.getType());
             ReflectionHelper.setPrivileged(modelField, controller, model);
             models.put(controllerId, model);
         }
@@ -241,7 +235,7 @@ public class ControllerHandler {
 
         Field parentField = null;
 
-        for (Field field : allFields) {
+        for (final Field field : allFields) {
             if (field.isAnnotationPresent(ParentController.class)) {
                 if (parentField != null) {
                     throw new RuntimeException("More than one parent was found for controller " + ControllerUtils.getControllerName(controller.getClass()));
@@ -287,7 +281,7 @@ public class ControllerHandler {
             LOG.debug("Will call {} action for controller {} ({}.{}) with {} params.", actionName, controllerId, controllerClass, ControllerUtils.getActionMethodName(actionMethod), args.size());
             if(LOG.isTraceEnabled()) {
                 int index = 1;
-                for(Object param : args) {
+                for(final Object param : args) {
                     if(param != null) {
                         LOG.trace("Action param {}: {} with type {} is called with value \"{}\" and type {}", index, actionMethod.getParameters()[index - 1].getName(), actionMethod.getParameters()[index - 1].getType().getSimpleName(), param, param.getClass());
                     } else {
@@ -298,7 +292,7 @@ public class ControllerHandler {
             }
             try {
                 ReflectionHelper.invokePrivileged(actionMethod, controller, args.toArray());
-            } catch (DolphinRuntimeException e) {
+            } catch (final DolphinRuntimeException e) {
                 if(e.getCause() instanceof InvocationTargetException) {
                     final InvocationTargetException invocationTargetException = (InvocationTargetException) e.getCause();
                     final Throwable internalException = invocationTargetException.getCause();
@@ -306,9 +300,9 @@ public class ControllerHandler {
                 }
                 throw e;
             }
-        } catch (InvokeActionException e) {
+        } catch (final InvokeActionException e) {
           throw e;
-        } catch (Exception e) {
+        } catch (final Exception e) {
             throw new InvokeActionException("Can not call action '" + actionName + "'", e);
         }
     }
@@ -322,7 +316,7 @@ public class ControllerHandler {
 
         for (int i = 0; i < n; i++) {
             String paramName = Integer.toString(i);
-            for (Annotation annotation : method.getParameterAnnotations()[i]) {
+            for (final Annotation annotation : method.getParameterAnnotations()[i]) {
                 if (annotation.annotationType().equals(Param.class)) {
                     final Param param = (Param) annotation;
                     if (param.value() != null && !param.value().isEmpty()) {
@@ -333,8 +327,8 @@ public class ControllerHandler {
             if(!params.containsKey(paramName)) {
                 throw new IllegalArgumentException("No value for param " + paramName + " specified!");
             }
-            Object value = params.get(paramName);
-            Class<?> type = method.getParameters()[i].getType();
+            final Object value = params.get(paramName);
+            final Class<?> type = method.getParameters()[i].getType();
             if(value != null) {
                 LOG.trace("Param check of value {} with type {} for param with type {}", value, value.getClass(), type);
                 args.add(converters.getConverter(type).convertFromDolphin(value));
@@ -356,9 +350,9 @@ public class ControllerHandler {
         Assert.requireNonNull(controllerClass, "controllerClass");
         Assert.requireNonNull(actionName, "actionName");
 
-        List<Method> allMethods = ReflectionHelper.getInheritedDeclaredMethods(controllerClass);
+        final List<Method> allMethods = ReflectionHelper.getInheritedDeclaredMethods(controllerClass);
         Method foundMethod = null;
-        for (Method method : allMethods) {
+        for (final Method method : allMethods) {
             if (method.isAnnotationPresent(RemotingAction.class)) {
                 final String currentActionName = ControllerUtils.getActionMethodName(method);
                 if (currentActionName.equals(actionName)) {
@@ -373,9 +367,9 @@ public class ControllerHandler {
     }
 
     @SuppressWarnings("unchecked")
-    public <T> List<? extends T> getAllControllersThatImplement(Class<T> cls) {
+    public <T> List<? extends T> getAllControllersThatImplement(final Class<T> cls) {
         final List<T> ret = new ArrayList<>();
-        for (Object controller : controllers.values()) {
+        for (final Object controller : controllers.values()) {
             if (cls.isAssignableFrom(controller.getClass())) {
                 ret.add((T) controller);
             }

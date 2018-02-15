@@ -54,7 +54,7 @@ public class ActionErrorHandler {
             final Consumer<ActionExceptionEvent<T>> handler = iterator.next();
             try {
                 handler.accept(exceptionEvent);
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 LOG.error("Error in calling exception handler for error of type '" + throwable.getClass() +
                         "' thrown by action '" + exceptionEvent.getActionName() +
                         "' of controller '" + exceptionEvent.getControllerName() + "'!", e);
@@ -63,7 +63,7 @@ public class ActionErrorHandler {
         return exceptionEvent.isAborted();
     }
 
-    private <T extends Throwable> List<Consumer<ActionExceptionEvent<T>>> getConsumersForTypeInController(Class<? extends Throwable> throwableClass, Object controller) {
+    private <T extends Throwable> List<Consumer<ActionExceptionEvent<T>>> getConsumersForTypeInController(final Class<? extends Throwable> throwableClass, final Object controller) {
         Assert.requireNonNull(throwableClass, "throwableClass");
         Assert.requireNonNull(controller, "controller");
         return ReflectionHelper.getInheritedDeclaredMethods(controller.getClass()).stream()

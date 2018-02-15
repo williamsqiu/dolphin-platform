@@ -310,7 +310,6 @@ public class TypeUtils {
             return isAssignable(getRawType((ParameterizedType) type), toClass);
         }
 
-        // *
         if (type instanceof TypeVariable<?>) {
             // if any of the bounds are assignable to the class, then the
             // type is assignable to the class.

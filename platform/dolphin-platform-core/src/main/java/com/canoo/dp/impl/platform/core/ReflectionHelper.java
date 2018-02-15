@@ -71,12 +71,12 @@ public class ReflectionHelper {
     private ReflectionHelper() {
     }
 
-    public static Optional<Class<?>> getPrimitiveType(Class<?> cls) {
+    public static Optional<Class<?>> getPrimitiveType(final Class<?> cls) {
         Assert.requireNonNull(cls, "cls");
         return Optional.ofNullable(wrapperPrimitiveMap.get(cls));
     }
 
-    public static Optional<Class<?>> getWrapperClass(Class<?> cls) {
+    public static Optional<Class<?>> getWrapperClass(final Class<?> cls) {
         Assert.requireNonNull(cls, "cls");
         return Optional.ofNullable(primitiveWrapperMap.get(cls));
     }
@@ -86,11 +86,11 @@ public class ReflectionHelper {
         return (T) AccessController.doPrivileged(new PrivilegedAction<Object>() {
             @Override
             public Object run() {
-                boolean wasAccessible = field.isAccessible();
+                final boolean wasAccessible = field.isAccessible();
                 try {
                     field.setAccessible(true);
                     return field.get(bean);
-                } catch (IllegalArgumentException | IllegalAccessException ex) {
+                } catch (final IllegalArgumentException | IllegalAccessException ex) {
                     throw new IllegalStateException("Cannot set field: "
                             + field, ex);
                 } finally {
@@ -106,12 +106,12 @@ public class ReflectionHelper {
         AccessController.doPrivileged(new PrivilegedAction<Void>() {
             @Override
             public Void run() {
-                boolean wasAccessible = field.isAccessible();
+                final boolean wasAccessible = field.isAccessible();
                 try {
                     field.setAccessible(true);
                     field.set(bean, value);
                     return null; // return nothing...
-                } catch (IllegalArgumentException | IllegalAccessException ex) {
+                } catch (final IllegalArgumentException | IllegalAccessException ex) {
                     throw new IllegalStateException("Cannot set field: "
                             + field, ex);
                 } finally {
@@ -127,14 +127,14 @@ public class ReflectionHelper {
         return AccessController.doPrivileged((PrivilegedAction<T>) new PrivilegedAction<Object>() {
             @Override
             public Object run() {
-                boolean wasAccessible = method.isAccessible();
+                final boolean wasAccessible = method.isAccessible();
                 try {
                     method.setAccessible(true);
                     return method.invoke(instance, args);
-                } catch (InvocationTargetException ex) {
+                } catch (final InvocationTargetException ex) {
                     throw new DolphinRuntimeException("Error while calling method '"
                             + method.getName() + "' on instance of type '" + instance.getClass() + "'. Method details: " + method.toGenericString(), ex);
-                } catch (IllegalAccessException ex) {
+                } catch (final IllegalAccessException ex) {
                     throw new DolphinRuntimeException("Cannot invoke method '"
                             + method.getName() + "' on instance of type '" + instance.getClass() + "'. Method details: " + method.toGenericString(), ex);
                 } finally {
@@ -150,7 +150,7 @@ public class ReflectionHelper {
 
         Class<?> i = type;
         while (i != null && i != Object.class) {
-            for (Field field : Arrays.asList(i.getDeclaredFields())) {
+            for (final Field field : Arrays.asList(i.getDeclaredFields())) {
                 if (field.getName().equals(name)) {
                     return field;
                 }
@@ -161,7 +161,7 @@ public class ReflectionHelper {
 
     public static List<Field> getInheritedDeclaredFields(final Class<?> type) {
         Assert.requireNonNull(type, "type");
-        List<Field> result = new ArrayList<>();
+        final List<Field> result = new ArrayList<>();
         Class<?> i = type;
         while (i != null && i != Object.class) {
             result.addAll(Arrays.asList(i.getDeclaredFields()));
@@ -172,7 +172,7 @@ public class ReflectionHelper {
 
     public static List<Method> getInheritedDeclaredMethods(final Class<?> type) {
         Assert.requireNonNull(type, "type");
-        List<Method> result = new ArrayList<>();
+        final List<Method> result = new ArrayList<>();
         Class<?> i = type;
         while (i != null && i != Object.class) {
             result.addAll(Arrays.asList(i.getDeclaredMethods()));
@@ -181,7 +181,7 @@ public class ReflectionHelper {
         return result;
     }
 
-    public static Optional<Method> getMethod(final Class<?> type, final String name, Class... paramTypes) {
+    public static Optional<Method> getMethod(final Class<?> type, final String name, final Class... paramTypes) {
         return getInheritedDeclaredMethods(type).stream()
                 .filter(m -> m.getName().equals(name))
                 .filter(m -> Arrays.equals(m.getParameterTypes(), paramTypes)).findFirst();
@@ -196,7 +196,7 @@ public class ReflectionHelper {
     public static Class getTypeParameter(final Field field) {
         Assert.requireNonNull(field, "field");
         try {
-            ParameterizedType pType = (ParameterizedType) field.getGenericType();
+            final ParameterizedType pType = (ParameterizedType) field.getGenericType();
             if (pType.getActualTypeArguments().length > 0) {
                 return (Class) pType.getActualTypeArguments()[0];
             }
