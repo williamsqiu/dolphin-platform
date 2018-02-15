@@ -13,6 +13,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.Duration;
 
 import static org.apiguardian.api.API.Status.INTERNAL;
 
@@ -60,6 +61,35 @@ public class ServerTimingFilter implements Filter {
 
 
     public static ServerTiming getCurrentTiming() {
-        return timingLocal.get();
+        final ServerTimingImpl timing = timingLocal.get();
+        if(timing == null) {
+            return new ServerTiming() {
+                @Override
+                public Metric start(final String name, final String description) {
+                    return new Metric() {
+                        @Override
+                        public String getName() {
+                            return name;
+                        }
+
+                        @Override
+                        public String getDescription() {
+                            return description;
+                        }
+
+                        @Override
+                        public Duration getDuration() {
+                            return null;
+                        }
+
+                        @Override
+                        public void stop() throws IllegalStateException {
+
+                        }
+                    };
+                }
+            };
+        }
+        return timing;
     }
 }

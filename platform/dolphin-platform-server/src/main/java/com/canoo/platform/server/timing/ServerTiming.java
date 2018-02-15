@@ -1,7 +1,7 @@
 package com.canoo.platform.server.timing;
 
 /**
- * Service to add metrics of the server to a http response:
+ * Service to add metrics of the server to a http response.
  */
 public interface ServerTiming {
 
