@@ -21,8 +21,7 @@ import static org.apiguardian.api.API.Status.INTERNAL;
 
 @API(since = "0.x", status = INTERNAL)
 public interface PlatformConstants {
-    String DOLPHIN_PLATFORM_PREFIX = "dolphin_platform_intern_";
     String REMOTING_DATE_FORMAT_PATTERN = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
     String TIMEZONE_UTC = "UTC";
-    String CLIENT_ID_HTTP_HEADER_NAME = DOLPHIN_PLATFORM_PREFIX + "dolphinClientId";
+    String CLIENT_ID_HTTP_HEADER_NAME = "X-Client-Session-Id";
 }
