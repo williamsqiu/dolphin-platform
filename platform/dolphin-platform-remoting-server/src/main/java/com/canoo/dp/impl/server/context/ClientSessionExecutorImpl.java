@@ -18,6 +18,8 @@ package com.canoo.dp.impl.server.context;
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.remoting.server.ClientSessionExecutor;
 import org.apiguardian.api.API;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
@@ -27,6 +29,8 @@ import static org.apiguardian.api.API.Status.INTERNAL;
 
 @API(since = "0.x", status = INTERNAL)
 public class ClientSessionExecutorImpl implements ClientSessionExecutor {
+
+    private final static Logger LOG = LoggerFactory.getLogger(ClientSessionExecutorImpl.class);
 
     private final Executor runLaterExecutor;
 
@@ -57,6 +61,7 @@ public class ClientSessionExecutorImpl implements ClientSessionExecutor {
                     T result = task.call();
                     future.complete(result);
                 } catch (Exception e) {
+                    LOG.error("Unchaught exception in task!", e);
                     future.completeExceptionally(e);
                 }
             }
