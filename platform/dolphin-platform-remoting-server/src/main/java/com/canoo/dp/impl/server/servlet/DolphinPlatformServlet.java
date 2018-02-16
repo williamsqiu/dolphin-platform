@@ -40,7 +40,7 @@ public class DolphinPlatformServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(final HttpServletRequest req, final HttpServletResponse resp) throws ServletException, IOException {
         final Metric metric = ServerTimingFilter.getCurrentTiming().start("RemotingRequest", "A request for the DP remoting");
         try {
             communicationHandler.handle(req, resp);

@@ -86,8 +86,8 @@ public class ProcessMonitorController {
     private void update() {
         final Metric metric = serverTiming.start("processUpdate", "Update of OS process list");
         try {
-            List<OSProcess> procs = Arrays.asList(os.getProcesses(10, OperatingSystem.ProcessSort.CPU));
-            for (OSProcess process : procs) {
+            final List<OSProcess> procs = Arrays.asList(os.getProcesses(10, OperatingSystem.ProcessSort.CPU));
+            for (final OSProcess process : procs) {
                 ProcessBean bean = null;
                 if (processList.getItems().size() <= procs.indexOf(process)) {
                     bean = beanManager.create(ProcessBean.class);
@@ -95,17 +95,12 @@ public class ProcessMonitorController {
                 } else {
                     bean = processList.getItems().get(procs.indexOf(process));
                 }
-                bean.setProcessID(new Integer(process.getProcessID()).toString());
+                bean.setProcessID(Integer.toString(process.getProcessID()));
                 bean.setCpuPercentage(format.format(100d * (process.getKernelTime() + process.getUserTime()) / process.getUpTime()));
                 bean.setMemoryPercentage(format.format(100d * process.getResidentSetSize() / memory.getTotal()));
                 bean.setName(process.getName());
             }
-            asyncServerRunner.execute(new Runnable() {
-                @Override
-                public void run() {
-                    sessionExecutor.runLaterInClientSession(() -> update());
-                }
-            });
+            asyncServerRunner.execute(() -> sessionExecutor.runLaterInClientSession(this::update));
         } finally {
             metric.stop();
         }

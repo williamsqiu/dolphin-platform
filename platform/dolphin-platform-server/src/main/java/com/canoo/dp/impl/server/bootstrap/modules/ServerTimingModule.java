@@ -37,7 +37,7 @@ public class ServerTimingModule extends AbstractBaseModule {
     }
 
     @Override
-    public void initialize(ServerCoreComponents coreComponents) throws ModuleInitializationException {
+    public void initialize(final ServerCoreComponents coreComponents) throws ModuleInitializationException {
         final ServletContext servletContext = coreComponents.getInstance(ServletContext.class);
         final PlatformConfiguration configuration = coreComponents.getConfiguration();
 

@@ -269,7 +269,7 @@ public class DolphinContext {
         final Metric metric = ServerTimingFilter.getCurrentTiming().start("RemotingActionCall:"+actionName, "Remote action call");
         try {
             controllerHandler.invokeAction(controllerId, actionName, params);
-        } catch (Exception e) {
+        } catch (final Exception e) {
             LOG.error("Unexpected exception while invoking action {} on controller {}",
                     actionName, controllerId, e);
             bean.setError(true);
@@ -320,8 +320,8 @@ public class DolphinContext {
         return clientSession.getId();
     }
 
-    public List<Command> handle(List<Command> commands) {
-        List<Command> results = new LinkedList<>();
+    public List<Command> handle(final List<Command> commands) {
+        final List<Command> results = new LinkedList<>();
         for (Command command : commands) {
             results.addAll(serverConnector.receive(command));
             hasResponseCommands = !results.isEmpty();

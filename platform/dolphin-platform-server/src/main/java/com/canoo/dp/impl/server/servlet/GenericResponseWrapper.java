@@ -11,7 +11,7 @@ import java.io.PrintWriter;
 public class GenericResponseWrapper extends HttpServletResponseWrapper {
     private final ByteArrayOutputStream output;
 
-    public GenericResponseWrapper(HttpServletResponse response) {
+    public GenericResponseWrapper(final HttpServletResponse response) {
         super(response);
         output = new ByteArrayOutputStream();
     }

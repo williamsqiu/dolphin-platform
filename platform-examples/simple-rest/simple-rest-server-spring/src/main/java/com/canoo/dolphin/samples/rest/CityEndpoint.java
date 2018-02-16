@@ -60,10 +60,10 @@ public class CityEndpoint {
         }
     }
 
-    private void sleep(long ms) {
+    private void sleep(final long ms) {
         try {
             Thread.sleep(ms);
-        } catch (InterruptedException e) {
+        } catch (final InterruptedException e) {
             e.printStackTrace();
         }
     }
