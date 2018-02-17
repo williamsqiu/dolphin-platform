@@ -55,9 +55,9 @@ public class SimpleCrudService<E extends AbstractEntity> implements CrudService<
     public E reset(final E entity) {
         Assert.requireNonNull(entity , "entity");
         final Long id = entity.getId();
-        entityManager.detach(entity);
 
         if(id != null) {
+            entityManager.detach(entity);
             return findById(id);
         } else {
             return createNewInstance();
