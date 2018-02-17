@@ -32,7 +32,7 @@ public abstract class AbstractCrudListController<ID extends Serializable, B, E e
     private List<E> entities;
 
     private final Subscription eventBusSubscription;
-
+    
     protected AbstractCrudListController(final Class<B> modelClass, final Class<E> entityClass, final BeanManager manager, final CrudService<ID, E> crudService, final BeanConverter<ID, B, E> converter, final RemotingEventBus eventBus) {
         this.modelClass = Assert.requireNonNull(modelClass, "modelClass");
         this.entityClass = Assert.requireNonNull(entityClass, "entityClass");
@@ -59,14 +59,13 @@ public abstract class AbstractCrudListController<ID extends Serializable, B, E e
             entities.stream()
                     .filter(e -> id.equals(e.getId()))
                     .findFirst()
-                    .ifPresent(e -> entityModified(e, event.getEventType()));
+                    .ifPresent(e -> onEntityDirty(e, event.getEventType()));
         }
     }
 
-    private void entityModified(final E entity, final CrudEventType type) {
+    protected void onEntityDirty(final E entity, final CrudEventType type) {
         
     }
-
 
     protected void showAll() {
         setEntities(crudService.findAll());
@@ -79,26 +78,29 @@ public abstract class AbstractCrudListController<ID extends Serializable, B, E e
     }
 
     protected void deleteSelected() {
-        final List<E> selectedEntities = getSelectedEntities();
-
-        selectedEntities.stream()
-                .filter(e -> e.getId() != null)
-                .forEach(e -> crudService.delete(e));
-
-        final List<E> newList = new ArrayList<>(getEntities());
-        newList.removeAll(selectedEntities);
-        setEntities(newList);
+        delete(getSelectedEntities());
     }
 
     protected void resetSelected() {
-        List<E> selectedEntities = getSelectedEntities();
-        List<E> resetedEntities = selectedEntities.stream()
+        reset(getSelectedEntities());
+    }
+
+    protected void delete(final List<E> entities) {
+        entities.stream()
+                .filter(e -> e.getId() != null)
+                .forEach(e -> crudService.delete(e));
+        final List<E> newList = new ArrayList<>(getEntities());
+        newList.removeAll(entities);
+        setEntities(newList);
+    }
+
+    protected void reset(final List<E> entities) {
+        List<E> resetedEntities = entities.stream()
                 .map(e -> crudService.reset(e))
                 .collect(Collectors.toList());
-
         final List<E> newList = new ArrayList<>(getEntities());
         newList.replaceAll(e -> {
-            final int index = selectedEntities.indexOf(e);
+            final int index = entities.indexOf(e);
             if(index >= 0) {
                 return resetedEntities.get(index);
             }
@@ -127,7 +129,21 @@ public abstract class AbstractCrudListController<ID extends Serializable, B, E e
     }
 
     protected void updateModel() {
+        final List<B> updated = entities.stream()
+                .filter(e -> !mapper.hasBeanForEntity(e, modelClass))
+                .map(e -> mapper.toBean(e, modelClass))
+                .collect(Collectors.toList());
 
+        final List<B> toDelete = getModel().stream()
+                .filter(b -> !updated.contains(b))
+                .collect(Collectors.toList());
+        getModel().removeAll(toDelete);
+
+        final List<B> toAdd = entities.stream()
+                .filter(e -> !mapper.hasBeanForEntity(e, modelClass))
+                .map(e -> mapper.toBean(e, modelClass))
+                .collect(Collectors.toList());
+        getModel().addAll(toAdd);
     }
 
     protected abstract ObservableList<B> getModel();

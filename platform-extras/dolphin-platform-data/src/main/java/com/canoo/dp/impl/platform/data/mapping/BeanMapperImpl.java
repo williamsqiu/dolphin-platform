@@ -70,4 +70,19 @@ public class BeanMapperImpl implements BeanMapper {
         return converter.enrichtEntityByBean(entity, bean);
     }
 
+    @Override
+    public <ID extends Serializable, B, E extends EntityWithId<ID>> B toBean(final E entity, final Class<B> beanClass) {
+        throw new RuntimeException("Not yet implemented!");
+    }
+
+    @Override
+    public <ID extends Serializable, B, E extends EntityWithId<ID>> boolean hasBeanForEntity(final E entity, final Class<B> beanClass) {
+        return findBeanForEntity(entity, beanClass) != null;
+    }
+
+    @Override
+    public <ID extends Serializable, B, E extends EntityWithId<ID>> B findBeanForEntity(final E entity, final Class<B> beanClass) {
+        throw new RuntimeException("Not yet implemented!");
+    }
+
 }

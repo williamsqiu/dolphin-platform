@@ -16,6 +16,11 @@ public interface BeanMapper {
                 .collect(Collectors.toList());
     }
 
+    <ID extends Serializable, B, E extends EntityWithId<ID>> boolean hasBeanForEntity(E entity, Class<B> beanClass);
+
+    <ID extends Serializable, B, E extends EntityWithId<ID>> B findBeanForEntity(E entity, Class<B> beanClass);
+
     <ID extends Serializable, B, E extends EntityWithId<ID>> B updateBean(E entity, B bean, Class<B> beanClass);
 
+    <ID extends Serializable, B, E extends EntityWithId<ID>> B toBean(E entity, Class<B> beanClass);
 }
