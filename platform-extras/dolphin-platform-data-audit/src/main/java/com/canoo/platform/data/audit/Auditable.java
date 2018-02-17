@@ -1,4 +1,4 @@
-package com.canoo.dp.impl.platform.data.audit;
+package com.canoo.platform.data.audit;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
