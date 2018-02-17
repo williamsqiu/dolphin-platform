@@ -24,26 +24,38 @@ import org.keycloak.adapters.KeycloakDeploymentBuilder;
 import org.keycloak.adapters.spi.HttpFacade;
 import org.keycloak.representations.adapters.config.AdapterConfig;
 
+import javax.servlet.http.HttpSession;
 import java.util.Optional;
+import java.util.function.Supplier;
 
-import static com.canoo.dp.impl.security.SecurityHttpHeader.APPLICATION_NAME_HEADER;
 import static com.canoo.dp.impl.security.SecurityHttpHeader.BEARER_ONLY_HEADER;
-import static com.canoo.dp.impl.security.SecurityHttpHeader.REALM_NAME_HEADER;
 import static org.apiguardian.api.API.Status.INTERNAL;
 
 @API(since = "0.19.0", status = INTERNAL)
 public class DolphinKeycloakConfigResolver implements KeycloakConfigResolver {
 
+    private final KeycloakConfiguration configuration;
 
-    private static KeycloakConfiguration configuration;
+    private final Supplier<HttpSession> sessionSupplier;
+
+    public DolphinKeycloakConfigResolver(final KeycloakConfiguration configuration, final Supplier<HttpSession> sessionSupplier) {
+        this.configuration = Assert.requireNonNull(configuration, "configuration");
+        this.sessionSupplier = Assert.requireNonNull(sessionSupplier, "sessionSupplier");
+    }
 
     public KeycloakDeployment resolve(final HttpFacade.Request request) {
         Assert.requireNonNull(request, "request");
 
-        final String realmName = Optional.ofNullable(request.getHeader(REALM_NAME_HEADER)).
-                orElse(configuration.getRealmName());
-        final String applicationName = Optional.ofNullable(request.getHeader(APPLICATION_NAME_HEADER)).
-                orElse(configuration.getApplicationName());
+        final String realmName = Optional.ofNullable(sessionSupplier.get())
+                .map(s -> s.getAttribute(SecurityServerConstants.REALM_SESSION_ATTRIBUTE_NAME))
+                .map(s -> s.toString())
+                .orElse(configuration.getRealmName());
+
+        final String applicationName = Optional.ofNullable(sessionSupplier.get())
+                .map(s -> s.getAttribute(SecurityServerConstants.APP_SESSION_ATTRIBUTE_NAME))
+                .map(s -> s.toString())
+                .orElse(configuration.getApplicationName());
+
         final String authEndPoint = configuration.getAuthEndpoint();
 
         Optional.ofNullable(realmName).orElseThrow(() -> new SecurityException("Realm name for security check is not configured!"));
@@ -52,14 +64,14 @@ public class DolphinKeycloakConfigResolver implements KeycloakConfigResolver {
 
         final AdapterConfig adapterConfig = new AdapterConfig();
 
-        if(configuration.isRealmAllowed(realmName)){
+        if (configuration.isRealmAllowed(realmName)) {
             adapterConfig.setRealm(realmName);
-        }else{
+        } else {
             throw new SecurityException("Access Denied! The given realm is not allowed.");
         }
-        if(configuration.isApplicationAllowed(applicationName)){
+        if (configuration.isApplicationAllowed(applicationName)) {
             adapterConfig.setResource(applicationName);
-        }else{
+        } else {
             throw new SecurityException("Access Denied! The given application is not allowed.");
         }
 
@@ -67,10 +79,5 @@ public class DolphinKeycloakConfigResolver implements KeycloakConfigResolver {
         Optional.ofNullable(request.getHeader(BEARER_ONLY_HEADER)).
                 ifPresent(v -> adapterConfig.setBearerOnly(true));
         return KeycloakDeploymentBuilder.build(adapterConfig);
-    }
-
-    public static void setConfiguration(final KeycloakConfiguration configuration) {
-        Assert.requireNonNull(configuration, "configuration");
-        DolphinKeycloakConfigResolver.configuration = configuration;
     }
 }

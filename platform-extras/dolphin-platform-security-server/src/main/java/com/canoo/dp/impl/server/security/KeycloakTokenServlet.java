@@ -68,6 +68,9 @@ public class KeycloakTokenServlet extends HttpServlet {
                 throw new SecurityException("Access Denied! The given application is not allowed.");
             }
 
+            req.getSession().setAttribute(SecurityServerConstants.REALM_SESSION_ATTRIBUTE_NAME, realmName);
+            req.getSession().setAttribute(SecurityServerConstants.APP_SESSION_ATTRIBUTE_NAME, appName);
+
             final String authEndPoint = configuration.getAuthEndpoint();
             final String content = ConnectionUtils.readUTF8Content(req.getInputStream()) + "&client_id=" + appName;
 
