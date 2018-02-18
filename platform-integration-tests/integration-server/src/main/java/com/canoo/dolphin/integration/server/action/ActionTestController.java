@@ -15,12 +15,19 @@
  */
 package com.canoo.dolphin.integration.server.action;
 
+import com.canoo.dolphin.integration.action.ActionErrorBean;
 import com.canoo.dolphin.integration.action.ActionTestBean;
+import com.canoo.platform.core.DolphinRuntimeException;
+import com.canoo.platform.remoting.BeanManager;
+import com.canoo.platform.remoting.server.Param;
 import com.canoo.platform.remoting.server.RemotingAction;
 import com.canoo.platform.remoting.server.RemotingController;
 import com.canoo.platform.remoting.server.RemotingModel;
-import com.canoo.platform.remoting.server.Param;
+import com.canoo.platform.remoting.server.error.ActionExceptionEvent;
+import com.canoo.platform.remoting.server.error.ActionExceptionHandler;
 
+import javax.inject.Inject;
+import java.io.IOException;
 import java.lang.annotation.ElementType;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -35,6 +42,9 @@ public class ActionTestController {
 
     @RemotingModel
     private ActionTestBean model;
+
+    @Inject
+    private BeanManager beanManager;
 
     @RemotingAction(RESET_MODEL_ACTION)
     public void resetModel() {
@@ -311,5 +321,41 @@ public class ActionTestController {
     }
     /** End ElementType Type Related Action */
 
+    private void addErrorBean(final ActionExceptionEvent<?> exceptionEvent) {
+        final ActionErrorBean errorBean = beanManager.create(ActionErrorBean.class);
+        errorBean.setActionName(exceptionEvent.getActionName());
+        errorBean.setControllerName(exceptionEvent.getControllerName());
+        errorBean.setExceptionName(exceptionEvent.getException().getClass().getSimpleName());
+        model.getErrors().add(errorBean);
+    }
 
+    @ActionExceptionHandler
+    private void onDolphinRuntimeException(final ActionExceptionEvent<DolphinRuntimeException> exceptionEvent) {
+        addErrorBean(exceptionEvent);
+    }
+
+    @ActionExceptionHandler
+    private void onRuntimeException(final ActionExceptionEvent<RuntimeException> exceptionEvent) {
+        addErrorBean(exceptionEvent);
+    }
+
+    @ActionExceptionHandler
+    private void onIOException(final ActionExceptionEvent<IOException> exceptionEvent) {
+        addErrorBean(exceptionEvent);
+    }
+
+    @ActionExceptionHandler
+    private void onException(final ActionExceptionEvent<Exception> exceptionEvent) {
+        addErrorBean(exceptionEvent);
+    }
+
+    @ActionExceptionHandler
+    private void onAnyException(final ActionExceptionEvent<?> exceptionEvent) {
+        addErrorBean(exceptionEvent);
+    }
+
+    @ActionExceptionHandler
+    private void onAnyRuntimeException(final ActionExceptionEvent<? extends RuntimeException> exceptionEvent) {
+        addErrorBean(exceptionEvent);
+    }
 }

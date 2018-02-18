@@ -15,8 +15,9 @@
  */
 package com.canoo.dolphin.integration.action;
 
-import com.canoo.platform.remoting.RemotingBean;
+import com.canoo.platform.remoting.ObservableList;
 import com.canoo.platform.remoting.Property;
+import com.canoo.platform.remoting.RemotingBean;
 
 import java.lang.annotation.ElementType;
 import java.math.BigDecimal;
@@ -27,6 +28,8 @@ import java.util.UUID;
 
 @RemotingBean
 public class ActionTestBean {
+
+    private ObservableList<ActionErrorBean> errors;
 
     private Property<String> stringValue;
 
@@ -55,6 +58,10 @@ public class ActionTestBean {
     private Property<UUID> uuidValue;
 
     private Property<ElementType> enumValue;
+
+    public ObservableList<ActionErrorBean> getErrors() {
+        return errors;
+    }
 
     public String getStringValue() {
         return stringValue.get();
