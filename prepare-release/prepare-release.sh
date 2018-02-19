@@ -10,7 +10,7 @@ function show_help() {
     echo "  version:      The release version number in the format major.minor.patch, e.g. 1.0.0"
     echo "  candidate:    Optional release candidate number, e.g 4"
     echo
-    echo "Full Exxample:  ./prepare-release javascript 1.0.0 4"
+    echo "Full example:  ./prepare-release javascript 1.0.0 4"
     echo "  Will release javascript and frameworks as 1.0.0-CR.4 and java as 1.0.0.CR4"
     echo
     echo "This script expects the packages to be found as subdirectories (git projects) relative to this script"
