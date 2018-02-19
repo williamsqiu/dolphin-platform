@@ -1,3 +1,98 @@
 = Overview
 
 The Dolphin Platform is an application framework for enterprise applications. It provides client and server APIs that helps developers to create modern application.
+
+TODO
+
+image::client-server.png[]
+
+For the client the platform provides APIs for the following technologies & UI toolkits:
+
+* A general UI tookits agnostic Java client API
+* A JavaFX client API
+* a general framework agnostic JavaScript client API
+* A Angular 1 client API
+* A Polymer 2 client API
+
+For the server the platform provides APIs for the following technologies & frameworks:
+
+* a general Java server framework
+* a JavaEE 6 based implementation
+* a Spring Boot based implementation
+
+== Modules
+
+The Platform is splitted in several layers and modules. Most modules provides additional functionality and features on top of the core layer. For a small REST based application the core layer of the Platform can be easily used without any additional modules. The following image shows an overview of the internal dependencies of the core layer:
+
+image::base-layer.png[]
+
+The image only shows the dependencies for the Java server APIs and the Java client APIs. For a JavaScript based client the client needs to depend on the Platform JavaScript core module.
+
+Next to the core module the Platform provides several modules that are al based on the core modules and integrate theirself automatically based on severel plugin mechanisms that are provided by the core API. If you for example want to use the remoting features of the Platform you applications needs the remoting modules as dependencies. The following image shows an overview of the given modules:
+
+image::remoting-layer.png[]
+
+All this modules contains the general private and public APIs for the platform. For a concrete application you will normally be based on a specific enterprise framework and UI toolkit. Based on this all modules have specific shaping extension. The following images shows the specific extensions for the server side:
+
+image::server-layer.png[]
+
+This modules automatically provide the functionally of the Platform for the given framework. By doing so you can for example inject all provided classes of the Platform easily in managed containers by the underlying framework. All Platform classes will be handled as managed beans in that case.
+
+image::managed-beans.png[]
+
+== The core layer
+
+The core layer of the platform contains client and server specific APIs. All this APIs provide the core functionality of the Platform and general functionality that will help developers to create enterprise application without defining or depending on a specific architecture, remoting protocol or infrastructure.
+
+The core layer provides the following features and APIs on the client site:
+
+* A
+* B
+* C
+
+The core layer provides the following features and APIs on the server site:
+
+* A
+* B
+* C
+
+=== The client scope
+
+TODO
+
+=== The http client
+
+TODO
+
+=== The configuration
+
+TODO
+
+== The security layer
+
+TODO
+
+== The remoting layer
+
+TODO
+
+== Logging
+
+TODO
+
+== Data & Auditing
+
+TODO
+
+== Validation
+
+TODO
+
+== Monitoring & Tracing
+
+TODO
+
+== Projection
+
+TODO
+
