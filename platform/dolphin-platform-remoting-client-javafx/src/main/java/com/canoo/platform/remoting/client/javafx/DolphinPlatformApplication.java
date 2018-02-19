@@ -120,7 +120,7 @@ public abstract class DolphinPlatformApplication extends Application {
             Assert.requireNonNull(clientContext, "clientContext");
 
             connectInProgress.set(true);
-            clientContext.connect().get(3_000, TimeUnit.MILLISECONDS);
+            clientContext.connect().get(30_000, TimeUnit.MILLISECONDS);
         } catch (ClientInitializationException e) {
             initializationException = e;
         } catch (Exception e) {

@@ -16,6 +16,7 @@
 package com.canoo.dp.impl.server.servlet;
 
 import com.canoo.dp.impl.server.context.DolphinContextCommunicationHandler;
+import com.canoo.platform.server.timing.Metric;
 import org.apiguardian.api.API;
 
 import javax.servlet.ServletException;
@@ -39,7 +40,12 @@ public class DolphinPlatformServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        communicationHandler.handle(req, resp);
+    protected void doPost(final HttpServletRequest req, final HttpServletResponse resp) throws ServletException, IOException {
+        final Metric metric = ServerTimingFilter.getCurrentTiming().start("RemotingRequest", "A request for the DP remoting");
+        try {
+            communicationHandler.handle(req, resp);
+        } finally {
+            metric.stop();
+        }
     }
 }

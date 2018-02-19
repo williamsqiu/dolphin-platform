@@ -18,6 +18,7 @@ apply plugin: 'war'
 
 dependencies {
     compile project(':simple-rest-common')
+    compile project(':dolphin-platform-server-javaee')
     compileOnly "javax:javaee-api:$javaeeApiVersion"
 }
 
