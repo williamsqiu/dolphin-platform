@@ -35,6 +35,8 @@ import static org.apiguardian.api.API.Status.EXPERIMENTAL;
 @API(since = "0.19.0", status = EXPERIMENTAL)
 public class PlatformClient {
 
+    private static final String DEFAULT_LOCATION = "application.properties";
+
     private static PlatformClient INSTANCE;
 
     private final Map<Class<?>, ServiceProvider> providers = new ConcurrentHashMap<>();
@@ -47,7 +49,7 @@ public class PlatformClient {
 
     private PlatformClient() {
         PlatformLogo.printLogo();
-        this.clientConfiguration = ConfigurationFileLoader.loadConfiguration();
+        this.clientConfiguration = ConfigurationFileLoader.loadConfiguration(DEFAULT_LOCATION);
 
         final ServiceLoader<ServiceProvider> loader = ServiceLoader.load(ServiceProvider.class);
         final Iterator<ServiceProvider> iterator = loader.iterator();
