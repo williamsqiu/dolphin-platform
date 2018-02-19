@@ -1,0 +1,3 @@
+= Overview
+
+The Dolphin Platform is an application framework for enterprise applications. It provides client and server APIs that helps developers to create modern application.
