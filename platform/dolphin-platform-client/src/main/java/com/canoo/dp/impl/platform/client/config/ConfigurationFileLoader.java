@@ -59,13 +59,13 @@ public class ConfigurationFileLoader {
             final ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 
             if(additionalLocations != null) {
-                for(String location : additionalLocations) {
+                for(final String location : additionalLocations) {
                     LOG.trace("Trying to load configuration at '" + location + "'");
                     try (final InputStream inputStream = classLoader.getResourceAsStream(location)) {
                         if (inputStream != null) {
                             return readConfig(inputStream);
                         }
-                    } catch (Exception e) {
+                    } catch (final Exception e) {
                         LOG.trace("No config found at '" + location + "'");
                     }
                 }
@@ -76,7 +76,7 @@ public class ConfigurationFileLoader {
                 if (inputStream != null) {
                     return readConfig(inputStream);
                 }
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 LOG.trace("No config found at '" + PLATFORM_LOCATION + "'");
             }
 
@@ -85,7 +85,7 @@ public class ConfigurationFileLoader {
                 if (inputStream != null) {
                     return readConfig(inputStream);
                 }
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 LOG.trace("No config found at '" + DEFAULT_LOCATION + "'");
             }
 
@@ -94,12 +94,12 @@ public class ConfigurationFileLoader {
                 if (inputStream != null) {
                     return readConfig(inputStream);
                 }
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 LOG.trace("No config found at '" + JAR_LOCATION + "'");
             }
 
             return new DefaultClientConfiguration();
-        } catch (Exception e) {
+        } catch (final Exception e) {
             throw new RuntimeException("Can not create configuration!", e);
         }
     }
