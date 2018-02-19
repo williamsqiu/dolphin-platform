@@ -49,3 +49,50 @@ The core layer provides the following features and APIs on the client site:
 * A
 * B
 * C
+
+The core layer provides the following features and APIs on the server site:
+
+* A
+* B
+* C
+
+=== The client scope
+
+TODO
+
+=== The http client
+
+TODO
+
+=== The configuration
+
+TODO
+
+== The security layer
+
+TODO
+
+== The remoting layer
+
+TODO
+
+== Logging
+
+TODO
+
+== Data & Auditing
+
+TODO
+
+== Validation
+
+TODO
+
+== Monitoring & Tracing
+
+TODO
+
+== Projection
+
+TODO
+
