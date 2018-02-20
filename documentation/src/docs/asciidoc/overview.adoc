@@ -97,7 +97,6 @@ image::secure-rest.png[]
 
 NOTE: The http client API of the JavaScript client is currently in development.
 
-
 === The configuration
 
 The Platform provides an easy way to configure clients and server instances. Since frameworks like JavaEE or JavaFX do not provide any APIs for a general configuration the Platform APIs can be used here. If the Platform is used on frameworks that already provide a configuration API like Spring Boot the Platform is integrated in this API and a single configuration can be used.
@@ -124,7 +123,20 @@ TODO
 
 == Data & Auditing
 
-TODO
+The Platform provides some modules that help developers to handle data. Here the Platform provides basic classes that can be extended for custom data types. In general the Platform provides support for 3 different types of data:
+
+* Generic data objects that are definied by a unique identifier
+* JPA based entities that extend the generic data objects
+* Beans of the Platform remoting modules
+
+For all this types the Platform provides generic abstract classes and services. By extending the abstract classes and interfaces for custom data types all the services can be used without any change and CRUD based operations will be provided out of the box. The services that are provided here can easily be mixed and integrated with other frameworks like Spring Data.
+
+Next to the basic functionality the Platform provides notifications for entity mutation. Any service or controller can easily be added as a listener to receive events once an entity of a specific type was created, mutated or deleted. Based on this it is quite easy to handle parallel mutation of entities.
+
+The Platform provides generic CRUD dialogs on top of the remoting layer that can be used to create a frontend for a specific data type within a minute. Since the frontend is based on the projection features of the platform such view can easily be integrated in a custom client and CI.
+
+The Platform supports audit functionality that can be used to crete and show change histories for any data type.
+
 
 == Monitoring & Tracing
 
