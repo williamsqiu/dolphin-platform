@@ -49,6 +49,8 @@ The sources of the Platform are divided in 2 basic packages that defines the pri
 
 Mainly all functionalities of the public API is defined by interfaces and enums. Here the Platform uses more or less the same approaches as JSR based specifications does: The public interface is defined to be as user friendly as possible and hides concrete implementation details from any user. By doing so a new module / functionality of the Platform is quite easy to learn since a developer only need to know the functionality of the interfaces.
 
+Several features of the Platform depend on open source products that are state-of-the-art implementations of the given features and often used in software projects. The public APIs of the Platform hide the concrete product from a developer and provide generic APIs to use the feature. Based on that a concrete implementation or product can easily be replaced in future.
+
 == The core layer
 
 The core layer of the platform contains client and server specific APIs. All this APIs provide the core functionality of the Platform and general functionality that will help developers to create enterprise application without defining or depending on a specific architecture, remoting protocol or infrastructure.
@@ -123,7 +125,7 @@ TODO
 
 == Data & Auditing
 
-The Platform provides some modules that help developers to handle data. Here the Platform provides basic classes that can be extended for custom data types. In general the Platform provides support for 3 different types of data:
+The Platform provides some server site modules that help developers to handle data. Here the Platform provides basic classes that can be extended for custom data types. In general the Platform provides support for 3 different types of data:
 
 * Generic data objects that are definied by a unique identifier
 * JPA based entities that extend the generic data objects
@@ -137,20 +139,79 @@ The Platform provides generic CRUD dialogs on top of the remoting layer that can
 
 The Platform supports audit functionality that can be used to crete and show change histories for any data type.
 
+NOTE: The CRUD and audit modules are still in development. Several features in this area are still experimental.
 
 == Monitoring & Tracing
 
-TODO
+A general monitoring and tracing API should be part of the Platform in near future.
+
+The Platform supports the W3C server timing specification. On the server metrics can easily be traced that automatically will be added to http responses. By doing so a developer can directly see what parts of a long running server call will cost the most time. The following image shows how the result of a http response with server timing information will be displayed in chrome 65:
+
+image::server-timing.png[]
+
+NOTE: Currently the server timing support is the only monitoring API of the Platform. Since some general interfaces (like metric) are already defined in for this feature a general monitoring API is still missing.
 
 == The remoting layer
 
-TODO
+The remoting modules of the Platform implement the remote presentation model pattern and provide a modern way to create dynamic widgets and applications.
+In the remoting layer, all models will automatically be synchronized between client and server. Thus, you don't need to think about any specific endpoints or requests.
+
+image::rpm-overview.png[]
+
+Based on this, the remoting layer defines server side controllers that contain all the controller logic for a specific view. The lifecycle of these controllers is automatically synchronized with the view lifecycle. With this approach you have a MVC group for each client view with a synchronized model and a managed controller.
+
+image::rpm-mvc.png[]
+
+On the server site the controller instances are completely managed by the underlying framework (like JavaEE or Spring). To easily show dynamic data on a client and update the view based on several events the remoting layer provides an event bus that can be used from any service (a REST endpoint, another remoting controller) to publish events to controllers. By doing so data in a frontend can be changed without any user interaction. So against any REST based application a user do not need to refresh the browser to see new data.
+
+image::rpm-eventbus.png[]
+
 
 == Validation
 
 TODO
 
 == Projection
+
+TODO
+
+== Functionality and modules that are planed for future releases
+
+TODO
+
+=== Angular 5 client API
+
+TODO
+
+=== Config server
+
+TODO
+
+=== Remote validation
+
+TODO
+
+== Monitoring & Tracing
+
+TODO
+
+=== Additional distribution features
+
+TODO
+
+=== Enterprise widget toolkit
+
+TODO
+
+=== MQTT broker
+
+TODO
+
+=== MQTT client
+
+TODO
+
+=== Kafka support
 
 TODO
 
