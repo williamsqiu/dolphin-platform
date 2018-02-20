@@ -8,11 +8,12 @@ image::client-server.png[]
 
 For the client the platform provides APIs for the following technologies & UI toolkits:
 
-* A general UI tookits agnostic Java client API
-* A JavaFX client API
+* a general UI tookits agnostic Java client API
+* a JavaFX client API
 * a general framework agnostic JavaScript client API
-* A Angular 1 client API
-* A Polymer 2 client API
+* a Angular 1 client API
+* a Polymer 1 client API
+* a Polymer 2 client API
 
 For the server the platform provides APIs for the following technologies & frameworks:
 
@@ -58,7 +59,17 @@ The core layer provides the following features and APIs on the server site:
 
 === The client scope
 
-TODO
+One main feature of the core layer is the client scope. This scope is defined as a sub scope of the http session scope. When creating web based applications all tabs of a browser instance will share the same http session scope as shown in the following image:
+
+image::shared-session.png[]
+
+This behavior often ends in problems when developing applications that needs a state on the server. Since all tabs in a browser will share the same state it is quite hard to develop an application that works in several tabs.
+
+The Platform provides a special scope to solve this problem: The client scope provides a unique client session for each browser tab. By doing so the server can easily hold a state for each tab. The client scope is defined as a sub scope of the http session scope and all client sessions will automatically be destroyed once the http session is destroyed.
+
+image::client-session.png[]
+
+The server API provides functionality to directly work with the client scope. Like the servlet API does for the http session scope the Platform provides a `ClientSession` class that can easily be injected in any managed class and holds the complete context of a client session. Next to this scope annotations are provided to directly define managed objects in the client scope. The http client that is part of the Platform client API (in Java and JavaScript) automatically supports the client scope and each request that is done by using the client will automatically be assigned to a client session on the server.
 
 === The http client
 
@@ -72,10 +83,6 @@ TODO
 
 TODO
 
-== The remoting layer
-
-TODO
-
 == Logging
 
 TODO
@@ -84,11 +91,15 @@ TODO
 
 TODO
 
-== Validation
+== Monitoring & Tracing
 
 TODO
 
-== Monitoring & Tracing
+== The remoting layer
+
+TODO
+
+== Validation
 
 TODO
 
