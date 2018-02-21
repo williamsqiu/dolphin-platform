@@ -26,7 +26,7 @@ dependencies. For a maven based project a minimum  `pom.xml` looks like this:
     <dependencies>
         <dependency>
             <groupId>com.canoo.dolphin-platform</groupId>
-            <artifactId>dolphin-platform-server-javaee</artifactId>
+            <artifactId>dolphin-platform-remoting-server-javaee</artifactId>
             <version>{dolphin-platform-version}</version>
         </dependency>
     </dependencies>

@@ -1,11 +1,23 @@
+/*
+ * Copyright 2015-2018 Canoo Engineering AG.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.canoo.dolphin.integration.server.runlater;
 
 import com.canoo.dolphin.integration.runlater.RunLaterTestBean;
-import com.canoo.platform.remoting.server.ClientSessionExecutor;
-import com.canoo.platform.remoting.server.DolphinAction;
-import com.canoo.platform.remoting.server.DolphinController;
-import com.canoo.platform.remoting.server.DolphinModel;
-import com.canoo.platform.remoting.server.RemotingContext;
+import com.canoo.platform.remoting.server.*;
+import com.canoo.platform.remoting.server.RemotingModel;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -17,14 +29,14 @@ import static com.canoo.dolphin.integration.runlater.RunLaterTestConstants.RUN_L
 import static com.canoo.dolphin.integration.runlater.RunLaterTestConstants.RUN_LATER_ASYNC_ACTION_NAME;
 import static com.canoo.dolphin.integration.runlater.RunLaterTestConstants.RUN_LATER_CONTROLLER_NAME;
 
-@DolphinController(RUN_LATER_CONTROLLER_NAME)
+@RemotingController(RUN_LATER_CONTROLLER_NAME)
 public class RunLaterTestController {
 
     private final AtomicInteger callIndex = new AtomicInteger();
 
     private final ClientSessionExecutor sessionExecutor;
 
-    @DolphinModel
+    @RemotingModel
     private RunLaterTestBean model;
 
     @Inject
@@ -41,14 +53,14 @@ public class RunLaterTestController {
         model.setPostConstructPostRunLaterCallIndex(callIndex.incrementAndGet());
     }
 
-    @DolphinAction(RUN_LATER_ACTION_NAME)
+    @RemotingAction(RUN_LATER_ACTION_NAME)
     public void runLaterAction() {
         model.setActionPreRunLaterCallIndex(callIndex.incrementAndGet());
         sessionExecutor.runLaterInClientSession(() -> model.setActionRunLaterCallIndex(callIndex.incrementAndGet()));
         model.setActionPostRunLaterCallIndex(callIndex.incrementAndGet());
     }
 
-    @DolphinAction(RUN_LATER_ASYNC_ACTION_NAME)
+    @RemotingAction(RUN_LATER_ASYNC_ACTION_NAME)
     public void runLaterAsyncAction() {
         model.setActionPreRunLaterAsyncCallIndex(callIndex.incrementAndGet());
         Executors.newSingleThreadExecutor().submit(() -> {

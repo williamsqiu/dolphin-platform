@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2017 Canoo Engineering AG.
+ * Copyright 2015-2018 Canoo Engineering AG.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@ package com.canoo.dp.impl.server.mbean.beans;
 import com.canoo.platform.remoting.ObservableList;
 import com.canoo.dp.impl.remoting.DolphinUtils;
 import com.canoo.dp.impl.platform.core.ReflectionHelper;
-import com.canoo.platform.remoting.DolphinBean;
+import com.canoo.platform.remoting.RemotingBean;
 import com.canoo.platform.remoting.Property;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -30,7 +30,7 @@ import java.lang.reflect.Field;
 import static org.apiguardian.api.API.Status.INTERNAL;
 
 /**
- * Helper class that exports the current state of a dolphin bean (see {@link DolphinBean}) to JSON
+ * Helper class that exports the current state of a dolphin bean (see {@link RemotingBean}) to JSON
  */
 @API(since = "0.x", status = INTERNAL)
 public class ModelJsonSerializer {

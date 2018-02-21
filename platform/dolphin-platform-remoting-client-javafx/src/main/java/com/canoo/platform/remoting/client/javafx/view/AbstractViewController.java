@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2017 Canoo Engineering AG.
+ * Copyright 2015-2018 Canoo Engineering AG.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 package com.canoo.platform.remoting.client.javafx.view;
 
 import com.canoo.dp.impl.platform.core.Assert;
-import com.canoo.platform.remoting.DolphinBean;
+import com.canoo.platform.remoting.RemotingBean;
 import com.canoo.platform.remoting.client.ClientContext;
 import com.canoo.platform.remoting.client.ControllerProxy;
 import com.canoo.platform.remoting.client.Param;
@@ -35,7 +35,7 @@ import static org.apiguardian.api.API.Status.MAINTAINED;
 /**
  * A abstract JavaFX view controller that can be used as a basic for a JavaFX based view. Each instance will automatically
  * trigger Dolphin Platform to create a controller instance on the server that is bound to the view instance and shares
- * a model (see {@link DolphinBean}) with the view.
+ * a model (see {@link RemotingBean}) with the view.
  *
  * @param <M> type of the model
  */
@@ -103,7 +103,7 @@ public abstract class AbstractViewController<M> {
 
     /**
      * This invokes a action on the server side controller. For more information how an action can be defined in the
-     * controller have a look at the DolphinAction annotation in the server module.
+     * controller have a look at the RemotingAction annotation in the server module.
      * This method don't block and can be called from the Platform thread. To check if an server
      *
      * @param actionName name of the action
@@ -143,7 +143,7 @@ public abstract class AbstractViewController<M> {
     }
 
     /**
-     * Returns the model that is synchronized between client and server. For more information see {@link DolphinBean}
+     * Returns the model that is synchronized between client and server. For more information see {@link RemotingBean}
      *
      * @return the model
      */
@@ -153,7 +153,7 @@ public abstract class AbstractViewController<M> {
 
     /**
      * Returns a read only property that contains the model that is synchronized between client and server.
-     * For more information see {@link DolphinBean}
+     * For more information see {@link RemotingBean}
      *
      * @return read only property
      */

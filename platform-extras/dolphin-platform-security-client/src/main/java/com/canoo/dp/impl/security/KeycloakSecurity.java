@@ -1,7 +1,23 @@
+/*
+ * Copyright 2015-2018 Canoo Engineering AG.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.canoo.dp.impl.security;
 
 import com.canoo.dp.impl.platform.core.Assert;
-import com.canoo.dp.impl.platform.core.http.DefaultHttpURLConnectionFactory;
+import com.canoo.dp.impl.platform.core.http.HttpClientConnection;
+import com.canoo.platform.client.ClientConfiguration;
 import com.canoo.platform.client.PlatformClient;
 import com.canoo.platform.client.security.Security;
 import com.canoo.platform.core.DolphinRuntimeException;
@@ -11,19 +27,24 @@ import org.apiguardian.api.API;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
-import static com.canoo.dp.impl.platform.core.http.HttpHeaderConstants.CHARSET;
+import static com.canoo.dp.impl.platform.core.http.HttpHeaderConstants.CONTENT_TYPE_HEADER;
+import static com.canoo.dp.impl.platform.core.http.HttpHeaderConstants.FORM_MIME_TYPE;
+import static com.canoo.dp.impl.platform.core.http.HttpHeaderConstants.TEXT_MIME_TYPE;
+import static com.canoo.dp.impl.platform.core.http.HttpStatus.SC_HTTP_UNAUTHORIZED;
+import static com.canoo.dp.impl.security.SecurityConfiguration.APPLICATION_PROPERTY_NAME;
+import static com.canoo.dp.impl.security.SecurityConfiguration.AUTH_ENDPOINT_PROPERTY_DEFAULT_VALUE;
+import static com.canoo.dp.impl.security.SecurityConfiguration.AUTH_ENDPOINT_PROPERTY_NAME;
+import static com.canoo.dp.impl.security.SecurityConfiguration.DIRECT_CONNECTION_PROPERTY_DEFAULT_VALUE;
+import static com.canoo.dp.impl.security.SecurityConfiguration.DIRECT_CONNECTION_PROPERTY_NAME;
+import static com.canoo.dp.impl.security.SecurityConfiguration.REALM_PROPERTY_NAME;
+import static com.canoo.dp.impl.security.SecurityHttpHeader.REALM_NAME_HEADER;
 import static org.apiguardian.api.API.Status.INTERNAL;
 
 @API(since = "0.19.0", status = INTERNAL)
@@ -33,7 +54,6 @@ public class KeycloakSecurity implements Security {
 
     private static final Logger LOG = LoggerFactory.getLogger(KeycloakSecurity.class);
 
-
     private final String authEndpoint;
 
     private final String realmName;
@@ -42,56 +62,55 @@ public class KeycloakSecurity implements Security {
 
     private final ExecutorService executor;
 
+    private final boolean directConnect;
+
     private KeycloakOpenidConnectResult connectResult;
 
     private long tokenCreation;
 
-    public KeycloakSecurity(final String authEndpoint, final String realmName, final String appName, final ExecutorService executor) {
-        this.appName = Assert.requireNonBlank(appName, "appName");
-        this.authEndpoint = Assert.requireNonBlank(authEndpoint, "authEndpoint");
-        this.realmName = Assert.requireNonBlank(realmName, "realmName");
-        this.executor = Assert.requireNonNull(executor, "executor");
+    public KeycloakSecurity(final ClientConfiguration configuration) {
+        Assert.requireNonNull(configuration, "configuration");
+
+        this.appName = configuration.getProperty(APPLICATION_PROPERTY_NAME);
+
+        this.authEndpoint = configuration.getProperty(AUTH_ENDPOINT_PROPERTY_NAME, AUTH_ENDPOINT_PROPERTY_DEFAULT_VALUE);
+        Assert.requireNonBlank(authEndpoint, "authEndpoint");
+
+        this.realmName = configuration.getProperty(REALM_PROPERTY_NAME);
+
+        this.directConnect = configuration.getBooleanProperty(DIRECT_CONNECTION_PROPERTY_NAME, DIRECT_CONNECTION_PROPERTY_DEFAULT_VALUE);
+
+        this.executor = configuration.getBackgroundExecutor();
+        Assert.requireNonNull(executor, "executor");
     }
 
-    private void receiveTokenFromKeycloak(final String content) throws IOException, URISyntaxException {
-        LOG.debug("receiving new token from keycloak server");
-        final byte[] rawContent = content.getBytes(CHARSET);
+    private HttpClientConnection createDirectConnection() throws URISyntaxException, IOException {
         final URI url = new URI(authEndpoint + "/auth/realms/" + realmName + "/protocol/openid-connect/token");
-        final HttpURLConnection connection = new DefaultHttpURLConnectionFactory().create(url);
-        connection.setRequestMethod(RequestMethod.POST.getRawName());
-        connection.setRequestProperty("charset", "UTF-8");
-        connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-        connection.setRequestProperty("Content-Length", rawContent.length + "");
-        connection.setDoOutput(true);
-        connection.setDoInput(true);
+        final HttpClientConnection clientConnection = new HttpClientConnection(url, RequestMethod.POST);
+        clientConnection.addRequestHeader(CONTENT_TYPE_HEADER, FORM_MIME_TYPE);
+        return clientConnection;
+    }
 
-        try {
-            final OutputStream w = connection.getOutputStream();
-            w.write(rawContent);
-            w.close();
-        } catch (IOException e) {
-            throw new DolphinRuntimeException("Looks like the security server is not reachable", e);
+    private HttpClientConnection createServerProxyConnection() throws URISyntaxException, IOException {
+        final URI url = new URI(authEndpoint);
+        final HttpClientConnection clientConnection = new HttpClientConnection(url, RequestMethod.POST);
+        clientConnection.addRequestHeader(CONTENT_TYPE_HEADER, TEXT_MIME_TYPE);
+        if(realmName != null && !realmName.isEmpty()) {
+            clientConnection.addRequestHeader(REALM_NAME_HEADER, realmName);
         }
+        return clientConnection;
+    }
 
-        final int responseCode = connection.getResponseCode();
-        if(responseCode == 401) {
+    private void receiveToken(final HttpClientConnection connection, final String content) throws IOException {
+        Assert.requireNonNull(content, "content");
+        LOG.debug("receiving new token from keycloak server");
+        connection.setDoOutput(true);
+        connection.writeRequestContent(content);
+        final int responseCode = connection.readResponseCode();
+        if(responseCode == SC_HTTP_UNAUTHORIZED) {
             throw new DolphinRuntimeException("Invalid login!");
         }
-
-        final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        try {
-            final InputStream is = connection.getInputStream();
-            int read = is.read();
-            while (read != -1) {
-                byteArrayOutputStream.write(read);
-                read = is.read();
-            }
-        } catch (FileNotFoundException e) {
-            throw new DolphinRuntimeException("Maybe the realm or application is not defined in the keycloak server", e);
-        }
-        final byte[] rawInput = byteArrayOutputStream.toByteArray();
-        final String input = new String(rawInput);
-
+        final String input = connection.readUTFResponseContent();
         final Gson gson = PlatformClient.getService(Gson.class);
         final KeycloakOpenidConnectResult result = gson.fromJson(input, KeycloakOpenidConnectResult.class);
         connectResult = result;
@@ -102,7 +121,11 @@ public class KeycloakSecurity implements Security {
     public Future<Void> login(final String user, final String password) {
         return (Future<Void>) executor.submit(() -> {
             try {
-                receiveTokenFromKeycloak("client_id=" + appName + "&username=" + user + "&password=" + password + "&grant_type=password");
+                if(directConnect) {
+                    receiveToken(createDirectConnection(), "client_id=" + appName + "&username=" + user + "&password=" + password + "&grant_type=password");
+                } else {
+                    receiveToken(createServerProxyConnection(), "username=" + user + "&password=" + password + "&grant_type=password");
+                }
             } catch (IOException | URISyntaxException e) {
                 throw new DolphinRuntimeException("Can not receive security token!", e);
             }
@@ -110,9 +133,17 @@ public class KeycloakSecurity implements Security {
     }
 
     public Future<Void> refreshToken() {
+        if(connectResult == null) {
+            throw new IllegalStateException("Can not refresh token without valid login");
+        }
+        final String refreshToken = connectResult.getRefresh_token();
         return (Future<Void>) executor.submit(() -> {
                 try {
-                    receiveTokenFromKeycloak("grant_type=refresh_token&refresh_token=" + connectResult.getRefresh_token() + "&client_id=" + appName);
+                    if(directConnect) {
+                        receiveToken(createDirectConnection(), "grant_type=refresh_token&refresh_token=" + refreshToken + "&client_id=" + appName);
+                    } else {
+                        receiveToken(createServerProxyConnection(), "grant_type=refresh_token&refresh_token=" + refreshToken);
+                    }
                 } catch (IOException | URISyntaxException e) {
                     throw new DolphinRuntimeException("Can not refresh security token!", e);
                 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2017 Canoo Engineering AG.
+ * Copyright 2015-2018 Canoo Engineering AG.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,13 +15,13 @@
  */
 package com.canoo.platform.spring.test;
 
-import com.canoo.platform.remoting.server.DolphinController;
+import com.canoo.platform.remoting.server.RemotingController;
 import org.apiguardian.api.API;
 
 import static org.apiguardian.api.API.Status.MAINTAINED;
 
 /**
- * Basic interface for testing a Dolpgin Platform controller (see {@link DolphinController}).
+ * Basic interface for testing a Dolpgin Platform controller (see {@link RemotingController}).
  * The interface provides testable controllers.
  *
  * @author Hendrik Ebbers
@@ -31,7 +31,7 @@ import static org.apiguardian.api.API.Status.MAINTAINED;
 public interface ControllerTest {
 
     /**
-     * Creates a {@link ControllerUnderTest} for the given controller name. See {@link DolphinController}
+     * Creates a {@link ControllerUnderTest} for the given controller name. See {@link RemotingController}
      * for the name definition. The {@link ControllerUnderTest} instance that is created by this method can be used to
      * interact with the controller or access the model.
      * @param controllerName the controller name

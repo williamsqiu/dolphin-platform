@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2017 Canoo Engineering AG.
+ * Copyright 2015-2018 Canoo Engineering AG.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,12 +18,19 @@ package com.canoo.dp.impl.server.spring;
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.server.bootstrap.PlatformBootstrap;
 import com.canoo.dp.impl.server.client.ClientSessionProvider;
+import com.canoo.dp.impl.server.servlet.ServerTimingFilter;
 import com.canoo.platform.server.client.ClientSession;
 import com.canoo.platform.server.spring.ClientScope;
+import com.canoo.platform.server.timing.ServerTiming;
 import org.apiguardian.api.API;
 import org.springframework.beans.factory.config.CustomScopeConfigurer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.context.annotation.RequestScope;
+
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 
 import static org.apiguardian.api.API.Status.INTERNAL;
 
@@ -47,5 +54,16 @@ public class SpringBeanFactory {
         final CustomScopeConfigurer configurer = new CustomScopeConfigurer();
         configurer.addScope(ClientScopeImpl.CLIENT_SCOPE, new ClientScopeImpl());
         return configurer;
+    }
+
+    @Bean(name = "serverTiming")
+    @RequestScope
+    protected ServerTiming createServerTiming() {
+        return (ServerTiming) Proxy.newProxyInstance(SpringBeanFactory.class.getClassLoader(), new Class[]{ServerTiming.class}, new InvocationHandler() {
+            @Override
+            public Object invoke(final Object proxy, final Method method, final Object[] args) throws Throwable {
+                return method.invoke(ServerTimingFilter.getCurrentTiming(), args);
+            }
+        });
     }
 }

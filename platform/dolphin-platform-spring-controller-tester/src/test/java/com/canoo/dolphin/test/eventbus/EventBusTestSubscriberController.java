@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2017 Canoo Engineering AG.
+ * Copyright 2015-2018 Canoo Engineering AG.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,8 @@
  */
 package com.canoo.dolphin.test.eventbus;
 
-import com.canoo.platform.remoting.server.DolphinController;
-import com.canoo.platform.remoting.server.DolphinModel;
+import com.canoo.platform.remoting.server.RemotingController;
+import com.canoo.platform.remoting.server.RemotingModel;
 import com.canoo.platform.remoting.server.event.RemotingEventBus;
 import com.canoo.platform.remoting.server.event.MessageEvent;
 import com.canoo.platform.remoting.server.event.MessageListener;
@@ -24,10 +24,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
 
-@DolphinController(EventBusTestConstants.EVENT_BUS_SUBSCIBER_CONTROLLER_NAME)
+@RemotingController(EventBusTestConstants.EVENT_BUS_SUBSCIBER_CONTROLLER_NAME)
 public class EventBusTestSubscriberController {
 
-    @DolphinModel
+    @RemotingModel
     private EventBusTestModel model;
 
     @Autowired

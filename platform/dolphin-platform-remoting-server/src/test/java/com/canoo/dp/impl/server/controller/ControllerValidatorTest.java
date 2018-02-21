@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2017 Canoo Engineering AG.
+ * Copyright 2015-2018 Canoo Engineering AG.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,9 @@
  */
 package com.canoo.dp.impl.server.controller;
 
-import com.canoo.platform.remoting.server.DolphinAction;
-import com.canoo.platform.remoting.server.DolphinController;
-import com.canoo.platform.remoting.server.DolphinModel;
+import com.canoo.platform.remoting.server.RemotingAction;
+import com.canoo.platform.remoting.server.RemotingController;
+import com.canoo.platform.remoting.server.RemotingModel;
 import com.canoo.platform.remoting.server.Param;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
@@ -91,10 +91,10 @@ public class ControllerValidatorTest {
 
 }
 
-@DolphinController
+@RemotingController
 class ValidController {
 
-    @DolphinModel
+    @RemotingModel
     private TestBean testBean;
 
     @PostConstruct
@@ -105,15 +105,15 @@ class ValidController {
     public void preDestroy() {
     }
 
-    @DolphinAction
+    @RemotingAction
     public void dolphinAction(@Param String test) {
     }
 
-    @DolphinAction
+    @RemotingAction
     public void dolphinAction2(@Param @Nonnull String test) {
     }
 
-    @DolphinAction
+    @RemotingAction
     public void dolphinAction3(@Nonnull @Param String test) {
     }
 }
@@ -122,26 +122,26 @@ class ControllerWithoutDolphinControllerAnnotation{
 
 }
 
-@DolphinController
+@RemotingController
 interface ControllerAsInterface{}
-@DolphinController
+@RemotingController
 abstract class ControllerAsAbstract{}
-@DolphinController
+@RemotingController
 final class ControllerAsFinal{}
-@DolphinController
+@RemotingController
 class ControllerPostConstructWithParam{
 
-    @DolphinModel
+    @RemotingModel
     private TestBean testBean;
 
     @PostConstruct
     public void postConstruct(String param) {
     }
 }
-@DolphinController
+@RemotingController
 class ControllerWithMoreThanOnePostConstruct{
 
-    @DolphinModel
+    @RemotingModel
     private TestBean testBean;
 
     @PostConstruct
@@ -151,20 +151,20 @@ class ControllerWithMoreThanOnePostConstruct{
     public void postConstruct2() {
     }
 }
-@DolphinController
+@RemotingController
 class ControllerPreDestroyWithParam{
 
-    @DolphinModel
+    @RemotingModel
     private TestBean testBean;
 
     @PreDestroy
     public void preDestroy(String param) {
     }
 }
-@DolphinController
+@RemotingController
 class ControllerWithMoreThanOnePreDestroy{
 
-    @DolphinModel
+    @RemotingModel
     private TestBean testBean;
 
     @PreDestroy
@@ -174,35 +174,35 @@ class ControllerWithMoreThanOnePreDestroy{
     public void preDestroy2() {
     }
 }
-@DolphinController
+@RemotingController
 class ControllerWithNonVoidDolphinAction{
 
-    @DolphinModel
+    @RemotingModel
     private TestBean testBean;
 
-    @DolphinAction
+    @RemotingAction
     public String dolphinAction(@Param String test) {
         return "";
     }
 }
-@DolphinController
+@RemotingController
 class ControllerWithDolphinActionParam{
 
-    @DolphinModel
+    @RemotingModel
     private TestBean testBean;
 
-    @DolphinAction
+    @RemotingAction
     public void dolphinAction(String test) {
     }
 }
-@DolphinController
+@RemotingController
 class ControllerWithoutDolphinModel{}
-@DolphinController
+@RemotingController
 class ControllerWithMoreThanOneDolphinModel{
-    @DolphinModel
+    @RemotingModel
     private TestBean testBean1;
 
-    @DolphinModel
+    @RemotingModel
     private TestBean testBean2;
 }
 

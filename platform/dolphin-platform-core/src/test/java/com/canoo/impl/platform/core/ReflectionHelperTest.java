@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2017 Canoo Engineering AG.
+ * Copyright 2015-2018 Canoo Engineering AG.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,16 @@
 package com.canoo.impl.platform.core;
 
 import com.canoo.dp.impl.platform.core.ReflectionHelper;
+import com.canoo.platform.core.DolphinRuntimeException;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Date;
 import java.util.List;
+import java.util.MissingResourceException;
 
 
 public class ReflectionHelperTest {
@@ -125,6 +129,49 @@ public class ReflectionHelperTest {
        Assert.assertFalse(ReflectionHelper.isPrimitiveNumber(Float.class));
        Assert.assertFalse(ReflectionHelper.isPrimitiveNumber(Short.class));
        Assert.assertFalse(ReflectionHelper.isPrimitiveNumber(Byte.class));
+    }
+
+    @Test
+    public void testInvokePrivileged() throws NoSuchMethodException {
+        final Method method = ReflectionHelperTest.class.getMethod("invokeThis");
+        final String result = ReflectionHelper.invokePrivileged(method, this);
+        Assert.assertEquals(result, "done");
+    }
+
+    @Test
+    public void testInvokePrivilegedPrivate() throws NoSuchMethodException {
+        final Method method = ReflectionHelper.getMethod(ReflectionHelperTest.class, "privateInvokeThis").get();
+        final String result = ReflectionHelper.invokePrivileged(method, this);
+        Assert.assertEquals(result, "done private");
+    }
+
+    @Test
+    public void testInvokePrivilegedException() throws NoSuchMethodException {
+        final Method method = ReflectionHelper.getMethod(ReflectionHelperTest.class, "fail").get();
+        try {
+            ReflectionHelper.invokePrivileged(method, this);
+            Assert.fail();
+        } catch (DolphinRuntimeException e) {
+            Assert.assertEquals(e.getCause().getClass(), InvocationTargetException.class);
+            final InvocationTargetException invocationTargetException = (InvocationTargetException) e.getCause();
+            Assert.assertEquals(invocationTargetException.getCause().getClass(), MissingResourceException.class);
+            final MissingResourceException missingResourceException = (MissingResourceException) invocationTargetException.getCause();
+            Assert.assertEquals(missingResourceException.getClassName(), "Class");
+            Assert.assertEquals(missingResourceException.getKey(), "Key");
+            Assert.assertEquals(missingResourceException.getMessage(), "FAIL");
+        }
+    }
+
+    public String fail() {
+        throw new MissingResourceException("FAIL", "Class", "Key");
+    }
+
+    public String invokeThis() {
+        return "done";
+    }
+
+    private String privateInvokeThis() {
+        return "done private";
     }
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2017 Canoo Engineering AG.
+ * Copyright 2015-2018 Canoo Engineering AG.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 package com.canoo.dolphin.integration.server.enterprise;
 
 import com.canoo.dolphin.integration.enterprise.EnterpriseTestBean;
-import com.canoo.platform.remoting.server.DolphinController;
-import com.canoo.platform.remoting.server.DolphinModel;
+import com.canoo.platform.remoting.server.RemotingController;
+import com.canoo.platform.remoting.server.RemotingModel;
 import com.canoo.platform.remoting.server.event.RemotingEventBus;
 import com.canoo.platform.remoting.server.event.Topic;
 
@@ -27,10 +27,10 @@ import javax.inject.Inject;
 
 import static com.canoo.dolphin.integration.enterprise.EnterpriseTestConstants.ENTERPRISE_CONTROLLER_NAME;
 
-@DolphinController(ENTERPRISE_CONTROLLER_NAME)
+@RemotingController(ENTERPRISE_CONTROLLER_NAME)
 public class EnterpriseTestController {
 
-    @DolphinModel
+    @RemotingModel
     private EnterpriseTestBean model;
 
     @Inject

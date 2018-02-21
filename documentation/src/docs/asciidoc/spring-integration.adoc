@@ -26,7 +26,7 @@ dependencies. For a maven based project a minimum  `pom.xml` looks like this:
     <dependencies>
         <dependency>
             <groupId>com.canoo.dolphin-platform</groupId>
-            <artifactId>dolphin-platform-server-spring</artifactId>
+            <artifactId>dolphin-platform-remoting-server-spring</artifactId>
             <version>{dolphin-platform-version}</version>
         </dependency>
     </dependencies>
@@ -40,7 +40,7 @@ must be added as a second dependency to your application.
 == Defining the main class of the application
 
 To start your Spring Boot based server a class with a main method need be be defined. In the main method Spring must be
-started. In addition the Dolphin Platform bootstrap must be configured and initalialized. To do so Dolphin Platform
+started. In addition the Dolphin Platform bootstrap must be configured and initialized. To do so Dolphin Platform
 provides the `@DolphinPlatformApplication` annotation that must be added to the main class to automatically load all
 needed configurations and trigger the Dolphin Platform Bootstrap. Based on the annotation a main class will always looks
 like this:

@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2017 Canoo Engineering AG.
+ * Copyright 2015-2018 Canoo Engineering AG.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,9 +17,9 @@ package com.canoo.dp.impl.server.controller;
 
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.platform.core.ReflectionHelper;
-import com.canoo.platform.remoting.server.DolphinAction;
-import com.canoo.platform.remoting.server.DolphinController;
-import com.canoo.platform.remoting.server.DolphinModel;
+import com.canoo.platform.remoting.server.RemotingAction;
+import com.canoo.platform.remoting.server.RemotingController;
+import com.canoo.platform.remoting.server.RemotingModel;
 import com.canoo.platform.remoting.server.Param;
 import org.apiguardian.api.API;
 
@@ -34,7 +34,7 @@ import java.util.List;
 import static org.apiguardian.api.API.Status.INTERNAL;
 
 /**
- * This class validates the DolphinController
+ * This class validates the RemotingController
  */
 @API(since = "0.x", status = INTERNAL)
 public class ControllerValidator {
@@ -44,7 +44,7 @@ public class ControllerValidator {
         Assert.requireNonNull(clazz, "Controller class");
 
         if(!isClassAnnotatedWithDolhinController(clazz)){
-            throw new ControllerValidationException("Dolphin Controller " + clazz.getName() + " must be must be annotated with @DolphinController.");
+            throw new ControllerValidationException("Dolphin Controller " + clazz.getName() + " must be must be annotated with @RemotingController.");
         }
         if (isInterface(clazz)) {
             throw new ControllerValidationException("Dolphin Controller " + ControllerUtils.getControllerName(clazz) + " must be a class.");
@@ -63,10 +63,10 @@ public class ControllerValidator {
         }
 
         if (!isDolphinModelPresent(clazz)) {
-            throw new ControllerValidationException("Controller " + ControllerUtils.getControllerName(clazz) + " must have a DolphinModel.");
+            throw new ControllerValidationException("Controller " + ControllerUtils.getControllerName(clazz) + " must have a RemotingModel.");
         }
         if (isMoreThanOneDolphinModel(clazz)) {
-            throw new ControllerValidationException("Controller " + ControllerUtils.getControllerName(clazz) + " should not contain more than one DolphinModel.");
+            throw new ControllerValidationException("Controller " + ControllerUtils.getControllerName(clazz) + " should not contain more than one RemotingModel.");
         }
         checkPreDestroyContainsParameter(clazz);
         checkPostConstructContainsParameter(clazz);
@@ -75,7 +75,7 @@ public class ControllerValidator {
     }
 
     private boolean isClassAnnotatedWithDolhinController(Class<?> clazz) {
-        return clazz.isAnnotationPresent(DolphinController.class);
+        return clazz.isAnnotationPresent(RemotingController.class);
     }
 
     private boolean isInterface(final Class<?> clazz) {
@@ -117,7 +117,7 @@ public class ControllerValidator {
     private void checkDolphinActionVoid(final Class<?> clazz) throws ControllerValidationException {
         Assert.requireNonNull(clazz, "clazz");
         final ControllerValidationException controllerValidationException = ReflectionHelper.getInheritedDeclaredMethods(clazz).stream().
-                filter(method -> method.isAnnotationPresent(DolphinAction.class)).
+                filter(method -> method.isAnnotationPresent(RemotingAction.class)).
                 filter(method -> !method.getReturnType().equals(Void.TYPE)).
                 findAny().
                 map(method -> new ControllerValidationException("Return type of controller action " + ControllerUtils.getActionMethodName(method) + " in controller type " + ControllerUtils.getControllerName(clazz) + " must be of type void.")).
@@ -131,10 +131,10 @@ public class ControllerValidator {
     private void checkDolphinActionAnnotatedWithParam(final Class<?> clazz)  throws ControllerValidationException {
         Assert.requireNonNull(clazz, "clazz");
         final ControllerValidationException controllerValidationException = ReflectionHelper.getInheritedDeclaredMethods(clazz).stream().
-                filter(method -> method.isAnnotationPresent(DolphinAction.class)).
+                filter(method -> method.isAnnotationPresent(RemotingAction.class)).
                 filter(method -> checkMethodForMissingParamAnnotation(method)).
                 findAny().
-                map(method -> new ControllerValidationException("DolphinAction " + ControllerUtils.getActionMethodName(method) + " parameters must be annotated with @param in Controller " + ControllerUtils.getControllerName(clazz))).
+                map(method -> new ControllerValidationException("RemotingAction " + ControllerUtils.getActionMethodName(method) + " parameters must be annotated with @param in Controller " + ControllerUtils.getControllerName(clazz))).
                 orElse(null);
 
         if(controllerValidationException != null){
@@ -154,7 +154,7 @@ public class ControllerValidator {
     private boolean isDolphinModelPresent(final Class<?> clazz) {
         List<Field> fields = ReflectionHelper.getInheritedDeclaredFields(clazz);
         if(null != fields){
-            long count = fields.stream().filter(field -> field.isAnnotationPresent(DolphinModel.class)).count();
+            long count = fields.stream().filter(field -> field.isAnnotationPresent(RemotingModel.class)).count();
             return count > 0;
         }
         return false;
@@ -163,7 +163,7 @@ public class ControllerValidator {
     private boolean isMoreThanOneDolphinModel(final Class<?> clazz) {
         List<Field> fields = ReflectionHelper.getInheritedDeclaredFields(clazz);
         if(null != fields){
-            long count = fields.stream().filter(field -> field.isAnnotationPresent(DolphinModel.class)).count();
+            long count = fields.stream().filter(field -> field.isAnnotationPresent(RemotingModel.class)).count();
             return count > 1;
         }
         return false;

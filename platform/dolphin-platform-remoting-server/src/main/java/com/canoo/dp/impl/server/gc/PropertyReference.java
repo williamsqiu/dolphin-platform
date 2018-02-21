@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2017 Canoo Engineering AG.
+ * Copyright 2015-2018 Canoo Engineering AG.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 package com.canoo.dp.impl.server.gc;
 
-import com.canoo.platform.remoting.DolphinBean;
+import com.canoo.platform.remoting.RemotingBean;
 import com.canoo.platform.remoting.Property;
 import org.apiguardian.api.API;
 
@@ -24,7 +24,7 @@ import static org.apiguardian.api.API.Status.INTERNAL;
 /**
  * A {@link Reference} that is defined by a {@link Property}.
  * Example for such a reference: Dolphin bean A contains a {@link Property} that value is dolphin bean B
- * For more information see {@link Reference} and {@link DolphinBean}
+ * For more information see {@link Reference} and {@link RemotingBean}
  */
 @API(since = "0.x", status = INTERNAL)
 public class PropertyReference extends Reference {

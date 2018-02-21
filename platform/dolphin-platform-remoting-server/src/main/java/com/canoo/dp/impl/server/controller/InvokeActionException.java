@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2017 Canoo Engineering AG.
+ * Copyright 2015-2018 Canoo Engineering AG.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,22 +15,16 @@
  */
 package com.canoo.dp.impl.server.controller;
 
-import com.canoo.platform.remoting.server.DolphinAction;
+import com.canoo.platform.remoting.server.RemotingAction;
 import org.apiguardian.api.API;
 
 import static org.apiguardian.api.API.Status.INTERNAL;
 
 /**
- * This exception is thrown if a an dolphin action (see {@link DolphinAction}) throws an exception
+ * This exception is thrown if a an dolphin action (see {@link RemotingAction}) throws an exception
  */
 @API(since = "0.x", status = INTERNAL)
 public class InvokeActionException extends Exception {
-
-    /**
-     * Default constructor
-     */
-    public InvokeActionException() {
-    }
 
     /**
      * Constructor
@@ -49,11 +43,4 @@ public class InvokeActionException extends Exception {
         super(message, cause);
     }
 
-    /**
-     * Constructor
-     * @param cause the cause
-     */
-    public InvokeActionException(Throwable cause) {
-        super(cause);
-    }
 }

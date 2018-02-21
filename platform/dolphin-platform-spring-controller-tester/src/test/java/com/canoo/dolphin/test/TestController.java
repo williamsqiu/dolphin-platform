@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2017 Canoo Engineering AG.
+ * Copyright 2015-2018 Canoo Engineering AG.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,9 @@
 package com.canoo.dolphin.test;
 
 import com.canoo.platform.remoting.BeanManager;
-import com.canoo.platform.remoting.server.DolphinAction;
-import com.canoo.platform.remoting.server.DolphinController;
-import com.canoo.platform.remoting.server.DolphinModel;
+import com.canoo.platform.remoting.server.RemotingAction;
+import com.canoo.platform.remoting.server.RemotingController;
+import com.canoo.platform.remoting.server.RemotingModel;
 import com.canoo.platform.remoting.server.event.RemotingEventBus;
 import com.canoo.platform.remoting.server.event.MessageEvent;
 import com.canoo.platform.remoting.server.event.MessageListener;
@@ -27,7 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
 
-@DolphinController("TestController")
+@RemotingController("TestController")
 public class TestController {
 
     @Autowired
@@ -36,7 +36,7 @@ public class TestController {
     @Autowired
     private RemotingEventBus eventBus;
 
-    @DolphinModel
+    @RemotingModel
     private TestModel model;
 
     private static Topic<String> TEST_TOPIC = Topic.create();
@@ -51,22 +51,22 @@ public class TestController {
         });
     }
 
-    @DolphinAction("sendEvent")
+    @RemotingAction("sendEvent")
     public void sendEvent() {
         eventBus.publish(TEST_TOPIC, "changed by eventBus!");
     }
 
-    @DolphinAction("action")
+    @RemotingAction("action")
     public void doSomeAction() {
         model.setValue("Hello Dolphin Test");
     }
 
-    @DolphinAction("addToList")
+    @RemotingAction("addToList")
     public void addToList() {
         model.getItems().add("Hallo");
     }
 
-    @DolphinAction("addBeanToList")
+    @RemotingAction("addBeanToList")
     public void addBeanToList() {
         TestSubModel bean = beanManager.create(TestSubModel.class);
         bean.setValue("I'm a subbean");

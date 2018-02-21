@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2017 Canoo Engineering AG.
+ * Copyright 2015-2018 Canoo Engineering AG.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,8 @@
 package com.canoo.platform.remoting.client.javafx;
 
 import com.canoo.dp.impl.platform.core.Assert;
-import com.canoo.dp.impl.platform.core.SimpleDolphinPlatformThreadFactory;
-import com.canoo.platform.client.ClientConfiguration;
 import com.canoo.platform.client.PlatformClient;
 import com.canoo.platform.core.DolphinRuntimeException;
-import com.canoo.platform.core.PlatformThreadFactory;
-import com.canoo.platform.remoting.DolphinRemotingException;
 import com.canoo.platform.remoting.client.ClientContext;
 import com.canoo.platform.remoting.client.ClientContextFactory;
 import com.canoo.platform.remoting.client.ClientInitializationException;
@@ -33,17 +29,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.MalformedURLException;
-import java.net.URI;
 import java.net.URL;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executors;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.apiguardian.api.API.Status.MAINTAINED;
 
 /**
  * Defines a basic application class for Dolphin Platform based applications that can be used like the {@link Application}
- * class. Next to the general {@link Application} class of JavaFX this class supports the Dolphin Platform connection lifecycle.
+ * class. Next to the general {@link Application} class of JavaFX this class supports the DOlphin Platform connecttion lifecycle.
  */
 @API(since = "0.x", status = MAINTAINED)
 public abstract class DolphinPlatformApplication extends Application {
@@ -54,7 +52,11 @@ public abstract class DolphinPlatformApplication extends Application {
 
     private ClientInitializationException initializationException;
 
+    private final List<DolphinRuntimeException> runtimeExceptionsAtInitialization = new CopyOnWriteArrayList<>();
+
     private Stage primaryStage;
+
+    private AtomicBoolean connectInProgress = new AtomicBoolean(false);
 
     /**
      * Returns the server url of the Dolphin Platform server endpoint.
@@ -63,13 +65,30 @@ public abstract class DolphinPlatformApplication extends Application {
      */
     protected abstract URL getServerEndpoint() throws MalformedURLException;
 
+    /**
+     * Returns the Dolphin Platform configuration for the client. As long as all the default configurations can be used
+     * this method don't need to be overridden. The URL of the server will be configured by the {@link DolphinPlatformApplication#getServerEndpoint()}
+     * method.
+     *
+     * @return The Dolphin Platform configuration for this client
+     */
+//    protected JavaFXConfiguration createClientConfiguration() {
+//        try {
+//            configuration.addRemotingExceptionHandler(e -> {
+//                if (connectInProgress.get()) {
+//                    runtimeExceptionsAtInitialization.add(new DolphinRuntimeException("Dolphin Platform remoting error", e));
+//                } else {
+//                    onRuntimeError(primaryStage, new DolphinRuntimeException("Dolphin Platform remoting error!", e));
+//                }
+//            });
+//            return configuration;
+//        } catch (MalformedURLException e) {
+//            throw new ClientInitializationException("PlatformClient configuration cannot be created", e);
+//        }
+//    }
+
     private final ClientContext createClientContext() throws Exception {
-        final ClientContextFactory factory = PlatformClient.getService(ClientContextFactory.class);
-        final ClientConfiguration configuration = PlatformClient.getClientConfiguration();
-        final URI endpoint = getServerEndpoint().toURI();
-        final ClientContext clientContext = factory.create(configuration, endpoint);
-        clientContext.addRemotingExceptionHandler(e -> onRemotingError(primaryStage, e));
-        return clientContext;
+        return PlatformClient.getService(ClientContextFactory.class).create(PlatformClient.getClientConfiguration(), getServerEndpoint().toURI());
     }
 
     /**
@@ -83,26 +102,31 @@ public abstract class DolphinPlatformApplication extends Application {
 
         applicationInit();
 
-        final PlatformThreadFactory threadFactory = new SimpleDolphinPlatformThreadFactory();
-        threadFactory.setUncaughtExceptionHandler((t, e) -> {
-            if(e instanceof DolphinRuntimeException) {
-                Platform.runLater(() -> onRuntimeError(primaryStage, (DolphinRuntimeException) e));
-            } else {
-                DolphinRuntimeException runtimeException = new DolphinRuntimeException("Unexpected error!", e);
-                Platform.runLater(() -> onRuntimeError(primaryStage, runtimeException));
-            }
+        PlatformClient.getClientConfiguration().setUncaughtExceptionHandler((Thread thread, Throwable exception) -> {
+            PlatformClient.getClientConfiguration().getUiExecutor().execute(() -> {
+                Assert.requireNonNull(thread, "thread");
+                Assert.requireNonNull(exception, "exception");
+
+                if (connectInProgress.get()) {
+                    runtimeExceptionsAtInitialization.add(new DolphinRuntimeException(thread, "Unhandled error in Dolphin Platform background thread", exception));
+                } else {
+                    onRuntimeError(primaryStage, new DolphinRuntimeException(thread, "Unhandled error in Dolphin Platform background thread", exception));
+                }
+            });
         });
-        final ClientConfiguration clientConfiguration = PlatformClient.getClientConfiguration();
-        clientConfiguration.setBackgroundExecutor(Executors.newCachedThreadPool(threadFactory));
 
         try {
             clientContext = createClientContext();
             Assert.requireNonNull(clientContext, "clientContext");
-            clientContext.connect().get(3_000, TimeUnit.MILLISECONDS);
+
+            connectInProgress.set(true);
+            clientContext.connect().get(30_000, TimeUnit.MILLISECONDS);
         } catch (ClientInitializationException e) {
             initializationException = e;
         } catch (Exception e) {
             initializationException = new ClientInitializationException("Can not initialize Dolphin Platform Context", e);
+        } finally {
+            connectInProgress.set(false);
         }
     }
 
@@ -138,13 +162,13 @@ public abstract class DolphinPlatformApplication extends Application {
                 try {
                     start(primaryStage, clientContext);
                 } catch (Exception e) {
-                    onRuntimeError(primaryStage, new ClientInitializationException("Error in application start!", e));
+                    handleInitializationError(primaryStage, new ClientInitializationException("Error in application start!", e));
                 }
             } else {
-                onRuntimeError(primaryStage, new ClientInitializationException("No clientContext was created!"));
+                handleInitializationError(primaryStage, new ClientInitializationException("No clientContext was created!"));
             }
         } else {
-            onRuntimeError(primaryStage, initializationException);
+            handleInitializationError(primaryStage, initializationException);
         }
     }
 
@@ -185,21 +209,38 @@ public abstract class DolphinPlatformApplication extends Application {
                 }
                 Assert.requireNonNull(clientContext, "clientContext");
 
+                connectInProgress.set(true);
                 clientContext.connect().get(3_000, TimeUnit.MILLISECONDS);
 
                 Platform.runLater(() -> {
                     try {
                         start(primaryStage, clientContext);
                     } catch (Exception e) {
-                        onRuntimeError(primaryStage, new DolphinRuntimeException("Error in application reconnect", e));
+                        handleInitializationError(primaryStage, new ClientInitializationException("Error in application reconnect", e));
                     }
                 });
             } catch (Exception e) {
-                Platform.runLater(() -> onRuntimeError(primaryStage, new DolphinRuntimeException("Error in application reconnect", e)));
+                Platform.runLater(() -> handleInitializationError(primaryStage, new ClientInitializationException("Error in application reconnect", e)));
+            } finally {
+                connectInProgress.set(false);
             }
             result.complete(null);
         });
         return result;
+    }
+
+    protected void onInitializationError(Stage primaryStage, ClientInitializationException initializationException, Iterable<DolphinRuntimeException> possibleCauses) {
+        LOG.error("Dolphin Platform initialization error", initializationException);
+        for (DolphinRuntimeException cause : possibleCauses) {
+            LOG.error("Possible cause", cause);
+        }
+        Platform.exit();
+    }
+
+    private final void handleInitializationError(final Stage primaryStage, final ClientInitializationException initializationException) {
+        Iterable<DolphinRuntimeException> possibleCauses = Collections.unmodifiableList(runtimeExceptionsAtInitialization);
+        runtimeExceptionsAtInitialization.clear();
+        onInitializationError(primaryStage, initializationException, possibleCauses);
     }
 
     /**
@@ -213,12 +254,6 @@ public abstract class DolphinPlatformApplication extends Application {
     protected void onRuntimeError(final Stage primaryStage, final DolphinRuntimeException runtimeException) {
         Assert.requireNonNull(runtimeException, "runtimeException");
         LOG.error("Dolphin Platform runtime error in thread " + runtimeException.getThread().getName(), runtimeException);
-        Platform.exit();
-    }
-
-    protected void onRemotingError(final Stage primaryStage, final DolphinRemotingException exception) {
-        Assert.requireNonNull(exception, "exception");
-        LOG.error("Remoting error!", exception);
         Platform.exit();
     }
 }

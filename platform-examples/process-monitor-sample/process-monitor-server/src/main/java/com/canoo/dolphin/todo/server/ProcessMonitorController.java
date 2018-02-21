@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2017 Canoo Engineering AG.
+ * Copyright 2015-2018 Canoo Engineering AG.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,9 +19,11 @@ import com.canoo.platform.remoting.BeanManager;
 import com.canoo.dolphin.samples.processmonitor.model.ProcessBean;
 import com.canoo.dolphin.samples.processmonitor.model.ProcessListBean;
 import com.canoo.platform.remoting.server.ClientSessionExecutor;
-import com.canoo.platform.remoting.server.DolphinController;
-import com.canoo.platform.remoting.server.DolphinModel;
+import com.canoo.platform.remoting.server.RemotingController;
+import com.canoo.platform.remoting.server.RemotingModel;
 import com.canoo.platform.remoting.server.RemotingContext;
+import com.canoo.platform.server.timing.Metric;
+import com.canoo.platform.server.timing.ServerTiming;
 import oshi.SystemInfo;
 import oshi.hardware.GlobalMemory;
 import oshi.software.os.OSProcess;
@@ -38,7 +40,7 @@ import java.util.concurrent.Future;
 
 import static com.canoo.dolphin.samples.processmonitor.ProcessMonitorConstants.CONTROLLER_NAME;
 
-@DolphinController(CONTROLLER_NAME)
+@RemotingController(CONTROLLER_NAME)
 public class ProcessMonitorController {
 
     private static DecimalFormat format = new DecimalFormat("0.00");
@@ -54,7 +56,10 @@ public class ProcessMonitorController {
     @Inject
     private AsyncServerRunner asyncServerRunner;
 
-    @DolphinModel
+    @Inject
+    private ServerTiming serverTiming;
+
+    @RemotingModel
     private ProcessListBean processList;
 
     private Future<Void> executor;
@@ -79,26 +84,26 @@ public class ProcessMonitorController {
 
 
     private void update() {
-        List<OSProcess> procs = Arrays.asList(os.getProcesses(10, OperatingSystem.ProcessSort.CPU));
-        for (OSProcess process : procs) {
-            ProcessBean bean = null;
-            if(processList.getItems().size() <= procs.indexOf(process)) {
-                bean = beanManager.create(ProcessBean.class);
-                processList.getItems().add(bean);
-            } else {
-                bean = processList.getItems().get(procs.indexOf(process));
+        final Metric metric = serverTiming.start("processUpdate", "Update of OS process list");
+        try {
+            final List<OSProcess> procs = Arrays.asList(os.getProcesses(10, OperatingSystem.ProcessSort.CPU));
+            for (final OSProcess process : procs) {
+                ProcessBean bean = null;
+                if (processList.getItems().size() <= procs.indexOf(process)) {
+                    bean = beanManager.create(ProcessBean.class);
+                    processList.getItems().add(bean);
+                } else {
+                    bean = processList.getItems().get(procs.indexOf(process));
+                }
+                bean.setProcessID(Integer.toString(process.getProcessID()));
+                bean.setCpuPercentage(format.format(100d * (process.getKernelTime() + process.getUserTime()) / process.getUpTime()));
+                bean.setMemoryPercentage(format.format(100d * process.getResidentSetSize() / memory.getTotal()));
+                bean.setName(process.getName());
             }
-            bean.setProcessID(new Integer(process.getProcessID()).toString());
-            bean.setCpuPercentage(format.format(100d * (process.getKernelTime() + process.getUserTime()) / process.getUpTime()));
-            bean.setMemoryPercentage(format.format(100d * process.getResidentSetSize() / memory.getTotal()));
-            bean.setName(process.getName());
+            asyncServerRunner.execute(() -> sessionExecutor.runLaterInClientSession(this::update));
+        } finally {
+            metric.stop();
         }
-        asyncServerRunner.execute(new Runnable() {
-            @Override
-            public void run() {
-                sessionExecutor.runLaterInClientSession(() -> update());
-            }
-        });
     }
 
 }

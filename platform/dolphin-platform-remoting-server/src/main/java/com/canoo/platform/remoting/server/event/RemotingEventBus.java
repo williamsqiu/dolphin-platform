@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2017 Canoo Engineering AG.
+ * Copyright 2015-2018 Canoo Engineering AG.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 package com.canoo.platform.remoting.server.event;
 
 import com.canoo.platform.core.functional.Subscription;
-import com.canoo.platform.remoting.server.DolphinController;
+import com.canoo.platform.remoting.server.RemotingController;
 import org.apiguardian.api.API;
 
 import java.io.Serializable;
@@ -28,7 +28,7 @@ import static org.apiguardian.api.API.Status.EXPERIMENTAL;
  * The dolphin event bus that can be used to withContent messages to dolphin sessions.
  * The {@link RemotingEventBus} can be injected in any
  * managed bean and will automatically publish the given data in the dolphin session.
- * This means that you ca subscribe your dolphin controller (see {@link DolphinController})
+ * This means that you ca subscribe your dolphin controller (see {@link RemotingController})
  * to the event bus and publish messages from any other bean like an REST endpoint.
  * <br>
  * <center><img src="doc-files/event-bus.png" alt="Notification MVC Widget example"></center>

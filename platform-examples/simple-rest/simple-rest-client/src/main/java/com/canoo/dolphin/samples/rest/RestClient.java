@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2016 Canoo Engineering AG.
+ * Copyright 2015-2018 Canoo Engineering AG.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ import com.canoo.platform.core.http.HttpClient;
 public class RestClient {
 
     public static void main(String[] args) throws Exception {
-        final String endpoint = "http://localhost:8080/simple-rest/api/city";
+        final String endpoint = "http://localhost:8080/openid-connect";
         final HttpClient httpClient = PlatformClient.getService(HttpClient.class);
 
         final City city = new City("Dortmund", "Germany");

@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2017 Canoo Engineering AG.
+ * Copyright 2015-2018 Canoo Engineering AG.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 package com.canoo.dp.impl.remoting.converters;
 
 import com.canoo.dp.impl.remoting.DolphinUtils;
-import com.canoo.platform.remoting.DolphinBean;
+import com.canoo.platform.remoting.RemotingBean;
 import com.canoo.platform.remoting.spi.converter.Converter;
 import com.canoo.platform.remoting.spi.converter.ConverterFactory;
 import com.canoo.platform.remoting.spi.converter.DolphinBeanRepo;
@@ -47,7 +47,7 @@ public class DolphinBeanConverterFactory implements ConverterFactory {
 
     @Override
     public List<Class> getSupportedTypes() {
-        return Collections.singletonList(DolphinBean.class);
+        return Collections.singletonList(RemotingBean.class);
     }
 
     @Override

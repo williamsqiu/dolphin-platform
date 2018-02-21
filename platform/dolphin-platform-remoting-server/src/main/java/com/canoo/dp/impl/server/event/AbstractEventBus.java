@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2017 Canoo Engineering AG.
+ * Copyright 2015-2018 Canoo Engineering AG.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -162,8 +162,12 @@ public abstract class AbstractEventBus implements RemotingEventBus {
                             LOG.trace("Calling event listener for topic {} in Dolphin Platform context {}", topic.getName(), sessionId);
                             final Predicate<MessageEventContext<T>> sessionFilter = ((ListenerWithFilter<T>) listenerAndFilter).getFilter();
                             final MessageListener<T> listener = (MessageListener<T>) listenerAndFilter.getListener();
-                            if (sessionFilter == null || sessionFilter.test(event.getMessageEventContext())) {
-                                listener.onMessage(event);
+                            try {
+                                if (sessionFilter == null || sessionFilter.test(event.getMessageEventContext())) {
+                                    listener.onMessage(event);
+                                }
+                            } catch (final Exception e) {
+                                LOG.error("Error in calling event listener for topic '" + topic.getName() + "' in Dolphin Platform context " + sessionId, e);
                             }
                         }
                     });

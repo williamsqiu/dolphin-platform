@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2017 Canoo Engineering AG.
+ * Copyright 2015-2018 Canoo Engineering AG.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,11 +18,14 @@ package com.canoo.dp.impl.server.javaee;
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.server.bootstrap.PlatformBootstrap;
 import com.canoo.dp.impl.server.client.ClientSessionProvider;
+import com.canoo.dp.impl.server.servlet.ServerTimingFilter;
 import com.canoo.platform.server.client.ClientSession;
 import com.canoo.platform.server.javaee.ClientScoped;
+import com.canoo.platform.server.timing.ServerTiming;
 import org.apiguardian.api.API;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Produces;
 
 import static org.apiguardian.api.API.Status.INTERNAL;
@@ -44,4 +47,9 @@ public class CdiBeanFactory {
         return provider.getCurrentClientSession();
     }
 
+    @Produces
+    @RequestScoped
+    public ServerTiming createServerTiming() {
+        return ServerTimingFilter.getCurrentTiming();
+    }
 }

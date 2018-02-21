@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2017 Canoo Engineering AG.
+ * Copyright 2015-2018 Canoo Engineering AG.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,9 @@
 package com.canoo.platform.spring.test;
 
 import com.canoo.platform.remoting.client.Param;
-import com.canoo.platform.remoting.DolphinBean;
-import com.canoo.platform.remoting.server.DolphinAction;
-import com.canoo.platform.remoting.server.DolphinController;
+import com.canoo.platform.remoting.RemotingBean;
+import com.canoo.platform.remoting.server.RemotingAction;
+import com.canoo.platform.remoting.server.RemotingController;
 import org.apiguardian.api.API;
 
 import java.util.Map;
@@ -26,7 +26,7 @@ import java.util.Map;
 import static org.apiguardian.api.API.Status.MAINTAINED;
 
 /**
- * Provides acces to a controller (see {@link DolphinController}) and its model for tests
+ * Provides acces to a controller (see {@link RemotingController}) and its model for tests
  *
  * @param <T> type of the model
  * @author Hendrik Ebbers
@@ -35,14 +35,14 @@ import static org.apiguardian.api.API.Status.MAINTAINED;
 public interface ControllerUnderTest<T> {
 
     /**
-     * Returns the model of the controller (see {@link DolphinBean})
+     * Returns the model of the controller (see {@link RemotingBean})
      *
      * @return the model
      */
     T getModel();
 
     /**
-     * Invokes an action on the controller. See {@link DolphinAction}
+     * Invokes an action on the controller. See {@link RemotingAction}
      *
      * @param actionName
      * @param params
@@ -58,4 +58,5 @@ public interface ControllerUnderTest<T> {
      */
     void destroy();
 
+    <S> ControllerUnderTest<S> createController(String childControllerName);
 }

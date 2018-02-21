@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2017 Canoo Engineering AG.
+ * Copyright 2015-2018 Canoo Engineering AG.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,13 +15,13 @@
  */
 package com.canoo.dp.impl.server.gc;
 
-import com.canoo.platform.remoting.DolphinBean;
+import com.canoo.platform.remoting.RemotingBean;
 import org.apiguardian.api.API;
 
 import static org.apiguardian.api.API.Status.INTERNAL;
 
 /**
- * Describes a direct reference between 2 dolphin beans (see {@link DolphinBean}). In each
+ * Describes a direct reference between 2 dolphin beans (see {@link RemotingBean}). In each
  * reference one dolphin bean must be the parent that holds the reference to the other dolphin bean that is defined as child.
  * Internally the dolphin beans are defined by {@link Instance} instances that hold additional informationen next to the bean instance.
  */

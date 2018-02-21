@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2017 Canoo Engineering AG.
+ * Copyright 2015-2018 Canoo Engineering AG.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,19 +16,19 @@
 package com.canoo.dp.impl.server.controller.repository;
 
 import com.canoo.dp.impl.server.controller.TestBean;
-import com.canoo.platform.remoting.server.DolphinAction;
-import com.canoo.platform.remoting.server.DolphinController;
-import com.canoo.platform.remoting.server.DolphinModel;
+import com.canoo.platform.remoting.server.RemotingAction;
+import com.canoo.platform.remoting.server.RemotingController;
+import com.canoo.platform.remoting.server.RemotingModel;
 import com.canoo.platform.remoting.server.Param;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
-@DolphinController
+@RemotingController
 public class TestController {
 
 
-    @DolphinModel
+    @RemotingModel
     private TestBean testBean;
 
     @PostConstruct
@@ -39,7 +39,7 @@ public class TestController {
     public void preDestroy() {
     }
 
-    @DolphinAction
+    @RemotingAction
     public void dolphinAction(@Param String test) {
     }
 }

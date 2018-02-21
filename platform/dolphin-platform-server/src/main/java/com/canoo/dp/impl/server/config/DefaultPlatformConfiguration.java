@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2017 Canoo Engineering AG.
+ * Copyright 2015-2018 Canoo Engineering AG.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@ package com.canoo.dp.impl.server.config;
 
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.server.bootstrap.modules.CorsModule;
+import com.canoo.dp.impl.server.bootstrap.modules.ServerTimingModule;
 import com.canoo.platform.core.PlatformConfiguration;
 import org.apiguardian.api.API;
 import org.slf4j.Logger;
@@ -92,6 +93,7 @@ public final class DefaultPlatformConfiguration implements PlatformConfiguration
         setIntProperty(MAX_CLIENTS_PER_SESSION, MAX_CLIENTS_PER_SESSION_DEFAULT_VALUE);
         setListProperty(ID_FILTER_URL_MAPPINGS, ID_FILTER_URL_MAPPINGS_DEFAULT_VALUE);
         setBooleanProperty(CorsModule.CORS_MODULE_ACTIVE, true);
+        setBooleanProperty(ServerTimingModule.SERVER_TIMING_MODULE_ACTIVE_PROPERTY_NAME, true);
         setListProperty(CORS_ENDPOINTS_URL_MAPPINGS, CORS_ENDPOINTS_URL_MAPPINGS_DEFAULT_VALUE);
     }
 

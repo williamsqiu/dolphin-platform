@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2017 Canoo Engineering AG.
+ * Copyright 2015-2018 Canoo Engineering AG.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,6 +32,8 @@ public class ConfigurationFileLoader {
 
     private static final Logger LOG = LoggerFactory.getLogger(ConfigurationFileLoader.class);
 
+    private static final String PLATFORM_LOCATION = "platform.properties";
+
     private static final String DEFAULT_LOCATION = "dolphin.properties";
 
     private static final String JAR_LOCATION = "META-INF/dolphin.properties";
@@ -39,8 +41,8 @@ public class ConfigurationFileLoader {
     private ConfigurationFileLoader() {
     }
 
-    public static DefaultClientConfiguration loadConfiguration() {
-        final DefaultClientConfiguration configuration = createConfiguration();
+    public static DefaultClientConfiguration loadConfiguration(final String... additionalLocations) {
+        final DefaultClientConfiguration configuration = createConfiguration(additionalLocations);
         Assert.requireNonNull(configuration, "configuration");
 
         LOG.debug("Configuration created with {} properties", configuration.getPropertyKeys().size());
@@ -49,28 +51,55 @@ public class ConfigurationFileLoader {
                 LOG.debug("Dolphin Platform configured with '{}'='{}'", key, configuration.getProperty(key, null));
             }
         }
-
         return configuration;
     }
 
-    private static DefaultClientConfiguration createConfiguration() {
+    private static DefaultClientConfiguration createConfiguration(final String... additionalLocations) {
         try {
             final ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 
-            try (final InputStream inputStream = classLoader.getResourceAsStream(DEFAULT_LOCATION)) {
+            if(additionalLocations != null) {
+                for(final String location : additionalLocations) {
+                    LOG.trace("Trying to load configuration at '" + location + "'");
+                    try (final InputStream inputStream = classLoader.getResourceAsStream(location)) {
+                        if (inputStream != null) {
+                            return readConfig(inputStream);
+                        }
+                    } catch (final Exception e) {
+                        LOG.trace("No config found at '" + location + "'");
+                    }
+                }
+            }
+
+            try (final InputStream inputStream = classLoader.getResourceAsStream(PLATFORM_LOCATION)) {
+                LOG.trace("Trying to load configuration at '" + PLATFORM_LOCATION + "'");
                 if (inputStream != null) {
                     return readConfig(inputStream);
                 }
+            } catch (final Exception e) {
+                LOG.trace("No config found at '" + PLATFORM_LOCATION + "'");
+            }
+
+            try (final InputStream inputStream = classLoader.getResourceAsStream(DEFAULT_LOCATION)) {
+                LOG.trace("Trying to load configuration at '" + DEFAULT_LOCATION + "'");
+                if (inputStream != null) {
+                    return readConfig(inputStream);
+                }
+            } catch (final Exception e) {
+                LOG.trace("No config found at '" + DEFAULT_LOCATION + "'");
             }
 
             try (final InputStream inputStream = classLoader.getResourceAsStream(JAR_LOCATION)) {
+                LOG.trace("Trying to load configuration at '" + JAR_LOCATION + "'");
                 if (inputStream != null) {
                     return readConfig(inputStream);
                 }
+            } catch (final Exception e) {
+                LOG.trace("No config found at '" + JAR_LOCATION + "'");
             }
 
             return new DefaultClientConfiguration();
-        } catch (IOException e) {
+        } catch (final Exception e) {
             throw new RuntimeException("Can not create configuration!", e);
         }
     }

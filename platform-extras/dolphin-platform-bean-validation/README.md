@@ -32,7 +32,7 @@ The module don't depend on a JSR-303 implementation. If your application server 
 By doing so you can create a Dolphin Platform based model that looks like this:
 
 ```Java
-@DolphinBean
+@RemotingBean
 public class MyModel {
 
     @NotNull

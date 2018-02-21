@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2017 Canoo Engineering AG.
+ * Copyright 2015-2018 Canoo Engineering AG.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@ package com.canoo.dp.impl.platform.core;
 
 import org.apiguardian.api.API;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -44,9 +45,8 @@ public final class Assert {
      * @throws java.lang.NullPointerException if {@code value} is null.
      */
 
-    public static <T> T requireNonNull(T value, String argumentName) {
+    public static <T> T requireNonNull(final T value, final String argumentName) {
         Objects.requireNonNull(argumentName, String.format(NOT_NULL_MSG_FORMAT, "argumentName"));
-
         return Objects.requireNonNull(value, String.format(NOT_NULL_MSG_FORMAT, argumentName));
     }
 
@@ -62,9 +62,8 @@ public final class Assert {
      * @see #isBlank(String)
      */
 
-    public static String requireNonBlank(String str, String argumentName) {
+    public static String requireNonBlank(final String str, final String argumentName) {
         requireNonNull(str, argumentName);
-
         if (isBlank(str)) {
             throw new IllegalArgumentException(String.format(NOT_EMPTY_MSG_FORMAT, argumentName));
         }
@@ -81,11 +80,11 @@ public final class Assert {
      * @return <code>true</code> if the string is <code>null</code>, or
      * blank.
      */
-    public static boolean isBlank(String str) {
+    public static boolean isBlank(final String str) {
         if (str == null || str.length() == 0) {
             return true;
         }
-        for (char c : str.toCharArray()) {
+        for (final char c : str.toCharArray()) {
             if (!Character.isWhitespace(c)) {
                 return false;
             }
@@ -104,14 +103,27 @@ public final class Assert {
      * @see #requireNonNull(Object, String)
      */
 
-    public static <T, L extends List<T>> L requireNonNullEntries(L collection, String argumentName) {
+    public static <T, L extends List<T>> L requireNonNullEntries(final L collection, final String argumentName) {
         requireNonNull(collection, argumentName);
-
-        String msg = String.format(NOT_NULL_ENTRIES_MSG_FORMAT, argumentName);
-        for (Object value : collection) {
+        final String msg = String.format(NOT_NULL_ENTRIES_MSG_FORMAT, argumentName);
+        for (final Object value : collection) {
             requireState(value != null, msg);
         }
         return collection;
+    }
+
+    public static <T> T[] requireNonNullEntries(final T[] array, final String argumentName) {
+        requireNonNull(array, "array");
+        requireNonNullEntries(Arrays.asList(array), argumentName);
+        return array;
+    }
+
+    public static <T> T[] requireNotEmpty(final T[] array, final String argumentName) {
+        requireNonNull(array, "array");
+        if(array.length == 0) {
+            throw new IllegalArgumentException(String.format(NOT_EMPTY_MSG_FORMAT, array));
+        }
+        return array;
     }
 
     /**
@@ -123,7 +135,7 @@ public final class Assert {
      *                  IllegalStateException} is thrown
      * @throws IllegalStateException if {@code condition} evaluates to false
      */
-    public static void requireState(boolean condition, String message) {
+    public static void requireState(final boolean condition, final String message) {
         if (!condition) {
             throw new IllegalStateException(requireNonBlank(message, "message"));
         }

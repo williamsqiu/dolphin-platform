@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2016 Canoo Engineering AG.
+ * Copyright 2015-2018 Canoo Engineering AG.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,6 @@ description = ''
 dependencies {
   compile project(':process-monitor-common')
   compile project(':dolphin-platform-remoting-server')
-  compile 'javax.inject:javax.inject:1'
+  compile "javax.inject:javax.inject:$javaxInjectVersion"
   compile 'com.github.dblock:oshi-core:3.2'
 }

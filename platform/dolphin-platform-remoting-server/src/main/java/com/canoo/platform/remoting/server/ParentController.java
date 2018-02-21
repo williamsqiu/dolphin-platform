@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2017 Canoo Engineering AG.
+ * Copyright 2015-2018 Canoo Engineering AG.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import static org.apiguardian.api.API.Status.MAINTAINED;
 
 /**
- * Can be used in a dolphin controller (see {@link DolphinController}) to
+ * Can be used in a dolphin controller (see {@link RemotingController}) to
  * define and inject the parent controller. This can only be done if the controller
  * was created as a child of another controller (see client site API).
  *
@@ -34,7 +34,7 @@ import static org.apiguardian.api.API.Status.MAINTAINED;
  *
  *  @see PostChildCreated
  *  @see PreChildDestroyed
- *  @see DolphinController
+ *  @see RemotingController
  */
 @Documented
 @Retention(RUNTIME)

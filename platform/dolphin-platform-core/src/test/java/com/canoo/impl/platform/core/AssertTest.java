@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2017 Canoo Engineering AG.
+ * Copyright 2015-2018 Canoo Engineering AG.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ import com.canoo.dp.impl.platform.core.Assert;
 import org.testng.annotations.Test;
 
 import java.util.Arrays;
+import java.util.List;
 
 public class AssertTest {
 
@@ -46,7 +47,7 @@ public class AssertTest {
             org.testng.Assert.assertTrue(e instanceof NullPointerException);
         }
         try {
-            Assert.requireNonNullEntries(null, "message");
+            Assert.requireNonNullEntries((List<? extends Object>) null, "message");
             org.testng.Assert.fail();
         } catch (Exception e) {
             org.testng.Assert.assertTrue(e instanceof NullPointerException);

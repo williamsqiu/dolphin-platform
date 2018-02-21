@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2017 Canoo Engineering AG.
+ * Copyright 2015-2018 Canoo Engineering AG.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  */
 package com.canoo.platform.remoting.spi.converter;
 
+import com.canoo.platform.remoting.RemotingBean;
 import org.apiguardian.api.API;
 
 import java.util.List;
@@ -24,7 +25,7 @@ import static org.apiguardian.api.API.Status.MAINTAINED;
 /**
  * Entry point of the data converter SPI. Custom implementations can be provided by the default Java SPI
  * (see {@link java.util.ServiceLoader}) and will be used at runtime to convert custom data types that
- * are used in Dolphin Platform beans (see {@link com.canoo.platform.remoting.DolphinBean}) to
+ * are used in Dolphin Platform beans (see {@link RemotingBean}) to
  * internally supported data types.
  *
  * @author Hendrik Ebbers

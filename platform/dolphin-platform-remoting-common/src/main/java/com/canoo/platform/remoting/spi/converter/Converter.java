@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2017 Canoo Engineering AG.
+ * Copyright 2015-2018 Canoo Engineering AG.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  */
 package com.canoo.platform.remoting.spi.converter;
 
+import com.canoo.platform.remoting.RemotingBean;
 import org.apiguardian.api.API;
 
 import static org.apiguardian.api.API.Status.MAINTAINED;
@@ -29,7 +30,7 @@ import static org.apiguardian.api.API.Status.MAINTAINED;
  * @param <D> type of the internal Dolphin Platform supported data types that represents the custom data. Converter will be provided by custom implementations of the {@link ConverterFactory} interface.
  * @author Hendrik Ebbers
  * @see com.canoo.platform.remoting.Property
- * @see com.canoo.platform.remoting.DolphinBean
+ * @see RemotingBean
  * @see ConverterFactory
  */
 @API(since = "0.x", status = MAINTAINED)

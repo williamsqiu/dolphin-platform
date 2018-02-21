@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2017 Canoo Engineering AG.
+ * Copyright 2015-2018 Canoo Engineering AG.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,9 +17,9 @@ package com.canoo.dp.impl.server.gc;
 
 import com.canoo.platform.remoting.ObservableList;
 import com.canoo.dp.impl.platform.core.IdentitySet;
-import com.canoo.platform.remoting.DolphinBean;
+import com.canoo.platform.remoting.RemotingBean;
 import com.canoo.platform.remoting.Property;
-import com.canoo.platform.remoting.server.DolphinModel;
+import com.canoo.platform.remoting.server.RemotingModel;
 import org.apiguardian.api.API;
 
 import java.util.ArrayList;
@@ -28,7 +28,7 @@ import java.util.List;
 import static org.apiguardian.api.API.Status.INTERNAL;
 
 /**
- * This class holds an instance of a dolphin bean (see {@link DolphinBean}) for the internal
+ * This class holds an instance of a dolphin bean (see {@link RemotingBean}) for the internal
  * garbage collection (see {@link GarbageCollector}).
  */
 @API(since = "0.x", status = INTERNAL)
@@ -46,7 +46,7 @@ public class Instance {
     /**
      * Constructor
      * @param bean the dolphin bean
-     * @param rootBean if true this is a root bean as defined by {@link DolphinModel}
+     * @param rootBean if true this is a root bean as defined by {@link RemotingModel}
      * @param properties a set that contains all properties of the given bean
      * @param lists a list that contains all lists of the given bean
      */

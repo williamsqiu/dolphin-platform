@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2017 Canoo Engineering AG.
+ * Copyright 2015-2018 Canoo Engineering AG.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,10 +42,10 @@ public interface ControllerProxy<T> extends ControllerFactory {
     T getModel();
 
     /**
-     * By calling this method an action will be called on the server side controller (see {@literal @}DolphinAction
+     * By calling this method an action will be called on the server side controller (see {@literal @}RemotingAction
      * annotation for more details). The method won't block until the action was handled on the server. If you need this
      * information the method returns a {@link CompletableFuture} that is completed when the action was on the server.
-     * @param actionName unique name of the action (defined by method name or {@literal @}DolphinAction annotation in the
+     * @param actionName unique name of the action (defined by method name or {@literal @}RemotingAction annotation in the
      *                   server controller.
      * @param params params that can be used for the action call. The server action must define the sama param count with
      *               matching names.

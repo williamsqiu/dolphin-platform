@@ -73,8 +73,8 @@ Spring module as a Maven dependency:
 ----
 <dependency>
     <groupId>com.canoo.dolphin-platform</groupId>
-    <artifactId>dolphin-platform-server-spring</artifactId>
-    <version>0.8.9</version>
+    <artifactId>dolphin-platform-remoting-server-spring</artifactId>
+    <version>1.0.0.CR3</version>
 </dependency>
 ----
 
@@ -83,7 +83,7 @@ Spring module as a Gradle dependency:
 [source,xml]
 ----
 dependencies{
-    compile 'com.canoo.dolphin-platform:dolphin-platform-server-spring:0.8.9'
+    compile 'com.canoo.dolphin-platform:dolphin-platform-remoting-server-spring:1.0.0.CR3'
 }
 ----
 
@@ -95,8 +95,8 @@ Dolphin Platform as a Maven dependency:
 ----
 <dependency>
     <groupId>com.canoo.dolphin-platform</groupId>
-    <artifactId>dolphin-platform-server-javaee</artifactId>
-    <version>0.8.9</version>
+    <artifactId>dolphin-platform-remoting-server-javaee</artifactId>
+    <version>1.0.0.CR3</version>
 </dependency>
 ----
 
@@ -105,7 +105,7 @@ JavaEE module as a Gradle dependency:
 [source,xml]
 ----
 dependencies{
-    compile 'com.canoo.dolphin-platform:dolphin-platform-server-javaee:0.8.9'
+    compile 'com.canoo.dolphin-platform:dolphin-platform-remoting-server-javaee:1.0.0.CR3'
 }
 ----
 
@@ -129,8 +129,8 @@ The following snippet shows the dependency for a JavaFX based client as a Maven 
 ----
 <dependency>
     <groupId>com.canoo.dolphin-platform</groupId>
-    <artifactId>dolphin-platform-client-javafx</artifactId>
-    <version>0.8.9</version>
+    <artifactId>dolphin-platform-remoting-client-javafx</artifactId>
+    <version>1.0.0.CR3</version>
 </dependency>
 ----
 
