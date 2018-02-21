@@ -55,10 +55,12 @@ import com.canoo.dp.impl.server.model.ServerControllerActionCallBean;
 import com.canoo.dp.impl.server.model.ServerEventDispatcher;
 import com.canoo.dp.impl.server.model.ServerPlatformBeanRepository;
 import com.canoo.dp.impl.server.model.ServerPresentationModelBuilderFactory;
+import com.canoo.dp.impl.server.servlet.ServerTimingFilter;
 import com.canoo.platform.core.functional.Subscription;
 import com.canoo.platform.remoting.BeanManager;
 import com.canoo.platform.server.client.ClientSession;
 import com.canoo.platform.server.spi.components.ManagedBeanFactory;
+import com.canoo.platform.server.timing.Metric;
 import org.apiguardian.api.API;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -266,12 +268,15 @@ public class DolphinContext {
         if (platformBeanRepository == null) {
             throw new IllegalStateException("An action was called before the init-command was sent.");
         }
+        final Metric metric = ServerTimingFilter.getCurrentTiming().start("RemotingActionCall:"+actionName, "Remote action call");
         try {
             controllerHandler.invokeAction(controllerId, actionName, params);
-        } catch (Exception e) {
+        } catch (final Exception e) {
             LOG.error("Unexpected exception while invoking action {} on controller {}",
                     actionName, controllerId, e);
             bean.setError(true);
+        } finally {
+            metric.stop();
         }
     }
 
@@ -284,11 +289,21 @@ public class DolphinContext {
             LOG.trace("Handling GarbageCollection for DolphinContext {}", getId());
             onGarbageCollection();
         }
+        final Metric metric = ServerTimingFilter.getCurrentTiming().start("TaskExecution", "Execution of Tasks in Long Poll");
+        try {
         taskQueue.executeTasks();
+        } finally {
+            metric.stop();
+        }
     }
 
     private void onGarbageCollection() {
+        final Metric metric = ServerTimingFilter.getCurrentTiming().start("RemotingGc", "Garbage collection for the remoting model");
+        try {
         garbageCollector.gc();
+        } finally {
+            metric.stop();
+        }
     }
 
     public ServerModelStore getServerModelStore() {
@@ -307,10 +322,10 @@ public class DolphinContext {
         return clientSession.getId();
     }
 
-    public List<Command> handle(List<Command> commands) {
+    public List<Command> handle(final List<Command> commands) {
         active = true;
         try {
-            List<Command> results = new LinkedList<>();
+        final List<Command> results = new LinkedList<>();
             for (Command command : commands) {
                 results.addAll(serverConnector.receive(command));
                 hasResponseCommands = !results.isEmpty();

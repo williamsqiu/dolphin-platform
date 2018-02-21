@@ -20,5 +20,6 @@ mainClassName = 'com.canoo.dolphin.samples.rest.ServerApplication'
 
 dependencies {
   compile project(':simple-rest-common')
+  compile project(':dolphin-platform-server-spring')
   compile "org.springframework.boot:spring-boot-starter-web:$springBootVersion"
 }

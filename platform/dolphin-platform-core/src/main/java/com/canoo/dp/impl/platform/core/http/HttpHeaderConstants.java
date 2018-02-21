@@ -33,6 +33,12 @@ public interface HttpHeaderConstants {
 
     String ACCEPT_CHARSET_HEADER = "Accept-Charset";
 
+    String SERVER_TIMING_HEADER = "Server-Timing";
+
+    String SERVER_TIMING_HEADER_DUR = "dur=";
+
+    String SERVER_TIMING_HEADER_DESC = "desc=";
+
     String JSON_MIME_TYPE = "application/json;charset=utf-8";
 
     String TEXT_MIME_TYPE = "application/txt;charset=utf-8";
@@ -40,4 +46,5 @@ public interface HttpHeaderConstants {
     String RAW_MIME_TYPE = "application/raw";
 
     String FORM_MIME_TYPE = "application/x-www-form-urlencoded";
+
 }

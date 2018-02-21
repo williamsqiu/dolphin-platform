@@ -15,9 +15,9 @@
  */
 package com.canoo.dolphin.integration.server.action;
 
-import com.canoo.platform.remoting.client.Param;
 import com.canoo.dolphin.integration.action.ActionTestBean;
 import com.canoo.dolphin.integration.server.TestConfiguration;
+import com.canoo.platform.remoting.client.Param;
 import com.canoo.platform.spring.test.ControllerTestException;
 import com.canoo.platform.spring.test.ControllerUnderTest;
 import com.canoo.platform.spring.test.SpringTestNGControllerTest;
@@ -499,6 +499,15 @@ public class ActionTestControllerTest extends SpringTestNGControllerTest {
     }
 
     /** End ElementType Type Related Action Test */
+
+    @Test(expectedExceptions = ControllerTestException.class)
+    public void checkExceptionHandlerForRuntimeException() {
+        try {
+            controller.invoke(WITH_EXCEPTION_ACTION);
+        } finally {
+            System.out.println(controller.getModel().getErrors());
+        }
+    }
 
 }
 

@@ -9,6 +9,60 @@ package structure or adding additional methods to public interfaces. In addition
 method of the API is annotated by `@Deprecated` since we plan to remove all this methods and classes for the final 1.0.0 release.
 In addition we are adding the @Api annotation to all classes. Based on this we define if a public API is already maintained or is currently in an incubation state. The annotations defines rhe split between provate and public API, too.
 
+
+== Version 1.0.0.CR4
+_Release date: Feb, 19 2018_
+
+ * Prepare release script
+ * Fix dependencies in Bower & NPM(https://github.com/canoo/dolphin-platform/issues/796[issue])
+ * Polymer 2 "dolphin-controller" element is missing listener for lifecycle(https://github.com/canoo/dolphin-platform/issues/836[issue])
+ * Dolphin-Controller Polymer 2 componente do not update all model parts(https://github.com/canoo/dolphin-platform/issues/837[issue])
+ * Custom config supported
+ * Provide W3C Server Timing support with default metrics(https://github.com/canoo/dolphin-platform/issues/841[issue])
+ * Provide Action exception handling on the server(https://github.com/canoo/dolphin-platform/issues/761[issue])
+ * ClientSessionExecutorImpl#callLaterinClientSession swallows Exceptions(https://github.com/canoo/dolphin-platform/issues/737[issue])
+ * Bugfix for security http connection
+ * Docker services: Keycloak
+ * 2 small extra modules that helps to handle data (like JPA)
+ * Remote Validation
+ * Add controller tests / integration tests that check controller hierarchy(https://github.com/canoo/dolphin-platform/issues/603[issue])
+ * Define security realm by client(https://github.com/canoo/dolphin-platform/issues/787[issue])
+ * Add version information to the console.log output(https://github.com/canoo/dolphin-platform/issues/817[issue])
+ * Print version of Dolphin Platform at boot time(https://github.com/canoo/dolphin-platform/issues/829[issue])
+ * Remoting security sample
+ * Update all classes packages module names in doc
+ * Configuration in test is not based on properties file(https://github.com/canoo/dolphin-platform/issues/407[issue])
+ * Version updates
+ * Remoting component for server logging
+ * Update all class names in documentation(https://github.com/canoo/dolphin-platform/issues/231[issue])
+ * Install & Call Bower directly from NPM
+ * Dolphin Platform graphics added
+ * Login endpoint on server
+ * equals & hashCode for properties(https://github.com/canoo/dolphin-platform/issues/816[issue])
+ * Logging for Runtime exceptions in event listener(https://github.com/canoo/dolphin-platform/issues/806[issue])
+ * Configure javadoc task to copy resources(https://github.com/canoo/dolphin-platform/issues/299[issue])
+ * Define all dependency versions in gradle.properties(https://github.com/canoo/dolphin-platform/issues/517[issue])
+ * Rename dolphin public api to remoting prefix(https://github.com/canoo/dolphin-platform/issues/757[issue])
+
+=== Release notes for 1.0.0.CR4
+
+Please be aware of API changes in this release. This changes will affect your Java and Polymer implementations.
+
+In the Java API the annotations for the platform changed to reflect the specific platform feature.
+
+==== Java API changes
+
+ * `DolphinController` annotation was changed to `RemotingController`
+ * `DolphinModel` annotation was changed to `RemotingModel`
+ * `DolphinEventBus` annotation was changed to `RemotingEventBus`
+ * `DolphinAction` annotation was changed to `RemotingAction`
+
+==== Polymer API changes
+
+In the Polymer API the custom element name was changed to reflect the specific platform feature.
+
+ * `<dolphin-controller>` element was changed to `<remoting-controller>`
+
 == Version 1.0.0.CR3
 _Release date: Jan, 10 2018_
 

@@ -15,19 +15,26 @@
  */
 package com.canoo.dp.impl.platform.core;
 
+import com.canoo.platform.core.DolphinRuntimeException;
 import org.apiguardian.api.API;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Proxy;
+import java.lang.reflect.Type;
+import java.lang.reflect.WildcardType;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import static org.apiguardian.api.API.Status.INTERNAL;
 
@@ -36,8 +43,42 @@ public class ReflectionHelper {
 
     private static final Logger LOG = LoggerFactory.getLogger(ReflectionHelper.class);
 
+    private static final Map<Class<?>, Class<?>> primitiveWrapperMap = new HashMap<>();
+    private static final Map<Class<?>, Class<?>> wrapperPrimitiveMap = new HashMap<>();
+
+    static {
+        primitiveWrapperMap.put(Boolean.TYPE, Boolean.class);
+        primitiveWrapperMap.put(Byte.TYPE, Byte.class);
+        primitiveWrapperMap.put(Character.TYPE, Character.class);
+        primitiveWrapperMap.put(Short.TYPE, Short.class);
+        primitiveWrapperMap.put(Integer.TYPE, Integer.class);
+        primitiveWrapperMap.put(Long.TYPE, Long.class);
+        primitiveWrapperMap.put(Double.TYPE, Double.class);
+        primitiveWrapperMap.put(Float.TYPE, Float.class);
+        primitiveWrapperMap.put(Void.TYPE, Void.TYPE);
+        wrapperPrimitiveMap.put(Boolean.class, Boolean.TYPE);
+        wrapperPrimitiveMap.put(Byte.class, Byte.TYPE);
+        wrapperPrimitiveMap.put(Character.class, Character.TYPE);
+        wrapperPrimitiveMap.put(Short.class, Short.TYPE);
+        wrapperPrimitiveMap.put(Integer.class, Integer.TYPE);
+        wrapperPrimitiveMap.put(Long.class, Long.TYPE);
+        wrapperPrimitiveMap.put(Double.class, Double.TYPE);
+        wrapperPrimitiveMap.put(Float.class, Float.TYPE);
+        wrapperPrimitiveMap.put(Void.class, Void.TYPE);
+    }
+
 
     private ReflectionHelper() {
+    }
+
+    public static Optional<Class<?>> getPrimitiveType(final Class<?> cls) {
+        Assert.requireNonNull(cls, "cls");
+        return Optional.ofNullable(wrapperPrimitiveMap.get(cls));
+    }
+
+    public static Optional<Class<?>> getWrapperClass(final Class<?> cls) {
+        Assert.requireNonNull(cls, "cls");
+        return Optional.ofNullable(primitiveWrapperMap.get(cls));
     }
 
     public static <T> T getPrivileged(final Field field, final Object bean) {
@@ -45,11 +86,11 @@ public class ReflectionHelper {
         return (T) AccessController.doPrivileged(new PrivilegedAction<Object>() {
             @Override
             public Object run() {
-                boolean wasAccessible = field.isAccessible();
+                final boolean wasAccessible = field.isAccessible();
                 try {
                     field.setAccessible(true);
                     return field.get(bean);
-                } catch (IllegalArgumentException | IllegalAccessException ex) {
+                } catch (final IllegalArgumentException | IllegalAccessException ex) {
                     throw new IllegalStateException("Cannot set field: "
                             + field, ex);
                 } finally {
@@ -65,12 +106,12 @@ public class ReflectionHelper {
         AccessController.doPrivileged(new PrivilegedAction<Void>() {
             @Override
             public Void run() {
-                boolean wasAccessible = field.isAccessible();
+                final boolean wasAccessible = field.isAccessible();
                 try {
                     field.setAccessible(true);
                     field.set(bean, value);
                     return null; // return nothing...
-                } catch (IllegalArgumentException | IllegalAccessException ex) {
+                } catch (final IllegalArgumentException | IllegalAccessException ex) {
                     throw new IllegalStateException("Cannot set field: "
                             + field, ex);
                 } finally {
@@ -80,19 +121,21 @@ public class ReflectionHelper {
         });
     }
 
-    public static void invokePrivileged(final Method method, final Object instance, final Object... args) {
+    public static <T> T invokePrivileged(final Method method, final Object instance, final Object... args) {
         Assert.requireNonNull(method, "method");
         Assert.requireNonNull(instance, "instance");
-        AccessController.doPrivileged(new PrivilegedAction<Void>() {
+        return AccessController.doPrivileged((PrivilegedAction<T>) new PrivilegedAction<Object>() {
             @Override
-            public Void run() {
-                boolean wasAccessible = method.isAccessible();
+            public Object run() {
+                final boolean wasAccessible = method.isAccessible();
                 try {
                     method.setAccessible(true);
-                    method.invoke(instance, args);
-                    return null; // return nothing...
-                } catch (Exception ex) {
-                    throw new IllegalArgumentException("Cannot invoke method '"
+                    return method.invoke(instance, args);
+                } catch (final InvocationTargetException ex) {
+                    throw new DolphinRuntimeException("Error while calling method '"
+                            + method.getName() + "' on instance of type '" + instance.getClass() + "'. Method details: " + method.toGenericString(), ex);
+                } catch (final IllegalAccessException ex) {
+                    throw new DolphinRuntimeException("Cannot invoke method '"
                             + method.getName() + "' on instance of type '" + instance.getClass() + "'. Method details: " + method.toGenericString(), ex);
                 } finally {
                     method.setAccessible(wasAccessible);
@@ -107,7 +150,7 @@ public class ReflectionHelper {
 
         Class<?> i = type;
         while (i != null && i != Object.class) {
-            for (Field field : Arrays.asList(i.getDeclaredFields())) {
+            for (final Field field : Arrays.asList(i.getDeclaredFields())) {
                 if (field.getName().equals(name)) {
                     return field;
                 }
@@ -118,7 +161,7 @@ public class ReflectionHelper {
 
     public static List<Field> getInheritedDeclaredFields(final Class<?> type) {
         Assert.requireNonNull(type, "type");
-        List<Field> result = new ArrayList<>();
+        final List<Field> result = new ArrayList<>();
         Class<?> i = type;
         while (i != null && i != Object.class) {
             result.addAll(Arrays.asList(i.getDeclaredFields()));
@@ -129,7 +172,7 @@ public class ReflectionHelper {
 
     public static List<Method> getInheritedDeclaredMethods(final Class<?> type) {
         Assert.requireNonNull(type, "type");
-        List<Method> result = new ArrayList<>();
+        final List<Method> result = new ArrayList<>();
         Class<?> i = type;
         while (i != null && i != Object.class) {
             result.addAll(Arrays.asList(i.getDeclaredMethods()));
@@ -138,6 +181,11 @@ public class ReflectionHelper {
         return result;
     }
 
+    public static Optional<Method> getMethod(final Class<?> type, final String name, final Class... paramTypes) {
+        return getInheritedDeclaredMethods(type).stream()
+                .filter(m -> m.getName().equals(name))
+                .filter(m -> Arrays.equals(m.getParameterTypes(), paramTypes)).findFirst();
+    }
 
 
     public static boolean isProxyInstance(final Object bean) {
@@ -148,7 +196,7 @@ public class ReflectionHelper {
     public static Class getTypeParameter(final Field field) {
         Assert.requireNonNull(field, "field");
         try {
-            ParameterizedType pType = (ParameterizedType) field.getGenericType();
+            final ParameterizedType pType = (ParameterizedType) field.getGenericType();
             if (pType.getActualTypeArguments().length > 0) {
                 return (Class) pType.getActualTypeArguments()[0];
             }
@@ -166,5 +214,76 @@ public class ReflectionHelper {
     public static boolean isPrimitiveNumber(final Class<?> cls) {
         Assert.requireNonNull(cls, "cls");
         return (Integer.TYPE.equals(cls) || Long.TYPE.equals(cls) || Double.TYPE.equals(cls) || Float.TYPE.equals(cls) || Short.TYPE.equals(cls) || Byte.TYPE.equals(cls));
+    }
+
+    public static boolean hasGenericTypeCount(final ParameterizedType type, final int count) {
+        Assert.requireNonNull(type, "type");
+        if (count < 0) {
+            throw new IllegalArgumentException("count must be >= 0");
+        }
+        return type.getActualTypeArguments().length == count;
+    }
+
+    public static Type getGenericType(final ParameterizedType type, final int index) {
+        Assert.requireNonNull(type, "type");
+        if (index < 0) {
+            throw new IllegalArgumentException("Can not get generic type at negativ index.");
+        }
+        if (type.getActualTypeArguments().length <= index) {
+            throw new IllegalArgumentException("Can not get generic type at index " + index + " since type has only " + type.getActualTypeArguments().length + " generic parameters. Type: " + type);
+        }
+        return type.getActualTypeArguments()[0];
+    }
+
+    public static ParameterizedType toParameterizedType(final Type type) {
+        Assert.requireNonNull(type, "type");
+        if (isParameterizedType(type)) {
+            return (ParameterizedType) type;
+        } else {
+            throw new IllegalArgumentException("The given type is not a ParameterizedType. Type: " + type);
+        }
+    }
+
+    public static boolean isParameterizedType(Type type) {
+        Assert.requireNonNull(type, "type");
+        if (type instanceof ParameterizedType) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static WildcardType toWildcardType(final Type type) {
+        if (isWildcardType(type)) {
+            return (WildcardType) type;
+        } else {
+            throw new IllegalArgumentException("The given type is not a WildcardType. Type: " + type);
+        }
+    }
+
+    public static boolean isWildcardType(final Type type) {
+        Assert.requireNonNull(type, "type");
+        if (type instanceof WildcardType) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static Class toClass(final Type type) {
+        if (isClass(type)) {
+            return (Class) type;
+        } else {
+            throw new IllegalArgumentException("The given type is not a class. Type: " + type);
+        }
+    }
+
+    public static boolean isClass(final Type type) {
+        Assert.requireNonNull(type, "type");
+        if (type instanceof Class) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

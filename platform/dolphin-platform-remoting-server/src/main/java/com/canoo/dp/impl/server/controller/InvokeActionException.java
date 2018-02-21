@@ -27,12 +27,6 @@ import static org.apiguardian.api.API.Status.INTERNAL;
 public class InvokeActionException extends Exception {
 
     /**
-     * Default constructor
-     */
-    public InvokeActionException() {
-    }
-
-    /**
      * Constructor
      * @param message the message
      */
@@ -49,11 +43,4 @@ public class InvokeActionException extends Exception {
         super(message, cause);
     }
 
-    /**
-     * Constructor
-     * @param cause the cause
-     */
-    public InvokeActionException(Throwable cause) {
-        super(cause);
-    }
 }
