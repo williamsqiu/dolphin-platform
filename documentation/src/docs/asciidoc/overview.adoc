@@ -44,6 +44,7 @@ image::managed-beans.png[]
 
 All modules of the Platform contains a public and a private API. Since the Platform is not based on Java 9 at the moment and not Java 9 specific builds are provided the private API can still be accessed from application developers. Once the Dolphin Platform provides Java 9 based builds with real Java module descriptions the private API will be hidden.
 The sources of the Platform are divided in 2 basic packages that defines the private and public API:
+
 * all sources under `com.canoo.platform.*` are part of the public API
 * all sources under `com.canoo.dp.impl.*` are part of the private API
 
@@ -166,6 +167,9 @@ On the server site the controller instances are completely managed by the underl
 
 image::rpm-eventbus.png[]
 
+The functionality of the remoting layer can be used to create complete applications. Next to this this feature can be easily integrated in any REST based application. By doing so a specific widget can be added to any application to show dynamic (real time) data in a frontend.
+
+image::rpm-widget.png[]
 
 == Validation
 
