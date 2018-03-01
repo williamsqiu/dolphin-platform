@@ -80,10 +80,10 @@ public class ControllerValidatorTest {
     public void testDolphinActionParameterAnnotation() throws ControllerValidationException{
         controllerValidator.validate(ControllerWithDolphinActionParam.class);
     }
-    @Test(expectedExceptions = ControllerValidationException.class)
-    public void testControllerMusthaveDolphinModel() throws ControllerValidationException{
-        controllerValidator.validate(ControllerWithoutDolphinModel.class);
-    }
+//    @Test(expectedExceptions = ControllerValidationException.class)
+//    public void testControllerMusthaveDolphinModel() throws ControllerValidationException{
+//        controllerValidator.validate(ControllerWithoutDolphinModel.class);
+//    }
     @Test(expectedExceptions = ControllerValidationException.class)
     public void testControllerCannoHaveMoreThanOneDolphinModel() throws ControllerValidationException{
         controllerValidator.validate(ControllerWithMoreThanOneDolphinModel.class);
