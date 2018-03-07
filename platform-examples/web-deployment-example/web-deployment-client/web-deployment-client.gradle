@@ -30,9 +30,23 @@ dependencies {
 
 jar {
     archiveName = 'fxclient.jar'
-    from {
-        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    doFirst {
+        def serviceDir = file("$buildDir/META-INF/services")
+        serviceDir.deleteDir()
+        serviceDir.mkdirs()
+
+        // copy all service files from deps to buildDir
+        for(file in configurations.runtime) {
+            zipTree(file).matching{ include 'META-INF/services/*' }.each { f ->
+                new File(serviceDir, f.name) << f.getText("UTF-8")+"\n"
+            }
+        }
     }
+
+    from(configurations.runtime.collect{ it.isDirectory() ? it : zipTree(it) }) {
+        exclude 'META-INF/**' // Don't let Gradle merge service files
+    }
+    from fileTree(buildDir).matching{ include 'META-INF/services/*' }
 }
 
 jar.doLast {
@@ -45,7 +59,7 @@ jar.doLast {
                 attribute(name: 'codebase', value: '*')
             }
         }
-        
+
         ant.signjar(
                 alias: "test",
                 jar: it,
