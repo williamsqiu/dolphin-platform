@@ -71,6 +71,7 @@ The following GitHub repositories provides additional sources for the Dolphin Pl
 * [JavaScript client API Repository](https://github.com/canoo/dolphin-platform-js)
 * [AngularJS client API Repository](https://github.com/canoo/dolphin-platform-angularjs)
 * [Polymer client API Repository](https://github.com/canoo/dolphin-platform-polymer)
+* [Dolphin Platform examples repository](https://github.com/canoo/dolphin-platform-examples)
 * [Maven archetype Repository](https://github.com/canoo/dolphin-platform-spring-boot-archetype)
 * [Lazybones template Repository](https://github.com/canoo/dolphin-platform-lazybones-templates)
 
