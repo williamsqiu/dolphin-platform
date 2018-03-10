@@ -4,31 +4,45 @@ import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.metrics.Meter;
 import com.canoo.platform.metrics.MeterTag;
 
-import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
-public class AbstractMeter implements Meter {
+public abstract class AbstractMeter implements Meter {
 
-    private final String name;
+    private final MeterIdentifier identifier;
 
-    private final List<MeterTag> tags;
+    private final AutoCloseable closeable;
 
-    public AbstractMeter(final String name, final List<MeterTag> tags) {
-        this.name = Assert.requireNonBlank(name, "name");
-        Assert.requireNonNull(tags, "tags");
-        this.tags = Collections.unmodifiableList(tags);
+    public AbstractMeter(final MeterIdentifier identifier, final AutoCloseable closeable) {
+        this.identifier = Assert.requireNonNull(identifier, "identifier");
+        this.closeable = Assert.requireNonNull(closeable, "closeable");
     }
 
     @Override
     public String getName() {
-        return name;
+        return identifier.getName();
     }
 
     @Override
     public List<MeterTag> getTags() {
-        return tags;
+        return identifier.getTags();
     }
 
     @Override
-    public void close() throws Exception {}
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        final AbstractMeter that = (AbstractMeter) o;
+        return Objects.equals(identifier, that.identifier);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(identifier);
+    }
+
+    @Override
+    public void close() throws Exception {
+        closeable.close();
+    }
 }

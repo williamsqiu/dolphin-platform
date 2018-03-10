@@ -2,10 +2,9 @@ package com.canoo.dp.impl.platform.server.metrics.noop;
 
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.platform.server.metrics.AbstractMeter;
-import com.canoo.platform.metrics.MeterTag;
+import com.canoo.dp.impl.platform.server.metrics.MeterIdentifier;
 import com.canoo.platform.metrics.types.Timer;
 
-import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
@@ -13,8 +12,8 @@ import java.util.function.Supplier;
 
 public class NoopTimer extends AbstractMeter implements Timer {
 
-    public NoopTimer(final String name, final List<MeterTag> tags) {
-        super(name, tags);
+    public NoopTimer(final MeterIdentifier identifier, AutoCloseable closeable) {
+        super(identifier, closeable);
     }
 
     @Override
