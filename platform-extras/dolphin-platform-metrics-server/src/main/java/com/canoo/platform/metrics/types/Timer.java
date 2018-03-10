@@ -1,6 +1,6 @@
 package com.canoo.platform.metrics.types;
 
-import com.canoo.platform.metrics.Meter;
+import com.canoo.platform.metrics.Metric;
 
 import java.time.Duration;
 import java.util.concurrent.Callable;
@@ -8,7 +8,7 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 
-public interface Timer extends Meter {
+public interface Timer extends Metric {
 
     void record(long amount, TimeUnit unit);
 

@@ -1,13 +1,13 @@
 package com.canoo.dp.impl.platform.server.metrics;
 
 import com.canoo.dp.impl.platform.core.Assert;
-import com.canoo.platform.metrics.Meter;
-import com.canoo.platform.metrics.MeterTag;
+import com.canoo.platform.metrics.Metric;
+import com.canoo.platform.metrics.Tag;
 
 import java.util.List;
 import java.util.Objects;
 
-public abstract class AbstractMeter implements Meter {
+public abstract class AbstractMeter implements Metric {
 
     private final MeterIdentifier identifier;
 
@@ -24,7 +24,7 @@ public abstract class AbstractMeter implements Meter {
     }
 
     @Override
-    public List<MeterTag> getTags() {
+    public List<Tag> getTags() {
         return identifier.getTags();
     }
 

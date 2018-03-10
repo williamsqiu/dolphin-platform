@@ -1,7 +1,7 @@
 package com.canoo.dp.impl.platform.server.metrics;
 
 import com.canoo.dp.impl.platform.core.Assert;
-import com.canoo.platform.metrics.MeterTag;
+import com.canoo.platform.metrics.Tag;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -12,9 +12,9 @@ public class MeterIdentifier {
 
     private final String name;
 
-    private final List<MeterTag> tags;
+    private final List<Tag> tags;
 
-    public MeterIdentifier(final String name, final MeterTag... tags) {
+    public MeterIdentifier(final String name, final Tag... tags) {
         this.name = Assert.requireNonBlank(name, "name");
         Assert.requireNonNull(tags, "tags");
         this.tags = Collections.unmodifiableList(Arrays.asList(tags));
@@ -24,7 +24,7 @@ public class MeterIdentifier {
         return name;
     }
 
-    public List<MeterTag> getTags() {
+    public List<Tag> getTags() {
         return tags;
     }
 

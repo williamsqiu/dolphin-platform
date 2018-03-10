@@ -2,9 +2,9 @@ package com.canoo.platform.metrics;
 
 import java.util.List;
 
-public interface Meter extends AutoCloseable {
+public interface Metric extends AutoCloseable {
 
     String getName();
 
-    List<MeterTag> getTags();
+    List<Tag> getTags();
 }

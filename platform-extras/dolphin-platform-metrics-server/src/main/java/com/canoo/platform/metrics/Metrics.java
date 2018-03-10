@@ -6,10 +6,10 @@ import com.canoo.platform.metrics.types.Timer;
 
 public interface Metrics {
 
-    Counter getOrCreateCounter(String name, MeterTag... tags);
+    Counter getOrCreateCounter(String name, Tag... tags);
 
-    Timer getOrCreateTimer(String name, MeterTag... tags);
+    Timer getOrCreateTimer(String name, Tag... tags);
 
-    Gauge getOrCreateGauge(String name, MeterTag... tags);
+    Gauge getOrCreateGauge(String name, Tag... tags);
 
 }
