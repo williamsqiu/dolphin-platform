@@ -1,6 +1,5 @@
 package com.canoo.dp.impl.platform.server.metrics.noop;
 
-import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.platform.server.metrics.AbstractMeter;
 import com.canoo.dp.impl.platform.server.metrics.MeterIdentifier;
 import com.canoo.platform.metrics.types.Timer;
@@ -16,11 +15,5 @@ public class NoopTimer extends AbstractMeter implements Timer {
     @Override
     public void record(final long amount, final TimeUnit unit) {
 
-    }
-
-    @Override
-    public void record(final Runnable runnable) {
-        Assert.requireNonNull(runnable, "runnable");
-        runnable.run();
     }
 }
