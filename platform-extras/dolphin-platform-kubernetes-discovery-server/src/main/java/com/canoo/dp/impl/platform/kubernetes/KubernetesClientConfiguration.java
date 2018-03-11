@@ -15,10 +15,20 @@ public class KubernetesClientConfiguration {
     @Value("${dolphinPlatform.kubernetes.masterUrl}")
     private String masterUrl;
 
+    @Value("${dolphinPlatform.kubernetes.user}")
+    private String user;
+
+    @Value("${dolphinPlatform.kubernetes.password}")
+    private String password;
+
     @Bean("kubernetesClient")
     @ApplicationScope
     public KubernetesClient createKubernetesClient() {
-        Config config = new ConfigBuilder().withMasterUrl(masterUrl).build();
+        Config config = new ConfigBuilder()
+                .withMasterUrl(masterUrl)
+                .withUsername(user)
+                .withPassword(password)
+                .build();
         return new DefaultKubernetesClient(config);
     }
 }
