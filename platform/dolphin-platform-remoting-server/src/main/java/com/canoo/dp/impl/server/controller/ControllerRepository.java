@@ -28,7 +28,7 @@ import static org.apiguardian.api.API.Status.INTERNAL;
 
 /**
  * This repository manages all Dolphin Platform controller classes (see {@link RemotingController}).
- * Internally the class uses the {@link DefaultClasspathScanner} to find all controller classes.
+ * Internally the class uses the {@link ClasspathScanner} to find all controller classes.
  */
 @API(since = "0.x", status = INTERNAL)
 public class ControllerRepository {

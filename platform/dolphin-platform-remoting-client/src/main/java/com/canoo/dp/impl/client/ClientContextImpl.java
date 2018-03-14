@@ -42,9 +42,7 @@ import com.canoo.platform.remoting.client.ControllerProxy;
 import org.apiguardian.api.API;
 
 import java.net.URI;
-import java.net.URL;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -107,18 +105,15 @@ public class ClientContextImpl implements ClientContext {
     public synchronized <T> CompletableFuture<ControllerProxy<T>> createController(final String name) {
         Assert.requireNonBlank(name, "name");
 
-        if(controllerProxyFactory == null) {
+        if (controllerProxyFactory == null) {
             throw new IllegalStateException("connect was not called!");
         }
 
-        return controllerProxyFactory.<T>create(name).handle(new BiFunction<ControllerProxy<T>, Throwable, ControllerProxy<T>>() {
-            @Override
-            public ControllerProxy<T> apply(ControllerProxy<T> controllerProxy, Throwable throwable) {
-                if (throwable != null) {
-                    throw new ControllerInitalizationException(throwable);
-                }
-                return controllerProxy;
+        return controllerProxyFactory.<T>create(name).handle((ControllerProxy<T> controllerProxy, Throwable throwable) -> {
+            if (throwable != null) {
+                throw new ControllerInitalizationException(throwable);
             }
+            return controllerProxy;
         });
     }
 
@@ -131,23 +126,18 @@ public class ClientContextImpl implements ClientContext {
     public synchronized CompletableFuture<Void> disconnect() {
         final CompletableFuture<Void> result = new CompletableFuture<>();
 
-        clientConfiguration.getBackgroundExecutor().execute(new Runnable() {
-            @Override
-            public void run() {
-                dolphinCommandHandler.invokeDolphinCommand(new DestroyContextCommand()).handle(new BiFunction<Void, Throwable, Object>() {
-                    @Override
-                    public Object apply(Void aVoid, Throwable throwable) {
-                        clientConnector.disconnect();
-                        clientSessionStore.resetSession(endpoint);
-                        if (throwable != null) {
-                            result.completeExceptionally(new DolphinRemotingException("Can't disconnect", throwable));
-                        } else {
-                            result.complete(null);
-                        }
-                        return null;
-                    }
-                });
-            }
+        clientConfiguration.getBackgroundExecutor().execute(() -> {
+            dolphinCommandHandler.invokeDolphinCommand(new DestroyContextCommand()).handle((Void aVoid, Throwable throwable) -> {
+
+                clientConnector.disconnect();
+                clientSessionStore.resetSession(endpoint);
+                if (throwable != null) {
+                    result.completeExceptionally(new DolphinRemotingException("Can't disconnect", throwable));
+                } else {
+                    result.complete(null);
+                }
+                return null;
+            });
         });
         return result;
     }
@@ -155,25 +145,18 @@ public class ClientContextImpl implements ClientContext {
     @Override
     public CompletableFuture<Void> connect() {
 
-
         final CompletableFuture<Void> result = new CompletableFuture<>();
         clientConnector.connect();
 
-        clientConfiguration.getBackgroundExecutor().execute(new Runnable() {
-            @Override
-            public void run() {
-                dolphinCommandHandler.invokeDolphinCommand(new CreateContextCommand()).handle(new BiFunction<Void, Throwable, Void>() {
-                    @Override
-                    public Void apply(Void aVoid, Throwable throwable) {
-                        if (throwable != null) {
-                            result.completeExceptionally(new ClientInitializationException("Can't call init action!", throwable));
-                        } else {
-                        }
-                        result.complete(null);
-                        return null;
-                    }
-                });
-            }
+        clientConfiguration.getBackgroundExecutor().execute(() -> {
+            dolphinCommandHandler.invokeDolphinCommand(new CreateContextCommand()).handle((Void aVoid, Throwable throwable) -> {
+                if (throwable != null) {
+                    result.completeExceptionally(new ClientInitializationException("Can't call init action!", throwable));
+                } else {
+                }
+                result.complete(null);
+                return null;
+            });
         });
         return result;
     }

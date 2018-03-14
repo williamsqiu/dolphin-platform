@@ -71,7 +71,7 @@ public class InternalAttributesBean {
 
     public <T> T getModel() {
         if(modelAttribute.getValue() == null) {
-            throw new RuntimeException("Dolphin Platform internal error: No model defined");
+            return null;
         }
         return (T) beanRepository.getBean(modelAttribute.getValue().toString());
     }
