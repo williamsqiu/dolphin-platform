@@ -42,7 +42,7 @@ public class ControllerWithoutModelTest extends SpringTestNGControllerTest {
     }
 
     @Test
-    public void testDummy(){
-        Assert.assertTrue(true);
+    public void testGetModel(){
+        Assert.assertNull(controller.getModel());
     }
 }

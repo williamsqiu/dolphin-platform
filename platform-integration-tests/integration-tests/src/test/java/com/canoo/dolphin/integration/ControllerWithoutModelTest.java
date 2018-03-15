@@ -29,7 +29,7 @@ public class ControllerWithoutModelTest extends AbstractIntegrationTest {
         try {
             ClientContext context = connect(endpoint);
             ControllerProxy controller = createController(context, CONTROLLER_WITHOUT_MODEL_NAME);
-
+            Assert.assertNull(controller.getModel());
             destroy(controller, endpoint);
             disconnect(context, endpoint);
         } catch (Exception e) {
