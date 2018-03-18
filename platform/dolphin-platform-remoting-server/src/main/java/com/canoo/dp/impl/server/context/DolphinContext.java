@@ -117,6 +117,8 @@ public class DolphinContext {
 
     private boolean hasResponseCommands = false;
 
+    private boolean active = false;
+
     public DolphinContext(final RemotingConfiguration configuration, ClientSession clientSession, ClientSessionProvider clientSessionProvider, ManagedBeanFactory beanFactory, ControllerRepository controllerRepository, Consumer<DolphinContext> onDestroyCallback) {
         this.configuration = Assert.requireNonNull(configuration, "configuration");
         Assert.requireNonNull(beanFactory, "beanFactory");
@@ -321,12 +323,17 @@ public class DolphinContext {
     }
 
     public List<Command> handle(final List<Command> commands) {
+        active = true;
+        try {
         final List<Command> results = new LinkedList<>();
-        for (Command command : commands) {
-            results.addAll(serverConnector.receive(command));
-            hasResponseCommands = !results.isEmpty();
+            for (final Command command : commands) {
+                results.addAll(serverConnector.receive(command));
+                hasResponseCommands = !results.isEmpty();
+            }
+            return results;
+        } finally {
+            active = false;
         }
-        return results;
     }
 
     public ClientSession getClientSession() {
@@ -361,5 +368,9 @@ public class DolphinContext {
 
     public <T> Future<T> callLater(final Callable<T> callable) {
         return taskQueue.addTask(callable);
+    }
+
+    public boolean isActive() {
+        return active;
     }
 }

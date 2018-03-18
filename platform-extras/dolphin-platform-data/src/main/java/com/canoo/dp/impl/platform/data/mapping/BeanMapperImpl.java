@@ -15,30 +15,37 @@
  */
 package com.canoo.dp.impl.platform.data.mapping;
 
+import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.platform.data.CrudService;
 import com.canoo.dp.impl.platform.data.EntityWithId;
 import com.canoo.platform.remoting.BeanManager;
 
 import java.io.Serializable;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.WeakHashMap;
-import java.util.stream.Collectors;
 
 public class BeanMapperImpl implements BeanMapper {
 
-    private static final WeakHashMap<Object, Map<Class<?>, Serializable>> beanToIdMapper = new WeakHashMap<>();
+    private final WeakHashMap<Object, Map<Class<?>, Serializable>> beanToIdMapper = new WeakHashMap<>();
 
-    private static final Map<Class, Map<Class<?>, BeanConverter>> converters = new HashMap<>();
+    private final Map<Class, Map<Class<?>, BeanConverter>> converters = new HashMap<>();
 
-    private static final Map<Class, CrudService> services = new HashMap<>();
+    private final Map<Class, CrudService> services = new HashMap<>();
 
     private final BeanManager beanManager;
 
     public BeanMapperImpl(final BeanManager beanManager) {
         this.beanManager = beanManager;
+    }
+
+    public synchronized <ID extends Serializable, B, E extends EntityWithId<ID>> void addConverter(final Class<B> beanClass, final Class<E> entityClass, BeanConverter<ID, B, E> converter) {
+        Assert.requireNonNull(beanClass, "beanClass");
+        Assert.requireNonNull(entityClass, "entityClass");
+        Assert.requireNonNull(converter, "converter");
+        final Map<Class<?>, BeanConverter> map = converters.computeIfAbsent(entityClass, e -> new HashMap<>());
+        map.put(beanClass, converter);
     }
 
     private synchronized <ID extends Serializable, B, E extends EntityWithId<ID>> BeanConverter<ID, B, E> getConverter(final Class<E> entityClass, final Class<B> beanClass) {
@@ -59,11 +66,10 @@ public class BeanMapperImpl implements BeanMapper {
     }
 
     @Override
-    public <ID extends Serializable, B, E extends EntityWithId<ID>> B toBean(final E entity, final Class<B> beanClass) {
+    public <ID extends Serializable, B, E extends EntityWithId<ID>> B updateBean(final E entity, final B bean, final Class<B> beanClass) {
         final Class<E> entityClass = (Class<E>) entity.getClass();
         final ID id = entity.getId();
         final BeanConverter<ID, B, E> converter = getConverter(entityClass, beanClass);
-        final B bean = beanManager.create(beanClass);
         addMapping(bean, entityClass, id);
         return converter.enrichtBeanByEntity(bean, entity);
     }
@@ -80,16 +86,18 @@ public class BeanMapperImpl implements BeanMapper {
     }
 
     @Override
-    public <ID extends Serializable, B, E extends EntityWithId<ID>> List<B> toBeanList(final List<E> entityList, final Class<B> beanClass) {
-        return entityList.stream()
-                .map(e -> toBean(e, beanClass))
-                .collect(Collectors.toList());
+    public <ID extends Serializable, B, E extends EntityWithId<ID>> B toBean(final E entity, final Class<B> beanClass) {
+        throw new RuntimeException("Not yet implemented!");
     }
 
     @Override
-    public <ID extends Serializable, B, E extends EntityWithId<ID>> List<E> toEntityList(final List<B> beanList, final Class<E> entityClass) {
-        return beanList.stream()
-                .map(b -> toEntity(b, entityClass))
-                .collect(Collectors.toList());
+    public <ID extends Serializable, B, E extends EntityWithId<ID>> boolean hasBeanForEntity(final E entity, final Class<B> beanClass) {
+        return findBeanForEntity(entity, beanClass) != null;
     }
+
+    @Override
+    public <ID extends Serializable, B, E extends EntityWithId<ID>> B findBeanForEntity(final E entity, final Class<B> beanClass) {
+        throw new RuntimeException("Not yet implemented!");
+    }
+
 }
