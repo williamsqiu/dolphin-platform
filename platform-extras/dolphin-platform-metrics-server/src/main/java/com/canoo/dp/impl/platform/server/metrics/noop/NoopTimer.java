@@ -8,7 +8,7 @@ import java.util.concurrent.TimeUnit;
 
 public class NoopTimer extends AbstractMeter implements Timer {
 
-    public NoopTimer(final MeterIdentifier identifier, AutoCloseable closeable) {
+    public NoopTimer(final MeterIdentifier identifier, final AutoCloseable closeable) {
         super(identifier, closeable);
     }
 

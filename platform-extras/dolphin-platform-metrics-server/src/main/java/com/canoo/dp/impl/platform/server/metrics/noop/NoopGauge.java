@@ -6,7 +6,7 @@ import com.canoo.platform.metrics.types.Gauge;
 
 public class NoopGauge extends AbstractMeter implements Gauge {
 
-    public NoopGauge(final MeterIdentifier identifier, AutoCloseable closeable) {
+    public NoopGauge(final MeterIdentifier identifier, final AutoCloseable closeable) {
         super(identifier, closeable);
     }
 
