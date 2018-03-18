@@ -29,6 +29,8 @@ include 'platform-extras/dolphin-platform-data-audit'
 include 'platform-extras/dolphin-platform-crud'
 include 'platform-extras/dolphin-platform-crud-jpa'
 
+include 'platform-extras/dolphin-platform-metrics-server'
+
 include 'platform-extras/dolphin-platform-reactive'
 include 'platform-extras/dolphin-platform-security-common'
 include 'platform-extras/dolphin-platform-security-client'
