@@ -40,10 +40,10 @@ public class DiscoveryServiceImpl implements DiscoveryService {
                     throw new DolphinRuntimeException("Can not get address for name " + name, e);
                 }
                 try {
-                    URL url = new URL(r.getContent());
+                    final URL url = new URL(r.getContent());
                     cache.put(name, url);
                     return url;
-                } catch (MalformedURLException e1) {
+                } catch (final MalformedURLException e1) {
                     throw new DolphinRuntimeException("Can not get address for name " + name, e);
                 }
             });
@@ -63,10 +63,10 @@ public class DiscoveryServiceImpl implements DiscoveryService {
                     throw new DolphinRuntimeException("Can not get address for namespace " + namespace + " and name " + name, e);
                 }
                 try {
-                    URL url = new URL(r.getContent());
+                    final URL url = new URL(r.getContent());
                     cache.put(namespace + ":" + name, url);
                     return url;
-                } catch (MalformedURLException e1) {
+                } catch (final MalformedURLException e1) {
                     throw new DolphinRuntimeException("Can not get address for namespace " + namespace + " and name " + name, e);
                 }
             });

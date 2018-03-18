@@ -40,22 +40,22 @@ public class KubernetesURLStreamHandlerFactory implements URLStreamHandlerProvid
             new URLStreamHandler(){
 
                 @Override
-                protected URLConnection openConnection(final URL u) throws IOException {
-                    Assert.requireNonNull(u, "u");
-                    final String serviceName = u.getHost();
+                protected URLConnection openConnection(final URL url) throws IOException {
+                    Assert.requireNonNull(url, "url");
+                    final String serviceName = url.getHost();
                     if(serviceName.contains(":")) {
                         final String namespace = serviceName.split(":")[0];
                         final String name = serviceName.split(":")[1];
                         try {
                             return discoveryService.getAddress(namespace, name).get().openConnection();
-                        } catch (Exception e) {
+                        } catch (final Exception e) {
                             throw new IOException("Can not convert service URL", e);
                         }
                     } else {
                         final String name = serviceName;
                         try {
                             return discoveryService.getAddress(name).get().openConnection();
-                        } catch (Exception e) {
+                        } catch (final Exception e) {
                             throw new IOException("Can not convert service URL", e);
                         }
                     }

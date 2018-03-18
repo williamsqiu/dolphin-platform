@@ -8,7 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @EnableDolphinPlatform
 public class KubernetesDiscoveryServer {
 
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         SpringApplication.run(KubernetesDiscoveryServer.class);
     }
 

@@ -24,7 +24,7 @@ public class KubernetesClientConfiguration {
     @Bean("kubernetesClient")
     @ApplicationScope
     public KubernetesClient createKubernetesClient() {
-        Config config = new ConfigBuilder()
+        final Config config = new ConfigBuilder()
                 .withMasterUrl(masterUrl)
                 .withUsername(user)
                 .withPassword(password)
