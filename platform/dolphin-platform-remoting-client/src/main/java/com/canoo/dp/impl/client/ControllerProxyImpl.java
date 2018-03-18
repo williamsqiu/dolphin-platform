@@ -63,7 +63,7 @@ public class ControllerProxyImpl<T> implements ControllerProxy<T> {
         this.clientConnector = Assert.requireNonNull(clientConnector, "clientConnector");
         this.controllerId = Assert.requireNonBlank(controllerId, "controllerId");
         this.controllerProxyFactory = Assert.requireNonNull(controllerProxyFactory, "controllerProxyFactory");
-        this.model = Assert.requireNonNull(model, "model");
+        this.model = model;
         this.platformBeanRepository = Assert.requireNonNull(platformBeanRepository, "platformBeanRepository");
         this.converters = Assert.requireNonNull(converters, "converters");
     }
@@ -108,16 +108,14 @@ public class ControllerProxyImpl<T> implements ControllerProxy<T> {
         }
 
         final CompletableFuture<Void> result = new CompletableFuture<>();
-        clientConnector.send(callActionCommand, new OnFinishedHandler(){
-            @Override
-            public void onFinished() {
+        clientConnector.send(callActionCommand, () -> {
+
                 if (bean.isError()) {
                     result.completeExceptionally(new ControllerActionException("Error on calling action on the server. Please check the server log."));
                 } else {
                     result.complete(null);
                 }
                 bean.unregister();
-            }
         });
         return result;
     }
@@ -136,12 +134,9 @@ public class ControllerProxyImpl<T> implements ControllerProxy<T> {
         final DestroyControllerCommand destroyControllerCommand = new DestroyControllerCommand();
         destroyControllerCommand.setControllerId(controllerId);
 
-        clientConnector.send(destroyControllerCommand, new OnFinishedHandler() {
-            @Override
-            public void onFinished() {
-                model = null;
-                ret.complete(null);
-            }
+        clientConnector.send(destroyControllerCommand, () -> {
+            model = null;
+            ret.complete(null);
         });
         return ret;
     }
@@ -150,14 +145,11 @@ public class ControllerProxyImpl<T> implements ControllerProxy<T> {
     public <C> CompletableFuture<ControllerProxy<C>> createController(String name) {
         Assert.requireNonBlank(name, "name");
 
-        return controllerProxyFactory.<C>create(name, controllerId).handle(new BiFunction<ControllerProxy<C>, Throwable, ControllerProxy<C>>() {
-            @Override
-            public ControllerProxy<C> apply(ControllerProxy<C> cControllerProxy, Throwable throwable) {
-                if (throwable != null) {
-                    throw new ControllerInitalizationException(throwable);
-                }
-                return cControllerProxy;
+        return controllerProxyFactory.<C>create(name, controllerId).handle((ControllerProxy<C> cControllerProxy, Throwable throwable) -> {
+            if (throwable != null) {
+                throw new ControllerInitalizationException(throwable);
             }
+            return cControllerProxy;
         });
     }
 }

@@ -61,10 +61,6 @@ public class ControllerValidator {
         if (isMoreThanOnePreDestroy(clazz)) {
             throw new ControllerValidationException("Only one PreDestroy method is allowed in Controller " + ControllerUtils.getControllerName(clazz));
         }
-
-        if (!isDolphinModelPresent(clazz)) {
-            throw new ControllerValidationException("Controller " + ControllerUtils.getControllerName(clazz) + " must have a RemotingModel.");
-        }
         if (isMoreThanOneDolphinModel(clazz)) {
             throw new ControllerValidationException("Controller " + ControllerUtils.getControllerName(clazz) + " should not contain more than one RemotingModel.");
         }
@@ -149,15 +145,6 @@ public class ControllerValidator {
                 findAny().
                 map(param -> true).
                 orElse(false);
-    }
-
-    private boolean isDolphinModelPresent(final Class<?> clazz) {
-        List<Field> fields = ReflectionHelper.getInheritedDeclaredFields(clazz);
-        if(null != fields){
-            long count = fields.stream().filter(field -> field.isAnnotationPresent(RemotingModel.class)).count();
-            return count > 0;
-        }
-        return false;
     }
 
     private boolean isMoreThanOneDolphinModel(final Class<?> clazz) {

@@ -80,4 +80,9 @@ public class RemotingContextImpl implements RemotingContext {
     public ClientSession getClientSession() {
         return dolphinContext.getClientSession();
     }
+
+    @Override
+    public boolean isActive() {
+        return dolphinContext.isActive();
+    }
 }

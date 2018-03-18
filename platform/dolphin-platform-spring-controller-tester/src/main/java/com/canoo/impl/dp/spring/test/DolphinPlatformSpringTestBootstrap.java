@@ -132,6 +132,11 @@ public class DolphinPlatformSpringTestBootstrap {
             public ClientSession getClientSession() {
                 return testConfiguration.getDolphinTestContext().getClientSession();
             }
+
+            @Override
+            public boolean isActive() {
+                return true;
+            }
         };
     }
 

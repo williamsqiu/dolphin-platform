@@ -67,6 +67,19 @@ public class SimpleCrudService<E extends AbstractEntity> implements CrudService<
     }
 
     @Override
+    public E reset(final E entity) {
+        Assert.requireNonNull(entity , "entity");
+        final Long id = entity.getId();
+
+        if(id != null) {
+            entityManager.detach(entity);
+            return findById(id);
+        } else {
+            return createNewInstance();
+        }
+    }
+
+    @Override
     public E save(final E entity) {
         Assert.requireNonNull(entity , "entity");
         if (entity.getId() == null) {

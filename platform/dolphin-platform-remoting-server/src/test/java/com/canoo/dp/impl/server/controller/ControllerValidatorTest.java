@@ -81,10 +81,6 @@ public class ControllerValidatorTest {
         controllerValidator.validate(ControllerWithDolphinActionParam.class);
     }
     @Test(expectedExceptions = ControllerValidationException.class)
-    public void testControllerMusthaveDolphinModel() throws ControllerValidationException{
-        controllerValidator.validate(ControllerWithoutDolphinModel.class);
-    }
-    @Test(expectedExceptions = ControllerValidationException.class)
     public void testControllerCannoHaveMoreThanOneDolphinModel() throws ControllerValidationException{
         controllerValidator.validate(ControllerWithMoreThanOneDolphinModel.class);
     }
@@ -195,8 +191,6 @@ class ControllerWithDolphinActionParam{
     public void dolphinAction(String test) {
     }
 }
-@RemotingController
-class ControllerWithoutDolphinModel{}
 @RemotingController
 class ControllerWithMoreThanOneDolphinModel{
     @RemotingModel
