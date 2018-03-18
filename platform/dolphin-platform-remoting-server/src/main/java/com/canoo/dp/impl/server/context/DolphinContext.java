@@ -291,7 +291,7 @@ public class DolphinContext {
         }
         final Metric metric = ServerTimingFilter.getCurrentTiming().start("TaskExecution", "Execution of Tasks in Long Poll");
         try {
-        taskQueue.executeTasks();
+            taskQueue.executeTasks();
         } finally {
             metric.stop();
         }
@@ -300,7 +300,7 @@ public class DolphinContext {
     private void onGarbageCollection() {
         final Metric metric = ServerTimingFilter.getCurrentTiming().start("RemotingGc", "Garbage collection for the remoting model");
         try {
-        garbageCollector.gc();
+            garbageCollector.gc();
         } finally {
             metric.stop();
         }
@@ -326,7 +326,7 @@ public class DolphinContext {
         active = true;
         try {
         final List<Command> results = new LinkedList<>();
-            for (Command command : commands) {
+            for (final Command command : commands) {
                 results.addAll(serverConnector.receive(command));
                 hasResponseCommands = !results.isEmpty();
             }
