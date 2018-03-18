@@ -1,0 +1,98 @@
+package com.canoo.dp.impl.platform.core.http;
+
+import com.canoo.dp.impl.platform.core.Assert;
+import com.canoo.platform.core.DolphinRuntimeException;
+
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Collections;
+import java.util.Map;
+
+public class URLTemplate {
+
+    private final String urlRepresentation;
+
+    private URLTemplate(final String urlRepresentation) {
+        Assert.requireNonBlank(urlRepresentation, "urlRepresentation");
+        this.urlRepresentation = urlRepresentation;
+    }
+
+    public static URLTemplate of(final String urlRepresentation) {
+        return new URLTemplate(urlRepresentation);
+    }
+
+    public String createString() {
+        return create().toString();
+    }
+
+    public URL create() {
+        try {
+            return new URL(urlRepresentation);
+        } catch (MalformedURLException e) {
+            throw new DolphinRuntimeException("Can not create url for '" + urlRepresentation + "'");
+        }
+    }
+
+    public String createString(final String key, final String value) {
+        return createString(Collections.singletonMap(key, value));
+    }
+
+    public String createString(final String key, final int value) {
+        return createString(key, "" + value);
+    }
+
+    public String createString(final String key, final long value) {
+        return createString(key, "" + value);
+    }
+
+    public String createString(final URLParams params) {
+        return createString(params.asMap());
+    }
+
+    public String createString(final Map<String, String> variables) {
+        return create(variables).toString();
+    }
+
+    public URL create(final String key, final int value) {
+        return create(key, ""+ value);
+    }
+
+    public URL create(final String key, final long value) {
+        return create(key, ""+ value);
+    }
+
+    public URL create(final String key, final String value) {
+        return create(Collections.singletonMap(key, value));
+    }
+
+    public URL create(final URLParams params) {
+        Assert.requireNonNull(params, "params");
+        return create(params.asMap());
+    }
+
+    public URL create(final Map<String, String> variables) {
+        Assert.requireNonNull(variables, "variables");
+
+        final String url = variables.keySet()
+                .stream()
+                .reduce(urlRepresentation, (base, key) -> {
+                    final String value = variables.get(key);
+                    return replace(base, key, value);
+                });
+        try {
+            return new URL(url);
+        } catch (MalformedURLException e) {
+            throw new DolphinRuntimeException("Can not create url for '" + url + "'");
+        }
+    }
+
+    private String replace(final String base, final String key, final String value) {
+        final String toReplace = "{" + key + "}";
+        final String replaced = base.replace(toReplace, value);
+        if(replaced == base) {
+            return replaced;
+        } else {
+            return replace(replaced, key, value);
+        }
+    }
+}
