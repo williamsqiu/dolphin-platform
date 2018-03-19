@@ -27,7 +27,7 @@ public class SimpleUncaughtExceptionHandler implements Thread.UncaughtExceptionH
     private static final Logger LOG = LoggerFactory.getLogger(SimpleUncaughtExceptionHandler.class);
 
     @Override
-    public void uncaughtException(Thread thread, Throwable exception) {
+    public void uncaughtException(final Thread thread, final Throwable exception) {
         Assert.requireNonNull(thread, "thread");
         Assert.requireNonNull(exception, "exception");
         LOG.error("Unhandled error in Dolphin Platform background thread " + thread.getName(), exception);

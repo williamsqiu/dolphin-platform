@@ -28,7 +28,7 @@ import static org.apiguardian.api.API.Status.INTERNAL;
 public class StartLongPollCommandEncoder extends AbstractCommandTranscoder<StartLongPollCommand> {
 
     @Override
-    public JsonObject encode(StartLongPollCommand command) {
+    public JsonObject encode(final StartLongPollCommand command) {
         Assert.requireNonNull(command, "command");
         final JsonObject jsonCommand = new JsonObject();
         jsonCommand.addProperty(ID, START_LONG_POLL_COMMAND_ID);
@@ -36,7 +36,7 @@ public class StartLongPollCommandEncoder extends AbstractCommandTranscoder<Start
     }
 
     @Override
-    public StartLongPollCommand decode(JsonObject jsonObject) {
+    public StartLongPollCommand decode(final JsonObject jsonObject) {
         return new StartLongPollCommand();
     }
 }

@@ -28,7 +28,7 @@ import static org.apiguardian.api.API.Status.DEPRECATED;
 @API(since = "0.x", status = DEPRECATED)
 public class EmptyCommandEncoder extends AbstractCommandTranscoder<EmptyCommand> {
     @Override
-    public JsonObject encode(EmptyCommand command) {
+    public JsonObject encode(final EmptyCommand command) {
         Assert.requireNonNull(command, "command");
         final JsonObject jsonCommand = new JsonObject();
         jsonCommand.addProperty(ID, EMPTY_COMMAND_ID);
@@ -36,7 +36,7 @@ public class EmptyCommandEncoder extends AbstractCommandTranscoder<EmptyCommand>
     }
 
     @Override
-    public EmptyCommand decode(JsonObject jsonObject) {
+    public EmptyCommand decode(final JsonObject jsonObject) {
         return new EmptyCommand();
     }
 }

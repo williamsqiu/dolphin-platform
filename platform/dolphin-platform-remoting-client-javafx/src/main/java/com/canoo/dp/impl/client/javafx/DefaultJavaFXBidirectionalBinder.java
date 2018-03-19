@@ -35,7 +35,7 @@ public class DefaultJavaFXBidirectionalBinder<S> extends DefaultJavaFXBinder<S> 
     }
 
     @Override
-    public <T> Binding bidirectionalTo(final Property<T> property, BidirectionalConverter<T, S> converter) {
+    public <T> Binding bidirectionalTo(final Property<T> property, final BidirectionalConverter<T, S> converter) {
         final Binding unidirectionalBinding = to(property, converter);
 
         final ChangeListener<S> listener = (obs, oldVal, newVal) -> property.set(converter.convertBack(newVal));

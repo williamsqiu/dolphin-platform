@@ -244,7 +244,7 @@ public class ReflectionHelper {
         }
     }
 
-    public static boolean isParameterizedType(Type type) {
+    public static boolean isParameterizedType(final Type type) {
         Assert.requireNonNull(type, "type");
         if (type instanceof ParameterizedType) {
             return true;

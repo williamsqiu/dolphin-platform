@@ -27,24 +27,24 @@ public class BeanDefinitionException extends RuntimeException {
     public BeanDefinitionException() {
     }
 
-    public BeanDefinitionException(Class<?> notValidBeanClass) {
+    public BeanDefinitionException(final Class<?> notValidBeanClass) {
         this("Class " + notValidBeanClass + " is not a valid Dolphin Platform bean class!");
     }
 
-    public BeanDefinitionException(String message) {
+    public BeanDefinitionException(final String message) {
         super(message);
     }
 
-    public BeanDefinitionException(Class<?> notValidBeanClass, Throwable cause) {
+    public BeanDefinitionException(final Class<?> notValidBeanClass, final Throwable cause) {
         this("Class " + notValidBeanClass + " is not a valid Dolphin Platform bean class!", cause);
     }
 
 
-    public BeanDefinitionException(String message, Throwable cause) {
+    public BeanDefinitionException(final String message, final Throwable cause) {
         super(message, cause);
     }
 
-    public BeanDefinitionException(Throwable cause) {
+    public BeanDefinitionException(final Throwable cause) {
         super(cause);
     }
 }

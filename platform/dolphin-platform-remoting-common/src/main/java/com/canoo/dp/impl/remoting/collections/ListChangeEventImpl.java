@@ -30,11 +30,11 @@ public class ListChangeEventImpl<E> implements ListChangeEvent<E> {
     private final ObservableList<E> source;
     private final List<Change<E>> changes;
 
-    public ListChangeEventImpl(ObservableList<E> source, int from, int to, List<E> removedElements) {
+    public ListChangeEventImpl(final ObservableList<E> source, final int from, final int to, final List<E> removedElements) {
         this(source, Collections.<Change<E>>singletonList(new ChangeImpl<>(from, to, removedElements)));
     }
 
-    public ListChangeEventImpl(ObservableList<E> source, List<Change<E>> changes) {
+    public ListChangeEventImpl(final ObservableList<E> source, final List<Change<E>> changes) {
         if (source == null || changes == null) {
             throw new NullPointerException("Parameters 'source' and 'changes' cannot be null");
         }
@@ -61,7 +61,7 @@ public class ListChangeEventImpl<E> implements ListChangeEvent<E> {
         private final int to;
         private final List<S> removedElements;
 
-        public ChangeImpl(int from, int to, List<S> removedElements) {
+        public ChangeImpl(final int from, final int to, final List<S> removedElements) {
             if (from < 0) {
                 throw new IllegalArgumentException("Parameter 'from' cannot be negative");
             }

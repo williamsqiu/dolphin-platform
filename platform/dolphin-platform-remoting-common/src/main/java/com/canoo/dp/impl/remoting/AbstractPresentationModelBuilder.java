@@ -25,9 +25,9 @@ import static org.apiguardian.api.API.Status.INTERNAL;
 @API(since = "0.x", status = INTERNAL)
 public abstract class AbstractPresentationModelBuilder<T extends PresentationModel> implements PresentationModelBuilder<T> {
 
-    protected String type;
+    private String type;
 
-    protected String id;
+    private String id;
 
     public AbstractPresentationModelBuilder() {
         this.id = UUID.randomUUID().toString();
@@ -43,5 +43,21 @@ public abstract class AbstractPresentationModelBuilder<T extends PresentationMod
     public PresentationModelBuilder<T> withId(final String id) {
         this.id = id;
         return this;
+    }
+
+    protected String getType() {
+        return type;
+    }
+
+    protected void setType(final String type) {
+        this.type = type;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(final String id) {
+        this.id = id;
     }
 }

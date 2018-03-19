@@ -31,7 +31,7 @@ public class DoubleDolphinBinder extends AbstractNumericDolphinBinder<Double> {
     }
 
     @Override
-    protected boolean equals(Number n, Double aDouble) {
+    protected boolean equals(final Number n, final Double aDouble) {
         if(n == null && aDouble != null) {
             return false;
         }
@@ -48,7 +48,7 @@ public class DoubleDolphinBinder extends AbstractNumericDolphinBinder<Double> {
     protected BidirectionalConverter<Number, Double> getConverter() {
         return new BidirectionalConverter<Number, Double>() {
             @Override
-            public Number convertBack(Double value) {
+            public Number convertBack(final Double value) {
                 if(value == null) {
                     return 0.0;
                 }
@@ -56,7 +56,7 @@ public class DoubleDolphinBinder extends AbstractNumericDolphinBinder<Double> {
             }
 
             @Override
-            public Double convert(Number value) {
+            public Double convert(final Number value) {
                 if(value == null) {
                     return 0.0;
                 }

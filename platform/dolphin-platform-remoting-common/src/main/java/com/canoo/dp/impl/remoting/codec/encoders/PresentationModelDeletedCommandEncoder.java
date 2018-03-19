@@ -30,7 +30,7 @@ import static org.apiguardian.api.API.Status.DEPRECATED;
 public class PresentationModelDeletedCommandEncoder extends AbstractCommandTranscoder<PresentationModelDeletedCommand> {
 
     @Override
-    public JsonObject encode(PresentationModelDeletedCommand command) {
+    public JsonObject encode(final PresentationModelDeletedCommand command) {
         Assert.requireNonNull(command, "command");
         final JsonObject jsonCommand = new JsonObject();
         jsonCommand.addProperty(ID, PRESENTATION_MODEL_DELETED_COMMAND_ID);
@@ -39,8 +39,8 @@ public class PresentationModelDeletedCommandEncoder extends AbstractCommandTrans
     }
 
     @Override
-    public PresentationModelDeletedCommand decode(JsonObject jsonObject) {
-        PresentationModelDeletedCommand command = new PresentationModelDeletedCommand();
+    public PresentationModelDeletedCommand decode(final JsonObject jsonObject) {
+        final PresentationModelDeletedCommand command = new PresentationModelDeletedCommand();
         command.setPmId(getStringElement(jsonObject, PM_ID));
         return command;
     }

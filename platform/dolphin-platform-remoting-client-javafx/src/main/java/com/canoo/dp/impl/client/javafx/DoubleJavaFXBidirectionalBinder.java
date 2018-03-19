@@ -28,7 +28,7 @@ public class DoubleJavaFXBidirectionalBinder extends AbstractNumericJavaFXBidire
     }
 
     @Override
-    public Double convertNumber(Number value) {
+    public Double convertNumber(final Number value) {
         if (value == null) {
             return null;
         }

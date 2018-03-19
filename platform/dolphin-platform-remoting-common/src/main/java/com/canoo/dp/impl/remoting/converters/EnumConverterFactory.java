@@ -33,7 +33,7 @@ public class EnumConverterFactory extends AbstractConverterFactory {
     private final Map<Class<?>, EnumConverter> enumConverters = new HashMap<>();
 
     @Override
-    public boolean supportsType(Class<?> cls) {
+    public boolean supportsType(final Class<?> cls) {
         return Enum.class.isAssignableFrom(cls);
     }
 
@@ -48,7 +48,7 @@ public class EnumConverterFactory extends AbstractConverterFactory {
     }
 
     @Override
-    public Converter getConverterForType(Class<?> cls) {
+    public Converter getConverterForType(final Class<?> cls) {
         EnumConverter enumConverter = enumConverters.get(cls);
         if (enumConverter == null) {
             enumConverter = new EnumConverter(cls);
@@ -64,12 +64,12 @@ public class EnumConverterFactory extends AbstractConverterFactory {
         private final Class<? extends Enum> clazz;
 
         @SuppressWarnings("unchecked")
-        public EnumConverter(Class<?> clazz) {
+        public EnumConverter(final Class<?> clazz) {
             this.clazz = (Class<? extends Enum>) clazz;
         }
 
         @Override
-        public Enum convertFromDolphin(String value) throws ValueConverterException{
+        public Enum convertFromDolphin(final String value) throws ValueConverterException{
             if (value == null) {
                 return null;
             }
@@ -81,7 +81,7 @@ public class EnumConverterFactory extends AbstractConverterFactory {
         }
 
         @Override
-        public String convertToDolphin(Enum value) throws ValueConverterException{
+        public String convertToDolphin(final Enum value) throws ValueConverterException{
             if (value == null) {
                 return null;
             }

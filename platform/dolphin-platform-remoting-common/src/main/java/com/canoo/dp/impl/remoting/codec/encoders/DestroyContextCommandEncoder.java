@@ -27,7 +27,7 @@ import static org.apiguardian.api.API.Status.INTERNAL;
 @API(since = "0.x", status = INTERNAL)
 public class DestroyContextCommandEncoder extends AbstractCommandTranscoder<DestroyContextCommand> {
     @Override
-    public JsonObject encode(DestroyContextCommand command) {
+    public JsonObject encode(final DestroyContextCommand command) {
         Assert.requireNonNull(command, "command");
         final JsonObject jsonCommand = new JsonObject();
         jsonCommand.addProperty(ID, DESTROY_CONTEXT_COMMAND_ID);
@@ -35,7 +35,7 @@ public class DestroyContextCommandEncoder extends AbstractCommandTranscoder<Dest
     }
 
     @Override
-    public DestroyContextCommand decode(JsonObject jsonObject) {
+    public DestroyContextCommand decode(final JsonObject jsonObject) {
         return new DestroyContextCommand();
     }
 }

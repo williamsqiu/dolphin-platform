@@ -31,18 +31,18 @@ public class ShortConverterFactory extends AbstractConverterFactory {
     private final static Converter CONVERTER = new AbstractNumberConverter<Short>() {
 
         @Override
-        public Short convertFromDolphin(Number value) {
+        public Short convertFromDolphin(final Number value) {
             return value == null ? null : value.shortValue();
         }
 
         @Override
-        public Number convertToDolphin(Short value) {
+        public Number convertToDolphin(final Short value) {
             return value;
         }
     };
 
     @Override
-    public boolean supportsType(Class<?> cls) {
+    public boolean supportsType(final Class<?> cls) {
         return short.class.equals(cls) || Short.class.equals(cls);
     }
 
@@ -57,7 +57,7 @@ public class ShortConverterFactory extends AbstractConverterFactory {
     }
 
     @Override
-    public Converter getConverterForType(Class<?> cls) {
+    public Converter getConverterForType(final Class<?> cls) {
         return CONVERTER;
     }
 }

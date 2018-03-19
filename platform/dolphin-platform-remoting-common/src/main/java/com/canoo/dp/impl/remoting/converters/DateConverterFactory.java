@@ -36,7 +36,7 @@ public class DateConverterFactory extends AbstractConverterFactory {
     private final static Converter CONVERTER = new DateConverter();
 
     @Override
-    public boolean supportsType(Class<?> cls) {
+    public boolean supportsType(final Class<?> cls) {
         return Date.class.isAssignableFrom(cls);
     }
 
@@ -51,7 +51,7 @@ public class DateConverterFactory extends AbstractConverterFactory {
     }
 
     @Override
-    public Converter getConverterForType(Class<?> cls) {
+    public Converter getConverterForType(final Class<?> cls) {
         return CONVERTER;
     }
 

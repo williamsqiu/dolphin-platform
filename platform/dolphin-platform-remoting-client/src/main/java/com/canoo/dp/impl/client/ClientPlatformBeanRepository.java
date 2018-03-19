@@ -47,7 +47,7 @@ public class ClientPlatformBeanRepository {
         });
     }
 
-    public ClientControllerActionCallBean createControllerActionCallBean(String controllerId, String actionName, Param... params) {
+    public ClientControllerActionCallBean createControllerActionCallBean(final String controllerId, final String actionName, final Param... params) {
         return new ClientControllerActionCallBean(modelStore, converters, controllerId, actionName, params);
     }
 

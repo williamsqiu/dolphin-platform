@@ -31,18 +31,18 @@ public class BooleanConverterFactory extends AbstractConverterFactory {
     private final static Converter<Boolean, Boolean> CONVERTER = new AbstractBooleanConverter<Boolean>() {
 
         @Override
-        public Boolean convertFromDolphin(Boolean value) {
+        public Boolean convertFromDolphin(final Boolean value) {
             return value;
         }
 
         @Override
-        public Boolean convertToDolphin(Boolean value) {
+        public Boolean convertToDolphin(final Boolean value) {
             return value;
         }
     };
 
     @Override
-    public boolean supportsType(Class<?> cls) {
+    public boolean supportsType(final Class<?> cls) {
         return boolean.class.equals(cls) || Boolean.class.equals(cls);
     }
 
@@ -57,7 +57,7 @@ public class BooleanConverterFactory extends AbstractConverterFactory {
     }
 
     @Override
-    public Converter getConverterForType(Class<?> cls) {
+    public Converter getConverterForType(final Class<?> cls) {
         return CONVERTER;
     }
 }

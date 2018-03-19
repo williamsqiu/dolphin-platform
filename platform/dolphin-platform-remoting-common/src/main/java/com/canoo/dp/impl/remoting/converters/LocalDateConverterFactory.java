@@ -36,7 +36,7 @@ public class LocalDateConverterFactory extends AbstractConverterFactory {
     private final static Converter<?, ?> CONVERTER = new LocalDateConverter();
 
     @Override
-    public boolean supportsType(Class<?> cls) {
+    public boolean supportsType(final Class<?> cls) {
         return LocalDate.class.isAssignableFrom(cls);
     }
 
@@ -51,7 +51,7 @@ public class LocalDateConverterFactory extends AbstractConverterFactory {
     }
 
     @Override
-    public Converter<?, ?> getConverterForType(Class<?> cls) {
+    public Converter<?, ?> getConverterForType(final Class<?> cls) {
         return CONVERTER;
     }
 
@@ -64,7 +64,7 @@ public class LocalDateConverterFactory extends AbstractConverterFactory {
             dateFormat.setTimeZone(TimeZone.getTimeZone(TIMEZONE_UTC));
         }
         @Override
-        public LocalDate convertFromDolphin(String value)
+        public LocalDate convertFromDolphin(final String value)
                 throws ValueConverterException {
             if (value == null) {
                 return null;
@@ -80,13 +80,13 @@ public class LocalDateConverterFactory extends AbstractConverterFactory {
         }
 
         @Override
-        public String convertToDolphin(LocalDate value)
+        public String convertToDolphin(final LocalDate value)
                 throws ValueConverterException {
             if (value == null) {
                 return null;
             }
             try {
-                Date date = Date.from(value.atStartOfDay().toInstant(ZoneOffset.ofHours(0)));
+                final Date date = Date.from(value.atStartOfDay().toInstant(ZoneOffset.ofHours(0)));
                 return dateFormat.format(date);
             } catch (Exception e) {
                 throw new ValueConverterException(

@@ -27,7 +27,7 @@ import static org.apiguardian.api.API.Status.INTERNAL;
 @API(since = "0.x", status = INTERNAL)
 public class CreateContextCommandEncoder extends AbstractCommandTranscoder<CreateContextCommand> {
     @Override
-    public JsonObject encode(CreateContextCommand command) {
+    public JsonObject encode(final CreateContextCommand command) {
         Assert.requireNonNull(command, "command");
         final JsonObject jsonCommand = new JsonObject();
         jsonCommand.addProperty(ID, CREATE_CONTEXT_COMMAND_ID);
@@ -35,7 +35,7 @@ public class CreateContextCommandEncoder extends AbstractCommandTranscoder<Creat
     }
 
     @Override
-    public CreateContextCommand decode(JsonObject jsonObject) {
+    public CreateContextCommand decode(final JsonObject jsonObject) {
         return new CreateContextCommand();
     }
 }

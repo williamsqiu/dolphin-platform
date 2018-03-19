@@ -37,7 +37,7 @@ public class BigIntegerConverterFactory extends AbstractConverterFactory {
 
     private final static Converter CONVERTER = new AbstractNumberConverter<BigInteger>() {
         @Override
-        public BigInteger convertFromDolphin(Number value) throws ValueConverterException {
+        public BigInteger convertFromDolphin(final Number value) throws ValueConverterException {
             try {
                 return value == null ? null : new BigInteger(value.toString());
             } catch (Exception e) {
@@ -46,13 +46,13 @@ public class BigIntegerConverterFactory extends AbstractConverterFactory {
         }
 
         @Override
-        public Number convertToDolphin(BigInteger value) throws ValueConverterException {
+        public Number convertToDolphin(final BigInteger value) throws ValueConverterException {
             return value;
         }
     };
 
     @Override
-    public boolean supportsType(Class<?> cls) {
+    public boolean supportsType(final Class<?> cls) {
         return BigInteger.class.equals(cls);
     }
 
@@ -67,7 +67,7 @@ public class BigIntegerConverterFactory extends AbstractConverterFactory {
     }
 
     @Override
-    public Converter getConverterForType(Class<?> cls) {
+    public Converter getConverterForType(final Class<?> cls) {
         return CONVERTER;
     }
 }

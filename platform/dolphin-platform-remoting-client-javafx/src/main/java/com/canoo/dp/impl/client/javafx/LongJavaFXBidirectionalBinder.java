@@ -28,7 +28,7 @@ public class LongJavaFXBidirectionalBinder extends AbstractNumericJavaFXBidirect
     }
 
     @Override
-    public Long convertNumber(Number value) {
+    public Long convertNumber(final Number value) {
         if (value == null) {
             return null;
         }

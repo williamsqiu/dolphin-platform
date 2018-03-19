@@ -44,7 +44,7 @@ public class IdentitySet<E> implements Set<E> {
     }
 
     @Override
-    public boolean contains(Object o) {
+    public boolean contains(final Object o) {
         return internalMap.containsKey(o);
     }
 
@@ -64,26 +64,26 @@ public class IdentitySet<E> implements Set<E> {
     }
 
     @Override
-    public boolean add(E e) {
+    public boolean add(final E e) {
         boolean ret = internalMap.keySet().contains(e);
         internalMap.put(e, e);
         return !ret;
     }
 
     @Override
-    public boolean remove(Object o) {
+    public boolean remove(final Object o) {
         boolean ret = internalMap.keySet().contains(o);
         internalMap.remove(o);
         return ret;
     }
 
     @Override
-    public boolean containsAll(Collection<?> c) {
+    public boolean containsAll(final Collection<?> c) {
         return internalMap.keySet().containsAll(c);
     }
 
     @Override
-    public boolean addAll(Collection<? extends E> c) {
+    public boolean addAll(final Collection<? extends E> c) {
         boolean ret = false;
         for(E elem : c) {
             boolean currentRet = add(elem);
@@ -95,12 +95,12 @@ public class IdentitySet<E> implements Set<E> {
     }
 
     @Override
-    public boolean retainAll(Collection<?> c) {
+    public boolean retainAll(final Collection<?> c) {
         throw new RuntimeException("Not yet implemented!");
     }
 
     @Override
-    public boolean removeAll(Collection<?> c) {
+    public boolean removeAll(final Collection<?> c) {
         boolean ret = false;
         for(Object elem : c) {
             boolean currentRet = remove(elem);

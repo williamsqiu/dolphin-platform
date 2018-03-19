@@ -47,7 +47,7 @@ public class ListMapperImpl implements ListMapper {
     private final ClassRepository classRepository;
     protected final PresentationModelBuilderFactory builderFactory;
 
-    public ListMapperImpl(final ModelStore modelStore, ClassRepository classRepository, BeanRepository beanRepository, PresentationModelBuilderFactory builderFactory, EventDispatcher dispatcher) {
+    public ListMapperImpl(final ModelStore modelStore, final ClassRepository classRepository, final BeanRepository beanRepository, final PresentationModelBuilderFactory builderFactory, final EventDispatcher dispatcher) {
         this.beanRepository = beanRepository;
         this.classRepository = classRepository;
         this.builderFactory = builderFactory;
@@ -92,7 +92,7 @@ public class ListMapperImpl implements ListMapper {
     }
 
     @Override
-    public void processEvent(PropertyInfo observableListInfo, String sourceId, ListChangeEvent<?> event) {
+    public void processEvent(final PropertyInfo observableListInfo, final String sourceId, final ListChangeEvent<?> event) {
         final String attributeName = observableListInfo.getAttributeName();
 
         for (final ListChangeEvent.Change<?> change : event.getChanges()) {

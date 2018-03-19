@@ -44,7 +44,7 @@ public class CallActionCommandEncoder extends AbstractCommandTranscoder<CallActi
         jsonCommand.addProperty(NAME, command.getActionName());
 
         final JsonArray paramArray = new JsonArray();
-        for(Map.Entry<String, Object> paramEntry : command.getParams().entrySet()) {
+        for(final Map.Entry<String, Object> paramEntry : command.getParams().entrySet()) {
             final JsonObject paramObject = new JsonObject();
             paramObject.addProperty(NAME, paramEntry.getKey());
             paramObject.add(VALUE, ValueEncoder.encodeValue(paramEntry.getValue()));
@@ -57,7 +57,7 @@ public class CallActionCommandEncoder extends AbstractCommandTranscoder<CallActi
     }
 
     @Override
-    public CallActionCommand decode(JsonObject jsonObject) {
+    public CallActionCommand decode(final JsonObject jsonObject) {
         Assert.requireNonNull(jsonObject, "jsonObject");
         try {
             final CallActionCommand command = new CallActionCommand();
@@ -72,7 +72,7 @@ public class CallActionCommandEncoder extends AbstractCommandTranscoder<CallActi
                 }
             }
             return command;
-        } catch (Exception ex) {
+        } catch (final Exception ex) {
             throw new JsonParseException("Illegal JSON detected", ex);
         }
     }

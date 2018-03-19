@@ -36,7 +36,7 @@ public class CalendarConverterFactory extends AbstractConverterFactory {
     public final static int FIELD_TYPE_CALENDAR = 11;
 
     @Override
-    public boolean supportsType(Class<?> cls) {
+    public boolean supportsType(final Class<?> cls) {
         return Calendar.class.isAssignableFrom(cls);
     }
 
@@ -67,7 +67,7 @@ public class CalendarConverterFactory extends AbstractConverterFactory {
         }
 
         @Override
-        public Calendar convertFromDolphin(String value) throws ValueConverterException {
+        public Calendar convertFromDolphin(final String value) throws ValueConverterException {
             if (value == null) {
                 return null;
             }
@@ -81,7 +81,7 @@ public class CalendarConverterFactory extends AbstractConverterFactory {
         }
 
         @Override
-        public String convertToDolphin(Calendar value) throws ValueConverterException {
+        public String convertToDolphin(final Calendar value) throws ValueConverterException {
             if (value == null) {
                 return null;
             }

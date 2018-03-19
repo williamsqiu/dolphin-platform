@@ -35,7 +35,7 @@ public class ZonedDateTimeConverterFactory extends AbstractConverterFactory {
     private final static Converter CONVERTER = new ZonedDateTimeConverter();
 
     @Override
-    public boolean supportsType(Class<?> cls) {
+    public boolean supportsType(final Class<?> cls) {
         return ZonedDateTime.class.isAssignableFrom(cls);
     }
 
@@ -50,7 +50,7 @@ public class ZonedDateTimeConverterFactory extends AbstractConverterFactory {
     }
 
     @Override
-    public Converter getConverterForType(Class<?> cls) {
+    public Converter getConverterForType(final Class<?> cls) {
         return CONVERTER;
     }
 
@@ -63,7 +63,7 @@ public class ZonedDateTimeConverterFactory extends AbstractConverterFactory {
             dateFormat.setTimeZone(TimeZone.getTimeZone(TIMEZONE_UTC));
         }
         @Override
-        public ZonedDateTime convertFromDolphin(String value) throws ValueConverterException {
+        public ZonedDateTime convertFromDolphin(final String value) throws ValueConverterException {
             if (value == null) {
                 return null;
             }
@@ -77,12 +77,12 @@ public class ZonedDateTimeConverterFactory extends AbstractConverterFactory {
         }
 
         @Override
-        public String convertToDolphin(ZonedDateTime value) throws ValueConverterException {
+        public String convertToDolphin(final ZonedDateTime value) throws ValueConverterException {
             if (value == null) {
                 return null;
             }
             try {
-                Calendar calendar = GregorianCalendar.from(value);
+                final Calendar calendar = GregorianCalendar.from(value);
                 return dateFormat.format(calendar.getTime());
             } catch (Exception e) {
                 throw new ValueConverterException("Can not convert from ZonedDateTime", e);

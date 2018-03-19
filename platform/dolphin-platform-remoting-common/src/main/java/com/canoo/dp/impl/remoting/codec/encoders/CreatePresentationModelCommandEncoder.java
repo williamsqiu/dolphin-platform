@@ -43,7 +43,7 @@ import static org.apiguardian.api.API.Status.INTERNAL;
 public class CreatePresentationModelCommandEncoder extends AbstractCommandTranscoder<CreatePresentationModelCommand> {
 
     @Override
-    public JsonObject encode(CreatePresentationModelCommand command) {
+    public JsonObject encode(final CreatePresentationModelCommand command) {
         Assert.requireNonNull(command, "command");
 
         final JsonObject jsonCommand = new JsonObject();
@@ -65,7 +65,7 @@ public class CreatePresentationModelCommandEncoder extends AbstractCommandTransc
     }
 
     @Override
-    public CreatePresentationModelCommand decode(JsonObject jsonObject) {
+    public CreatePresentationModelCommand decode(final JsonObject jsonObject) {
         Assert.requireNonNull(jsonObject, "jsonObject");
 
         try {
@@ -89,7 +89,7 @@ public class CreatePresentationModelCommandEncoder extends AbstractCommandTransc
             command.setAttributes(attributes);
 
             return command;
-        } catch (IllegalStateException | ClassCastException | NullPointerException ex) {
+        } catch (final IllegalStateException | ClassCastException | NullPointerException ex) {
             throw new JsonParseException("Illegal JSON detected", ex);
         }
     }

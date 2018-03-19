@@ -43,37 +43,37 @@ public class ObservableArrayList<E> implements ObservableList<E> {
         list = new ArrayList<>();
     }
 
-    public ObservableArrayList(int initialCapacity) {
+    public ObservableArrayList(final int initialCapacity) {
         list = new ArrayList<>(initialCapacity);
     }
 
-    public ObservableArrayList(Collection<? extends E> c) {
+    public ObservableArrayList(final Collection<? extends E> c) {
         list = new ArrayList<>(c);
     }
 
     @SafeVarargs
-    public ObservableArrayList(E... elements) {
+    public ObservableArrayList(final E... elements) {
         this(Arrays.asList(elements));
     }
 
-    protected void fireListChanged(ListChangeEvent<E> event) {
+    protected void fireListChanged(final ListChangeEvent<E> event) {
         notifyInternalListeners(event);
         notifyExternalListeners(event);
     }
 
 
 
-    protected void notifyInternalListeners(ListChangeEvent<E> event) {
+    protected void notifyInternalListeners(final ListChangeEvent<E> event) {
 
     }
 
-    protected void notifyExternalListeners(ListChangeEvent<E> event) {
+    protected void notifyExternalListeners(final ListChangeEvent<E> event) {
         for (final ListChangeListener<? super E> listener : listeners) {
             listener.listChanged(event);
         }
     }
 
-    public void internalSplice(int from, int to, Collection<? extends E> newElements) {
+    public void internalSplice(final int from, final int to, final Collection<? extends E> newElements) {
         final List<E> slice = list.subList(from, to);
         final List<E> removedElements = new ArrayList<>(slice);
         slice.clear();
@@ -93,17 +93,17 @@ public class ObservableArrayList<E> implements ObservableList<E> {
     }
 
     @Override
-    public boolean addAll(E... elements) {
+    public boolean addAll(final E... elements) {
         return addAll(Arrays.asList(elements));
     }
 
     @Override
-    public boolean setAll(E... elements) {
+    public boolean setAll(final E... elements) {
         return setAll(Arrays.asList(elements));
     }
 
     @Override
-    public boolean removeAll(E... elements) {
+    public boolean removeAll(final E... elements) {
         return removeAll(Arrays.asList(elements));
     }
 
@@ -118,7 +118,7 @@ public class ObservableArrayList<E> implements ObservableList<E> {
     }
 
     @Override
-    public boolean contains(Object o) {
+    public boolean contains(final Object o) {
         return list.contains(o);
     }
 
@@ -133,18 +133,18 @@ public class ObservableArrayList<E> implements ObservableList<E> {
     }
 
     @Override
-    public <T> T[] toArray(T[] a) {
+    public <T> T[] toArray(final T[] a) {
         return list.toArray(a);
     }
 
     @Override
-    public boolean add(E e) {
+    public boolean add(final E e) {
         add(list.size(), e);
         return true;
     }
 
     @Override
-    public boolean remove(Object o) {
+    public boolean remove(final Object o) {
         final int index = list.indexOf(o);
         if (index >= 0) {
             remove(index);
@@ -154,17 +154,17 @@ public class ObservableArrayList<E> implements ObservableList<E> {
     }
 
     @Override
-    public boolean containsAll(Collection<?> c) {
+    public boolean containsAll(final Collection<?> c) {
         return list.containsAll(c);
     }
 
     @Override
-    public boolean addAll(Collection<? extends E> c) {
+    public boolean addAll(final Collection<? extends E> c) {
         return addAll(list.size(), c);
     }
 
     @Override
-    public boolean addAll(int index, Collection<? extends E> c) {
+    public boolean addAll(final int index, final Collection<? extends E> c) {
         if (c.isEmpty()) {
             return false;
         }
@@ -174,17 +174,17 @@ public class ObservableArrayList<E> implements ObservableList<E> {
     }
 
     @Override
-    public boolean removeAll(Collection<?> c) {
+    public boolean removeAll(final Collection<?> c) {
         return batchRemove(c, true);
     }
 
     @Override
-    public boolean retainAll(Collection<?> c) {
+    public boolean retainAll(final Collection<?> c) {
         return batchRemove(c, false);
     }
 
     @Override
-    public boolean retainAll(E... elements) {
+    public boolean retainAll(final E... elements) {
         return batchRemove(Arrays.asList(elements), false);
     }
 
@@ -225,32 +225,32 @@ public class ObservableArrayList<E> implements ObservableList<E> {
     }
 
     @Override
-    public E get(int index) {
+    public E get(final int index) {
         return list.get(index);
     }
 
     @Override
-    public E set(int index, E element) {
+    public E set(final int index, final E element) {
         final E oldElement = list.set(index, element);
         fireListChanged(new ListChangeEventImpl<>(this, index, index + 1, Collections.singletonList(oldElement)));
         return oldElement;
     }
 
     @Override
-    public void add(int index, E element) {
+    public void add(final int index, final E element) {
         list.add(index, element);
         fireListChanged(new ListChangeEventImpl<>(this, index, index + 1, Collections.<E>emptyList()));
     }
 
     @Override
-    public E remove(int index) {
+    public E remove(final int index) {
         final E oldElement = list.remove(index);
         fireListChanged(new ListChangeEventImpl<>(this, index, index, Collections.singletonList(oldElement)));
         return oldElement;
     }
 
     @Override
-    public void remove(int from, int to)
+    public void remove(final int from, final int to)
     {
         final List<E> oldList = list.subList(from, to);
         final List<E> copy = new ArrayList<>(oldList);
@@ -259,12 +259,12 @@ public class ObservableArrayList<E> implements ObservableList<E> {
     }
 
     @Override
-    public int indexOf(Object o) {
+    public int indexOf(final Object o) {
         return list.indexOf(o);
     }
 
     @Override
-    public int lastIndexOf(Object o) {
+    public int lastIndexOf(final Object o) {
         return list.lastIndexOf(o);
     }
 
@@ -274,12 +274,12 @@ public class ObservableArrayList<E> implements ObservableList<E> {
     }
 
     @Override
-    public ListIterator<E> listIterator(int index) {
+    public ListIterator<E> listIterator(final int index) {
         return new ListIteratorWrapper(list.listIterator(index));
     }
 
     @Override
-    public List<E> subList(int fromIndex, int toIndex) {
+    public List<E> subList(final int fromIndex, final int toIndex) {
         final ObservableArrayList subList = new ObservableArrayList(list.subList(fromIndex, toIndex));
         subList.onChanged(new ListChangeListener() {
             @Override
@@ -378,7 +378,7 @@ public class ObservableArrayList<E> implements ObservableList<E> {
         }
 
         @Override
-        public void set(E e) {
+        public void set(final E e) {
             int replacedIndex = iterator.nextIndex();
             final E oldElement = ObservableArrayList.this.get(replacedIndex);
             iterator.set(e);
@@ -386,7 +386,7 @@ public class ObservableArrayList<E> implements ObservableList<E> {
         }
 
         @Override
-        public void add(E e) {
+        public void add(final E e) {
             int addedIndex = iterator.nextIndex();
             iterator.add(e);
             lastRet = -1;
@@ -395,13 +395,13 @@ public class ObservableArrayList<E> implements ObservableList<E> {
     }
 
     @Override
-    public boolean setAll(Collection<? extends E> col) {
+    public boolean setAll(final Collection<? extends E> col) {
         clear();
         return addAll(col);
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         return list.equals(o);
     }
 

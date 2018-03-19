@@ -53,15 +53,15 @@ public class DefaultDolphinBinder<S> implements DolphinBinder<S> {
 
 
     @Override
-    public <T> Binding bidirectionalTo(javafx.beans.property.Property<T> javaFxProperty, BidirectionalConverter<T, S> converter) {
+    public <T> Binding bidirectionalTo(final javafx.beans.property.Property<T> javaFxProperty, final BidirectionalConverter<T, S> converter) {
         if (javaFxProperty == null) {
             throw new IllegalArgumentException("javaFxProperty must not be null");
         }
         if (converter == null) {
             throw new IllegalArgumentException("converter must not be null");
         }
-        Binding unidirectionalBinding = to(javaFxProperty, converter);
-        Subscription subscription = property.onChanged(e -> javaFxProperty.setValue(converter.convertBack(property.get())));
+        final Binding unidirectionalBinding = to(javaFxProperty, converter);
+        final Subscription subscription = property.onChanged(e -> javaFxProperty.setValue(converter.convertBack(property.get())));
         return () -> {
             unidirectionalBinding.unbind();
             subscription.unsubscribe();

@@ -45,7 +45,7 @@ public class DestroyControllerCommandEncoder extends AbstractCommandTranscoder<D
             final DestroyControllerCommand command = new DestroyControllerCommand();
             command.setControllerId(getStringElement(jsonObject, CONTROLLER_ID));
             return command;
-        } catch (Exception ex) {
+        } catch (final Exception ex) {
             throw new JsonParseException("Illegal JSON detected", ex);
         }
     }

@@ -53,7 +53,7 @@ public class DistributedEventBusConfigProvider extends ConfigurationProviderAdap
 
     @Override
     public Map<String, String> getStringProperties() {
-        Map<String, String> properties = new HashMap<>();
+        final Map<String, String> properties = new HashMap<>();
         properties.put(HAZELCAST_SERVER_NAME, DEFAULT_HAZELCAST_SERVER);
         properties.put(HAZELCAST_SERVER_PORT, DEFAULT_HAZELCAST_PORT);
         properties.put(HAZELCAST_GROUP_NAME, DEFAULT_HAZELCAST_GROUP_NAME);
@@ -62,7 +62,7 @@ public class DistributedEventBusConfigProvider extends ConfigurationProviderAdap
 
     @Override
     public Map<String, Integer> getIntegerProperties() {
-        Map<String, Integer> properties = new HashMap<>();
+        final Map<String, Integer> properties = new HashMap<>();
         properties.put(HAZELCAST_CONNECTION_ATTEMPT_COUNT, DEFAULT_HAZELCAST_CONNECTION_ATTEMPT_COUNT);
         properties.put(HAZELCAST_CONNECTION_ATTEMPT_PERIOD, DEFAULT_HAZELCAST_CONNECTION_ATTEMPT_PERIOD);
         properties.put(HAZELCAST_CONNECTION_TIMEOUT, DEFAULT_HAZELCAST_CONNECTION_TIMEOUT);

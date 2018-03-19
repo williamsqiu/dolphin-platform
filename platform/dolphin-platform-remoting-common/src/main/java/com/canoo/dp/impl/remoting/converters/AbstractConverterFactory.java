@@ -25,7 +25,7 @@ import static org.apiguardian.api.API.Status.INTERNAL;
 public abstract class AbstractConverterFactory implements ConverterFactory {
 
     @Override
-    public void init(DolphinBeanRepo beanRepository) {
+    public void init(final DolphinBeanRepo beanRepository) {
 
     }
 }

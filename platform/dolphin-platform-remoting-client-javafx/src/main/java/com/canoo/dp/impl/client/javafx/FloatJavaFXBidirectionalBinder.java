@@ -28,7 +28,7 @@ public class FloatJavaFXBidirectionalBinder extends AbstractNumericJavaFXBidirec
     }
 
     @Override
-    public Float convertNumber(Number value) {
+    public Float convertNumber(final Number value) {
         if (value == null) {
             return null;
         }

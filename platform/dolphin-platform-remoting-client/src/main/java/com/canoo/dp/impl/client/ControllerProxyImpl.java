@@ -16,7 +16,6 @@
 package com.canoo.dp.impl.client;
 
 import com.canoo.dp.impl.client.legacy.communication.AbstractClientConnector;
-import com.canoo.dp.impl.client.legacy.communication.OnFinishedHandler;
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.remoting.Converters;
 import com.canoo.dp.impl.remoting.InternalAttributesBean;
@@ -35,7 +34,6 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
 import static org.apiguardian.api.API.Status.INTERNAL;
@@ -74,7 +72,7 @@ public class ControllerProxyImpl<T> implements ControllerProxy<T> {
     }
 
     @Override
-    public CompletableFuture<Void> invoke(String actionName, Map<String, ?> params) {
+    public CompletableFuture<Void> invoke(final String actionName, final Map<String, ?> params) {
         final List<Param> paramList = params.entrySet().stream().
                 map(e -> new Param(e.getKey(), e.getValue())).
                 collect(Collectors.toList());
@@ -82,14 +80,14 @@ public class ControllerProxyImpl<T> implements ControllerProxy<T> {
     }
 
     @Override
-    public CompletableFuture<Void> invoke(String actionName, Param... params) {
+    public CompletableFuture<Void> invoke(final String actionName, final Param... params) {
         if (destroyed) {
             throw new IllegalStateException("The controller was already destroyed");
         }
 
         final ClientControllerActionCallBean bean = platformBeanRepository.createControllerActionCallBean(controllerId, actionName, params);
 
-        CallActionCommand callActionCommand = new CallActionCommand();
+        final CallActionCommand callActionCommand = new CallActionCommand();
         callActionCommand.setControllerId(controllerId);
         callActionCommand.setActionName(actionName);
         if(params != null) {

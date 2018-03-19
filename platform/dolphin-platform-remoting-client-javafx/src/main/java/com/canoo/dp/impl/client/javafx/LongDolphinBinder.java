@@ -29,7 +29,7 @@ public class LongDolphinBinder extends AbstractNumericDolphinBinder<Long> {
     }
 
     @Override
-    protected boolean equals(Number n, Long aLong) {
+    protected boolean equals(final Number n, final Long aLong) {
         if (n == null && aLong != null) {
             return false;
         }
@@ -46,7 +46,7 @@ public class LongDolphinBinder extends AbstractNumericDolphinBinder<Long> {
     protected BidirectionalConverter<Number, Long> getConverter() {
         return new BidirectionalConverter<Number, Long>() {
             @Override
-            public Number convertBack(Long value) {
+            public Number convertBack(final Long value) {
                 if (value == null) {
                     return 0l;
                 }
@@ -54,7 +54,7 @@ public class LongDolphinBinder extends AbstractNumericDolphinBinder<Long> {
             }
 
             @Override
-            public Long convert(Number value) {
+            public Long convert(final Number value) {
                 if (value == null) {
                     return 0l;
                 }

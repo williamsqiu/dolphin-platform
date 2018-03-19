@@ -31,7 +31,7 @@ import static org.apiguardian.api.API.Status.INTERNAL;
 public class ValueChangedCommandEncoder extends AbstractCommandTranscoder<ValueChangedCommand> {
 
     @Override
-    public JsonObject encode(ValueChangedCommand command) {
+    public JsonObject encode(final ValueChangedCommand command) {
         Assert.requireNonNull(command, "command");
         final JsonObject jsonCommand = new JsonObject();
         jsonCommand.addProperty(ATTRIBUTE_ID, command.getAttributeId());
@@ -43,7 +43,7 @@ public class ValueChangedCommandEncoder extends AbstractCommandTranscoder<ValueC
     }
 
     @Override
-    public ValueChangedCommand decode(JsonObject jsonObject) {
+    public ValueChangedCommand decode(final JsonObject jsonObject) {
         Assert.requireNonNull(jsonObject, "jsonObject");
         try {
             final ValueChangedCommand command = new ValueChangedCommand();

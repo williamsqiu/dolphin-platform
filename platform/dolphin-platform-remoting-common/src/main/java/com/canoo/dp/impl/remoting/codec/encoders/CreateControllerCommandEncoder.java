@@ -41,7 +41,7 @@ public class CreateControllerCommandEncoder extends AbstractCommandTranscoder<Cr
     }
 
     @Override
-    public CreateControllerCommand decode(JsonObject jsonObject) {
+    public CreateControllerCommand decode(final JsonObject jsonObject) {
         Assert.requireNonNull(jsonObject, "jsonObject");
         try {
             final CreateControllerCommand command = new CreateControllerCommand();
@@ -50,7 +50,7 @@ public class CreateControllerCommandEncoder extends AbstractCommandTranscoder<Cr
             }
             command.setControllerName(getStringElement(jsonObject, NAME));
             return command;
-        } catch (Exception ex) {
+        } catch (final Exception ex) {
             throw new JsonParseException("Illegal JSON detected", ex);
         }
     }
