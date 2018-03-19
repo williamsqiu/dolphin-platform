@@ -37,7 +37,7 @@ public class MBeanDescription {
      * @param name the name
      * @param type the type
      */
-    public MBeanDescription(String domainName, String name, String type) {
+    public MBeanDescription(final String domainName, final String name, final String type) {
         this.domainName = domainName;
         this.name = name;
         this.type = type;
@@ -47,7 +47,7 @@ public class MBeanDescription {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(final String type) {
         this.type = type;
     }
 
@@ -55,7 +55,7 @@ public class MBeanDescription {
         return domainName;
     }
 
-    public void setDomainName(String domainName) {
+    public void setDomainName(final String domainName) {
         this.domainName = domainName;
     }
 
@@ -63,11 +63,11 @@ public class MBeanDescription {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
-    public String getMBeanName(String uniqueIdentifier) {
+    public String getMBeanName(final String uniqueIdentifier) {
         return domainName + ":00=" + type + ",name=" + name + "-" + uniqueIdentifier;
     }
 

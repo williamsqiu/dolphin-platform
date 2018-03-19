@@ -15,6 +15,7 @@
  */
 package com.canoo.dp.impl.server.bootstrap.modules;
 
+import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.server.servlet.CrossSiteOriginFilter;
 import com.canoo.platform.server.spi.AbstractBaseModule;
 import com.canoo.platform.server.spi.ModuleDefinition;
@@ -54,7 +55,8 @@ public class CorsModule extends AbstractBaseModule {
     }
 
     @Override
-    public void initialize(ServerCoreComponents coreComponents) throws ModuleInitializationException {
+    public void initialize(final ServerCoreComponents coreComponents) throws ModuleInitializationException {
+        Assert.requireNonNull(coreComponents, "coreComponents");
         final ServletContext servletContext = coreComponents.getInstance(ServletContext.class);
         final PlatformConfiguration configuration = coreComponents.getConfiguration();
         final List<String> endpointList = configuration.getListProperty(CORS_ENDPOINTS_URL_MAPPINGS, CORS_ENDPOINTS_URL_MAPPINGS_DEFAULT_VALUE);

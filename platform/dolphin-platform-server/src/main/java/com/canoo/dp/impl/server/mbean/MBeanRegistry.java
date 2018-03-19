@@ -15,6 +15,7 @@
  */
 package com.canoo.dp.impl.server.mbean;
 
+import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.core.functional.Subscription;
 import org.apiguardian.api.API;
 import org.slf4j.Logger;
@@ -39,11 +40,11 @@ public class MBeanRegistry {
 
     private static final MBeanRegistry INSTANCE = new MBeanRegistry();
 
-    private MBeanServer server = ManagementFactory.getPlatformMBeanServer();
+    private final MBeanServer server = ManagementFactory.getPlatformMBeanServer();
 
-    private AtomicBoolean mbeanSupport = new AtomicBoolean(true);
+    private final AtomicBoolean mbeanSupport = new AtomicBoolean(true);
 
-    private AtomicLong idGenerator = new AtomicLong(0L);
+    private final AtomicLong idGenerator = new AtomicLong(0L);
 
     /**
      * Register the given MBean based on the given description
@@ -51,7 +52,8 @@ public class MBeanRegistry {
      * @param description the description
      * @return the subscription that can be used to unregister the bean
      */
-    public Subscription register(Object mBean, MBeanDescription description) {
+    public Subscription register(final Object mBean, final MBeanDescription description) {
+        Assert.requireNonNull(description, "description");
         return register(mBean, description.getMBeanName(getNextId()));
     }
 
@@ -100,7 +102,7 @@ public class MBeanRegistry {
      * setter for the MBean support
      * @param mbeanSupport new state of MBean support
      */
-    public void setMbeanSupport(boolean mbeanSupport) {
+    public void setMbeanSupport(final boolean mbeanSupport) {
         this.mbeanSupport.set(mbeanSupport);
     }
 

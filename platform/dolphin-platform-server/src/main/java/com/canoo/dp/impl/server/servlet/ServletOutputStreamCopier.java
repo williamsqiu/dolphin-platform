@@ -13,7 +13,7 @@ public class ServletOutputStreamCopier extends ServletOutputStream {
     private final OutputStream outputStream;
     private final ByteArrayOutputStream copy;
 
-    public ServletOutputStreamCopier(OutputStream outputStream) {
+    public ServletOutputStreamCopier(final OutputStream outputStream) {
         this.outputStream = Assert.requireNonNull(outputStream, "outputStream");
         this.copy = new ByteArrayOutputStream(1024);
     }

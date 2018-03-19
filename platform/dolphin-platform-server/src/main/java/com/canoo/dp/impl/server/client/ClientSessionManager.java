@@ -45,12 +45,13 @@ public class ClientSessionManager {
 
     private final ClientSessionLifecycleHandlerImpl lifecycleHandler;
 
-    public ClientSessionManager(PlatformConfiguration configuration, ClientSessionLifecycleHandlerImpl lifecycleHandler) {
-        this.configuration = configuration;
-        this.lifecycleHandler = lifecycleHandler;
+    public ClientSessionManager(final PlatformConfiguration configuration, final ClientSessionLifecycleHandlerImpl lifecycleHandler) {
+        this.configuration = Assert.requireNonNull(configuration, "configuration");
+        this.lifecycleHandler = Assert.requireNonNull(lifecycleHandler, "lifecycleHandler");
     }
 
-    public String createClientSession(HttpSession httpSession) throws MaxSessionCountReachedException {
+    public String createClientSession(final HttpSession httpSession) throws MaxSessionCountReachedException {
+        Assert.requireNonNull(httpSession, "httpSession");
         if (!canAddInSession(httpSession)) {
             throw new MaxSessionCountReachedException();
         }
@@ -63,8 +64,9 @@ public class ClientSessionManager {
         return clientSession.getId();
     }
 
-    public boolean checkValidClientSession(HttpSession httpSession, String clientSessionId) {
-        Lock lock = getOrCreateClientSessionLockForHttpSession(httpSession);
+    public boolean checkValidClientSession(final HttpSession httpSession, final String clientSessionId) {
+        final Lock lock = getOrCreateClientSessionLockForHttpSession(httpSession);
+        Assert.requireNonNull(lock, "lock");
         lock.lock();
         try {
             return getOrCreateClientSessionMapInHttpSession(httpSession).containsKey(clientSessionId);
@@ -73,8 +75,9 @@ public class ClientSessionManager {
         }
     }
 
-    public void removeAllClientSessionsInHttpSession(HttpSession httpSession) {
-        Lock lock = getOrCreateClientSessionLockForHttpSession(httpSession);
+    public void removeAllClientSessionsInHttpSession(final HttpSession httpSession) {
+        final Lock lock = getOrCreateClientSessionLockForHttpSession(httpSession);
+        Assert.requireNonNull(lock, "lock");
         lock.lock();
         try {
             Map<String, ClientSession> map = getOrCreateClientSessionMapInHttpSession(httpSession);
@@ -87,8 +90,9 @@ public class ClientSessionManager {
         }
     }
 
-    public void setClientSessionForThread(HttpSession httpSession, String clientSessionId) {
-        Lock lock = getOrCreateClientSessionLockForHttpSession(httpSession);
+    public void setClientSessionForThread(final HttpSession httpSession, final String clientSessionId) {
+        final Lock lock = getOrCreateClientSessionLockForHttpSession(httpSession);
+        Assert.requireNonNull(lock, "lock");
         lock.lock();
         try {
             lifecycleHandler.setCurrentSession(getOrCreateClientSessionMapInHttpSession(httpSession).get(clientSessionId));
@@ -101,8 +105,10 @@ public class ClientSessionManager {
         lifecycleHandler.setCurrentSession(null);
     }
 
-    private void add(HttpSession httpSession, ClientSession clientSession) {
-        Lock lock = getOrCreateClientSessionLockForHttpSession(httpSession);
+    private void add(final HttpSession httpSession, final ClientSession clientSession) {
+        Assert.requireNonNull(clientSession, "clientSession");
+        final Lock lock = getOrCreateClientSessionLockForHttpSession(httpSession);
+        Assert.requireNonNull(lock, "lock");
         lock.lock();
         try {
             getOrCreateClientSessionMapInHttpSession(httpSession).put(clientSession.getId(), clientSession);
@@ -111,8 +117,9 @@ public class ClientSessionManager {
         }
     }
 
-    private boolean canAddInSession(HttpSession httpSession) {
-        Lock lock = getOrCreateClientSessionLockForHttpSession(httpSession);
+    private boolean canAddInSession(final HttpSession httpSession) {
+        final Lock lock = getOrCreateClientSessionLockForHttpSession(httpSession);
+        Assert.requireNonNull(lock, "lock");
         lock.lock();
         try {
             return getOrCreateClientSessionMapInHttpSession(httpSession).size() < configuration.getIntProperty(MAX_CLIENTS_PER_SESSION, MAX_CLIENTS_PER_SESSION_DEFAULT_VALUE);
@@ -121,7 +128,7 @@ public class ClientSessionManager {
         }
     }
 
-    private Map<String, ClientSession> getOrCreateClientSessionMapInHttpSession(HttpSession session) {
+    private Map<String, ClientSession> getOrCreateClientSessionMapInHttpSession(final HttpSession session) {
         Assert.requireNonNull(session, "session");
         if (session.getAttribute(DOLPHIN_CONTEXT_MAP) == null) {
             session.setAttribute(DOLPHIN_CONTEXT_MAP, new HashMap<>());
@@ -129,7 +136,7 @@ public class ClientSessionManager {
         return (Map<String, ClientSession>) session.getAttribute(DOLPHIN_CONTEXT_MAP);
     }
 
-    private synchronized Lock getOrCreateClientSessionLockForHttpSession(HttpSession session) {
+    private synchronized Lock getOrCreateClientSessionLockForHttpSession(final HttpSession session) {
         Assert.requireNonNull(session, "session");
         if (session.getAttribute(CLIENT_SESSION_LOCK) == null) {
             session.setAttribute(CLIENT_SESSION_LOCK, new ReentrantLock());

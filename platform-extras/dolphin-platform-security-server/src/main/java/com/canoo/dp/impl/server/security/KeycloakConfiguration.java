@@ -28,7 +28,6 @@ import static com.canoo.dp.impl.security.SecurityConfiguration.APPLICATION_PROPE
 import static com.canoo.dp.impl.security.SecurityConfiguration.APPLICATION_PROPERTY_NAME;
 import static com.canoo.dp.impl.security.SecurityConfiguration.AUTH_ENDPOINT_PROPERTY_DEFAULT_VALUE;
 import static com.canoo.dp.impl.security.SecurityConfiguration.AUTH_ENDPOINT_PROPERTY_NAME;
-import static com.canoo.dp.impl.security.SecurityConfiguration.REALM_PROPERTY_DEFAULT_VALUE;
 import static com.canoo.dp.impl.security.SecurityConfiguration.REALM_PROPERTY_NAME;
 import static org.apiguardian.api.API.Status.INTERNAL;
 
