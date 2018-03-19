@@ -45,6 +45,7 @@ public class DolphinKeycloakConfigResolver implements KeycloakConfigResolver {
         final String applicationName = Optional.ofNullable(request.getHeader(APPLICATION_NAME_HEADER)).
                 orElse(configuration.getApplicationName());
         final String authEndPoint = configuration.getAuthEndpoint();
+        final boolean cors = configuration.isCors();
 
         Optional.ofNullable(realmName).orElseThrow(() -> new SecurityException("Realm name for security check is not configured!"));
         Optional.ofNullable(applicationName).orElseThrow(() -> new SecurityException("Application name for security check is not configured!"));
@@ -59,6 +60,8 @@ public class DolphinKeycloakConfigResolver implements KeycloakConfigResolver {
 
         adapterConfig.setResource(applicationName);
         adapterConfig.setAuthServerUrl(authEndPoint);
+        adapterConfig.setCors(cors);
+
         Optional.ofNullable(request.getHeader(BEARER_ONLY_HEADER)).
                 ifPresent(v -> adapterConfig.setBearerOnly(true));
         return KeycloakDeploymentBuilder.build(adapterConfig);
