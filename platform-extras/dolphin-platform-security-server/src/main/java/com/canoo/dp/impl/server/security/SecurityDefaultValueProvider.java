@@ -31,7 +31,6 @@ import static com.canoo.dp.impl.security.SecurityConfiguration.REALM_PROPERTY_DE
 import static com.canoo.dp.impl.security.SecurityConfiguration.REALM_PROPERTY_NAME;
 import static com.canoo.dp.impl.security.SecurityConfiguration.CORS_PROPERTY_NAME;
 import static com.canoo.dp.impl.security.SecurityConfiguration.CORS_PROPERTY_DEFAULT_VALUE;
-import static com.canoo.dp.impl.security.SecurityConfiguration.REALMS_PROPERTY_DEFAULT_VALUE;
 import static com.canoo.dp.impl.security.SecurityConfiguration.REALMS_PROPERTY_NAME;
 import static com.canoo.dp.impl.server.security.KeycloakConfiguration.SECURE_ENDPOINTS_PROPERTY_DEFAULT_VALUE;
 import static com.canoo.dp.impl.server.security.KeycloakConfiguration.SECURE_ENDPOINTS_PROPERTY_NAME;
@@ -63,7 +62,7 @@ public class SecurityDefaultValueProvider extends ConfigurationProviderAdapter {
     public Map<String, List<String>> getListProperties() {
         final HashMap<String, List<String>> ret = new HashMap<>();
         ret.put(SECURE_ENDPOINTS_PROPERTY_NAME, Collections.<String>singletonList(SECURE_ENDPOINTS_PROPERTY_DEFAULT_VALUE));
-        ret.put(REALMS_PROPERTY_NAME, REALMS_PROPERTY_DEFAULT_VALUE);
+        ret.put(REALMS_PROPERTY_NAME, Collections.emptyList());
         return ret;
     }
 }

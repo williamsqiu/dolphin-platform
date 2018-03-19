@@ -17,9 +17,6 @@ package com.canoo.dp.impl.security;
 
 import org.apiguardian.api.API;
 
-import java.util.Collections;
-import java.util.List;
-
 @API(since = "0.19.0", status = API.Status.EXPERIMENTAL)
 public interface SecurityConfiguration {
 
@@ -44,6 +41,4 @@ public interface SecurityConfiguration {
     boolean CORS_PROPERTY_DEFAULT_VALUE = true;
 
     String REALMS_PROPERTY_NAME = "security.keycloak.realms";
-
-    List<String> REALMS_PROPERTY_DEFAULT_VALUE = Collections.emptyList();
 }
