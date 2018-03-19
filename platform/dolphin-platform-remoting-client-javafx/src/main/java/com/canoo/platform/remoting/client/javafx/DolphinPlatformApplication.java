@@ -17,6 +17,7 @@ package com.canoo.platform.remoting.client.javafx;
 
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.client.PlatformClient;
+import com.canoo.platform.client.javafx.FxToolkit;
 import com.canoo.platform.core.DolphinRuntimeException;
 import com.canoo.platform.remoting.client.ClientContext;
 import com.canoo.platform.remoting.client.ClientContextFactory;

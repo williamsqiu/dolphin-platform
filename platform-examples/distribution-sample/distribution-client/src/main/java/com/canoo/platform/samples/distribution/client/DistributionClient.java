@@ -18,7 +18,7 @@ package com.canoo.platform.samples.distribution.client;
 import com.canoo.platform.client.PlatformClient;
 import com.canoo.platform.remoting.client.ClientContext;
 import com.canoo.platform.remoting.client.ClientContextFactory;
-import com.canoo.platform.remoting.client.javafx.FxToolkit;
+import com.canoo.platform.client.javafx.FxToolkit;
 import com.canoo.platform.samples.distribution.client.view.ToDoView;
 import javafx.application.Application;
 import javafx.application.Platform;
