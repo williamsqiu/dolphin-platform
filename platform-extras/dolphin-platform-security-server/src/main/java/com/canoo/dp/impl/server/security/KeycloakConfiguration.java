@@ -30,6 +30,8 @@ import static com.canoo.dp.impl.security.SecurityConfiguration.AUTH_ENDPOINT_PRO
 import static com.canoo.dp.impl.security.SecurityConfiguration.AUTH_ENDPOINT_PROPERTY_NAME;
 import static com.canoo.dp.impl.security.SecurityConfiguration.CORS_PROPERTY_NAME;
 import static com.canoo.dp.impl.security.SecurityConfiguration.REALM_PROPERTY_NAME;
+import static com.canoo.dp.impl.security.SecurityConfiguration.REALMS_PROPERTY_NAME;
+import static com.canoo.dp.impl.security.SecurityConfiguration.CORS_PROPERTY_DEFAULT_VALUE;
 import static org.apiguardian.api.API.Status.INTERNAL;
 
 @API(since = "0.19.0", status = INTERNAL)
@@ -69,11 +71,11 @@ public class KeycloakConfiguration implements Serializable {
 
     public KeycloakConfiguration(final PlatformConfiguration platformConfiguration) {
         Assert.requireNonNull(platformConfiguration, "platformConfiguration");
-        this.realmNames = platformConfiguration.getListProperty(REALM_PROPERTY_NAME, Collections.emptyList());
-        if (this.realmNames.size() > 0) {
-            this.realmName = this.realmNames.get(0);
-        } else {
-            this.realmName = null;
+        this.realmName = platformConfiguration.getProperty(REALM_PROPERTY_NAME);
+        this.realmNames = new ArrayList<>();
+        this.realmNames.addAll(platformConfiguration.getListProperty(REALMS_PROPERTY_NAME, Collections.emptyList()));
+        if (this.realmName != null && !this.realmName.isEmpty() && !this.realmNames.contains(this.realmName)) {
+            this.realmNames.add(this.realmName);
         }
         this.applicationName = platformConfiguration.getProperty(APPLICATION_PROPERTY_NAME, APPLICATION_PROPERTY_DEFAULT_VALUE);
         this.authEndpoint = platformConfiguration.getProperty(AUTH_ENDPOINT_PROPERTY_NAME, AUTH_ENDPOINT_PROPERTY_DEFAULT_VALUE) + "/auth";
@@ -81,7 +83,7 @@ public class KeycloakConfiguration implements Serializable {
         this.securityActive = platformConfiguration.getBooleanProperty(SECURITY_ACTIVE_PROPERTY_NAME, false);
         this.loginEndpointActive = platformConfiguration.getBooleanProperty(LOGIN_ENDPOINTS_ACTIVE_PROPERTY_NAME, true);
         this.loginEndpoint = platformConfiguration.getProperty(LOGIN_ENDPOINTS_PROPERTY_NAME, LOGIN_ENDPOINTS_PROPERTY_DEFAULT_VALUE);
-        this.cors  = platformConfiguration.getBooleanProperty(CORS_PROPERTY_NAME, true);
+        this.cors  = platformConfiguration.getBooleanProperty(CORS_PROPERTY_NAME, CORS_PROPERTY_DEFAULT_VALUE);
 
     }
 
