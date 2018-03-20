@@ -41,7 +41,7 @@ public class HttpSessionTimeoutListener implements HttpSessionListener {
     }
 
     @Override
-    public void sessionCreated(HttpSessionEvent sessionEvent) {
+    public void sessionCreated(final HttpSessionEvent sessionEvent) {
         Assert.requireNonNull(sessionEvent, "sessionEvent");
         try {
             sessionEvent.getSession().setMaxInactiveInterval(sessionTimeoutInSeconds);
@@ -51,5 +51,5 @@ public class HttpSessionTimeoutListener implements HttpSessionListener {
     }
 
     @Override
-    public void sessionDestroyed(HttpSessionEvent se) {}
+    public void sessionDestroyed(final HttpSessionEvent se) {}
 }

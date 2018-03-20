@@ -68,33 +68,33 @@ public class ConfigurationFileLoader {
         Assert.requireNonNull(configuration, "configuration");
 
         final ServiceLoader<ConfigurationProvider> serviceLoader = ServiceLoader.load(ConfigurationProvider.class);
-        for(ConfigurationProvider provider : serviceLoader) {
+        for(final ConfigurationProvider provider : serviceLoader) {
             final Map<String, String> additionalStringProperties = provider.getStringProperties();
-            for(Map.Entry<String, String> property : additionalStringProperties.entrySet()) {
+            for(final Map.Entry<String, String> property : additionalStringProperties.entrySet()) {
                 if(!configuration.containsProperty(property.getKey())) {
                     configuration.setProperty(property.getKey(), property.getValue());
                 }
             }
             final Map<String, List<String>> additionalListProperties = provider.getListProperties();
-            for(Map.Entry<String, List<String>> property : additionalListProperties.entrySet()) {
+            for(final Map.Entry<String, List<String>> property : additionalListProperties.entrySet()) {
                 if(!configuration.containsProperty(property.getKey())) {
                     configuration.setListProperty(property.getKey(), property.getValue());
                 }
             }
             final Map<String, Boolean> additionalBooleanProperties = provider.getBooleanProperties();
-            for(Map.Entry<String, Boolean> property : additionalBooleanProperties.entrySet()) {
+            for(final Map.Entry<String, Boolean> property : additionalBooleanProperties.entrySet()) {
                 if(!configuration.containsProperty(property.getKey())) {
                     configuration.setBooleanProperty(property.getKey(), property.getValue());
                 }
             }
-            Map<String, Integer> additionalIntegerProperties = provider.getIntegerProperties();
-            for(Map.Entry<String, Integer> property : additionalIntegerProperties.entrySet()) {
+            final Map<String, Integer> additionalIntegerProperties = provider.getIntegerProperties();
+            for(final Map.Entry<String, Integer> property : additionalIntegerProperties.entrySet()) {
                 if(!configuration.containsProperty(property.getKey())) {
                     configuration.setIntProperty(property.getKey(), property.getValue());
                 }
             }
             final Map<String, Long> additionalLongProperties = provider.getLongProperties();
-            for(Map.Entry<String, Long> property : additionalLongProperties.entrySet()) {
+            for(final Map.Entry<String, Long> property : additionalLongProperties.entrySet()) {
                 if(!configuration.containsProperty(property.getKey())) {
                     configuration.setLongProperty(property.getKey(), property.getValue());
                 }
@@ -102,7 +102,7 @@ public class ConfigurationFileLoader {
         }
         LOG.debug("Configuration created with {} properties", configuration.getPropertyKeys().size());
         if(LOG.isTraceEnabled()) {
-            for(String key : configuration.getPropertyKeys()) {
+            for(final String key : configuration.getPropertyKeys()) {
                 LOG.debug("Dolphin Platform configured with '{}'='{}'", key, configuration.getProperty(key, null));
             }
         }

@@ -47,17 +47,17 @@ public class HttpClientSessionImpl implements ClientSession {
     }
 
     @Override
-    public void setAttribute(String name, Object value) {
+    public void setAttribute(final String name, final Object value) {
         store.put(name, value);
     }
 
     @Override
-    public Object getAttribute(String name) {
+    public Object getAttribute(final String name) {
         return store.get(name);
     }
 
     @Override
-    public void removeAttribute(String name) {
+    public void removeAttribute(final String name) {
         store.remove(name);
     }
 

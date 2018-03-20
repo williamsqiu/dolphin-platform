@@ -43,7 +43,10 @@ public class ClientSessionFilter implements Filter {
     }
 
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+    public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain) throws IOException, ServletException {
+        Assert.requireNonNull(request, "request");
+        Assert.requireNonNull(response, "response");
+        Assert.requireNonNull(chain, "chain");
         final HttpServletRequest servletRequest = (HttpServletRequest) request;
         final HttpServletResponse servletResponse = (HttpServletResponse) response;
         final HttpSession httpSession = Assert.requireNonNull(servletRequest.getSession(), "request.getSession()");
@@ -52,9 +55,9 @@ public class ClientSessionFilter implements Filter {
             final String clientId = servletRequest.getHeader(PlatformConstants.CLIENT_ID_HTTP_HEADER_NAME);
             if (clientId == null || clientId.trim().isEmpty()) {
                 try {
-                    String createdClientId = clientSessionManager.createClientSession(httpSession);
+                    final String createdClientId = clientSessionManager.createClientSession(httpSession);
                     continueRequest(servletRequest, servletResponse, chain, httpSession, createdClientId);
-                } catch (MaxSessionCountReachedException e) {
+                } catch (final MaxSessionCountReachedException e) {
                     LOG.warn("Maximum size for clients in session {} is reached", servletRequest.getSession().getId());
                     servletResponse.sendError(HttpServletResponse.SC_SERVICE_UNAVAILABLE, "Maximum size for clients in session is reached");
                 }
@@ -72,14 +75,17 @@ public class ClientSessionFilter implements Filter {
                     continueRequest(servletRequest, servletResponse, chain, httpSession, clientId);
                 }
             }
-        } catch (Exception e) {
+        } catch (final Exception e) {
             LOG.error("Error while checking requested client in session " + httpSession.getId() + " (unknown error)", e);
             servletResponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Can not find requested client (unknown error)!");
             return;
         }
     }
 
-    private void continueRequest(HttpServletRequest request, HttpServletResponse response, FilterChain chain, final HttpSession httpSession, final String clientSessionId) throws IOException, ServletException {
+    private void continueRequest(final HttpServletRequest request, final HttpServletResponse response, final FilterChain chain, final HttpSession httpSession, final String clientSessionId) throws IOException, ServletException {
+        Assert.requireNonNull(request, "request");
+        Assert.requireNonNull(response, "response");
+        Assert.requireNonNull(chain, "chain");
         clientSessionManager.setClientSessionForThread(httpSession, clientSessionId);
         try {
             final Object init = httpSession.getAttribute(INITIALIZED_IN_SESSION);
@@ -95,7 +101,7 @@ public class ClientSessionFilter implements Filter {
     }
 
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
+    public void init(final FilterConfig filterConfig) throws ServletException {
         //Nothing to do here
     }
 

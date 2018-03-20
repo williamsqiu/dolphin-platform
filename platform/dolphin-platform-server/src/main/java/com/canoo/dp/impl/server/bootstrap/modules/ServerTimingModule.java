@@ -15,6 +15,7 @@
  */
 package com.canoo.dp.impl.server.bootstrap.modules;
 
+import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.server.servlet.ServerTimingFilter;
 import com.canoo.platform.core.PlatformConfiguration;
 import com.canoo.platform.server.spi.AbstractBaseModule;
@@ -53,6 +54,7 @@ public class ServerTimingModule extends AbstractBaseModule {
 
     @Override
     public void initialize(final ServerCoreComponents coreComponents) throws ModuleInitializationException {
+        Assert.requireNonNull(coreComponents, "coreComponents");
         final ServletContext servletContext = coreComponents.getInstance(ServletContext.class);
         final PlatformConfiguration configuration = coreComponents.getConfiguration();
 

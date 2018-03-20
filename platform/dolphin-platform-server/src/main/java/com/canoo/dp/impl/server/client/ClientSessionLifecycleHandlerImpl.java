@@ -82,7 +82,7 @@ public final class ClientSessionLifecycleHandlerImpl implements ClientSessionLif
         return currentClientSession.get();
     }
 
-    public void setCurrentSession(ClientSession currentSession) {
+    public void setCurrentSession(final ClientSession currentSession) {
         currentClientSession.set(currentSession);
     }
 }

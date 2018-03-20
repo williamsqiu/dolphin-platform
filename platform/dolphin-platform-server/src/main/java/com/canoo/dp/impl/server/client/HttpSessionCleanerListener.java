@@ -35,15 +35,15 @@ public class HttpSessionCleanerListener implements HttpSessionListener {
 
     private final ClientSessionManager clientSessionManager;
 
-    public HttpSessionCleanerListener(ClientSessionManager clientSessionManager) {
-        this.clientSessionManager = clientSessionManager;
+    public HttpSessionCleanerListener(final ClientSessionManager clientSessionManager) {
+        this.clientSessionManager = Assert.requireNonNull(clientSessionManager, "clientSessionManager");
     }
 
     @Override
-    public void sessionCreated(HttpSessionEvent sessionEvent) {}
+    public void sessionCreated(final HttpSessionEvent sessionEvent) {}
 
     @Override
-    public void sessionDestroyed(HttpSessionEvent sessionEvent) {
+    public void sessionDestroyed(final HttpSessionEvent sessionEvent) {
         Assert.requireNonNull(sessionEvent, "sessionEvent");
         LOG.trace("Http session {} destroyed! Will remove all client sessions for the http session.", sessionEvent.getSession().getId());
         clientSessionManager.removeAllClientSessionsInHttpSession(sessionEvent.getSession());

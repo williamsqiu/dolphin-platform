@@ -34,7 +34,7 @@ public class ServerCoreComponentsImpl implements ServerCoreComponents {
 
     private final Map<Class<?>, Object> instances = new HashMap<>();
 
-    protected ServerCoreComponentsImpl(final ServletContext servletContext, final PlatformConfiguration configuration, final PlatformThreadFactory threadFactory, ClasspathScanner classpathScanner, ManagedBeanFactory managedBeanFactory) {
+    protected ServerCoreComponentsImpl(final ServletContext servletContext, final PlatformConfiguration configuration, final PlatformThreadFactory threadFactory, final ClasspathScanner classpathScanner, final ManagedBeanFactory managedBeanFactory) {
         Assert.requireNonNull(servletContext, "servletContext");
         Assert.requireNonNull(configuration, "configuration");
         Assert.requireNonNull(threadFactory, "threadFactory");
@@ -56,7 +56,7 @@ public class ServerCoreComponentsImpl implements ServerCoreComponents {
         return getInstance(PlatformConfiguration.class);
     }
 
-    public <T> void provideInstance(Class<T> cls, T instance) {
+    public <T> void provideInstance(final Class<T> cls, final T instance) {
         Assert.requireNonNull(cls, "cls");
         Assert.requireNonNull(instance, "instance");
 
@@ -66,7 +66,7 @@ public class ServerCoreComponentsImpl implements ServerCoreComponents {
         instances.put(cls, instance);
     }
 
-    public <T> T getInstance(Class<T> cls) {
+    public <T> T getInstance(final Class<T> cls) {
         Assert.requireNonNull(cls, "cls");
         return (T) instances.get(cls);
     }

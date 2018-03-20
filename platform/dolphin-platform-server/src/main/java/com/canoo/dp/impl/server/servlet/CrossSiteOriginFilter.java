@@ -46,27 +46,27 @@ public class CrossSiteOriginFilter implements Filter {
     }
 
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
+    public void init(final FilterConfig filterConfig) throws ServletException {
         //Nothing to do here
     }
 
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        HttpServletRequest req = (HttpServletRequest) request;
-        HttpServletResponse resp = (HttpServletResponse) response;
+    public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain) throws IOException, ServletException {
+        final HttpServletRequest req = (HttpServletRequest) request;
+        final HttpServletResponse resp = (HttpServletResponse) response;
 
         //Access-Control-Allow-Headers
         String accessControlAllowHeaders = PlatformConstants.CLIENT_ID_HTTP_HEADER_NAME;
-        String headerValues = getAsCommaSeparatedList(configuration.getListProperty(ACCESS_CONTROL_ALLOW_HEADERS, ACCESS_CONTROL_ALLOW_HEADERS_DEFAULT_VALUE));
+        final String headerValues = getAsCommaSeparatedList(configuration.getListProperty(ACCESS_CONTROL_ALLOW_HEADERS, ACCESS_CONTROL_ALLOW_HEADERS_DEFAULT_VALUE));
         if(!headerValues.isEmpty()){
             accessControlAllowHeaders = accessControlAllowHeaders + ", " + headerValues;
         }
 
         //Access-Control-Allow-Methods
-        String allowedMethods = getAsCommaSeparatedList(configuration.getListProperty(ACCESS_CONTROL_ALLOW_METHODS, ACCESS_CONTROL_ALLOW_METHODS_DEFAULT_VALUE));
+        final String allowedMethods = getAsCommaSeparatedList(configuration.getListProperty(ACCESS_CONTROL_ALLOW_METHODS, ACCESS_CONTROL_ALLOW_METHODS_DEFAULT_VALUE));
 
 
-        String clientOrigin = req.getHeader("origin");
+        final String clientOrigin = req.getHeader("origin");
         resp.setHeader("Access-Control-Allow-Origin", clientOrigin);
         if(!allowedMethods.isEmpty()){
             resp.setHeader("Access-Control-Allow-Methods", allowedMethods);
