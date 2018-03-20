@@ -42,17 +42,17 @@ public class URLParams {
     }
 
     public URLParams and(final String key, final int value) {
-        map.put(key, "" + value);
+        map.put(key, String.valueOf(value));
         return this;
     }
 
     public URLParams and(final String key, final long value) {
-        map.put(key, "" + value);
+        map.put(key, String.valueOf(value));
         return this;
     }
 
     public URLParams and(final String key, final boolean value) {
-        map.put(key, "" + value);
+        map.put(key, String.valueOf(value));
         return this;
     }
 

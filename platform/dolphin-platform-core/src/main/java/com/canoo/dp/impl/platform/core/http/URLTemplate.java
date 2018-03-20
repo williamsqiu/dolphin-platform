@@ -28,7 +28,7 @@ public class URLTemplate {
     public URL create() {
         try {
             return new URL(urlRepresentation);
-        } catch (MalformedURLException e) {
+        } catch (final MalformedURLException e) {
             throw new DolphinRuntimeException("Can not create url for '" + urlRepresentation + "'");
         }
     }
@@ -37,12 +37,16 @@ public class URLTemplate {
         return createString(Collections.singletonMap(key, value));
     }
 
+    public String createString(final String key, final boolean value) {
+        return createString(key, String.valueOf(value));
+    }
+
     public String createString(final String key, final int value) {
-        return createString(key, "" + value);
+        return createString(key, String.valueOf(value));
     }
 
     public String createString(final String key, final long value) {
-        return createString(key, "" + value);
+        return createString(key, String.valueOf(value));
     }
 
     public String createString(final URLParams params) {
@@ -53,12 +57,16 @@ public class URLTemplate {
         return create(variables).toString();
     }
 
+    public URL create(final String key, final boolean value) {
+        return create(key, String.valueOf(value));
+    }
+
     public URL create(final String key, final int value) {
-        return create(key, ""+ value);
+        return create(key, String.valueOf(value));
     }
 
     public URL create(final String key, final long value) {
-        return create(key, ""+ value);
+        return create(key, String.valueOf(value));
     }
 
     public URL create(final String key, final String value) {
@@ -75,13 +83,10 @@ public class URLTemplate {
 
         final String url = variables.keySet()
                 .stream()
-                .reduce(urlRepresentation, (base, key) -> {
-                    final String value = variables.get(key);
-                    return replace(base, key, value);
-                });
+                .reduce(urlRepresentation, (base, key) -> replace(base, key, variables.get(key)));
         try {
             return new URL(url);
-        } catch (MalformedURLException e) {
+        } catch (final MalformedURLException e) {
             throw new DolphinRuntimeException("Can not create url for '" + url + "'");
         }
     }
