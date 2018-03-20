@@ -88,7 +88,7 @@ public class ConfigurationFileLoader {
                 }
             }
             final Map<String, Integer> additionalIntegerProperties = provider.getIntegerProperties();
-            for(Map.Entry<String, Integer> property : additionalIntegerProperties.entrySet()) {
+            for(final Map.Entry<String, Integer> property : additionalIntegerProperties.entrySet()) {
                 if(!configuration.containsProperty(property.getKey())) {
                     configuration.setIntProperty(property.getKey(), property.getValue());
                 }
