@@ -26,22 +26,22 @@ import static org.apiguardian.api.API.Status.DEPRECATED;
 @API(since = "0.x", status = DEPRECATED)
 public class DefaultBidirectionalConverter<T, U> implements BidirectionalConverter<T, U> {
 
-    private Converter<T, U> converter;
+    private final Converter<T, U> converter;
 
-    private Converter<U, T> backConverter;
+    private final Converter<U, T> backConverter;
 
-    public DefaultBidirectionalConverter(Converter<T, U> converter, Converter<U, T> backConverter) {
+    public DefaultBidirectionalConverter(final Converter<T, U> converter, final Converter<U, T> backConverter) {
         this.converter = Assert.requireNonNull(converter, "converter");
         this.backConverter = Assert.requireNonNull(backConverter, "backConverter");
     }
 
     @Override
-    public T convertBack(U value) {
+    public T convertBack(final U value) {
         return backConverter.convert(value);
     }
 
     @Override
-    public U convert(T value) {
+    public U convert(final T value) {
         return converter.convert(value);
     }
 }

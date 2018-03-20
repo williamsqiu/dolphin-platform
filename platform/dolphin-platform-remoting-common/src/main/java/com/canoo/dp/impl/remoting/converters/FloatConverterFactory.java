@@ -31,19 +31,19 @@ public class FloatConverterFactory extends AbstractConverterFactory {
     private final static Converter CONVERTER = new AbstractNumberConverter<Float>() {
 
         @Override
-        public Float convertFromDolphin(Number value) {
+        public Float convertFromDolphin(final Number value) {
             return value == null ? null : value.floatValue();
         }
 
         @Override
-        public Number convertToDolphin(Float value) {
+        public Number convertToDolphin(final Float value) {
             return value;
         }
     };
 
 
     @Override
-    public boolean supportsType(Class<?> cls) {
+    public boolean supportsType(final Class<?> cls) {
         return float.class.equals(cls) || Float.class.equals(cls);
     }
 
@@ -58,7 +58,7 @@ public class FloatConverterFactory extends AbstractConverterFactory {
     }
 
     @Override
-    public Converter getConverterForType(Class<?> cls) {
+    public Converter getConverterForType(final Class<?> cls) {
         return CONVERTER;
     }
 }

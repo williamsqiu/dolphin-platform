@@ -31,19 +31,19 @@ public class DoubleConverterFactory extends AbstractConverterFactory {
     private final static Converter CONVERTER = new AbstractNumberConverter<Double>() {
 
         @Override
-        public Double convertFromDolphin(Number value) {
+        public Double convertFromDolphin(final Number value) {
             return value == null ? null : value.doubleValue();
         }
 
         @Override
-        public Number convertToDolphin(Double value) {
+        public Number convertToDolphin(final Double value) {
             return value;
         }
     };
 
 
     @Override
-    public boolean supportsType(Class<?> cls) {
+    public boolean supportsType(final Class<?> cls) {
         return double.class.equals(cls) || Double.class.equals(cls);
     }
 
@@ -58,7 +58,7 @@ public class DoubleConverterFactory extends AbstractConverterFactory {
     }
 
     @Override
-    public Converter getConverterForType(Class<?> cls) {
+    public Converter getConverterForType(final Class<?> cls) {
         return CONVERTER;
     }
 }

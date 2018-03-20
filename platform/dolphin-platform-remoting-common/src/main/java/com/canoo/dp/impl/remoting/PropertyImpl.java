@@ -61,7 +61,7 @@ public class PropertyImpl<T> extends AbstractProperty<T> {
                             (oldValue != null && newValue != null && !oldValue.equals(newValue))) {
                        firePropertyChanged(oldValue, newValue);
                     }
-                } catch (Exception e) {
+                } catch (final Exception e) {
                     throw new MappingException("Error in property change handling for property: " + attribute.getPropertyName() + " in attribute with name: " + propertyInfo.getAttributeName() + " and Id: " + attribute.getId(), e);
                 }
             }
@@ -69,10 +69,10 @@ public class PropertyImpl<T> extends AbstractProperty<T> {
     }
 
     @Override
-    public void set(T value) {
+    public void set(final T value) {
         try {
             attribute.setValue(propertyInfo.convertToDolphin(value));
-        } catch (ValueConverterException e) {
+        } catch (final ValueConverterException e) {
             throw new MappingException("Error in mutating property value!", e);
         }
     }
@@ -82,7 +82,7 @@ public class PropertyImpl<T> extends AbstractProperty<T> {
     public T get() {
         try {
             return (T) propertyInfo.convertFromDolphin(attribute.getValue());
-        } catch (ValueConverterException e) {
+        } catch (final ValueConverterException e) {
             throw new MappingException("Error in accessing property value!", e);
         }
     }

@@ -35,7 +35,7 @@ public class UuidConverterFactory extends AbstractConverterFactory {
 
     private final static Converter CONVERTER = new AbstractStringConverter<UUID>() {
         @Override
-        public UUID convertFromDolphin(String value) throws ValueConverterException {
+        public UUID convertFromDolphin(final String value) throws ValueConverterException {
             try {
                 return value == null ? null : UUID.fromString(value);
             } catch (Exception ex) {
@@ -44,7 +44,7 @@ public class UuidConverterFactory extends AbstractConverterFactory {
         }
 
         @Override
-        public String convertToDolphin(UUID value) throws ValueConverterException {
+        public String convertToDolphin(final UUID value) throws ValueConverterException {
             if (value == null)
                 return null;
             
@@ -53,7 +53,7 @@ public class UuidConverterFactory extends AbstractConverterFactory {
     };
 
     @Override
-    public boolean supportsType(Class<?> cls) {
+    public boolean supportsType(final Class<?> cls) {
         return UUID.class.equals(cls);
     }
 
@@ -68,7 +68,7 @@ public class UuidConverterFactory extends AbstractConverterFactory {
     }
 
     @Override
-    public Converter getConverterForType(Class<?> cls) {
+    public Converter getConverterForType(final Class<?> cls) {
         return CONVERTER;
     }
 

@@ -37,22 +37,22 @@ public class BigDecimalConverterFactory extends AbstractConverterFactory {
     
     private final static Converter CONVERTER = new AbstractNumberConverter<BigDecimal> () {
         @Override
-        public BigDecimal convertFromDolphin(Number value) throws ValueConverterException {
+        public BigDecimal convertFromDolphin(final Number value) throws ValueConverterException {
             try {
                 return value == null ? null : new BigDecimal(value.toString());
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 throw new ValueConverterException("Unable to parse the number: " + value, e);
             }
         }
 
         @Override
-        public Number convertToDolphin(BigDecimal value) throws ValueConverterException {
+        public Number convertToDolphin(final BigDecimal value) throws ValueConverterException {
             return value;
         }
     };
 
     @Override
-    public boolean supportsType(Class<?> cls) {
+    public boolean supportsType(final Class<?> cls) {
         return BigDecimal.class.equals(cls);
     }
 
@@ -67,7 +67,7 @@ public class BigDecimalConverterFactory extends AbstractConverterFactory {
     }
 
     @Override
-    public Converter getConverterForType(Class<?> cls) {
+    public Converter getConverterForType(final Class<?> cls) {
         return CONVERTER;
     }
     

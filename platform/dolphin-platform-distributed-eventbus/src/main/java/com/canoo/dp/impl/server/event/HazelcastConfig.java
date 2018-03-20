@@ -15,6 +15,7 @@
  */
 package com.canoo.dp.impl.server.event;
 
+import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.core.PlatformConfiguration;
 import org.apiguardian.api.API;
 
@@ -39,8 +40,8 @@ public class HazelcastConfig implements Serializable {
 
     private final PlatformConfiguration configuration;
 
-    public HazelcastConfig(PlatformConfiguration configuration) {
-        this.configuration = configuration;
+    public HazelcastConfig(final PlatformConfiguration configuration) {
+        this.configuration = Assert.requireNonNull(configuration, "configuration");
     }
 
     public String getServerName() {

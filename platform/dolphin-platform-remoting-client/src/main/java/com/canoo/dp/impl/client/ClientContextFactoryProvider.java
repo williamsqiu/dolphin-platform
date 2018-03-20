@@ -30,7 +30,7 @@ public class ClientContextFactoryProvider extends AbstractServiceProvider<Client
     }
 
     @Override
-    protected ClientContextFactory createService(ClientConfiguration configuration) {
+    protected ClientContextFactory createService(final ClientConfiguration configuration) {
         return new ClientContextFactoryImpl();
     }
 

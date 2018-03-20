@@ -15,6 +15,7 @@
  */
 package com.canoo.dp.impl.remoting.info;
 
+import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.remoting.spi.converter.Converter;
 import com.canoo.platform.remoting.spi.converter.ValueConverterException;
 import org.apiguardian.api.API;
@@ -27,24 +28,24 @@ public abstract class PropertyInfo {
     private final String attributeName;
     private final Converter converter;
 
-    public PropertyInfo(String attributeName, Converter converter) {
+    public PropertyInfo(final String attributeName, final Converter converter) {
         this.attributeName = attributeName;
-        this.converter = converter;
+        this.converter = Assert.requireNonNull(converter, "converter");
     }
 
     public String getAttributeName() {
         return attributeName;
     }
 
-    public abstract Object getPrivileged(Object bean);
+    public abstract Object getPrivileged(final Object bean);
 
-    public abstract void setPriviliged(Object bean, Object value);
+    public abstract void setPriviliged(final Object bean, final Object value);
 
-    public Object convertFromDolphin(Object value) throws ValueConverterException {
+    public Object convertFromDolphin(final Object value) throws ValueConverterException {
         return converter.convertFromDolphin(value);
     }
 
-    public Object convertToDolphin(Object value) throws ValueConverterException {
+    public Object convertToDolphin(final Object value) throws ValueConverterException {
         return converter.convertToDolphin(value);
     }
 }

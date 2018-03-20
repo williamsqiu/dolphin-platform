@@ -29,7 +29,7 @@ public class IntegerDolphinBinder extends AbstractNumericDolphinBinder<Integer> 
     }
 
     @Override
-    protected boolean equals(Number n, Integer aInteger) {
+    protected boolean equals(final Number n, final Integer aInteger) {
         if (n == null && aInteger != null) {
             return false;
         }
@@ -46,7 +46,7 @@ public class IntegerDolphinBinder extends AbstractNumericDolphinBinder<Integer> 
     protected BidirectionalConverter<Number, Integer> getConverter() {
         return new BidirectionalConverter<Number, Integer>() {
             @Override
-            public Number convertBack(Integer value) {
+            public Number convertBack(final Integer value) {
                 if (value == null) {
                     return 0;
                 }
@@ -54,7 +54,7 @@ public class IntegerDolphinBinder extends AbstractNumericDolphinBinder<Integer> 
             }
 
             @Override
-            public Integer convert(Number value) {
+            public Integer convert(final Number value) {
                 if (value == null) {
                     return 0;
                 }

@@ -29,7 +29,7 @@ import static org.apiguardian.api.API.Status.DEPRECATED;
 public class InterruptLongPollCommandEncoder extends AbstractCommandTranscoder<InterruptLongPollCommand> {
 
     @Override
-    public JsonObject encode(InterruptLongPollCommand command) {
+    public JsonObject encode(final InterruptLongPollCommand command) {
         Assert.requireNonNull(command, "command");
         final JsonObject jsonCommand = new JsonObject();
         jsonCommand.addProperty(ID, INTERRUPT_LONG_POLL_COMMAND_ID);
@@ -37,7 +37,7 @@ public class InterruptLongPollCommandEncoder extends AbstractCommandTranscoder<I
     }
 
     @Override
-    public InterruptLongPollCommand decode(JsonObject jsonObject) {
+    public InterruptLongPollCommand decode(final JsonObject jsonObject) {
         return new InterruptLongPollCommand();
     }
 }

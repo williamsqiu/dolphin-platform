@@ -36,12 +36,12 @@ public class DolphinBeanConverterFactory implements ConverterFactory {
     private Converter<Object, String> converter;
 
     @Override
-    public void init(DolphinBeanRepo beanRepository) {
+    public void init(final DolphinBeanRepo beanRepository) {
         this.converter = new DolphinBeanConverter(beanRepository);
     }
 
     @Override
-    public boolean supportsType(Class<?> cls) {
+    public boolean supportsType(final Class<?> cls) {
         return DolphinUtils.isDolphinBean(cls);
     }
 
@@ -56,7 +56,7 @@ public class DolphinBeanConverterFactory implements ConverterFactory {
     }
 
     @Override
-    public Converter getConverterForType(Class<?> cls) {
+    public Converter getConverterForType(final Class<?> cls) {
         return converter;
     }
 
@@ -64,12 +64,12 @@ public class DolphinBeanConverterFactory implements ConverterFactory {
 
         private final DolphinBeanRepo beanRepository;
 
-        public DolphinBeanConverter(DolphinBeanRepo beanRepository) {
+        public DolphinBeanConverter(final DolphinBeanRepo beanRepository) {
             this.beanRepository = beanRepository;
         }
 
         @Override
-        public Object convertFromDolphin(String value) throws ValueConverterException {
+        public Object convertFromDolphin(final String value) throws ValueConverterException {
             try {
                 return beanRepository.getBean(value);
             } catch (Exception e) {
@@ -78,7 +78,7 @@ public class DolphinBeanConverterFactory implements ConverterFactory {
         }
 
         @Override
-        public String convertToDolphin(Object value) throws ValueConverterException {
+        public String convertToDolphin(final Object value) throws ValueConverterException {
             try {
                 return beanRepository.getDolphinId(value);
             } catch (Exception e) {

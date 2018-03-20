@@ -48,7 +48,7 @@ public class DefaultClientConfiguration implements ClientConfiguration {
         setHttpURLConnectionFactory(new DefaultHttpURLConnectionFactory());
     }
 
-    public DefaultClientConfiguration(Properties prop) {
+    public DefaultClientConfiguration(final Properties prop) {
         this();
         Assert.requireNonNull(prop, "prop");
         internalProperties.putAll(prop);
@@ -124,17 +124,17 @@ public class DefaultClientConfiguration implements ClientConfiguration {
     }
 
     @Override
-    public void setUncaughtExceptionHandler(Thread.UncaughtExceptionHandler uncaughtExceptionHandler) {
+    public void setUncaughtExceptionHandler(final Thread.UncaughtExceptionHandler uncaughtExceptionHandler) {
         setObjectProperty(UNCAUGHT_EXCEPTION_HANDLER, uncaughtExceptionHandler);
     }
 
     @Override
-    public void setUiUncaughtExceptionHandler(Thread.UncaughtExceptionHandler uncaughtExceptionHandler) {
+    public void setUiUncaughtExceptionHandler(final Thread.UncaughtExceptionHandler uncaughtExceptionHandler) {
         setObjectProperty(UI_UNCAUGHT_EXCEPTION_HANDLER, uncaughtExceptionHandler);
     }
 
     @Override
-    public void setHttpURLConnectionFactory(HttpURLConnectionFactory httpURLConnectionFactory) {
+    public void setHttpURLConnectionFactory(final HttpURLConnectionFactory httpURLConnectionFactory) {
         setObjectProperty(CONNECTION_FACTORY, httpURLConnectionFactory);
     }
 

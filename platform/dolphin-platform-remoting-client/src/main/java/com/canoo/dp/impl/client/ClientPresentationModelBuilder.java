@@ -40,26 +40,26 @@ public class ClientPresentationModelBuilder extends AbstractPresentationModelBui
     }
 
     @Override
-    public ClientPresentationModelBuilder withAttribute(String name) {
+    public ClientPresentationModelBuilder withAttribute(final String name) {
         attributes.add(new ClientAttribute(name, null));
         return this;
     }
 
     @Override
-    public ClientPresentationModelBuilder withAttribute(String name, Object value) {
+    public ClientPresentationModelBuilder withAttribute(final String name, final Object value) {
         attributes.add(new ClientAttribute(name, value));
         return this;
     }
 
     @Override
-    public ClientPresentationModelBuilder withAttribute(String name, Object value, String qualifier) {
+    public ClientPresentationModelBuilder withAttribute(final String name, Object value, final String qualifier) {
         attributes.add(new ClientAttribute(name, value, qualifier));
         return this;
     }
 
     @Override
     public ClientPresentationModel create() {
-        return modelStore.createModel(id, type, attributes.toArray(new ClientAttribute[attributes.size()]));
+        return modelStore.createModel(getId(), getType(), attributes.toArray(new ClientAttribute[attributes.size()]));
     }
 
 }

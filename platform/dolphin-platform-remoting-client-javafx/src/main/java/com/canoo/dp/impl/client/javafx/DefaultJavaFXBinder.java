@@ -36,7 +36,7 @@ public class DefaultJavaFXBinder<S> implements JavaFXBinder<S> {
     }
 
     @Override
-    public <T> Binding to(Property<T> dolphinProperty, Converter<? super T, ? extends S> converter) {
+    public <T> Binding to(final Property<T> dolphinProperty, final Converter<? super T, ? extends S> converter) {
         Assert.requireNonNull(dolphinProperty, "dolphinProperty");
         Assert.requireNonNull(converter, "converter");
         final Subscription subscription = dolphinProperty.onChanged(event -> javaFxValue.setValue(converter.convert(dolphinProperty.get())));

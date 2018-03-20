@@ -30,18 +30,18 @@ public class StringConverterFactory extends AbstractConverterFactory {
 
     private final static Converter<String, String> CONVERTER = new AbstractStringConverter<String>() {
         @Override
-        public String convertFromDolphin(String value) {
+        public String convertFromDolphin(final String value) {
             return value;
         }
 
         @Override
-        public String convertToDolphin(String value) {
+        public String convertToDolphin(final String value) {
             return value;
         }
     };
 
     @Override
-    public boolean supportsType(Class<?> cls) {
+    public boolean supportsType(final Class<?> cls) {
         return String.class.equals(cls);
     }
 
@@ -56,7 +56,7 @@ public class StringConverterFactory extends AbstractConverterFactory {
     }
 
     @Override
-    public Converter getConverterForType(Class<?> cls) {
+    public Converter getConverterForType(final Class<?> cls) {
         return CONVERTER;
     }
 }

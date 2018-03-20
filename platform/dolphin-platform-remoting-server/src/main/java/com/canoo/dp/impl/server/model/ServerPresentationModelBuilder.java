@@ -61,7 +61,7 @@ public class ServerPresentationModelBuilder extends AbstractPresentationModelBui
 
     @Override
     public ServerPresentationModel create() {
-        return serverModelStore.presentationModel(id, type, new DTO(slots));
+        return serverModelStore.presentationModel(getId(), getType(), new DTO(slots));
     }
 
 }

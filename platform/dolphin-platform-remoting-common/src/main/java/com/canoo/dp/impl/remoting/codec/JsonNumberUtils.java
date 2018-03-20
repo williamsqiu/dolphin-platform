@@ -44,7 +44,7 @@ public class JsonNumberUtils {
         if(!Number.class.isAssignableFrom(value.getClass())) {
             throw new IllegalArgumentException("Given value is not a number! Type " + value.getClass().getSimpleName());
         }
-        Number numberValue = (Number) value;
+        final Number numberValue = (Number) value;
         if (neededType.equals(Integer.class) || neededType.equals(Integer.TYPE)) {
             return numberValue.intValue();
         } else if (neededType.equals(Long.class) || neededType.equals(Long.TYPE)) {

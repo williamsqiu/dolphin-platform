@@ -40,7 +40,7 @@ public class BeanRepositoryImpl implements BeanRepository {
     private final Map<String, Object> dolphinIdToObjectPm = new HashMap<>();
     private final ModelStore modelStore;
     private final Map<Class<?>, List<BeanAddedListener<?>>> beanAddedListenerMap = new HashMap<>();
-    private List<BeanAddedListener<Object>> anyBeanAddedListeners = new ArrayList<>();
+    private final List<BeanAddedListener<Object>> anyBeanAddedListeners = new ArrayList<>();
     private final Map<Class<?>, List<BeanRemovedListener<?>>> beanRemovedListenerMap = new HashMap<>();
 
     private List<BeanRemovedListener<Object>> anyBeanRemovedListeners = new ArrayList<>();

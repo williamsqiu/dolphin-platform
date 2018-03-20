@@ -37,7 +37,7 @@ public class DefaultHazelcastProvider implements HazelcastProvider {
 
     private HazelcastInstance hazelcastInstance;
 
-    public synchronized HazelcastInstance getHazelcastInstance(HazelcastConfig configuration) {
+    public synchronized HazelcastInstance getHazelcastInstance(final HazelcastConfig configuration) {
         if (hazelcastInstance == null) {
             final String serverName = configuration.getServerName();
             final String serverPort = configuration.getServerPort();

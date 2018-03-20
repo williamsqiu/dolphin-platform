@@ -34,7 +34,7 @@ public class ClientControllerActionCallBean extends AbstractControllerActionCall
     private final ClientModelStore modelStore;
     private ClientPresentationModel pm;
 
-    public ClientControllerActionCallBean(ClientModelStore modelStore, Converters converters, String controllerId, String actionName, Param... params) {
+    public ClientControllerActionCallBean(final ClientModelStore modelStore, final Converters converters, final String controllerId, final String actionName, final Param... params) {
         this.modelStore = Assert.requireNonNull(modelStore, "modelStore");
 
         final ClientPresentationModelBuilder builder = new ClientPresentationModelBuilder(modelStore);

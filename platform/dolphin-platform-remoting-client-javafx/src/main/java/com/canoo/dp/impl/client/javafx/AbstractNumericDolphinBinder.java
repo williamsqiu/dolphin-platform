@@ -41,7 +41,7 @@ public abstract class AbstractNumericDolphinBinder<T extends Number> extends Def
     protected abstract BidirectionalConverter<Number, T> getConverter();
 
     @Override
-    public Binding toNumeric(ObservableValue<Number> observableValue) {
+    public Binding toNumeric(final ObservableValue<Number> observableValue) {
         if (observableValue == null) {
             throw new IllegalArgumentException("observableValue must not be null");
         }
@@ -58,12 +58,12 @@ public abstract class AbstractNumericDolphinBinder<T extends Number> extends Def
     }
 
     @Override
-    public Binding bidirectionalToNumeric(javafx.beans.property.Property<Number> javaFxProperty) {
+    public Binding bidirectionalToNumeric(final javafx.beans.property.Property<Number> javaFxProperty) {
         if (javaFxProperty == null) {
             throw new IllegalArgumentException("javaFxProperty must not be null");
         }
-        Binding unidirectionalBinding = toNumeric(javaFxProperty);
-        Subscription subscription = property.onChanged(e -> {
+        final Binding unidirectionalBinding = toNumeric(javaFxProperty);
+        final Subscription subscription = property.onChanged(e -> {
             if (!equals(javaFxProperty.getValue(), property.get())) {
                 javaFxProperty.setValue(getConverter().convertBack(property.get()));
             }

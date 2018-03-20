@@ -32,7 +32,7 @@ import static org.apiguardian.api.API.Status.DEPRECATED;
 public class AttributeMetadataChangedCommandEncoder extends AbstractCommandTranscoder<AttributeMetadataChangedCommand> {
 
     @Override
-    public JsonObject encode(AttributeMetadataChangedCommand command) {
+    public JsonObject encode(final AttributeMetadataChangedCommand command) {
         Assert.requireNonNull(command, "command");
         final JsonObject jsonCommand = new JsonObject();
         jsonCommand.addProperty(ID, ATTRIBUTE_METADATA_CHANGED_COMMAND_ID);
@@ -43,8 +43,8 @@ public class AttributeMetadataChangedCommandEncoder extends AbstractCommandTrans
     }
 
     @Override
-    public AttributeMetadataChangedCommand decode(JsonObject jsonObject) {
-        AttributeMetadataChangedCommand command = new AttributeMetadataChangedCommand();
+    public AttributeMetadataChangedCommand decode(final JsonObject jsonObject) {
+        final AttributeMetadataChangedCommand command = new AttributeMetadataChangedCommand();
         command.setAttributeId(getStringElement(jsonObject, ATTRIBUTE_ID));
         command.setMetadataName(getStringElement(jsonObject, NAME));
         command.setValue(ValueEncoder.decodeValue(jsonObject.get(VALUE)));

@@ -37,13 +37,13 @@ public class DefaultJavaFXListBinder<S> implements JavaFXListBinder<S> {
 
     private static IdentityHashMap<javafx.collections.ObservableList, javafx.collections.ObservableList> boundLists = new IdentityHashMap<>();
 
-    public DefaultJavaFXListBinder(javafx.collections.ObservableList<S> list) {
+    public DefaultJavaFXListBinder(final javafx.collections.ObservableList<S> list) {
         Assert.requireNonNull(list, "list");
         this.list = list;
     }
 
     @Override
-    public <T> Binding to(ObservableList<T> dolphinList, Function<? super T, ? extends S> converter) {
+    public <T> Binding to(final ObservableList<T> dolphinList, final Function<? super T, ? extends S> converter) {
         Assert.requireNonNull(dolphinList, "dolphinList");
         Assert.requireNonNull(converter, "converter");
         if(boundLists.containsKey(list)) {
@@ -72,7 +72,7 @@ public class DefaultJavaFXListBinder<S> implements JavaFXListBinder<S> {
     }
 
     @Override
-    public <T> Binding bidirectionalTo(ObservableList<T> dolphinList, Function<? super T, ? extends S> converter, Function<? super S, ? extends T> backConverter) {
+    public <T> Binding bidirectionalTo(final ObservableList<T> dolphinList, final Function<? super T, ? extends S> converter, final Function<? super S, ? extends T> backConverter) {
         Assert.requireNonNull(dolphinList, "dolphinList");
         Assert.requireNonNull(converter, "converter");
         Assert.requireNonNull(backConverter, "backConverter");
@@ -99,20 +99,20 @@ public class DefaultJavaFXListBinder<S> implements JavaFXListBinder<S> {
 
         protected boolean onChange;
 
-        private InternalListChangeListener(Function<? super T, ? extends S> converter) {
+        private InternalListChangeListener(final Function<? super T, ? extends S> converter) {
             this.converter = converter;
             onChange = false;
         }
 
         @Override
-        public void listChanged(ListChangeEvent<? extends T> e) {
+        public void listChanged(final ListChangeEvent<? extends T> e) {
             if (onChange) {
                 return;
             }
 
             onChange = true;
             try {
-                for (ListChangeEvent.Change<? extends T> c : e.getChanges()) {
+                for (final ListChangeEvent.Change<? extends T> c : e.getChanges()) {
                     final int index = c.getFrom();
                     if (c.isRemoved() || c.isReplaced()) {
                         list.subList(index, index + c.getRemovedElements().size()).clear();

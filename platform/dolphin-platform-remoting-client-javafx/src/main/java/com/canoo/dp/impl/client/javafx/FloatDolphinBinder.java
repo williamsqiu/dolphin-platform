@@ -31,7 +31,7 @@ public class FloatDolphinBinder extends AbstractNumericDolphinBinder<Float> {
     }
 
     @Override
-    protected boolean equals(Number n, Float aFloat) {
+    protected boolean equals(final Number n, final Float aFloat) {
         if (n == null && aFloat != null) {
             return false;
         }
@@ -48,7 +48,7 @@ public class FloatDolphinBinder extends AbstractNumericDolphinBinder<Float> {
     protected BidirectionalConverter<Number, Float> getConverter() {
         return new BidirectionalConverter<Number, Float>() {
             @Override
-            public Number convertBack(Float value) {
+            public Number convertBack(final Float value) {
                 if (value == null) {
                     return 0.0f;
                 }
@@ -56,7 +56,7 @@ public class FloatDolphinBinder extends AbstractNumericDolphinBinder<Float> {
             }
 
             @Override
-            public Float convert(Number value) {
+            public Float convert(final Number value) {
                 if (value == null) {
                     return 0.0f;
                 }

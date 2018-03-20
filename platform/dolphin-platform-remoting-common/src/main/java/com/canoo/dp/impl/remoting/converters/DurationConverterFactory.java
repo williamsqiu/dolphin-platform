@@ -31,7 +31,7 @@ public class DurationConverterFactory extends AbstractConverterFactory {
     private final static Converter CONVERTER = new DurationConverter();
 
     @Override
-    public boolean supportsType(Class<?> cls) {
+    public boolean supportsType(final Class<?> cls) {
         return Duration.class.isAssignableFrom(cls);
     }
 
@@ -46,14 +46,14 @@ public class DurationConverterFactory extends AbstractConverterFactory {
     }
 
     @Override
-    public Converter getConverterForType(Class<?> cls) {
+    public Converter getConverterForType(final Class<?> cls) {
         return CONVERTER;
     }
 
     private static class DurationConverter extends AbstractStringConverter<Duration> {
 
         @Override
-        public Duration convertFromDolphin(String value) throws ValueConverterException {
+        public Duration convertFromDolphin(final String value) throws ValueConverterException {
             if (value == null) {
                 return null;
             }
@@ -65,7 +65,7 @@ public class DurationConverterFactory extends AbstractConverterFactory {
         }
 
         @Override
-        public String convertToDolphin(Duration value) throws ValueConverterException {
+        public String convertToDolphin(final Duration value) throws ValueConverterException {
             if (value == null) {
                 return null;
             }

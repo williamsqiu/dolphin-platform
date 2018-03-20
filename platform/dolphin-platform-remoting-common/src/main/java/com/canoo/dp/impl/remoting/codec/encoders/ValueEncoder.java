@@ -28,7 +28,7 @@ public class ValueEncoder {
 
     private ValueEncoder() {}
 
-    public static JsonElement encodeValue(Object value) {
+    public static JsonElement encodeValue(final Object value) {
         if(value == null) {
             return JsonNull.INSTANCE;
         }
@@ -44,7 +44,7 @@ public class ValueEncoder {
         throw new JsonParseException("Only String, Number, and Boolean are allowed currently");
     }
 
-    public static Object decodeValue(JsonElement jsonElement) {
+    public static Object decodeValue(final JsonElement jsonElement) {
         if (jsonElement == null || jsonElement.isJsonNull()) {
             return null;
         }

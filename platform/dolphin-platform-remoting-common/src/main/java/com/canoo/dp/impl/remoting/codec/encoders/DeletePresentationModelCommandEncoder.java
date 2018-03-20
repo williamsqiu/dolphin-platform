@@ -29,7 +29,7 @@ import static org.apiguardian.api.API.Status.INTERNAL;
 public class DeletePresentationModelCommandEncoder extends AbstractCommandTranscoder<DeletePresentationModelCommand> {
 
     @Override
-    public JsonObject encode(DeletePresentationModelCommand command) {
+    public JsonObject encode(final DeletePresentationModelCommand command) {
         Assert.requireNonNull(command, "command");
         final JsonObject jsonCommand = new JsonObject();
         jsonCommand.addProperty(ID, DELETE_PRESENTATION_MODEL_COMMAND_ID);
@@ -38,8 +38,8 @@ public class DeletePresentationModelCommandEncoder extends AbstractCommandTransc
     }
 
     @Override
-    public DeletePresentationModelCommand decode(JsonObject jsonObject) {
-        DeletePresentationModelCommand command = new DeletePresentationModelCommand();
+    public DeletePresentationModelCommand decode(final JsonObject jsonObject) {
+        final DeletePresentationModelCommand command = new DeletePresentationModelCommand();
         command.setPmId(getStringElement(jsonObject, PM_ID));
         return command;
     }

@@ -29,18 +29,18 @@ public class ClassPropertyInfo extends PropertyInfo {
 
     private final Field field;
 
-    public ClassPropertyInfo(String attributeName, Converter converter, Field field) {
+    public ClassPropertyInfo(final String attributeName, final Converter converter, final Field field) {
         super(attributeName, converter);
         this.field = field;
     }
 
     @Override
-    public Object getPrivileged(Object bean) {
+    public Object getPrivileged(final Object bean) {
         return ReflectionHelper.getPrivileged(field, bean);
     }
 
     @Override
-    public void setPriviliged(Object bean, Object value) {
+    public void setPriviliged(final Object bean, final Object value) {
         ReflectionHelper.setPrivileged(field, bean, value);
     }
 

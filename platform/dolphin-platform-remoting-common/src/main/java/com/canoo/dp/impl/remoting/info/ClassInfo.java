@@ -32,7 +32,7 @@ public class ClassInfo {
     private final Map<String, PropertyInfo> propertyInfoMap;
     private final Map<String, PropertyInfo> observableListInfoMap;
 
-    public ClassInfo(Class<?> beanClass, Collection<PropertyInfo> propertyInfos, Collection<PropertyInfo> observableListInfos) {
+    public ClassInfo(final Class<?> beanClass, final Collection<PropertyInfo> propertyInfos, final Collection<PropertyInfo> observableListInfos) {
         this.beanClass = beanClass;
         modelType = DolphinUtils.getDolphinPresentationModelTypeForClass(beanClass);
 
@@ -57,21 +57,21 @@ public class ClassInfo {
         return modelType;
     }
 
-    public PropertyInfo getPropertyInfo(String attributeName) {
+    public PropertyInfo getPropertyInfo(final String attributeName) {
         return propertyInfoMap.get(attributeName);
     }
 
-    public PropertyInfo getObservableListInfo(String attributeName) {
+    public PropertyInfo getObservableListInfo(final String attributeName) {
         return observableListInfoMap.get(attributeName);
     }
 
-    public void forEachProperty(PropertyIterator iterator) {
+    public void forEachProperty(final PropertyIterator iterator) {
         for (final PropertyInfo propertyInfo : propertyInfoMap.values()) {
             iterator.call(propertyInfo);
         }
     }
 
-    public void forEachObservableList(PropertyIterator iterator) {
+    public void forEachObservableList(final PropertyIterator iterator) {
         for (final PropertyInfo observableListInfo : observableListInfoMap.values()) {
             iterator.call(observableListInfo);
         }

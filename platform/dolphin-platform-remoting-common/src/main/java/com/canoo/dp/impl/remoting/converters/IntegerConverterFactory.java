@@ -31,19 +31,19 @@ public class IntegerConverterFactory extends AbstractConverterFactory {
     private final static Converter CONVERTER = new AbstractNumberConverter<Integer>() {
 
         @Override
-        public Integer convertFromDolphin(Number value) {
+        public Integer convertFromDolphin(final Number value) {
             return value == null ? null : value.intValue();
         }
 
         @Override
-        public Number convertToDolphin(Integer value) {
+        public Number convertToDolphin(final Integer value) {
             return value;
         }
     };
 
 
     @Override
-    public boolean supportsType(Class<?> cls) {
+    public boolean supportsType(final Class<?> cls) {
         return int.class.equals(cls) || Integer.class.equals(cls);
     }
 
@@ -58,7 +58,7 @@ public class IntegerConverterFactory extends AbstractConverterFactory {
     }
 
     @Override
-    public Converter getConverterForType(Class<?> cls) {
+    public Converter getConverterForType(final Class<?> cls) {
         return CONVERTER;
     }
 }

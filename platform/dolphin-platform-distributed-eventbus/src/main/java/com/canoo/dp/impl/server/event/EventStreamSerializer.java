@@ -61,7 +61,7 @@ public class EventStreamSerializer implements StreamSerializer<DolphinEvent<?>> 
     }
 
     @Override
-    public void write(ObjectDataOutput out, DolphinEvent<?> event) throws IOException {
+    public void write(final ObjectDataOutput out, final DolphinEvent<?> event) throws IOException {
         out.writeUTF(gson.toJson(convertToJson(event)));
     }
 
@@ -88,7 +88,7 @@ public class EventStreamSerializer implements StreamSerializer<DolphinEvent<?>> 
         root.addProperty(TIMESTAMP_PARAM, eventContext.getTimestamp());
 
         final JsonArray metadataArray = new JsonArray();
-        for (Map.Entry<String, Serializable> entry : eventContext.getMetadata().entrySet()) {
+        for (final Map.Entry<String, Serializable> entry : eventContext.getMetadata().entrySet()) {
             final String key = entry.getKey();
             final Serializable data = entry.getValue();
             final JsonObject metadataEntry = new JsonObject();
@@ -105,7 +105,7 @@ public class EventStreamSerializer implements StreamSerializer<DolphinEvent<?>> 
     }
 
     @Override
-    public DolphinEvent<?> read(ObjectDataInput in) throws IOException {
+    public DolphinEvent<?> read(final ObjectDataInput in) throws IOException {
         final JsonElement root = new JsonParser().parse(in.readUTF());
         if (!root.isJsonObject()) {
             throw new IllegalArgumentException("Input can not be parsed!");
@@ -196,7 +196,7 @@ public class EventStreamSerializer implements StreamSerializer<DolphinEvent<?>> 
             } else {
                 try {
                     event.addMetadata(metadataKey, Base64Utils.fromBase64(metadataElement.getAsJsonObject().get(METADATA_VALUE_PARAM).getAsJsonPrimitive().getAsString()));
-                } catch (ClassNotFoundException e) {
+                } catch (final ClassNotFoundException e) {
                     throw new IllegalArgumentException("Input can not be parsed! metadata for key '" + metadataKey + "' can not be parsed");
                 }
             }

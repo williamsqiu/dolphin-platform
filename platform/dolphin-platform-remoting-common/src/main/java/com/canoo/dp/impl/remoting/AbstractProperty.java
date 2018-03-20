@@ -65,7 +65,7 @@ public abstract class AbstractProperty<T> implements Property<T> {
     }
 
     protected void notifyExternalListeners(ValueChangeEvent<T> event) {
-        for(ValueChangeListener<? super T> listener : listeners) {
+        for(final ValueChangeListener<? super T> listener : listeners) {
             listener.valueChanged(event);
         }
     }

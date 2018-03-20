@@ -66,7 +66,7 @@ public class SimpleDolphinPlatformThreadFactory implements PlatformThreadFactory
         });
     }
 
-    public void setUncaughtExceptionHandler(Thread.UncaughtExceptionHandler uncaughtExceptionHandler) {
+    public void setUncaughtExceptionHandler(final Thread.UncaughtExceptionHandler uncaughtExceptionHandler) {
         Assert.requireNonNull(uncaughtExceptionHandler, "uncaughtExceptionHandler");
         uncaughtExceptionHandlerLock.lock();
         try {
