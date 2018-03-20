@@ -40,7 +40,7 @@ public class BigDecimalConverterFactory extends AbstractConverterFactory {
         public BigDecimal convertFromDolphin(final Number value) throws ValueConverterException {
             try {
                 return value == null ? null : new BigDecimal(value.toString());
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 throw new ValueConverterException("Unable to parse the number: " + value, e);
             }
         }
