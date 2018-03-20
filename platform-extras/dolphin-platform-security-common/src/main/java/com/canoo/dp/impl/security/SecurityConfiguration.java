@@ -35,10 +35,4 @@ public interface SecurityConfiguration {
     boolean DIRECT_CONNECTION_PROPERTY_DEFAULT_VALUE = false;
 
     String APPLICATION_PROPERTY_DEFAULT_VALUE = "myApp";
-
-    String CORS_PROPERTY_NAME = "security.keycloak.cors";
-
-    boolean CORS_PROPERTY_DEFAULT_VALUE = true;
-
-    String REALMS_PROPERTY_NAME = "security.keycloak.realms";
 }

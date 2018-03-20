@@ -28,10 +28,11 @@ import static com.canoo.dp.impl.security.SecurityConfiguration.APPLICATION_PROPE
 import static com.canoo.dp.impl.security.SecurityConfiguration.APPLICATION_PROPERTY_NAME;
 import static com.canoo.dp.impl.security.SecurityConfiguration.AUTH_ENDPOINT_PROPERTY_DEFAULT_VALUE;
 import static com.canoo.dp.impl.security.SecurityConfiguration.AUTH_ENDPOINT_PROPERTY_NAME;
-import static com.canoo.dp.impl.security.SecurityConfiguration.CORS_PROPERTY_NAME;
 import static com.canoo.dp.impl.security.SecurityConfiguration.REALM_PROPERTY_NAME;
-import static com.canoo.dp.impl.security.SecurityConfiguration.REALMS_PROPERTY_NAME;
-import static com.canoo.dp.impl.security.SecurityConfiguration.CORS_PROPERTY_DEFAULT_VALUE;
+
+import static com.canoo.dp.impl.server.security.SecurityServerConfiguration.CORS_PROPERTY_NAME;
+import static com.canoo.dp.impl.server.security.SecurityServerConfiguration.REALMS_PROPERTY_NAME;
+import static com.canoo.dp.impl.server.security.SecurityServerConfiguration.CORS_PROPERTY_DEFAULT_VALUE;
 import static org.apiguardian.api.API.Status.INTERNAL;
 
 @API(since = "0.19.0", status = INTERNAL)
@@ -72,11 +73,11 @@ public class KeycloakConfiguration implements Serializable {
     public KeycloakConfiguration(final PlatformConfiguration platformConfiguration) {
         Assert.requireNonNull(platformConfiguration, "platformConfiguration");
         this.realmName = platformConfiguration.getProperty(REALM_PROPERTY_NAME);
-        this.realmNames = new ArrayList<>();
-        this.realmNames.addAll(platformConfiguration.getListProperty(REALMS_PROPERTY_NAME, Collections.emptyList()));
-        if (this.realmName != null && !this.realmName.isEmpty() && !this.realmNames.contains(this.realmName)) {
-            this.realmNames.add(this.realmName);
+        final List<String> realmNames = new ArrayList<>(platformConfiguration.getListProperty(REALMS_PROPERTY_NAME, Collections.emptyList()));
+        if (this.realmName != null && !this.realmName.isEmpty() && !realmNames.contains(this.realmName)) {
+            realmNames.add(this.realmName);
         }
+        this.realmNames = Collections.unmodifiableList(realmNames);
         this.applicationName = platformConfiguration.getProperty(APPLICATION_PROPERTY_NAME, APPLICATION_PROPERTY_DEFAULT_VALUE);
         this.authEndpoint = platformConfiguration.getProperty(AUTH_ENDPOINT_PROPERTY_NAME, AUTH_ENDPOINT_PROPERTY_DEFAULT_VALUE) + "/auth";
         this.secureEndpoints.addAll(platformConfiguration.getListProperty(SECURE_ENDPOINTS_PROPERTY_NAME, Collections.emptyList()));

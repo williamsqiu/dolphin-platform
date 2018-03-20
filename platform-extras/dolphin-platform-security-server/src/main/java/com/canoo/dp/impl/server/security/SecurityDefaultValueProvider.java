@@ -29,9 +29,9 @@ import static com.canoo.dp.impl.security.SecurityConfiguration.AUTH_ENDPOINT_PRO
 import static com.canoo.dp.impl.security.SecurityConfiguration.AUTH_ENDPOINT_PROPERTY_NAME;
 import static com.canoo.dp.impl.security.SecurityConfiguration.REALM_PROPERTY_DEFAULT_VALUE;
 import static com.canoo.dp.impl.security.SecurityConfiguration.REALM_PROPERTY_NAME;
-import static com.canoo.dp.impl.security.SecurityConfiguration.CORS_PROPERTY_NAME;
-import static com.canoo.dp.impl.security.SecurityConfiguration.CORS_PROPERTY_DEFAULT_VALUE;
-import static com.canoo.dp.impl.security.SecurityConfiguration.REALMS_PROPERTY_NAME;
+import static com.canoo.dp.impl.server.security.SecurityServerConfiguration.CORS_PROPERTY_NAME;
+import static com.canoo.dp.impl.server.security.SecurityServerConfiguration.CORS_PROPERTY_DEFAULT_VALUE;
+import static com.canoo.dp.impl.server.security.SecurityServerConfiguration.REALMS_PROPERTY_NAME;
 import static com.canoo.dp.impl.server.security.KeycloakConfiguration.SECURE_ENDPOINTS_PROPERTY_DEFAULT_VALUE;
 import static com.canoo.dp.impl.server.security.KeycloakConfiguration.SECURE_ENDPOINTS_PROPERTY_NAME;
 import static com.canoo.dp.impl.server.security.KeycloakConfiguration.SECURITY_ACTIVE_PROPERTY_DEFAULT_VALUE;
