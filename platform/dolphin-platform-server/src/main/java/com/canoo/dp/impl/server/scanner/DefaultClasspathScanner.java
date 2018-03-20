@@ -79,13 +79,13 @@ public class DefaultClasspathScanner implements ClasspathScanner {
         //Remove native libs (will be added on Mac in a Spring Boot app)
         final Set<URL> urls = configuration.getUrls();
         final List<URL> toRemove = new ArrayList<>();
-        for (URL url : urls) {
+        for (final URL url : urls) {
             if (url.toString().endsWith(".jnilib")) {
                 toRemove.add(url);
             }
         }
         LOG.trace("Configuration Urls {}", Arrays.toString(configuration.getUrls().toArray()));
-        for (URL url : toRemove) {
+        for (final URL url : toRemove) {
             LOG.trace("Url removed {}", url.toString());
             configuration.getUrls().remove(url);
         }
