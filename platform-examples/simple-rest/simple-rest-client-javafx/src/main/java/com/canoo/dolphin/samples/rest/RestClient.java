@@ -18,7 +18,7 @@ package com.canoo.dolphin.samples.rest;
 import com.canoo.platform.client.PlatformClient;
 import com.canoo.platform.core.http.HttpClient;
 import com.canoo.platform.core.http.RequestMethod;
-import com.canoo.platform.remoting.client.javafx.FxToolkit;
+import com.canoo.platform.client.javafx.FxToolkit;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;

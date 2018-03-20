@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.platform.remoting.client.javafx;
+package com.canoo.platform.client.javafx;
 
 import com.canoo.platform.client.PlatformClient;
 import com.canoo.platform.client.Toolkit;

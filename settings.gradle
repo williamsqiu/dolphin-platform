@@ -2,6 +2,8 @@ rootProject.name = 'dolphin-platform'
 
 include 'platform/dolphin-platform-core'
 include 'platform/dolphin-platform-client'
+include 'platform/dolphin-platform-client-swing'
+include 'platform/dolphin-platform-client-javafx'
 include 'platform/dolphin-platform-server'
 include 'platform/dolphin-platform-server-javaee'
 include 'platform/dolphin-platform-server-spring'
