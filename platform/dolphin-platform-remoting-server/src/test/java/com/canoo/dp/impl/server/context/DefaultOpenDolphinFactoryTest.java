@@ -38,8 +38,8 @@ public class DefaultOpenDolphinFactoryTest {
         final ServerConnector serverConnector = new ServerConnector();
         serverConnector.setCodec(OptimizedJsonCodec.getInstance());
         serverConnector.setServerModelStore(modelStore);
-        final DefaultServerDolphin dolphin = new DefaultServerDolphin(modelStore, serverConnector);
-        dolphin.getServerConnector().registerDefaultActions();
+        final DefaultServerDolphin serverDolphin = new DefaultServerDolphin(modelStore, serverConnector);
+        serverDolphin.getServerConnector().registerDefaultActions();
 
         assertNotNull(serverDolphin);
         assertNotNull(serverDolphin.getModelStore());
