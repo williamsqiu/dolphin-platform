@@ -21,6 +21,8 @@ import com.canoo.dp.impl.remoting.legacy.communication.CreatePresentationModelCo
 import com.canoo.dp.impl.remoting.legacy.communication.PresentationModelDeletedCommand;
 import com.canoo.dp.impl.remoting.legacy.communication.ValueChangedCommand;
 import com.canoo.dp.impl.server.legacy.DefaultServerDolphin;
+import com.canoo.dp.impl.server.legacy.ServerConnector;
+import com.canoo.dp.impl.server.legacy.ServerModelStore;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertEquals;
@@ -31,8 +33,14 @@ public class DefaultOpenDolphinFactoryTest {
 
     @Test
     public void testDolphinCreation() {
-        OpenDolphinFactory factory = new OpenDolphinFactory();
-        DefaultServerDolphin serverDolphin = factory.create();
+
+        final ServerModelStore modelStore = new ServerModelStore();
+        final ServerConnector serverConnector = new ServerConnector();
+        serverConnector.setCodec(OptimizedJsonCodec.getInstance());
+        serverConnector.setServerModelStore(modelStore);
+        final DefaultServerDolphin serverDolphin = new DefaultServerDolphin(modelStore, serverConnector);
+        serverDolphin.getServerConnector().registerDefaultActions();
+
         assertNotNull(serverDolphin);
         assertNotNull(serverDolphin.getModelStore());
         assertNotNull(serverDolphin.getServerConnector());

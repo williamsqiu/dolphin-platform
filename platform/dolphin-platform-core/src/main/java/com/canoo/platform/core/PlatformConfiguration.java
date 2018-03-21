@@ -18,6 +18,7 @@ package com.canoo.platform.core;
 import org.apiguardian.api.API;
 
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -95,4 +96,48 @@ public interface PlatformConfiguration extends Serializable {
      * @return set with all property names
      */
     Set<String> getPropertyKeys();
+
+    static PlatformConfiguration empty() {
+        return new PlatformConfiguration() {
+            @Override
+            public boolean containsProperty(final String key) {
+                return false;
+            }
+
+            @Override
+            public String getProperty(final String key, final String defaultValue) {
+                return defaultValue;
+            }
+
+            @Override
+            public String getProperty(final String key) {
+                return null;
+            }
+
+            @Override
+            public boolean getBooleanProperty(final String key, final boolean defaultValue) {
+                return defaultValue;
+            }
+
+            @Override
+            public int getIntProperty(final String key, final int defaultValue) {
+                return defaultValue;
+            }
+
+            @Override
+            public long getLongProperty(final String key, final long defaultValue) {
+                return defaultValue;
+            }
+
+            @Override
+            public List<String> getListProperty(final String key, final List<String> defaultValues) {
+                return defaultValues;
+            }
+
+            @Override
+            public Set<String> getPropertyKeys() {
+                return Collections.emptySet();
+            }
+        };
+    }
 }

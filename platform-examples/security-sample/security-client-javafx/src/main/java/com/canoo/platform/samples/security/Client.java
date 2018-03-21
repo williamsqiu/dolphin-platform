@@ -30,11 +30,29 @@ public class Client {
         System.out.println(message);
 
         final Security security = PlatformClient.getService(Security.class);
-        security.login("admin", "admin").get();
+        security.login("user", "password").get();
 
         final String message2 = client.get("http://localhost:8080/api/secure/message").
                 withoutContent().
                 readString().execute().get().getContent();
         System.out.println(message2);
+
+        Thread.sleep(60 * 1_000);
+
+        System.out.println(client.get("http://localhost:8080/api/secure/message").
+                withoutContent().
+                readString().execute().get().getContent());
+
+        Thread.sleep(2 * 60 * 1_000);
+
+        System.out.println(client.get("http://localhost:8080/api/secure/message").
+                withoutContent().
+                readString().execute().get().getContent());
+
+        Thread.sleep(5 * 60 * 1_000);
+
+        System.out.println(client.get("http://localhost:8080/api/secure/message").
+                withoutContent().
+                readString().execute().get().getContent());
     }
 }

@@ -50,6 +50,10 @@ public class KeycloakConfiguration implements Serializable {
 
     public final static String LOGIN_ENDPOINTS_PROPERTY_DEFAULT_VALUE = "/openid-connect";
 
+    public final static String LOGOUT_ENDPOINTS_PROPERTY_NAME = "security.logoutEndpoint";
+
+    public final static String LOGOUT_ENDPOINTS_PROPERTY_DEFAULT_VALUE = "/openid-logout";
+
     public final static String SECURE_ENDPOINTS_PROPERTY_DEFAULT_VALUE = "/dolphin";
 
     private final String realmName;
@@ -65,6 +69,8 @@ public class KeycloakConfiguration implements Serializable {
     private final String authEndpoint;
 
     private final String loginEndpoint;
+
+    private final String logoutEndpoint;
 
     private final List<String> secureEndpoints = new ArrayList<>();
 
@@ -84,6 +90,7 @@ public class KeycloakConfiguration implements Serializable {
         this.securityActive = platformConfiguration.getBooleanProperty(SECURITY_ACTIVE_PROPERTY_NAME, false);
         this.loginEndpointActive = platformConfiguration.getBooleanProperty(LOGIN_ENDPOINTS_ACTIVE_PROPERTY_NAME, true);
         this.loginEndpoint = platformConfiguration.getProperty(LOGIN_ENDPOINTS_PROPERTY_NAME, LOGIN_ENDPOINTS_PROPERTY_DEFAULT_VALUE);
+        this.logoutEndpoint = platformConfiguration.getProperty(LOGOUT_ENDPOINTS_PROPERTY_NAME, LOGOUT_ENDPOINTS_PROPERTY_DEFAULT_VALUE);
         this.cors  = platformConfiguration.getBooleanProperty(CORS_PROPERTY_NAME, CORS_PROPERTY_DEFAULT_VALUE);
 
     }
@@ -132,5 +139,9 @@ public class KeycloakConfiguration implements Serializable {
 
     public boolean isCors() {
         return cors;
+    }
+
+    public String getLogoutEndpoint() {
+        return logoutEndpoint;
     }
 }
