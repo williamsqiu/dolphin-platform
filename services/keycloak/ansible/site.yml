@@ -62,3 +62,8 @@
         headers:
           Authorization: "bearer {{ keycloak_auth_response.json.access_token }}"
         status_code: 201
+
+    - name: Shutdown server
+      shell: /opt/keycloak-3.4.0.Final/bin/jboss-cli.sh --connect --command=:shutdown >> shutdown.log
+      args:
+        creates: shutdown.log
