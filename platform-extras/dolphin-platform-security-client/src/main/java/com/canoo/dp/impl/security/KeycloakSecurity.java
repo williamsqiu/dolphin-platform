@@ -102,7 +102,7 @@ public class KeycloakSecurity implements Security {
     @Override
     public Future<Void> login(final String user, final String password, final PlatformConfiguration securityConfig) {
         Assert.requireNonNull(securityConfig, "securityConfig");
-        return (Future<Void>) executor.submit(() -> {
+        return executor.submit(() -> {
             loginLogoutLock.lock();
             try {
                 if (authorized.get()) {
@@ -113,17 +113,17 @@ public class KeycloakSecurity implements Security {
                 final String appName = securityConfig.getProperty(APPLICATION_PROPERTY_NAME, defaultAppName);
 
                 try {
-                    KeycloakOpenidConnectResult connectResult = receiveTokenByLogin(user, password, realmName, appName);
+                    final KeycloakOpenidConnectResult connectResult = receiveTokenByLogin(user, password, realmName, appName);
                     accessToken.set(connectResult.getAccess_token());
                     authorized.set(true);
                     startTokenRefreshRunner(connectResult, realmName, appName);
-                } catch (IOException | URISyntaxException e) {
+                } catch (final IOException | URISyntaxException e) {
                     throw new DolphinRuntimeException("Can not receive security token!", e);
                 }
             } finally {
                 loginLogoutLock.unlock();
             }
-        });
+        }, null);
     }
 
     @Override
@@ -177,9 +177,9 @@ public class KeycloakSecurity implements Security {
                         LOG.debug("Token refresh done");
                         connectResultReference.set(newConnectResult);
                     }
-                } catch (InterruptedException e) {
+                } catch (final InterruptedException e) {
                     LOG.debug("Token refresh runner stopped");
-                } catch (IOException | URISyntaxException e) {
+                } catch (final IOException | URISyntaxException e) {
                     throw new DolphinRuntimeException("Can not receive security token!", e);
                 }
             }, null);
