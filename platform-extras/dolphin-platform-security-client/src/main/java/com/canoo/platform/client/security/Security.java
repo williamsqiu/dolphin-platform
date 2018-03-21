@@ -28,12 +28,5 @@ public interface Security {
 
     boolean isAuthorized();
 
-    @Deprecated
     String getAccessToken();
-
-    @Deprecated
-    long tokenExpiresAt();
-
-    @Deprecated
-    Future<Void> refreshToken();
 }
