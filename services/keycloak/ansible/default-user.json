@@ -1,11 +1,11 @@
 {
-  "username": "dolphin-user",
+  "username": "user",
   "enabled": true,
   "emailVerified": true,
   "credentials": [
     {
       "type":"password",
-      "value":"secret",
+      "value":"password",
       "temporary":false
     }
   ]
