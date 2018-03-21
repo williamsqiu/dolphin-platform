@@ -49,6 +49,9 @@ public class SecurityModule extends AbstractBaseModule {
         if(configuration.isLoginEndpointActive()) {
             final ServletContext servletContext = coreComponents.getInstance(ServletContext.class);
             servletContext.addServlet("security-login", new KeycloakTokenServlet(configuration)).addMapping(configuration.getLoginEndpoint());
+            servletContext.addServlet("security-logout", new KeycloakLogoutServlet(configuration)).addMapping(configuration.getLogoutEndpoint());
+
+
         }
     }
 

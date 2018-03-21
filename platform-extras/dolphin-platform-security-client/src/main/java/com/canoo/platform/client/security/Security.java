@@ -15,6 +15,7 @@
  */
 package com.canoo.platform.client.security;
 
+import com.canoo.platform.core.PlatformConfiguration;
 import org.apiguardian.api.API;
 
 import java.util.concurrent.Future;
@@ -24,9 +25,12 @@ public interface Security {
 
     Future<Void> login(String user, String password);
 
+    Future<Void> login(String user, String password, final PlatformConfiguration securityConfig);
+
     Future<Void> logout();
 
     boolean isAuthorized();
 
+    @Deprecated
     String getAccessToken();
 }
