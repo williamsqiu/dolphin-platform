@@ -3,5 +3,9 @@
   "name": "Default Dolphin Platform Client",
   "description": "The default client for the Dolphin Platform",
   "enabled":true,
-  "directAccessGrantsEnabled": true
+  "directAccessGrantsEnabled": true,
+  "publicClient": true,
+  "bearerOnly": false,
+  "redirectUris": ["/*"],
+  "webOrigins": ["*"]
 }
