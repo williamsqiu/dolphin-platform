@@ -15,15 +15,12 @@
  */
 package com.canoo.dp.impl.remoting;
 
-import com.canoo.dp.impl.remoting.legacy.RemotingConstants;
 import org.apiguardian.api.API;
 
 import static org.apiguardian.api.API.Status.INTERNAL;
 
 @API(since = "0.x", status = INTERNAL)
 public interface PlatformRemotingConstants {
-
-    String CLIENT_ID_HTTP_HEADER_NAME = RemotingConstants.DOLPHIN_PLATFORM_PREFIX + "dolphinClientId";
 
     String DOLPHIN_BEAN = "@@@ DOLPHIN_BEAN @@@";
 
@@ -32,5 +29,6 @@ public interface PlatformRemotingConstants {
     String LIST_SPLICE = "@DP:LS@";
 
     String CONTROLLER_ACTION_CALL_BEAN_NAME = "@@@ CONTROLLER_ACTION_CALL_BEAN @@@";
+
     String INTERNAL_ATTRIBUTES_BEAN_NAME = "@@@ HIGHLANDER_BEAN @@@";
 }
