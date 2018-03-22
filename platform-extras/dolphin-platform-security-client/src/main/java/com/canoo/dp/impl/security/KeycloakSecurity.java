@@ -43,6 +43,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import static com.canoo.dp.impl.platform.core.http.HttpHeaderConstants.CONTENT_TYPE_HEADER;
 import static com.canoo.dp.impl.platform.core.http.HttpHeaderConstants.FORM_MIME_TYPE;
 import static com.canoo.dp.impl.platform.core.http.HttpHeaderConstants.TEXT_MIME_TYPE;
+import static com.canoo.dp.impl.platform.core.http.HttpHeaderConstants.CHARSET;
 import static com.canoo.dp.impl.platform.core.http.HttpStatus.SC_HTTP_UNAUTHORIZED;
 import static com.canoo.dp.impl.security.SecurityConfiguration.APPLICATION_PROPERTY_NAME;
 import static com.canoo.dp.impl.security.SecurityConfiguration.AUTH_ENDPOINT_PROPERTY_DEFAULT_VALUE;
@@ -166,7 +167,7 @@ public class KeycloakSecurity implements Security {
 
     private String encode(final String value) throws UnsupportedEncodingException {
         if (value != null) {
-            return URLEncoder.encode(value, "UTF-8");
+            return URLEncoder.encode(value, CHARSET);
         } else {
             return value;
         }
