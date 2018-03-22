@@ -29,8 +29,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URLEncoder;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -113,10 +115,14 @@ public class KeycloakSecurity implements Security {
                 final String appName = securityConfig.getProperty(APPLICATION_PROPERTY_NAME, defaultAppName);
 
                 try {
-                    final KeycloakOpenidConnectResult connectResult = receiveTokenByLogin(user, password, realmName, appName);
+                    final String encodedUser = encode(user);
+                    final String encodedPassword = encode(password);
+                    final String encodedAppName = encode(appName);
+
+                    final KeycloakOpenidConnectResult connectResult = receiveTokenByLogin(encodedUser, encodedPassword, realmName, appName);
                     accessToken.set(connectResult.getAccess_token());
                     authorized.set(true);
-                    startTokenRefreshRunner(connectResult, realmName, appName);
+                    startTokenRefreshRunner(connectResult, realmName, encodedAppName);
                 } catch (final IOException | URISyntaxException e) {
                     throw new DolphinRuntimeException("Can not receive security token!", e);
                 }
@@ -156,6 +162,14 @@ public class KeycloakSecurity implements Security {
     @Override
     public String getAccessToken() {
         return accessToken.get();
+    }
+
+    private String encode(final String value) throws UnsupportedEncodingException {
+        if (value != null) {
+            return URLEncoder.encode(value, "UTF-8");
+        } else {
+            return value;
+        }
     }
 
     private void startTokenRefreshRunner(final KeycloakOpenidConnectResult connectResult, final String realmName, final String appName) {
