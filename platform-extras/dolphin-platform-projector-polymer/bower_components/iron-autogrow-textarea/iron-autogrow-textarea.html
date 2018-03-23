@@ -34,7 +34,7 @@ Custom property | Description | Default
 
 @group Iron Elements
 @hero hero.svg
-@demo demo/index-formular-demo.html
+@demo demo/index.html
 -->
 
 <dom-module id="iron-autogrow-textarea">
@@ -275,6 +275,18 @@ Custom property | Description | Default
      */
     set selectionEnd(value) {
       this.$.textarea.selectionEnd = value;
+    },
+
+    attached: function() {
+      /* iOS has an arbitrary left margin of 3px that isn't present
+       * in any other browser, and means that the paper-textarea's cursor
+       * overlaps the label.
+       * See https://github.com/PolymerElements/paper-input/issues/468.
+       */
+      var IS_IOS = navigator.userAgent.match(/iP(?:[oa]d|hone)/);
+      if (IS_IOS) {
+        this.$.textarea.style.marginLeft = '-3px';
+      }
     },
 
     /**

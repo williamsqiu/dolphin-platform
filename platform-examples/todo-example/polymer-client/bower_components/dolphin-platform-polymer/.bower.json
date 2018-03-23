@@ -1,6 +1,6 @@
 {
   "name": "dolphin-platform-polymer",
-  "version": "1.0.0-CR.4",
+  "version": "1.0.0-CR.5",
   "description": "The Dolphin Platform framework implements the presentation model pattern and provides a modern way to create enterprise applications.",
   "keywords": [
     "Dolphin Platform"
@@ -29,10 +29,10 @@
     "package-lock.json"
   ],
   "dependencies": {
-    "polymer": "Polymer/polymer#2.1.1"
+    "polymer": "Polymer/polymer#2.1.1",
+    "dolphin-platform-js": "1.0.0-CR.5"
   },
   "devDependencies": {
-    "dolphin-platform-js": "1.0.0-CR.4",
     "iron-component-page": "PolymerElements/iron-component-page#3.0.1",
     "web-component-tester": "Polymer/web-component-tester#6.5.0",
     "webcomponentsjs": "webcomponents/webcomponentsjs#1.1.0",
@@ -45,13 +45,13 @@
     "chai": "3.2.0",
     "mocha": "3.1.2"
   },
-  "_release": "1.0.0-CR.4",
+  "_release": "1.0.0-CR.5",
   "_resolution": {
     "type": "version",
-    "tag": "1.0.0-CR.4",
-    "commit": "2d49ed3f7679207f1ae31c07793e0064b0c7aad1"
+    "tag": "1.0.0-CR.5",
+    "commit": "7b578f06f92c6dc86d98430c7327f00261a446d6"
   },
   "_source": "https://github.com/canoo/dolphin-platform-polymer.git",
-  "_target": "1.0.0-CR.4",
+  "_target": "1.0.0-CR.5",
   "_originalSource": "dolphin-platform-polymer"
 }
