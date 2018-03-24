@@ -26,7 +26,7 @@ You can simply integrate Dolphin Platform in a Spring based application. To do s
 <dependency>
     <groupId>com.canoo.dolphin-platform</groupId>
     <artifactId>dolphin-platform-server-spring</artifactId>
-    <version>0.14.0</version>
+    <version>1.0.0.CR5</version>
 </dependency>
 ```
 
@@ -35,7 +35,7 @@ Next to Spring we provide support for JavaEE. To do so you only need to add our 
 <dependency>
     <groupId>com.canoo.dolphin-platform</groupId>
     <artifactId>dolphin-platform-server-javaee</artifactId>
-    <version>0.14.0</version>
+    <version>1.0.0.CR5</version>
 </dependency>
 ```
 
@@ -45,7 +45,7 @@ For a JavaFX based client you need to add the following dependency:
 <dependency>
     <groupId>com.canoo.dolphin-platform</groupId>
     <artifactId>dolphin-platform-client-javafx</artifactId>
-    <version>0.14.0</version>
+    <version>1.0.0.CR5</version>
 </dependency>
 ```
 
