@@ -308,7 +308,7 @@ function release_polymer() {
     update_master $DIRECTORY_POLYMER_PROJECT
 
     echo "- Update dependency for dolphin-platform.js in bower.json"
-    sed_withfix "s/\"dolphin-platform-js\": \".*\",/\"dolphin-platform-js\"\: \"${1}\",/g" bower.json
+    sed_withfix "s/\"dolphin-platform-js\": \".*\"/\"dolphin-platform-js\"\: \"${1}\"/g" bower.json
 
     bower install --force-latest > /dev/null 2>&1
     RETURN=$?
@@ -477,9 +477,6 @@ function release_java() {
     cd $SCRIPT_DIR
     echo "Build for dolphin-platform on master"
     
-    git add -A > /dev/null 2>&1
-    git commit -m "Version updated to $2" > /dev/null 2>&1
-
     create_branch $DIRECTORY_MAIN_PROJECT $2
     switch_branch $DIRECTORY_MAIN_PROJECT $2
 
@@ -511,7 +508,7 @@ function release_java() {
 if [ $PACKAGE -eq 1 ]; then
     release_javascript $JAVASCRIPT_VERSION
 
-    echo "- Please check the new release manuelly in $DIRECTORY_JS_CORE_PROJECT"
+    echo "- Please check the new release manually in $DIRECTORY_JS_CORE_PROJECT"
     echo "  + Check files changed for the master branch with 'git show' and 'git log'"
     echo "  + Check files changed for the release/$JAVASCRIPT_VERSION branch with 'git show' and 'git log'"
     echo "  + Check the existence of the tag for '$JAVASCRIPT_VERSION' with 'git tag'"
@@ -522,7 +519,7 @@ elif [ $PACKAGE -eq 2 ]; then
     release_angularjs $JAVASCRIPT_VERSION
     release_polymer $JAVASCRIPT_VERSION
 
-    echo "- Please check the new release manuelly in $DIRECTORY_POLYMER_PROJECT and $DIRECTORY_ANGULAR_PROJECT"
+    echo "- Please check the new release manually in $DIRECTORY_POLYMER_PROJECT and $DIRECTORY_ANGULAR_PROJECT"
     echo "  + Check files changed for the master branch with 'git show' and 'git log'"
     echo "  + Check files changed for the release/$JAVASCRIPT_VERSION branch with 'git show' and 'git log'"
     echo "  + Check the existence of the tag for '$JAVASCRIPT_VERSION' with 'git tag'"
@@ -531,9 +528,23 @@ elif [ $PACKAGE -eq 2 ]; then
     notify "dolphin-platform-polymer and dolphin-platform-angular $JAVASCRIPT_VERSION" "Release prepared"
 elif [ $PACKAGE -eq 3 ]; then
     release_java_examples $JAVASCRIPT_VERSION $JAVA_VERSION
-    notify "dolphin-platform-examples $JAVASCRIPT_VERSION" "Release prepared"
+
+    echo "- Please check the examples manually in $DIRECTORY_MAIN_PROJECT/platform-examples, because of Bower they are many files changed and maybe not added to version control"
+    echo "  + Add changes to the CHANGELOG in $DIRECTORY_MAIN_PROJECT/documentation/src/docs/asciidoc/changelog.adoc"
+    echo "  + Add all files with 'git add -A'"
+    echo "  + Do a commit for updated examples with 'commit -m \"Examples and Changelog updated for $JAVA_VERSION\""
+
+    notify "dolphin-platform-examples $JAVA_VERSION" "Release prepared"
 elif [ $PACKAGE -eq 4 ]; then
     release_java $JAVASCRIPT_VERSION $JAVA_VERSION
+
+    echo "- Please check the new release manually in $DIRECTORY_MAIN_PROJECT"
+    echo "  + Check files changed for the master branch with 'git show' and 'git log'"
+    echo "  + Check files changed for the release/$JAVA_VERSION branch with 'git show' and 'git log'"
+    echo "  + Check the existence of the tag for '$JAVA_VERSION' with 'git tag'"
+    echo "  + If the check is okay, upload the release to github.com. For the master do 'git push', for the branch do 'git push --set-upstream origin', and for the tag do 'git push origin $JAVA_VERSION'"
+    echo "  + Upload at Bintray with './gradlew clean bintrayUpload'"
+
     notify "dolphin-platform $JAVA_VERSION" "Release prepared"
 fi
 
