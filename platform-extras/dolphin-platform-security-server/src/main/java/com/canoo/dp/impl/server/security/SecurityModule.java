@@ -43,7 +43,7 @@ public class SecurityModule extends AbstractBaseModule {
     public void initialize(final ServerCoreComponents coreComponents) throws ModuleInitializationException {
         Assert.requireNonNull(coreComponents, "coreComponents");
         final KeycloakConfiguration configuration = new KeycloakConfiguration(coreComponents.getConfiguration());
-        final DolphinSecurityBootstrap bootstrap = DolphinSecurityBootstrap.getInstance();
+        final DolphinKeycloakSecurityBootstrap bootstrap = DolphinKeycloakSecurityBootstrap.getInstance();
         bootstrap.init(coreComponents.getInstance(ServletContext.class), coreComponents.getConfiguration());
 
         if(configuration.isLoginEndpointActive()) {

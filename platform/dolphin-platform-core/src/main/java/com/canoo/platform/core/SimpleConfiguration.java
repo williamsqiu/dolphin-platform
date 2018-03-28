@@ -50,7 +50,7 @@ public class SimpleConfiguration implements PlatformConfiguration {
     }
 
     public boolean getBooleanProperty(final String key, final boolean defaultValue) {
-        return Boolean.parseBoolean(internalProperties.getProperty(key, defaultValue + ""));
+        return Boolean.parseBoolean(getProperty(key, defaultValue + ""));
     }
 
     public boolean getBooleanProperty(final String key) {
@@ -58,11 +58,11 @@ public class SimpleConfiguration implements PlatformConfiguration {
     }
 
     public int getIntProperty(final String key, final int defaultValue) {
-        return Integer.parseInt(internalProperties.getProperty(key, defaultValue + ""));
+        return Integer.parseInt(getProperty(key, defaultValue + ""));
     }
 
     public long getLongProperty(final String key, final long defaultValue) {
-        return Long.parseLong(internalProperties.getProperty(key, defaultValue + ""));
+        return Long.parseLong(getProperty(key, defaultValue + ""));
     }
 
     public List<String> getListProperty(final String key) {
@@ -70,7 +70,7 @@ public class SimpleConfiguration implements PlatformConfiguration {
     }
 
     public List<String> getListProperty(final String key, final List<String> defaultValues) {
-        final String value = internalProperties.getProperty(key);
+        final String value = getProperty(key);
         if (value != null) {
             return Arrays.asList(value.split(","));
         }
@@ -126,7 +126,7 @@ public class SimpleConfiguration implements PlatformConfiguration {
         if (value == null) {
             LOG.warn("Setting property '{}' to null value will be ignored.");
         } else {
-            getInternalProperties().setProperty(key, value);
+            internalProperties.setProperty(key, value);
         }
     }
 
@@ -134,7 +134,7 @@ public class SimpleConfiguration implements PlatformConfiguration {
         if(LOG.isDebugEnabled()) {
             final Set<Map.Entry<Object, Object>> properties = internalProperties.entrySet();
             for (final Map.Entry property : properties) {
-                LOG.debug("Configuration propererty: '" + property.getKey() + "' = '" + property.getValue() + "'");
+                LOG.debug("Configuration property: '" + property.getKey() + "' = '" + property.getValue() + "'");
             }
         }
     }

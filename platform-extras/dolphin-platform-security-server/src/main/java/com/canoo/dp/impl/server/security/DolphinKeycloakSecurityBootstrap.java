@@ -33,9 +33,9 @@ import java.util.Optional;
 import static org.apiguardian.api.API.Status.INTERNAL;
 
 @API(since = "0.19.0", status = INTERNAL)
-public class DolphinSecurityBootstrap {
+public class DolphinKeycloakSecurityBootstrap {
 
-    private final static Logger LOG = LoggerFactory.getLogger(DolphinSecurityBootstrap.class);
+    private final static Logger LOG = LoggerFactory.getLogger(DolphinKeycloakSecurityBootstrap.class);
 
     private final static String FILTER_NAME = "DolphinSecurityFilter";
 
@@ -43,7 +43,7 @@ public class DolphinSecurityBootstrap {
 
     private final static String KEYCLOAK_CONFIG_RESOLVER_PROPERTY_NAME = "keycloak.config.resolver";
 
-    private final static DolphinSecurityBootstrap INSTANCE = new DolphinSecurityBootstrap();
+    private final static DolphinKeycloakSecurityBootstrap INSTANCE = new DolphinKeycloakSecurityBootstrap();
 
     private KeycloakSecurityContextExtractFilter extractFilter;
 
@@ -87,7 +87,15 @@ public class DolphinSecurityBootstrap {
         return extractFilter.token();
     }
 
-    public static DolphinSecurityBootstrap getInstance() {
+    public Optional<String> realmForCurrentRequest() {
+        return extractFilter.realm();
+    }
+
+    public Optional<String> appNameForCurrentRequest() {
+        return extractFilter.appName();
+    }
+
+    public static DolphinKeycloakSecurityBootstrap getInstance() {
         return INSTANCE;
     }
 }

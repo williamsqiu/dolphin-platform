@@ -18,29 +18,57 @@ package com.canoo.dp.impl.server.security.spring;
 import com.canoo.dp.impl.platform.core.Assert;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.HttpClients;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 
 import java.util.function.Supplier;
 
+import static com.canoo.dp.impl.security.SecurityHttpHeader.APPLICATION_NAME_HEADER;
 import static com.canoo.dp.impl.security.SecurityHttpHeader.AUTHORIZATION_HEADER;
 import static com.canoo.dp.impl.security.SecurityHttpHeader.BEARER;
+import static com.canoo.dp.impl.security.SecurityHttpHeader.REALM_NAME_HEADER;
 
 public class SecurityClientRequestFactory extends HttpComponentsClientHttpRequestFactory implements ClientHttpRequestFactory {
 
+    private final static Logger LOG = LoggerFactory.getLogger(SecurityClientRequestFactory.class);
+
     private final Supplier<String> securityTokenSupplier;
 
-    public SecurityClientRequestFactory(final Supplier<String> securityTokenSupplier) {
+    private final Supplier<String> realmSupplier;
+
+    private final Supplier<String> appNameSupplier;
+
+    public SecurityClientRequestFactory(final Supplier<String> securityTokenSupplier, final Supplier<String> realmSupplier, final Supplier<String> appNameSupplier) {
         super(HttpClients.custom()
                 .disableCookieManagement()
                 .build()
         );
         this.securityTokenSupplier = Assert.requireNonNull(securityTokenSupplier, "securityTokenSupplier");
+        this.realmSupplier = Assert.requireNonNull(realmSupplier, "realmSupplier");
+        this.appNameSupplier = Assert.requireNonNull(appNameSupplier, "appNameSupplier");
     }
 
     @Override
     protected void postProcessHttpRequest(HttpUriRequest request) {
         final String token = securityTokenSupplier.get();
-        request.setHeader(AUTHORIZATION_HEADER, BEARER + token);
+        if(token != null && !token.isEmpty() && !request.containsHeader(AUTHORIZATION_HEADER)) {
+            LOG.debug("adding auth header");
+            request.setHeader(AUTHORIZATION_HEADER, BEARER + token);
+        }
+
+        final String realm = realmSupplier.get();
+        if(realm != null && !realm.isEmpty() && !request.containsHeader(REALM_NAME_HEADER)) {
+            LOG.debug("adding realm header");
+            request.setHeader(REALM_NAME_HEADER, realm);
+        }
+
+        final String appName = appNameSupplier.get();
+        if(appName != null && !appName.isEmpty() && !request.containsHeader(APPLICATION_NAME_HEADER)) {
+            LOG.debug("adding app name header");
+            request.setHeader(APPLICATION_NAME_HEADER, appName);
+        }
+
     }
 }

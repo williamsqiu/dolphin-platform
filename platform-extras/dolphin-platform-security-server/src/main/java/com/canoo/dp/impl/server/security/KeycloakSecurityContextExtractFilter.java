@@ -27,10 +27,13 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Optional;
 
+import static com.canoo.dp.impl.security.SecurityHttpHeader.APPLICATION_NAME_HEADER;
+import static com.canoo.dp.impl.security.SecurityHttpHeader.REALM_NAME_HEADER;
 import static org.apiguardian.api.API.Status.INTERNAL;
 
 @API(since = "0.19.0", status = INTERNAL)
@@ -38,17 +41,24 @@ public class KeycloakSecurityContextExtractFilter implements Filter, AccessDenie
 
     private final static Logger LOG = LoggerFactory.getLogger(KeycloakSecurityContextExtractFilter.class);
 
-    private final ThreadLocal<KeycloakSecurityContext> contextHolder = new ThreadLocal<KeycloakSecurityContext>();
+    private final ThreadLocal<KeycloakSecurityContext> contextHolder = new ThreadLocal<>();
 
-    private final ThreadLocal<Boolean> accessDenied = new ThreadLocal<Boolean>();
+    private final ThreadLocal<Boolean> accessDenied = new ThreadLocal<>();
+
+    private final ThreadLocal<String> realmHolder = new ThreadLocal<>();
+
+    private final ThreadLocal<String> appNameHolder = new ThreadLocal<>();
 
     private final KeyCloakSecurityExtractor keyCloakSecurityExtractor = new KeyCloakSecurityExtractor();
 
     public void init(final FilterConfig filterConfig) throws ServletException {}
 
     public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain) throws IOException, ServletException {
+        final HttpServletRequest req = (HttpServletRequest) request;
         Assert.requireNonNull(chain, "chain");
         contextHolder.set(keyCloakSecurityExtractor.extractContext(request));
+        realmHolder.set(req.getHeader(REALM_NAME_HEADER));
+        appNameHolder.set(req.getHeader(APPLICATION_NAME_HEADER));
         accessDenied.set(false);
         try {
             chain.doFilter(request, response);
@@ -81,5 +91,13 @@ public class KeycloakSecurityContextExtractFilter implements Filter, AccessDenie
     @Override
     public void onAccessDenied() {
         accessDenied.set(true);
+    }
+
+    public Optional<String> realm() {
+        return Optional.ofNullable(realmHolder.get());
+    }
+
+    public Optional<String> appName() {
+        return Optional.ofNullable(appNameHolder.get());
     }
 }

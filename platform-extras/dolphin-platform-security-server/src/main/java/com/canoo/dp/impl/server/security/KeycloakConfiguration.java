@@ -24,15 +24,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static com.canoo.dp.impl.security.SecurityConfiguration.APPLICATION_PROPERTY_DEFAULT_VALUE;
 import static com.canoo.dp.impl.security.SecurityConfiguration.APPLICATION_PROPERTY_NAME;
 import static com.canoo.dp.impl.security.SecurityConfiguration.AUTH_ENDPOINT_PROPERTY_DEFAULT_VALUE;
 import static com.canoo.dp.impl.security.SecurityConfiguration.AUTH_ENDPOINT_PROPERTY_NAME;
 import static com.canoo.dp.impl.security.SecurityConfiguration.REALM_PROPERTY_NAME;
-
+import static com.canoo.dp.impl.server.security.SecurityServerConfiguration.CORS_PROPERTY_DEFAULT_VALUE;
 import static com.canoo.dp.impl.server.security.SecurityServerConfiguration.CORS_PROPERTY_NAME;
 import static com.canoo.dp.impl.server.security.SecurityServerConfiguration.REALMS_PROPERTY_NAME;
-import static com.canoo.dp.impl.server.security.SecurityServerConfiguration.CORS_PROPERTY_DEFAULT_VALUE;
 import static org.apiguardian.api.API.Status.INTERNAL;
 
 @API(since = "0.19.0", status = INTERNAL)
@@ -84,7 +82,7 @@ public class KeycloakConfiguration implements Serializable {
             realmNames.add(this.realmName);
         }
         this.realmNames = Collections.unmodifiableList(realmNames);
-        this.applicationName = platformConfiguration.getProperty(APPLICATION_PROPERTY_NAME, APPLICATION_PROPERTY_DEFAULT_VALUE);
+        this.applicationName = platformConfiguration.getProperty(APPLICATION_PROPERTY_NAME);
         this.authEndpoint = platformConfiguration.getProperty(AUTH_ENDPOINT_PROPERTY_NAME, AUTH_ENDPOINT_PROPERTY_DEFAULT_VALUE) + "/auth";
         this.secureEndpoints.addAll(platformConfiguration.getListProperty(SECURE_ENDPOINTS_PROPERTY_NAME, Collections.emptyList()));
         this.securityActive = platformConfiguration.getBooleanProperty(SECURITY_ACTIVE_PROPERTY_NAME, false);

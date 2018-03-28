@@ -74,6 +74,7 @@ public class KeycloakTokenServlet extends HttpServlet {
             final byte[] responseContent = clientConnection.readResponseContent();
             ConnectionUtils.writeContent(resp.getOutputStream(), responseContent);
         } catch (final Exception e) {
+            LOG.error("Error in security token handling", e);
             resp.sendError(SC_HTTP_UNAUTHORIZED, "Can not authorize");
         }
     }

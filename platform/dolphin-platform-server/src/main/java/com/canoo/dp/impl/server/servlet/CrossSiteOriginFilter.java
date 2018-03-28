@@ -19,6 +19,8 @@ import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.platform.core.PlatformConstants;
 import com.canoo.platform.core.PlatformConfiguration;
 import org.apiguardian.api.API;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -39,6 +41,8 @@ import static com.canoo.dp.impl.server.config.ServerConfiguration.ACCESS_CONTROL
 @API(since = "0.x", status = INTERNAL)
 public class CrossSiteOriginFilter implements Filter {
 
+    private final static Logger LOG = LoggerFactory.getLogger(CrossSiteOriginFilter.class);
+
     private final PlatformConfiguration configuration;
 
     public CrossSiteOriginFilter(final PlatformConfiguration configuration){
@@ -54,6 +58,8 @@ public class CrossSiteOriginFilter implements Filter {
     public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain) throws IOException, ServletException {
         final HttpServletRequest req = (HttpServletRequest) request;
         final HttpServletResponse resp = (HttpServletResponse) response;
+
+        LOG.error("Received Request for {} of type {} with headers {}", req.getRequestURL(), req.getMethod(), req.getHeaderNames());
 
         //Access-Control-Allow-Headers
         String accessControlAllowHeaders = PlatformConstants.CLIENT_ID_HTTP_HEADER_NAME;
