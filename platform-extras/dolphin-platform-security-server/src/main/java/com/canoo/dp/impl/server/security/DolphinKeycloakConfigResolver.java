@@ -23,6 +23,8 @@ import org.keycloak.adapters.KeycloakDeployment;
 import org.keycloak.adapters.KeycloakDeploymentBuilder;
 import org.keycloak.adapters.spi.HttpFacade;
 import org.keycloak.representations.adapters.config.AdapterConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Optional;
 
@@ -34,6 +36,7 @@ import static org.apiguardian.api.API.Status.INTERNAL;
 @API(since = "0.19.0", status = INTERNAL)
 public class DolphinKeycloakConfigResolver implements KeycloakConfigResolver {
 
+    private final static Logger LOG = LoggerFactory.getLogger(DolphinKeycloakConfigResolver.class);
 
     private static KeycloakConfiguration configuration;
 
@@ -51,10 +54,17 @@ public class DolphinKeycloakConfigResolver implements KeycloakConfigResolver {
         Optional.ofNullable(applicationName).orElseThrow(() -> new SecurityException("Application name for security check is not configured!"));
         Optional.ofNullable(authEndPoint).orElseThrow(() -> new SecurityException("Auth endpoint for security check is not configured!"));
 
+        LOG.debug("Defined Keycloak AdapterConfig for request against realm '" +realmName + "' and app '" + applicationName + "'");
+
         final AdapterConfig adapterConfig = new AdapterConfig();
+        LOG.debug("Checking if realm '" +realmName + "' is allowed");
         if(isRealmAllowed(realmName)){
             adapterConfig.setRealm(realmName);
         }else{
+            if(LOG.isDebugEnabled()) {
+                final String allowedRealms = configuration.getRealmNames().stream().reduce("", (a, b) -> a + "," + b);
+                LOG.debug("Realm '" + realmName + "' is not allowed! Allowed realms are {}", allowedRealms);
+            }
             throw new SecurityException("Access Denied! The given realm is not in the allowed realms.");
         }
 
@@ -64,6 +74,7 @@ public class DolphinKeycloakConfigResolver implements KeycloakConfigResolver {
 
         Optional.ofNullable(request.getHeader(BEARER_ONLY_HEADER)).
                 ifPresent(v -> adapterConfig.setBearerOnly(true));
+
         return KeycloakDeploymentBuilder.build(adapterConfig);
     }
 
@@ -71,8 +82,15 @@ public class DolphinKeycloakConfigResolver implements KeycloakConfigResolver {
         Assert.requireNonNull(realmName, "realmName");
         return configuration.getRealmNames().contains(realmName);
     }
+
     public static void setConfiguration(final KeycloakConfiguration configuration) {
         Assert.requireNonNull(configuration, "configuration");
         DolphinKeycloakConfigResolver.configuration = configuration;
+
+        LOG.debug("Configuration for keycloak resolver defined");
+        if(LOG.isTraceEnabled()) {
+            final String allowedRealms = configuration.getRealmNames().stream().reduce("", (a, b) -> a + "," + b);
+            LOG.trace("Allowed keycloak realms: {}", allowedRealms);
+        }
     }
 }

@@ -13,16 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.dp.impl.server.security;
+package com.canoo.dp.impl.security;
 
-import org.apiguardian.api.API;
+public class KeycloakAuthentification {
 
-@API(since = "0.19.0", status = API.Status.EXPERIMENTAL)
-public interface SecurityServerConfiguration {
+    private final String accessToken;
 
-    String CORS_PROPERTY_NAME = "security.keycloak.cors";
+    private final String appName;
 
-    boolean CORS_PROPERTY_DEFAULT_VALUE = true;
+    private final String realm;
 
-    String REALMS_PROPERTY_NAME = "security.keycloak.realms";
+    public KeycloakAuthentification(final String accessToken, final String appName, final String realm) {
+        this.accessToken = accessToken;
+        this.appName = appName;
+        this.realm = realm;
+    }
+
+    public String getAppName() {
+        return appName;
+    }
+
+    public String getRealm() {
+        return realm;
+    }
+
+    public String getAccessToken() {
+        return accessToken;
+    }
 }

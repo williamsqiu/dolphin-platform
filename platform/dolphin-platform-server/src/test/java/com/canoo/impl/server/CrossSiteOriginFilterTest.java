@@ -15,7 +15,7 @@
  */
 package com.canoo.impl.server;
 
-import com.canoo.dp.impl.server.config.DefaultPlatformConfiguration;
+import com.canoo.dp.impl.server.config.ServerConfiguration;
 import com.canoo.dp.impl.server.servlet.CrossSiteOriginFilter;
 import org.testng.annotations.Test;
 
@@ -27,13 +27,13 @@ public class CrossSiteOriginFilterTest {
 
     @Test
     public void testCommaSeparatedStringWithValidList(){
-        CrossSiteOriginFilter crossSiteOriginFilter = new CrossSiteOriginFilter(new DefaultPlatformConfiguration());
-        String commaSeparatedList = crossSiteOriginFilter.getAsCommaSeparatedList(Arrays.asList("origin", "authorization", "accept"));
+        final CrossSiteOriginFilter crossSiteOriginFilter = new CrossSiteOriginFilter(new ServerConfiguration());
+        final String commaSeparatedList = crossSiteOriginFilter.getAsCommaSeparatedList(Arrays.asList("origin", "authorization", "accept"));
         assertEquals("origin,authorization,accept",commaSeparatedList);
     }
     @Test(expectedExceptions = NullPointerException.class)
     public void testCommaSeparatedList(){
-        CrossSiteOriginFilter crossSiteOriginFilter = new CrossSiteOriginFilter(new DefaultPlatformConfiguration());
+        final CrossSiteOriginFilter crossSiteOriginFilter = new CrossSiteOriginFilter(new ServerConfiguration());
         crossSiteOriginFilter.getAsCommaSeparatedList(null);
     }
 }

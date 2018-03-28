@@ -17,42 +17,27 @@ package com.canoo.platform.samples.security;
 
 import com.canoo.platform.client.PlatformClient;
 import com.canoo.platform.client.security.Security;
+import com.canoo.platform.core.SimpleConfiguration;
 import com.canoo.platform.core.http.HttpClient;
+
+import static com.canoo.dp.impl.security.SecurityConfiguration.APPLICATION_PROPERTY_NAME;
+import static com.canoo.dp.impl.security.SecurityConfiguration.REALM_PROPERTY_NAME;
 
 public class Client {
 
-    public static void main(String[] args) throws Exception{
+    public static void main(final String[] args) throws Exception {
         final HttpClient client = PlatformClient.getService(HttpClient.class);
-
-        final String message = client.get("http://localhost:8080/api/message").
-                withoutContent().
-                readString().execute().get().getContent();
-        System.out.println(message);
-
         final Security security = PlatformClient.getService(Security.class);
-        security.login("user", "password").get();
+        final SimpleConfiguration configuration = new SimpleConfiguration();
 
-        final String message2 = client.get("http://localhost:8080/api/secure/message").
+        configuration.setProperty(REALM_PROPERTY_NAME, "dolphin-realm");
+        configuration.setProperty(APPLICATION_PROPERTY_NAME, "default-dolphin-client");
+        configuration.log();
+
+        security.login("user", "password", configuration).get();
+
+        client.get("http://localhost:8080/api/secure/message").
                 withoutContent().
-                readString().execute().get().getContent();
-        System.out.println(message2);
-
-        Thread.sleep(60 * 1_000);
-
-        System.out.println(client.get("http://localhost:8080/api/secure/message").
-                withoutContent().
-                readString().execute().get().getContent());
-
-        Thread.sleep(2 * 60 * 1_000);
-
-        System.out.println(client.get("http://localhost:8080/api/secure/message").
-                withoutContent().
-                readString().execute().get().getContent());
-
-        Thread.sleep(5 * 60 * 1_000);
-
-        System.out.println(client.get("http://localhost:8080/api/secure/message").
-                withoutContent().
-                readString().execute().get().getContent());
+                readString().execute().get();
     }
 }

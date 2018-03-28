@@ -122,6 +122,8 @@ public class KeycloakSecurity implements Security {
 
                     final KeycloakOpenidConnectResult connectResult = receiveTokenByLogin(encodedUser, encodedPassword, realmName, appName);
                     accessToken.set(connectResult.getAccess_token());
+                    final KeycloakAuthentification auth = new KeycloakAuthentification(accessToken.get(), appName, realmName);
+                    KeycloakAuthentificationManager.getInstance().setAuth(auth);
                     authorized.set(true);
                     startTokenRefreshRunner(connectResult, realmName, encodedAppName);
                 } catch (final IOException | URISyntaxException e) {
@@ -189,6 +191,8 @@ public class KeycloakSecurity implements Security {
                         final KeycloakOpenidConnectResult newConnectResult = receiveTokenByRefresh(currentConnectResult.getRefresh_token(), realmName, appName);
                         Assert.requireNonNull(newConnectResult, "newConnectResult");
                         accessToken.set(newConnectResult.getAccess_token());
+                        final KeycloakAuthentification auth = new KeycloakAuthentification(accessToken.get(), appName, realmName);
+                        KeycloakAuthentificationManager.getInstance().setAuth(auth);
                         LOG.debug("Token refresh done");
                         connectResultReference.set(newConnectResult);
                     }

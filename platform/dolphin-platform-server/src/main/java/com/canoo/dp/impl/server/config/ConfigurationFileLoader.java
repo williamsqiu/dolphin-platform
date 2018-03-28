@@ -31,7 +31,7 @@ import java.util.ServiceLoader;
 import static org.apiguardian.api.API.Status.INTERNAL;
 
 /**
- * This class loads a Dolphin Platform configuration (see {@link DefaultPlatformConfiguration}) based on a property file.
+ * This class loads a Dolphin Platform configuration (see {@link ServerConfiguration}) based on a property file.
  * The file must be placed under "META-INF/dolphin.properties" (normal for a JAR) or under
  * "WEB-INF/classes/META-INF/dolphin.properties" (normal for a WAR). If no file can be found a default
  * confihuration will be returned.
@@ -58,13 +58,13 @@ public class ConfigurationFileLoader {
     }
 
     /**
-     * Tries to load a {@link DefaultPlatformConfiguration} based on a file. if no config file
+     * Tries to load a {@link ServerConfiguration} based on a file. if no config file
      * can be found a default config will be returned.
      *
      * @return a configuration
      */
-    public static DefaultPlatformConfiguration loadConfiguration() {
-        final DefaultPlatformConfiguration configuration = createConfiguration();
+    public static ServerConfiguration loadConfiguration() {
+        final ServerConfiguration configuration = createConfiguration();
         Assert.requireNonNull(configuration, "configuration");
 
         final ServiceLoader<ConfigurationProvider> serviceLoader = ServiceLoader.load(ConfigurationProvider.class);
@@ -110,7 +110,7 @@ public class ConfigurationFileLoader {
         return configuration;
     }
 
-    private static DefaultPlatformConfiguration createConfiguration() {
+    private static ServerConfiguration createConfiguration() {
         try {
             final ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 
@@ -130,7 +130,7 @@ public class ConfigurationFileLoader {
             try (final InputStream inputStream = classLoader.getResourceAsStream(WAR_LOCATION)) {
                 if (inputStream == null) {
                     LOG.info("Can not read configuration. Maybe no dolphin.properties file is defined. Will use a default configuration!");
-                    return new DefaultPlatformConfiguration();
+                    return new ServerConfiguration();
                 } else {
                     return readConfig(inputStream);
                 }
@@ -140,11 +140,11 @@ public class ConfigurationFileLoader {
         }
     }
 
-    private static DefaultPlatformConfiguration readConfig(final InputStream input) throws IOException {
+    private static ServerConfiguration readConfig(final InputStream input) throws IOException {
         Assert.requireNonNull(input, "input");
         final Properties prop = new Properties();
         prop.load(input);
 
-        return new DefaultPlatformConfiguration(prop);
+        return new ServerConfiguration(prop);
     }
 }

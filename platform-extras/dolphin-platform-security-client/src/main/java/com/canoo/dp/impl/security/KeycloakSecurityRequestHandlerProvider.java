@@ -13,16 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.dp.impl.server.security;
+package com.canoo.dp.impl.security;
 
+import com.canoo.platform.core.PlatformConfiguration;
+import com.canoo.platform.core.http.HttpURLConnectionHandler;
+import com.canoo.platform.core.http.spi.RequestHandlerProvider;
 import org.apiguardian.api.API;
 
-@API(since = "0.19.0", status = API.Status.EXPERIMENTAL)
-public interface SecurityServerConfiguration {
+import static org.apiguardian.api.API.Status.INTERNAL;
 
-    String CORS_PROPERTY_NAME = "security.keycloak.cors";
+@API(since = "0.19.0", status = INTERNAL)
+public class KeycloakSecurityRequestHandlerProvider implements RequestHandlerProvider {
 
-    boolean CORS_PROPERTY_DEFAULT_VALUE = true;
-
-    String REALMS_PROPERTY_NAME = "security.keycloak.realms";
+    @Override
+    public HttpURLConnectionHandler getHandler(final PlatformConfiguration configuration) {
+        return new KeycloakRequestHandler();
+    }
 }

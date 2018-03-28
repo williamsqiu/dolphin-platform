@@ -15,7 +15,7 @@
  */
 package com.canoo.dp.impl.server.security.javaee;
 
-import com.canoo.dp.impl.server.security.DolphinSecurityBootstrap;
+import com.canoo.dp.impl.server.security.DolphinKeycloakSecurityBootstrap;
 import com.canoo.platform.server.security.SecurityContext;
 import org.apiguardian.api.API;
 
@@ -32,6 +32,6 @@ public class SecurityBeanFactory {
     @Produces
     @RequestScoped
     public SecurityContext createDolphinSession() {
-        return DolphinSecurityBootstrap.getInstance().getSecurityForCurrentRequest();
+        return DolphinKeycloakSecurityBootstrap.getInstance().getSecurityForCurrentRequest();
     }
 }

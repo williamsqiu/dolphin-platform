@@ -16,7 +16,7 @@
 package com.canoo.dp.impl.server.gc;
 
 import com.canoo.dp.impl.platform.core.Assert;
-import com.canoo.dp.impl.server.config.DefaultPlatformConfiguration;
+import com.canoo.dp.impl.server.config.ServerConfiguration;
 import com.canoo.dp.impl.server.config.RemotingConfiguration;
 import org.testng.annotations.Test;
 
@@ -768,7 +768,7 @@ public class TestGarbageCollection {
         };
         Properties properties = new Properties();
         properties.setProperty("garbageCollectionActive", "false");
-        RemotingConfiguration configuration = new RemotingConfiguration(new DefaultPlatformConfiguration(properties));
+        RemotingConfiguration configuration = new RemotingConfiguration(new ServerConfiguration(properties));
         GarbageCollector garbageCollector = new GarbageCollector(configuration, gcConsumer);
 
         BeanWithLists parentBeanA = new BeanWithLists(garbageCollector);

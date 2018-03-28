@@ -17,7 +17,7 @@ package com.canoo.dp.impl.server.spring;
 
 import com.canoo.dp.impl.server.bootstrap.PlatformBootstrap;
 import com.canoo.dp.impl.server.config.ConfigurationFileLoader;
-import com.canoo.dp.impl.server.config.DefaultPlatformConfiguration;
+import com.canoo.dp.impl.server.config.ServerConfiguration;
 import org.apiguardian.api.API;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +31,8 @@ import org.springframework.core.env.Environment;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+
+import java.util.Optional;
 
 import static org.apiguardian.api.API.Status.INTERNAL;
 
@@ -51,22 +53,20 @@ public class DolphinPlatformSpringBootstrap implements ServletContextInitializer
     private Environment environment;
 
     @Autowired(required = false)
-    private DefaultPlatformConfiguration injectedConfig;
+    private ServerConfiguration injectedConfig;
 
     @Override
     public void onStartup(final ServletContext servletContext) throws ServletException {
-        DefaultPlatformConfiguration configuration = injectedConfig;
-        if(configuration == null) {
-            configuration = ConfigurationFileLoader.loadConfiguration();
-        }
+        final ServerConfiguration configuration = Optional.ofNullable(injectedConfig)
+                .orElse(ConfigurationFileLoader.loadConfiguration());
         updateConfigurationBySpring(configuration);
-        PlatformBootstrap bootstrap = new PlatformBootstrap();
+        final PlatformBootstrap bootstrap = new PlatformBootstrap();
         bootstrap.init(servletContext, configuration);
     }
 
-    private void updateConfigurationBySpring(DefaultPlatformConfiguration configuration) {
-        for(String key : configuration.getPropertyKeys()) {
-            String valInSpringConfig = environment.getProperty(PREFIX + key);
+    private void updateConfigurationBySpring(final ServerConfiguration configuration) {
+        for(final String key : configuration.getPropertyKeys()) {
+            final String valInSpringConfig = environment.getProperty(PREFIX + key);
             if(valInSpringConfig != null) {
                 LOG.debug("Dolphin Platform property '{}' found in spring configuration", key);
                 configuration.setProperty(key, valInSpringConfig);
@@ -80,7 +80,7 @@ public class DolphinPlatformSpringBootstrap implements ServletContextInitializer
         return ctx;
     }
 
-    public void setApplicationContext(ApplicationContext ctx) throws BeansException {
+    public void setApplicationContext(final ApplicationContext ctx) throws BeansException {
         this.ctx = ctx;
     }
 }
