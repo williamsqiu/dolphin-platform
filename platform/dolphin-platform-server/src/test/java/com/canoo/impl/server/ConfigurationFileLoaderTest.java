@@ -31,7 +31,7 @@ public class ConfigurationFileLoaderTest {
     public void testConfigLoad() {
         try {
             //given:
-            ServerConfiguration configuration = ConfigurationFileLoader.loadConfiguration();
+            final ServerConfiguration configuration = ConfigurationFileLoader.loadConfiguration();
 
             //then:
             assertEquals(configuration.getBooleanProperty(USE_CROSS_SITE_ORIGIN_FILTER), false);
@@ -45,7 +45,7 @@ public class ConfigurationFileLoaderTest {
     public void testConfigurationProvider() {
         try {
             //given:
-            ServerConfiguration configuration = ConfigurationFileLoader.loadConfiguration();
+            final ServerConfiguration configuration = ConfigurationFileLoader.loadConfiguration();
 
             //then:
             assertEquals(configuration.getProperty(TestConfigurationProvider.PROPERTY_1_NAME, null), TestConfigurationProvider.PROPERTY_1_VALUE);
@@ -61,7 +61,7 @@ public class ConfigurationFileLoaderTest {
     public void testConfigurationProviderDoNotOverwrite() {
         try {
             //given:
-            ServerConfiguration configuration = ConfigurationFileLoader.loadConfiguration();
+            final ServerConfiguration configuration = ConfigurationFileLoader.loadConfiguration();
 
             //then:
             assertEquals(configuration.getBooleanProperty(USE_CROSS_SITE_ORIGIN_FILTER, USE_CROSS_SITE_ORIGIN_FILTER_DEFAULT_VALUE), false);
@@ -75,7 +75,7 @@ public class ConfigurationFileLoaderTest {
     public void testNullPropertyWillNotBeAdded() {
         try {
             //given:
-            ServerConfiguration configuration = ConfigurationFileLoader.loadConfiguration();
+            final ServerConfiguration configuration = ConfigurationFileLoader.loadConfiguration();
 
             //when:
             configuration.setProperty("test-key", null);
@@ -95,7 +95,7 @@ public class ConfigurationFileLoaderTest {
     public void testNullPropertyWillNotRemoveOldValue() {
         try {
             //given:
-            ServerConfiguration configuration = ConfigurationFileLoader.loadConfiguration();
+            final ServerConfiguration configuration = ConfigurationFileLoader.loadConfiguration();
 
             //when:
             configuration.setProperty("test-key", "a");

@@ -25,7 +25,7 @@ import static com.canoo.dp.impl.security.SecurityConfiguration.REALM_PROPERTY_NA
 
 public class Client {
 
-    public static void main(String[] args) throws Exception {
+    public static void main(final String[] args) throws Exception {
         final HttpClient client = PlatformClient.getService(HttpClient.class);
         final Security security = PlatformClient.getService(Security.class);
         final SimpleConfiguration configuration = new SimpleConfiguration();

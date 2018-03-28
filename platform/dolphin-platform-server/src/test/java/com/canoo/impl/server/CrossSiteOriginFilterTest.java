@@ -27,13 +27,13 @@ public class CrossSiteOriginFilterTest {
 
     @Test
     public void testCommaSeparatedStringWithValidList(){
-        CrossSiteOriginFilter crossSiteOriginFilter = new CrossSiteOriginFilter(new ServerConfiguration());
-        String commaSeparatedList = crossSiteOriginFilter.getAsCommaSeparatedList(Arrays.asList("origin", "authorization", "accept"));
+        final CrossSiteOriginFilter crossSiteOriginFilter = new CrossSiteOriginFilter(new ServerConfiguration());
+        final String commaSeparatedList = crossSiteOriginFilter.getAsCommaSeparatedList(Arrays.asList("origin", "authorization", "accept"));
         assertEquals("origin,authorization,accept",commaSeparatedList);
     }
     @Test(expectedExceptions = NullPointerException.class)
     public void testCommaSeparatedList(){
-        CrossSiteOriginFilter crossSiteOriginFilter = new CrossSiteOriginFilter(new ServerConfiguration());
+        final CrossSiteOriginFilter crossSiteOriginFilter = new CrossSiteOriginFilter(new ServerConfiguration());
         crossSiteOriginFilter.getAsCommaSeparatedList(null);
     }
 }

@@ -37,8 +37,8 @@ public class DolphinPlatformJavaeeBootstrap implements ServletContainerInitializ
 
     @Override
     public void onStartup(final Set<Class<?>> c, final ServletContext servletContext) throws ServletException {
-        ServerConfiguration configuration = ConfigurationFileLoader.loadConfiguration();
-        PlatformBootstrap bootstrap = new PlatformBootstrap();
+        final ServerConfiguration configuration = ConfigurationFileLoader.loadConfiguration();
+        final PlatformBootstrap bootstrap = new PlatformBootstrap();
         bootstrap.init(servletContext, configuration);
     }
 }

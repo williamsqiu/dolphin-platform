@@ -114,7 +114,7 @@ public class SimpleConfiguration implements PlatformConfiguration {
             setProperty(key, "");
         } else {
             final StringBuilder builder = new StringBuilder();
-            for (String value : values) {
+            for (final String value : values) {
                 builder.append(value + ", ");
             }
             builder.setLength(builder.length() - 2);

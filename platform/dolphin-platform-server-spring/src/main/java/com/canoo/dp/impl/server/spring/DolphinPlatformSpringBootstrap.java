@@ -32,6 +32,8 @@ import org.springframework.core.env.Environment;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 
+import java.util.Optional;
+
 import static org.apiguardian.api.API.Status.INTERNAL;
 
 /**
@@ -55,18 +57,16 @@ public class DolphinPlatformSpringBootstrap implements ServletContextInitializer
 
     @Override
     public void onStartup(final ServletContext servletContext) throws ServletException {
-        ServerConfiguration configuration = injectedConfig;
-        if(configuration == null) {
-            configuration = ConfigurationFileLoader.loadConfiguration();
-        }
+        final ServerConfiguration configuration = Optional.ofNullable(injectedConfig)
+                .orElse(ConfigurationFileLoader.loadConfiguration());
         updateConfigurationBySpring(configuration);
-        PlatformBootstrap bootstrap = new PlatformBootstrap();
+        final PlatformBootstrap bootstrap = new PlatformBootstrap();
         bootstrap.init(servletContext, configuration);
     }
 
-    private void updateConfigurationBySpring(ServerConfiguration configuration) {
-        for(String key : configuration.getPropertyKeys()) {
-            String valInSpringConfig = environment.getProperty(PREFIX + key);
+    private void updateConfigurationBySpring(final ServerConfiguration configuration) {
+        for(final String key : configuration.getPropertyKeys()) {
+            final String valInSpringConfig = environment.getProperty(PREFIX + key);
             if(valInSpringConfig != null) {
                 LOG.debug("Dolphin Platform property '{}' found in spring configuration", key);
                 configuration.setProperty(key, valInSpringConfig);
@@ -80,7 +80,7 @@ public class DolphinPlatformSpringBootstrap implements ServletContextInitializer
         return ctx;
     }
 
-    public void setApplicationContext(ApplicationContext ctx) throws BeansException {
+    public void setApplicationContext(final ApplicationContext ctx) throws BeansException {
         this.ctx = ctx;
     }
 }
