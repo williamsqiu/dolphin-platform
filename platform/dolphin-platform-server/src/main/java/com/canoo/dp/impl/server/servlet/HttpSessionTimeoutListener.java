@@ -26,8 +26,8 @@ import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 
 import static org.apiguardian.api.API.Status.INTERNAL;
-import static com.canoo.dp.impl.server.config.DefaultPlatformConfiguration.SESSION_TIMEOUT;
-import static com.canoo.dp.impl.server.config.DefaultPlatformConfiguration.SESSION_TIMEOUT_DEFAULT_VALUE;
+import static com.canoo.dp.impl.server.config.ServerConfiguration.SESSION_TIMEOUT;
+import static com.canoo.dp.impl.server.config.ServerConfiguration.SESSION_TIMEOUT_DEFAULT_VALUE;
 
 @API(since = "0.x", status = INTERNAL)
 public class HttpSessionTimeoutListener implements HttpSessionListener {

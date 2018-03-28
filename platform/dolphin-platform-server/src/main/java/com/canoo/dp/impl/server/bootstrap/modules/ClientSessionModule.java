@@ -42,8 +42,8 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 
-import static com.canoo.dp.impl.server.config.DefaultPlatformConfiguration.ID_FILTER_URL_MAPPINGS;
-import static com.canoo.dp.impl.server.config.DefaultPlatformConfiguration.ID_FILTER_URL_MAPPINGS_DEFAULT_VALUE;
+import static com.canoo.dp.impl.server.config.ServerConfiguration.ID_FILTER_URL_MAPPINGS;
+import static com.canoo.dp.impl.server.config.ServerConfiguration.ID_FILTER_URL_MAPPINGS_DEFAULT_VALUE;
 import static org.apiguardian.api.API.Status.INTERNAL;
 
 @API(since = "0.x", status = INTERNAL)

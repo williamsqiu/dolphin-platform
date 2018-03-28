@@ -23,7 +23,7 @@ import com.canoo.dp.impl.remoting.legacy.communication.Command;
 import com.canoo.dp.impl.server.client.ClientSessionProvider;
 import com.canoo.dp.impl.server.client.HttpClientSessionImpl;
 import com.canoo.dp.impl.server.config.ConfigurationFileLoader;
-import com.canoo.dp.impl.server.config.DefaultPlatformConfiguration;
+import com.canoo.dp.impl.server.config.ServerConfiguration;
 import com.canoo.dp.impl.server.config.RemotingConfiguration;
 import com.canoo.dp.impl.server.context.DolphinContext;
 import com.canoo.dp.impl.server.controller.ControllerRepository;
@@ -41,7 +41,7 @@ import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import static com.canoo.dp.impl.server.config.DefaultPlatformConfiguration.ROOT_PACKAGE_FOR_CLASSPATH_SCAN;
+import static com.canoo.dp.impl.server.config.ServerConfiguration.ROOT_PACKAGE_FOR_CLASSPATH_SCAN;
 import static org.apiguardian.api.API.Status.INTERNAL;
 
 @API(since = "0.x", status = INTERNAL)
@@ -55,7 +55,7 @@ public class TestConfiguration {
         Assert.requireNonNull(context, "context");
         Assert.requireNonNull(httpSession, "httpSession");
 
-        final DefaultPlatformConfiguration defaultPlatformConfiguration = ConfigurationFileLoader.loadConfiguration();
+        final ServerConfiguration defaultPlatformConfiguration = ConfigurationFileLoader.loadConfiguration();
         final RemotingConfiguration remotingConfiguration = new RemotingConfiguration(defaultPlatformConfiguration);
 
         //PlatformClient

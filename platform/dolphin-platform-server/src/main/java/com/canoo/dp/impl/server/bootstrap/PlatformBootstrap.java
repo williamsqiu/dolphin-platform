@@ -18,7 +18,7 @@ package com.canoo.dp.impl.server.bootstrap;
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.platform.core.SimpleDolphinPlatformThreadFactory;
 import com.canoo.dp.impl.platform.core.ansi.PlatformLogo;
-import com.canoo.dp.impl.server.config.DefaultPlatformConfiguration;
+import com.canoo.dp.impl.server.config.ServerConfiguration;
 import com.canoo.dp.impl.server.mbean.MBeanRegistry;
 import com.canoo.dp.impl.server.scanner.DefaultClasspathScanner;
 import com.canoo.platform.core.DolphinRuntimeException;
@@ -40,11 +40,11 @@ import java.util.Map;
 import java.util.ServiceLoader;
 import java.util.Set;
 
-import static com.canoo.dp.impl.server.config.DefaultPlatformConfiguration.ACTIVE_DEFAULT_VALUE;
-import static com.canoo.dp.impl.server.config.DefaultPlatformConfiguration.MBEAN_REGISTRATION;
-import static com.canoo.dp.impl.server.config.DefaultPlatformConfiguration.M_BEAN_REGISTRATION_DEFAULT_VALUE;
-import static com.canoo.dp.impl.server.config.DefaultPlatformConfiguration.PLATFORM_ACTIVE;
-import static com.canoo.dp.impl.server.config.DefaultPlatformConfiguration.ROOT_PACKAGE_FOR_CLASSPATH_SCAN;
+import static com.canoo.dp.impl.server.config.ServerConfiguration.ACTIVE_DEFAULT_VALUE;
+import static com.canoo.dp.impl.server.config.ServerConfiguration.MBEAN_REGISTRATION;
+import static com.canoo.dp.impl.server.config.ServerConfiguration.M_BEAN_REGISTRATION_DEFAULT_VALUE;
+import static com.canoo.dp.impl.server.config.ServerConfiguration.PLATFORM_ACTIVE;
+import static com.canoo.dp.impl.server.config.ServerConfiguration.ROOT_PACKAGE_FOR_CLASSPATH_SCAN;
 import static org.apiguardian.api.API.Status.INTERNAL;
 
 @API(since = "0.x", status = INTERNAL)
@@ -56,7 +56,7 @@ public class PlatformBootstrap {
 
     private static ServerCoreComponents serverCoreComponents;
 
-    public void init(final ServletContext servletContext, final DefaultPlatformConfiguration configuration) {
+    public void init(final ServletContext servletContext, final ServerConfiguration configuration) {
         Assert.requireNonNull(servletContext, "servletContext");
         Assert.requireNonNull(configuration, "configuration");
 

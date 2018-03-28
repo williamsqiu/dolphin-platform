@@ -15,22 +15,21 @@
  */
 package com.canoo.dp.impl.server.config;
 
-import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.server.bootstrap.modules.CorsModule;
 import com.canoo.dp.impl.server.bootstrap.modules.ServerTimingModule;
-import com.canoo.platform.core.PlatformConfiguration;
+import com.canoo.platform.core.SimpleConfiguration;
 import org.apiguardian.api.API;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Properties;
 
 import static org.apiguardian.api.API.Status.INTERNAL;
 
 @API(since = "0.x", status = INTERNAL)
-public final class DefaultPlatformConfiguration implements PlatformConfiguration {
-
-    private static final Logger LOG = LoggerFactory.getLogger(DefaultPlatformConfiguration.class);
+public final class ServerConfiguration extends SimpleConfiguration {
 
     public static final String USE_CROSS_SITE_ORIGIN_FILTER = "useCrossSiteOriginFilter";
 
@@ -78,10 +77,8 @@ public final class DefaultPlatformConfiguration implements PlatformConfiguration
 
     public final static List<String> CORS_ENDPOINTS_URL_MAPPINGS_DEFAULT_VALUE = Arrays.asList("/*");
 
-    private final Properties internalProperties;
-
-    public DefaultPlatformConfiguration() {
-        this(new Properties());
+    public ServerConfiguration() {
+        super(new Properties());
         setIntProperty(SESSION_TIMEOUT, SESSION_TIMEOUT_DEFAULT_VALUE);
         setBooleanProperty(USE_CROSS_SITE_ORIGIN_FILTER, USE_CROSS_SITE_ORIGIN_FILTER_DEFAULT_VALUE);
         setBooleanProperty(MBEAN_REGISTRATION, M_BEAN_REGISTRATION_DEFAULT_VALUE);
@@ -97,101 +94,8 @@ public final class DefaultPlatformConfiguration implements PlatformConfiguration
         setListProperty(CORS_ENDPOINTS_URL_MAPPINGS, CORS_ENDPOINTS_URL_MAPPINGS_DEFAULT_VALUE);
     }
 
-    public DefaultPlatformConfiguration(final Properties internalProperties) {
-        Assert.requireNonNull(internalProperties, "internalProperties");
-        this.internalProperties = internalProperties;
-    }
-
-    public boolean containsProperty(final String key) {
-        return internalProperties.containsKey(key);
-    }
-
-    public boolean getBooleanProperty(final String key, final boolean defaultValue) {
-        return Boolean.parseBoolean(internalProperties.getProperty(key, defaultValue + ""));
-    }
-
-    public boolean getBooleanProperty(final String key) {
-        return getBooleanProperty(key, false);
-    }
-
-    public int getIntProperty(final String key, final int defaultValue) {
-        return Integer.parseInt(internalProperties.getProperty(key, defaultValue + ""));
-    }
-
-    public long getLongProperty(final String key, final long defaultValue) {
-        return Long.parseLong(internalProperties.getProperty(key, defaultValue + ""));
-    }
-
-    public List<String> getListProperty(final String key) {
-        return getListProperty(key, Collections.<String>emptyList());
-    }
-
-    public List<String> getListProperty(final String key, final List<String> defaultValues) {
-        final String value = internalProperties.getProperty(key);
-        if (value != null) {
-            return Arrays.asList(value.split(","));
-        }
-        return defaultValues;
-    }
-
-    public String getProperty(final String key, final String defaultValue) {
-        return internalProperties.getProperty(key, defaultValue);
-    }
-
-    public String getProperty(final String key) {
-        return internalProperties.getProperty(key);
-    }
-
-    public Set<String> getPropertyKeys() {
-        final Set<String> ret = new HashSet<>();
-        for (final Object key : internalProperties.keySet()) {
-            if (key != null) {
-                ret.add(key.toString());
-            }
-        }
-        return ret;
-    }
-
-    public void setIntProperty(final String key, final int value) {
-        setProperty(key, Integer.toString(value));
-    }
-
-    public void setLongProperty(final String key, final long value) {
-        setProperty(key, Long.toString(value));
-    }
-
-    public void setBooleanProperty(final String key, final boolean value) {
-        setProperty(key, Boolean.toString(value));
-    }
-
-    public void setListProperty(final String key, final List<String> values) {
-        if (values == null) {
-            setProperty(key, null);
-        } else if (values.isEmpty()) {
-            setProperty(key, "");
-        } else {
-            final StringBuilder builder = new StringBuilder();
-            for (String value : values) {
-                builder.append(value + ", ");
-            }
-            builder.setLength(builder.length() - 2);
-            setProperty(key, builder.toString());
-        }
-    }
-
-    public void setProperty(final String key, final String value) {
-        if (value == null) {
-            LOG.warn("Setting property '{}' to null value will be ignored.");
-        } else {
-            internalProperties.setProperty(key, value);
-        }
-    }
-
-    public void log() {
-        final Set<Map.Entry<Object, Object>> properties = internalProperties.entrySet();
-        for (Map.Entry property : properties) {
-            LOG.debug("Dolphin Platform starts with value for " + property.getKey() + " = " + property.getValue());
-        }
+    public ServerConfiguration(final Properties internalProperties) {
+        super(internalProperties);
     }
 }
 

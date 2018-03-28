@@ -31,8 +31,8 @@ import java.util.EnumSet;
 import java.util.List;
 
 import static org.apiguardian.api.API.Status.INTERNAL;
-import static com.canoo.dp.impl.server.config.DefaultPlatformConfiguration.CORS_ENDPOINTS_URL_MAPPINGS;
-import static com.canoo.dp.impl.server.config.DefaultPlatformConfiguration.CORS_ENDPOINTS_URL_MAPPINGS_DEFAULT_VALUE;
+import static com.canoo.dp.impl.server.config.ServerConfiguration.CORS_ENDPOINTS_URL_MAPPINGS;
+import static com.canoo.dp.impl.server.config.ServerConfiguration.CORS_ENDPOINTS_URL_MAPPINGS_DEFAULT_VALUE;
 
 @API(since = "0.x", status = INTERNAL)
 @ModuleDefinition

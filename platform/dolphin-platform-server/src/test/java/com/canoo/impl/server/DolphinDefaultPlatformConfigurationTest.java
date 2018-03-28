@@ -15,9 +15,9 @@
  */
 package com.canoo.impl.server;
 
-import static com.canoo.dp.impl.server.config.DefaultPlatformConfiguration.USE_CROSS_SITE_ORIGIN_FILTER;
-import static com.canoo.dp.impl.server.config.DefaultPlatformConfiguration.USE_CROSS_SITE_ORIGIN_FILTER_DEFAULT_VALUE;
-import com.canoo.dp.impl.server.config.DefaultPlatformConfiguration;
+import static com.canoo.dp.impl.server.config.ServerConfiguration.USE_CROSS_SITE_ORIGIN_FILTER;
+import static com.canoo.dp.impl.server.config.ServerConfiguration.USE_CROSS_SITE_ORIGIN_FILTER_DEFAULT_VALUE;
+import com.canoo.dp.impl.server.config.ServerConfiguration;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -26,7 +26,7 @@ public class DolphinDefaultPlatformConfigurationTest {
     @Test
     public void testDefaultConfiguration() {
         //given:
-        DefaultPlatformConfiguration configuration = new DefaultPlatformConfiguration();
+        ServerConfiguration configuration = new ServerConfiguration();
 
         //then:
         Assert.assertEquals(configuration.getBooleanProperty(USE_CROSS_SITE_ORIGIN_FILTER, USE_CROSS_SITE_ORIGIN_FILTER_DEFAULT_VALUE), true);

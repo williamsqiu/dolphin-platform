@@ -1,1 +1,1 @@
-com.canoo.dp.impl.security.SecurityRequestHandlerProvider
+com.canoo.dp.impl.security.KeycloakSecurityRequestHandlerProvider

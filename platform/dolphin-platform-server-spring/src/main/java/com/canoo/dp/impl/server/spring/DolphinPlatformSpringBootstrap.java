@@ -17,7 +17,7 @@ package com.canoo.dp.impl.server.spring;
 
 import com.canoo.dp.impl.server.bootstrap.PlatformBootstrap;
 import com.canoo.dp.impl.server.config.ConfigurationFileLoader;
-import com.canoo.dp.impl.server.config.DefaultPlatformConfiguration;
+import com.canoo.dp.impl.server.config.ServerConfiguration;
 import org.apiguardian.api.API;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,11 +51,11 @@ public class DolphinPlatformSpringBootstrap implements ServletContextInitializer
     private Environment environment;
 
     @Autowired(required = false)
-    private DefaultPlatformConfiguration injectedConfig;
+    private ServerConfiguration injectedConfig;
 
     @Override
     public void onStartup(final ServletContext servletContext) throws ServletException {
-        DefaultPlatformConfiguration configuration = injectedConfig;
+        ServerConfiguration configuration = injectedConfig;
         if(configuration == null) {
             configuration = ConfigurationFileLoader.loadConfiguration();
         }
@@ -64,7 +64,7 @@ public class DolphinPlatformSpringBootstrap implements ServletContextInitializer
         bootstrap.init(servletContext, configuration);
     }
 
-    private void updateConfigurationBySpring(DefaultPlatformConfiguration configuration) {
+    private void updateConfigurationBySpring(ServerConfiguration configuration) {
         for(String key : configuration.getPropertyKeys()) {
             String valInSpringConfig = environment.getProperty(PREFIX + key);
             if(valInSpringConfig != null) {

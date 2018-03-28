@@ -58,7 +58,7 @@ public class RemotingConfiguration implements Serializable {
     private final PlatformConfiguration configuration;
 
     public RemotingConfiguration() {
-        this(new DefaultPlatformConfiguration());
+        this(new ServerConfiguration());
     }
 
     public RemotingConfiguration(final PlatformConfiguration configuration) {

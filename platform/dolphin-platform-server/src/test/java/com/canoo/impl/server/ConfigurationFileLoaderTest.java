@@ -16,13 +16,13 @@
 package com.canoo.impl.server;
 
 import com.canoo.dp.impl.server.config.ConfigurationFileLoader;
-import com.canoo.dp.impl.server.config.DefaultPlatformConfiguration;
+import com.canoo.dp.impl.server.config.ServerConfiguration;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.*;
-import static com.canoo.dp.impl.server.config.DefaultPlatformConfiguration.USE_CROSS_SITE_ORIGIN_FILTER;
-import static com.canoo.dp.impl.server.config.DefaultPlatformConfiguration.ROOT_PACKAGE_FOR_CLASSPATH_SCAN;
-import static com.canoo.dp.impl.server.config.DefaultPlatformConfiguration.USE_CROSS_SITE_ORIGIN_FILTER_DEFAULT_VALUE;
+import static com.canoo.dp.impl.server.config.ServerConfiguration.USE_CROSS_SITE_ORIGIN_FILTER;
+import static com.canoo.dp.impl.server.config.ServerConfiguration.ROOT_PACKAGE_FOR_CLASSPATH_SCAN;
+import static com.canoo.dp.impl.server.config.ServerConfiguration.USE_CROSS_SITE_ORIGIN_FILTER_DEFAULT_VALUE;
 
 
 public class ConfigurationFileLoaderTest {
@@ -31,7 +31,7 @@ public class ConfigurationFileLoaderTest {
     public void testConfigLoad() {
         try {
             //given:
-            DefaultPlatformConfiguration configuration = ConfigurationFileLoader.loadConfiguration();
+            ServerConfiguration configuration = ConfigurationFileLoader.loadConfiguration();
 
             //then:
             assertEquals(configuration.getBooleanProperty(USE_CROSS_SITE_ORIGIN_FILTER), false);
@@ -45,7 +45,7 @@ public class ConfigurationFileLoaderTest {
     public void testConfigurationProvider() {
         try {
             //given:
-            DefaultPlatformConfiguration configuration = ConfigurationFileLoader.loadConfiguration();
+            ServerConfiguration configuration = ConfigurationFileLoader.loadConfiguration();
 
             //then:
             assertEquals(configuration.getProperty(TestConfigurationProvider.PROPERTY_1_NAME, null), TestConfigurationProvider.PROPERTY_1_VALUE);
@@ -61,7 +61,7 @@ public class ConfigurationFileLoaderTest {
     public void testConfigurationProviderDoNotOverwrite() {
         try {
             //given:
-            DefaultPlatformConfiguration configuration = ConfigurationFileLoader.loadConfiguration();
+            ServerConfiguration configuration = ConfigurationFileLoader.loadConfiguration();
 
             //then:
             assertEquals(configuration.getBooleanProperty(USE_CROSS_SITE_ORIGIN_FILTER, USE_CROSS_SITE_ORIGIN_FILTER_DEFAULT_VALUE), false);
@@ -75,7 +75,7 @@ public class ConfigurationFileLoaderTest {
     public void testNullPropertyWillNotBeAdded() {
         try {
             //given:
-            DefaultPlatformConfiguration configuration = ConfigurationFileLoader.loadConfiguration();
+            ServerConfiguration configuration = ConfigurationFileLoader.loadConfiguration();
 
             //when:
             configuration.setProperty("test-key", null);
@@ -95,7 +95,7 @@ public class ConfigurationFileLoaderTest {
     public void testNullPropertyWillNotRemoveOldValue() {
         try {
             //given:
-            DefaultPlatformConfiguration configuration = ConfigurationFileLoader.loadConfiguration();
+            ServerConfiguration configuration = ConfigurationFileLoader.loadConfiguration();
 
             //when:
             configuration.setProperty("test-key", "a");

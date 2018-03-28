@@ -98,7 +98,7 @@ public class ConfigurationFileLoader {
                 LOG.trace("No config found at '" + JAR_LOCATION + "'");
             }
 
-            return new DefaultClientConfiguration();
+            return new DefaultClientConfiguration(new Properties());
         } catch (final Exception e) {
             throw new RuntimeException("Can not create configuration!", e);
         }
