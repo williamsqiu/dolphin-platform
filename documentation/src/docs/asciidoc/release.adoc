@@ -163,7 +163,7 @@ CAUTION: For a release the repositories shoud be released in a defined order to 
          the sources of the *JavaScript basic API* repositories followed by the JavaScript Frameworks and the Java repository. Once this is done the jumpstart related
          repositories can be released in any order.
 
-===== Releasing the JavaScript basci API
+===== Releasing the JavaScript basic API
 A developer *must* always start to release the *JavaScript basic API*. To do so several steps are needed:
 
 * The https://github.com/canoo/dolphin-platform-js[JavaScript basic API repository] must be check out on the local
