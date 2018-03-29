@@ -1,10 +1,11 @@
 package com.canoo.dp.impl.platform.server.metrics;
 
 import com.canoo.dp.impl.platform.core.Assert;
+import com.canoo.dp.impl.platform.core.context.ContextImpl;
 import com.canoo.dp.impl.platform.server.metrics.noop.NoopMeterRegistry;
 import com.canoo.platform.core.functional.Subscription;
 import com.canoo.platform.metrics.Metrics;
-import com.canoo.platform.metrics.Tag;
+import com.canoo.platform.core.context.Context;
 import com.canoo.platform.metrics.types.Counter;
 import com.canoo.platform.metrics.types.Gauge;
 import com.canoo.platform.metrics.types.Timer;
@@ -23,7 +24,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
-import static com.canoo.dp.impl.platform.server.metrics.util.TagUtil.convertTags;
+import static com.canoo.dp.impl.platform.server.metrics.util.ContextUtil.convertTags;
 
 public class MetricsImpl implements Metrics {
 
@@ -33,9 +34,9 @@ public class MetricsImpl implements Metrics {
 
     private final AtomicReference<MeterRegistry> registry;
 
-    private final List<Tag> globalTags;
+    private final List<Context> globalTags;
 
-    private final ThreadLocal<List<Tag>> contextTags;
+    private final ThreadLocal<List<Context>> contextTags;
 
     private MetricsImpl() {
         registry = new AtomicReference<>(new NoopMeterRegistry());
@@ -43,15 +44,15 @@ public class MetricsImpl implements Metrics {
         this.contextTags = new ThreadLocal<>();
     }
 
-    public Subscription addGlobalTag(final Tag tag) {
+    public Subscription addGlobalContext(final Context tag) {
         Assert.requireNonNull(tag, "tag");
         globalTags.add(tag);
         return () -> globalTags.remove(tag);
     }
 
-    public Subscription addContextTag(final Tag tag) {
+    public Subscription addLocalContext(final Context tag) {
         Assert.requireNonNull(tag, "tag");
-        final List<Tag> list = Optional.ofNullable(contextTags.get()).orElse(new CopyOnWriteArrayList<>());
+        final List<Context> list = Optional.ofNullable(contextTags.get()).orElse(new CopyOnWriteArrayList<>());
         contextTags.set(list);
         list.add(tag);
         return () -> list.remove(tag);
@@ -63,17 +64,17 @@ public class MetricsImpl implements Metrics {
     }
 
 
-    public List<Tag> getGlobalTags() {
+    public List<Context> getGlobalTags() {
         return globalTags;
     }
 
-    public List<Tag> getContextTags() {
+    public List<Context> getContextTags() {
         return Optional.ofNullable(contextTags.get())
                 .orElse(Collections.emptyList());
     }
 
     @Override
-    public Counter getOrCreateCounter(final String name, final Tag... tags) {
+    public Counter getOrCreateCounter(final String name, final Context... tags) {
         final List<io.micrometer.core.instrument.Tag> tagList = new ArrayList<>();
         tagList.addAll(convertTags(tags));
         tagList.addAll(convertTags(globalTags));
@@ -95,10 +96,10 @@ public class MetricsImpl implements Metrics {
             }
 
             @Override
-            public List<Tag> getTags() {
+            public List<Context> getContext() {
                 return counter.getId().getTags()
                         .stream()
-                        .map(t -> new TagImpl(t.getKey(), t.getValue()))
+                        .map(t -> new ContextImpl(t.getKey(), t.getValue()))
                         .collect(Collectors.toList());
             }
 
@@ -110,7 +111,7 @@ public class MetricsImpl implements Metrics {
     }
 
     @Override
-    public Timer getOrCreateTimer(final String name, final Tag... tags) {
+    public Timer getOrCreateTimer(final String name, final Context... tags) {
         final List<io.micrometer.core.instrument.Tag> tagList = new ArrayList<>();
         tagList.addAll(convertTags(tags));
         tagList.addAll(convertTags(globalTags));
@@ -128,7 +129,7 @@ public class MetricsImpl implements Metrics {
             }
 
             @Override
-            public List<Tag> getTags() {
+            public List<Context> getContext() {
                 return Collections.unmodifiableList(Arrays.asList(tags));
             }
 
@@ -140,7 +141,7 @@ public class MetricsImpl implements Metrics {
     }
 
     @Override
-    public Gauge getOrCreateGauge(final String name, final Tag... tags) {
+    public Gauge getOrCreateGauge(final String name, final Context... tags) {
         final List<io.micrometer.core.instrument.Tag> tagList = new ArrayList<>();
         tagList.addAll(convertTags(tags));
         tagList.addAll(convertTags(globalTags));
@@ -164,7 +165,7 @@ public class MetricsImpl implements Metrics {
             }
 
             @Override
-            public List<Tag> getTags() {
+            public List<Context> getContext() {
                 return Collections.unmodifiableList(Arrays.asList(tags));
             }
 

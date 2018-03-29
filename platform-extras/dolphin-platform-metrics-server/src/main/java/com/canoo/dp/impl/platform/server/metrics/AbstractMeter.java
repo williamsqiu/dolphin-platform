@@ -2,7 +2,7 @@ package com.canoo.dp.impl.platform.server.metrics;
 
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.metrics.Metric;
-import com.canoo.platform.metrics.Tag;
+import com.canoo.platform.core.context.Context;
 
 import java.util.List;
 import java.util.Objects;
@@ -24,7 +24,7 @@ public abstract class AbstractMeter implements Metric {
     }
 
     @Override
-    public List<Tag> getTags() {
+    public List<Context> getContext() {
         return identifier.getTags();
     }
 

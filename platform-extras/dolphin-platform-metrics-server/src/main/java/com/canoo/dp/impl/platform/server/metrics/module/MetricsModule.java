@@ -1,7 +1,7 @@
 package com.canoo.dp.impl.platform.server.metrics.module;
 
 import com.canoo.dp.impl.platform.server.metrics.MetricsImpl;
-import com.canoo.dp.impl.platform.server.metrics.TagImpl;
+import com.canoo.dp.impl.platform.core.context.ContextImpl;
 import com.canoo.dp.impl.platform.server.metrics.servlet.MetricsHttpSessionListener;
 import com.canoo.dp.impl.platform.server.metrics.servlet.MetricsServlet;
 import com.canoo.dp.impl.platform.server.metrics.servlet.RequestMetricsFilter;
@@ -40,7 +40,7 @@ import static com.canoo.dp.impl.platform.server.metrics.module.MetricsConfigCons
 import static com.canoo.dp.impl.platform.server.metrics.module.MetricsConfigConstants.METRICS_SERVLET_FILTER_NAME;
 import static com.canoo.dp.impl.platform.server.metrics.module.MetricsConfigConstants.METRICS_SERVLET_NAME;
 import static com.canoo.dp.impl.platform.server.metrics.module.MetricsConfigConstants.MODULE_NAME;
-import static com.canoo.dp.impl.platform.server.metrics.util.TagUtil.convertTags;
+import static com.canoo.dp.impl.platform.server.metrics.util.ContextUtil.convertTags;
 import static com.canoo.dp.impl.server.servlet.ServletConstants.ALL_URL_MAPPING;
 import static org.apiguardian.api.API.Status.INTERNAL;
 
@@ -66,13 +66,13 @@ public class MetricsModule extends AbstractBaseModule {
         final ServletContext servletContext = coreComponents.getInstance(ServletContext.class);
 
         if(!configuration.getBooleanProperty(METRICS_NOOP_PROPERTY, true)) {
-            MetricsImpl.getInstance().addGlobalTag(new TagImpl(APPLICATION_TAG_NAME, configuration.getProperty(APPLICATION_NAME_PROPERTY, APPLICATION_NAME_DEFAULT)));
+            MetricsImpl.getInstance().addGlobalContext(new ContextImpl(APPLICATION_TAG_NAME, configuration.getProperty(APPLICATION_NAME_PROPERTY, APPLICATION_NAME_DEFAULT)));
 
             try {
                 final InetAddress address = InetAddress.getLocalHost();
-                MetricsImpl.getInstance().addGlobalTag(new TagImpl(HOST_NAME_TAG_NAME, address.getHostName()));
-                MetricsImpl.getInstance().addGlobalTag(new TagImpl(CANONICAL_HOST_NAME_TAG_NAME, address.getCanonicalHostName()));
-                MetricsImpl.getInstance().addGlobalTag(new TagImpl(HOST_ADDRESS_TAG_NAME, address.getHostAddress()));
+                MetricsImpl.getInstance().addGlobalContext(new ContextImpl(HOST_NAME_TAG_NAME, address.getHostName()));
+                MetricsImpl.getInstance().addGlobalContext(new ContextImpl(CANONICAL_HOST_NAME_TAG_NAME, address.getCanonicalHostName()));
+                MetricsImpl.getInstance().addGlobalContext(new ContextImpl(HOST_ADDRESS_TAG_NAME, address.getHostAddress()));
             } catch (Exception e) {
                 LOG.error("Can not define InetAddress for metrics!", e);
             }

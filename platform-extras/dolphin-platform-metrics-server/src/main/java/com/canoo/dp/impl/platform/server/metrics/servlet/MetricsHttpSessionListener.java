@@ -1,8 +1,8 @@
 package com.canoo.dp.impl.platform.server.metrics.servlet;
 
 import com.canoo.dp.impl.platform.server.metrics.MetricsImpl;
-import com.canoo.dp.impl.platform.server.metrics.TagImpl;
-import com.canoo.platform.metrics.Tag;
+import com.canoo.dp.impl.platform.core.context.ContextImpl;
+import com.canoo.platform.core.context.Context;
 
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
@@ -14,14 +14,14 @@ public class MetricsHttpSessionListener implements HttpSessionListener {
 
     @Override
     public void sessionCreated(final HttpSessionEvent se) {
-        final Tag idTag = new TagImpl("sessionId", se.getSession().getId());
+        final Context idTag = new ContextImpl("sessionId", se.getSession().getId());
         MetricsImpl.getInstance().getOrCreateGauge("httpSessions", idTag)
                 .setValue(counter.incrementAndGet());
     }
 
     @Override
     public void sessionDestroyed(final HttpSessionEvent se) {
-        final Tag idTag = new TagImpl("sessionId", se.getSession().getId());
+        final Context idTag = new ContextImpl("sessionId", se.getSession().getId());
         MetricsImpl.getInstance().getOrCreateGauge("httpSessions", idTag)
                 .setValue(counter.decrementAndGet());
     }
