@@ -6,6 +6,8 @@ public interface MetricsConfigConstants {
 
     String METRICS_SERVLET_NAME = "metrics";
 
+    String METRICS_SERVLET_FILTER_NAME = "metricsFilter";
+
     String METRICS_ACTIVE_PROPERTY = "metrics.active";
 
     boolean METRICS_ACTIVE_DEFAULT = true;
@@ -17,5 +19,13 @@ public interface MetricsConfigConstants {
     String METRICS_NOOP_PROPERTY = "metrics.noop";
 
     boolean METRICS_NOOP_DEFAULT = true;
+
+    String APPLICATION_TAG_NAME = "application";
+
+    String HOST_NAME_TAG_NAME = "hostName";
+
+    String CANONICAL_HOST_NAME_TAG_NAME = "canonicalHostName";
+
+    String HOST_ADDRESS_TAG_NAME = "hostAddress";
 
 }
