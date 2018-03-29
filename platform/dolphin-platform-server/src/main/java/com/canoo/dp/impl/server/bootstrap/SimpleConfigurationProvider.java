@@ -19,23 +19,23 @@ public class SimpleConfigurationProvider implements ConfigurationProvider {
 
     private final Map<String, Long> longProperties = new HashMap<>();
 
-    protected final void addString(String key, String value) {
+    protected final void addString(final String key, final String value) {
         stringProperties.put(key, value);
     }
 
-    protected final void addList(String key, List<String> value) {
+    protected final void addList(final String key, final List<String> value) {
         listProperties.put(key, value);
     }
 
-    protected final void addBoolean(String key, boolean value) {
+    protected final void addBoolean(final String key, final boolean value) {
         booleanProperties.put(key, value);
     }
 
-    protected final void addInt(String key, int value) {
+    protected final void addInt(final String key, final int value) {
         intProperties.put(key, value);
     }
 
-    protected final void addLong(String key, long value) {
+    protected final void addLong(final String key, final long value) {
         longProperties.put(key, value);
     }
 

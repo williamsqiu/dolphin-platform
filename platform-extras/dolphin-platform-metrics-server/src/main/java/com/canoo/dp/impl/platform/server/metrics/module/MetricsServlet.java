@@ -24,7 +24,7 @@ public class MetricsServlet extends HttpServlet {
     @Override
     protected void service(final HttpServletRequest req, final HttpServletResponse resp) throws ServletException, IOException {
         LOG.debug("Metrics servlet called");
-        String response = prometheusRegistry.scrape();
+        final String response = prometheusRegistry.scrape();
         resp.getOutputStream().write(response.getBytes());
     }
 }
