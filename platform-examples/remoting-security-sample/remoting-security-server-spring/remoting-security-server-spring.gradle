@@ -1,5 +1,0 @@
-dependencies {
-  compile project(':remoting-security-common')
-  compile project(':dolphin-platform-remoting-server-spring')
-  compile project(':dolphin-platform-security-server-spring')
-}
