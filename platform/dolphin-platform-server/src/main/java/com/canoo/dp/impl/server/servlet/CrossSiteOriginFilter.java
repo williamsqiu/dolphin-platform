@@ -59,7 +59,9 @@ public class CrossSiteOriginFilter implements Filter {
         final HttpServletRequest req = (HttpServletRequest) request;
         final HttpServletResponse resp = (HttpServletResponse) response;
 
-        LOG.error("Received Request for {} of type {} with headers {}", req.getRequestURL(), req.getMethod(), req.getHeaderNames());
+        if(LOG.isTraceEnabled()) {
+            LOG.trace("Received Request for {} of type {} with headers {}", req.getRequestURL(), req.getMethod(), req.getHeaderNames());
+        }
 
         //Access-Control-Allow-Headers
         String accessControlAllowHeaders = PlatformConstants.CLIENT_ID_HTTP_HEADER_NAME;
