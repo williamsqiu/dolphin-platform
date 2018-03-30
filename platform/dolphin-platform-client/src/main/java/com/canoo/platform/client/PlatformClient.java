@@ -31,6 +31,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import static com.canoo.dp.impl.platform.client.ClientConstants.UI_CONTEXT;
 import static com.canoo.dp.impl.platform.core.PlatformConstants.APPLICATION_CONTEXT;
 import static com.canoo.dp.impl.platform.core.PlatformConstants.APPLICATION_NAME_DEFAULT;
 import static com.canoo.dp.impl.platform.core.PlatformConstants.APPLICATION_NAME_PROPERTY;
@@ -79,6 +80,7 @@ public class PlatformClient {
         Assert.requireNonNull(toolkit, "toolkit");
         clientConfiguration.setUiExecutor(toolkit.getUiExecutor());
         isToolkitSet.set(true);
+        ContextManagerImpl.getInstance().addGlobalContext(UI_CONTEXT, toolkit.getName());
     }
 
     private Set<Class<?>> implGetAllServiceTypes() {

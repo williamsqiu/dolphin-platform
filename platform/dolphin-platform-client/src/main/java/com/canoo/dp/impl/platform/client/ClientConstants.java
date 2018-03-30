@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.dp.impl.server.servlet;
+package com.canoo.dp.impl.platform.client;
 
-public interface ServletConstants {
+public interface ClientConstants {
 
-    String ALL_URL_MAPPING = "/*";
+    String UI_CONTEXT = "uiToolkit";
 }

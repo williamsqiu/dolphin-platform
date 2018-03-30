@@ -41,7 +41,7 @@ import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import static com.canoo.dp.impl.server.config.ServerConfiguration.ROOT_PACKAGE_FOR_CLASSPATH_SCAN;
+import static com.canoo.dp.impl.server.bootstrap.BasicConfigurationProvider.ROOT_PACKAGE_FOR_CLASSPATH_SCAN;
 import static org.apiguardian.api.API.Status.INTERNAL;
 
 @API(since = "0.x", status = INTERNAL)
