@@ -15,7 +15,7 @@
  */
 package com.canoo.platform.server.spring;
 
-import com.canoo.dp.impl.server.security.spring.MetricsBeanFactory;
+import com.canoo.dp.impl.server.metrics.spring.MetricsBeanFactory;
 import org.apiguardian.api.API;
 import org.springframework.context.annotation.Import;
 

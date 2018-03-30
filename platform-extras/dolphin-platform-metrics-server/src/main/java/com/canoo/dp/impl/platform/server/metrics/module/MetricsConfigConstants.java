@@ -18,7 +18,7 @@ public interface MetricsConfigConstants {
 
     String METRICS_NOOP_PROPERTY = "metrics.noop";
 
-    boolean METRICS_NOOP_DEFAULT = true;
+    boolean METRICS_NOOP_DEFAULT = false;
 
     String APPLICATION_TAG_NAME = "application";
 

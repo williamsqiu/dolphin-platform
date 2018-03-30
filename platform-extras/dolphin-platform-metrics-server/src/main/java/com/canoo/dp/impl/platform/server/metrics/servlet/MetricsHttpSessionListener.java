@@ -1,6 +1,6 @@
 package com.canoo.dp.impl.platform.server.metrics.servlet;
 
-import com.canoo.dp.impl.platform.server.metrics.MetricsImpl;
+import com.canoo.dp.impl.platform.metrics.MetricsImpl;
 import com.canoo.dp.impl.platform.core.context.ContextImpl;
 import com.canoo.platform.core.context.Context;
 

@@ -1,7 +1,7 @@
 package com.canoo.dp.impl.platform.server.metrics.servlet;
 
-import com.canoo.dp.impl.platform.server.metrics.MetricsImpl;
-import com.canoo.dp.impl.platform.server.metrics.util.ContextUtil;
+import com.canoo.dp.impl.platform.metrics.MetricsImpl;
+import com.canoo.dp.impl.server.context.ContextServerUtil;
 import com.canoo.platform.core.context.Context;
 
 import javax.servlet.Filter;
@@ -26,10 +26,10 @@ public class RequestMetricsFilter implements Filter {
             chain.doFilter(request, response);
         } finally {
             final long timeInMs = System.currentTimeMillis() - startTime;
-            final Context methodTag = ContextUtil.createMethodTag((HttpServletRequest) request);
-            final Context uriTag = ContextUtil.createUriTag((HttpServletRequest) request);
-            final Context contextPathTag = ContextUtil.createContextPathTag((HttpServletRequest) request);
-            final Context portTag = ContextUtil.createPortTag((HttpServletRequest) request);
+            final Context methodTag = ContextServerUtil.createMethodTag((HttpServletRequest) request);
+            final Context uriTag = ContextServerUtil.createUriTag((HttpServletRequest) request);
+            final Context contextPathTag = ContextServerUtil.createContextPathTag((HttpServletRequest) request);
+            final Context portTag = ContextServerUtil.createPortTag((HttpServletRequest) request);
             MetricsImpl.getInstance()
                     .getOrCreateTimer("request", contextPathTag, uriTag, methodTag, portTag)
                     .record(timeInMs, TimeUnit.MILLISECONDS);

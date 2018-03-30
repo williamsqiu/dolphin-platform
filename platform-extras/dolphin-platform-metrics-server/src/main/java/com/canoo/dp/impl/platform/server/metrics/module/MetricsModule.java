@@ -1,7 +1,8 @@
 package com.canoo.dp.impl.platform.server.metrics.module;
 
-import com.canoo.dp.impl.platform.server.metrics.MetricsImpl;
+import com.canoo.dp.impl.platform.metrics.MetricsImpl;
 import com.canoo.dp.impl.platform.core.context.ContextImpl;
+import com.canoo.dp.impl.platform.metrics.TagUtil;
 import com.canoo.dp.impl.platform.server.metrics.servlet.MetricsHttpSessionListener;
 import com.canoo.dp.impl.platform.server.metrics.servlet.MetricsServlet;
 import com.canoo.dp.impl.platform.server.metrics.servlet.RequestMetricsFilter;
@@ -40,7 +41,6 @@ import static com.canoo.dp.impl.platform.server.metrics.module.MetricsConfigCons
 import static com.canoo.dp.impl.platform.server.metrics.module.MetricsConfigConstants.METRICS_SERVLET_FILTER_NAME;
 import static com.canoo.dp.impl.platform.server.metrics.module.MetricsConfigConstants.METRICS_SERVLET_NAME;
 import static com.canoo.dp.impl.platform.server.metrics.module.MetricsConfigConstants.MODULE_NAME;
-import static com.canoo.dp.impl.platform.server.metrics.util.ContextUtil.convertTags;
 import static com.canoo.dp.impl.server.servlet.ServletConstants.ALL_URL_MAPPING;
 import static org.apiguardian.api.API.Status.INTERNAL;
 
@@ -79,7 +79,7 @@ public class MetricsModule extends AbstractBaseModule {
 
             final PrometheusMeterRegistry prometheusRegistry = new PrometheusMeterRegistry(PrometheusConfig.DEFAULT);
 
-            final List<Tag> tagList = Collections.unmodifiableList(convertTags(MetricsImpl.getInstance().getGlobalTags()));
+            final List<Tag> tagList = Collections.unmodifiableList(TagUtil.convertTags(MetricsImpl.getInstance().getGlobalTags()));
 
             new ClassLoaderMetrics(tagList).bindTo(prometheusRegistry);
             new JvmMemoryMetrics(tagList).bindTo(prometheusRegistry);

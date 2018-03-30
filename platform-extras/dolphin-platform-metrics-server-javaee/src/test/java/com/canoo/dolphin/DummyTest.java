@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2016 Canoo Engineering AG.
+ * Copyright 2015-2018 Canoo Engineering AG.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,11 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.canoo.dolphin;
 
-dependencies {
-    compile project(':dolphin-platform-server')
-    compile project(':dolphin-platform-metrics')
-    compile "io.micrometer:micrometer-registry-prometheus:1.0.1"
-    compileOnly "javax.servlet:javax.servlet-api:$servletApiVersion"
+import org.testng.annotations.Test;
+
+public class DummyTest {
+
+    @Test
+    public void test() {
+        
+    }
 
 }
