@@ -24,6 +24,8 @@ public interface PlatformConstants {
 
     String APPLICATION_CONTEXT = "application.name";
 
+    String UNNAMED_APPLICATION = "UNNAMED";
+
     String HOST_NAME_CONTEXT = "hostName";
 
     String CANONICAL_HOST_NAME_CONTEXT = "canonicalHostName";

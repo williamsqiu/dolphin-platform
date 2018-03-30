@@ -13,9 +13,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import static com.canoo.dp.impl.platform.core.PlatformConstants.APPLICATION_CONTEXT;
 import static com.canoo.dp.impl.platform.core.PlatformConstants.CANONICAL_HOST_NAME_CONTEXT;
 import static com.canoo.dp.impl.platform.core.PlatformConstants.HOST_ADDRESS_CONTEXT;
 import static com.canoo.dp.impl.platform.core.PlatformConstants.HOST_NAME_CONTEXT;
+import static com.canoo.dp.impl.platform.core.PlatformConstants.UNNAMED_APPLICATION;
 
 public class ContextManagerImpl implements ContextManager {
 
@@ -30,6 +32,8 @@ public class ContextManagerImpl implements ContextManager {
     public ContextManagerImpl() {
         globalContexts = new CopyOnWriteArrayList();
         threadContexts = new ThreadLocal<>();
+
+        addGlobalContext(new ContextImpl(APPLICATION_CONTEXT, UNNAMED_APPLICATION));
 
         try {
             final InetAddress address = InetAddress.getLocalHost();

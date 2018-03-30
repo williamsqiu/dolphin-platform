@@ -15,10 +15,10 @@
  */
 package com.canoo.impl.dp.logging;
 
-import com.canoo.platform.logging.spi.LogMessage;
+import com.canoo.dp.impl.platform.core.context.ContextManagerImpl;
 import com.canoo.platform.logging.spi.DolphinLoggerBridge;
+import com.canoo.platform.logging.spi.LogMessage;
 import org.slf4j.Logger;
-import org.slf4j.MDC;
 import org.slf4j.Marker;
 import org.slf4j.MarkerFactory;
 import org.slf4j.event.Level;
@@ -29,8 +29,10 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.locks.Lock;
@@ -428,8 +430,12 @@ public class DolphinLogger implements Logger {
                 logMessage.setMessage(msg);
                 logMessage.setTimestamp(ZonedDateTime.now());
                 logMessage.setThreadName(Thread.currentThread().getName());
-                logMessage.setContext(MDC.getCopyOfContextMap());
 
+
+                final Map<String, String> context = new HashMap<>();
+                ContextManagerImpl.getInstance().getGlobalContexts().forEach(c -> context.put(c.getType(), c.getValue()));
+                ContextManagerImpl.getInstance().getThreadContexts().forEach(c -> context.put(c.getType(), c.getValue()));
+                logMessage.setContext(Collections.unmodifiableMap(context));
 
                 logMessage.setMarker(currentMarkers);
 
@@ -459,18 +465,6 @@ public class DolphinLogger implements Logger {
                 removeMarkers(tempMarkers);
             }
         }
-    }
-
-    public static void putInThreadContext(String key, String val) {
-        MDC.put(key, val);
-    }
-
-    public static void removeFromThreadContext(String key) {
-        MDC.remove(key);
-    }
-
-    public static void clearThreadContext() {
-        MDC.clear();
     }
 
     public static void addMarker(final Logger logger, final String marker) {
