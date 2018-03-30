@@ -17,10 +17,10 @@ public final class TagUtil {
         return convertTags(Arrays.asList(tags));
     }
 
-    public static List<io.micrometer.core.instrument.Tag> convertTags(final List<Context> tags) {
+    public static List<Tag> convertTags(final List<Context> tags) {
         Assert.requireNonNull(tags, "tags");
         return tags.stream()
-                .map(t -> io.micrometer.core.instrument.Tag.of(t.getType(), t.getValue()))
+                .map(t -> Tag.of(t.getType(), t.getValue()))
                 .collect(Collectors.toList());
     }
 }

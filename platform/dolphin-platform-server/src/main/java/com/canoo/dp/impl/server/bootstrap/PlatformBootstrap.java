@@ -18,6 +18,8 @@ package com.canoo.dp.impl.server.bootstrap;
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.platform.core.SimpleDolphinPlatformThreadFactory;
 import com.canoo.dp.impl.platform.core.ansi.PlatformLogo;
+import com.canoo.dp.impl.platform.core.context.ContextImpl;
+import com.canoo.dp.impl.platform.core.context.ContextManagerImpl;
 import com.canoo.dp.impl.server.config.ServerConfiguration;
 import com.canoo.dp.impl.server.mbean.MBeanRegistry;
 import com.canoo.dp.impl.server.scanner.DefaultClasspathScanner;
@@ -40,6 +42,9 @@ import java.util.Map;
 import java.util.ServiceLoader;
 import java.util.Set;
 
+import static com.canoo.dp.impl.platform.core.PlatformConstants.APPLICATION_CONTEXT;
+import static com.canoo.dp.impl.platform.core.PlatformConstants.APPLICATION_NAME_DEFAULT;
+import static com.canoo.dp.impl.platform.core.PlatformConstants.APPLICATION_NAME_PROPERTY;
 import static com.canoo.dp.impl.server.config.ServerConfiguration.ACTIVE_DEFAULT_VALUE;
 import static com.canoo.dp.impl.server.config.ServerConfiguration.MBEAN_REGISTRATION;
 import static com.canoo.dp.impl.server.config.ServerConfiguration.M_BEAN_REGISTRATION_DEFAULT_VALUE;
@@ -59,6 +64,8 @@ public class PlatformBootstrap {
     public void init(final ServletContext servletContext, final ServerConfiguration configuration) {
         Assert.requireNonNull(servletContext, "servletContext");
         Assert.requireNonNull(configuration, "configuration");
+
+        ContextManagerImpl.getInstance().addGlobalContext(new ContextImpl(APPLICATION_CONTEXT, configuration.getProperty(APPLICATION_NAME_PROPERTY, APPLICATION_NAME_DEFAULT)));
 
         if(configuration.getBooleanProperty(PLATFORM_ACTIVE, ACTIVE_DEFAULT_VALUE)) {
             PlatformLogo.printLogo();

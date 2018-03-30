@@ -20,12 +20,4 @@ public interface MetricsConfigConstants {
 
     boolean METRICS_NOOP_DEFAULT = false;
 
-    String APPLICATION_TAG_NAME = "application";
-
-    String HOST_NAME_TAG_NAME = "hostName";
-
-    String CANONICAL_HOST_NAME_TAG_NAME = "canonicalHostName";
-
-    String HOST_ADDRESS_TAG_NAME = "hostAddress";
-
 }

@@ -21,6 +21,15 @@ import static org.apiguardian.api.API.Status.INTERNAL;
 
 @API(since = "0.x", status = INTERNAL)
 public interface PlatformConstants {
+
+    String APPLICATION_CONTEXT = "application.name";
+
+    String HOST_NAME_CONTEXT = "hostName";
+
+    String CANONICAL_HOST_NAME_CONTEXT = "canonicalHostName";
+
+    String HOST_ADDRESS_CONTEXT = "hostAddress";
+
     String APPLICATION_NAME_PROPERTY = "application.name";
 
     String APPLICATION_NAME_DEFAULT = "app";

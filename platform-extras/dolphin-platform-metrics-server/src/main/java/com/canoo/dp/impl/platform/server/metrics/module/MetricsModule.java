@@ -1,7 +1,7 @@
 package com.canoo.dp.impl.platform.server.metrics.module;
 
+import com.canoo.dp.impl.platform.core.context.ContextManagerImpl;
 import com.canoo.dp.impl.platform.metrics.MetricsImpl;
-import com.canoo.dp.impl.platform.core.context.ContextImpl;
 import com.canoo.dp.impl.platform.metrics.TagUtil;
 import com.canoo.dp.impl.platform.server.metrics.servlet.MetricsHttpSessionListener;
 import com.canoo.dp.impl.platform.server.metrics.servlet.MetricsServlet;
@@ -24,17 +24,9 @@ import org.slf4j.LoggerFactory;
 
 import javax.servlet.DispatcherType;
 import javax.servlet.ServletContext;
-import java.net.InetAddress;
-import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 
-import static com.canoo.dp.impl.platform.core.PlatformConstants.APPLICATION_NAME_DEFAULT;
-import static com.canoo.dp.impl.platform.core.PlatformConstants.APPLICATION_NAME_PROPERTY;
-import static com.canoo.dp.impl.platform.server.metrics.module.MetricsConfigConstants.APPLICATION_TAG_NAME;
-import static com.canoo.dp.impl.platform.server.metrics.module.MetricsConfigConstants.CANONICAL_HOST_NAME_TAG_NAME;
-import static com.canoo.dp.impl.platform.server.metrics.module.MetricsConfigConstants.HOST_ADDRESS_TAG_NAME;
-import static com.canoo.dp.impl.platform.server.metrics.module.MetricsConfigConstants.HOST_NAME_TAG_NAME;
 import static com.canoo.dp.impl.platform.server.metrics.module.MetricsConfigConstants.METRICS_ACTIVE_PROPERTY;
 import static com.canoo.dp.impl.platform.server.metrics.module.MetricsConfigConstants.METRICS_ENDPOINT_PROPERTY;
 import static com.canoo.dp.impl.platform.server.metrics.module.MetricsConfigConstants.METRICS_NOOP_PROPERTY;
@@ -66,20 +58,10 @@ public class MetricsModule extends AbstractBaseModule {
         final ServletContext servletContext = coreComponents.getInstance(ServletContext.class);
 
         if(!configuration.getBooleanProperty(METRICS_NOOP_PROPERTY, true)) {
-            MetricsImpl.getInstance().addGlobalContext(new ContextImpl(APPLICATION_TAG_NAME, configuration.getProperty(APPLICATION_NAME_PROPERTY, APPLICATION_NAME_DEFAULT)));
-
-            try {
-                final InetAddress address = InetAddress.getLocalHost();
-                MetricsImpl.getInstance().addGlobalContext(new ContextImpl(HOST_NAME_TAG_NAME, address.getHostName()));
-                MetricsImpl.getInstance().addGlobalContext(new ContextImpl(CANONICAL_HOST_NAME_TAG_NAME, address.getCanonicalHostName()));
-                MetricsImpl.getInstance().addGlobalContext(new ContextImpl(HOST_ADDRESS_TAG_NAME, address.getHostAddress()));
-            } catch (Exception e) {
-                LOG.error("Can not define InetAddress for metrics!", e);
-            }
 
             final PrometheusMeterRegistry prometheusRegistry = new PrometheusMeterRegistry(PrometheusConfig.DEFAULT);
 
-            final List<Tag> tagList = Collections.unmodifiableList(TagUtil.convertTags(MetricsImpl.getInstance().getGlobalTags()));
+            final List<Tag> tagList = TagUtil.convertTags(ContextManagerImpl.getInstance().getGlobalContexts());
 
             new ClassLoaderMetrics(tagList).bindTo(prometheusRegistry);
             new JvmMemoryMetrics(tagList).bindTo(prometheusRegistry);
