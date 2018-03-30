@@ -16,7 +16,6 @@
 package com.canoo.dp.impl.server.security;
 
 import com.canoo.dp.impl.platform.core.Assert;
-import com.canoo.dp.impl.platform.core.context.ContextImpl;
 import com.canoo.dp.impl.platform.core.context.ContextManagerImpl;
 import com.canoo.platform.core.functional.Subscription;
 import org.apiguardian.api.API;
@@ -69,7 +68,7 @@ public class KeycloakSecurityContextExtractFilter implements Filter, AccessDenie
         final Subscription userContextSubscription = Optional.ofNullable(securityContext)
                 .map(c -> c.getToken())
                 .map(t -> t.getPreferredUsername())
-                .map(u -> ContextManagerImpl.getInstance().addThreadContext(new ContextImpl(USER_CONTEXT, u)))
+                .map(u -> ContextManagerImpl.getInstance().addThreadContext(USER_CONTEXT, u))
                 .orElse(null);
         try {
             chain.doFilter(request, response);

@@ -28,9 +28,9 @@ import java.util.Map;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import static com.canoo.dp.impl.server.bootstrap.BasicConfigurationProvider.MAX_CLIENTS_PER_SESSION;
+import static com.canoo.dp.impl.server.bootstrap.BasicConfigurationProvider.MAX_CLIENTS_PER_SESSION_DEFAULT_VALUE;
 import static org.apiguardian.api.API.Status.INTERNAL;
-import static com.canoo.dp.impl.server.config.ServerConfiguration.MAX_CLIENTS_PER_SESSION;
-import static com.canoo.dp.impl.server.config.ServerConfiguration.MAX_CLIENTS_PER_SESSION_DEFAULT_VALUE;
 
 @API(since = "0.x", status = INTERNAL)
 public class ClientSessionManager {

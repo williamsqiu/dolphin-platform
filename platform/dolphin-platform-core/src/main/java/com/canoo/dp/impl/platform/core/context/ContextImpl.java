@@ -36,7 +36,6 @@ public class ContextImpl implements Context {
 
     @Override
     public int hashCode() {
-
         return Objects.hash(key);
     }
 }

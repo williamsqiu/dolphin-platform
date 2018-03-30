@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class SimpleConfigurationProvider implements ConfigurationProvider {
+public abstract class SimpleConfigurationProvider implements ConfigurationProvider {
 
     private final Map<String, String> stringProperties = new HashMap<>();
 

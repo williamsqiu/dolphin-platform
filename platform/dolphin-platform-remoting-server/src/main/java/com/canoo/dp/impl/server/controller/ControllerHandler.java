@@ -17,7 +17,6 @@ package com.canoo.dp.impl.server.controller;
 
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.platform.core.ReflectionHelper;
-import com.canoo.dp.impl.platform.core.context.ContextImpl;
 import com.canoo.dp.impl.platform.core.context.ContextManagerImpl;
 import com.canoo.dp.impl.remoting.BeanRepository;
 import com.canoo.dp.impl.remoting.Converters;
@@ -274,9 +273,9 @@ public class ControllerHandler {
         final Class controllerClass = controllerClassMapping.get(controllerId);
 
         final Subscription controllerContextSubscription = ContextManagerImpl.getInstance()
-                .addThreadContext(new ContextImpl(CONTROLLER_CONTEXT, Optional.ofNullable(controllerClass).map(c -> c.getSimpleName()).orElse(UNKNOWN_CONTROLLER_CONTEXT)));
+                .addThreadContext(CONTROLLER_CONTEXT, Optional.ofNullable(controllerClass).map(c -> c.getSimpleName()).orElse(UNKNOWN_CONTROLLER_CONTEXT));
         final Subscription controllerActionContextSubscription = ContextManagerImpl.getInstance()
-                .addThreadContext(new ContextImpl(CONTROLLER_ACTION_CONTEXT, actionName));
+                .addThreadContext(CONTROLLER_ACTION_CONTEXT, actionName);
         try {
             if(controller == null) {
                 throw new InvokeActionException("No controller for id " + controllerId + " found");

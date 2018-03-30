@@ -18,7 +18,6 @@ package com.canoo.platform.client;
 import com.canoo.dp.impl.platform.client.config.ConfigurationFileLoader;
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.platform.core.ansi.PlatformLogo;
-import com.canoo.dp.impl.platform.core.context.ContextImpl;
 import com.canoo.dp.impl.platform.core.context.ContextManagerImpl;
 import com.canoo.platform.client.spi.ServiceProvider;
 import com.canoo.platform.core.DolphinRuntimeException;
@@ -57,7 +56,7 @@ public class PlatformClient {
         this.clientConfiguration = ConfigurationFileLoader.loadConfiguration(DEFAULT_LOCATION);
         Assert.requireNonNull(clientConfiguration, "clientConfiguration");
 
-        ContextManagerImpl.getInstance().addGlobalContext(new ContextImpl(APPLICATION_CONTEXT, clientConfiguration.getProperty(APPLICATION_NAME_PROPERTY, APPLICATION_NAME_DEFAULT)));
+        ContextManagerImpl.getInstance().addGlobalContext(APPLICATION_CONTEXT, clientConfiguration.getProperty(APPLICATION_NAME_PROPERTY, APPLICATION_NAME_DEFAULT));
 
         final ServiceLoader<ServiceProvider> loader = ServiceLoader.load(ServiceProvider.class);
         final Iterator<ServiceProvider> iterator = loader.iterator();

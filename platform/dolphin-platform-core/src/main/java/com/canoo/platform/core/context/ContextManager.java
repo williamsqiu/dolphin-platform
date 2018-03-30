@@ -2,20 +2,17 @@ package com.canoo.platform.core.context;
 
 import com.canoo.platform.core.functional.Subscription;
 
-import java.util.List;
+import java.util.Set;
 
 public interface ContextManager {
 
-    Subscription addGlobalContext(Context context);
+    Subscription addGlobalContext(String type, String value);
 
-    Subscription addThreadContext(Context context);
+    Subscription addThreadContext(String type, String value);
 
-    void removeGlobalContext(Context context);
+    Set<Context> getGlobalContexts();
 
-    void removeThreadContext(Context context);
+    Set<Context> getThreadContexts();
 
-    List<Context> getGlobalContexts();
-
-    List<Context> getThreadContexts();
 
 }

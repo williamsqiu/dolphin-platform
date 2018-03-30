@@ -9,9 +9,11 @@ import org.slf4j.LoggerFactory;
 
 import java.net.InetAddress;
 import java.util.Collections;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Optional;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.Set;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import static com.canoo.dp.impl.platform.core.PlatformConstants.APPLICATION_CONTEXT;
 import static com.canoo.dp.impl.platform.core.PlatformConstants.CANONICAL_HOST_NAME_CONTEXT;
@@ -25,21 +27,24 @@ public class ContextManagerImpl implements ContextManager {
 
     private final static ContextManagerImpl INSTANCE = new ContextManagerImpl();
 
-    private final List<Context> globalContexts;
+    private final Set<Context> globalContexts;
 
-    private final ThreadLocal<List<Context>> threadContexts;
+    private final Lock globalContextsLock;
+
+    private final ThreadLocal<Set<Context>> threadContexts;
 
     public ContextManagerImpl() {
-        globalContexts = new CopyOnWriteArrayList();
+        globalContexts = new HashSet<>();
         threadContexts = new ThreadLocal<>();
+        globalContextsLock = new ReentrantLock();
 
-        addGlobalContext(new ContextImpl(APPLICATION_CONTEXT, UNNAMED_APPLICATION));
+        addGlobalContext(APPLICATION_CONTEXT, UNNAMED_APPLICATION);
 
         try {
             final InetAddress address = InetAddress.getLocalHost();
-            addGlobalContext(new ContextImpl(HOST_NAME_CONTEXT, address.getHostName()));
-            addGlobalContext(new ContextImpl(CANONICAL_HOST_NAME_CONTEXT, address.getCanonicalHostName()));
-            addGlobalContext(new ContextImpl(HOST_ADDRESS_CONTEXT, address.getHostAddress()));
+            addGlobalContext(HOST_NAME_CONTEXT, address.getHostName());
+            addGlobalContext(CANONICAL_HOST_NAME_CONTEXT, address.getCanonicalHostName());
+            addGlobalContext(HOST_ADDRESS_CONTEXT, address.getHostAddress());
         } catch (Exception e) {
             LOG.error("Can not define InetAddress for context!", e);
         }
@@ -47,46 +52,59 @@ public class ContextManagerImpl implements ContextManager {
     }
 
     @Override
-    public Subscription addGlobalContext(final Context context) {
-        Assert.requireNonNull(context, "context");
-        globalContexts.add(context);
-        return () -> globalContexts.remove(context);
+    public Subscription addGlobalContext(final String type, final String value) {
+        Assert.requireNonNull(type, "type");
+        final Context context = new ContextImpl(type, value);
+        globalContextsLock.lock();
+        try {
+            if(globalContexts.contains(context)) {
+                globalContexts.remove(context);
+            }
+            globalContexts.add(context);
+        } finally {
+            globalContextsLock.unlock();
+        }
+        return () -> {
+            globalContextsLock.lock();
+            try {
+                globalContexts.remove(context);
+            } finally {
+                globalContextsLock.unlock();
+            }
+        };
     }
 
     @Override
-    public Subscription addThreadContext(final Context context) {
-        Assert.requireNonNull(context, "context");
-        final List<Context> list = getOrCreateThreadContexts();
-        list.add(context);
-        return () -> list.remove(context);
+    public Subscription addThreadContext(final String type, String value) {
+        Assert.requireNonNull(type, "type");
+        final Set<Context> set = getOrCreateThreadContexts();
+        final Context context = new ContextImpl(type, value);
+        if(set.contains(context)) {
+            set.remove(context);
+        }
+        set.add(context);
+        return () -> set.remove(context);
     }
 
     @Override
-    public void removeGlobalContext(final Context context) {
-        Assert.requireNonNull(context, "context");
-        globalContexts.remove(context);
+    public Set<Context> getGlobalContexts() {
+        globalContextsLock.lock();
+        try {
+            return Collections.unmodifiableSet(globalContexts);
+        } finally {
+            globalContextsLock.unlock();
+        }
     }
 
     @Override
-    public void removeThreadContext(final Context context) {
-        Assert.requireNonNull(context, "context");
-        getOrCreateThreadContexts().remove(context);
+    public Set<Context> getThreadContexts() {
+        return Collections.unmodifiableSet(getOrCreateThreadContexts());
     }
 
-    @Override
-    public List<Context> getGlobalContexts() {
-        return Collections.unmodifiableList(globalContexts);
-    }
-
-    @Override
-    public List<Context> getThreadContexts() {
-        return Collections.unmodifiableList(getOrCreateThreadContexts());
-    }
-
-    private List<Context> getOrCreateThreadContexts() {
-        final List<Context> list = Optional.ofNullable(threadContexts.get()).orElse(new CopyOnWriteArrayList<>());
-        threadContexts.set(list);
-        return list;
+    private Set<Context> getOrCreateThreadContexts() {
+        final Set<Context> set = Optional.ofNullable(threadContexts.get()).orElse(new HashSet<>());
+        threadContexts.set(set);
+        return set;
     }
 
     public static ContextManagerImpl getInstance() {

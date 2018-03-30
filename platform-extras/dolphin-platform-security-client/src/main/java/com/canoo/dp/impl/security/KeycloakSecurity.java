@@ -16,7 +16,6 @@
 package com.canoo.dp.impl.security;
 
 import com.canoo.dp.impl.platform.core.Assert;
-import com.canoo.dp.impl.platform.core.context.ContextImpl;
 import com.canoo.dp.impl.platform.core.context.ContextManagerImpl;
 import com.canoo.dp.impl.platform.core.http.HttpClientConnection;
 import com.canoo.platform.client.ClientConfiguration;
@@ -43,10 +42,10 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import static com.canoo.dp.impl.platform.core.http.HttpHeaderConstants.CHARSET;
 import static com.canoo.dp.impl.platform.core.http.HttpHeaderConstants.CONTENT_TYPE_HEADER;
 import static com.canoo.dp.impl.platform.core.http.HttpHeaderConstants.FORM_MIME_TYPE;
 import static com.canoo.dp.impl.platform.core.http.HttpHeaderConstants.TEXT_MIME_TYPE;
-import static com.canoo.dp.impl.platform.core.http.HttpHeaderConstants.CHARSET;
 import static com.canoo.dp.impl.platform.core.http.HttpStatus.SC_HTTP_UNAUTHORIZED;
 import static com.canoo.dp.impl.security.SecurityConfiguration.APPLICATION_PROPERTY_NAME;
 import static com.canoo.dp.impl.security.SecurityConfiguration.AUTH_ENDPOINT_PROPERTY_DEFAULT_VALUE;
@@ -133,7 +132,7 @@ public class KeycloakSecurity implements Security {
                     final KeycloakAuthentification auth = new KeycloakAuthentification(accessToken.get(), appName, realmName);
                     KeycloakAuthentificationManager.getInstance().setAuth(auth);
                     authorized.set(true);
-                    userContextSubscription.set(ContextManagerImpl.getInstance().addGlobalContext(new ContextImpl(USER_CONTEXT, user)));
+                    userContextSubscription.set(ContextManagerImpl.getInstance().addGlobalContext(USER_CONTEXT, user));
                     startTokenRefreshRunner(connectResult, realmName, encodedAppName);
                 } catch (final IOException | URISyntaxException e) {
                     throw new DolphinRuntimeException("Can not receive security token!", e);

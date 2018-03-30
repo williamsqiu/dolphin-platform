@@ -30,9 +30,9 @@ import javax.servlet.ServletContext;
 import java.util.EnumSet;
 import java.util.List;
 
+import static com.canoo.dp.impl.server.bootstrap.BasicConfigurationProvider.CORS_ENDPOINTS_URL_MAPPINGS;
+import static com.canoo.dp.impl.server.bootstrap.BasicConfigurationProvider.CORS_ENDPOINTS_URL_MAPPINGS_DEFAULT_VALUE;
 import static org.apiguardian.api.API.Status.INTERNAL;
-import static com.canoo.dp.impl.server.config.ServerConfiguration.CORS_ENDPOINTS_URL_MAPPINGS;
-import static com.canoo.dp.impl.server.config.ServerConfiguration.CORS_ENDPOINTS_URL_MAPPINGS_DEFAULT_VALUE;
 
 @API(since = "0.x", status = INTERNAL)
 @ModuleDefinition
