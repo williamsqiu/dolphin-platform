@@ -20,6 +20,8 @@ import org.apiguardian.api.API;
 @API(since = "0.19.0", status = API.Status.EXPERIMENTAL)
 public interface SecurityConfiguration {
 
+    String USER_CONTEXT = "user";
+
     String AUTH_ENDPOINT_PROPERTY_NAME = "security.keycloak.endpoint";
 
     String AUTH_ENDPOINT_PROPERTY_DEFAULT_VALUE = "http://localhost:8080/openid-connect";

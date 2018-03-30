@@ -16,6 +16,9 @@
 package com.canoo.dp.impl.server.security;
 
 import com.canoo.dp.impl.platform.core.Assert;
+import com.canoo.dp.impl.platform.core.context.ContextImpl;
+import com.canoo.dp.impl.platform.core.context.ContextManagerImpl;
+import com.canoo.platform.core.functional.Subscription;
 import org.apiguardian.api.API;
 import org.keycloak.KeycloakSecurityContext;
 import org.slf4j.Logger;
@@ -32,6 +35,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Optional;
 
+import static com.canoo.dp.impl.security.SecurityConfiguration.USER_CONTEXT;
 import static com.canoo.dp.impl.security.SecurityHttpHeader.APPLICATION_NAME_HEADER;
 import static com.canoo.dp.impl.security.SecurityHttpHeader.REALM_NAME_HEADER;
 import static org.apiguardian.api.API.Status.INTERNAL;
@@ -56,10 +60,17 @@ public class KeycloakSecurityContextExtractFilter implements Filter, AccessDenie
     public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain) throws IOException, ServletException {
         final HttpServletRequest req = (HttpServletRequest) request;
         Assert.requireNonNull(chain, "chain");
-        contextHolder.set(keyCloakSecurityExtractor.extractContext(request));
+        final KeycloakSecurityContext securityContext = keyCloakSecurityExtractor.extractContext(request);
+        contextHolder.set(securityContext);
         realmHolder.set(req.getHeader(REALM_NAME_HEADER));
         appNameHolder.set(req.getHeader(APPLICATION_NAME_HEADER));
         accessDenied.set(false);
+
+        final Subscription userContextSubscription = Optional.ofNullable(securityContext)
+                .map(c -> c.getToken())
+                .map(t -> t.getPreferredUsername())
+                .map(u -> ContextManagerImpl.getInstance().addThreadContext(new ContextImpl(USER_CONTEXT, u)))
+                .orElse(null);
         try {
             chain.doFilter(request, response);
         }catch (Exception e) {
@@ -69,6 +80,7 @@ public class KeycloakSecurityContextExtractFilter implements Filter, AccessDenie
                 LOG.error("SecurityContext error in request", e);
             }
         } finally {
+            Optional.ofNullable(userContextSubscription).ifPresent(s -> s.unsubscribe());
             contextHolder.set(null);
             boolean sendAccessDenied = accessDenied.get();
             accessDenied.set(false);

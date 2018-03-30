@@ -16,12 +16,15 @@
 package com.canoo.dp.impl.security;
 
 import com.canoo.dp.impl.platform.core.Assert;
+import com.canoo.dp.impl.platform.core.context.ContextImpl;
+import com.canoo.dp.impl.platform.core.context.ContextManagerImpl;
 import com.canoo.dp.impl.platform.core.http.HttpClientConnection;
 import com.canoo.platform.client.ClientConfiguration;
 import com.canoo.platform.client.PlatformClient;
 import com.canoo.platform.client.security.Security;
 import com.canoo.platform.core.DolphinRuntimeException;
 import com.canoo.platform.core.PlatformConfiguration;
+import com.canoo.platform.core.functional.Subscription;
 import com.canoo.platform.core.http.RequestMethod;
 import com.google.gson.Gson;
 import org.apiguardian.api.API;
@@ -51,6 +54,7 @@ import static com.canoo.dp.impl.security.SecurityConfiguration.AUTH_ENDPOINT_PRO
 import static com.canoo.dp.impl.security.SecurityConfiguration.DIRECT_CONNECTION_PROPERTY_DEFAULT_VALUE;
 import static com.canoo.dp.impl.security.SecurityConfiguration.DIRECT_CONNECTION_PROPERTY_NAME;
 import static com.canoo.dp.impl.security.SecurityConfiguration.REALM_PROPERTY_NAME;
+import static com.canoo.dp.impl.security.SecurityConfiguration.USER_CONTEXT;
 import static com.canoo.dp.impl.security.SecurityHttpHeader.APPLICATION_NAME_HEADER;
 import static com.canoo.dp.impl.security.SecurityHttpHeader.REALM_NAME_HEADER;
 import static org.apiguardian.api.API.Status.INTERNAL;
@@ -84,6 +88,9 @@ public class KeycloakSecurity implements Security {
 
     private final Lock loginLogoutLock = new ReentrantLock();
 
+    private final AtomicReference<Subscription> userContextSubscription;
+
+
     public KeycloakSecurity(final ClientConfiguration configuration) {
         Assert.requireNonNull(configuration, "configuration");
         this.defaultAppName = configuration.getProperty(APPLICATION_PROPERTY_NAME);
@@ -95,6 +102,7 @@ public class KeycloakSecurity implements Security {
         Assert.requireNonNull(executor, "executor");
         this.authorized = new AtomicBoolean(false);
         this.accessToken = new AtomicReference<>(null);
+        userContextSubscription = new AtomicReference<>();
     }
 
     @Override
@@ -125,6 +133,7 @@ public class KeycloakSecurity implements Security {
                     final KeycloakAuthentification auth = new KeycloakAuthentification(accessToken.get(), appName, realmName);
                     KeycloakAuthentificationManager.getInstance().setAuth(auth);
                     authorized.set(true);
+                    userContextSubscription.set(ContextManagerImpl.getInstance().addGlobalContext(new ContextImpl(USER_CONTEXT, user)));
                     startTokenRefreshRunner(connectResult, realmName, encodedAppName);
                 } catch (final IOException | URISyntaxException e) {
                     throw new DolphinRuntimeException("Can not receive security token!", e);
@@ -140,6 +149,10 @@ public class KeycloakSecurity implements Security {
         return executor.submit(() -> {
             loginLogoutLock.lock();
             try {
+                Subscription userSubscription = userContextSubscription.getAndSet(null);
+                if(userSubscription != null) {
+                    userSubscription.unsubscribe();
+                }
                 authorized.set(false);
                 refreshLock.lock();
                 try {
