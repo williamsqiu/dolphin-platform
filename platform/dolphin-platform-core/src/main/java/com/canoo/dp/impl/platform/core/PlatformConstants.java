@@ -24,6 +24,8 @@ public interface PlatformConstants {
 
     String APPLICATION_CONTEXT = "application.name";
 
+    String THREAD_CONTEXT = "thread";
+
     String UNNAMED_APPLICATION = "UNNAMED";
 
     String HOST_NAME_CONTEXT = "hostName";
@@ -39,4 +41,10 @@ public interface PlatformConstants {
     String REMOTING_DATE_FORMAT_PATTERN = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
     String TIMEZONE_UTC = "UTC";
     String CLIENT_ID_HTTP_HEADER_NAME = "X-Client-Session-Id";
+
+    String THREAD_NAME_PREFIX = "Dolphin-Platform-Background-Thread-";
+
+    String THREAD_GROUP_NAME = "Dolphin Platform executors";
+
+    String PLATFORM_VERSION_CONTEXT = "platform.version";
 }

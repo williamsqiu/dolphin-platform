@@ -16,6 +16,7 @@
 package com.canoo.dp.impl.platform.core.context;
 
 import com.canoo.dp.impl.platform.core.Assert;
+import com.canoo.dp.impl.platform.core.PlatformVersion;
 import com.canoo.platform.core.context.Context;
 import com.canoo.platform.core.context.ContextManager;
 import com.canoo.platform.core.functional.Subscription;
@@ -34,6 +35,7 @@ import static com.canoo.dp.impl.platform.core.PlatformConstants.APPLICATION_CONT
 import static com.canoo.dp.impl.platform.core.PlatformConstants.CANONICAL_HOST_NAME_CONTEXT;
 import static com.canoo.dp.impl.platform.core.PlatformConstants.HOST_ADDRESS_CONTEXT;
 import static com.canoo.dp.impl.platform.core.PlatformConstants.HOST_NAME_CONTEXT;
+import static com.canoo.dp.impl.platform.core.PlatformConstants.PLATFORM_VERSION_CONTEXT;
 import static com.canoo.dp.impl.platform.core.PlatformConstants.UNNAMED_APPLICATION;
 
 public class ContextManagerImpl implements ContextManager {
@@ -54,6 +56,8 @@ public class ContextManagerImpl implements ContextManager {
         globalContextsLock = new ReentrantLock();
 
         addGlobalContext(APPLICATION_CONTEXT, UNNAMED_APPLICATION);
+
+        addGlobalContext(PLATFORM_VERSION_CONTEXT, PlatformVersion.getVersion());
 
         try {
             final InetAddress address = InetAddress.getLocalHost();
