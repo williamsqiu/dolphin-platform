@@ -19,7 +19,8 @@ package com.canoo.impl.server;
 import com.canoo.platform.server.spi.ConfigurationProviderAdapter;
 import java.util.HashMap;
 import java.util.Map;
-import static com.canoo.dp.impl.server.config.ServerConfiguration.USE_CROSS_SITE_ORIGIN_FILTER;
+
+import static com.canoo.dp.impl.server.bootstrap.BasicConfigurationProvider.USE_CROSS_SITE_ORIGIN_FILTER;
 
 public class TestConfigurationProvider extends ConfigurationProviderAdapter {
 

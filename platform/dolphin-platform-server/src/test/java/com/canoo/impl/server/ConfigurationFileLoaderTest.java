@@ -19,10 +19,10 @@ import com.canoo.dp.impl.server.config.ConfigurationFileLoader;
 import com.canoo.dp.impl.server.config.ServerConfiguration;
 import org.testng.annotations.Test;
 
+import static com.canoo.dp.impl.server.bootstrap.BasicConfigurationProvider.ROOT_PACKAGE_FOR_CLASSPATH_SCAN;
+import static com.canoo.dp.impl.server.bootstrap.BasicConfigurationProvider.USE_CROSS_SITE_ORIGIN_FILTER;
+import static com.canoo.dp.impl.server.bootstrap.BasicConfigurationProvider.USE_CROSS_SITE_ORIGIN_FILTER_DEFAULT_VALUE;
 import static org.testng.Assert.*;
-import static com.canoo.dp.impl.server.config.ServerConfiguration.USE_CROSS_SITE_ORIGIN_FILTER;
-import static com.canoo.dp.impl.server.config.ServerConfiguration.ROOT_PACKAGE_FOR_CLASSPATH_SCAN;
-import static com.canoo.dp.impl.server.config.ServerConfiguration.USE_CROSS_SITE_ORIGIN_FILTER_DEFAULT_VALUE;
 
 
 public class ConfigurationFileLoaderTest {
