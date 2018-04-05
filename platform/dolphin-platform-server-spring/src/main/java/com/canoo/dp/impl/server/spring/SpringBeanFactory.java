@@ -16,9 +16,11 @@
 package com.canoo.dp.impl.server.spring;
 
 import com.canoo.dp.impl.platform.core.Assert;
+import com.canoo.dp.impl.platform.core.context.ContextManagerImpl;
 import com.canoo.dp.impl.server.bootstrap.PlatformBootstrap;
 import com.canoo.dp.impl.server.client.ClientSessionProvider;
 import com.canoo.dp.impl.server.servlet.ServerTimingFilter;
+import com.canoo.platform.core.context.ContextManager;
 import com.canoo.platform.server.client.ClientSession;
 import com.canoo.platform.server.spring.ClientScope;
 import com.canoo.platform.server.timing.ServerTiming;
@@ -26,6 +28,7 @@ import org.apiguardian.api.API;
 import org.springframework.beans.factory.config.CustomScopeConfigurer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.context.annotation.ApplicationScope;
 import org.springframework.web.context.annotation.RequestScope;
 
 import java.lang.reflect.InvocationHandler;
@@ -47,6 +50,12 @@ public class SpringBeanFactory {
         final ClientSessionProvider provider = PlatformBootstrap.getServerCoreComponents().getInstance(ClientSessionProvider.class);
         Assert.requireNonNull(provider, "provider");
         return provider.getCurrentClientSession();
+    }
+
+    @Bean(name = "contextManager")
+    @ApplicationScope
+    protected ContextManager createContextManager() {
+        return ContextManagerImpl.getInstance();
     }
     
     @Bean(name = "customScopeConfigurer")

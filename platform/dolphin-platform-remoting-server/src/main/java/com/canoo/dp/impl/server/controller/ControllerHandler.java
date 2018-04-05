@@ -17,6 +17,7 @@ package com.canoo.dp.impl.server.controller;
 
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.platform.core.ReflectionHelper;
+import com.canoo.dp.impl.platform.core.context.ContextManagerImpl;
 import com.canoo.dp.impl.remoting.BeanRepository;
 import com.canoo.dp.impl.remoting.Converters;
 import com.canoo.dp.impl.server.beans.PostConstructInterceptor;
@@ -46,9 +47,13 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
+import static com.canoo.dp.impl.server.RemotingServerConstants.CONTROLLER_ACTION_CONTEXT;
+import static com.canoo.dp.impl.server.RemotingServerConstants.CONTROLLER_CONTEXT;
+import static com.canoo.dp.impl.server.RemotingServerConstants.UNKNOWN_CONTROLLER_CONTEXT;
 import static org.apiguardian.api.API.Status.INTERNAL;
 
 /**
@@ -264,12 +269,18 @@ public class ControllerHandler {
         Assert.requireNonBlank(actionName, "actionName");
         Assert.requireNonNull(params, "params");
 
+        final Object controller = controllers.get(controllerId);
+        final Class controllerClass = controllerClassMapping.get(controllerId);
+
+        final Subscription controllerContextSubscription = ContextManagerImpl.getInstance()
+                .addThreadContext(CONTROLLER_CONTEXT, Optional.ofNullable(controllerClass).map(c -> c.getSimpleName()).orElse(UNKNOWN_CONTROLLER_CONTEXT));
+        final Subscription controllerActionContextSubscription = ContextManagerImpl.getInstance()
+                .addThreadContext(CONTROLLER_ACTION_CONTEXT, actionName);
         try {
-            final Object controller = controllers.get(controllerId);
             if(controller == null) {
                 throw new InvokeActionException("No controller for id " + controllerId + " found");
             }
-            final Class controllerClass = controllerClassMapping.get(controllerId);
+
             if(controllerClass == null) {
                 throw new InvokeActionException("No controllerClass for id " + controllerId + " found");
             }
@@ -304,6 +315,9 @@ public class ControllerHandler {
           throw e;
         } catch (final Exception e) {
             throw new InvokeActionException("Can not call action '" + actionName + "'", e);
+        } finally {
+            controllerContextSubscription.unsubscribe();
+            controllerActionContextSubscription.unsubscribe();
         }
     }
 
@@ -364,20 +378,5 @@ public class ControllerHandler {
             }
         }
         return foundMethod;
-    }
-
-    @SuppressWarnings("unchecked")
-    public <T> List<? extends T> getAllControllersThatImplement(final Class<T> cls) {
-        final List<T> ret = new ArrayList<>();
-        for (final Object controller : controllers.values()) {
-            if (cls.isAssignableFrom(controller.getClass())) {
-                ret.add((T) controller);
-            }
-        }
-        return ret;
-    }
-
-    public <T> T getControllerById(String id) {
-        return (T) controllers.get(id);
     }
 }

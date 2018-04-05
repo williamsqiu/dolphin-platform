@@ -262,7 +262,7 @@ public class HttpClientTests {
                 .execute();
 
         //then:
-        final HttpResponse<String> response = future.get(100_000, TimeUnit.MILLISECONDS);
+        final HttpResponse<String> response = future.get(10_000, TimeUnit.MILLISECONDS);
         assertThat("response not defined", response, notNullValue());
         assertThat("Wrong response code", response.getStatusCode(), is(200));
         assertThat("Content should not be null", response.getRawContent(), notNullValue());

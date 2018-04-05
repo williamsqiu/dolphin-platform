@@ -18,6 +18,7 @@ package com.canoo.platform.client;
 import com.canoo.dp.impl.platform.client.config.ConfigurationFileLoader;
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.platform.core.ansi.PlatformLogo;
+import com.canoo.dp.impl.platform.core.context.ContextManagerImpl;
 import com.canoo.platform.client.spi.ServiceProvider;
 import com.canoo.platform.core.DolphinRuntimeException;
 import org.apiguardian.api.API;
@@ -30,6 +31,10 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import static com.canoo.dp.impl.platform.client.ClientConstants.UI_CONTEXT;
+import static com.canoo.dp.impl.platform.core.PlatformConstants.APPLICATION_CONTEXT;
+import static com.canoo.dp.impl.platform.core.PlatformConstants.APPLICATION_NAME_DEFAULT;
+import static com.canoo.dp.impl.platform.core.PlatformConstants.APPLICATION_NAME_PROPERTY;
 import static org.apiguardian.api.API.Status.EXPERIMENTAL;
 
 @API(since = "0.19.0", status = EXPERIMENTAL)
@@ -50,6 +55,9 @@ public class PlatformClient {
     private PlatformClient() {
         PlatformLogo.printLogo();
         this.clientConfiguration = ConfigurationFileLoader.loadConfiguration(DEFAULT_LOCATION);
+        Assert.requireNonNull(clientConfiguration, "clientConfiguration");
+
+        ContextManagerImpl.getInstance().addGlobalContext(APPLICATION_CONTEXT, clientConfiguration.getProperty(APPLICATION_NAME_PROPERTY, APPLICATION_NAME_DEFAULT));
 
         final ServiceLoader<ServiceProvider> loader = ServiceLoader.load(ServiceProvider.class);
         final Iterator<ServiceProvider> iterator = loader.iterator();
@@ -72,6 +80,7 @@ public class PlatformClient {
         Assert.requireNonNull(toolkit, "toolkit");
         clientConfiguration.setUiExecutor(toolkit.getUiExecutor());
         isToolkitSet.set(true);
+        ContextManagerImpl.getInstance().addGlobalContext(UI_CONTEXT, toolkit.getName());
     }
 
     private Set<Class<?>> implGetAllServiceTypes() {

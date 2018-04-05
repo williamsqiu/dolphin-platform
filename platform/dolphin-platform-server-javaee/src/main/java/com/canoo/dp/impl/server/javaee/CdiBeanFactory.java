@@ -16,9 +16,11 @@
 package com.canoo.dp.impl.server.javaee;
 
 import com.canoo.dp.impl.platform.core.Assert;
+import com.canoo.dp.impl.platform.core.context.ContextManagerImpl;
 import com.canoo.dp.impl.server.bootstrap.PlatformBootstrap;
 import com.canoo.dp.impl.server.client.ClientSessionProvider;
 import com.canoo.dp.impl.server.servlet.ServerTimingFilter;
+import com.canoo.platform.core.context.ContextManager;
 import com.canoo.platform.server.client.ClientSession;
 import com.canoo.platform.server.javaee.ClientScoped;
 import com.canoo.platform.server.timing.ServerTiming;
@@ -51,5 +53,11 @@ public class CdiBeanFactory {
     @RequestScoped
     public ServerTiming createServerTiming() {
         return ServerTimingFilter.getCurrentTiming();
+    }
+
+    @Produces
+    @ApplicationScoped
+    public ContextManager createContextManager() {
+        return ContextManagerImpl.getInstance();
     }
 }

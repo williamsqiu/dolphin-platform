@@ -19,8 +19,9 @@ import com.canoo.dp.impl.server.config.ServerConfiguration;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import static com.canoo.dp.impl.server.config.ServerConfiguration.USE_CROSS_SITE_ORIGIN_FILTER;
-import static com.canoo.dp.impl.server.config.ServerConfiguration.USE_CROSS_SITE_ORIGIN_FILTER_DEFAULT_VALUE;
+import static com.canoo.dp.impl.server.bootstrap.BasicConfigurationProvider.USE_CROSS_SITE_ORIGIN_FILTER;
+import static com.canoo.dp.impl.server.bootstrap.BasicConfigurationProvider.USE_CROSS_SITE_ORIGIN_FILTER_DEFAULT_VALUE;
+
 
 public class DolphinDefaultPlatformConfigurationTest {
 

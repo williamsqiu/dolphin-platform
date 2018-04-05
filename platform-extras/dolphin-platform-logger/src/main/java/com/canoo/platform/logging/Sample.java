@@ -44,11 +44,8 @@ public class Sample {
 
         while (true) {
             Thread.sleep(100);
-            DolphinLogger.putInThreadContext("Stimmen", "" + Math.random() * 100.0);
-            DolphinLogger.putInThreadContext("Werte", "" + Math.random() * 100.0);
             LOG.info(MarkerFactory.getMarker("MyMarker"), "Zeit: " + System.currentTimeMillis());
             LOG.error("HILFE", new RuntimeException("Ich bin der Fehler"));
-            DolphinLogger.clearThreadContext();
         }
     }
 

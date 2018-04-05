@@ -15,6 +15,7 @@
  */
 package com.canoo.dp.impl.platform.core;
 
+import com.canoo.dp.impl.platform.core.context.ContextManagerImpl;
 import com.canoo.platform.core.PlatformThreadFactory;
 import org.apiguardian.api.API;
 
@@ -24,6 +25,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import static com.canoo.dp.impl.platform.core.PlatformConstants.THREAD_CONTEXT;
+import static com.canoo.dp.impl.platform.core.PlatformConstants.THREAD_GROUP_NAME;
+import static com.canoo.dp.impl.platform.core.PlatformConstants.THREAD_NAME_PREFIX;
 import static org.apiguardian.api.API.Status.INTERNAL;
 
 @API(since = "0.x", status = INTERNAL)
@@ -39,7 +43,7 @@ public class SimpleDolphinPlatformThreadFactory implements PlatformThreadFactory
 
     public SimpleDolphinPlatformThreadFactory(final Thread.UncaughtExceptionHandler uncaughtExceptionHandler) {
         this.uncaughtExceptionHandler = Assert.requireNonNull(uncaughtExceptionHandler, "uncaughtExceptionHandler");
-        this.group = new ThreadGroup("Dolphin Platform executors");
+        this.group = new ThreadGroup(THREAD_GROUP_NAME);
     }
 
     public SimpleDolphinPlatformThreadFactory() {
@@ -52,8 +56,12 @@ public class SimpleDolphinPlatformThreadFactory implements PlatformThreadFactory
         return AccessController.doPrivileged(new PrivilegedAction<Thread>() {
             @Override
             public Thread run() {
-                final Thread backgroundThread = new Thread(group, task);
-                backgroundThread.setName("Dolphin-Platform-Background-Thread-" + threadNumber.getAndIncrement());
+                final String name = THREAD_NAME_PREFIX + threadNumber.getAndIncrement();
+                final Thread backgroundThread = new Thread(group, () -> {
+                    ContextManagerImpl.getInstance().addThreadContext(THREAD_CONTEXT, name);
+                    task.run();
+                });
+                backgroundThread.setName(name);
                 backgroundThread.setDaemon(false);
                 uncaughtExceptionHandlerLock.lock();
                 try {

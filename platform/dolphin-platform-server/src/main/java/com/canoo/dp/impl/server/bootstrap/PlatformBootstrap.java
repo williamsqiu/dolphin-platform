@@ -18,6 +18,7 @@ package com.canoo.dp.impl.server.bootstrap;
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.dp.impl.platform.core.SimpleDolphinPlatformThreadFactory;
 import com.canoo.dp.impl.platform.core.ansi.PlatformLogo;
+import com.canoo.dp.impl.platform.core.context.ContextManagerImpl;
 import com.canoo.dp.impl.server.config.ServerConfiguration;
 import com.canoo.dp.impl.server.mbean.MBeanRegistry;
 import com.canoo.dp.impl.server.scanner.DefaultClasspathScanner;
@@ -40,11 +41,11 @@ import java.util.Map;
 import java.util.ServiceLoader;
 import java.util.Set;
 
-import static com.canoo.dp.impl.server.config.ServerConfiguration.ACTIVE_DEFAULT_VALUE;
-import static com.canoo.dp.impl.server.config.ServerConfiguration.MBEAN_REGISTRATION;
-import static com.canoo.dp.impl.server.config.ServerConfiguration.M_BEAN_REGISTRATION_DEFAULT_VALUE;
-import static com.canoo.dp.impl.server.config.ServerConfiguration.PLATFORM_ACTIVE;
-import static com.canoo.dp.impl.server.config.ServerConfiguration.ROOT_PACKAGE_FOR_CLASSPATH_SCAN;
+import static com.canoo.dp.impl.platform.core.PlatformConstants.APPLICATION_CONTEXT;
+import static com.canoo.dp.impl.platform.core.PlatformConstants.APPLICATION_NAME_PROPERTY;
+import static com.canoo.dp.impl.server.bootstrap.BasicConfigurationProvider.MBEAN_REGISTRATION;
+import static com.canoo.dp.impl.server.bootstrap.BasicConfigurationProvider.PLATFORM_ACTIVE;
+import static com.canoo.dp.impl.server.bootstrap.BasicConfigurationProvider.ROOT_PACKAGE_FOR_CLASSPATH_SCAN;
 import static org.apiguardian.api.API.Status.INTERNAL;
 
 @API(since = "0.x", status = INTERNAL)
@@ -60,7 +61,9 @@ public class PlatformBootstrap {
         Assert.requireNonNull(servletContext, "servletContext");
         Assert.requireNonNull(configuration, "configuration");
 
-        if(configuration.getBooleanProperty(PLATFORM_ACTIVE, ACTIVE_DEFAULT_VALUE)) {
+        ContextManagerImpl.getInstance().addGlobalContext(APPLICATION_CONTEXT, configuration.getProperty(APPLICATION_NAME_PROPERTY));
+
+        if(configuration.getBooleanProperty(PLATFORM_ACTIVE)) {
             PlatformLogo.printLogo();
             try {
                 LOG.info("Will boot Dolphin Plaform now");
@@ -68,7 +71,7 @@ public class PlatformBootstrap {
                 servletContext.setAttribute(CONFIGURATION_ATTRIBUTE_NAME, configuration);
                 configuration.log();
 
-                MBeanRegistry.getInstance().setMbeanSupport(configuration.getBooleanProperty(MBEAN_REGISTRATION, M_BEAN_REGISTRATION_DEFAULT_VALUE));
+                MBeanRegistry.getInstance().setMbeanSupport(configuration.getBooleanProperty(MBEAN_REGISTRATION));
 
 
                 //TODO: We need to provide a container specific thread factory that contains managed threads

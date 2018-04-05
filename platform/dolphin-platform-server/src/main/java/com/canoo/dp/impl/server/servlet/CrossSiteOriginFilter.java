@@ -28,15 +28,15 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
+import static com.canoo.dp.impl.server.bootstrap.BasicConfigurationProvider.ACCESS_CONTROL_ALLOW_CREDENTIALS;
+import static com.canoo.dp.impl.server.bootstrap.BasicConfigurationProvider.ACCESS_CONTROL_ALLOW_CREDENTIALS_DEFAULT_VALUE;
+import static com.canoo.dp.impl.server.bootstrap.BasicConfigurationProvider.ACCESS_CONTROL_ALLOW_HEADERS;
+import static com.canoo.dp.impl.server.bootstrap.BasicConfigurationProvider.ACCESS_CONTROL_ALLOW_HEADERS_DEFAULT_VALUE;
+import static com.canoo.dp.impl.server.bootstrap.BasicConfigurationProvider.ACCESS_CONTROL_ALLOW_METHODS;
+import static com.canoo.dp.impl.server.bootstrap.BasicConfigurationProvider.ACCESS_CONTROL_ALLOW_METHODS_DEFAULT_VALUE;
+import static com.canoo.dp.impl.server.bootstrap.BasicConfigurationProvider.ACCESS_CONTROL_MAXAGE;
+import static com.canoo.dp.impl.server.bootstrap.BasicConfigurationProvider.ACCESS_CONTROL_MAX_AGE_DEFAULT_VALUE;
 import static org.apiguardian.api.API.Status.INTERNAL;
-import static com.canoo.dp.impl.server.config.ServerConfiguration.ACCESS_CONTROL_ALLOW_HEADERS;
-import static com.canoo.dp.impl.server.config.ServerConfiguration.ACCESS_CONTROL_ALLOW_HEADERS_DEFAULT_VALUE;
-import static com.canoo.dp.impl.server.config.ServerConfiguration.ACCESS_CONTROL_ALLOW_METHODS;
-import static com.canoo.dp.impl.server.config.ServerConfiguration.ACCESS_CONTROL_ALLOW_METHODS_DEFAULT_VALUE;
-import static com.canoo.dp.impl.server.config.ServerConfiguration.ACCESS_CONTROL_ALLOW_CREDENTIALS;
-import static com.canoo.dp.impl.server.config.ServerConfiguration.ACCESS_CONTROL_ALLOW_CREDENTIALS_DEFAULT_VALUE;
-import static com.canoo.dp.impl.server.config.ServerConfiguration.ACCESS_CONTROL_MAXAGE;
-import static com.canoo.dp.impl.server.config.ServerConfiguration.ACCESS_CONTROL_MAX_AGE_DEFAULT_VALUE;
 
 @API(since = "0.x", status = INTERNAL)
 public class CrossSiteOriginFilter implements Filter {

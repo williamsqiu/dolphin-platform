@@ -17,7 +17,6 @@ package com.canoo.dp.impl.platform.core.ansi;
 
 import com.canoo.dp.impl.platform.core.PlatformVersion;
 
-import java.io.IOException;
 import java.util.Optional;
 
 /**
@@ -25,17 +24,9 @@ import java.util.Optional;
  */
 public class PlatformLogo {
 
-    private static String getVersionString() {
-        final PlatformVersion version = new PlatformVersion();
-        try {
-            return version.getVersion();
-        } catch (IOException e) {
-            return null;
-        }
-    }
 
     public static void printLogo() {
-        final String version = getVersionString();
+        final String version = PlatformVersion.getVersion();
         final String versionString = Optional.of(version).map(v -> "Version " + version + " | ").orElse("");
         final String versionEndSuffix = "                                      ".substring(versionString.length());
 
