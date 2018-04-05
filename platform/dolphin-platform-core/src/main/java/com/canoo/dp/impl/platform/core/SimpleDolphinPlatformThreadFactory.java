@@ -59,6 +59,7 @@ public class SimpleDolphinPlatformThreadFactory implements PlatformThreadFactory
                 final String name = THREAD_NAME_PREFIX + threadNumber.getAndIncrement();
                 final Thread backgroundThread = new Thread(group, () -> {
                     ContextManagerImpl.getInstance().addThreadContext(THREAD_CONTEXT, name);
+                    task.run();
                 });
                 backgroundThread.setName(name);
                 backgroundThread.setDaemon(false);
