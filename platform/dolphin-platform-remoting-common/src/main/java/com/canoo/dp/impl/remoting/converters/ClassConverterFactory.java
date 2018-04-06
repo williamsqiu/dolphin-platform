@@ -13,9 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.dp.impl.platform.projector.converter;
+package com.canoo.dp.impl.remoting.converters;
 
-import com.canoo.dp.impl.remoting.converters.AbstractStringConverter;
 import com.canoo.platform.remoting.spi.converter.Converter;
 import com.canoo.platform.remoting.spi.converter.ConverterFactory;
 import com.canoo.platform.remoting.spi.converter.DolphinBeanRepo;

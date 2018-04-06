@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.dp.impl.platform.projector.gantt;
 
-public enum BarType {
-    BASE, PARENT;
+dependencies {
+    compile project(':dolphin-platform-projector-server')
+    compile project(':dolphin-platform-data')
+    compile project(':dolphin-platform-remoting-server-spring')
 }

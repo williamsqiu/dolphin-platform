@@ -22,11 +22,16 @@ import com.canoo.dp.impl.platform.projector.form.concrete.BooleanFormFieldBean;
 import com.canoo.dp.impl.platform.projector.form.concrete.StringFormFieldBean;
 import com.canoo.dp.impl.platform.projector.metadata.AbstractKeyValueBean;
 import com.canoo.dp.impl.platform.projector.metadata.KeyValue;
+import com.canoo.dp.impl.platform.projector.server.update.UpdateHandler;
 import com.canoo.platform.remoting.BeanManager;
 import com.canoo.platform.remoting.ValueChangeListener;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 public class FormFieldBuilder<T, S extends FormField<T>> {
 
@@ -52,7 +57,9 @@ public class FormFieldBuilder<T, S extends FormField<T>> {
 
     private Class<S> beanType;
 
-    private ValueChangeListener<? super T> listener;
+    private List<ValueChangeListener<? super T>> listeners = new ArrayList<>();
+
+    private List<UpdateHandlerWrapper<Object>> updateHandlerWrappers = new ArrayList<>();
 
     private Map<String, Object> metadata = new HashMap<>();
 
@@ -70,9 +77,14 @@ public class FormFieldBuilder<T, S extends FormField<T>> {
         return new FormFieldBuilder(Boolean.class, BooleanFormFieldBean.class, beanManager);
     }
 
-    public FormFieldBuilder<T, S> withValueChangeListener(ValueChangeListener<? super T> listener) {
-        this.listener = listener;
+    public FormFieldBuilder<T, S> withValueChangeListener(ValueChangeListener<T> listener) {
+        listeners.add(listener);
         return this;
+    }
+
+    public <U> FormFieldBuilder<T, S>  withUpdateHandler(final UpdateHandler<U> updateHandler, final Function<U, T> valueSupplier, final Consumer<T> valueConsumer) {
+        updateHandlerWrappers.add(new UpdateHandlerWrapper(updateHandler, valueSupplier));
+        return withValueChangeListener(e -> valueConsumer.accept(e.getNewValue()));
     }
 
     public FormFieldBuilder<T, S> withMandatoryFlag(boolean mandatory) {
@@ -158,9 +170,9 @@ public class FormFieldBuilder<T, S extends FormField<T>> {
         bean.setDescription(description);
 
         bean.setValue(value);
-        if (listener != null) {
-            bean.valueProperty().onChanged(listener);
-        }
+        listeners.forEach(l -> bean.valueProperty().onChanged(l));
+
+        updateHandlerWrappers.forEach(w -> addToUpdateHandler(w.updateHandler, w.valueSupplier, bean));
 
         metadata.forEach((k, v) -> {
             if (v instanceof String) {
@@ -183,8 +195,33 @@ public class FormFieldBuilder<T, S extends FormField<T>> {
             bean.setIcon(icon);
         }
 
-
         return bean;
+    }
+
+    private <U> void addToUpdateHandler(final UpdateHandler<U> handler, final Function<U, T> valueSupplier, final FormField<T> bean) {
+        handler.addHandler(data -> {
+            T value = valueSupplier.apply(data);
+            bean.setValue(value);
+        });
+    }
+
+    private class UpdateHandlerWrapper<U> {
+
+        private final UpdateHandler<U> updateHandler;
+        private final Function<U, T> valueSupplier;
+
+        public UpdateHandlerWrapper(final UpdateHandler<U> updateHandler, final Function<U, T> valueSupplier) {
+            this.updateHandler = updateHandler;
+            this.valueSupplier = valueSupplier;
+        }
+
+        public UpdateHandler<U> getUpdateHandler() {
+            return updateHandler;
+        }
+
+        public Function<U, T> getValueSupplier() {
+            return valueSupplier;
+        }
     }
 
 }
