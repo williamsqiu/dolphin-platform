@@ -15,7 +15,7 @@
  */
 package com.canoo.dp.impl.platform.projector.server.projection;
 
-import com.canoo.dp.impl.platform.projector.action.Action;
+import com.canoo.dp.impl.platform.projector.base.Action;
 import com.canoo.dp.impl.platform.projector.base.Icon;
 import com.canoo.dp.impl.platform.projector.base.IconBean;
 import com.canoo.dp.impl.platform.projector.metadata.AbstractKeyValueBean;

@@ -19,7 +19,7 @@ import com.canoo.platform.remoting.Property;
 import com.canoo.platform.remoting.RemotingBean;
 
 @RemotingBean
-public interface WithIcon {
+public interface WithIcon extends Projectable {
 
     Property<Icon> iconProperty();
 

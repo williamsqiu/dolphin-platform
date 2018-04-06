@@ -20,7 +20,7 @@ import com.canoo.platform.remoting.ObservableList;
 import com.canoo.platform.remoting.RemotingBean;
 
 @RemotingBean
-public interface WithLayoutMetadata {
+public interface WithLayoutMetadata extends Projectable {
 
     ObservableList<KeyValue> getLayoutMetadata();
 

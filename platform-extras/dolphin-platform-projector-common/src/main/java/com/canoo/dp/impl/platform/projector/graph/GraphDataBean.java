@@ -16,6 +16,7 @@
 package com.canoo.dp.impl.platform.projector.graph;
 
 
+import com.canoo.dp.impl.platform.projector.base.AbstractProjectableBean;
 import com.canoo.dp.impl.platform.projector.base.Projectable;
 import com.canoo.dp.impl.platform.projector.base.WithLayoutMetadata;
 import com.canoo.dp.impl.platform.projector.base.WithTitle;
@@ -25,7 +26,7 @@ import com.canoo.platform.remoting.Property;
 import com.canoo.platform.remoting.RemotingBean;
 
 @RemotingBean
-public class GraphDataBean implements Projectable, WithTitle, WithLayoutMetadata {
+public class GraphDataBean extends AbstractProjectableBean implements Projectable, WithTitle, WithLayoutMetadata {
 
     private ObservableList<KeyValue> layoutMetadata;
 

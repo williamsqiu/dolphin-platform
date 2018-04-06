@@ -15,12 +15,13 @@
  */
 package com.canoo.dp.impl.platform.projector.chat;
 
+import com.canoo.dp.impl.platform.projector.base.AbstractProjectableBean;
 import com.canoo.dp.impl.platform.projector.base.Projectable;
 import com.canoo.platform.remoting.ObservableList;
 import com.canoo.platform.remoting.RemotingBean;
 
 @RemotingBean
-public class ChatThreadBean implements ChatThread, Projectable {
+public class ChatThreadBean extends AbstractProjectableBean implements ChatThread, Projectable {
 
     private ObservableList<ChatMessage> messages;
 

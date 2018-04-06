@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.dp.impl.platform.projector.base;
+package com.canoo.dp.impl.platform.projector.progress;
 
+import com.canoo.dp.impl.platform.projector.base.Projectable;
 import com.canoo.platform.remoting.Property;
 import com.canoo.platform.remoting.RemotingBean;
 

@@ -15,6 +15,7 @@
  */
 package com.canoo.dp.impl.platform.projector.table;
 
+import com.canoo.dp.impl.platform.projector.base.AbstractProjectableBean;
 import com.canoo.dp.impl.platform.projector.base.Icon;
 import com.canoo.dp.impl.platform.projector.metadata.KeyValue;
 import com.canoo.platform.remoting.ObservableList;
@@ -22,7 +23,7 @@ import com.canoo.platform.remoting.Property;
 import com.canoo.platform.remoting.RemotingBean;
 
 @RemotingBean
-public class PropertyColumnBean implements PropertyColumn {
+public class PropertyColumnBean extends AbstractProjectableBean implements PropertyColumn {
 
     private Property<Boolean> editable;
 

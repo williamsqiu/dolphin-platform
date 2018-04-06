@@ -15,13 +15,15 @@
  */
 package com.canoo.dp.impl.platform.projector.media;
 
+import com.canoo.dp.impl.platform.projector.base.AbstractProjectableBean;
+import com.canoo.dp.impl.platform.projector.base.Action;
 import com.canoo.dp.impl.platform.projector.metadata.KeyValue;
 import com.canoo.platform.remoting.ObservableList;
 import com.canoo.platform.remoting.Property;
 import com.canoo.platform.remoting.RemotingBean;
 
 @RemotingBean
-public class MediaBean implements Media {
+public class MediaBean extends AbstractProjectableBean implements Media {
 
     private Property<String> imageUrl;
 
@@ -30,6 +32,8 @@ public class MediaBean implements Media {
     private ObservableList<KeyValue> layoutMetadata;
 
     private Property<String> title;
+
+    private ObservableList<Action> actions;
 
     @Override
     public Property<String> imageUrlProperty() {
@@ -49,5 +53,10 @@ public class MediaBean implements Media {
     @Override
     public Property<String> titleProperty() {
         return title;
+    }
+
+    @Override
+    public ObservableList<Action> getActions() {
+        return actions;
     }
 }

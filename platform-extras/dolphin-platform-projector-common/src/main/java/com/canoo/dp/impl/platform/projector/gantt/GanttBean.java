@@ -15,12 +15,12 @@
  */
 package com.canoo.dp.impl.platform.projector.gantt;
 
-import com.canoo.dp.impl.platform.projector.base.Projectable;
+import com.canoo.dp.impl.platform.projector.base.AbstractProjectableBean;
 import com.canoo.platform.remoting.Property;
 import com.canoo.platform.remoting.RemotingBean;
 
 @RemotingBean
-public class GanttBean implements Projectable {
+public class GanttBean extends AbstractProjectableBean {
 
     private Property<RowBean> root;
 

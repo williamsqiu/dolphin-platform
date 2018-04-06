@@ -13,16 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.dp.impl.platform.projector.annotations;
+package com.canoo.dp.impl.platform.projector.base;
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import com.canoo.platform.remoting.Property;
+import com.canoo.platform.remoting.RemotingBean;
 
-@Documented
-@Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.FIELD})
-public @interface OnlyOnServer {
+@RemotingBean
+public abstract class AbstractProjectableBean implements Projectable {
+
+    private Property<String> id;
+
+    @Override
+    public Property<String> idProperty() {
+        return id;
+    }
 }

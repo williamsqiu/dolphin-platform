@@ -20,7 +20,7 @@ import com.canoo.platform.remoting.Property;
 import com.canoo.platform.remoting.RemotingBean;
 
 @RemotingBean
-public interface WithMultiSelection<T> extends WithSelection<T> {
+public interface WithMultiSelection<T> extends WithSelection<T>, Projectable {
 
     ObservableList<T> getSelectedValues();
 

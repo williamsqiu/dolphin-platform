@@ -15,6 +15,7 @@
  */
 package com.canoo.dp.impl.platform.projector.view;
 
+import com.canoo.dp.impl.platform.projector.base.View;
 import com.canoo.dp.impl.platform.projector.base.WithLayoutMetadata;
 import com.canoo.dp.impl.platform.projector.metadata.MetadataUtilities;
 import com.canoo.platform.remoting.BeanManager;
