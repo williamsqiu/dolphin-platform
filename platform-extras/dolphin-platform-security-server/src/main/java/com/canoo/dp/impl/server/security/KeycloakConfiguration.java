@@ -24,35 +24,24 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static com.canoo.dp.impl.security.SecurityConfiguration.APPLICATION_PROPERTY_NAME;
-import static com.canoo.dp.impl.security.SecurityConfiguration.AUTH_ENDPOINT_PROPERTY_DEFAULT_VALUE;
-import static com.canoo.dp.impl.security.SecurityConfiguration.AUTH_ENDPOINT_PROPERTY_NAME;
-import static com.canoo.dp.impl.security.SecurityConfiguration.REALM_PROPERTY_NAME;
-import static com.canoo.dp.impl.server.security.SecurityServerConfiguration.CORS_PROPERTY_DEFAULT_VALUE;
-import static com.canoo.dp.impl.server.security.SecurityServerConfiguration.CORS_PROPERTY_NAME;
-import static com.canoo.dp.impl.server.security.SecurityServerConfiguration.REALMS_PROPERTY_NAME;
+import static com.canoo.dp.impl.security.SecurityConstants.APPLICATION_PROPERTY_NAME;
+import static com.canoo.dp.impl.security.SecurityConstants.AUTH_ENDPOINT_PROPERTY_DEFAULT_VALUE;
+import static com.canoo.dp.impl.security.SecurityConstants.AUTH_ENDPOINT_PROPERTY_NAME;
+import static com.canoo.dp.impl.security.SecurityConstants.REALM_PROPERTY_NAME;
+import static com.canoo.dp.impl.server.security.SecurityServerConstants.CORS_PROPERTY_DEFAULT_VALUE;
+import static com.canoo.dp.impl.server.security.SecurityServerConstants.CORS_PROPERTY_NAME;
+import static com.canoo.dp.impl.server.security.SecurityServerConstants.LOGIN_ENDPOINTS_ACTIVE_PROPERTY_NAME;
+import static com.canoo.dp.impl.server.security.SecurityServerConstants.LOGIN_ENDPOINTS_PROPERTY_DEFAULT_VALUE;
+import static com.canoo.dp.impl.server.security.SecurityServerConstants.LOGIN_ENDPOINTS_PROPERTY_NAME;
+import static com.canoo.dp.impl.server.security.SecurityServerConstants.LOGOUT_ENDPOINTS_PROPERTY_DEFAULT_VALUE;
+import static com.canoo.dp.impl.server.security.SecurityServerConstants.LOGOUT_ENDPOINTS_PROPERTY_NAME;
+import static com.canoo.dp.impl.server.security.SecurityServerConstants.REALMS_PROPERTY_NAME;
+import static com.canoo.dp.impl.server.security.SecurityServerConstants.SECURE_ENDPOINTS_PROPERTY_NAME;
+import static com.canoo.dp.impl.server.security.SecurityServerConstants.SECURITY_ACTIVE_PROPERTY_NAME;
 import static org.apiguardian.api.API.Status.INTERNAL;
 
 @API(since = "0.19.0", status = INTERNAL)
 public class KeycloakConfiguration implements Serializable {
-
-    public final static String SECURITY_ACTIVE_PROPERTY_NAME = "security.active";
-
-    public final static boolean SECURITY_ACTIVE_PROPERTY_DEFAULT_VALUE = true;
-
-    public final static String SECURE_ENDPOINTS_PROPERTY_NAME = "security.endpoints";
-
-    public final static String LOGIN_ENDPOINTS_ACTIVE_PROPERTY_NAME = "security.loginEndpoint.active";
-
-    public final static String LOGIN_ENDPOINTS_PROPERTY_NAME = "security.loginEndpoint";
-
-    public final static String LOGIN_ENDPOINTS_PROPERTY_DEFAULT_VALUE = "/openid-connect";
-
-    public final static String LOGOUT_ENDPOINTS_PROPERTY_NAME = "security.logoutEndpoint";
-
-    public final static String LOGOUT_ENDPOINTS_PROPERTY_DEFAULT_VALUE = "/openid-logout";
-
-    public final static String SECURE_ENDPOINTS_PROPERTY_DEFAULT_VALUE = "/dolphin";
 
     private final String realmName;
 

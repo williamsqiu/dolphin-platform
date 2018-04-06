@@ -32,8 +32,8 @@ import java.util.Optional;
 
 import static com.canoo.dp.impl.platform.core.http.HttpStatus.HTTP_OK;
 import static com.canoo.dp.impl.platform.core.http.HttpStatus.SC_INTERNAL_SERVER_ERROR;
-import static com.canoo.dp.impl.security.SecurityHttpHeader.AUTHORIZATION_HEADER;
-import static com.canoo.dp.impl.security.SecurityHttpHeader.REALM_NAME_HEADER;
+import static com.canoo.dp.impl.security.SecurityConstants.AUTHORIZATION_HEADER;
+import static com.canoo.dp.impl.security.SecurityConstants.REALM_NAME_HEADER;
 
 public class KeycloakLogoutServlet extends HttpServlet {
 

@@ -19,7 +19,6 @@ import org.apiguardian.api.API;
 
 import java.util.Collection;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @API(since = "0.19.0", status = API.Status.EXPERIMENTAL)
 public interface SecurityContext {
@@ -29,7 +28,6 @@ public interface SecurityContext {
     default boolean hasRole(final String role) {
         return Optional.ofNullable(getUser()).
                 map(u -> u.getRoles()).
-                map(s -> s.collect(Collectors.toSet())).
                 map(l -> l.contains(role)).
                 orElse(false);
     }

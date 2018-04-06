@@ -36,8 +36,8 @@ import static com.canoo.dp.impl.platform.core.http.HttpHeaderConstants.CHARSET_H
 import static com.canoo.dp.impl.platform.core.http.HttpHeaderConstants.CONTENT_TYPE_HEADER;
 import static com.canoo.dp.impl.platform.core.http.HttpHeaderConstants.FORM_MIME_TYPE;
 import static com.canoo.dp.impl.platform.core.http.HttpStatus.SC_HTTP_UNAUTHORIZED;
-import static com.canoo.dp.impl.security.SecurityHttpHeader.APPLICATION_NAME_HEADER;
-import static com.canoo.dp.impl.security.SecurityHttpHeader.REALM_NAME_HEADER;
+import static com.canoo.dp.impl.security.SecurityConstants.APPLICATION_NAME_HEADER;
+import static com.canoo.dp.impl.security.SecurityConstants.REALM_NAME_HEADER;
 
 public class KeycloakTokenServlet extends HttpServlet {
 

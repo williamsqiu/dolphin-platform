@@ -47,15 +47,15 @@ import static com.canoo.dp.impl.platform.core.http.HttpHeaderConstants.CONTENT_T
 import static com.canoo.dp.impl.platform.core.http.HttpHeaderConstants.FORM_MIME_TYPE;
 import static com.canoo.dp.impl.platform.core.http.HttpHeaderConstants.TEXT_MIME_TYPE;
 import static com.canoo.dp.impl.platform.core.http.HttpStatus.SC_HTTP_UNAUTHORIZED;
-import static com.canoo.dp.impl.security.SecurityConfiguration.APPLICATION_PROPERTY_NAME;
-import static com.canoo.dp.impl.security.SecurityConfiguration.AUTH_ENDPOINT_PROPERTY_DEFAULT_VALUE;
-import static com.canoo.dp.impl.security.SecurityConfiguration.AUTH_ENDPOINT_PROPERTY_NAME;
-import static com.canoo.dp.impl.security.SecurityConfiguration.DIRECT_CONNECTION_PROPERTY_DEFAULT_VALUE;
-import static com.canoo.dp.impl.security.SecurityConfiguration.DIRECT_CONNECTION_PROPERTY_NAME;
-import static com.canoo.dp.impl.security.SecurityConfiguration.REALM_PROPERTY_NAME;
-import static com.canoo.dp.impl.security.SecurityConfiguration.USER_CONTEXT;
-import static com.canoo.dp.impl.security.SecurityHttpHeader.APPLICATION_NAME_HEADER;
-import static com.canoo.dp.impl.security.SecurityHttpHeader.REALM_NAME_HEADER;
+import static com.canoo.dp.impl.security.SecurityConstants.APPLICATION_PROPERTY_NAME;
+import static com.canoo.dp.impl.security.SecurityConstants.AUTH_ENDPOINT_PROPERTY_DEFAULT_VALUE;
+import static com.canoo.dp.impl.security.SecurityConstants.AUTH_ENDPOINT_PROPERTY_NAME;
+import static com.canoo.dp.impl.security.SecurityConstants.DIRECT_CONNECTION_PROPERTY_DEFAULT_VALUE;
+import static com.canoo.dp.impl.security.SecurityConstants.DIRECT_CONNECTION_PROPERTY_NAME;
+import static com.canoo.dp.impl.security.SecurityConstants.REALM_PROPERTY_NAME;
+import static com.canoo.dp.impl.security.SecurityConstants.USER_CONTEXT;
+import static com.canoo.dp.impl.security.SecurityConstants.APPLICATION_NAME_HEADER;
+import static com.canoo.dp.impl.security.SecurityConstants.REALM_NAME_HEADER;
 import static org.apiguardian.api.API.Status.INTERNAL;
 
 @API(since = "0.19.0", status = INTERNAL)
@@ -88,7 +88,6 @@ public class KeycloakSecurity implements Security {
     private final Lock loginLogoutLock = new ReentrantLock();
 
     private final AtomicReference<Subscription> userContextSubscription;
-
 
     public KeycloakSecurity(final ClientConfiguration configuration) {
         Assert.requireNonNull(configuration, "configuration");
@@ -172,11 +171,6 @@ public class KeycloakSecurity implements Security {
         //http://www.keycloak.org/docs-api/3.3/rest-api/index.html
         //See /admin/realms/{realm}/users/{id}/sessions
         return authorized.get();
-    }
-
-    @Override
-    public String getAccessToken() {
-        return accessToken.get();
     }
 
     private String encode(final String value) throws UnsupportedEncodingException {
