@@ -37,12 +37,6 @@ public class DolphinKeycloakSecurityBootstrap {
 
     private final static Logger LOG = LoggerFactory.getLogger(DolphinKeycloakSecurityBootstrap.class);
 
-    private final static String FILTER_NAME = "DolphinSecurityFilter";
-
-    private final static String EXTRACTOR_FILTER_NAME = "KeycloakSecurityContextExtractFilter";
-
-    private final static String KEYCLOAK_CONFIG_RESOLVER_PROPERTY_NAME = "keycloak.config.resolver";
-
     private final static DolphinKeycloakSecurityBootstrap INSTANCE = new DolphinKeycloakSecurityBootstrap();
 
     private KeycloakSecurityContextExtractFilter extractFilter;
@@ -61,11 +55,11 @@ public class DolphinKeycloakSecurityBootstrap {
             this.extractFilter = new KeycloakSecurityContextExtractFilter();
             DolphinKeycloakConfigResolver.setConfiguration(keycloakConfiguration);
 
-            final FilterRegistration.Dynamic keycloakSecurityFilter = servletContext.addFilter(FILTER_NAME, new KeycloakOIDCFilter());
-            keycloakSecurityFilter.setInitParameter(KEYCLOAK_CONFIG_RESOLVER_PROPERTY_NAME, DolphinKeycloakConfigResolver.class.getName());
+            final FilterRegistration.Dynamic keycloakSecurityFilter = servletContext.addFilter(SecurityServerConstants.FILTER_NAME, new KeycloakOIDCFilter());
+            keycloakSecurityFilter.setInitParameter(SecurityServerConstants.KEYCLOAK_CONFIG_RESOLVER_PROPERTY_NAME, DolphinKeycloakConfigResolver.class.getName());
             keycloakSecurityFilter.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, keycloakConfiguration.getSecureEndpointsArray());
 
-            final FilterRegistration.Dynamic keycloakExtractorFilter = servletContext.addFilter(EXTRACTOR_FILTER_NAME, extractFilter);
+            final FilterRegistration.Dynamic keycloakExtractorFilter = servletContext.addFilter(SecurityServerConstants.EXTRACTOR_FILTER_NAME, extractFilter);
             keycloakExtractorFilter.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/*");
         }
     }

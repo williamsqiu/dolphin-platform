@@ -23,10 +23,11 @@ import org.slf4j.LoggerFactory;
 
 import java.net.HttpURLConnection;
 
-import static com.canoo.dp.impl.security.SecurityHttpHeader.APPLICATION_NAME_HEADER;
-import static com.canoo.dp.impl.security.SecurityHttpHeader.AUTHORIZATION_HEADER;
-import static com.canoo.dp.impl.security.SecurityHttpHeader.BEARER;
-import static com.canoo.dp.impl.security.SecurityHttpHeader.REALM_NAME_HEADER;
+import static com.canoo.dp.impl.security.SecurityConstants.APPLICATION_NAME_HEADER;
+import static com.canoo.dp.impl.security.SecurityConstants.AUTHORIZATION_HEADER;
+import static com.canoo.dp.impl.security.SecurityConstants.BEARER;
+import static com.canoo.dp.impl.security.SecurityConstants.BEARER_ONLY_HEADER;
+import static com.canoo.dp.impl.security.SecurityConstants.REALM_NAME_HEADER;
 import static org.apiguardian.api.API.Status.INTERNAL;
 
 @API(since = "0.19.0", status = INTERNAL)
@@ -34,16 +35,13 @@ public class KeycloakRequestHandler implements HttpURLConnectionHandler {
 
     private static final Logger LOG = LoggerFactory.getLogger(KeycloakRequestHandler.class);
 
-    public KeycloakRequestHandler() {
-    }
-
     @Override
     public void handle(final HttpURLConnection connection) {
         Assert.requireNonNull(connection, "connection");
         KeycloakAuthentificationManager.getInstance().getAuthFor(connection.getURL()).ifPresent(auth -> {
 
             //No redirect, can not be handled in Java
-            connection.setRequestProperty(SecurityHttpHeader.BEARER_ONLY_HEADER, "true");
+            connection.setRequestProperty(BEARER_ONLY_HEADER, "true");
 
             final String accessToken = auth.getAccessToken();
             if(accessToken != null && !accessToken.isEmpty()) {

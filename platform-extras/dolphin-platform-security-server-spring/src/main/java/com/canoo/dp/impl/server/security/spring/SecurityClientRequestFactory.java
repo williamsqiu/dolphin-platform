@@ -25,10 +25,10 @@ import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 
 import java.util.function.Supplier;
 
-import static com.canoo.dp.impl.security.SecurityHttpHeader.APPLICATION_NAME_HEADER;
-import static com.canoo.dp.impl.security.SecurityHttpHeader.AUTHORIZATION_HEADER;
-import static com.canoo.dp.impl.security.SecurityHttpHeader.BEARER;
-import static com.canoo.dp.impl.security.SecurityHttpHeader.REALM_NAME_HEADER;
+import static com.canoo.dp.impl.security.SecurityConstants.APPLICATION_NAME_HEADER;
+import static com.canoo.dp.impl.security.SecurityConstants.AUTHORIZATION_HEADER;
+import static com.canoo.dp.impl.security.SecurityConstants.BEARER;
+import static com.canoo.dp.impl.security.SecurityConstants.REALM_NAME_HEADER;
 
 public class SecurityClientRequestFactory extends HttpComponentsClientHttpRequestFactory implements ClientHttpRequestFactory {
 

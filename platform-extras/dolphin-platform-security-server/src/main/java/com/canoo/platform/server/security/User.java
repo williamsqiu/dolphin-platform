@@ -19,14 +19,14 @@ import org.apiguardian.api.API;
 
 import java.security.Principal;
 import java.util.Optional;
-import java.util.stream.Stream;
+import java.util.Set;
 
 @API(since = "0.19.0", status = API.Status.EXPERIMENTAL)
 public interface User extends Principal {
 
     String getUserName();
 
-    Stream<String> getRoles();
+    Set<String> getRoles();
 
     String getEmail();
 

@@ -28,9 +28,9 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Optional;
 
-import static com.canoo.dp.impl.security.SecurityHttpHeader.APPLICATION_NAME_HEADER;
-import static com.canoo.dp.impl.security.SecurityHttpHeader.BEARER_ONLY_HEADER;
-import static com.canoo.dp.impl.security.SecurityHttpHeader.REALM_NAME_HEADER;
+import static com.canoo.dp.impl.security.SecurityConstants.APPLICATION_NAME_HEADER;
+import static com.canoo.dp.impl.security.SecurityConstants.BEARER_ONLY_HEADER;
+import static com.canoo.dp.impl.security.SecurityConstants.REALM_NAME_HEADER;
 import static org.apiguardian.api.API.Status.INTERNAL;
 
 @API(since = "0.19.0", status = INTERNAL)

@@ -20,7 +20,8 @@ import com.canoo.platform.server.security.User;
 import org.apiguardian.api.API;
 import org.keycloak.KeycloakSecurityContext;
 
-import java.util.stream.Stream;
+import java.util.Collections;
+import java.util.Set;
 
 import static org.apiguardian.api.API.Status.INTERNAL;
 
@@ -34,8 +35,8 @@ public class UserKeycloakImpl implements User {
     }
 
     @Override
-    public Stream<String> getRoles() {
-        return keycloakSecurityContext.getToken().getRealmAccess().getRoles().stream();
+    public Set<String> getRoles() {
+        return Collections.unmodifiableSet(keycloakSecurityContext.getToken().getRealmAccess().getRoles());
     }
 
     @Override
@@ -60,6 +61,6 @@ public class UserKeycloakImpl implements User {
 
     @Override
     public String toString() {
-        return "User " + getUserName() + " [first name:" + getFirstName() + ", last name:" + getLastName() + ", mail:" + getEmail() + "] Roles:" + getRoles().reduce("", (a,b) -> a+ ", " +b);
+        return "User " + getUserName() + " [first name:" + getFirstName() + ", last name:" + getLastName() + ", mail:" + getEmail() + "] Roles:" + getRoles().stream().reduce("", (a,b) -> a + ", " + b);
     }
 }

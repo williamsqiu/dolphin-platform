@@ -18,7 +18,19 @@ package com.canoo.dp.impl.security;
 import org.apiguardian.api.API;
 
 @API(since = "0.19.0", status = API.Status.EXPERIMENTAL)
-public interface SecurityHttpHeader {
+public interface SecurityConstants {
+
+    String AUTH_ENDPOINT_PROPERTY_NAME = "security.keycloak.endpoint";
+
+    String REALM_PROPERTY_NAME = "security.keycloak.realm";
+
+    String APPLICATION_PROPERTY_NAME = "security.keycloak.app";
+
+    String DIRECT_CONNECTION_PROPERTY_NAME = "security.useDirectConnection";
+
+    String AUTH_ENDPOINT_PROPERTY_DEFAULT_VALUE = "http://localhost:8080/openid-connect";
+
+    boolean DIRECT_CONNECTION_PROPERTY_DEFAULT_VALUE = false;
 
     String REALM_NAME_HEADER = "X-platform-security-realm";
 
@@ -29,4 +41,7 @@ public interface SecurityHttpHeader {
     String AUTHORIZATION_HEADER = "Authorization";
 
     String BEARER = "Bearer ";
+
+    String USER_CONTEXT = "user";
+
 }

@@ -30,7 +30,4 @@ public interface Security {
     Future<Void> logout();
 
     boolean isAuthorized();
-
-    @Deprecated
-    String getAccessToken();
 }

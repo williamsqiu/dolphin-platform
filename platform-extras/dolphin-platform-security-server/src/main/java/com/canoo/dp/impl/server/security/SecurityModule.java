@@ -24,19 +24,17 @@ import org.apiguardian.api.API;
 
 import javax.servlet.ServletContext;
 
+import static com.canoo.dp.impl.server.security.SecurityServerConstants.SECURITY_MODULE_ACTIVE_PROPERTY;
+import static com.canoo.dp.impl.server.security.SecurityServerConstants.SECURITY_MODULE_NAME;
 import static org.apiguardian.api.API.Status.INTERNAL;
 
 @API(since = "0.19.0", status = INTERNAL)
 @ModuleDefinition
 public class SecurityModule extends AbstractBaseModule {
 
-    public final static String MODULE_NAME = "SecurityModule";
-
-    private final static String MODULE_ACTIVE_PROPERTY= "security.active";
-
     @Override
     public String getName() {
-        return MODULE_NAME;
+        return SECURITY_MODULE_NAME;
     }
 
     @Override
@@ -57,6 +55,6 @@ public class SecurityModule extends AbstractBaseModule {
 
     @Override
     protected String getActivePropertyName() {
-        return MODULE_ACTIVE_PROPERTY;
+        return SECURITY_MODULE_ACTIVE_PROPERTY;
     }
 }
