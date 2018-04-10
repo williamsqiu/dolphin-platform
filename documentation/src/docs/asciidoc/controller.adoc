@@ -215,6 +215,8 @@ what controller instance should be injected in bean. For a future release of Dol
 parent-child-relations between controller instances. Currently the Dolphin Platform event bus should be used for
 communication between controllers and / or additional services.
 
+
+
 == Definition of the client scope
 
 Dolphin Platform provides an additional custom Scope called `ClientScope`. This scope is currently implemented for
