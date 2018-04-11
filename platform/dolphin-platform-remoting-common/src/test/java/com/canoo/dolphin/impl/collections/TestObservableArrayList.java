@@ -592,6 +592,22 @@ public class TestObservableArrayList {
     }
 
 
+    @Test
+    public void testRemoveByIndexPositions() {
+        //given
+        final ObservableArrayList<String> list = new ObservableArrayList<>();
+        list.addAll("1", "2", "3", "4", "5");
+        list.remove(0,3);
+        Assert.assertEquals(list.size(), 2);
+
+        Assert.assertFalse(list.contains("1"));
+        Assert.assertFalse(list.contains("2"));
+        Assert.assertFalse(list.contains("3"));
+
+        Assert.assertTrue(list.contains("4"));
+        Assert.assertTrue(list.contains("5"));
+
+    }
 
     /** End of SubList Unit Test*/
 
