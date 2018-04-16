@@ -27,10 +27,21 @@ import static com.canoo.dolphin.integration.util.ValueHelper.getUtcZone;
 
 public interface PropertyTestConstants {
 
+    String LIST_CONTROLLER_NAME = "ObservableListController";
+
     String PROPERTY_CONTROLLER_NAME = "PropertyController";
 
     String PROPERTY_CHANGE_CONTROLLER_NAME = "PropertyChangeController";
 
+    String ADD_ID_ACTION = "addIs";
+
+    String REMOVE_ACTION = "remove";
+
+    String INDEX_PARAM = "index";
+
+    String SIZE_PARAM = "index";
+
+    String CHECK_SIZE_ACTION = "checkSize";
 
     String CHECK_MODEL_CREATION_ACTION = "checkModelCreation";
 
