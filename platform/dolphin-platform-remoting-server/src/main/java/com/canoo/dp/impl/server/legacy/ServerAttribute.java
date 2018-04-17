@@ -23,6 +23,7 @@ import com.canoo.dp.impl.remoting.legacy.core.BaseAttribute;
 import org.apiguardian.api.API;
 
 import java.util.List;
+import java.util.Objects;
 
 import static org.apiguardian.api.API.Status.INTERNAL;
 
@@ -69,7 +70,7 @@ public class ServerAttribute extends BaseAttribute {
                 continue;
             }
 
-            if (newValue == null && sameQualified.getValue() != null || newValue != null && sameQualified.getValue() == null || !newValue.equals(sameQualified.getValue())) {
+            if (!Objects.equals(newValue, sameQualified.getValue())) {
                 sameQualified.setValue(newValue);
             }
         }

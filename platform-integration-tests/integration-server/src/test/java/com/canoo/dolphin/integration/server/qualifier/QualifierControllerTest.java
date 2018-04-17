@@ -63,6 +63,42 @@ public class QualifierControllerTest extends SpringTestNGControllerTest {
     }
 
     @Test
+    public void testQualifier1With2Controllers() {
+
+        //given:
+        final ControllerUnderTest<QualifierTestBean> controller2 = createController(QUALIFIER_CONTROLLER_NAME);
+        final QualifierTestSubBean qualifierTestSubBeanOne = controller.getModel().getQualifierTestSubBeanOneValue();
+        final QualifierTestSubBean qualifierTestSubBeanTwo = controller2.getModel().getQualifierTestSubBeanOneValue();
+
+        //when:
+        setSubBeanValue(qualifierTestSubBeanOne, 42, true, "Test1");
+
+        //then:
+        assertSubBeanValue(qualifierTestSubBeanOne, 42, true, "Test1");
+        assertSubBeanValue(qualifierTestSubBeanTwo, 42, true, "Test1");
+
+        controller2.destroy();
+    }
+
+    @Test
+    public void testQualifier2With2Controllers() {
+        //given:
+        final ControllerUnderTest<QualifierTestBean> controller2 = createController(QUALIFIER_CONTROLLER_NAME);
+        final QualifierTestSubBean qualifierTestSubBeanOne = controller.getModel().getQualifierTestSubBeanOneValue();
+        final QualifierTestSubBean qualifierTestSubBeanTwo = controller2.getModel().getQualifierTestSubBeanOneValue();
+
+        //when:
+        setSubBeanValue(qualifierTestSubBeanTwo, 44, true, "Test2");
+
+        //then:
+        assertSubBeanValue(qualifierTestSubBeanOne, 44, true, "Test2");
+        assertSubBeanValue(qualifierTestSubBeanTwo, 44, true, "Test2");
+
+        controller2.destroy();
+
+    }
+
+    @Test
     public void testQualifier2() {
         //given:
         final QualifierTestSubBean qualifierTestSubBeanOne = controller.getModel().getQualifierTestSubBeanOneValue();
@@ -76,6 +112,25 @@ public class QualifierControllerTest extends SpringTestNGControllerTest {
         assertSubBeanValue(qualifierTestSubBeanOne, 44, true, "Test2");
         assertSubBeanValue(qualifierTestSubBeanTwo, 44, true, "Test2");
     }
+
+    @Test
+    public void testQualifierWithNullValue() {
+
+        //given:
+        final QualifierTestSubBean qualifierTestSubBeanOne = controller.getModel().getQualifierTestSubBeanOneValue();
+        final QualifierTestSubBean qualifierTestSubBeanTwo = controller.getModel().getQualifierTestSubBeanTwoValue();
+
+        //when:
+        setSubBeanValue(qualifierTestSubBeanOne, 42, true, "Test1");
+        setSubBeanValue(qualifierTestSubBeanOne, 42, true, null);
+
+        controller.invoke(DUMMY_ACTION);
+
+        //then:
+        assertSubBeanValue(qualifierTestSubBeanOne, 42, true, null);
+        assertSubBeanValue(qualifierTestSubBeanTwo, 42, true, null);
+    }
+
 
     @Test
     public void testQualifierUnbind() {
@@ -96,6 +151,25 @@ public class QualifierControllerTest extends SpringTestNGControllerTest {
     }
 
     @Test
+    public void testQualifierUnbindWith2Controllers() {
+        //given:
+        final ControllerUnderTest<QualifierTestBean> controller2 = createController(QUALIFIER_CONTROLLER_NAME);
+        final QualifierTestSubBean qualifierTestSubBeanOne = controller.getModel().getQualifierTestSubBeanOneValue();
+        final QualifierTestSubBean qualifierTestSubBeanTwo = controller2.getModel().getQualifierTestSubBeanOneValue();
+
+        //when:
+        setSubBeanValue(qualifierTestSubBeanOne, 42, true, "Test1");
+        controller.invoke(UNBIND_ACTION);
+        setSubBeanValue(qualifierTestSubBeanOne, 44, false, "Test2");
+
+        //then:
+        assertSubBeanValue(qualifierTestSubBeanOne, 44, false, "Test2");
+        assertSubBeanValue(qualifierTestSubBeanTwo, 42, true, "Test1");
+
+        controller2.destroy();
+    }
+
+    @Test
     public void testQualifierNotBound() {
         //given:
         final QualifierTestSubBean qualifierTestSubBeanOne = controller.getModel().getQualifierTestSubBeanOneValue();
@@ -110,6 +184,25 @@ public class QualifierControllerTest extends SpringTestNGControllerTest {
         assertSubBeanValue(qualifierTestSubBeanOne, 42, true, "Test1");
         assertSubBeanValue(qualifierTestSubBeanTwo, null, null, null);
 
+    }
+
+    @Test
+    public void testQualifierNotBoundWith2Controllers() {
+        //given:
+        final ControllerUnderTest<QualifierTestBean> controller2 = createController(QUALIFIER_CONTROLLER_NAME);
+
+        final QualifierTestSubBean qualifierTestSubBeanOne = controller.getModel().getQualifierTestSubBeanOneValue();
+        final QualifierTestSubBean qualifierTestSubBeanTwo = controller2.getModel().getQualifierTestSubBeanOneValue();
+
+        //when:
+        controller.invoke(UNBIND_ACTION);
+        setSubBeanValue(qualifierTestSubBeanOne, 42, true, "Test1");
+        controller.invoke(DUMMY_ACTION);
+
+        //then:
+        assertSubBeanValue(qualifierTestSubBeanOne, 42, true, "Test1");
+        assertSubBeanValue(qualifierTestSubBeanTwo, null, null, null);
+        controller2.destroy();
     }
 
     @Test
@@ -129,6 +222,26 @@ public class QualifierControllerTest extends SpringTestNGControllerTest {
     }
 
     @Test
+    public void testQualifierRebindWith2Controllers() {
+        //given:
+        final ControllerUnderTest<QualifierTestBean> controller2 = createController(QUALIFIER_CONTROLLER_NAME);
+
+        final QualifierTestSubBean qualifierTestSubBeanOne = controller.getModel().getQualifierTestSubBeanOneValue();
+        final QualifierTestSubBean qualifierTestSubBeanTwo = controller2.getModel().getQualifierTestSubBeanOneValue();
+
+        //when:
+        controller.invoke(UNBIND_ACTION);
+        setSubBeanValue(qualifierTestSubBeanTwo, 42, true, "Test1");
+        controller.invoke(BIND_ACTION);
+
+        //then:
+        assertSubBeanValue(qualifierTestSubBeanOne, null, null, null);
+        assertSubBeanValue(qualifierTestSubBeanTwo, 42, true, "Test1");
+
+        controller2.destroy();
+    }
+
+    @Test
     public void testQualifierChangeAfterRebind() {
         //given:
         final QualifierTestSubBean qualifierTestSubBeanOne = controller.getModel().getQualifierTestSubBeanOneValue();
@@ -143,6 +256,27 @@ public class QualifierControllerTest extends SpringTestNGControllerTest {
         //then:
         assertSubBeanValue(qualifierTestSubBeanOne, 44, false, "Test2");
         assertSubBeanValue(qualifierTestSubBeanTwo, 44, false, "Test2");
+    }
+
+    @Test
+    public void testQualifierChangeAfterRebindWith2Controllers() {
+        //given:
+        final ControllerUnderTest<QualifierTestBean> controller2 = createController(QUALIFIER_CONTROLLER_NAME);
+
+        final QualifierTestSubBean qualifierTestSubBeanOne = controller.getModel().getQualifierTestSubBeanOneValue();
+        final QualifierTestSubBean qualifierTestSubBeanTwo = controller2.getModel().getQualifierTestSubBeanOneValue();
+
+        //when:
+        controller.invoke(UNBIND_ACTION);
+        setSubBeanValue(qualifierTestSubBeanOne, 42, true, "Test1");
+        controller.invoke(BIND_ACTION);
+        setSubBeanValue(qualifierTestSubBeanTwo, 44, false, "Test2");
+
+        //then:
+        assertSubBeanValue(qualifierTestSubBeanOne, 44, false, "Test2");
+        assertSubBeanValue(qualifierTestSubBeanTwo, 44, false, "Test2");
+
+        controller2.destroy();
     }
 
     private void setSubBeanValue(final QualifierTestSubBean qualifierTestSubBean, final int intValue, final boolean booleanValue, final String stringValue) {
