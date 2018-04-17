@@ -58,6 +58,65 @@ public class QualifierControllerTest extends AbstractIntegrationTest {
         }
     }
 
+    @Test(dataProvider = ENDPOINTS_DATAPROVIDER, description = "Test if QualifierTestSubBeanTwo is sync when updating QualifierTestSubBean")
+    public void testQualifier1With2Controllers(String containerType, String endpoint) {
+        try {
+            final ClientContext context = connect(endpoint);
+            final ControllerProxy<QualifierTestBean> controller1 = createController(context, QUALIFIER_CONTROLLER_NAME);
+            final ControllerProxy<QualifierTestBean> controller2 = createController(context, QUALIFIER_CONTROLLER_NAME);
+
+            //given:
+            final QualifierTestSubBean qualifierTestSubBeanOne = controller1.getModel().getQualifierTestSubBeanOneValue();
+            final QualifierTestSubBean qualifierTestSubBeanTwo = controller2.getModel().getQualifierTestSubBeanOneValue();
+
+            //when:
+            setSubBeanValue(qualifierTestSubBeanOne, 42, true, "Test1");
+
+            invoke(controller1, DUMMY_ACTION, containerType);
+
+            //then:
+            assertSubBeanValue(qualifierTestSubBeanOne, 42, true, "Test1");
+            assertSubBeanValue(qualifierTestSubBeanTwo, 42, true, "Test1");
+
+            //Destroy and Disconnect Controller
+            destroy(controller1, endpoint);
+            destroy(controller2, endpoint);
+            disconnect(context, endpoint);
+
+        } catch (Exception e) {
+            Assert.fail("Can not create controller for " + containerType, e);
+        }
+    }
+
+    @Test(dataProvider = ENDPOINTS_DATAPROVIDER, description = "Test if QualifierTestSubBeanTwo is sync when updating QualifierTestSubBean")
+    public void testQualifierNullValue(String containerType, String endpoint) {
+        try {
+            final ClientContext context = connect(endpoint);
+            final ControllerProxy<QualifierTestBean> controller = createController(context, QUALIFIER_CONTROLLER_NAME);
+
+            //given:
+            final QualifierTestSubBean qualifierTestSubBeanOne = controller.getModel().getQualifierTestSubBeanOneValue();
+            final QualifierTestSubBean qualifierTestSubBeanTwo = controller.getModel().getQualifierTestSubBeanTwoValue();
+
+            //when:
+            setSubBeanValue(qualifierTestSubBeanOne, 42, true, "Test1");
+            setSubBeanValue(qualifierTestSubBeanOne, 42, true, null);
+
+            invoke(controller, DUMMY_ACTION, containerType);
+
+            //then:
+            assertSubBeanValue(qualifierTestSubBeanOne, 42, true, null);
+            assertSubBeanValue(qualifierTestSubBeanTwo, 42, true, null);
+
+            //Destroy and Disconnect Controller
+            destroy(controller, endpoint);
+            disconnect(context, endpoint);
+
+        } catch (Exception e) {
+            Assert.fail("Can not create controller for " + containerType, e);
+        }
+    }
+
     @Test(dataProvider = ENDPOINTS_DATAPROVIDER, description = "Test if QualifierTestSubBean is sync when updating QualifierTestSubBeanTwo")
     public void testQualifier2(String containerType, String endpoint) {
         try {
@@ -115,6 +174,36 @@ public class QualifierControllerTest extends AbstractIntegrationTest {
         }
     }
 
+    @Test(dataProvider = ENDPOINTS_DATAPROVIDER, description = "Test Qualifier Unbind")
+    public void testQualifierUnbindWith2Controlers(String containerType, String endpoint) {
+        try {
+            final ClientContext context = connect(endpoint);
+            final ControllerProxy<QualifierTestBean> controller1 = createController(context, QUALIFIER_CONTROLLER_NAME);
+            final ControllerProxy<QualifierTestBean> controller2 = createController(context, QUALIFIER_CONTROLLER_NAME);
+
+            //given:
+            final QualifierTestSubBean qualifierTestSubBeanOne = controller1.getModel().getQualifierTestSubBeanOneValue();
+            final QualifierTestSubBean qualifierTestSubBeanTwo = controller2.getModel().getQualifierTestSubBeanOneValue();
+
+            //when:
+            setSubBeanValue(qualifierTestSubBeanOne, 42, true, "Test1");
+            invoke(controller1, UNBIND_ACTION, containerType);
+            setSubBeanValue(qualifierTestSubBeanOne, 44, false, "Test2");
+
+            //then:
+            assertSubBeanValue(qualifierTestSubBeanOne, 44, false, "Test2");
+            assertSubBeanValue(qualifierTestSubBeanTwo, 42, true, "Test1");
+
+            //Destroy and Disconnect Controller
+            destroy(controller1, endpoint);
+            destroy(controller2, endpoint);
+            disconnect(context, endpoint);
+
+        } catch (Exception e) {
+            Assert.fail("Can not create controller for " + containerType, e);
+        }
+    }
+
     @Test(dataProvider = ENDPOINTS_DATAPROVIDER, description = "Test Qualifier Not Bound")
     public void testQualifierNotBound(String containerType, String endpoint) {
         try {
@@ -143,6 +232,36 @@ public class QualifierControllerTest extends AbstractIntegrationTest {
         }
     }
 
+    @Test(dataProvider = ENDPOINTS_DATAPROVIDER, description = "Test Qualifier Not Bound")
+    public void testQualifierNotBoundWith2Controllers(String containerType, String endpoint) {
+        try {
+            final ClientContext context = connect(endpoint);
+            final ControllerProxy<QualifierTestBean> controller1 = createController(context, QUALIFIER_CONTROLLER_NAME);
+            final ControllerProxy<QualifierTestBean> controller2 = createController(context, QUALIFIER_CONTROLLER_NAME);
+
+            //given:
+            final QualifierTestSubBean qualifierTestSubBeanOne = controller1.getModel().getQualifierTestSubBeanOneValue();
+            final QualifierTestSubBean qualifierTestSubBeanTwo = controller2.getModel().getQualifierTestSubBeanOneValue();
+
+            //when:
+            invoke(controller1, UNBIND_ACTION, containerType);
+            setSubBeanValue(qualifierTestSubBeanOne, 42, true, "Test1");
+            invoke(controller1, DUMMY_ACTION, containerType);
+
+            //then:
+            assertSubBeanValue(qualifierTestSubBeanOne, 42, true, "Test1");
+            assertSubBeanValue(qualifierTestSubBeanTwo, null, null, null);
+
+            //Destroy and Disconnect Controller
+            destroy(controller1, endpoint);
+            destroy(controller2, endpoint);
+            disconnect(context, endpoint);
+
+        } catch (Exception e) {
+            Assert.fail("Can not create controller for " + containerType, e);
+        }
+    }
+
     @Test(dataProvider = ENDPOINTS_DATAPROVIDER, description = "Test Qualifier Rebind")
     public void testQualifierRebind(String containerType, String endpoint) {
         try {
@@ -164,6 +283,36 @@ public class QualifierControllerTest extends AbstractIntegrationTest {
 
             //Destroy and Disconnect Controller
             destroy(controller, endpoint);
+            disconnect(context, endpoint);
+
+        } catch (Exception e) {
+            Assert.fail("Can not create controller for " + containerType, e);
+        }
+    }
+
+    @Test(dataProvider = ENDPOINTS_DATAPROVIDER, description = "Test Qualifier Rebind")
+    public void testQualifierRebindWith2Controllers(String containerType, String endpoint) {
+        try {
+            final ClientContext context = connect(endpoint);
+            final ControllerProxy<QualifierTestBean> controller1 = createController(context, QUALIFIER_CONTROLLER_NAME);
+            final ControllerProxy<QualifierTestBean> controller2 = createController(context, QUALIFIER_CONTROLLER_NAME);
+
+            //given:
+            final QualifierTestSubBean qualifierTestSubBeanOne = controller1.getModel().getQualifierTestSubBeanOneValue();
+            final QualifierTestSubBean qualifierTestSubBeanTwo = controller2.getModel().getQualifierTestSubBeanOneValue();
+
+            //when:
+            invoke(controller1, UNBIND_ACTION, containerType);
+            setSubBeanValue(qualifierTestSubBeanTwo, 42, true, "Test1");
+            invoke(controller1, BIND_ACTION, containerType);
+
+            //then:
+            assertSubBeanValue(qualifierTestSubBeanOne, null, null, null);
+            assertSubBeanValue(qualifierTestSubBeanTwo, 42, true, "Test1");
+
+            //Destroy and Disconnect Controller
+            destroy(controller1, endpoint);
+            destroy(controller2, endpoint);
             disconnect(context, endpoint);
 
         } catch (Exception e) {
