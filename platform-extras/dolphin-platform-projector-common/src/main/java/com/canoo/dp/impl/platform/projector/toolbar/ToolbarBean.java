@@ -15,12 +15,13 @@
  */
 package com.canoo.dp.impl.platform.projector.toolbar;
 
-import com.canoo.dp.impl.platform.projector.action.Action;
+import com.canoo.dp.impl.platform.projector.base.AbstractProjectableBean;
+import com.canoo.dp.impl.platform.projector.base.Action;
 import com.canoo.platform.remoting.ObservableList;
 import com.canoo.platform.remoting.RemotingBean;
 
 @RemotingBean
-public class ToolbarBean implements Toolbar {
+public class ToolbarBean extends AbstractProjectableBean implements Toolbar {
 
     private ObservableList<Action> actions;
 

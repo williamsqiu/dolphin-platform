@@ -15,6 +15,7 @@
  */
 package com.canoo.dp.impl.platform.projector.action;
 
+import com.canoo.dp.impl.platform.projector.base.Action;
 import com.canoo.platform.remoting.Property;
 import com.canoo.platform.remoting.RemotingBean;
 

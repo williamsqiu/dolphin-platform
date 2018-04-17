@@ -19,7 +19,7 @@ import com.canoo.platform.remoting.Property;
 import com.canoo.platform.remoting.RemotingBean;
 
 @RemotingBean
-public interface WithResult<T> {
+public interface WithResult<T> extends Projectable {
 
     Property<T> resultProperty();
 

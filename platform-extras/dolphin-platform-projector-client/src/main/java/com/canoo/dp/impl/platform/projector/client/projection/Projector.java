@@ -22,7 +22,7 @@ import com.canoo.dp.impl.platform.projector.client.base.ClientActionSupport;
 import com.canoo.dp.impl.platform.projector.form.Form;
 import com.canoo.dp.impl.platform.projector.graph.GraphDataBean;
 import com.canoo.dp.impl.platform.projector.lazy.concrete.MediaLazyListBean;
-import com.canoo.dp.impl.platform.projector.view.View;
+import com.canoo.dp.impl.platform.projector.base.View;
 import com.canoo.platform.remoting.client.ClientContext;
 import com.canoo.platform.remoting.client.ControllerProxy;
 import javafx.application.Platform;

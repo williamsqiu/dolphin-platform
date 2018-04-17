@@ -15,7 +15,8 @@
  */
 package com.canoo.dp.impl.platform.projector.form;
 
-import com.canoo.dp.impl.platform.projector.action.Action;
+import com.canoo.dp.impl.platform.projector.base.AbstractProjectableBean;
+import com.canoo.dp.impl.platform.projector.base.Action;
 import com.canoo.dp.impl.platform.projector.base.Icon;
 import com.canoo.dp.impl.platform.projector.metadata.KeyValue;
 import com.canoo.platform.remoting.ObservableList;
@@ -23,7 +24,7 @@ import com.canoo.platform.remoting.Property;
 import com.canoo.platform.remoting.RemotingBean;
 
 @RemotingBean
-public class FormBean implements Form {
+public class FormBean extends AbstractProjectableBean implements Form {
 
     private ObservableList<FormSection> sections;
 

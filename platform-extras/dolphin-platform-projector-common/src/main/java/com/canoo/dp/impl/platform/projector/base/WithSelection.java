@@ -19,7 +19,7 @@ import com.canoo.platform.remoting.Property;
 import com.canoo.platform.remoting.RemotingBean;
 
 @RemotingBean
-public interface WithSelection<T> {
+public interface WithSelection<T> extends Projectable {
 
     Property<T> selectedValueProperty();
 

@@ -15,6 +15,7 @@
  */
 package com.canoo.dp.impl.platform.projector.form;
 
+import com.canoo.dp.impl.platform.projector.base.AbstractProjectableBean;
 import com.canoo.dp.impl.platform.projector.base.Icon;
 import com.canoo.dp.impl.platform.projector.message.Message;
 import com.canoo.dp.impl.platform.projector.metadata.KeyValue;
@@ -23,7 +24,7 @@ import com.canoo.platform.remoting.Property;
 import com.canoo.platform.remoting.RemotingBean;
 
 @RemotingBean
-public abstract class AbstractFormFieldBean<T> implements FormField<T> {
+public abstract class AbstractFormFieldBean<T> extends AbstractProjectableBean implements FormField<T> {
 
     private Property<Boolean> mandatory;
 

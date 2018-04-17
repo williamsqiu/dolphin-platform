@@ -13,18 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.dp.impl.platform.projector.action;
+package com.canoo.dp.impl.platform.projector.base;
 
 import com.canoo.platform.remoting.ObservableList;
 import com.canoo.platform.remoting.RemotingBean;
 
 @RemotingBean
-public class DefaultActionQueue extends AbstractActionBean implements ActionQueue {
+public interface View extends WithTitle, WithDescription, WithIcon, WithLayoutMetadata {
 
-    private ObservableList<Action> actions;
-
-    @Override
-    public ObservableList<Action> getActions() {
-        return actions;
-    }
+    ObservableList<Projectable> getContent();
 }
+

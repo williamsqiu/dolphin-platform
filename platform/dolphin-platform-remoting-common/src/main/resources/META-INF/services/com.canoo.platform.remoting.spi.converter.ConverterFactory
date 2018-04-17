@@ -18,3 +18,4 @@ com.canoo.dp.impl.remoting.converters.LocalDateTimeConverterFactory
 com.canoo.dp.impl.remoting.converters.PeriodConverterFactory
 com.canoo.dp.impl.remoting.converters.ZonedDateTimeConverterFactory
 com.canoo.dp.impl.remoting.converters.LocalDateConverterFactory
+com.canoo.dp.impl.remoting.converters.ClassConverterFactory

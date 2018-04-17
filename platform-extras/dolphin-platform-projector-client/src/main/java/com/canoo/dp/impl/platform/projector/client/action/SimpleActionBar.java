@@ -15,7 +15,7 @@
  */
 package com.canoo.dp.impl.platform.projector.client.action;
 
-import com.canoo.dp.impl.platform.projector.action.Action;
+import com.canoo.dp.impl.platform.projector.base.Action;
 import com.canoo.dp.impl.platform.projector.client.projection.Projector;
 import com.canoo.platform.remoting.ObservableList;
 import com.canoo.platform.remoting.client.ControllerProxy;

@@ -19,7 +19,7 @@ import com.canoo.platform.remoting.ObservableList;
 import com.canoo.platform.remoting.RemotingBean;
 
 @RemotingBean
-public interface WithMultiResult<T> extends WithResult<T> {
+public interface WithMultiResult<T> extends WithResult<T>, Projectable {
 
     ObservableList<T> getResults();
 

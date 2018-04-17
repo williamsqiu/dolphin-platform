@@ -16,9 +16,21 @@
 package com.canoo.dp.impl.platform.projector.base;
 
 
+import com.canoo.platform.remoting.Property;
 import com.canoo.platform.remoting.RemotingBean;
 
 //Marker Interface for all beans that can use projection
 @RemotingBean
 public interface Projectable {
+
+    Property<String> idProperty();
+
+    default String getId() {
+        return idProperty().get();
+    }
+
+    default void setId(String id) {
+        idProperty().set(id);
+    }
+
 }

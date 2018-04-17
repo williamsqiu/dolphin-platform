@@ -13,19 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.dp.impl.platform.projector.view;
+package com.canoo.dp.impl.platform.projector.base;
 
-import com.canoo.dp.impl.platform.projector.base.Icon;
-import com.canoo.dp.impl.platform.projector.base.Projectable;
+
 import com.canoo.dp.impl.platform.projector.metadata.KeyValue;
 import com.canoo.platform.remoting.ObservableList;
 import com.canoo.platform.remoting.Property;
-import com.canoo.platform.remoting.RemotingBean;
 
-@RemotingBean
-public class ViewBean implements View {
+public abstract class AbstractActionBean extends AbstractProjectableBean implements Action {
 
-    private ObservableList<Projectable> content;
+    private Property<Boolean> disabled;
 
     private Property<String> description;
 
@@ -35,9 +32,23 @@ public class ViewBean implements View {
 
     private Property<String> title;
 
+    private Property<Boolean> blockUi;
+
+    private Property<Boolean> blockOnAction;
+
     @Override
-    public ObservableList<Projectable> getContent() {
-        return content;
+    public Property<Boolean> disabledProperty() {
+        return disabled;
+    }
+
+    @Override
+    public Property<Boolean> blockUiProperty() {
+        return blockUi;
+    }
+
+    @Override
+    public Property<Boolean> blockOnActionProperty() {
+        return blockOnAction;
     }
 
     @Override
@@ -59,4 +70,5 @@ public class ViewBean implements View {
     public Property<String> titleProperty() {
         return title;
     }
+
 }

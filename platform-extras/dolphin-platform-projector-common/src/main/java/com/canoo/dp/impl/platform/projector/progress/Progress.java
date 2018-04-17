@@ -13,26 +13,40 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.dp.impl.platform.projector.gantt;
+package com.canoo.dp.impl.platform.projector.progress;
 
 import com.canoo.dp.impl.platform.projector.base.Projectable;
 import com.canoo.platform.remoting.Property;
 import com.canoo.platform.remoting.RemotingBean;
 
 @RemotingBean
-public class GanttBean implements Projectable {
+public interface Progress extends Projectable {
 
-    private Property<RowBean> root;
+    Property<Boolean> indeterminateProperty();
 
-    public Property<RowBean> rootProperty() {
-        return root;
+    Property<Double> progressProperty();
+
+    default boolean isIndeterminate() {
+        Boolean val = indeterminateProperty().get();
+        if(val == null) {
+            return false;
+        }
+        return val.booleanValue();
     }
 
-    public RowBean getRoot() {
-        return rootProperty().get();
+    default void setIndeterminate(boolean indeterminate) {
+        indeterminateProperty().set(indeterminate);
     }
 
-    public void setRoot(RowBean root) {
-        rootProperty().set(root);
+    default double getProgress() {
+        Double val = progressProperty().get();
+        if(val == null) {
+            return 0.0;
+        }
+        return val.doubleValue();
+    }
+
+    default void setProgress(double progress) {
+        progressProperty().set(progress);
     }
 }

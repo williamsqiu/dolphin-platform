@@ -13,15 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.dp.impl.platform.projector.action;
+package com.canoo.dp.impl.platform.projector.base;
 
+import com.canoo.platform.remoting.Property;
 
-import com.canoo.platform.remoting.ObservableList;
-import com.canoo.platform.remoting.RemotingBean;
+public interface WithAction extends Projectable {
 
-@RemotingBean
-public interface ActionQueue extends Action {
+    Property<Action> actionProperty();
 
-    ObservableList<Action> getActions();
+    default Action getAction() {
+        return actionProperty().get();
+    }
 
+    default void setAction(final Action action) {
+        actionProperty().set(action);
+    }
 }

@@ -19,7 +19,7 @@ import com.canoo.platform.remoting.Property;
 import com.canoo.platform.remoting.RemotingBean;
 
 @RemotingBean
-public interface WithDescription {
+public interface WithDescription extends Projectable {
 
     Property<String> descriptionProperty();
 

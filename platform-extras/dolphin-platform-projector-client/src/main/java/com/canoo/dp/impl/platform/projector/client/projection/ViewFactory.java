@@ -17,7 +17,7 @@ package com.canoo.dp.impl.platform.projector.client.projection;
 
 import com.canoo.dp.impl.platform.projector.base.WithLayoutMetadata;
 import com.canoo.dp.impl.platform.projector.metadata.MetadataUtilities;
-import com.canoo.dp.impl.platform.projector.view.View;
+import com.canoo.dp.impl.platform.projector.base.View;
 import com.canoo.dp.impl.platform.projector.view.ViewMetadata;
 import com.canoo.platform.remoting.client.ClientContext;
 import com.canoo.platform.remoting.client.ControllerProxy;

@@ -15,7 +15,8 @@
  */
 package com.canoo.dp.impl.platform.projector.table;
 
-import com.canoo.dp.impl.platform.projector.action.Action;
+import com.canoo.dp.impl.platform.projector.base.AbstractProjectableBean;
+import com.canoo.dp.impl.platform.projector.base.Action;
 import com.canoo.dp.impl.platform.projector.base.Icon;
 import com.canoo.dp.impl.platform.projector.metadata.KeyValue;
 import com.canoo.platform.remoting.ObservableList;
@@ -23,9 +24,9 @@ import com.canoo.platform.remoting.Property;
 import com.canoo.platform.remoting.RemotingBean;
 
 @RemotingBean
-public class ActionColumnBean<T extends Action> implements ActionColumn<T> {
+public class ActionColumnBean extends AbstractProjectableBean implements ActionColumn {
 
-    private Property<T> action;
+    private Property<Action> action;
 
     private Property<Boolean> editable;
 
@@ -40,7 +41,7 @@ public class ActionColumnBean<T extends Action> implements ActionColumn<T> {
     private Property<String> title;
 
     @Override
-    public Property<T> actionProperty() {
+    public Property<Action> actionProperty() {
         return action;
     }
 

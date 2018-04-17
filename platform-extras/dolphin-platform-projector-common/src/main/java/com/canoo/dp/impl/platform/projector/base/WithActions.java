@@ -13,34 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.dp.impl.platform.projector.gantt;
+package com.canoo.dp.impl.platform.projector.base;
 
 import com.canoo.platform.remoting.ObservableList;
-import com.canoo.platform.remoting.Property;
 import com.canoo.platform.remoting.RemotingBean;
 
 @RemotingBean
-public class RowBean {
+public interface WithActions extends Projectable {
 
-    private Property<String> name;
-
-    private ObservableList<RowBean> children;
-
-    private ObservableList<ActivityBean> activityBeen;
-
-    public Property<String> nameProperty() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name.set(name);
-    }
-
-    public ObservableList<RowBean> getChildren() {
-        return children;
-    }
-
-    public ObservableList<ActivityBean> getActivityBeen() {
-        return activityBeen;
-    }
+    ObservableList<Action> getActions();
 }

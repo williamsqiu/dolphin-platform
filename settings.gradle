@@ -54,6 +54,9 @@ include 'platform-integration-tests/integration-server'
 include 'platform-integration-tests/integration-tests-jee'
 include 'platform-integration-tests/integration-tests'
 
+include 'platform-examples/projector-sample/projector-sample-client'
+include 'platform-examples/projector-sample/projector-sample-server'
+
 rootProject.children.each { project ->
     int slash = project.name.lastIndexOf('/')
     String fileBaseName = project.name[(slash + 1)..-1]

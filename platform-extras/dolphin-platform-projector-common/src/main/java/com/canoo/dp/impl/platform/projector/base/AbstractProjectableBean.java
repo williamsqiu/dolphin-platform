@@ -13,8 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.dp.impl.platform.projector.gantt;
+package com.canoo.dp.impl.platform.projector.base;
 
-public enum BarType {
-    BASE, PARENT;
+import com.canoo.platform.remoting.Property;
+import com.canoo.platform.remoting.RemotingBean;
+
+@RemotingBean
+public abstract class AbstractProjectableBean implements Projectable {
+
+    private Property<String> id;
+
+    @Override
+    public Property<String> idProperty() {
+        return id;
+    }
 }

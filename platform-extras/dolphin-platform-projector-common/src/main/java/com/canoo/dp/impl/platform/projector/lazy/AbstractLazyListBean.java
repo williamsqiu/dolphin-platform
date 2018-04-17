@@ -15,13 +15,14 @@
  */
 package com.canoo.dp.impl.platform.projector.lazy;
 
+import com.canoo.dp.impl.platform.projector.base.AbstractProjectableBean;
 import com.canoo.dp.impl.platform.projector.metadata.KeyValue;
 import com.canoo.platform.remoting.ObservableList;
 import com.canoo.platform.remoting.Property;
 import com.canoo.platform.remoting.RemotingBean;
 
 @RemotingBean
-public abstract class AbstractLazyListBean<E extends LazyListElement> implements LazyList<E> {
+public abstract class AbstractLazyListBean<E extends LazyListElement> extends AbstractProjectableBean implements LazyList<E> {
 
     private Property<Integer> listLenght;
 
