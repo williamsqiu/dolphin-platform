@@ -252,10 +252,8 @@ public class ObservableArrayList<E> implements ObservableList<E> {
     @Override
     public void remove(final int from, final int to)
     {
-        final List<E> oldList = list.subList(from, to);
-        final List<E> copy = new ArrayList<>(oldList);
-        oldList.clear();
-        fireListChanged(new ListChangeEventImpl<>(this, from, to, Collections.unmodifiableList(copy)));
+        final List<E> toRemove = new ArrayList<>(list.subList(from, to));
+        toRemove.forEach(e -> remove(e));
     }
 
     @Override
