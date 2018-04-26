@@ -15,7 +15,7 @@
  */
 package com.canoo.dp.impl.server.bootstrap;
 
-import com.canoo.platform.core.PlatformThreadFactory;
+import com.canoo.platform.core.concurrent.PlatformThreadFactory;
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.server.spi.components.ManagedBeanFactory;
 import com.canoo.platform.server.spi.components.ClasspathScanner;

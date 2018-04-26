@@ -28,16 +28,15 @@ public class HttpResponseImpl<V> implements HttpResponse<V> {
 
     private final int statusCode;
 
-    private final byte[] rawContent;
-
     private final V content;
 
-    public HttpResponseImpl(final List<HttpHeader> headers, final int statusCode, final byte[] rawContent, final V content) {
+    private final long contentSize;
+
+    public HttpResponseImpl(final List<HttpHeader> headers, final int statusCode, final V content, final long contentSize) {
         this.headers = Collections.unmodifiableList(Assert.requireNonNull(headers, "headers"));
         this.statusCode = statusCode;
-
-        this.rawContent = rawContent;
         this.content = content;
+        this.contentSize = contentSize;
     }
 
     @Override
@@ -51,8 +50,8 @@ public class HttpResponseImpl<V> implements HttpResponse<V> {
     }
 
     @Override
-    public byte[] getRawContent() {
-        return rawContent;
+    public long getContentSize() {
+        return contentSize;
     }
 
     @Override

@@ -23,7 +23,7 @@ public interface HttpResponse<V> {
 
     V getContent();
 
-    byte[] getRawContent();
+    long getContentSize();
 
     int getStatusCode();
 }

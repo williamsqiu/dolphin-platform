@@ -23,6 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.util.List;
@@ -96,6 +97,10 @@ public class HttpClientConnection {
         return ConnectionUtils.readContent(connection);
     }
 
+    public InputStream getContentStream() throws IOException {
+        return ConnectionUtils.getContentStream(connection);
+    }
+
     public String readUTFResponseContent() throws IOException {
         final String charSet = Optional.ofNullable(getResponseHeader(CHARSET_HEADER)).map(h -> h.getContent()).orElse(CHARSET);
         return new String(readResponseContent(), charSet);
@@ -127,6 +132,10 @@ public class HttpClientConnection {
 
     public HttpURLConnection getConnection() {
         return connection;
+    }
+
+    public long getContentSize() {
+        return connection.getContentLengthLong();
     }
 
 }

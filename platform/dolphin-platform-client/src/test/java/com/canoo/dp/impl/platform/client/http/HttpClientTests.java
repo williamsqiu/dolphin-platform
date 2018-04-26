@@ -107,7 +107,6 @@ public class HttpClientTests {
         final HttpResponse<Void> response = future.get(1_000, TimeUnit.MILLISECONDS);
         assertThat("response not defined", response, notNullValue());
         assertThat("Wrong response code", response.getStatusCode(), is(200));
-        assertThat("Content should not be null", new String(response.getRawContent()), is(STD_GET_RESPONSE));
 
         assertThatDoneCalledAndErrorNotCalled(actionCalled, doneCalled, errorCalled);
     }
@@ -139,7 +138,7 @@ public class HttpClientTests {
         final HttpResponse<String> response = future.get(1_000, TimeUnit.MILLISECONDS);
         assertThat("response not defined", response, notNullValue());
         assertThat("Wrong response code", response.getStatusCode(), is(200));
-        assertThat("Content should not be null", new String(response.getRawContent()), is(STD_GET_RESPONSE));
+        assertThat("Content should not be null", response.getContent(), is(STD_GET_RESPONSE));
 
         final String content = response.getContent();
         assertThat("String content does not match", content, is(STD_GET_RESPONSE));
@@ -173,7 +172,6 @@ public class HttpClientTests {
         final HttpResponse<ByteArrayProvider> response = future.get(1_000, TimeUnit.MILLISECONDS);
         assertThat("response not defined", response, notNullValue());
         assertThat("Wrong response code", response.getStatusCode(), is(200));
-        assertThat("Content should not be null", new String(response.getRawContent()), is(STD_GET_RESPONSE));
 
         final byte[] bytes = response.getContent().get();
         assertThat("Byte content does not match", bytes, is(STD_GET_RESPONSE.getBytes()));
@@ -207,7 +205,7 @@ public class HttpClientTests {
         final HttpResponse<String> response = future.get(1_000, TimeUnit.MILLISECONDS);
         assertThat("response not defined", response, notNullValue());
         assertThat("Wrong response code", response.getStatusCode(), is(200));
-        assertThat("Content should not be null", response.getRawContent(), notNullValue());
+        assertThat("Content should not be null", response.getContent(), notNullValue());
 
         final String json = response.getContent();
         final Gson gson = new Gson();
@@ -246,7 +244,7 @@ public class HttpClientTests {
         final HttpResponse<String> response = future.get(10_000, TimeUnit.MILLISECONDS);
         assertThat("response not defined", response, notNullValue());
         assertThat("Wrong response code", response.getStatusCode(), is(200));
-        assertThat("Content should not be null", new String(response.getRawContent()), is(STD_POST_RESPONSE));
+        assertThat("Content should not be null", response.getContent(), is(STD_POST_RESPONSE));
 
         final String content = response.getContent();
         assertThat("String content does not match", content, is(STD_POST_RESPONSE));
@@ -280,7 +278,7 @@ public class HttpClientTests {
         final HttpResponse<String> response = future.get(1_000, TimeUnit.MILLISECONDS);
         assertThat("response not defined", response, notNullValue());
         assertThat("Wrong response code", response.getStatusCode(), is(200));
-        assertThat("Content should not be null", new String(response.getRawContent()), is(STD_POST_RESPONSE));
+        assertThat("Content should not be null", response.getContent(), is(STD_POST_RESPONSE));
 
         final String content = response.getContent();
         assertThat("String content does not match", content, is(STD_POST_RESPONSE));
@@ -395,7 +393,6 @@ public class HttpClientTests {
         final HttpResponse<Void> response = future.get(1_000, TimeUnit.MILLISECONDS);
         assertThat("response not defined", response, notNullValue());
         assertThat("Wrong response code", response.getStatusCode(), is(200));
-        assertThat("Content should not be null", new String(response.getRawContent()), is(STD_GET_RESPONSE));
     }
 
     private CompletableFuture<HttpResponse<Void>> getHttpResponseCompletableFuture(final HttpClient client, final AtomicBoolean actionCalled, final AtomicBoolean doneCalled, final AtomicBoolean errorCalled) {

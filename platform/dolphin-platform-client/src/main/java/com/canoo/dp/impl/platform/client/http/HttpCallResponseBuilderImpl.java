@@ -16,6 +16,7 @@
 package com.canoo.dp.impl.platform.client.http;
 
 import com.canoo.dp.impl.platform.core.Assert;
+import com.canoo.dp.impl.platform.core.http.ConnectionUtils;
 import com.canoo.dp.impl.platform.core.http.HttpClientConnection;
 import com.canoo.dp.impl.platform.core.http.HttpHeaderImpl;
 import com.canoo.platform.client.ClientConfiguration;
@@ -32,6 +33,7 @@ import com.google.gson.Gson;
 import org.apiguardian.api.API;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -70,6 +72,11 @@ public class HttpCallResponseBuilderImpl implements HttpCallResponseBuilder {
 
         Assert.requireNonNull(responseHandlers, "responseHandlers");
         this.responseHandlers = Collections.unmodifiableList(responseHandlers);
+    }
+
+    @Override
+    public Promise<HttpResponse<InputStream>, HttpException> streamBytes() {
+        return createExecutor();
     }
 
     @Override
@@ -123,9 +130,24 @@ public class HttpCallResponseBuilderImpl implements HttpCallResponseBuilder {
         return new HttpCallExecutorImpl<>(configuration, () -> handleRequest(converter));
     }
 
-    private <R> HttpResponse<R> handleRequest(final ResponseContentConverter<R> converter) throws HttpException {
-        Assert.requireNonNull(converter, "converter");
+    private Promise<HttpResponse<InputStream>, HttpException> createExecutor() {
+        return new HttpCallExecutorImpl<>(configuration, () -> handleRequest());
+    }
 
+    private <R> HttpResponse<R> handleRequest(final ResponseContentConverter<R> converter) throws HttpException {
+        final HttpResponse<InputStream> response = handleRequest();
+        try {
+            final InputStream inputStream = response.getContent();
+            final R content = converter.convert(ConnectionUtils.readContent(inputStream));
+            return new HttpResponseImpl<>(response.getHeaders(), response.getStatusCode(), content, response.getContentSize());
+        } catch (IOException e) {
+            throw new ConnectionException("No response from server", e);
+        } catch (Exception e) {
+            throw new HttpException("Can not handle response", e);
+        }
+    }
+
+    private HttpResponse<InputStream> handleRequest() throws HttpException {
         if (handled.get()) {
             throw new DolphinRuntimeException("Http call already handled");
         }
@@ -141,11 +163,9 @@ public class HttpCallResponseBuilderImpl implements HttpCallResponseBuilder {
 
         try {
             int responseCode = connection.readResponseCode();
-            final byte[] rawContent = connection.readResponseContent();
             responseHandlers.forEach(h -> h.handle(connection.getConnection()));
-            final R content = converter.convert(rawContent);
             final List<HttpHeader> headers = connection.getResponseHeaders();
-            return new HttpResponseImpl<R>(headers, responseCode, rawContent, content);
+            return new HttpResponseImpl<>(headers, responseCode, connection.getContentStream(), connection.getContentSize());
         } catch (IOException e) {
             throw new ConnectionException("No response from server", e);
         } catch (Exception e) {

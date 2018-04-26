@@ -18,10 +18,14 @@ package com.canoo.platform.core.http;
 import com.canoo.platform.core.functional.Promise;
 import org.apiguardian.api.API;
 
+import java.io.InputStream;
+
 import static org.apiguardian.api.API.Status.EXPERIMENTAL;
 
 @API(since = "0.x", status = EXPERIMENTAL)
 public interface HttpCallResponseBuilder {
+
+    Promise<HttpResponse<InputStream>, HttpException> streamBytes();
 
     Promise<HttpResponse<ByteArrayProvider>, HttpException> readBytes();
 

@@ -13,18 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.projection.sample.server;
+package com.canoo.dp.impl.platform.client.concurrent;
 
-import com.canoo.platform.remoting.server.spring.EnableRemoting;
-import com.canoo.platform.server.spring.DolphinPlatformApplication;
-import org.springframework.boot.SpringApplication;
+import com.canoo.dp.impl.platform.client.AbstractServiceProvider;
+import com.canoo.platform.client.ClientConfiguration;
+import com.canoo.platform.client.concurrent.ProcessChain;
 
-@DolphinPlatformApplication
-@EnableRemoting
-public class ProjectionServer {
+public class ProcessChainProvider extends AbstractServiceProvider<ProcessChain> {
 
-    public static void main(String[] args) {
-        SpringApplication.run(ProjectionServer.class);
+    public ProcessChainProvider() {
+        super(ProcessChain.class);
     }
 
+    @Override
+    protected ProcessChain createService(final ClientConfiguration configuration) {
+        return new ProcessChainImpl(configuration);
+    }
 }

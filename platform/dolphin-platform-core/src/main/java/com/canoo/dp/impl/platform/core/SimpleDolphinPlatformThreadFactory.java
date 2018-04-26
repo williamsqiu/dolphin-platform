@@ -16,7 +16,7 @@
 package com.canoo.dp.impl.platform.core;
 
 import com.canoo.dp.impl.platform.core.context.ContextManagerImpl;
-import com.canoo.platform.core.PlatformThreadFactory;
+import com.canoo.platform.core.concurrent.PlatformThreadFactory;
 import org.apiguardian.api.API;
 
 import java.security.AccessController;
