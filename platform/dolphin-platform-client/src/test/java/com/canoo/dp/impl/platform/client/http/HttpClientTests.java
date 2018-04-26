@@ -27,6 +27,7 @@ import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+import spark.Redirect;
 import spark.Spark;
 
 import java.net.ServerSocket;
@@ -42,6 +43,8 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
 public class HttpClientTests {
+    private static final String STD_GET_RESPONSE = "Spark Server for HTTP client integration tests";
+    private static final String STD_POST_RESPONSE = "CHECK";
 
     //Maybe we can use http://wiremock.org/docs/getting-started/
 
@@ -65,12 +68,12 @@ public class HttpClientTests {
     @BeforeClass
     public void startSpark() {
         Spark.port(freePort);
-        Spark.get("/", (req, res) -> "Spark Server for HTTP client integration tests");
+        Spark.get("/", (req, res) -> STD_GET_RESPONSE);
         Spark.get("/error", (req, res) -> {
             res.status(401);
             return "UPPS";
         });
-        Spark.post("/", (req, res) -> "CHECK");
+        Spark.post("/", (req, res) -> STD_POST_RESPONSE);
         Spark.get("/", HttpHeaderConstants.JSON_MIME_TYPE, (req, res) -> {
 
             final Gson gson = new Gson();
@@ -80,6 +83,7 @@ public class HttpClientTests {
 
             return json;
         });
+        Spark.redirect.any("/movedPermanently", "/", Redirect.Status.MOVED_PERMANENTLY);
         Spark.awaitInitialization();
     }
 
@@ -87,29 +91,6 @@ public class HttpClientTests {
     public void destroySpark() {
         Spark.stop();
     }
-
-    @Test
-    public void testSimpleGet() throws Exception {
-        //given:
-        final HttpClient client = PlatformClient.getService(HttpClient.class);
-        final AtomicBoolean actionCalled = new AtomicBoolean(false);
-        final AtomicBoolean doneCalled = new AtomicBoolean(false);
-        final AtomicBoolean errorCalled = new AtomicBoolean(false);
-
-        //when:
-        final CompletableFuture<HttpResponse<Void>> future = getHttpResponseCompletableFuture(client, actionCalled, doneCalled, errorCalled);
-
-        //then:
-        future.get(1_000, TimeUnit.MILLISECONDS);
-        final HttpResponse<Void> response = future.get(1_000, TimeUnit.MILLISECONDS);
-        assertThat("response not defined", response, notNullValue());
-        assertThat("Wrong response code", response.getStatusCode(), is(200));
-        assertThat("Content should not be null", response.getRawContent(), notNullValue());
-
-        assertThatDoneCalledAndErrorNotCalled(actionCalled, doneCalled, errorCalled);
-
-    }
-
 
     @Test
     public void testSimpleGetWithPromise() throws Exception {
@@ -126,7 +107,7 @@ public class HttpClientTests {
         final HttpResponse<Void> response = future.get(1_000, TimeUnit.MILLISECONDS);
         assertThat("response not defined", response, notNullValue());
         assertThat("Wrong response code", response.getStatusCode(), is(200));
-        assertThat("Content should not be null", response.getRawContent(), notNullValue());
+        assertThat("Content should not be null", new String(response.getRawContent()), is(STD_GET_RESPONSE));
 
         assertThatDoneCalledAndErrorNotCalled(actionCalled, doneCalled, errorCalled);
     }
@@ -158,10 +139,10 @@ public class HttpClientTests {
         final HttpResponse<String> response = future.get(1_000, TimeUnit.MILLISECONDS);
         assertThat("response not defined", response, notNullValue());
         assertThat("Wrong response code", response.getStatusCode(), is(200));
-        assertThat("Content should not be null", response.getRawContent(), notNullValue());
+        assertThat("Content should not be null", new String(response.getRawContent()), is(STD_GET_RESPONSE));
 
         final String content = response.getContent();
-        assertThat("String content does not match", content, is("Spark Server for HTTP client integration tests"));
+        assertThat("String content does not match", content, is(STD_GET_RESPONSE));
 
         assertThatDoneCalledAndErrorNotCalled(actionCalled, doneCalled, errorCalled);
     }
@@ -192,10 +173,10 @@ public class HttpClientTests {
         final HttpResponse<ByteArrayProvider> response = future.get(1_000, TimeUnit.MILLISECONDS);
         assertThat("response not defined", response, notNullValue());
         assertThat("Wrong response code", response.getStatusCode(), is(200));
-        assertThat("Content should not be null", response.getRawContent(), notNullValue());
+        assertThat("Content should not be null", new String(response.getRawContent()), is(STD_GET_RESPONSE));
 
         final byte[] bytes = response.getContent().get();
-        assertThat("Byte content does not match", bytes, is("Spark Server for HTTP client integration tests".getBytes()));
+        assertThat("Byte content does not match", bytes, is(STD_GET_RESPONSE.getBytes()));
 
         assertThatDoneCalledAndErrorNotCalled(actionCalled, doneCalled, errorCalled);
     }
@@ -265,10 +246,10 @@ public class HttpClientTests {
         final HttpResponse<String> response = future.get(10_000, TimeUnit.MILLISECONDS);
         assertThat("response not defined", response, notNullValue());
         assertThat("Wrong response code", response.getStatusCode(), is(200));
-        assertThat("Content should not be null", response.getRawContent(), notNullValue());
+        assertThat("Content should not be null", new String(response.getRawContent()), is(STD_POST_RESPONSE));
 
         final String content = response.getContent();
-        assertThat("String content does not match", content, is("CHECK"));
+        assertThat("String content does not match", content, is(STD_POST_RESPONSE));
 
         assertThatDoneCalledAndErrorNotCalled(actionCalled, doneCalled, errorCalled);
     }
@@ -299,10 +280,10 @@ public class HttpClientTests {
         final HttpResponse<String> response = future.get(1_000, TimeUnit.MILLISECONDS);
         assertThat("response not defined", response, notNullValue());
         assertThat("Wrong response code", response.getStatusCode(), is(200));
-        assertThat("Content should not be null", response.getRawContent(), notNullValue());
+        assertThat("Content should not be null", new String(response.getRawContent()), is(STD_POST_RESPONSE));
 
         final String content = response.getContent();
-        assertThat("String content does not match", content, is("CHECK"));
+        assertThat("String content does not match", content, is(STD_POST_RESPONSE));
 
         assertThatDoneCalledAndErrorNotCalled(actionCalled, doneCalled, errorCalled);
     }
@@ -386,6 +367,35 @@ public class HttpClientTests {
         //then:
         assertThatBadResponseException(doneCalled, errorCalled, future, SC_HTTP_UNAUTHORIZED);
         assertThatErrorCalledAndDoneNotCalled(actionCalled, doneCalled, errorCalled);
+    }
+
+    @Test
+    public void testPermanentRedirect() throws Exception {
+        //given:
+        final HttpClient client = PlatformClient.getService(HttpClient.class);
+        final AtomicBoolean actionCalled = new AtomicBoolean(false);
+        final AtomicBoolean doneCalled = new AtomicBoolean(false);
+        final AtomicBoolean errorCalled = new AtomicBoolean(false);
+
+        //when:
+        final CompletableFuture<HttpResponse<Void>> future = client.get("http://localhost:" + freePort + "/movedPermanently")
+                .withoutContent()
+                .withoutResult()
+                .onDone(response -> {
+                    actionCalled.set(true);
+                    doneCalled.set(true);
+                })
+                .onError(e -> {
+                    actionCalled.set(true);
+                    errorCalled.set(true);
+                })
+                .execute();
+
+        //then:
+        final HttpResponse<Void> response = future.get(1_000, TimeUnit.MILLISECONDS);
+        assertThat("response not defined", response, notNullValue());
+        assertThat("Wrong response code", response.getStatusCode(), is(200));
+        assertThat("Content should not be null", new String(response.getRawContent()), is(STD_GET_RESPONSE));
     }
 
     private CompletableFuture<HttpResponse<Void>> getHttpResponseCompletableFuture(final HttpClient client, final AtomicBoolean actionCalled, final AtomicBoolean doneCalled, final AtomicBoolean errorCalled) {
