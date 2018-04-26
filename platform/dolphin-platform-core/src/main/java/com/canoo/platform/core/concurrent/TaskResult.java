@@ -13,18 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.projection.sample.server;
+package com.canoo.platform.core.concurrent;
 
-import com.canoo.platform.remoting.server.spring.EnableRemoting;
-import com.canoo.platform.server.spring.DolphinPlatformApplication;
-import org.springframework.boot.SpringApplication;
+import java.time.LocalDateTime;
 
-@DolphinPlatformApplication
-@EnableRemoting
-public class ProjectionServer {
+public interface TaskResult {
 
-    public static void main(String[] args) {
-        SpringApplication.run(ProjectionServer.class);
-    }
+    LocalDateTime lastScheduledStartTime();
 
+    LocalDateTime lastStartTime();
+
+    LocalDateTime lastCompletionTime();
 }

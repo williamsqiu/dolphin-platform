@@ -15,13 +15,16 @@
  */
 package com.canoo.dp.impl.platform.core;
 
-import com.canoo.platform.core.DolphinRuntimeException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
 public class PlatformVersion {
+
+    private final static Logger LOG = LoggerFactory.getLogger(PlatformVersion.class);
 
     private static final String DEFAULT_LOCATION = "build.properties";
 
@@ -31,30 +34,35 @@ public class PlatformVersion {
 
     private static final String BUILD_TIME_PROPERTY_NAME = "buildTime";
 
+    private static final String UNKNOWN_VALUE = "unknown";
+
     private PlatformVersion() {
     }
 
     public static String getBuildTime() {
         try {
-            return getBuildProperties().getProperty(BUILD_TIME_PROPERTY_NAME);
+            return getBuildProperties().getProperty(BUILD_TIME_PROPERTY_NAME, UNKNOWN_VALUE);
         } catch (Exception e) {
-            throw new DolphinRuntimeException("Can not get version info", e);
+            LOG.error("Can not get build info", e);
+            return UNKNOWN_VALUE;
         }
     }
 
     public static String getBuildDate() {
         try {
-            return getBuildProperties().getProperty(BUILD_DATE_PROPERTY_NAME);
+            return getBuildProperties().getProperty(BUILD_DATE_PROPERTY_NAME, UNKNOWN_VALUE);
         } catch (Exception e) {
-            throw new DolphinRuntimeException("Can not get version info", e);
+            LOG.error("Can not get build info", e);
+            return UNKNOWN_VALUE;
         }
     }
 
     public static String getVersion() {
         try {
-            return getBuildProperties().getProperty(VERSION_PROPERTY_NAME);
+            return getBuildProperties().getProperty(VERSION_PROPERTY_NAME, UNKNOWN_VALUE);
         } catch (Exception e) {
-            throw new DolphinRuntimeException("Can not get version info", e);
+            LOG.error("Can not get build info", e);
+            return UNKNOWN_VALUE;
         }
     }
 

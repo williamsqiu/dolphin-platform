@@ -17,6 +17,8 @@ package com.canoo.dp.impl.platform.core.http;
 
 public interface HttpHeaderConstants {
 
+    String CONTENT_DISPOSITION_HEADER_NAME = "Content-Disposition";
+
     String CHARSET = "UTF-8";
 
     String CONTENT_TYPE_HEADER = "Content-Type";

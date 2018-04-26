@@ -104,7 +104,6 @@ public class HttpClientTests {
         final HttpResponse<Void> response = future.get(1_000, TimeUnit.MILLISECONDS);
         assertThat("response not defined", response, notNullValue());
         assertThat("Wrong response code", response.getStatusCode(), is(200));
-        assertThat("Content should not be null", response.getRawContent(), notNullValue());
 
         assertThatDoneCalledAndErrorNotCalled(actionCalled, doneCalled, errorCalled);
 
@@ -126,7 +125,6 @@ public class HttpClientTests {
         final HttpResponse<Void> response = future.get(1_000, TimeUnit.MILLISECONDS);
         assertThat("response not defined", response, notNullValue());
         assertThat("Wrong response code", response.getStatusCode(), is(200));
-        assertThat("Content should not be null", response.getRawContent(), notNullValue());
 
         assertThatDoneCalledAndErrorNotCalled(actionCalled, doneCalled, errorCalled);
     }
@@ -158,7 +156,7 @@ public class HttpClientTests {
         final HttpResponse<String> response = future.get(1_000, TimeUnit.MILLISECONDS);
         assertThat("response not defined", response, notNullValue());
         assertThat("Wrong response code", response.getStatusCode(), is(200));
-        assertThat("Content should not be null", response.getRawContent(), notNullValue());
+        assertThat("Content should not be null", response.getContent(), notNullValue());
 
         final String content = response.getContent();
         assertThat("String content does not match", content, is("Spark Server for HTTP client integration tests"));
@@ -192,7 +190,7 @@ public class HttpClientTests {
         final HttpResponse<ByteArrayProvider> response = future.get(1_000, TimeUnit.MILLISECONDS);
         assertThat("response not defined", response, notNullValue());
         assertThat("Wrong response code", response.getStatusCode(), is(200));
-        assertThat("Content should not be null", response.getRawContent(), notNullValue());
+        assertThat("Content should not be null", response.getContent(), notNullValue());
 
         final byte[] bytes = response.getContent().get();
         assertThat("Byte content does not match", bytes, is("Spark Server for HTTP client integration tests".getBytes()));
@@ -226,7 +224,7 @@ public class HttpClientTests {
         final HttpResponse<String> response = future.get(1_000, TimeUnit.MILLISECONDS);
         assertThat("response not defined", response, notNullValue());
         assertThat("Wrong response code", response.getStatusCode(), is(200));
-        assertThat("Content should not be null", response.getRawContent(), notNullValue());
+        assertThat("Content should not be null", response.getContent(), notNullValue());
 
         final String json = response.getContent();
         final Gson gson = new Gson();
@@ -265,7 +263,7 @@ public class HttpClientTests {
         final HttpResponse<String> response = future.get(10_000, TimeUnit.MILLISECONDS);
         assertThat("response not defined", response, notNullValue());
         assertThat("Wrong response code", response.getStatusCode(), is(200));
-        assertThat("Content should not be null", response.getRawContent(), notNullValue());
+        assertThat("Content should not be null", response.getContent(), notNullValue());
 
         final String content = response.getContent();
         assertThat("String content does not match", content, is("CHECK"));
@@ -299,7 +297,7 @@ public class HttpClientTests {
         final HttpResponse<String> response = future.get(1_000, TimeUnit.MILLISECONDS);
         assertThat("response not defined", response, notNullValue());
         assertThat("Wrong response code", response.getStatusCode(), is(200));
-        assertThat("Content should not be null", response.getRawContent(), notNullValue());
+        assertThat("Content should not be null", response.getContent(), notNullValue());
 
         final String content = response.getContent();
         assertThat("String content does not match", content, is("CHECK"));

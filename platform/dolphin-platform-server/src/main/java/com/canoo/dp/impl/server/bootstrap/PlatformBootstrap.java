@@ -23,7 +23,7 @@ import com.canoo.dp.impl.server.config.ServerConfiguration;
 import com.canoo.dp.impl.server.mbean.MBeanRegistry;
 import com.canoo.dp.impl.server.scanner.DefaultClasspathScanner;
 import com.canoo.platform.core.DolphinRuntimeException;
-import com.canoo.platform.core.PlatformThreadFactory;
+import com.canoo.platform.core.concurrent.PlatformThreadFactory;
 import com.canoo.platform.server.spi.ModuleDefinition;
 import com.canoo.platform.server.spi.ModuleInitializationException;
 import com.canoo.platform.server.spi.ServerCoreComponents;

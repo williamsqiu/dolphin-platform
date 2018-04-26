@@ -17,55 +17,81 @@ package com.canoo.dp.impl.platform.core.http;
 
 import com.canoo.dp.impl.platform.core.Assert;
 import com.canoo.platform.core.http.ByteArrayProvider;
+import com.canoo.platform.core.http.HttpResponse;
+import com.canoo.platform.core.http.RequestMethod;
 
-import java.io.BufferedReader;
+import javax.xml.bind.DatatypeConverter;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
+import java.net.URI;
+import java.security.DigestInputStream;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
+import java.util.Base64;
+import java.util.Objects;
 
+import static com.canoo.dp.impl.platform.core.PlatformConstants.HASH_ALGORITHM;
 import static com.canoo.dp.impl.platform.core.http.HttpHeaderConstants.CHARSET;
+import static com.canoo.dp.impl.platform.core.http.HttpHeaderConstants.CONTENT_DISPOSITION_HEADER_NAME;
 
 public class ConnectionUtils {
 
-    private ConnectionUtils() {}
+    private ConnectionUtils() {
+    }
 
-    public static byte[] readContent(final BufferedReader reader) throws IOException {
-        Assert.requireNonNull(reader, "reader");
-        final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        int read = reader.read();
-        while (read != -1) {
-            byteArrayOutputStream.write(read);
-            read = reader.read();
+    public static String toBase64(byte[] bytes) {
+        return Base64.getEncoder().encodeToString(bytes);
+    }
+
+    public static String toHex(byte[] bytes) {
+        return DatatypeConverter.printHexBinary(bytes).toUpperCase();
+    }
+
+    public static DigestInputStream createMD5HashStream(final InputStream inputStream) throws NoSuchAlgorithmException {
+        Assert.requireNonNull(inputStream, "inputStream");
+        final MessageDigest digest = MessageDigest.getInstance(HASH_ALGORITHM);
+        return new DigestInputStream(inputStream, digest);
+    }
+
+
+    public static String readMD5Hash(final InputStream inputStream) throws IOException, NoSuchAlgorithmException {
+        try (final DigestInputStream digestInputStream = createMD5HashStream(inputStream)) {
+            final byte[] buffer = new byte[1024];
+            while (digestInputStream.read(buffer) > 0) {
+            }
+            return toHex(digestInputStream.getMessageDigest().digest());
         }
-        return byteArrayOutputStream.toByteArray();
     }
 
     public static byte[] readContent(final InputStream inputStream) throws IOException {
         Assert.requireNonNull(inputStream, "inputStream");
         final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        int read = inputStream.read();
-            while (read != -1) {
-                byteArrayOutputStream.write(read);
-                read = inputStream.read();
-            }
+        final byte[] buffer = new byte[1024];
+        int len;
+        while ((len = inputStream.read(buffer)) > 0) {
+            byteArrayOutputStream.write(buffer, 0, len);
+        }
         return byteArrayOutputStream.toByteArray();
     }
 
     public static byte[] readContent(final HttpURLConnection connection) throws IOException {
         Assert.requireNonNull(connection, "connection");
+        try (final InputStream inputStream = getContentStream(connection)) {
+            return readContent(inputStream);
+        }
+    }
+
+    public static InputStream getContentStream(final HttpURLConnection connection) throws IOException {
+        Assert.requireNonNull(connection, "connection");
         final InputStream errorstream = connection.getErrorStream();
-        if(errorstream == null) {
-            try (final InputStream inputStream = connection.getInputStream()) {
-                return readContent(inputStream);
-            }
+        if (errorstream == null) {
+            return connection.getInputStream();
         } else {
-            try {
-                return readContent(errorstream);
-            } finally {
-                errorstream.close();
-            }
+            return errorstream;
         }
     }
 
@@ -87,7 +113,7 @@ public class ConnectionUtils {
     public static void writeContent(final HttpURLConnection connection, final byte[] rawData) throws IOException {
         Assert.requireNonNull(connection, "connection");
         Assert.requireNonNull(rawData, "rawData");
-        try(final OutputStream outputStream = connection.getOutputStream()) {
+        try (final OutputStream outputStream = connection.getOutputStream()) {
             writeContent(outputStream, rawData);
         }
     }
@@ -110,5 +136,32 @@ public class ConnectionUtils {
     public static void writeUTF8Content(final OutputStream outputStream, final String content) throws IOException {
         Assert.requireNonNull(content, "content");
         writeContent(outputStream, content.getBytes(CHARSET));
+    }
+
+    public static String getContentName(final HttpResponse<InputStream> response) {
+        Assert.requireNonNull(response, "response");
+        return response.getHeaders().stream()
+                .filter(h -> Objects.equals(CONTENT_DISPOSITION_HEADER_NAME, h.getName()))
+                .map(h -> h.getContent())
+                .flatMap(v -> Arrays.asList(v.split(";")).stream())
+                .map(v -> v.trim())
+                .filter(v -> v.startsWith("filename=\""))
+                .map(v -> v.substring("filename=\"" .length(), v.length() - 1))
+                .findAny()
+                .orElse(null);
+    }
+
+    public static boolean doesURLExist(URI uri) {
+        Assert.requireNonNull(uri, "uri");
+        try {
+            final HttpClientConnection clientConnection = new HttpClientConnection(uri, RequestMethod.HEAD);
+            final int code = clientConnection.getConnection().getResponseCode();
+            if (code < 300) {
+                return true;
+            }
+            return false;
+        } catch (Exception e) {
+            return false;
+        }
     }
 }

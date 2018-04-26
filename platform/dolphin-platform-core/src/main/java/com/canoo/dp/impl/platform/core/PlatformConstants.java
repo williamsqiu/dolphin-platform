@@ -22,6 +22,8 @@ import static org.apiguardian.api.API.Status.INTERNAL;
 @API(since = "0.x", status = INTERNAL)
 public interface PlatformConstants {
 
+    String HASH_ALGORITHM = "MD5";
+
     String APPLICATION_CONTEXT = "application.name";
 
     String THREAD_CONTEXT = "thread";

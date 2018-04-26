@@ -13,18 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.projection.sample.server;
+package com.canoo.dp.impl.platform.client.concurrent;
 
-import com.canoo.platform.remoting.server.spring.EnableRemoting;
-import com.canoo.platform.server.spring.DolphinPlatformApplication;
-import org.springframework.boot.SpringApplication;
+import java.util.Comparator;
 
-@DolphinPlatformApplication
-@EnableRemoting
-public class ProjectionServer {
+public class ScheduledTaskComparator implements Comparator<ScheduledTask> {
 
-    public static void main(String[] args) {
-        SpringApplication.run(ProjectionServer.class);
+
+
+    @Override
+    public int compare(final ScheduledTask o1, final ScheduledTask o2) {
+        return 0;
     }
-
 }

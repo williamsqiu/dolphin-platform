@@ -13,18 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.canoo.projection.sample.server;
+package com.canoo.platform.core.concurrent;
 
-import com.canoo.platform.remoting.server.spring.EnableRemoting;
-import com.canoo.platform.server.spring.DolphinPlatformApplication;
-import org.springframework.boot.SpringApplication;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
 
-@DolphinPlatformApplication
-@EnableRemoting
-public class ProjectionServer {
+public interface Scheduler extends Executor {
 
-    public static void main(String[] args) {
-        SpringApplication.run(ProjectionServer.class);
-    }
-
+    CompletableFuture<Void> schedule(Runnable task, Trigger trigger);
 }
