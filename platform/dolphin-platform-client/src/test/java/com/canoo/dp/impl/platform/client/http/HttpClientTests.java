@@ -17,7 +17,11 @@ package com.canoo.dp.impl.platform.client.http;
 
 import com.canoo.dp.impl.platform.core.http.HttpHeaderConstants;
 import com.canoo.platform.client.PlatformClient;
-import com.canoo.platform.core.http.*;
+import com.canoo.platform.core.http.BadResponseException;
+import com.canoo.platform.core.http.ByteArrayProvider;
+import com.canoo.platform.core.http.ConnectionException;
+import com.canoo.platform.core.http.HttpClient;
+import com.canoo.platform.core.http.HttpResponse;
 import com.google.gson.Gson;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
