@@ -43,8 +43,8 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
 public class HttpClientTests {
-    protected static final String STD_GET_RESPONSE = "Spark Server for HTTP client integration tests";
-    protected static final String STD_POST_RESPONSE = "CHECK";
+    private static final String STD_GET_RESPONSE = "Spark Server for HTTP client integration tests";
+    private static final String STD_POST_RESPONSE = "CHECK";
 
     //Maybe we can use http://wiremock.org/docs/getting-started/
 
